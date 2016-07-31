@@ -6,13 +6,10 @@ import (
 	"log"
 	"net/http"
 	"strings"
-
 	"github.com/kr/pretty"
 	"github.com/pkg/errors"
-
 	"golang.org/x/net/websocket"
-
-	"gopkg.in/redis.v3"
+	//"gopkg.in/redis.v3"
 	//"github.com/ant0ine/go-json-rest/rest"
 	config "github.com/SpaceHexagon/convolvr/config"
 	socket "github.com/SpaceHexagon/convolvr/socket"
@@ -46,13 +43,13 @@ func main() {
 		log.Fatal("ListenAndServe", http.ListenAndServe(settings.Port, nil))
 	}()
 
-	client := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
-	})
-	pong, err := client.Ping().Result()
-	fmt.Println(pong, err)
+	// client := redis.NewClient(&redis.Options{
+	// 	Addr:     "localhost:6379",
+	// 	Password: "",
+	// 	DB:       0,
+	// })
+	// pong, err := client.Ping().Result()
+	// fmt.Println(pong, err)
 
 	<-done
 	fmt.Println("Exiting")
