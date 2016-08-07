@@ -4,12 +4,15 @@ import (
 	"sync"
 	"time"
 
+	log "github.com/Sirupsen/logrus"
+	"golang.org/x/net/context"
 	"golang.org/x/net/websocket"
 
 	"github.com/SpaceHexagon/convolvr/pkg/socket"
 	"github.com/SpaceHexagon/convolvr/services/engine/entities"
 	"github.com/SpaceHexagon/convolvr/services/engine/types"
 	univs "github.com/SpaceHexagon/convolvr/services/engine/universe"
+	"github.com/SpaceHexagon/convolvr/services/user"
 	"github.com/pkg/errors"
 )
 
@@ -24,7 +27,10 @@ func (svc *Service) makeWebSocketAPI() websocket.Handler {
 	server := socket.NewServer()
 	server.HandleConnect(onClientConnect)
 	server.HandleDisconnect(onClientDisconnect)
-	server.Handle("/update", onClientUpdate)
+	server.Handle("/update", svc.onClientUpdate)
+	server.Handle("/user/create", svc.onClientUserCreate)
+	// server.Handle("/user/read", onUserRead)
+	// server.Handle("/user/update", onUserUpdate)
 
 	return websocket.Handler(server.Server)
 }
@@ -36,6 +42,10 @@ func broadcast(msg *socket.BaseMessage) {
 	for c := range clientPlayers {
 		go c.Send(msg)
 	}
+}
+
+type pushEntityUpdate struct {
+	Entity *entities.Entity `json:"entity"`
 }
 
 func startUpdater() {
@@ -75,7 +85,16 @@ func onClientDisconnect(c *socket.Client) {
 	delete(clientPlayers, c)
 }
 
-func onClientUpdate(r *socket.Request, c *socket.Client) {
+type updateData struct {
+	Username   string            `json:"username"`
+	Image      string            `json:"image"`
+	ImageSize  []int             `json:"imageSize"`
+	Arms       []entities.Entity `json:"arms"`
+	Position   *types.Position   `json:"position"`
+	Quaternion *types.Quaternion `json:"quaternion"`
+}
+
+func (svc Service) onClientUpdate(r *socket.Request, c *socket.Client) {
 	params := updateData{}
 	err := r.Decode(&params)
 	if err != nil {
@@ -93,15 +112,43 @@ func onClientUpdate(r *socket.Request, c *socket.Client) {
 
 }
 
-type pushEntityUpdate struct {
-	Entity *entities.Entity `json:"entity"`
+type userCreateData struct {
+	RequestId int    `json:"request_id"`
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	Password  string `json:"password"`
 }
 
-type updateData struct {
-	Username   string            `json:"username"`
-	Image      string            `json:"image"`
-	ImageSize  []int             `json:"imageSize"`
-	Arms       []entities.Entity `json:"arms"`
-	Position   *types.Position   `json:"position"`
-	Quaternion *types.Quaternion `json:"quaternion"`
+type userCreateResponse struct {
+	RequestId int    `json:"request_id"`
+	Id        string `json:"id"`
+}
+
+func (svc Service) onClientUserCreate(r *socket.Request, c *socket.Client) {
+	log.WithField("handler", "onClientUserCreate").Println("called")
+
+	params := userCreateData{}
+	err := r.Decode(&params)
+	if err != nil {
+		log.WithField("handler", "onClientUserCreate").Println("invalid params", string(r.Data))
+		c.SendError(errors.Errorf("invalid params %s", string(r.Data)))
+		return
+	}
+
+	res, err := svc.userClient.CreateUser(context.Background(), &user.CreateUserRequest{
+		User: &user.User{
+			Username: params.Username,
+			Email:    params.Email,
+		},
+		Password: params.Password,
+	})
+	if err != nil {
+		log.Printf("Could not create user: %v", err)
+	}
+	log.WithField("handler", "onClientUserCreate").Println("created user", res.Id)
+	msg, _ := socket.NewBaseMessage("/user/create", &userCreateResponse{
+		RequestId: params.RequestId,
+		Id:        res.Id,
+	})
+	c.Send(msg)
 }
