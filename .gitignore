@@ -3,3 +3,5 @@
 /convolvr.exe
 /convolvr
 _out
+*.pem
+*.key

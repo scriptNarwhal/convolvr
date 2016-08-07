@@ -8,7 +8,7 @@ export default class World {
 			console.log(data)
 		})
 		var scene = new THREE.Scene(),
-			camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 100, 1000000 ),
+			camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 100, 1000000 ),
 			renderer = new THREE.WebGLRenderer(),
 			mobile = (window.innerWidth <= 640),
 			self = this,
@@ -52,7 +52,7 @@ export default class World {
 			side: 1,
 			fog: false,
 			uniforms: {
-				time: { value: 1.0 }
+				time: { type: "f", value: 1.0 }
 			},
 			vertexShader: document.getElementById('sky-vertex').textContent,
 			fragmentShader: document.getElementById('sky-fragment').textContent
