@@ -1,12 +1,12 @@
 export default class Component {
   constructor (data) {
       var mesh = null,
-          type = data.type;
+          type = data.type,
           shape = data.shape,
           size = data.size,
-          quaternion = data.quaternion ? data.quaternion : { x: 0, y: 0, z: 0, w: 0 },
+          quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : { x: 0, y: 0, z: 0 },
-          geomtry = null,
+          geometry = null,
           material = new THREE.MeshBasicMaterial({ // temporary material..
               color: data.color || 0xffffff,
               wireframe: true,
@@ -42,7 +42,9 @@ export default class Component {
           break;
       }
       mesh = new THREE.Mesh(geometry , material);
-      mesh.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+      if (!! quaternion) {
+          mesh.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+      }
       mesh.position.set(position.x, position.y, position.z)
       this.data = data;
       this.type = type;

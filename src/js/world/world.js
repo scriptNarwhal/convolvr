@@ -4,36 +4,7 @@ import {on,send,sendReceive} from '../network/socket'
 
 export default class World {
 	constructor(userInput = false) {
-		setTimeout(() => {
 
-			sendReceive("/user/create", {
-				username: "Foo",
-				email: "foo@foo.com",
-				password: "abcdfooZ",
-			}, res => {
-				console.log("Create User!", res)
-			})
-
-			sendReceive("/user/create", {
-				username: "Foo2",
-				email: "foo2@foo.com",
-				password: "abcdfooZ",
-			}, res => {
-				console.log("Create User!", res)
-			})
-
-			sendReceive("/user/create", {
-				username: "Foo3",
-				email: "foo3@foo.com",
-				password: "abcdfooZ",
-			}, res => {
-				console.log("Create User!", res)
-			})
-		}, 5000)
-
-		on("/update", data => {
-			// console.log(data)
-		})
 		var scene = new THREE.Scene(),
 			camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 100, 1000000 ),
 			renderer = new THREE.WebGLRenderer(),
@@ -49,8 +20,8 @@ export default class World {
 			y = 0,
 			r = 4000;
 
-
 		this.mode = "vr";
+		this.users = [];
 		this.user = {
 			username: "user"+Math.floor(1000000*Math.random()),
 			arms: [],
@@ -125,6 +96,60 @@ export default class World {
 			three.camera.aspect = innerWidth / innerHeight;
 			three.camera.updateProjectionMatrix();
 		}
+
+		setTimeout(() => {
+
+			sendReceive("/user/create", {
+				username: "Foo",
+				email: "foo@foo.com",
+				password: "abcdfooZ",
+			}, res => {
+				console.log("Create User!", res)
+			})
+
+			sendReceive("/user/create", {
+				username: "Foo2",
+				email: "foo2@foo.com",
+				password: "abcdfooZ",
+			}, res => {
+				console.log("Create User!", res)
+			})
+
+			sendReceive("/user/create", {
+				username: "Foo3",
+				email: "foo3@foo.com",
+				password: "abcdfooZ",
+			}, res => {
+				console.log("Create User!", res)
+			})
+		}, 5000)
+
+		on("/update", data => {
+			let entity = null,
+				user = null,
+				pos = null,
+				quat = null,
+				mesh = null;
+
+			if (!! data.entity) {
+				entity = data.entity;
+				pos = entity.pos;
+				quat = entity.quat;
+				user = self.users[entity.id];
+				if (user == null) {
+					user = self.users[entity.id] = {
+						id: entity.id,
+						avatar: new Avatar()
+					}
+				}
+				mesh = user.mesh;
+			}
+			if (!! mesh) {
+				mesh.position.set(pos.x, pos.y, pos.z);
+				mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w);
+			}
+		})
+
 	}
 
 	render (last) {

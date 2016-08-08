@@ -7,23 +7,20 @@ export default class Avatar {
             entity = null,
             component = null;
 
-        component = new Component({
+        component = {
             type: "structure",
             shape: "cylinder",
             size: {x: 200, y: 200, z: 400},
             position: false,
             quaternion: false
-        });
+        };
 
-        entity = new Entity({
-            components: [component],
-            aspects: [{"avatar": true}]
-        })
+        entity = new Entity(name, [component], [{"avatar": true}]);
+        entity.init(three.scene);
 
         this.entity = entity;
         this.mesh = entity.mesh;
         this.type = type;
         this.data = data;
-
     }
 }
