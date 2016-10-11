@@ -15,27 +15,54 @@ export default class WorldPhysics {
 
 	        if (message.command == "update") {
 	          worker.postMessage('{"command":"update","data":{"position":['+cam.position.x+
-	          ','+cam.position.y+
-	          ','+cam.position.z+
+	          ', '+cam.position.y+
+	          ', '+cam.position.z+
 	          '],"velocity":['+user.velocity.x+
 	          ','+user.velocity.y+
 	          ','+user.velocity.z+'] }}');
 
-		  } else if (message.command == "collision") {
+		  } else if (message.command == "collision") { // not implemented
 	          console.log("collision");
 	          console.log(message.data);
 		  } else if (message.command == "platform collision") {
-	          console.log(message.command);
-	          //console.log(data.data);
-	          three.camera.position.set(message.data.position.x, message.data.position.y, message.data.position.z);
-			  sys.user.velocity.x *= -0.95;
-			  sys.user.velocity.y *= -0.95;
-			  sys.user.velocity.z *= -0.95;
+	          if (three.camera.position.y > message.data.position[1] && three.camera.position.y < 8500 + message.data.position[1]) {
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]+8500 , three.camera.position.z);
+				  user.velocity.y += 500.0;
+			  } else if (three.camera.position.y < message.data.position[1] && three.camera.position.y > message.data.position[1] - 8500){
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]-8500 , three.camera.position.z);
+				  user.velocity.y -= 500.0;
+			  }
+			  user.velocity.x *= 0.97;
+			  user.velocity.z *= 0.97;
+			  user.falling = false;
 
-		  } else if (message.command == "user collision") {
+		 } else if (message.command == "track collision") { // same as platform for now
+			 if (three.camera.position.y > message.data.position[1] && three.camera.position.y < 8500 + message.data.position[1]) {
+				 three.camera.position.set(three.camera.position.x, message.data.position[1]+8500 , three.camera.position.z);
+				 user.velocity.y += 500.0;
+			 } else if (three.camera.position.y < message.data.position[1] && three.camera.position.y > message.data.position[1] - 8500){
+				 three.camera.position.set(three.camera.position.x, message.data.position[1]-8500 , three.camera.position.z);
+				 user.velocity.y -= 500.0;
+			 }
+			 user.velocity.x *= 0.97;
+			 user.velocity.z *= 0.97;
+			 user.falling = false;
+
+		}  else if (message.command == "voxel collision") {
+			let cameraPosition = three.camera.position;
+			cameraPosition.set(cameraPosition.x + message.data.position[0] / 80,
+									  cameraPosition.y + message.data.position[1] / 80,
+									  cameraPosition.z + message.data.position[2] / 80);
+
+			user.velocity.x += message.data.position[0] / 8;
+			user.velocity.y += message.data.position[1] / 8;
+			user.velocity.z += message.data.position[2] / 8;
+			 user.falling = false;
+
+		} else if (message.command == "user collision") { // could trigger interaction / bater / chat screen
 	          console.log(message.data);
 
-		  } else if (message.command == "building collision") {
+		  } else if (message.command == "tower collision") { // left over from subnexus.fm ..might come in handy
 	          position = message.data.position;
 	          if (sys.tcl && message.data.inner == 0) {
 	            sys.user.falling = false;

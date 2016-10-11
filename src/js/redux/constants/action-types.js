@@ -1,4 +1,8 @@
 /* action types */
+
+export const APP_TOGGLE_MENU = 'APP_TOGGLE_MENU';
+export const APP_TOGGLE_VR = 'APP_TOGGLE_VR';
+
 export const PLATFORM_ADD = 'PLATFORM_ADD';
 export const SET_HOME_PLATFORM = 'SET_HOME_PLATFORM';
 export const FETCH_PLATFORM = 'FETCH_PLATFORM';
@@ -8,6 +12,7 @@ export const UPDATE_PLATFORM = 'UPDATE_PLATFORM';
 export const DELETE_PLATFORM = 'DELETE_PLATFORM';
 export const LOAD_PLATFORM_DATA = 'LOAD_PLATFORM_DATA';
 export const PLATFORM_HOME_INIT = 'PLATFORM_HOME_INIT';
+export const PLATFORM_TEST_INIT = 'PLATFORM_TEST_INIT';
 
 export const ADD_AVATAR = 'ADD_AVATAR';
 export const FETCH_AVATAR = 'FETCH_AVATARS';
@@ -24,6 +29,13 @@ export const TRACKS_FETCH_DONE = 'TRACKS_FETCH_DONE';
 export const TRACKS_FETCH_FAIL = 'TRACKS_FETCH_FAIL';
 export const UPDATE_TRACK = 'UPDATE_TRACK';
 export const DELETE_TRACK = 'DELETE_TRACK';
+
+export const TOWER_ADD = 'TOWER_ADD';
+export const TOWERS_FETCH = 'TOWERS_FETCH';
+export const TOWERS_FETCH_DONE = 'TOWERS_FETCH_DONE';
+export const TOWERS_FETCH_FAIL = 'TOWERS_FETCH_FAIL';
+export const TOWER_UPDATE = 'TOWER_UPDATE';
+export const TOWER_DELETE = 'TOWER_DELETE';
 
 export const COMPONENT_ADD = 'COMPONENT_ADD';
 export const APPEND_COMPONENT = 'APPEND_COMPONENT';

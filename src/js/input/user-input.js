@@ -1,3 +1,7 @@
+let isVRMode = (mode) => {
+	return (mode == "vr" || mode == "stereo");
+}
+
 export default class UserInput {
 	constructor (socket) {
 		this.camera = {
@@ -34,8 +38,8 @@ export default class UserInput {
 		canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
 		canvas.onclick = function (event) {
 			var elem = event.target;
-			if (world.mode == "vr") {
-				
+			if (isVRMode(world.mode)) {
+
 			}
 			elem.requestPointerLock();
 			uInput.toggleFullscreen();
@@ -63,7 +67,9 @@ export default class UserInput {
 				document.body.setAttribute("class", "desktop");
 			} else {
 				if (world.user.username != "") {
-					world.mode = "vr";
+					if (world.mode != "stereo") {
+						world.mode = "vr";
+					}
 					while (a < world.user.arms.length) {
 						world.user.arms[a].visible = true;
 						a ++;
@@ -81,7 +87,7 @@ export default class UserInput {
 			});
 		}
 		document.addEventListener("keydown", function (event) {
-			if (world.mode == "vr") { // 0 = chat, 1 = vr
+			if (isVRMode(world.mode)) { // 0 = chat, 1 = vr
 				switch (event.keyCode) {
 					case 87: uInput.keys.w = true; break;
 					case 65: uInput.keys.a = true; break;
@@ -116,7 +122,7 @@ export default class UserInput {
 		}, true);
 		document.body.addEventListener("touchmove", function(event) {
 			var data = event.touches, touch = data.length;
-			if (world.mode == "vr") {
+			if (isVRMode("vr")) {
 				event.preventDefault();
 				if (touch < 2) {
 					uInput.rotationVector.y += (data[0].pageX - uInput.lastTouch[0][0]) / 500.0;
@@ -134,7 +140,7 @@ export default class UserInput {
 		document.body.addEventListener("touchstart", function(event) {
 			var data = event.touches, touch = data.length ;
 			//uInput.lastTouch = [[0,0],[0,0]];
-			if (world.mode == "vr") {
+			if (isVRMode(world.mode)) {
 				event.preventDefault();
 				while (touch-- > 0) {
 					uInput.lastTouch[touch] = [data[touch].pageX, data[touch].pageY];
@@ -148,7 +154,7 @@ export default class UserInput {
 				input = uInput,
 				user = world.user;
 				uInput.leapMotion = true;
-			if (mode == "vr") { // if its VR mode and not chat mode
+			if (isVRMode(mode)) { // if its VR mode and not chat mode
 				if (input.leapMode == "movement") {
 					frame.hands.forEach(function (hand, index) {
 						var position = hand.screenPosition();
@@ -207,16 +213,16 @@ export default class UserInput {
 	}
 
 	update (delta) {
-		var bottom = -32000,
+		var bottom = -232000,
 			world = this.world,
 			velocity = this.device.velocity; //world.getElevation(this.camera.position);
 
-		if (world.mode == "vr") {
+		if (isVRMode(world.mode)) {
 			this.handleKeys();
-			if (this.device.gravity > 0.25 ) {
-				velocity.y -= 320 * this.device.gravity;
-			}
+
 		}
+
+
 			this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ");
 			velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion));
 
@@ -224,7 +230,16 @@ export default class UserInput {
 				if (velocity.y < 0) {
 					velocity.y *= 0.95;
 				}
+
 			}
+
+			//if (this.device.gravity > 0.25 ) {
+			if (this.device.falling) {
+
+				velocity.y -= 450 * this.device.gravity;
+
+			}
+
 			this.moveVector.set(0, 0, 0);
 			if (this.camera.position.y < bottom + 500) {
 				if (this.keys.shift) {
@@ -233,6 +248,7 @@ export default class UserInput {
 					velocity.y *= -0.20;
 				}
 				this.device.falling = false;
+
 				this.camera.position.y = bottom + 500;
 				if (velocity.y > 1000) {
 					//world.vibrate(50);

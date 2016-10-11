@@ -4,6 +4,7 @@ import createLogger from 'redux-logger'
 const loggerMiddleware = createLogger()
 
 import { combineReducers } from 'redux'
+import app from './reducers/app'
 import components from './reducers/component'
 import platforms from './reducers/platform'
 import tracks from './reducers/track'
@@ -22,6 +23,7 @@ export default function configureStore(router, initialState = {}) {
   return createStore(
         combineReducers({
             routing: router,
+                     app,
                      components,
                      platforms,
                      tracks,

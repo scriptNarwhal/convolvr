@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { fetchPlatforms } from '../redux/actions/platform-actions'
-import { homePlatformInit } from '../redux/actions/platform-actions'
+import {
+    fetchPlatforms,
+    homePlatformInit,
+    initTestPlatforms
+} from '../redux/actions/platform-actions'
 import { fetchTracks } from '../redux/actions/track-actions'
 import { fetchUsers } from '../redux/actions/user-actions'
-//store.dispatch(fetchPlatforms());
-//store.dispatch(fetchTracks());
-//store.dispatch(fetchUsers());
 
 class App extends Component {
 
   componentDidMount () {
-      this.props.initHomePlatform();
+      //this.props.initHomePlatform();
+      //this.props.initTestPlatforms();
   }
 
   render() {
@@ -22,9 +23,9 @@ class App extends Component {
     return (
         <div className="root">
             {this.props.children}
-    	  	<video id="webcam" ></video>
-    		<canvas id="webcam-canvas"></canvas>
             <div className="lightbox" style={{display: "none"}}></div>
+            <canvas id="webcam-canvas"></canvas>
+            <video id="webcam" ></video>
         </div>
     )
   }
@@ -42,13 +43,18 @@ export default connect(
       platforms: state.platforms,
       tracks: state.tracks,
       tools: state.tools,
-      users: state.users
+      users: state.users,
+      menuOpen: state.app.menuOpen,
+      stereoMode: state.app.vrMode
     }
   },
   dispatch => {
     return {
         initHomePlatform: () => {
             dispatch(homePlatformInit())
+        },
+        initTestPlatforms: () => {
+            dispatch(initTestPlatforms())
         }
     }
   }
