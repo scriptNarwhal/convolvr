@@ -4,13 +4,17 @@ body {
 }
 #root {
     position: absolute;
-    bottom: 0;
+    top: 0;
     right: 0;
-    background-color: rgba(0, 0, 0, 0.06);
+    background-color: #0000000f;
     z-index: 9999;
-    min-width: 360px;
+    min-width: 60px;
     min-height: 60px;
     border-top-left-radius: 4px;
+}
+.root {
+    position: fixed;
+    right: 0;
 }
 #viewport {
     cursor: pointer;
@@ -20,4 +24,165 @@ body {
 }
 #webcam {
     display: none;
+}
+.hud {
+    min-width: 60px;
+    min-height: 60px;
+    z-index: 999999;
+    position: relative;
+}
+.hud .menu-open {
+    background-color: rgba(0,0,0,0.1);
+}
+.shell {
+    margin: auto;
+    position: fixed;
+    top: 4vh;
+    left: 16vw;
+    text-align: center;
+    width: 68vw;
+    height: 92vh;
+    display: inline-block;
+    background: rgb(25, 24, 31);
+    border-radius: 0.8vh;
+    box-shadow: 0 0 6vh rgba(0,0,0,0.333);
+}
+.tabs {
+    float: left;
+    height: 100%;
+    background: #0b0a0f;
+    border-top-left-radius: 0.4vh;
+    border-bottom-left-radius: 0.4vh;
+}
+.tab {
+    height: 4.5vh;
+    color: rgba(255,255,255,0.92);
+    width: 5vh;
+    font-size: 15px;
+    margin-bottom: 0.5vh;
+}
+.tab .button {
+    display: inline-block;
+    width: 5.3vh;
+    height: 6.5vh;
+    max-width: 96px;
+    max-height: 96px;
+    margin-right: 0;
+}
+.tab .button .inner {
+    height: 6.5vh;
+    width: 6.5vh;
+    max-width: 96px;
+    max-height: 96px;
+}
+
+
+.side-menu {
+    width: 6vh;
+    max-width: 120px;
+    height: 100%;
+    padding-top: 0.5vh;
+}
+.menu-item {
+    display: inline-block;
+    height: 3vh;
+    margin-left: 0.25em;
+    min-height: 48px;
+    width: 100%;
+}
+.menu-item span {
+    position: relative;
+    top: 2.2vh;
+    color: rgba(255,255,255,0.94);
+    padding-left: 1em;
+    cursor: pointer;
+    display: inline-block;
+}
+.icon {
+    height: 4vh;
+    width: 4vh;
+    display: inline-block;
+}
+.button {
+    display: inline-block;
+    width: 5.5vh;
+    height: 5.5vh;
+    max-width: 96px;
+    max-height: 96px;
+    float: right;
+    margin-right: 0.5em;
+}
+.button .inner {
+    transition: all 0.333s ease-out;
+    background-size: contain;
+    height: 5vh;
+    width: 5vh;
+    display: block;
+    opacity: 0.35;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    cursor: pointer;
+}
+.menu-item .button .inner {
+    right: 0.5em;
+}
+.menu-item span {
+    opacity: 0.9;
+}
+.menu-item:hover .button .inner {
+    opacity: 1;
+}
+.tab:hover .button .inner {
+    opacity: 1;
+}
+.menu-item:hover span {
+    opacity: 1;
+}
+.overview {
+
+}
+.radial-control {
+    width: 60vh;
+    height: 60vh;
+    max-width: 50%;
+    max-height: 34vw;
+    border-radius: 100%;
+    margin-bottom: 1em;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    box-shadow: inset 0vh 0vh 4vh rgba(0,0,0,0.25);
+}
+.radial-control .inner {
+    position: absolute;
+    left: 25%;
+    top: 25%;
+    width: 50%;
+    height: 50%;
+    margin-left: 0;
+    border-radius: 100%;
+    background-color: #0b0a0f;
+}
+.crosshair {
+    position: fixed;
+    width: 0px;
+    height: 32px;
+    top:48vh;
+    left: 50%;
+}
+
+.crosshair .inner {
+    width: 3vh;
+    height: 3vh;
+    position: relative;
+    left: -0.5vh;
+    top: -0.5vh;
+    background-image:url(/data/crosshair.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50% 50%;
 }

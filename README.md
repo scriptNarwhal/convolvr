@@ -1,2 +1,2 @@
 # convolvr
-Modular webvr world builder, social platform and authoring tool.
+Modular webvr game engine, authoring tool and server

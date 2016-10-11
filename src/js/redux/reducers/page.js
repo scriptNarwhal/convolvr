@@ -14,14 +14,7 @@ module.exports = function pages (state = {
 }, action) {
   switch (action.type) {
     case ADD_PAGE:
-      return [
-        ...state,
-        {
-          title: action.title,
-          body: action.body,
-          nav: action.nav
-        }
-      ]
+
     case DELETE_PAGE:
 
     case PAGES_FETCH:
@@ -31,7 +24,7 @@ module.exports = function pages (state = {
     case PAGES_FETCH_FAIL:
 
     case PAGES_FETCH_DONE:
-    return Object.assign({}, state, {
+        return Object.assign({}, state, {
             all: action.pages,
             fetching: false
         })
