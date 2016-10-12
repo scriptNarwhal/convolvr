@@ -7,8 +7,8 @@ import { combineReducers } from 'redux'
 import app from './reducers/app'
 import components from './reducers/component'
 import platforms from './reducers/platform'
+import towers from './reducers/tower'
 import tracks from './reducers/track'
-import routers from './reducers/router'
 import users from './reducers/user'
 import npcs from './reducers/npc'
 import avatars from './reducers/avatar'
@@ -26,8 +26,8 @@ export default function configureStore(router, initialState = {}) {
                      app,
                      components,
                      platforms,
+                     towers,
                      tracks,
-                     routers,
                      users,
                      npcs,
                      avatars,

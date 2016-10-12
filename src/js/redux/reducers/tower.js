@@ -7,18 +7,18 @@ import {
     DELETE_TOWER
 } from '../constants/action-types';
 
-let towersState = {
-    data: [],
-    fetching: false,
-    error: false
-}
-
-module.exports = function towers (towersState, action) {
+module.exports = function towers (
+    state = {
+        data: [],
+        fetching: false,
+        error: false
+    }, action) {
   switch (action.type) {
     case TOWER_ADD:
       return Object.assign({}, state, {
           data: [
-              ...state.data
+              ...state.data,
+              action.data
           ]
       })
     case DELETE_TOWER:
