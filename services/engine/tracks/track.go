@@ -15,7 +15,7 @@ type Track struct {
 }
 
 func NewTrack(position *types.Position, voxels []*voxels.Voxel, aspects []*types.Aspect) *Track { // components []*components.Voxel
-	return &Tracks{
+	return &Track{
 		Id:         uuid.NewUUID().String(),
 		Voxels:     voxels,
 		Position:   position,
