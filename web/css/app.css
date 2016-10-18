@@ -18,6 +18,8 @@ body {
 }
 #viewport {
     cursor: pointer;
+    width: 100% !important;
+    height: 100% !important;
 }
 #webcam-canvas {
     display: none;

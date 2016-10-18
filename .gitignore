@@ -3,6 +3,7 @@
 /simple-server.go
 /convolvr.exe
 /convolvr
+/web/js/app.js
 _out
 *.pem
 *.key

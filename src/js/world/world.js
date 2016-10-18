@@ -45,7 +45,8 @@ export default class World {
 		this.ambientLight = new THREE.AmbientLight(0x050505);
 		scene.add(this.ambientLight);
 		// light.position.set(0, 60000, -32000);
-		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
+		renderer.setSize(window.innerWidth, window.innerHeight);
 		document.body.appendChild( renderer.domElement );
 		renderer.domElement.setAttribute("id", "viewport");
 		renderer.setClearColor(0x150840);
