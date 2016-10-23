@@ -85,10 +85,10 @@
                 float radial = abs(0.25 - (vUv.x / 2.0));
                 float glow = 0.0;
 
-                if ((vUv.y >= 0.0)) {
+                if ((vUv.y >= 0.5)) {
                     glow = intense * depth*4.0* depth* depth;
                 } else {
-                    glow = intense * (1.0-(0.5-vUv.y)) * depth* depth;
+                    glow = -0.07+(intense * (1.0-(0.5-vUv.y)) * depth * depth * vUv.y);
                 }
                float blue = 1.0* glow;
                float red = 0.3;
