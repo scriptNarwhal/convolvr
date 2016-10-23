@@ -1,6 +1,6 @@
 import Avatar from './avatar.js';
 import Platform from './platform.js';
-import WorldPhysics from '../core/world-physics.js';
+import WorldPhysics from '../workers/world-physics.js';
 import {on,send,sendReceive} from '../network/socket'
 
 export default class World {

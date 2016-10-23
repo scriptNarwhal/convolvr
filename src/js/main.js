@@ -1,4 +1,4 @@
-console.log('🌀 Powering up...');
+console.log('Convolvr Client Initializing');
 // React
 import ReactDOM from 'react-dom';
 import React, { Component, PropTypes } from 'react';
