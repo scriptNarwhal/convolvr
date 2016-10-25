@@ -37,53 +37,53 @@ body {
     background-color: rgba(0,0,0,0.1);
 }
 .shell {
-    margin: auto;
-    position: fixed;
-    top: 4vh;
-    left: 16vw;
-    text-align: center;
-    width: 68vw;
-    height: 92vh;
-    display: inline-block;
-    background: rgb(25, 24, 31);
-    border-radius: 0.8vh;
-    box-shadow: 0 0 6vh rgba(0,0,0,0.333);
+  margin: auto;
+  position: fixed;
+  top: 4vh;
+  left: 18vw;
+  text-align: center;
+  width: 64vw;
+  height: 84vh;
+  display: inline-block;
+  background: linear-gradient(rgb(28, 28, 28), rgb(76, 76, 76));
+  border-radius: 0.8vh;
+  box-shadow: 0 0 5vh rgba(0,0,0,0.333);
 }
 .tabs {
-    float: left;
-    height: 100%;
-    background: #0b0a0f;
-    border-top-left-radius: 0.4vh;
-    border-bottom-left-radius: 0.4vh;
+  height: 7.5vh;
+  min-height: 75px;
+  width: 100%;
+  background: #090909;
+  border-top-left-radius: 0.6vh;
+  border-top-right-radius: 0.6vh;
+  box-shadow: 0 0.5vh 1vh rgba(0,0,0,0.3);
 }
 .tab {
-    height: 4.5vh;
-    color: rgba(255,255,255,0.92);
-    width: 5vh;
-    font-size: 15px;
-    margin-bottom: 0.5vh;
+  height: 7.5vh;
+  color: rgba(255,255,255,0.92);
+  width: 8vh;
+  font-size: 15px;
+  margin-bottom: 0.5vh;
+  display: inline-block;
+  margin-top: 1vh;
 }
 .tab .button {
-    display: inline-block;
-    width: 5.3vh;
-    height: 6.5vh;
-    max-width: 96px;
-    max-height: 96px;
-    margin-right: 0;
+  display: inline-block;
+  width: 8.3vh;
+  height: 8.5vh;
+  margin-right: 0;
 }
 .tab .button .inner {
-    height: 6.5vh;
-    width: 6.5vh;
-    max-width: 96px;
-    max-height: 96px;
+  height: 7.5vh;
+  width: 7.5vh;
+  max-width: 96px;
+  max-height: 96px;
 }
 
 
 .side-menu {
-    width: 6vh;
-    max-width: 120px;
-    height: 100%;
-    padding-top: 0.5vh;
+  width: 100%;
+  padding-top: 0;
 }
 .menu-item {
     display: inline-block;
@@ -154,20 +154,20 @@ body {
     position: absolute;
     left: 0;
     right: 0;
-    top: 0;
+    top: 9vh;
     bottom: 0;
     margin: auto;
     box-shadow: inset 0vh 0vh 4vh rgba(0,0,0,0.25);
 }
 .radial-control .inner {
-    position: absolute;
-    left: 25%;
-    top: 25%;
-    width: 50%;
-    height: 50%;
-    margin-left: 0;
-    border-radius: 100%;
-    background-color: #0b0a0f;
+  position: absolute;
+  left: 25%;
+  top: 25%;
+  width: 50%;
+  height: 50%;
+  margin-left: 0;
+  border-radius: 100%;
+  background-color: #353535;
 }
 .crosshair {
     position: fixed;
