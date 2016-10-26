@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import Shell from '../components/shell';
 import RadialControl from '../components/radial-control';
 
-export default class Channels extends Component {
+export default class Worlds extends Component {
   render() {
     return (
-        <Shell className="channels">
+        <Shell className="worlds">
             <RadialControl onClick={
                 e => {
 
@@ -16,6 +16,6 @@ export default class Channels extends Component {
   }
 }
 
-Channels.defaultProps = {
+Worlds.defaultProps = {
 
 }

@@ -15,7 +15,7 @@ class HUD extends Component {
                     image="data/circle-a.png"
                     onClick={ (evt, title) => {
                         //this.toggleMenu()
-                        browserHistory.push("/channels")
+                        browserHistory.push("/home")
                     } }
             />
             <div className="crosshair">

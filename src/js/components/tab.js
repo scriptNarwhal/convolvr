@@ -12,7 +12,7 @@ export default class Tab extends Component {
                 { this.props.title }
                 </span>
             ) : "")}
-            <Button title=""
+            <Button title={this.props.title}
                     onClick={(evt, title) => { this.props.onClick(evt) }}
                     image={this.props.image}
                     style={{ marginRight: "0.25em"}}

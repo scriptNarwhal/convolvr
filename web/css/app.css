@@ -14,7 +14,7 @@ body {
 }
 .root {
     position: fixed;
-    right: 0;
+    left: 0;
 }
 #viewport {
     cursor: pointer;
@@ -43,7 +43,7 @@ body {
   left: 18vw;
   text-align: center;
   width: 64vw;
-  height: 84vh;
+  height: 90vh;
   display: inline-block;
   background: linear-gradient(rgb(28, 28, 28), rgb(76, 76, 76));
   border-radius: 0.8vh;
@@ -57,6 +57,8 @@ body {
   border-top-left-radius: 0.6vh;
   border-top-right-radius: 0.6vh;
   box-shadow: 0 0.5vh 1vh rgba(0,0,0,0.3);
+  text-align: left;
+
 }
 .tab {
   height: 7.5vh;
@@ -84,6 +86,7 @@ body {
 .side-menu {
   width: 100%;
   padding-top: 0;
+  padding-left: 2vh;
 }
 .menu-item {
     display: inline-block;

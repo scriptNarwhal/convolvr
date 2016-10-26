@@ -1,12 +1,13 @@
 /* chat container */
 import React, { Component } from 'react';
+import Shell from '../components/shell';
 
 export default class Chat extends Component {
   render() {
     return (
-        <div className="chat">
+        <Shell className="chat">
 
-        </div>
+        </Shell>
     )
   }
 }

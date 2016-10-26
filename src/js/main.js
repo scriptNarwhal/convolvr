@@ -12,7 +12,7 @@ import makeStore from './redux/makeStore'
 import App from './containers/app'
 import Editor from './containers/editor'
 import Memory from './containers/memory'
-import Channels from './containers/channels'
+import Worlds from './containers/worlds'
 import Settings from './containers/settings'
 import Home from './containers/home'
 import Login from './containers/login'
@@ -70,7 +70,7 @@ ReactDOM.render(
 				<Route path="/chat" component={Chat} />
 				<Route path="/editor" component={Editor} />
 				<Route path="/memory" component={Memory} />
-				<Route path="/channels" component={Channels} />
+				<Route path="/worlds" component={Worlds} />
 				<Route path="/settings" component={Settings} />
 			</Route>
 		</Router>

@@ -15,25 +15,37 @@ class SideMenu extends Component {
   render() {
     return (
         <div className="side-menu" >
-            <Tab image="data/circle-a.png"
-                      title="Close Menu"
-                      onClick={ ()=> { browserHistory.push("/") } }
+            <Tab image="data/x.png"
+                 title="Close Menu"
+                 onClick={ ()=> { browserHistory.push("/") } }
             />
             <Tab image="data/square-a.png"
-                      title="Browse Channels"
-                      onClick={ ()=> {alert("not implemented")} }
+                 title="Home"
+                 onClick={ ()=> { browserHistory.push("/home") } }
+            />
+            <Tab image="data/circle-a.png"
+                 title="Switch Worlds"
+                 onClick={ ()=> { browserHistory.push("/worlds") } }
             />
             <Tab image="data/voxel-white.png"
-                      title="Memory"
-                      onClick={ ()=> { browserHistory.push("/memory") } }
+                 title="Inventory"
+                 onClick={ ()=> { browserHistory.push("/memory") } }
+            />
+            <Tab image="data/chat.png"
+                 title="Chat"
+                 onClick={ ()=> { browserHistory.push("/chat") } }
             />
             <Tab image="data/stack.png"
-                      title="Editor"
-                      onClick={ ()=> { browserHistory.push("/editor") } }
+                 title="Editor"
+                 onClick={ ()=> { browserHistory.push("/editor") } }
             />
-            <Tab image="data/glasses.png"
-                      title="Virtual Reality Mode"
-                      onClick={ ()=> {this.toggleVRMode()} }
+            <Tab image="data/configure.png"
+                 title="Settings"
+                 onClick={ ()=> { browserHistory.push("/settings") } }
+            />
+            <Tab image="data/vr.png"
+                 title="Enter VR"
+                 onClick={ ()=> {this.toggleVRMode()} }
             />
         </div>
     )
