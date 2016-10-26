@@ -43,7 +43,7 @@ export default class Platform {
                 voxel = items[x];
                 cellMesh = new THREE.Mesh(voxelGeom, mat);
                cellMesh.position.set((voxel.cell[0] * gridSize) + (voxel.cell[2] % 2==0 ? 0 : gridSize / 2),
-                                      voxel.cell[1] * gridSize,    voxel.cell[2] * gridSize / 2.0);
+                                      voxel.cell[1] * gridSize,    voxel.cell[2] * gridSize);
                cellMesh.updateMatrix();
                base.merge(cellMesh.geometry, cellMesh.matrix);
                x --;
@@ -57,7 +57,7 @@ export default class Platform {
         }
         three.scene.add(mesh);
         this.mesh = mesh;
-        
+
         if (!!data && !!data.towers) { // multiple towers per platform
             items = data.towers;
             x = items.length;

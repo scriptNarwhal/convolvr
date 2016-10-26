@@ -321,7 +321,7 @@ export default class World {
 							if (Math.random() < 0.2) {
 								voxels.push({
 									cell: [
-										x, 1+Math.floor(Math.sin(x/2.0)*Math.cos(y/2.0)), y
+										x, 1+Math.floor(Math.sin(x)*Math.cos(y/2.0)), y
 									]
 								})
 							}
@@ -360,7 +360,7 @@ export default class World {
 						if (Math.random() < 0.25) {
 							voxels.push({
 								cell: [
-									x, 1+Math.floor(2*Math.sin(x/2.0)+2*Math.cos(y/2.0)), y
+									x, 1+Math.floor(2*Math.sin(x/1.5)+2*Math.cos(y/1.5)), y
 								]
 							})
 						}
