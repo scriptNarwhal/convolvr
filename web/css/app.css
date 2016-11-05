@@ -50,8 +50,8 @@ body {
   box-shadow: 0 0 5vh rgba(0,0,0,0.333);
 }
 .tabs {
-  height: 7.5vh;
-  min-height: 75px;
+  height: auto;
+  max-height: 128px;
   width: 100%;
   background: #090909;
   border-top-left-radius: 0.6vh;
