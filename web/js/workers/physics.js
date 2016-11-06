@@ -4,21 +4,15 @@ Jeremy Evans Openspacehexagon@gmail.com
 var observer = {
 		position: [0, 0, 0],
 		prevPos: [0, 0, 0],
-		velocity: [0, 0, 0],
-		coords: [0, 0, 0]
+		velocity: [0, 0, 0]
 	},
-	objects = [],
-	chunks = [],
-	buildings = [],
-	actors = [];
+	entities = [],
+	platforms = [],
+	towers = [],
+	tracks = [],
+	towers = [];
 
-function CollisionObject (data) {
-	this.data = data;
-	this.name = data.name;
-	this.position = data.position;
-}
-
-function CollisionBuilding (data) {
+function CollisionTower (data) {
 	this.data = data;
 	this.name = data.name;
 	this.position = data.position;
@@ -30,18 +24,21 @@ function distance3d (a, b) {
 }
 
 function distance2d (a, b) {
+	return Math.sqrt(Math.pow((a.x-b.x),2)+Math.pow((a.z-b.z),2));
+}
+function distance2dArray (a, b) {
 	return Math.sqrt(Math.pow((a[0]-b[0]),2)+Math.pow((a[2]-b[2]),2));
 }
 
 self.update = function () {
-	var objectCollision = false,
-			entities = [],
+	var 	entities = [],
 			distance = 0,
 			position = observer.position,
-			coords = observer.coords,
 			i = 0,
+			v = 0,
 			size = 2600,
 			obj = null,
+			voxel = null,
 			delta = [0, 0],
 			innerBox = [false, false],
 			oPos = [],
@@ -49,29 +46,60 @@ self.update = function () {
 			velocity = observer.velocity,
 			closeToVenue =  false,
 			chunkDimensions = [6150 * 6, 3200 * 6 * Math.sqrt(3)],
-			i = chunks.length -1,
-			cKey = "";
+			cKey = "",
+			collision = false;
 
-		entities = objects;
+		for (i = 0; i < platforms.length; i ++) {
+			obj = platforms[i];
+			if (!!obj) {
+				if (position[1] < obj.position[1] + 8500 && position[1] > obj.position[1]-8500 ) {
+					if (distance2dArray(position, obj.position) < 126000) {
+						collision = true;
+						//console.log('{"command": "platform collision", "data":{"position":[' + observer.prevPos[0] + ',' + observer.prevPos[1] + ',' + observer.prevPos[2] + '] }}');
+						self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
 
-	for (cKey in chunks) {
-		obj = chunks[cKey];
+					}
+				}
+					if (distance2dArray(position, obj.position) < 126000) {
+						if (!!obj.voxels && obj.voxels.length > 0) {
+							v = obj.voxels.length;
+							while (v > 0) {
+								v--;
+								voxel = obj.voxels[v].cell;
+								if (distance3d(position, [obj.position[0]+voxel[0]*10500, obj.position[1]+voxel[1]*10500, obj.position[2]+voxel[2]*10500]) < 12000) {
 
-			if (obj.coords[0] == coords[0] && obj.coords[1] == coords[1]) {
-				if (position[1] < obj.position[1] + 2400 && position[1] > obj.position[1] ) {
-					if (position[0] > obj.position[0]  && position[2] > obj.position[2] && position[0] < obj.position[0] + chunkDimensions[0] && position[2] < obj.position[2] + chunkDimensions[1]) {
-						self.postMessage('{"command": "chunk collision", "data":{"position":[' + observer.prevPos[0] + ',' + observer.prevPos[1] + ',' + observer.prevPos[2] + '] }}');
+									self.postMessage('{"command": "voxel collision", "data":{"position":[' + (position[0]-(voxel[0]*10500))
+																										   + ',' +(position[1]-(voxel[1]*10500))
+																										   + ',' +(position[2]-(voxel[2]*10500)) + '] }}');
+
+								}
+
+							}
+						}
+					}
+
+			}
+
+		}
+
+		for (i = 0; i < entities.length; i ++) {
+			obj = entities[i];
+			if (!!obj) {
+				if (position[1] < obj.position[1] + 1000 && position[1] > obj.position[1]-2000 ) {
+					if (distance2dArray(position, obj.position) < 128000) {
+						collision = true;
+						self.postMessage('{"command": "entity collision", "data":{"position":[' +obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
 					}
 				}
 			}
+		}
 
-	}
-	entities = buildings; // do collisions on buildings... just walls at first..
-	i = entities.length - 1;
+// do collisions on towers... just walls at first..
+	i = towers.length - 1;
 
 	while (i > -1) {
-		obj = entities[i];
-		distance = distance2d(position, obj.position);
+		obj = towers[i];
+		distance = distance2dArray(position, obj.position);
 		if (distance < 12000) {
 			if (!obj.interiorLoaded) {
 				obj.interiorLoaded = true;
@@ -85,29 +113,29 @@ self.update = function () {
 			}
 
 			oPos = obj.position;
-			if (position[0] > (oPos[0] - size) && position[0] < (oPos[0] + size)) { 		// now actually check collisions using box method...
-				innerBox[0] = (position[0] > (oPos[0] - size + 600) && position[0] < (oPos[0] + size - 600));
-				delta[0] = Math.abs(position[0] - oPos[0]);
+			if (position.x > (oPos[0] - size) && position.x < (oPos[0] + size)) { 		// now actually check collisions using box method...
+				innerBox[0] = (position.x > (oPos[0] - size + 600) && position.x < (oPos[0] + size - 600));
+				delta[0] = Math.abs(position.x - oPos[0]);
 
-				if (position[2] > (oPos[2] - size) && position[2] < (oPos[2] + size)) {
-					innerBox[1] = (position[2] > (oPos[2] - size + 600) && position[2] < (oPos[2] + size - 600));
-					delta[1] = Math.abs(position[2] - oPos[2]);
+				if (position.z > (oPos[2] - size) && position.z < (oPos[2] + size)) {
+					innerBox[1] = (position.z > (oPos[2] - size + 600) && position.z < (oPos[2] + size - 600));
+					delta[1] = Math.abs(position.z - oPos[2]);
 
-					if ((position[0] > oPos[0])) {
-						position[0] = oPos[0] + size;
+					if ((position.x > oPos[0])) {
+						position.x = oPos[0] + size;
 					} else {
-						position[0] = oPos[0] - size;
+						position.x = oPos[0] - size;
 					}
-					if (position[2] > oPos[2]) {
-						position[2] = oPos[2] + size;
+					if (position.z > oPos[2]) {
+						position.z = oPos[2] + size;
 					} else {
-						position[2] = oPos[2] - size;
+						position.z = oPos[2] - size;
 					}
 
 					if (distance > size * 1.18) {
-
-						self.postMessage('{"command": "building collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
-						', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}');
+						collision = true;
+						self.postMessage('{"command": "tower collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
+						', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position.x + ',' + position.y + ',' + position.z + '] }}');
 						// "velocity": ['+velocity[0]+','+velocity[1]+','+velocity[2]+']
 
 					}
@@ -117,6 +145,11 @@ self.update = function () {
 
 		i--;
 	}
+
+	if (!collision) {
+		observer.prevPos = [observer.position[0], observer.position[1], observer.position[2]];
+	}
+
 	self.postMessage('{"command": "update"}');
 	self.updateLoop = setTimeout(function () {
 		self.update();
@@ -124,75 +157,81 @@ self.update = function () {
 }
 
 self.onmessage = function (event) { // Do some work.
-	var data = JSON.parse(event.data),
-			user = observer,
-			c = 0,
-			chunk = null,
-			newChunks = [];
+	var message = JSON.parse(event.data),
+		user = observer,
+		c = 0,
+		p = 0,
+		items = [],
+		platform = null,
+		toRemove = null;
+	//console.log(message.command);
 
-	if (data.command == "update") {
-		user.coords = data.data.coords;
-		user.prevPos = [user.position[0], user.position[1], user.position[2]];
-		user.position = data.data.position;
-		user.velocity = data.data.velocity;
+	if (message.command == "update") {
+		// user.prevPos = [user.position[0], user.position[1], user.position[2]];
+		user.position = message.data.position;
+		user.velocity = message.data.velocity;
 		//self.postMessage(JSON.stringify(self.observer));
-	} else if (data.command == "add object") {
-		var cObject = new CollisionObject(data.data);
-		objects.push(cObject);
+	} else if (message.command == "add entities") {
+		entities = entities.concat(message.data);
 
-	} else if (data.command == "add chunks") {
-		newChunks = data.data;
-		c = newChunks.length-1;
+	} else if (message.command == "remove entity") {
+		c = entities.length-1;
 		while (c >= 0) {
-			chunk = newChunks[c];
-			chunks[chunk.coords[0]+"."+chunk.coords[1]+"."+chunk.coords[2]] = chunk;
-			c--;
-		}
-
-	} else if (data.command == "remove chunks") {
-		newChunks = data.data;
-		c = newChunks.length-1;
-		while (c >= 0) {
-			chunk = newChunks[c];
-			delete chunks[chunk.coords[0]+"."+chunk.coords[1]+"."+chunk.coords[2]];
-			c--;
-		}
-
-	} else if (data.command == "add building") {
-		var building = new CollisionBuilding(data.data);
-		buildings.push(building);
-		//		app.physicsWorker.postMessage('{"command":"addBuilding","data":{"name": "'+this.data.name+'", "structureType": "'+this.data.structureType+'", "size": "'+this.data.size+
-		//								  '", "floors": '+this.data.floors+', "position":['+this.data.position[0]+','+this.data.position[1]+','+this.data.position[2]+']}}');
-	} else if (data.command == "update object") {
-		// implement
-		self.unidentifiedObjects[0].id = data.data.id;
-		self.unidentifiedObjects.splice(0, 1);
-
-	} else if (data.command == "remove object") {
-		for (var o = 0; o < self.objects.length; o++) {
-			var co = self.objects[o];
-			if (co.id == data.data.id && co.cellName == data.data.cellName) {
-				self.objects.splice(o, 1);
+			if (entities[c].id == message.data) {
+				entities = entities.splice(c, 1);
 			}
+			c--;
 		}
-	} else if (data.command == "clear") {
-		objects = [];
-		chunks = [];
-		buildings = [];
+	} else if (message.command == "add platforms") {
+		console.log("add platforms");
+		console.log(message.data.length);
+		platforms = platforms.concat(message.data);
 
-	} else if (data.command == "start") {
+	} else if (message.command == "remove platforms") {
+		console.log("remove platforms");
+		console.log(message.data.length);
+		p = message.data.length -1;
+		while (p >= 0) {
+			toRemove = message.data[p];
+			c = platforms.length-1;
+			while (c >= 0) {
+				platform = platforms[c];
+				if (platform != null) {
+					if (platform.cell[0] == toRemove.cell[0] && platform.cell[1] == toRemove.cell[1]  && platform.cell[2] == toRemove.cell[2]) {
+						//platforms = platforms.splice(c, 1);
+					}
+				}
+				c--;
+			}
+			p --;
+		}
+
+	} else if (message.command == "add tracks") {
+		tracks = tracks.concat(message.data);
+
+	} else if (message.command == "remove track") {
+		c = tracks.length-1;
+		while (c >= 0) {
+			if (tracks[c].id == message.data) {
+				tracks = tracks.splice(c, 1);
+			}
+			c--;
+		}
+	}  else if (message.command == "clear") {
+		platforms = [];
+		entities = [];
+		tracks = [];
+		towers = [];
+
+	} else if (message.command == "start") {
 		self.update();
 
-	} else if (data.command == "stop") {
+	} else if (message.command == "stop") {
 		self.stop();
 
-	} else if (data.command == "log") {
-		self.postMessage('{"command":"log","data":[' + user.position[0] + ',' + user.position[1] + ',' + user.position[2] + ']}');
-		var allChunks = [];
-		for (var key in chunks) {
-			allChunks.push(chunks[key]);
-		}
-		self.postMessage('{"command":"log","data":' + JSON.stringify(allChunks)+'}');
+	} else if (message.command == "log") {
+		self.postMessage('{"command":"log","data":[' + user.position.x + ',' + user.position.y + ',' + user.position.z + ']}');
+		self.postMessage('{"command":"log","data":"' + JSON.stringify(entities)+'", platforms: "'+JSON.stringify(platforms)+'"}');
 
 	}
 };

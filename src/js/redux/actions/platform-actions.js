@@ -4,23 +4,57 @@ import {
     RECEIVE_PLATFORMS,
     PLATFORMS_FETCH_FAILED,
     UPDATE_PLATFORM,
-    DELETE_PLATFORM
+    DELETE_PLATFORM,
+    PLATFORM_HOME_INIT,
+    PLATFORM_TEST_INIT
 } from '../constants/action-types';
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
+import Platform from '../../world/platform.js'
 
 export function addPlatform () {
+    let physicsWorld = three.world.worldPhysics.worker;
+
     return {
         type: PLATFORM_ADD
     }
 }
+export function deletePlatform (id) {
+    let physicsWorld = three.world.worldPhysics.worker;
+    physicsWorld.postMessage(JSON.stringify({
+        command: "remove platform",
+        data: id
+    }))
+    return {
+        type: DELETE_PLATFORM
+    }
+}
+export function homePlatformInit () {
+    let physicsWorld = three.world.worldPhysics.worker,
+        platform = new Platform();
+
+    three.world.platforms.push({cell: [0,0,0], mesh: platform.mesh, platform: platform })
+    physicsWorld.postMessage(JSON.stringify({
+        command: "add platforms",
+        data: [
+            platform.data
+        ]
+    }))
+
+    return {
+        type: PLATFORM_HOME_INIT,
+        platform: platform
+    }
+}
+
+
 export function fetchPlatforms (id) {
     return dispatch => {
          dispatch({
             type: FETCH_PLATFORMS,
             id: id
          });
-     return axios.get(API_SERVER+"/api/platforms"+id)
+     return axios.get(API_SERVER+"/api/platforms/"+id)
         .then(response => {
             dispatch(doneFetchPlatforms(response))
         }).catch(response => {
@@ -29,6 +63,15 @@ export function fetchPlatforms (id) {
    }
 }
 export function doneFetchPlatforms (platforms) {
+    let worldPlatforms = three.world.platforms;
+    platforms.map(data => {
+        var platform = new Platform(data);
+        worldPlatforms.push(platform)
+    })
+    physicsWorld.postMessage(JSON.stringify({
+        command: "add platforms",
+        data: platforms
+    }))
     return {
         type: RECEIVE_PLATFORMS,
         platforms: platforms
@@ -45,10 +88,5 @@ export function updatePlatform (id, data) {
         type: UPDATE_PLATFORM,
         data: data,
         id: id
-    }
-}
-export function deletePlatform (id) {
-    return {
-        type: DELETE_PLATFORM
     }
 }

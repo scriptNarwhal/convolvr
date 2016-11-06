@@ -1,5 +1,19 @@
 import React, { Component } from 'react';
-export default class App extends Component {
+import {
+    fetchPlatforms,
+    homePlatformInit,
+    initTestPlatforms
+} from '../redux/actions/platform-actions'
+import { fetchTracks } from '../redux/actions/track-actions'
+import { fetchUsers } from '../redux/actions/user-actions'
+
+class App extends Component {
+
+  componentDidMount () {
+      //this.props.initHomePlatform();
+      //this.props.initTestPlatforms();
+  }
+
   render() {
     var content = "";
     if (window.location.href.split("host/").length > 1) {
@@ -9,9 +23,9 @@ export default class App extends Component {
     return (
         <div className="root">
             {this.props.children}
-    	  	<video id="webcam" ></video>
-    		<canvas id="webcam-canvas"></canvas>
             <div className="lightbox" style={{display: "none"}}></div>
+            <canvas id="webcam-canvas"></canvas>
+            <video id="webcam" ></video>
         </div>
     )
   }
@@ -20,3 +34,28 @@ export default class App extends Component {
 App.defaultProps = {
 
 }
+
+import { connect } from 'react-redux'
+
+export default connect(
+  state => {
+    return {
+      platforms: state.platforms,
+      tracks: state.tracks,
+      tools: state.tools,
+      users: state.users,
+      menuOpen: state.app.menuOpen,
+      stereoMode: state.app.vrMode
+    }
+  },
+  dispatch => {
+    return {
+        initHomePlatform: () => {
+            dispatch(homePlatformInit())
+        },
+        initTestPlatforms: () => {
+            dispatch(initTestPlatforms())
+        }
+    }
+  }
+)(App)

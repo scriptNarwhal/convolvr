@@ -1,32 +1,34 @@
-import Avatar from './avatars/default.js';
-import WorldPhysics from '../core/world-physics.js';
-import {send} from '../network/socket'
+import Avatar from './avatar.js';
+import Platform from './platform.js';
+import WorldPhysics  from '../workers/world-physics.js';
+import {on,send,sendReceive} from '../network/socket'
 
 export default class World {
 	constructor(userInput = false) {
+
 		var scene = new THREE.Scene(),
-			camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 100, 1000000 ),
+			camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4000000 ),
 			renderer = new THREE.WebGLRenderer(),
 			mobile = (window.innerWidth <= 640),
 			self = this,
-			coreGeom = new THREE.CylinderGeometry( 8096, 8096, 1024, 9),
+			coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 			material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
-			skyboxSideMat = new THREE.MeshBasicMaterial( {color:0x241631, fog: false} ),
 			core = new THREE.Mesh(coreGeom, material),
-			light = new THREE.PointLight(0xfcfcff, 1.5, 900000),
-			panelMat = new THREE.MeshLambertMaterial({ color: 0xe1e1e1 }),
-			cellGeometry = new THREE.CylinderGeometry(192, 192, 128, 6),
+			light = new THREE.PointLight(0xffffff, 1.5, 5000000),
 			skyShaderMat = null,
-			cell = null,
 			three = {},
 			x = 0,
 			y = 0,
 			r = 4000;
 
 		this.mode = "vr";
+		this.users = [];
 		this.user = {
+			username: "user"+Math.floor(1000000*Math.random()),
 			arms: [],
-			velocity: new THREE.Vector3()
+			gravity: 1,
+			velocity: new THREE.Vector3(),
+			falling: false
 		}
 		this.camera = camera;
 		this.mobile = mobile;
@@ -34,48 +36,55 @@ export default class World {
 		this.sendUpdatePacket = 0;
 		this.capturing = false;
 		this.webcamImage = "";
+		this.platforms = [];
+		this.pMap = []; // map of coord strings to platforms
+		this.lastChunkCoords = [0, 0, 0];
+		this.chunkCoords = [0, 0, 0];
 
-		scene.fog = new THREE.FogExp2(0x241631, 0.0000045);
-		this.ambientLight = new THREE.AmbientLight(0x231344);
+		scene.fog = new THREE.FogExp2(0xffffff, 0.0000002);
+		this.ambientLight = new THREE.AmbientLight(0x050505);
 		scene.add(this.ambientLight);
 		// light.position.set(0, 60000, -32000);
-		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
+		renderer.setSize(window.innerWidth, window.innerHeight);
 		document.body.appendChild( renderer.domElement );
 		renderer.domElement.setAttribute("id", "viewport");
-		renderer.setClearColor(0x241631);
-				camera.position.set(-18391.370770019803, 5916.124890438994, -14620.440770421374);
+		renderer.setClearColor(0x150840);
 
-				skyShaderMat = new THREE.ShaderMaterial( {
-					side: 1,
-					fog: false,
-					uniforms: {
-						time: { value: 1.0 }
-					},
-					vertexShader: document.getElementById('sky-vertex').textContent,
-					fragmentShader: document.getElementById('sky-fragment').textContent
+		//camera.position.set(-18391.370770019803, 5916.124890438994, -14620.440770421374);
+		camera.position.set(85000, 5916.124890438994, 155000);
 
-				} );
+		skyShaderMat = new THREE.ShaderMaterial( {
+			side: 1,
+			fog: false,
+			uniforms: {
+				time: { type: "f", value: 1.0 }
+			},
+			vertexShader: document.getElementById('sky-vertex').textContent,
+			fragmentShader: document.getElementById('sky-fragment').textContent
 
-				this.ground = new THREE.Object3D();
-				this.ground.rotation.x = -Math.PI /2;
-				this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(750000, 4), skyShaderMat);
-				this.skybox.add(light);
-				scene.add(core);
-				core.position.set(0, 2000, 0);
-				light.position.set(0, 20000, 0);
-				scene.add(this.skybox);
-				this.skybox.position.set(camera.position.x, 0, camera.position.z);
+		} );
 
-				userInput.init(this, camera, this.user);
-				this.worldPhysics = new WorldPhysics();
-				this.worldPhysics.init(self);
+		this.ground = new THREE.Object3D();
+		this.ground.rotation.x = -Math.PI /2;
+		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(3400000, 4), skyShaderMat);
+		this.skybox.add(light);
+		//scene.add(core);
+		//core.position.set(0, 2000, 0);
+		light.position.set(3000000, 750000, 0);
+		scene.add(this.skybox);
+		this.skybox.position.set(camera.position.x, 0, camera.position.z);
 
-				this.core = {
-					physics: this.worldPhysics.worker,
-					// audio: this.worldAudio.worker,
-					// video: this.worldVideo.worker,
-					// npc: this.npcLogic.worker
-				}
+		userInput.init(this, camera, this.user);
+		this.worldPhysics = new WorldPhysics();
+		this.worldPhysics.init(self);
+
+		this.core = {
+			physics: {}, // this.worldPhysics.worker,
+			// audio: this.worldAudio.worker,
+			// video: this.worldVideo.worker,
+			// npc: this.npcLogic.worker
+		}
 
 		three = this.three = {
 			world: this,
@@ -90,17 +99,69 @@ export default class World {
 
 		this.render(0);
 
-		var configure = {
-			baseURL: 'https://convolvr.io',
-			timeout: 1000,
-			headers: {'x-access-token': localStorage.getItem("token")}
-		};
-		
 		window.onresize = function () {
-			three.renderer.setSize(window.innerWidth, window.innerHeight);
+			if (three.world.mode != "stereo") {
+				three.renderer.setSize(window.innerWidth, window.innerHeight);
+			}
 			three.camera.aspect = innerWidth / innerHeight;
 			three.camera.updateProjectionMatrix();
 		}
+
+		setTimeout(() => {
+
+			sendReceive("/user/create", {
+				username: "Foo",
+				email: "foo@foo.com",
+				password: "abcdfooZ",
+			}, res => {
+				console.log("Create User!", res)
+			})
+
+			sendReceive("/user/create", {
+				username: "Foo2",
+				email: "foo2@foo.com",
+				password: "abcdfooZ",
+			}, res => {
+				console.log("Create User!", res)
+			})
+
+			sendReceive("/user/create", {
+				username: "Foo3",
+				email: "foo3@foo.com",
+				password: "abcdfooZ",
+			}, res => {
+				console.log("Create User!", res)
+			})
+		}, 5000)
+
+		on("/update", data => {
+			let entity = null,
+				user = null,
+				pos = null,
+				quat = null,
+				mesh = null;
+
+			if (!! data.entity) {
+				entity = data.entity;
+				pos = entity.pos;
+				quat = entity.quat;
+				user = self.users[entity.id];
+				if (user == null) {
+					user = self.users[entity.id] = {
+						id: entity.id,
+						avatar: new Avatar()
+					}
+				}
+				mesh = user.mesh;
+			}
+			if (!! mesh) {
+				mesh.position.set(pos.x, pos.y, pos.z);
+				mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w);
+			}
+		})
+
+		this.bufferPlatforms(true, 0);
+
 	}
 
 	render (last) {
@@ -108,17 +169,24 @@ export default class World {
 			core = sys.three.core,
 			mobile = sys.mobile,
 			camera = sys.three.camera,
-			delta = ((Date.now() - last) / 10000),
+			delta = ((Date.now() - last) / 10000.0),
 			time = (Date.now() / 4600),
 			image = "",
 			imageSize = [0, 0],
 			userArms = sys.user.arms,
 			arms = [];
 
-		if (!! sys.userInput) {
-			sys.userInput.update(delta);
+		// Update VR headset position and apply to camera.
+		!! three.vrControls && three.vrControls.update();
+
+		if (!! sys.userInput) { 
+      if ( sys.mode != "stereo") {
+        sys.userInput.update(delta);
+      } else {
+        // implement some hybrid combination...
+      }
 		}
-		if (sys.sendUpdatePacket == 30) { // send image
+		if (sys.sendUpdatePacket == 12) { // send image
 			if (sys.capturing) {
 				var v = document.getElementById('webcam'),
 				 	canvas = document.getElementById('webcam-canvas'),
@@ -127,16 +195,16 @@ export default class World {
 				 	ch = Math.floor(v.videoHeight),
 					imageSize = [cw, ch];
 
-				canvas.width = 512;
-				canvas.height = 512;
-				context.drawImage(v, 0, 0, 512, 512);
-				sys.webcamImage = canvas.toDataURL("image/jpg", 0.5);
+				canvas.width = 320;
+				canvas.height = 240;
+				context.drawImage(v, 0, 0, 320, 240);
+				sys.webcamImage = canvas.toDataURL("image/jpg", 0.6);
 			}
 			sys.sendUpdatePacket = 0;
 		}
-
+		sys.skybox.material.uniforms.time.value += delta;
 		sys.sendUpdatePacket += 1;
-		if (sys.sendUpdatePacket %(2*(mobile ? 2 : 1)) == 0 && sys.mode == "vr") {
+		if (sys.sendUpdatePacket %(2*(mobile ? 2 : 1)) == 0 && (sys.mode == "vr" || sys.mode == "stereo")) {
 
 			if (sys.userInput.leapMotion) {
 				userArms.forEach(function (arm) {
@@ -144,26 +212,261 @@ export default class World {
 						quat: [arm.quaternion.x, arm.quaternion.y, arm.quaternion.z, arm.quaternion.w] });
 					});
 				}
-				send('/update', {
-					username:sys.username,
+				/*send('/update', { // temporarily disabled
+					username: sys.user.username,
 					image: sys.webcamImage,
 					imageSize: imageSize,
 					arms: arms,
 					position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
 					quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
-				});
+				});*/
 					if (sys.capturing) {
 						sys.webcamImage = "";
 					}
 				}
 
-				core.rotation.y += 0.005;
+				//core.rotation.y += 0.005;
 				sys.skybox.material.uniforms.time.value += delta;
 				sys.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
-				sys.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z)
-				sys.three.renderer.render(sys.three.scene, camera);
+				sys.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
+				if (sys.mode == "vr" || sys.mode == "desktop") {
+					// render for 2d screens
+					sys.three.renderer.render(three.scene, camera);
+				} else if (sys.mode == "stereo") {
+					// Render the scene in stereo for HDM.
+				 	!!three.vrEffect && three.vrEffect.render(three.scene, camera);
+				}
 				last = Date.now();
 				requestAnimationFrame( () => { this.render(last) } )
 		}
+
+
+
+		toggleStereo (mode) {
+			let renderer = three.renderer,
+				camera = three.camera,
+				controls = null,
+				effect = null;
+
+				if (mode == "stereo") {
+					if (three.vrControls == null) {
+						// renderer = new THREE.WebGLRenderer(),
+						// renderer.setSize( window.innerWidth, window.innerHeight );
+						// renderer.domElement = document.getElementById("viewport");
+						// renderer.setClearColor(0x241631);
+						// three.renderer = renderer;
+            window.WebVRConfig = {
+              MOUSE_KEYBOARD_CONTROLS_DISABLED: true
+            };
+						controls = new THREE.VRControls(camera);
+						effect = new THREE.VREffect(renderer);
+						effect.setSize(window.innerWidth, window.innerHeight);
+						three.vrEffect = effect;
+						three.vrControls = controls;
+
+						// Get the VRDisplay and save it for later.
+						var vrDisplay = null;
+						navigator.getVRDisplays().then(function(displays) {
+						  if (displays.length > 0) {
+						    vrDisplay = displays[0];
+						  }
+						});
+
+
+						function onResize() {
+						  effect.setSize(window.innerWidth, window.innerHeight);
+						}
+						function onVRDisplayPresentChange() {
+						  console.log('onVRDisplayPresentChange');
+						  onResize();
+						}
+						// Resize the WebGL canvas when we resize and also when we change modes.
+						window.addEventListener('resize', onResize);
+						window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
+
+						// Button click handlers.
+						// document.querySelector('button#fullscreen').addEventListener('click', function() {
+						//   three.world.userInput.toggleFullscreen(renderer.domElement);
+						// });
+						document.querySelector('#viewport').addEventListener('click', function() {
+						  vrDisplay.requestPresent([{source: renderer.domElement}]);
+						});
+						// document.querySelector('button#reset').addEventListener('click', function() {
+						//   vrDisplay.resetPose();
+						// });
+					}
+
+				} else {
+
+				}
+
+		}
+		makeVoxels (t) {
+			let voxels = [],
+				y = 11,
+				x = 15;
+
+			switch(t) {
+				case 0:
+					for (x = 8; x >= 0; x--) {
+						if (Math.random() < 0.1) {
+							voxels.push({
+								cell: [
+									x, 1 +Math.floor(2*Math.sin(x/2.0)), x % 6
+								]
+							})
+						}
+					}
+				break
+				case 1:
+					for (x = 15; x >= 0; x--) {
+						for (y = 8; y >= 0; y--) {
+							if (Math.random() < 0.2) {
+								voxels.push({
+									cell: [
+										x, 1+Math.floor(Math.sin(x)*Math.cos(y/2.0)), y
+									]
+								})
+							}
+						}
+					}
+				break;
+				case 2:
+				for (x = 8; x >= 0; x--) {
+					for (y = 11; y >= 0; y--) {
+						if (Math.random() < 0.4) {
+							voxels.push({
+								cell: [
+									x-y, y%4, y+x
+								]
+							})
+						}
+					}
+				}
+				break;
+				case 3:
+				for (x = 15; x >= 0; x--) {
+					for (y = 11; y >= 0; y--) {
+						if (Math.random() < 0.75) {
+							voxels.push({
+								cell: [
+									x, y%6, y
+								]
+							})
+						}
+					}
+				}
+				break;
+				case 4:
+				for (x = 15; x >= 0; x--) {
+					for (y = 11; y >= 0; y--) {
+						if (Math.random() < 0.25) {
+							voxels.push({
+								cell: [
+									x, 1+Math.floor(2*Math.sin(x/1.5)+2*Math.cos(y/1.5)), y
+								]
+							})
+						}
+					}
+				}
+				break;
+			}
+			return voxels;
+		}
+		bufferPlatforms (force, phase) {
+			let platforms = this.platforms,
+				physicalPlatforms = [],
+				removePhysicsChunks = [],
+				chunkPos = [],
+				pCell = [0,0,0],
+				pMap = this.pMap,
+				position = three.camera.position,
+				platform = null,
+				c = 0,
+				coords = [Math.floor(position.x/232000), 0, Math.floor(position.z/201840)],
+				lastCoords = this.lastChunkCoords,
+				moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
+				viewDistance = (this.mobile ? 5 : (window.innerWidth > 2100 ?  9  : 7)),
+				removeDistance = viewDistance,
+				endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
+				x = coords[0]-phase,
+				y = coords[2]-phase;
+				this.chunkCoords = coords;
+
+			if (!!force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2]) {
+				force = false;
+				// remove old chunks
+				for (c in platforms) {
+					platform = platforms[c];
+					pCell = platform.data.cell;
+					if (pCell[0] < coords[0] - removeDistance || pCell[0] > coords[0] + removeDistance ||
+						pCell[2] < coords[2] - removeDistance || pCell[2] > coords[2] + removeDistance) {
+							// remove this platform
+							!!platforms.mesh && three.scene.remove(platform.mesh);
+							removePhysicsChunks.push({cell: [pCell[0], 0, pCell[2]]});
+							delete pMap[pCell[0]+".0."+pCell[2]];
+							platforms.splice(c, 1);
+						}
+					}
+					// load new platforms // at first just from client-side generation
+					while (x <= endCoords[0]) {
+						while (y <= endCoords[1]) {
+							//console.log("checking", x, y);
+							if (pMap[x+".0."+y] == null) { // only if its not already loaded
+								if (Math.random() < 0.5 ) {
+									let voxels = [];
+									if (Math.random() < 0.44) {
+										voxels = this.makeVoxels( Math.floor(Math.random() * 5) );
+									}
+									platform = new Platform({voxels: voxels, towers: Math.random() < 0.33 ? [ {floors: 2+Math.floor(Math.random()*4.0),
+																					   position: [
+																						   -2.0+Math.floor(Math.random()*4.0),
+																						   0,
+																						   -2.0+Math.floor(Math.random()*4.0)
+																					   ]
+																				   }
+																			   ] : undefined}, [x, 0, y]);
+									three.scene.add(platform.mesh);
+									physicalPlatforms.push(platform.data);
+								} else {
+									platform = { data: {
+										 cell: [x, 0, y]
+									}};
+								}
+
+								platforms.push(platform);
+								pMap[x+".0."+y] = platform;
+							}
+							y += 1;
+						}
+						y = coords[2]-viewDistance;
+						x += 1;
+					}
+
+				}
+
+				if (physicalPlatforms.length > 0) {
+					this.worldPhysics.worker.postMessage(JSON.stringify({
+				        command: "add platforms",
+				        data: physicalPlatforms
+				    }))
+				}
+				if (removePhysicsChunks.length > 0) {
+					this.worldPhysics.worker.postMessage('{"command":"remove platforms","data":'+JSON.stringify(removePhysicsChunks)+'}');
+				}
+
+				lastCoords[0] = coords[0];
+				lastCoords[1] = coords[1];
+				lastCoords[2] = coords[2];
+				phase ++;
+
+				if (phase > viewDistance) {
+					phase = 1;
+				}
+				setTimeout(() => { this.bufferPlatforms(force, phase); }, 500);
+			}
+
+
+
 
 	};

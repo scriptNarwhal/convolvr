@@ -4,21 +4,21 @@
         <title>Convolvr</title>
         <meta content="utf-8" http-equiv="encoding">
         <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' type='image/png' sizes='192x192' href='/images/icon.png' />
+        <link rel='icon' type='image/png' sizes='192x192' href='/data/renderwavetv.png' />
         <meta name='theme-color' content='rgb(20, 20, 20)' />
         <meta name="msapplication-TileColor" content="#151515" />
         <meta name="application-name" content="Convolvr" />
-        <meta name="description" content="Modular webvr world builder, social platform and authoring tool." />
+        <meta name="description" content="WebVR server for hosting games, 3d chat and social events." />
         <meta property="og:title" content="Convolvr" />
-        <meta property="og:description" content="Modular webvr world builder, social platform and authoring tool." />
-        <meta property="og:image" content="Facebook image" / >
+        <meta property="og:description" content="WebVR server for hosting games, 3d chat and social events." />
+        <meta property="og:image" content="https://convolvr.io/data/renderwavetv.png" / >
         <meta property="og:image:width" content="192" />
         <meta property="og:image:height" content="192" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="https://convolvr.io" />
         <meta name="twitter:title" content="Convolvr" />
-        <meta name="twitter:description" content="Modular webvr world builder, social platform and authoring tool." />
-        <meta name="twitter:image" content="Twitter image" />
+        <meta name="twitter:description" content="WebVR server for hosting games, 3d chat and social events." />
+        <meta name="twitter:image" content="https://convolvr.io/data/renderwavetv.png" />
         <style>
 			body {
 				padding: 0;
@@ -29,8 +29,8 @@
                 position: absolute;
                 font-size: 20px;
                 font-family: sans-serif;
-				background: #241631;
-				color: #303030;
+				background: #101010;
+				color: #ffffff;
 			}
 			h1 {
 
@@ -61,23 +61,46 @@
             varying vec2 vUv;
             uniform float time;
             //3.141592654
+            float hash( float n ) {
+                return fract(sin(n)*43758.5453);
+            }
+            float noise( vec3 x ) {
+                // The noise function returns a value in the range -1.0f -> 1.0f
+                vec3 p = floor(x);
+                vec3 f = fract(x);
+
+                f       = f*f*(3.0-2.0*f);
+                float n = p.x + p.y*57.0 + 113.0*p.z;
+
+                return mix(mix(mix( hash(n+0.0), hash(n+1.0),f.x),
+                               mix( hash(n+57.0), hash(n+58.0),f.x),f.y),
+                           mix(mix( hash(n+113.0), hash(n+114.0),f.x),
+                               mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
+            }
 
             void main( void ) {
-                float depth = 1.0-(abs(0.5 - vUv.y) * 4.0);
-                float intense = sin(vUv.x * 3.141592654);
-                //float waver = 0.06 * -vUv.y *  sin(vUv.x * 3.141592654 * 12.0 );
-                float blue = 1.0*intense;
-                float red = 0.66*intense;
-                float green = 0.11;
+                float depth = (1.0 - (abs(0.5 - vUv.y) * 2.0));
+                float opacity =  2.0* (1.0-(abs(0.5 - (vUv.y)) * 2.0));
+                float intense = vUv.y*2.0*abs(0.25 - (vUv.x / 2.0));
+                float radial = abs(0.25 - (vUv.x / 2.0));
+                float glow = 0.0;
 
-                vec4 color = vec4(
-                    (intense * ((red * depth))),
-                    depth* intense * green,
-                    (intense * 1.5 * ((blue * depth))),
-                    1.0
-                );
+                if ((vUv.y >= 0.5)) {
+                    glow = intense * depth*4.0* depth* depth;
+                } else {
+                    glow = -0.07+(intense * (1.0-(0.5-vUv.y)) * depth * depth * vUv.y);
+                }
+               float blue = 1.0* glow;
+               float red = 0.3;
+               float green = 0.25 * glow;
+               float luminance = 0.0;
+               // implement...
+               luminance += 0.2 + opacity * depth * red - 0.25*radial;
+               luminance += 0.1 + radial;
+               luminance += 0.2 + opacity * depth * blue + 0.5*radial;
+               vec4 color = vec4(luminance, luminance, luminance, 1.0);
 
-                gl_FragColor = color;
+               gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
             }
         </script>
         <script type="x-shader/x-vertex" id="webcam-vertex">
@@ -87,6 +110,12 @@
 
         </script>
         <script src='lib/three.min.js'></script>
+        <script src='lib/csg.js'></script>
+        <script src='lib/ThreeCSG.js'></script>
+        <script src='lib/BufferSubdivisionModifier.js'></script>
+        <script src='lib/webvr-polyfill.js'></script>
+        <script src='lib/VRControls.js'></script>
+        <script src='lib/VREffect.js'></script>
         <script src="lib/leap.js"></script>
         <script src="lib/leap-plugins.js"></script>
         <script src='js/app.js'></script>
