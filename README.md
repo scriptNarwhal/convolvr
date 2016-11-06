@@ -1,2 +1,2 @@
 # convolvr
-Modular webvr game engine and server.
+Modular webvr game engine, authoring tool and server
