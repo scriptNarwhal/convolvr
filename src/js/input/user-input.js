@@ -99,8 +99,8 @@ export default class UserInput {
 					case 32: uInput.keys.space = true; break;
 					case 27: // escape key
 					if (world.user.username != "") {
-						world.showChat();
-						world.mode = "desktop";
+						//world.showChat();
+						//world.mode = "desktop";
 						document.body.setAttribute("class", "desktop");
 						//document.querySelector("#chatMode").click();
 					}

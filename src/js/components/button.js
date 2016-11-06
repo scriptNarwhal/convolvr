@@ -9,8 +9,11 @@ export default class Button extends Component {
         <div className="button">
             <div className="inner"
                 title={this.props.title }
-                 onClick={ (evt) => { this.props.onClick(evt, this.props.title) } }
-                 style={style}>
+                 onClick={ (evt) => {
+                   this.props.onClick && this.props.onClick(evt, this.props.title)
+                 } }
+                 style={style}
+            >
 
             </div>
         </div>

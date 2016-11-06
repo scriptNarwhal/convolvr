@@ -1,6 +1,6 @@
 import Avatar from './avatar.js';
 import Platform from './platform.js';
-import WorldPhysics from '../workers/world-physics.js';
+import WorldPhysics  from '../workers/world-physics.js';
 import {on,send,sendReceive} from '../network/socket'
 
 export default class World {
@@ -239,15 +239,12 @@ export default class World {
 
 
 
-		toggleStereo () {
+		toggleStereo (mode) {
 			let renderer = three.renderer,
 				camera = three.camera,
-				mode = three.world.mode == "stereo" ? "vr" : "stereo",
 				controls = null,
 				effect = null;
 
-
-				three.world.mode = mode;
 				if (mode == "stereo") {
 					if (three.vrControls == null) {
 						// renderer = new THREE.WebGLRenderer(),
