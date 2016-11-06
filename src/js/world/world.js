@@ -69,8 +69,8 @@ export default class World {
 		this.ground.rotation.x = -Math.PI /2;
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(3400000, 4), skyShaderMat);
 		this.skybox.add(light);
-		scene.add(core);
-		core.position.set(0, 2000, 0);
+		//scene.add(core);
+		//core.position.set(0, 2000, 0);
 		light.position.set(3000000, 750000, 0);
 		scene.add(this.skybox);
 		this.skybox.position.set(camera.position.x, 0, camera.position.z);
@@ -176,14 +176,17 @@ export default class World {
 			userArms = sys.user.arms,
 			arms = [];
 
-			// Update VR headset position and apply to camera.
-			!! three.vrControls && three.vrControls.update();
+		// Update VR headset position and apply to camera.
+		!! three.vrControls && three.vrControls.update();
 
-
-		if (!! sys.userInput) {
-			sys.userInput.update(delta);
+		if (!! sys.userInput) { 
+      if ( sys.mode != "stereo") {
+        sys.userInput.update(delta);
+      } else {
+        // implement some hybrid combination...
+      }
 		}
-		if (sys.sendUpdatePacket == 30) { // send image
+		if (sys.sendUpdatePacket == 12) { // send image
 			if (sys.capturing) {
 				var v = document.getElementById('webcam'),
 				 	canvas = document.getElementById('webcam-canvas'),
@@ -192,10 +195,10 @@ export default class World {
 				 	ch = Math.floor(v.videoHeight),
 					imageSize = [cw, ch];
 
-				canvas.width = 512;
-				canvas.height = 512;
-				context.drawImage(v, 0, 0, 512, 512);
-				sys.webcamImage = canvas.toDataURL("image/jpg", 0.5);
+				canvas.width = 320;
+				canvas.height = 240;
+				context.drawImage(v, 0, 0, 320, 240);
+				sys.webcamImage = canvas.toDataURL("image/jpg", 0.6);
 			}
 			sys.sendUpdatePacket = 0;
 		}
@@ -222,12 +225,12 @@ export default class World {
 					}
 				}
 
-				core.rotation.y += 0.005;
+				//core.rotation.y += 0.005;
 				sys.skybox.material.uniforms.time.value += delta;
 				sys.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
 				sys.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
 				if (sys.mode == "vr" || sys.mode == "desktop") {
-					// render for desktop / mobile (without cardboard)
+					// render for 2d screens
 					sys.three.renderer.render(three.scene, camera);
 				} else if (sys.mode == "stereo") {
 					// Render the scene in stereo for HDM.
@@ -252,12 +255,15 @@ export default class World {
 						// renderer.domElement = document.getElementById("viewport");
 						// renderer.setClearColor(0x241631);
 						// three.renderer = renderer;
-
+            window.WebVRConfig = {
+              MOUSE_KEYBOARD_CONTROLS_DISABLED: true
+            };
 						controls = new THREE.VRControls(camera);
 						effect = new THREE.VREffect(renderer);
 						effect.setSize(window.innerWidth, window.innerHeight);
 						three.vrEffect = effect;
 						three.vrControls = controls;
+
 						// Get the VRDisplay and save it for later.
 						var vrDisplay = null;
 						navigator.getVRDisplays().then(function(displays) {

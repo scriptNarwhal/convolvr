@@ -59,7 +59,7 @@ export default class UserInput {
 			uInput.fullscreen = uInput.focus;
 			if (!uInput.fullscreen && world.user.username != "") {
 				//world.showChat();
-				world.mode = "desktop";
+				//world.mode = "desktop";
 				while (a < world.user.arms.length) {
 					world.user.arms[a].visible = false;
 					a ++;
