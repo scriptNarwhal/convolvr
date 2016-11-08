@@ -184,7 +184,7 @@ export default class World {
 		if (!! sys.userInput && sys.mode != "stereo") {
 			sys.userInput.update(delta);
 		}
-		if (sys.sendUpdatePacket == 30) { // send image
+		if (sys.sendUpdatePacket == 12) { // send image
 			if (sys.capturing) {
 				var v = document.getElementById('webcam'),
 				 	canvas = document.getElementById('webcam-canvas'),
@@ -193,10 +193,10 @@ export default class World {
 				 	ch = Math.floor(v.videoHeight),
 					imageSize = [cw, ch];
 
-				canvas.width = 512;
-				canvas.height = 512;
-				context.drawImage(v, 0, 0, 512, 512);
-				sys.webcamImage = canvas.toDataURL("image/jpg", 0.5);
+				canvas.width = 320;
+				canvas.height = 240;
+				context.drawImage(v, 0, 0, 320, 240);
+				sys.webcamImage = canvas.toDataURL("image/jpg", 0.6);
 			}
 			sys.sendUpdatePacket = 0;
 		}
@@ -248,12 +248,9 @@ export default class World {
 
 				if (mode == "stereo") {
 					if (three.vrControls == null) {
-						// renderer = new THREE.WebGLRenderer(),
-						// renderer.setSize( window.innerWidth, window.innerHeight );
-						// renderer.domElement = document.getElementById("viewport");
-						// renderer.setClearColor(0x241631);
-						// three.renderer = renderer;
-
+						window.WebVRConfig = {
+              MOUSE_KEYBOARD_CONTROLS_DISABLED: true
+            };
 						controls = new THREE.VRControls(camera);
 						effect = new THREE.VREffect(renderer);
 						effect.setSize(window.innerWidth, window.innerHeight);
