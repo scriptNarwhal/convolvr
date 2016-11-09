@@ -173,16 +173,27 @@ export default class World {
 			time = (Date.now() / 4600),
 			image = "",
 			imageSize = [0, 0],
+			beforeHMD = [0, 0, 0],
+			beforeInput = [0, 0, 0],
 			userArms = sys.user.arms,
 			arms = [];
 
 			// Update VR headset position and apply to camera.
 			if(!! three.vrControls) {
+				beforeHMD = [camera.position.x, camera.position.y, camera.position.z];
 				three.vrControls.update();
-				three.camera.position.multiplyScalar(20000);
+				camera.position.multiplyScalar(20000);
+
 			}
-		if (!! sys.userInput && sys.mode != "stereo") {
+
+		if (!! sys.userInput) {
 			sys.userInput.update(delta);
+
+			if (sys.mode == "stereo") {
+				camera.position.set(beforeHMD[0] + camera.position.x / 2.0,
+														beforeHMD[1] + camera.position.y / 2.0,
+														beforeHMD[2] + camera.position.z / 2.0);
+			}
 		}
 		if (sys.sendUpdatePacket == 12) { // send image
 			if (sys.capturing) {
@@ -231,7 +242,7 @@ export default class World {
 					// render for desktop / mobile (without cardboard)
 					sys.three.renderer.render(three.scene, camera);
 				} else if (sys.mode == "stereo") {
-					// Render the scene in stereo for HDM.
+					// Render the scene in stereo for HMD.
 				 	!!three.vrEffect && three.vrEffect.render(three.scene, camera);
 				}
 				last = Date.now();

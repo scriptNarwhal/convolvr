@@ -27,7 +27,7 @@ export default class UserInput {
 		},
 		this.lastTouch = [[0,0], [0,0]];
 		this.leapMotion = false;
-		this.leapMode = "hybrid";
+		this.leapMode = "movement";
 	}
 
 	init (world, camera, device) {
@@ -214,32 +214,24 @@ export default class UserInput {
 
 	update (delta) {
 		var bottom = -232000,
-			world = this.world,
-			velocity = this.device.velocity; //world.getElevation(this.camera.position);
-
+				world = this.world,
+				velocity = this.device.velocity; //world.getElevation(this.camera.position);
 		if (isVRMode(world.mode)) {
-			this.handleKeys();
-
+				this.handleKeys();
 		}
-
-
-			this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ");
+			if (world.mode != "stereo") {
+				this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ");
+			}
 			velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion));
-
 			if (this.leapMotion && this.moveVector.length() > 0) {
 				if (velocity.y < 0) {
 					velocity.y *= 0.95;
 				}
-
 			}
-
 			//if (this.device.gravity > 0.25 ) {
 			if (this.device.falling) {
-
 				velocity.y -= 450 * this.device.gravity;
-
 			}
-
 			this.moveVector.set(0, 0, 0);
 			if (this.camera.position.y < bottom + 500) {
 				if (this.keys.shift) {
@@ -248,15 +240,17 @@ export default class UserInput {
 					velocity.y *= -0.20;
 				}
 				this.device.falling = false;
-
 				this.camera.position.y = bottom + 500;
 				if (velocity.y > 1000) {
 					//world.vibrate(50);
 				}
 			}
-			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
-			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion );
-			this.camera.matrixWorldNeedsUpdate = true;
+
+			if (world.mode != "stereo") {
+				this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
+				this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
+				this.camera.matrixWorldNeedsUpdate = true;
+			}
 			velocity.x *= 0.98;
 			velocity.z *= 0.98;
 			if (!! world.user.mesh) {

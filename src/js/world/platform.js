@@ -13,7 +13,7 @@ export default class Platform {
             narrow = gridSize * 0.87,
             mesh = null,
             bsp = null,
-			cellMesh = null,
+			      cellMesh = null,
             finalGeom = new THREE.Geometry(),
             base = new THREE.Geometry(),
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
@@ -23,7 +23,6 @@ export default class Platform {
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null,
             emblem = null,
             emblemMat = new THREE.MeshBasicMaterial( {shading: THREE.FlatShading, color: 0xffffff, fog: false, wireframe: true } );
-
 
         this.track = null;
         this.towers = [];
@@ -103,7 +102,19 @@ export default class Platform {
              mesh.add(emblem);
              emblem.position.set(0, 64000, 0);
              emblem.scale.set(0.333, 10.0, 0.333);
-             let light =  new THREE.PointLight(0xffffff, 1.0, 700000);
+             let lightColor = 0x00ff00;
+             if (Math.random() < 0.5) {
+               if (Math.random() < 0.5) {
+                 lightColor = 0x8000ff;
+               } else {
+                 if (Math.random() < 0.5) {
+                   lightColor = 0x0080ff;
+                 } else {
+                   lightColor = 0xff8000;
+                 }
+               }
+             }
+             let light =  new THREE.PointLight(lightColor, 1.0, 700000);
              emblem.add(light);
 
          }
