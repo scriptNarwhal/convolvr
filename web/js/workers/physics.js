@@ -164,7 +164,6 @@ self.onmessage = function (event) { // Do some work.
 		items = [],
 		platform = null,
 		toRemove = null;
-	//console.log(message.command);
 
 	if (message.command == "update") {
 		// user.prevPos = [user.position[0], user.position[1], user.position[2]];
@@ -183,13 +182,9 @@ self.onmessage = function (event) { // Do some work.
 			c--;
 		}
 	} else if (message.command == "add platforms") {
-		console.log("add platforms");
-		console.log(message.data.length);
 		platforms = platforms.concat(message.data);
 
 	} else if (message.command == "remove platforms") {
-		console.log("remove platforms");
-		console.log(message.data.length);
 		p = message.data.length -1;
 		while (p >= 0) {
 			toRemove = message.data[p];
