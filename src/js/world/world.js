@@ -8,7 +8,7 @@ export default class World {
 
 		var scene = new THREE.Scene(),
 			camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4000000 ),
-			renderer = new THREE.WebGLRenderer(),
+			renderer = new THREE.WebGLRenderer({antialias: true}),
 			mobile = (window.innerWidth <= 640),
 			self = this,
 			coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
@@ -396,26 +396,30 @@ export default class World {
 				y = coords[2]-phase;
 				this.chunkCoords = coords;
 
-			if (!!force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2]) {
+			if (true || !!force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2]) {
 				force = false;
 				// remove old chunks
 				for (c in platforms) {
-					platform = platforms[c];
-					pCell = platform.data.cell;
-					if (pCell[0] < coords[0] - removeDistance || pCell[0] > coords[0] + removeDistance ||
-						pCell[2] < coords[2] - removeDistance || pCell[2] > coords[2] + removeDistance) {
-							// remove this platform
-							!!platforms.mesh && three.scene.remove(platform.mesh);
-							removePhysicsChunks.push({cell: [pCell[0], 0, pCell[2]]});
-							delete pMap[pCell[0]+".0."+pCell[2]];
-							platforms.splice(c, 1);
+					if (c < 4) {
+						platform = platforms[c];
+						pCell = platform.data.cell;
+						if (pCell[0] < coords[0] - removeDistance || pCell[0] > coords[0] + removeDistance ||
+							pCell[2] < coords[2] - removeDistance || pCell[2] > coords[2] + removeDistance) {
+								// remove this platform
+								!!platforms.mesh && three.scene.remove(platform.mesh);
+								removePhysicsChunks.push({cell: [pCell[0], 0, pCell[2]]});
+								delete pMap[pCell[0]+".0."+pCell[2]];
+								platforms.splice(c, 1);
+							}
 						}
 					}
+					c = 0;
 					// load new platforms // at first just from client-side generation
 					while (x <= endCoords[0]) {
 						while (y <= endCoords[1]) {
 							//console.log("checking", x, y);
-							if (pMap[x+".0."+y] == null) { // only if its not already loaded
+							if (c < 4 && pMap[x+".0."+y] == null) { // only if its not already loaded
+								c ++;
 								if (Math.random() < 0.5 ) {
 									let voxels = [];
 									if (Math.random() < 0.44) {
@@ -466,7 +470,7 @@ export default class World {
 				if (phase > viewDistance) {
 					phase = 1;
 				}
-				setTimeout(() => { this.bufferPlatforms(force, phase); }, 500);
+				setTimeout(() => { this.bufferPlatforms(force, phase); }, 64);
 			}
 
 

@@ -102,7 +102,7 @@ export default class Platform {
              mesh.add(emblem);
              emblem.position.set(0, 64000, 0);
              emblem.scale.set(0.333, 10.0, 0.333);
-             let lightColor = 0x00ff00;
+             let lightColor = 0x40ff40;
              if (Math.random() < 0.5) {
                if (Math.random() < 0.5) {
                  lightColor = 0x8000ff;
