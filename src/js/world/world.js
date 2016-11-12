@@ -7,7 +7,7 @@ export default class World {
 	constructor(userInput = false) {
 
 		var scene = new THREE.Scene(),
-			camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4000000 ),
+			camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4500000 ),
 			renderer = new THREE.WebGLRenderer({antialias: true}),
 			mobile = (window.innerWidth <= 640),
 			self = this,
@@ -40,6 +40,7 @@ export default class World {
 		this.pMap = []; // map of coord strings to platforms
 		this.lastChunkCoords = [0, 0, 0];
 		this.chunkCoords = [0, 0, 0];
+		this.cleanUpPlatforms = [];
 
 		scene.fog = new THREE.FogExp2(0xffffff, 0.0000002);
 		this.ambientLight = new THREE.AmbientLight(0x050505);
@@ -67,7 +68,7 @@ export default class World {
 
 		this.ground = new THREE.Object3D();
 		this.ground.rotation.x = -Math.PI /2;
-		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(3400000, 4), skyShaderMat);
+		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat);
 		this.skybox.add(light);
 		scene.add(core);
 		core.position.set(0, 2000, 0);
@@ -378,6 +379,7 @@ export default class World {
 		}
 		bufferPlatforms (force, phase) {
 			let platforms = this.platforms,
+				plat = null,
 				physicalPlatforms = [],
 				removePhysicsChunks = [],
 				chunkPos = [],
@@ -385,54 +387,75 @@ export default class World {
 				pMap = this.pMap,
 				position = three.camera.position,
 				platform = null,
+				physicalPlat = null,
 				c = 0,
 				coords = [Math.floor(position.x/232000), 0, Math.floor(position.z/201840)],
 				lastCoords = this.lastChunkCoords,
 				moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
-				viewDistance = (this.mobile ? 5 : (window.innerWidth > 2100 ?  9  : 7)),
+				viewDistance = (this.mobile ? 6 : (window.innerWidth > 2100 ?  12  : 10)),
 				removeDistance = viewDistance,
 				endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
 				x = coords[0]-phase,
 				y = coords[2]-phase;
 				this.chunkCoords = coords;
 
-			if (true || !!force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2]) {
-				force = false;
-				// remove old chunks
+			if (force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2]) {
+				lastCoords = this.lastChunkCoords = [coords[0], coords[1], coords[2]];
+				force = false; 	// remove old chunks
 				for (c in platforms) {
-					if (c < 4) {
 						platform = platforms[c];
 						pCell = platform.data.cell;
-						if (pCell[0] < coords[0] - removeDistance || pCell[0] > coords[0] + removeDistance ||
-							pCell[2] < coords[2] - removeDistance || pCell[2] > coords[2] + removeDistance) {
-								// remove this platform
-								!!platforms.mesh && three.scene.remove(platform.mesh);
-								removePhysicsChunks.push({cell: [pCell[0], 0, pCell[2]]});
-								delete pMap[pCell[0]+".0."+pCell[2]];
-								platforms.splice(c, 1);
+						if (!!!platform.cleanUp && (pCell[0] < coords[0] - removeDistance ||
+																				pCell[0] > coords[0] + removeDistance ||
+																				pCell[2] < coords[2] - removeDistance ||
+																				pCell[2] > coords[2] + removeDistance)
+							) { 	// park platforms for removal
+								platform.cleanUp = true;
+								this.cleanUpPlatforms.push({physics: {cell: [pCell[0], 0, pCell[2]]}, cell: pCell[0]+".0."+pCell[2]});
 							}
-						}
 					}
+				}
+					c = 0;
+					let cleanUpPlats = this.cleanUpPlatforms;
+					this.cleanUpPlatforms.forEach(function (plat, i) {
+						if (c < 4) {
+							if (!!plat) {
+								physicalPlat = pMap[plat.cell];
+								!! physicalPlat && !! physicalPlat.mesh && three.scene.remove(physicalPlat.mesh);
+								removePhysicsChunks.push(plat.physics);
+								platforms.splice(platforms.indexOf(physicalPlat), 1);
+								delete pMap[plat.cell];
+								cleanUpPlats.splice(i, 1);
+							}
+							c ++;
+						}
+					})
+
+
 					c = 0;
 					// load new platforms // at first just from client-side generation
 					while (x <= endCoords[0]) {
 						while (y <= endCoords[1]) {
 							//console.log("checking", x, y);
-							if (c < 4 && pMap[x+".0."+y] == null) { // only if its not already loaded
+							if (c < 2 && pMap[x+".0."+y] == null) { // only if its not already loaded
 								c ++;
 								if (Math.random() < 0.5 ) {
 									let voxels = [];
 									if (Math.random() < 0.44) {
 										voxels = this.makeVoxels( Math.floor(Math.random() * 5) );
 									}
-									platform = new Platform({voxels: voxels, towers: Math.random() < 0.33 ? [ {floors: 2+Math.floor(Math.random()*4.0),
-																					   position: [
-																						   -2.0+Math.floor(Math.random()*4.0),
-																						   0,
-																						   -2.0+Math.floor(Math.random()*4.0)
-																					   ]
-																				   }
-																			   ] : undefined}, [x, 0, y]);
+									platform = new Platform({voxels: voxels, towers: Math.random() < 0.33 ? [
+										{
+											length: 1+Math.floor(Math.random()*6.0),
+											width: 1+Math.floor(Math.random()*6.0),
+											floors: 2+Math.floor(Math.random()*6.0),
+											position: [
+													-1.0+Math.floor(Math.random()*2.0),
+													0,
+													-1.0+Math.floor(Math.random()*2.0)
+											]
+										}
+								] : undefined}, [x, 0, y]);
 									three.scene.add(platform.mesh);
 									physicalPlatforms.push(platform.data);
 								} else {
@@ -450,7 +473,7 @@ export default class World {
 						x += 1;
 					}
 
-				}
+				//}
 
 				if (physicalPlatforms.length > 0) {
 					this.worldPhysics.worker.postMessage(JSON.stringify({
@@ -470,7 +493,7 @@ export default class World {
 				if (phase > viewDistance) {
 					phase = 1;
 				}
-				setTimeout(() => { this.bufferPlatforms(force, phase); }, 64);
+				setTimeout(() => { this.bufferPlatforms(force, phase); }, 32);
 			}
 
 
