@@ -42,7 +42,7 @@ export default class World {
 		this.chunkCoords = [0, 0, 0];
 		this.cleanUpPlatforms = [];
 
-		scene.fog = new THREE.FogExp2(0xffffff, 0.0000002);
+		scene.fog = new THREE.FogExp2(0x000000, 0.0000002);
 		this.ambientLight = new THREE.AmbientLight(0x050505);
 		scene.add(this.ambientLight);
 		// light.position.set(0, 60000, -32000);
@@ -183,7 +183,7 @@ export default class World {
 			if(!! three.vrControls) {
 				beforeHMD = [camera.position.x, camera.position.y, camera.position.z];
 				three.vrControls.update();
-				camera.position.multiplyScalar(20000);
+				camera.position.multiplyScalar(12000);
 
 			}
 

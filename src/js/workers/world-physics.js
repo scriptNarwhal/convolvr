@@ -27,10 +27,10 @@ export default class WorldPhysics {
 		  } else if (message.command == "platform collision") {
 	          if (three.camera.position.y > message.data.position[1] && three.camera.position.y < 8500 + message.data.position[1]) {
 				  three.camera.position.set(three.camera.position.x, message.data.position[1]+8500 , three.camera.position.z);
-				  user.velocity.y += 500.0;
+				  user.velocity.y = 0.0;
 			  } else if (three.camera.position.y < message.data.position[1] && three.camera.position.y > message.data.position[1] - 8500){
 				  three.camera.position.set(three.camera.position.x, message.data.position[1]-8500 , three.camera.position.z);
-				  user.velocity.y -= 500.0;
+				  user.velocity.y = 0.0;
 			  }
 			  user.velocity.x *= 0.97;
 			  user.velocity.z *= 0.97;

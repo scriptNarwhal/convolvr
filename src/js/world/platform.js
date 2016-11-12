@@ -19,7 +19,7 @@ export default class Platform {
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
             geom = new THREE.CylinderGeometry( 128000, 128000, 7000, 6, 1),
             voxelGeom = new THREE.CylinderGeometry( 128000 / 15, 128000 / 15, 128000 / 8.5, 6, 1),
-            mat = new THREE.MeshPhongMaterial( {color: 0x202020, shininess: 20} ),
+            mat = new THREE.MeshPhongMaterial( {color: 0x282828, shininess: 20} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null,
             emblem = null,
             emblemMat = new THREE.MeshBasicMaterial( {shading: THREE.FlatShading, color: 0xffffff, fog: false, wireframe: true } );
@@ -113,7 +113,7 @@ export default class Platform {
                    if (Math.random() < 0.5) {
                      lightColor = 0xff00ff;
                    } else {
-                     lightColor = 0xff0000;
+                     lightColor = 0xff8000;
                    }
 
                  }
