@@ -87,8 +87,9 @@
 
                 if ((vUv.y >= 0.5)) {
                     glow = intense * depth*4.0* depth* depth;
+                    glow -= 0.2;
                 } else {
-                    glow = -0.07+(intense * (1.0-(0.5-vUv.y)) * depth * depth * vUv.y);
+                    glow = -0.1+(intense * (1.0-(0.5-vUv.y)) * depth * depth * vUv.y);
                 }
                float blue = 1.0* glow;
                float red = 0.3;

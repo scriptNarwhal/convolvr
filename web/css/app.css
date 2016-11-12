@@ -36,6 +36,9 @@ body {
 .hud .menu-open {
     background-color: rgba(0,0,0,0.1);
 }
+.hud .button {
+  float: left !important;
+}
 .shell {
   margin: auto;
   position: fixed;
@@ -128,6 +131,9 @@ body {
     background-repeat: no-repeat;
     background-position: 50%;
     cursor: pointer;
+}
+.options-button {
+  float: left;
 }
 .menu-item .button .inner {
     right: 0.5em;
