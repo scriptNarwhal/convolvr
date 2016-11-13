@@ -1,2 +1,3 @@
 # convolvr
-Modular webvr game engine, authoring tool and server
+High performance game server and virtual reality authoring tool for the web
+![environmental chunks / platforms](http://spacehexagon.com/app/Screenshot_138.png)
