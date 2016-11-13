@@ -58,7 +58,7 @@ class Tower {
 		bsp = bsp.union(wallBSP);
 
 		for (f = 0; f < floors; f++) {
-			floorHeight = (-height / 2) + (f * 50000);
+			floorHeight = -20000+(-height / 2) + (f * 50000);
 			bsp = bsp.union(this.initFloor(floorHeight, xUnits, zUnits));
 			windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
 			windowMesh.position.set(-width / 2, floorHeight - 10000, 0);
@@ -100,7 +100,7 @@ class Tower {
 		//	}
         this.mesh = new THREE.Mesh(finalGeom, towerMaterial);
         this.platform.mesh.add(this.mesh);
-        this.mesh.position.set(data.position[0]*32000, floors * 20000, data.position[2]*32000);
+        this.mesh.position.set(data.position[0]*32000, 8500 + floors * 22000, data.position[2]*32000);
 	}
 
     initFloor (y, width, length) {
