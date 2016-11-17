@@ -79,11 +79,11 @@ export default class Platform {
                 mesh.rotation.y = Math.PI;
                 data.position.x -= 64000;
             }
-            mesh.position.set(data.position[0], data.position[1] - 22000, data.position[2]);
+            mesh.position.set(data.position[0], data.position[1] - 24000, data.position[2]);
         } else {
             if (!! cell) {
                 mesh.position.set((cell[0]*232000) + (cell[2] % 2 == 0 ? 0 : 232000 / 2),
-                                  cell[1]*232000 - 22000,
+                                  cell[1]*232000 - 24000,
                                   cell[2]*232000 * 0.87);
                 data.cell = cell;
                 data.position = [

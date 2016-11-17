@@ -19,9 +19,10 @@ class Tower {
 					color: 0xffffff,
 					wireframe: false
 				}),
-				towerGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 10000),
+				towerGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 5000),
+				towerGeometryB = new THREE.BoxGeometry(5000, height, 50000 * zUnits),
 				shaftGeometry = new THREE.BoxGeometry(25000 * zUnits, height, 25000 * zUnits),
-				windowGeometry = new THREE.BoxGeometry(width * 0.666, ((height / floors) / 1.5), 10000),
+				windowGeometry = new THREE.BoxGeometry(width * 0.75, 35000, 10000),
 				windowBSP = null,
 				windowMesh = null,
 				towerMesh,
@@ -43,49 +44,51 @@ class Tower {
 		wallBSP = new ThreeBSP(towerMesh);
 		bsp = bsp.union(wallBSP);
 
-		towerMesh = new THREE.Mesh(towerGeometry, towerMaterial);
+		towerMesh = new THREE.Mesh(towerGeometryB, towerMaterial);
 		towerMesh.position.set(-width / 2, 0, 0);
-		towerMesh.rotateY(Math.PI / 2);
+		//towerMesh.rotateY(Math.PI / 2);
 		towerMesh.updateMatrix();
 		wallBSP = new ThreeBSP(towerMesh);
 		bsp = bsp.union(wallBSP);
 
-		towerMesh = new THREE.Mesh(towerGeometry, towerMaterial);
+		towerMesh = new THREE.Mesh(towerGeometryB, towerMaterial);
 		towerMesh.position.set(width / 2, 0, 0);
-		towerMesh.rotateY(Math.PI / 2);
+		//towerMesh.rotateY(Math.PI / 2);
 		towerMesh.updateMatrix();
 		wallBSP = new ThreeBSP(towerMesh);
 		bsp = bsp.union(wallBSP);
 
 		for (f = 0; f < floors; f++) {
-			floorHeight = -20000+(-height / 2) + (f * 50000);
+			floorHeight = (-height / 2) + (f * 50000);
 			bsp = bsp.union(this.initFloor(floorHeight, xUnits, zUnits));
-			windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
-			windowMesh.position.set(-width / 2, floorHeight - 10000, 0);
-			windowMesh.rotateY(Math.PI / 2);
-			windowMesh.updateMatrix();
-			windowBSP = new ThreeBSP(windowMesh);
-			bsp = bsp.subtract(windowBSP);
-			windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
-			windowMesh.position.set(width / 2, floorHeight - 10000, 0);
-			windowMesh.rotateY(Math.PI / 2);
-			windowMesh.updateMatrix();
-			windowBSP = new ThreeBSP(windowMesh);
-			bsp = bsp.subtract(windowBSP);
-			windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
-			windowMesh.position.set(0, floorHeight - 10000, -width / 2);
-			windowMesh.updateMatrix();
-			windowBSP = new ThreeBSP(windowMesh);
-			bsp = bsp.subtract(windowBSP);
-			windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
-			windowMesh.position.set(0, floorHeight - 10000, width / 2);
-			windowMesh.updateMatrix();
-			windowBSP = new ThreeBSP(windowMesh);
-			bsp = bsp.subtract(windowBSP);
+			if (f > 0) {
+				windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
+				windowMesh.position.set(-width / 2, floorHeight - 17500, 0);
+				windowMesh.rotateY(Math.PI / 2);
+				windowMesh.updateMatrix();
+				windowBSP = new ThreeBSP(windowMesh);
+				bsp = bsp.subtract(windowBSP);
+				windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
+				windowMesh.position.set(width / 2, floorHeight - 17500, 0);
+				windowMesh.rotateY(Math.PI / 2);
+				windowMesh.updateMatrix();
+				windowBSP = new ThreeBSP(windowMesh);
+				bsp = bsp.subtract(windowBSP);
+				windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
+				windowMesh.position.set(0, floorHeight - 17500, -width / 2);
+				windowMesh.updateMatrix();
+				windowBSP = new ThreeBSP(windowMesh);
+				bsp = bsp.subtract(windowBSP);
+				windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
+				windowMesh.position.set(0, floorHeight - 17500, width / 2);
+				windowMesh.updateMatrix();
+				windowBSP = new ThreeBSP(windowMesh);
+				bsp = bsp.subtract(windowBSP);
+			}
 		}
 
 		var elevator = new THREE.Mesh(shaftGeometry, towerMaterial);
-		elevator.position.set((width / 2) - 5000, 0, (length / 2) - 5000);
+		elevator.position.set((width / 2) - 10000, 0, (length / 2) - 10000);
 		elevator.rotateY(Math.PI / 2);
 		elevator.updateMatrix();
 		var elevatorBSP = new ThreeBSP(elevator);
@@ -100,11 +103,11 @@ class Tower {
 		//	}
         this.mesh = new THREE.Mesh(finalGeom, towerMaterial);
         this.platform.mesh.add(this.mesh);
-        this.mesh.position.set(data.position[0]*32000, 8500 + floors * 22000, data.position[2]*32000);
+        this.mesh.position.set(data.position[0]*50000, floors * 25000, data.position[2]*50000);
 	}
 
     initFloor (y, width, length) {
-    		var floorGeometry = new THREE.BoxGeometry(50000*width, 1000, 50000*length),
+    		var floorGeometry = new THREE.BoxGeometry(50000*width, 1600, 50000*length),
     		    floor = new THREE.Mesh(floorGeometry, this.towerMaterial),
     		    floorBSP;
     		floor.position.set(0, y, 0);
