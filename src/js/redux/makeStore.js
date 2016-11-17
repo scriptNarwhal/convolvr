@@ -7,15 +7,14 @@ import { combineReducers } from 'redux'
 import app from './reducers/app'
 import components from './reducers/component'
 import platforms from './reducers/platform'
-import towers from './reducers/tower'
-import tracks from './reducers/track'
+import structures from './reducers/structure'
 import users from './reducers/user'
 import npcs from './reducers/npc'
 import avatars from './reducers/avatar'
 import patterns from './reducers/pattern'
 import tools from './reducers/tool'
 import entities from './reducers/entity'
-import pagess from './reducers/page'
+import pages from './reducers/page'
 import messages from './reducers/message'
 import files from './reducers/file'
 
@@ -26,15 +25,14 @@ export default function configureStore(router, initialState = {}) {
                      app,
                      components,
                      platforms,
-                     towers,
-                     tracks,
+                     structures,
                      users,
                      npcs,
                      avatars,
                      patterns,
                      tools,
                      entities,
-                     pagess,
+                     pages,
                      messages,
                      files
         }),
