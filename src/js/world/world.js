@@ -42,7 +42,7 @@ export default class World {
 		this.chunkCoords = [0, 0, 0];
 		this.cleanUpPlatforms = [];
 
-		scene.fog = new THREE.FogExp2(0xffffff, 0.0000002);
+		scene.fog = new THREE.FogExp2(0x333333, 0.00000015);
 		this.ambientLight = new THREE.AmbientLight(0x050505);
 		scene.add(this.ambientLight);
 		// light.position.set(0, 60000, -32000);
@@ -183,7 +183,7 @@ export default class World {
 			if(!! three.vrControls) {
 				beforeHMD = [camera.position.x, camera.position.y, camera.position.z];
 				three.vrControls.update();
-				camera.position.multiplyScalar(20000);
+				camera.position.multiplyScalar(12000);
 
 			}
 
@@ -250,8 +250,6 @@ export default class World {
 				requestAnimationFrame( () => { this.render(last) } )
 		}
 
-
-
 		toggleStereo (mode) {
 			let renderer = three.renderer,
 				camera = three.camera,
@@ -276,7 +274,6 @@ export default class World {
 						  }
 						});
 
-
 						function onResize() {
 						  effect.setSize(window.innerWidth, window.innerHeight);
 						}
@@ -292,19 +289,23 @@ export default class World {
 						// document.querySelector('button#fullscreen').addEventListener('click', function() {
 						//   three.world.userInput.toggleFullscreen(renderer.domElement);
 						// });
-						document.querySelector('#viewport').addEventListener('click', function() {
-						  vrDisplay.requestPresent([{source: renderer.domElement}]);
-						});
+
+						setTimeout(()=> {
+							vrDisplay.requestPresent([{source: renderer.domElement}]);
+						}, 1000)
+
+						// document.querySelector('#viewport').addEventListener('click', function() {
+						//   vrDisplay.requestPresent([{source: renderer.domElement}]);
+						// });
+
 						// document.querySelector('button#reset').addEventListener('click', function() {
 						//   vrDisplay.resetPose();
 						// });
 					}
-
-				} else {
-
 				}
-
+				window.onresize();
 		}
+
 		makeVoxels (t) {
 			let voxels = [],
 				y = 11,
@@ -316,7 +317,7 @@ export default class World {
 						if (Math.random() < 0.1) {
 							voxels.push({
 								cell: [
-									x, 1 +Math.floor(2*Math.sin(x/2.0)), x % 6
+									x, 2+Math.floor(2*Math.sin(x/2.0)), x % 6
 								]
 							})
 						}
@@ -328,7 +329,7 @@ export default class World {
 							if (Math.random() < 0.2) {
 								voxels.push({
 									cell: [
-										x, 1+Math.floor(Math.sin(x)*Math.cos(y/2.0)), y
+										x, 2+Math.floor(Math.sin(x)*Math.cos(y/2.0)), y
 									]
 								})
 							}
@@ -341,7 +342,7 @@ export default class World {
 						if (Math.random() < 0.4) {
 							voxels.push({
 								cell: [
-									x-y, y%4, y+x
+									x-y, 2+y%4, y+x
 								]
 							})
 						}
@@ -354,7 +355,7 @@ export default class World {
 						if (Math.random() < 0.75) {
 							voxels.push({
 								cell: [
-									x, y%6, y
+									x, 1+y%6, y
 								]
 							})
 						}
@@ -367,7 +368,7 @@ export default class World {
 						if (Math.random() < 0.25) {
 							voxels.push({
 								cell: [
-									x, 1+Math.floor(2*Math.sin(x/1.5)+2*Math.cos(y/1.5)), y
+									x, 2+Math.floor(2*Math.sin(x/1.5)+2*Math.cos(y/1.5)), y
 								]
 							})
 						}
@@ -393,7 +394,7 @@ export default class World {
 				lastCoords = this.lastChunkCoords,
 				moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
 				viewDistance = (this.mobile ? 6 : (window.innerWidth > 2100 ?  12  : 10)),
-				removeDistance = viewDistance,
+				removeDistance = viewDistance + 2,
 				endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
 				x = coords[0]-phase,
 				y = coords[2]-phase;
@@ -446,14 +447,10 @@ export default class World {
 									}
 									platform = new Platform({voxels: voxels, towers: Math.random() < 0.33 ? [
 										{
-											length: 1+Math.floor(Math.random()*6.0),
-											width: 1+Math.floor(Math.random()*6.0),
+											length: 1+Math.floor(Math.random()*4.0),
+											width: 1+Math.floor(Math.random()*4.0),
 											floors: 2+Math.floor(Math.random()*6.0),
-											position: [
-													-1.0+Math.floor(Math.random()*2.0),
-													0,
-													-1.0+Math.floor(Math.random()*2.0)
-											]
+											position: [-1.0, 0, -1.0]
 										}
 								] : undefined}, [x, 0, y]);
 									three.scene.add(platform.mesh);

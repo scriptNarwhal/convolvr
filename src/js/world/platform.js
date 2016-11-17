@@ -17,9 +17,11 @@ export default class Platform {
             finalGeom = new THREE.Geometry(),
             base = new THREE.Geometry(),
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
-            geom = new THREE.CylinderGeometry( 128000, 128000, 7000, 6, 1),
-            voxelGeom = new THREE.CylinderGeometry( 128000 / 15, 128000 / 15, 128000 / 8.5, 6, 1),
-            mat = new THREE.MeshPhongMaterial( {color: 0x202020, shininess: 20} ),
+            // geom = new THREE.CylinderGeometry( 128000, 128000, 7000, 6, 1),
+            geom = new THREE.CylinderGeometry( 132000, 132000, 48000, 6, 1),
+
+            voxelGeom = new THREE.CylinderGeometry( 132000 / 15, 132000 / 15, 132000 / 8.5, 6, 1),
+            mat = new THREE.MeshPhongMaterial( {color: 0x282828, shininess: 20} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null,
             emblem = null,
             emblemMat = new THREE.MeshBasicMaterial( {shading: THREE.FlatShading, color: 0xffffff, fog: false, wireframe: true } );
@@ -77,16 +79,16 @@ export default class Platform {
                 mesh.rotation.y = Math.PI;
                 data.position.x -= 64000;
             }
-            mesh.position.set(data.position[0], data.position[1], data.position[2]);
+            mesh.position.set(data.position[0], data.position[1] - 24000, data.position[2]);
         } else {
             if (!! cell) {
                 mesh.position.set((cell[0]*232000) + (cell[2] % 2 == 0 ? 0 : 232000 / 2),
-                                  cell[1]*232000,
+                                  cell[1]*232000 - 24000,
                                   cell[2]*232000 * 0.87);
                 data.cell = cell;
                 data.position = [
                     mesh.position.x,
-                    mesh.position.y,
+                    mesh.position.y + 22000,
                     mesh.position.z
                 ]
             } else {
@@ -94,14 +96,14 @@ export default class Platform {
             }
         }
         if (data.size == null) {
-            data.size = { x: 128000, y: 128000, z: 2048 };
+            data.size = { x: 132000, y: 132000, z: 48000 };
         }
 
          if (Math.random() < 0.08) { // w.i.p. platform emblem / icons
              emblem = new THREE.Mesh(geom, emblemMat);
              mesh.add(emblem);
              emblem.position.set(0, 64000, 0);
-             emblem.scale.set(0.333, 10.0, 0.333);
+             emblem.scale.set(0.333, 1.0, 0.333);
              let lightColor = 0x00ff80;
              if (Math.random() < 0.5) {
                if (Math.random() < 0.50) {
@@ -113,7 +115,7 @@ export default class Platform {
                    if (Math.random() < 0.5) {
                      lightColor = 0xff00ff;
                    } else {
-                     lightColor = 0xff0000;
+                     lightColor = 0xff8000;
                    }
 
                  }

@@ -52,15 +52,18 @@ self.update = function () {
 		for (i = 0; i < platforms.length; i ++) {
 			obj = platforms[i];
 			if (!!obj) {
-				if (position[1] < obj.position[1] + 8500 && position[1] > obj.position[1]-8500 ) {
-					if (distance2dArray(position, obj.position) < 126000) {
+				if (position[1] > obj.position[1] && position[1] < obj.position[1] + 8500) {
+					if (distance2dArray(position, obj.position) < 132000) {
 						collision = true;
-						//console.log('{"command": "platform collision", "data":{"position":[' + observer.prevPos[0] + ',' + observer.prevPos[1] + ',' + observer.prevPos[2] + '] }}');
 						self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
-
+					}
+				} else if (position[1] < obj.position[1] && obj.position[1] > obj.position[1] - 56500) {
+					if (distance2dArray(position, obj.position) < 132000) {
+						collision = true;
+						self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + (obj.position[1]-56500) + ',' + obj.position[2] + '] }}');
 					}
 				}
-					if (distance2dArray(position, obj.position) < 126000) {
+					if (distance2dArray(position, obj.position) < 132000) {
 						if (!!obj.voxels && obj.voxels.length > 0) {
 							v = obj.voxels.length;
 							while (v > 0) {

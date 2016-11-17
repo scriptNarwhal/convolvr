@@ -43,7 +43,7 @@ var token = localStorage.getItem("token"),
 
 	userInput = new UserInput();
 	world = new World(userInput);
-	userInput.init(world, world.camera, {gravity: 1, mesh:new THREE.Object3D(), velocity: new THREE.Vector3()});
+	userInput.init(world, world.camera, {gravity: 1, mesh:new THREE.Object3D(), velocity: new THREE.Vector3(0, -10, 0)});
 	userInput.rotationVector = {x: 0, y: 9.95, z: 0};
 	three.camera.position.set(100000, 20000, 100000);
 
