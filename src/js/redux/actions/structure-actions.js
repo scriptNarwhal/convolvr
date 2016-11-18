@@ -1,27 +1,27 @@
 /* structure actions */
 import {
-    TOWER_ADD,
-    TOWERS_FETCH,
-    TOWERS_FETCH_DONE,
-    TOWERS_FETCH_FAIL,
-    TOWER_UPDATE,
-    TOWER_DELETE
+    STRUCTURE_ADD,
+    STRUCTURES_FETCH,
+    STRUCTURES_FETCH_DONE,
+    STRUCTURES_FETCH_FAIL,
+    STRUCTURE_UPDATE,
+    STRUCTURE_DELETE
 } from '../constants/action-types';
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 
 export function addTower () {
     return {
-        type: TOWER_ADD
+        type: STRUCTURE_ADD
     }
 }
 export function fetchTowers (id) {
     return dispatch => {
      dispatch({
-         type: TOWERS_FETCH,
+         type: STRUCTURES_FETCH,
          id: id
      })
-     return axios.get(API_SERVER+"/api/towers"+id)
+     return axios.get(API_SERVER+"/api/structures"+id)
         .then(response => {
             dispatch(doneFetchTowers(response))
         }).catch(response => {
@@ -29,25 +29,25 @@ export function fetchTowers (id) {
         });
    }
 }
-export function doneFetchTowers (towers) {
+export function doneFetchTowers (structures) {
     let physicsWorld = three.world.worldPhysics.worker;
-    towers.map(data => {
+    structures.map(data => {
 
     })
     return {
-        type: TOWERS_FETCH_DONE,
-        towers: towers
+        type: STRUCTURES_FETCH_DONE,
+        structures: structures
     }
 }
 export function failedFetchTowers (err) {
     return {
-        type: TOWERS_FETCH_FAIL,
+        type: STRUCTURES_FETCH_FAIL,
         err: err
     }
 }
 export function updateTower (id, data) {
     return {
-        type: UPDATE_TOWER,
+        type: UPDATE_STRUCTURE,
         data: data,
         id: id
     }
@@ -55,10 +55,10 @@ export function updateTower (id, data) {
 export function deleteTower (id) {
     let physicsWorld = three.world.worldPhysics.worker;
     physicsWorld.postMessage(JSON.stringify({
-        command: "remove tower",
+        command: "remove structure",
         data: id
     }))
     return {
-        type: DELETE_TOWER
+        type: DELETE_STRUCTURE
     }
 }

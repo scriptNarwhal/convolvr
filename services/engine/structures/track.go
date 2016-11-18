@@ -1,17 +1,17 @@
-package tracks
+package structures
 
 import (
 	"github.com/SpaceHexagon/convolvr/services/engine/types"
-    "github.com/SpaceHexagon/convolvr/services/engine/voxels"
+  "github.com/SpaceHexagon/convolvr/services/engine/voxels"
 	"github.com/pborman/uuid"
 )
 
 type Track struct {
 	Id         string                  `json:"id"`
-    Aspects    []*types.Aspect         `json:"aspects"`
+  Aspects    []*types.Aspect         `json:"aspects"`
 	Voxels     []*voxels.Voxel         `json:"voxels"`
 	Position   *types.Position         `json:"pos"`
-    Quaternion *types.Quaternion       `json:"quat"`
+  Quaternion *types.Quaternion       `json:"quat"`
 }
 
 func NewTrack(position *types.Position, voxels []*voxels.Voxel, aspects []*types.Aspect) *Track { // components []*components.Voxel
