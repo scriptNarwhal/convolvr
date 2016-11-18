@@ -79,7 +79,6 @@ export const PAGES_FETCH_FAIL = 'PAGES_FETCH_FAIL';
 export const UPDATE_PAGE = 'UPDATE_PAGE';
 export const DELETE_PAGE = 'DELETE_PAGE';
 
-export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const SEND_MESSAGE = 'SEND_MESSAGE';
 export const FETCH_MESSAGES = 'FETCH_MESSAGES';
 export const RECEIVE_MESSAGES = 'RECEIVE_MESSAGES';

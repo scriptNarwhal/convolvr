@@ -9,12 +9,6 @@ import {
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 
-var configure = {
-  baseURL: 'https://convolvr.io',
-  timeout: 1000,
-  headers: {'x-access-token': localStorage.getItem("token")}
-};
-
 export function addAvatar (data) {
     return {
         type: ADD_AVATAR,

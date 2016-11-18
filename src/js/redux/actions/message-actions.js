@@ -1,5 +1,5 @@
 import {
-    ADD_MESSAGES,
+    SEND_MESSAGE,
     FETCH_MESSAGES,
     RECEIVE_MESSAGES,
     FAILED_FETCH_MESSAGES,
@@ -9,45 +9,45 @@ import {
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 
-export function addMessage () {
+export function sendMessage () {
     return {
-        type: ADD_MESSAGE
+        type: SEND_MESSAGE
     }
 }
-export function fetchMESSAGES (id) {
+export function fetchMessages (id) {
     return dispatch => {
      dispatch({
          type: FETCH_MESSAGES,
          id: id
      })
-     return axios.get(API_SERVER+"/api/files"+id)
+     return axios.get(API_SERVER+"/api/messages"+id)
         .then(response => {
-            dispatch(receiveMESSAGES(response))
+            dispatch(receiveMessages(response))
         }).catch(response => {
-            dispatch(failedFetchMESSAGES(response))
+            dispatch(failedFetchMessages(response))
         });
    }
 }
-export function receiveMESSAGES (files) {
+export function receiveMessages (messages) {
     return {
         type: RECEIVE_MESSAGES,
-        files: files
+        messages: messages
     }
 }
-export function failedFetchMESSAGES (err) {
+export function failedFetchMessages (err) {
     return {
         type: FAILED_FETCH_MESSAGES,
         err: err
     }
 }
-export function updateMESSAGE (id, data) {
+export function updateMessage (id, data) {
     return {
         type: UPDATE_MESSAGE,
         data: data,
         id: id
     }
 }
-export function deleteMESSAGE (id) {
+export function deleteMessage (id) {
     return {
         type: DELETE_MESSAGE
     }
