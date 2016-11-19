@@ -48,9 +48,9 @@ body {
   width: 64vw;
   height: 90vh;
   display: inline-block;
-  background: linear-gradient(rgb(28, 28, 28), rgb(76, 76, 76));
+  background: linear-gradient(rgb(83, 83, 83), rgb(17, 17, 17));
   border-radius: 0.8vh;
-  box-shadow: 0 0 5vh rgba(0,0,0,0.333);
+  box-shadow: 0 0 4vh rgba(255, 255, 255, 0.3);
 }
 .tabs {
   height: auto;
@@ -60,8 +60,6 @@ body {
   border-top-left-radius: 0.6vh;
   border-top-right-radius: 0.6vh;
   box-shadow: 0 0.5vh 1vh rgba(0,0,0,0.3);
-  text-align: left;
-
 }
 .tab {
   height: 7.5vh;
@@ -89,7 +87,6 @@ body {
 .side-menu {
   width: 100%;
   padding-top: 0;
-  padding-left: 2vh;
 }
 .menu-item {
     display: inline-block;

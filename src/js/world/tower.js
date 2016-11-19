@@ -9,7 +9,7 @@ class Tower {
 				// z = data.position[2],
 				bsp,
 				wallBSP,
-				height = 40000 * floors,
+				height = 50000 * floors,
 				xUnits = (data.width || 1),
 				zUnits = (data.length || 1),
 				width = 50000 * xUnits,

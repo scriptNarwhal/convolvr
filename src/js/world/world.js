@@ -14,7 +14,7 @@ export default class World {
 			coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 			material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
 			core = new THREE.Mesh(coreGeom, material),
-			light = new THREE.PointLight(0xffffff, 1.5, 50000000),
+			light = new THREE.PointLight(0xe0f5ff, 1.5, 50000000),
 			skyShaderMat = null,
 			three = {},
 			x = 0,
@@ -44,7 +44,7 @@ export default class World {
 
 
 		scene.fog = new THREE.FogExp2(0x333333, 0.00000015);
-		this.ambientLight = new THREE.AmbientLight(0x050505);
+		this.ambientLight = new THREE.AmbientLight(0x020202);
 		scene.add(this.ambientLight);
 		// light.position.set(0, 60000, -32000);
 		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);

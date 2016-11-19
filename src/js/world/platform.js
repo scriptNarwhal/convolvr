@@ -18,7 +18,7 @@ export default class Platform {
 			      cellMesh = null,
             finalGeom = new THREE.Geometry(),
             base = new THREE.Geometry(),
-            smooth = true, //(data != null && data.smooth != null) ? data.smooth : false,
+            smooth = (data != null && data.smooth != null) ? data.smooth : false,
             // geom = new THREE.CylinderGeometry( 128000, 128000, 7000, 6, 1),
             geom = new THREE.CylinderGeometry( 132000, 132000, 50000, 6, 1),
             voxelGeom = new THREE.CylinderGeometry( 132000 / 15, 132000 / 15, 132000 / 8.5, 6, 1),
@@ -66,6 +66,7 @@ export default class Platform {
             while (x > 0) {
                 x--;
                 structure = new Tower(items[x], this);
+                // should switch here for other structure types
                 this.structures.push(structure);
             }
         }
@@ -116,7 +117,7 @@ export default class Platform {
                    if (Math.random() < 0.5) {
                      lightColor = 0xff00ff;
                    } else {
-                     lightColor = 0xff8000;
+                     lightColor = 0xffff00;
                    }
 
                  }
