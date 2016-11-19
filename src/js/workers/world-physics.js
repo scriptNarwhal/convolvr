@@ -51,6 +51,7 @@ export default class WorldPhysics {
 	          console.log(message.data);
 
 		  } else if (message.command == "structure collision") { // left over from subnexus.fm ..might come in handy
+				  console.log("structure collision ", message.data);
 	          position = message.data.position;
 	          if (sys.tcl && message.data.inner == 0) {
 	            sys.user.falling = false;
@@ -64,18 +65,18 @@ export default class WorldPhysics {
 	            }
 	          }
 	          sys.vibrate(50);
-	        } else if (data.command == "load interior") {
+	        } else if (message.command == "load interior") {
 	          console.log("load interior... ", message.data.name);
 	          world.loadInterior(message.data.name);
 
-	        } else if (data.command == "enter interior") {
+	        } else if (message.command == "enter interior") {
 	          if (message.data.name != sys.venue) {
 	            //console.log("message.data.name", data.data.name);
 	            sys.venue = message.data.name;
 	            world.enterInterior(message.data.name);
 	          }
 	        } else {
-	          console.log(data);
+	          console.log(message.data);
 	        }
 
 	      };

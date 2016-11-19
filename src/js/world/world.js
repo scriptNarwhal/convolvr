@@ -14,7 +14,7 @@ export default class World {
 			coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 			material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
 			core = new THREE.Mesh(coreGeom, material),
-			light = new THREE.PointLight(0xffffff, 1.5, 5000000),
+			light = new THREE.PointLight(0xffffff, 1.5, 50000000),
 			skyShaderMat = null,
 			three = {},
 			x = 0,
@@ -41,6 +41,7 @@ export default class World {
 		this.lastChunkCoords = [0, 0, 0];
 		this.chunkCoords = [0, 0, 0];
 		this.cleanUpPlatforms = [];
+
 
 		scene.fog = new THREE.FogExp2(0x333333, 0.00000015);
 		this.ambientLight = new THREE.AmbientLight(0x050505);
@@ -72,7 +73,7 @@ export default class World {
 		this.skybox.add(light);
 		scene.add(core);
 		core.position.set(0, 2000, 0);
-		light.position.set(3000000, 750000, 0);
+		light.position.set(30000000, 7500000, 0);
 		scene.add(this.skybox);
 		this.skybox.position.set(camera.position.x, 0, camera.position.z);
 
@@ -80,10 +81,8 @@ export default class World {
 		this.worldPhysics = new WorldPhysics();
 		this.worldPhysics.init(self);
 
-		this.core = {
-			physics: {}, // this.worldPhysics.worker,
-			// audio: this.worldAudio.worker,
-			// video: this.worldVideo.worker,
+		this.workers = {
+			physics: this.worldPhysics
 			// npc: this.npcLogic.worker
 		}
 
@@ -97,7 +96,8 @@ export default class World {
 			renderer: renderer
 		};
 		window.three = this.three;
-
+		console.log("window.three");
+		console.log(window.three);
 		this.render(0);
 
 		window.onresize = function () {
@@ -445,7 +445,7 @@ export default class World {
 									if (Math.random() < 0.44) {
 										voxels = this.makeVoxels( Math.floor(Math.random() * 5) );
 									}
-									platform = new Platform({voxels: voxels, towers: Math.random() < 0.33 ? [
+									platform = new Platform({voxels: voxels, structures: Math.random() < 0.33 ? [
 										{
 											length: 1+Math.floor(Math.random()*4.0),
 											width: 1+Math.floor(Math.random()*4.0),
@@ -493,7 +493,12 @@ export default class World {
 				setTimeout(() => { this.bufferPlatforms(force, phase); }, 32);
 			}
 
+			loadInterior (name) {
 
+			}
+			enterInterior (name) {
+
+			}
 
 
 	};

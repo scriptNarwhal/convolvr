@@ -1,11 +1,13 @@
 import Track from './track'
 import Tower from './tower'
 
+let physics = null;
+
 export default class Platform {
     constructor (data, cell) {
         let x = 8,
             voxel = null,
-            tower = null,
+            structure = null,
             track = null,
             items = [],
             altitude = 0,
@@ -16,18 +18,17 @@ export default class Platform {
 			      cellMesh = null,
             finalGeom = new THREE.Geometry(),
             base = new THREE.Geometry(),
-            smooth = (data != null && data.smooth != null) ? data.smooth : false,
+            smooth = true, //(data != null && data.smooth != null) ? data.smooth : false,
             // geom = new THREE.CylinderGeometry( 128000, 128000, 7000, 6, 1),
-            geom = new THREE.CylinderGeometry( 132000, 132000, 48000, 6, 1),
-
+            geom = new THREE.CylinderGeometry( 132000, 132000, 50000, 6, 1),
             voxelGeom = new THREE.CylinderGeometry( 132000 / 15, 132000 / 15, 132000 / 8.5, 6, 1),
             mat = new THREE.MeshPhongMaterial( {color: 0x282828, shininess: 20} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null,
             emblem = null,
             emblemMat = new THREE.MeshBasicMaterial( {shading: THREE.FlatShading, color: 0xffffff, fog: false, wireframe: true } );
 
-        this.track = null;
-        this.towers = [];
+        this.structures = [];
+        physics = window.three.world.worldPhysics.worker;
 
         if (data == null) {
             data = { }
@@ -59,13 +60,13 @@ export default class Platform {
         three.scene.add(mesh);
         this.mesh = mesh;
 
-        if (!!data && !!data.towers) { // multiple towers per platform
-            items = data.towers;
+        if (!!data && !!data.structures) { // multiple structures per platform
+            items = data.structures;
             x = items.length;
             while (x > 0) {
                 x--;
-                tower = new Tower(items[x], this);
-                this.towers.push(tower);
+                structure = new Tower(items[x], this);
+                this.structures.push(structure);
             }
         }
 
@@ -79,16 +80,16 @@ export default class Platform {
                 mesh.rotation.y = Math.PI;
                 data.position.x -= 64000;
             }
-            mesh.position.set(data.position[0], data.position[1] - 24000, data.position[2]);
+            mesh.position.set(data.position[0], data.position[1] - 25000, data.position[2]);
         } else {
             if (!! cell) {
                 mesh.position.set((cell[0]*232000) + (cell[2] % 2 == 0 ? 0 : 232000 / 2),
-                                  cell[1]*232000 - 24000,
+                                  cell[1]*232000 - 25000,
                                   cell[2]*232000 * 0.87);
                 data.cell = cell;
                 data.position = [
                     mesh.position.x,
-                    mesh.position.y + 22000,
+                    mesh.position.y + 25000,
                     mesh.position.z
                 ]
             } else {
@@ -121,7 +122,7 @@ export default class Platform {
                  }
                }
              }
-             let light =  new THREE.PointLight(lightColor, 1.0, 700000);
+             let light =  new THREE.PointLight(lightColor, 1.0, 600000);
              emblem.add(light);
 
          }
