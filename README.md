@@ -1,5 +1,5 @@
 # convolvr
-High performance game server and virtual reality authoring tool for the web
+WebVR game engine, server and virtual reality authoring tool.
 #### To run the basic test-server:
 ```
   git clone https://github.com/SpaceHexagon/convolvr.git
