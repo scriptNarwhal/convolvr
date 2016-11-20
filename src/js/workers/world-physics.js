@@ -54,7 +54,7 @@ export default class WorldPhysics {
 				  console.log("structure collision ", message.data);
 						let cameraPosition = three.camera.position;
 	          position = message.data.position;
-	          if (true) { //message.data.inner == 0 ) {
+	          if (message.data.inner == 0 ) {
 	            sys.user.falling = false;
 	            if (message.data.delta[0] > message.data.delta[1]) {
 	              cameraPosition.x = position[0];

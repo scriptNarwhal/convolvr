@@ -27,8 +27,11 @@ class Tower {
 				detailLevels = [],
 				floorHeight = 1;
 
-        this.towerMaterial = towerMaterial;
+
+    this.towerMaterial = towerMaterial;
 		this.platform = platform;
+		this.width = width;
+		this.length = length;
 
 		towerMesh = new THREE.Mesh(towerGeometry, towerMaterial);
 		towerMesh.position.set(0, 0, -length / 2);
@@ -162,7 +165,7 @@ class Tower {
 
 				emblem = new THREE.Mesh(geom, emblemMat);
 				this.mesh.add(emblem);
-				emblem.position.set(0, 64000, 0);
+				emblem.position.set(this.width/2, 64000, this.length/2 );
 				emblem.scale.set(0.1, 0.4, 0.1);
 				let lightColor = 0x00ff00;
 				if (Math.random() < 0.5) {
