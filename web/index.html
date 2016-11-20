@@ -89,7 +89,7 @@
                     glow = 0.9 * depth* depth;
                     glow -= 0.2;
                 } else {
-                    glow = -0.2+(depth* depth * vUv.y);
+                    glow = -0.2+(depth* depth) - vUv.y;
                 }
               //  float red = -0.4+glow+radial+depth;
               //  float blue = 1.2+glow+radial+(depth/2.0);

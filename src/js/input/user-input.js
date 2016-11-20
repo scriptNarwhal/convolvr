@@ -141,7 +141,7 @@ export default class UserInput {
 			var data = event.touches, touch = data.length ;
 			//uInput.lastTouch = [[0,0],[0,0]];
 			if (isVRMode(world.mode)) {
-				event.preventDefault();
+				//event.preventDefault();
 				while (touch-- > 0) {
 					uInput.lastTouch[touch] = [data[touch].pageX, data[touch].pageY];
 				}
