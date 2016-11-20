@@ -14,7 +14,7 @@ export default class World {
 			coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 			material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
 			core = new THREE.Mesh(coreGeom, material),
-			light = new THREE.PointLight(0xe0f5ff, 1.5, 50000000),
+			light = new THREE.PointLight(0xffffff, 1.5, 50000000),
 			skyShaderMat = null,
 			three = {},
 			x = 0,

@@ -52,19 +52,19 @@ export default class WorldPhysics {
 
 		  } else if (message.command == "structure collision") { // left over from subnexus.fm ..might come in handy
 				  console.log("structure collision ", message.data);
+						let cameraPosition = three.camera.position;
 	          position = message.data.position;
-	          if (sys.tcl && message.data.inner == 0) {
+	          if (true) { //message.data.inner == 0 ) {
 	            sys.user.falling = false;
 	            if (message.data.delta[0] > message.data.delta[1]) {
-	              three.camera.position.x = position[0];
-	              UserInput.device.velocity.x *= -0.85;
-
+	              cameraPosition.x = position[0];
+								user.velocity.x += position[0]*= -0.85;
 	            } else {
-	              three.camera.position.z = position[2];
-	              UserInput.device.velocity.z *= -0.85;
+	              cameraPosition.z = position[2];
+								user.velocity.z += position[2] *= -0.85;
 	            }
 	          }
-	          sys.vibrate(50);
+	          //sys.vibrate(50);
 	        } else if (message.command == "load interior") {
 	          console.log("load interior... ", message.data.name);
 	          world.loadInterior(message.data.name);

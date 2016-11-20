@@ -228,10 +228,10 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
-			velocity.y -= 1000.1 * delta;
+			velocity.y -= 10000 * delta;
 			//if (this.device.gravity > 0.25 ) {
 			if (this.device.falling) {
-				velocity.y -= 1000.1 * delta;
+				velocity.y -= 1000 * delta;
 			}
 			this.moveVector.set(0, 0, 0);
 			if (this.camera.position.y < bottom + 500) {

@@ -25,7 +25,7 @@ export default class Platform {
             mat = new THREE.MeshPhongMaterial( {color: 0x282828, shininess: 20} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null,
             emblem = null,
-            emblemMat = new THREE.MeshBasicMaterial( {shading: THREE.FlatShading, color: 0xffffff, fog: false, wireframe: true } );
+            emblemMat = new THREE.MeshBasicMaterial( {color: 0xffffff, fog: false, wireframe: false} );
 
         this.structures = [];
         physics = window.three.world.worldPhysics.worker;
@@ -105,8 +105,8 @@ export default class Platform {
              emblem = new THREE.Mesh(geom, emblemMat);
              mesh.add(emblem);
              emblem.position.set(0, 64000, 0);
-             emblem.scale.set(0.333, 1.0, 0.333);
-             let lightColor = 0x00ff80;
+             emblem.scale.set(0.1, 0.4, 0.1);
+             let lightColor = 0x8000ff;
              if (Math.random() < 0.5) {
                if (Math.random() < 0.50) {
                  lightColor = 0x00ff00;
@@ -117,7 +117,7 @@ export default class Platform {
                    if (Math.random() < 0.5) {
                      lightColor = 0xff00ff;
                    } else {
-                     lightColor = 0xffff00;
+                     lightColor = 0xff00ff;
                    }
 
                  }
