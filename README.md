@@ -1,6 +1,5 @@
 # convolvr
-#### High performance game server and virtual reality authoring tool for the web
-![environmental chunks / platforms](http://spacehexagon.com/app/Screenshot_138.png)
+High performance game server and virtual reality authoring tool for the web
 #### To run the basic test-server:
 ```
   git clone https://github.com/SpaceHexagon/convolvr.git
@@ -10,3 +9,5 @@
   ./convolvr #(starts server on port 3000 defautly)
 
 ```
+![environmental chunks / platforms](http://spacehexagon.com/app/Screenshot_138.png)
+
