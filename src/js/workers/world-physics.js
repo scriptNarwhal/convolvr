@@ -51,7 +51,6 @@ export default class WorldPhysics {
 	          console.log(message.data);
 
 		  } else if (message.command == "structure collision") { // left over from subnexus.fm ..might come in handy
-				  console.log("structure collision ", message.data);
 						let cameraPosition = three.camera.position;
 	          position = message.data.position;
 	          if (message.data.inner == 0 ) {

@@ -13,7 +13,7 @@ class Tower {
 				length = 50000 * zUnits,
 				intensity = 0,
 				towerMaterial = new THREE.MeshLambertMaterial({
-					color: 0x8080e0,
+					color: 0xf0f0f0,
 					wireframe: false
 				}),
 				towerGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 5000),

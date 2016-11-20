@@ -8,33 +8,30 @@
         <meta name='theme-color' content='rgb(20, 20, 20)' />
         <meta name="msapplication-TileColor" content="#151515" />
         <meta name="application-name" content="Convolvr" />
-        <meta name="description" content="WebVR server for hosting games, 3d chat and social events." />
+        <meta name="description" content="WebVR game engine, server and virtual reality authoring tool." />
         <meta property="og:title" content="Convolvr" />
-        <meta property="og:description" content="WebVR server for hosting games, 3d chat and social events." />
+        <meta property="og:description" content="WebVR game engine, server and virtual reality authoring tool." />
         <meta property="og:image" content="https://convolvr.io/data/convolvr.png" / >
         <meta property="og:image:width" content="192" />
         <meta property="og:image:height" content="192" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="https://convolvr.io" />
         <meta name="twitter:title" content="Convolvr" />
-        <meta name="twitter:description" content="WebVR server for hosting games, 3d chat and social events." />
+        <meta name="twitter:description" content="WebVR game engine, server and virtual reality authoring tool."  />
         <meta name="twitter:image" content="https://convolvr.io/data/convolvr.png" />
         <style>
 			body {
 				padding: 0;
 				margin: 0;
-                width: 100%;
-                height:100%;
-                overflow-x: hidden;
-                position: absolute;
-                font-size: 20px;
-                font-family: sans-serif;
+        width: 100%;
+        height:100%;
+        overflow-x: hidden;
+        position: absolute;
+        font-size: 20px;
+        font-family: sans-serif;
 				background: #101010;
 				color: #ffffff;
 			}
-			h1 {
-
-            }
 			canvas {
 				position: fixed;
 				z-index: 2;
@@ -94,9 +91,12 @@
               //  float red = -0.4+glow+radial+depth;
               //  float blue = 1.2+glow+radial+(depth/2.0);
               //  float green = -0.5+glow+radial+depth;
-              float red = 0.5*radial+0.2+0.36*depth;
-              float blue = 0.2+1.36*depth;
-              float green = 0.15+0.36*depth;
+              // float red = 0.5*radial+0.2+0.36*depth;
+              // float blue = 0.2+1.36*depth;
+              // float green = 0.15+0.36*depth;
+              float red = 0.8;
+              float blue = 1.2;
+              float green = 0.8;
                float luminance = 0.0;
                // implement...
                luminance += 0.1 * depth *radial;

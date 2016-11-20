@@ -64,17 +64,13 @@ export default class Platform {
             while (x > 0) {
                 x--;
                 structure = new Tower(items[x], this);
+                // track = new Track(items[x], this);
                 	if (Math.random() < 0.08) {
                     structure.initLight();
                   }
                 // should switch here for other structure types
                 this.structures.push(structure);
             }
-        }
-
-        if (!!data && !!data.track) { // one track segment per platform
-            track = new Track(data.track);
-            this.track = track;
         }
 
         if (!!data.position) {
