@@ -4,9 +4,6 @@ class Tower {
 				i = 0,
 				face = null,
 				floors = data.floors,
-
-				// x = data.position[0],
-				// z = data.position[2],
 				bsp,
 				wallBSP,
 				height = 50000 * floors,
@@ -16,7 +13,7 @@ class Tower {
 				length = 50000 * zUnits,
 				intensity = 0,
 				towerMaterial = new THREE.MeshLambertMaterial({
-					color: 0xffffff,
+					color: 0x8080e0,
 					wireframe: false
 				}),
 				towerGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 5000),
@@ -158,10 +155,35 @@ class Tower {
 
     }
 
+		initLight () {
+				let emblem = null,
+						geom = new THREE.CylinderGeometry( 132000, 132000, 50000, 6, 1),
+						emblemMat = new THREE.MeshBasicMaterial( {color: 0xffffff, fog: false, wireframe: false} );
 
+				emblem = new THREE.Mesh(geom, emblemMat);
+				this.mesh.add(emblem);
+				emblem.position.set(0, 64000, 0);
+				emblem.scale.set(0.1, 0.4, 0.1);
+				let lightColor = 0x00ff00;
+				if (Math.random() < 0.5) {
+					if (Math.random() < 0.50) {
+						lightColor = 0x00ff80;
+					} else {
+						if (Math.random() < 0.5) {
+							lightColor = 0xff00ff;
+						} else {
+							if (Math.random() < 0.5) {
+								lightColor = 0x0080ff;
+							} else {
+								lightColor = 0xffa000;
+							}
+
+						}
+					}
+				}
+				let light =  new THREE.PointLight(lightColor, 1.0, 800000);
+				emblem.add(light);
+		}
 }
-
-
-
 
 export default Tower;

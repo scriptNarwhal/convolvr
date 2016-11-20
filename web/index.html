@@ -94,10 +94,10 @@
               //  float red = -0.4+glow+radial+depth;
               //  float blue = 1.2+glow+radial+(depth/2.0);
               //  float green = -0.5+glow+radial+depth;
-              float red = 1.26*depth;
-              float blue = 1.26*depth;
-              float green = 1.26*depth;
-               float luminance = -0.1;
+              float red = 0.5*radial+0.2+0.36*depth;
+              float blue = 0.2+1.36*depth;
+              float green = 0.15+0.36*depth;
+               float luminance = 0.1;
                // implement...
                luminance += 0.1 * depth *radial;
                luminance += 0.1 + radial;

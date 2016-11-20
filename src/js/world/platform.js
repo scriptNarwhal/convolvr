@@ -23,9 +23,7 @@ export default class Platform {
             geom = new THREE.CylinderGeometry( 132000, 132000, 50000, 6, 1),
             voxelGeom = new THREE.CylinderGeometry( 132000 / 15, 132000 / 15, 132000 / 8.5, 6, 1),
             mat = new THREE.MeshPhongMaterial( {color: 0x282828, shininess: 20} ),
-            modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null,
-            emblem = null,
-            emblemMat = new THREE.MeshBasicMaterial( {color: 0xffffff, fog: false, wireframe: false} );
+            modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null;
 
         this.structures = [];
         physics = window.three.world.worldPhysics.worker;
@@ -66,6 +64,9 @@ export default class Platform {
             while (x > 0) {
                 x--;
                 structure = new Tower(items[x], this);
+                	if (Math.random() < 0.08) {
+                    structure.initLight();
+                  }
                 // should switch here for other structure types
                 this.structures.push(structure);
             }
@@ -100,34 +101,6 @@ export default class Platform {
         if (data.size == null) {
             data.size = { x: 132000, y: 132000, z: 48000 };
         }
-
-         if (Math.random() < 0.08) { // w.i.p. platform emblem / icons
-             emblem = new THREE.Mesh(geom, emblemMat);
-             mesh.add(emblem);
-             emblem.position.set(0, 64000, 0);
-             emblem.scale.set(0.1, 0.4, 0.1);
-             let lightColor = 0x8000ff;
-             if (Math.random() < 0.5) {
-               if (Math.random() < 0.50) {
-                 lightColor = 0x00ff00;
-               } else {
-                 if (Math.random() < 0.5) {
-                   lightColor = 0x0080ff;
-                 } else {
-                   if (Math.random() < 0.5) {
-                     lightColor = 0xff00ff;
-                   } else {
-                     lightColor = 0xff00ff;
-                   }
-
-                 }
-               }
-             }
-             let light =  new THREE.PointLight(lightColor, 1.0, 600000);
-             emblem.add(light);
-
-         }
-
         this.data = data;
         this.mesh = mesh;
     }
