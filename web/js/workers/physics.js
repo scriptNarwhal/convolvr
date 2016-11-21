@@ -34,6 +34,7 @@ function dist2dArrayCompare(a, b, n) {
 self.update = function () {
 	var entities = [],
 			distance = 0,
+			objPos = [],
 			position = observer.position,
 			i = 0,
 			v = 0,
@@ -54,32 +55,32 @@ self.update = function () {
 		for (i = 0; i < platforms.length; i ++) {
 			obj = platforms[i];
 			if (!!obj) {
-				if (position[1] > obj.position[1] && position[1] < obj.position[1] + 8500) {
-					if (dist2dArrayCompare(position, obj.position, 132000)) {
-						collision = true;
-						self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
-					}
-				} else if (position[1] < obj.position[1] && obj.position[1] > obj.position[1] - 56500) {
-					if (dist2dArrayCompare(position, obj.position, 132000)) {
-						collision = true;
-						self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + (obj.position[1]-56500) + ',' + obj.position[2] + '] }}');
+				if (dist2dArrayCompare(position, obj.position, 132000)) {
+					if (position[1] > obj.position[1] && position[1] < obj.position[1] + 8500) {
+							collision = true;
+							self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
+
+					} else if (position[1] < obj.position[1] && obj.position[1] > obj.position[1] - 56500) {
+							collision = true;
+							self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + (obj.position[1]-56500) + ',' + obj.position[2] + '] }}');
 					}
 				}
+			}
 					if (dist2dArrayCompare(position, obj.position, 200000)) { 	// do collisions on structures... just walls at first..
 							s = !! obj.structures ? obj.structures.length - 1 : -1;
 							while (s > -1) {
 								structure = obj.structures[s];
-								distance = distance2dArray(position, [obj.position[0]+structure.position[0]*size,
-																											obj.position[1]+structure.position[1]*size,
-																											obj.position[2]+structure.position[2]*size]);
-								if (distance < 480000) {
+								objPos = [obj.position[0]+structure.position[0]*size,
+													obj.position[1]+structure.position[1]*size,
+													obj.position[2]+structure.position[2]*size];
+								if (dist2dArrayCompare(position, objPos, 480000)) {
 									if (structure.name != undefined) {
 										if (!structure.interiorLoaded) {
 											structure.interiorLoaded = true;
 											console.log("loadInterior...");
 											self.postMessage('{"command":"load interior","data":' + JSON.stringify(structure) + '}');
 										}
-										if (!closeToVenue && distance < 320000) {
+										if (!closeToVenue && dist2dArrayCompare(position, objPos, 320000)) {
 											closeToVenue = true;
 											self.postMessage('{"command":"enter interior", "data":{"name":"'+structure.name+'"}}');
 										}
@@ -113,7 +114,7 @@ self.update = function () {
 							}
 					}
 
-					if (distance2dArray(position, obj.position) < 132000) {
+					if (dist2dArrayCompare(position, obj.position, 132000)) {
 						if (!!obj.voxels && obj.voxels.length > 0) {
 							v = obj.voxels.length;
 							while (v > 0) {
@@ -129,14 +130,13 @@ self.update = function () {
 							}
 						}
 					}
-			}
 		}
 
 		for (i = 0; i < entities.length; i ++) {
 			obj = entities[i];
 			if (!!obj) {
 				if (position[1] < obj.position[1] + 1000 && position[1] > obj.position[1]-2000 ) {
-					if (distance2dArray(position, obj.position) < 128000) {
+					if (dist2dArrayCompare(position, obj.position, 32000)) {
 						collision = true;
 						self.postMessage('{"command": "entity collision", "data":{"position":[' +obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
 					}
