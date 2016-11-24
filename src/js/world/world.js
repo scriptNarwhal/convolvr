@@ -14,7 +14,7 @@ export default class World {
 			coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 			material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
 			core = new THREE.Mesh(coreGeom, material),
-			light = new THREE.PointLight(0xffffff, 1.5, 50000000),
+			light = null, //new THREE.PointLight(0xffffff, 1.0, 5000000),
 			skyShaderMat = null,
 			three = {},
 			x = 0,
@@ -43,7 +43,7 @@ export default class World {
 		this.cleanUpPlatforms = [];
 
 
-		scene.fog = new THREE.FogExp2(0x333333, 0.00000015);
+		scene.fog = new THREE.FogExp2(0x303030, 0.00000015);
 		this.ambientLight = new THREE.AmbientLight(0x020202);
 		scene.add(this.ambientLight);
 		// light.position.set(0, 60000, -32000);
@@ -51,7 +51,7 @@ export default class World {
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		document.body.appendChild( renderer.domElement );
 		renderer.domElement.setAttribute("id", "viewport");
-		renderer.setClearColor(0x150840);
+		renderer.setClearColor(0x3b3b3b);
 
 		//camera.position.set(-18391.370770019803, 5916.124890438994, -14620.440770421374);
 		camera.position.set(85000, 5916.124890438994, 155000);
@@ -70,10 +70,11 @@ export default class World {
 		this.ground = new THREE.Object3D();
 		this.ground.rotation.x = -Math.PI /2;
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat);
-		this.skybox.add(light);
+		//this.skybox.add(light);
+		//camera.add(light);
 		scene.add(core);
 		core.position.set(0, 2000, 0);
-		light.position.set(30000000, 7500000, 0);
+		//light.position.set(6000000, 1500000, 0);
 		scene.add(this.skybox);
 		this.skybox.position.set(camera.position.x, 0, camera.position.z);
 
@@ -447,9 +448,9 @@ export default class World {
 									}
 									platform = new Platform({voxels: voxels, structures: Math.random() < 0.33 ? [
 										{
-											length: 1+Math.floor(Math.random()*4.0),
-											width: 1+Math.floor(Math.random()*4.0),
-											floors: 2+Math.floor(Math.random()*6.0),
+											length: 1+Math.floor(Math.random()*3.0),
+											width: 1+Math.floor(Math.random()*3.0),
+											floors: 2+Math.floor(Math.random()*10.0),
 											position: [-1.0, 0, -1.0]
 										}
 								] : undefined}, [x, 0, y]);

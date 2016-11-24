@@ -213,7 +213,7 @@ export default class UserInput {
 	}
 
 	update (delta) {
-		var bottom = -232000,
+		var bottom = -192000,
 				world = this.world,
 				velocity = this.device.velocity; //world.getElevation(this.camera.position);
 		if (isVRMode(world.mode)) {
@@ -228,10 +228,10 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
-			velocity.y -= 10000 * delta;
+			//velocity.y -=  * delta;
 			//if (this.device.gravity > 0.25 ) {
 			if (this.device.falling) {
-				velocity.y -= 1000 * delta;
+				velocity.y -= 400000 * delta;
 			}
 			this.moveVector.set(0, 0, 0);
 			if (this.camera.position.y < bottom + 500) {
@@ -284,7 +284,7 @@ export default class UserInput {
 		}
 		if (this.keys.space && !this.device.falling) {
 			this.device.falling = true;
-			velocity.y = 16000;
+			velocity.y = 160000;
 		}
 	}
 

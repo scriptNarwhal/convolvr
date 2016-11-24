@@ -103,7 +103,7 @@ class Tower {
 		//	}
         this.mesh = new THREE.Mesh(finalGeom, towerMaterial);
         this.platform.mesh.add(this.mesh);
-        this.mesh.position.set(data.position[0]*50000, floors * 25000, data.position[2]*50000);
+        this.mesh.position.set(data.position[0]*50000, 500+(floors+1) * 25000, data.position[2]*50000);
 	}
 
     initFloor (y, width, length) {
@@ -167,24 +167,24 @@ class Tower {
 				this.mesh.add(emblem);
 				emblem.position.set(this.width/2, 64000, this.length/2 );
 				emblem.scale.set(0.1, 0.4, 0.1);
-				let lightColor = 0x00ff00;
-				if (Math.random() < 0.5) {
-					if (Math.random() < 0.50) {
-						lightColor = 0x00ff80;
+				let lightColor = 0x1010ff;
+				if (Math.random() < 0.7) {
+					if (Math.random() < 0.6) {
+						lightColor = 0x00ff00;
 					} else {
 						if (Math.random() < 0.5) {
-							lightColor = 0xff00ff;
+							lightColor = 0xff00b0;
 						} else {
-							if (Math.random() < 0.5) {
-								lightColor = 0x0080ff;
+							if (Math.random() < 0.4) {
+								lightColor = 0xff0000;
 							} else {
-								lightColor = 0xffa000;
+								lightColor = 0x0080ff;
 							}
 
 						}
 					}
 				}
-				let light =  new THREE.PointLight(lightColor, 1.0, 800000);
+				let light =  new THREE.PointLight(lightColor, 1.0, 1100000);
 				emblem.add(light);
 		}
 }

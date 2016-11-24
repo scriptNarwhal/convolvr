@@ -102,11 +102,15 @@ self.update = function () {
 											} else {
 												position[2] = oPos[2] - size;
 											}
-											if (distance > size * 1.18) {
+
+											// self.postMessage('{"command": "structure floor collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
+											// ', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}');
+
+											//if (distance > size * 1.18) {
 												collision = true;
 												self.postMessage('{"command": "structure collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
 												', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}');
-											}
+											//}
 										}
 									}
 								}
