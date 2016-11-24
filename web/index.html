@@ -82,14 +82,14 @@
                 float glow = 0.0;
 
                 if ((vUv.y >= 0.5)) {
-                    glow = -0.2 + 0.9 * depth* depth;
+                    glow =   0.9 * depth* depth;
                 } else {
                     glow = -0.3+(depth* depth) - vUv.y;
                 }
 
-              float red = 0.4;
+              float red = 0.1;
               float blue = 0.4;
-              float green = 0.4;
+              float green = 0.0;
                float luminance = 0.0;
                // implement...
                luminance += 0.1 + radial;

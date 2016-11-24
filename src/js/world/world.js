@@ -43,7 +43,7 @@ export default class World {
 		this.cleanUpPlatforms = [];
 
 
-		scene.fog = new THREE.FogExp2(0x303030, 0.00000015);
+		//scene.fog = new THREE.FogExp2(0x303030, 0.00000015);
 		this.ambientLight = new THREE.AmbientLight(0x020202);
 		scene.add(this.ambientLight);
 		// light.position.set(0, 60000, -32000);
