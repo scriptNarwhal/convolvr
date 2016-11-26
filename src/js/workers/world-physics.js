@@ -65,8 +65,8 @@ export default class WorldPhysics {
 	          }
 	          //sys.vibrate(50);
 	        } else if (message.command == "load interior") {
-	          console.log("load interior... ", message.data.name);
-	          world.loadInterior(message.data.name);
+	          console.log("load interior... ", message.data.coords);
+	          world.generateFullLOD(message.data.coords);
 
 	        } else if (message.command == "enter interior") {
 	          if (message.data.name != sys.venue) {

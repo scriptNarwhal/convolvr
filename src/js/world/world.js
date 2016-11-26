@@ -40,7 +40,7 @@ export default class World {
 		this.lastChunkCoords = [0, 0, 0];
 		this.chunkCoords = [0, 0, 0];
 		this.cleanUpPlatforms = [];
-		this.HMDMode = "standard"; // "head-movement"
+		this.HMDMode = "non standard"; // "head-movement"
 
 		//scene.fog = new THREE.FogExp2(0x303030, 0.00000015);
 		this.ambientLight = new THREE.AmbientLight(0x020210);
@@ -184,7 +184,7 @@ export default class World {
 				camera.position.multiplyScalar(12000);
 
 			}
-			
+
 			if (this.mode == "stereo") {
 				if (this.HMDMode == "standard") {
 					camera.position.set(/*beforeHMD[0] + */ cPos.x / 2.0,
@@ -242,6 +242,12 @@ export default class World {
 				this.skybox.material.uniforms.time.value += delta;
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
 				this.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
+				this.three.scene.updateMatrixWorld();
+				this.three.scene.traverse( function ( object ) {
+					if ( object instanceof THREE.LOD ) {
+						object.update( camera );
+					}
+				} );
 				if (this.mode == "vr" || this.mode == "desktop") {
 					// render for desktop / mobile (without cardboard)
 					this.three.renderer.render(three.scene, camera);
@@ -311,6 +317,17 @@ export default class World {
 					}
 				}
 				window.onresize();
+		}
+
+		generateFullLOD (coords) {
+			let platform = this.pMap[coords];
+			if (platform != null) {
+				if (platform.structures != null) {
+					platform.structures.forEach(structure =>{
+							structure.generateFullLOD();
+					})
+				}
+			}
 		}
 
 		makeVoxels (t) {
