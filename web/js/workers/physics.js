@@ -66,14 +66,14 @@ self.update = function () {
 					}
 				}
 			}
-					if (dist2dArrayCompare(position, obj.position, 200000)) { 	// do collisions on structures... just walls at first..
+					if (dist2dArrayCompare(position, obj.position, 300000)) { 	// do collisions on voxels & structures... just walls at first..
 							s = !! obj.structures ? obj.structures.length - 1 : -1;
 							while (s > -1) {
 								structure = obj.structures[s];
 								objPos = [obj.position[0]+structure.position[0]*size,
 													obj.position[1]+structure.position[1]*size,
 													obj.position[2]+structure.position[2]*size];
-								if (dist2dArrayCompare(position, objPos, 480000)) {
+								if (dist2dArrayCompare(position, objPos, 250000)) {
 									if (structure.name != undefined) {
 										if (!structure.interiorLoaded) {
 											structure.interiorLoaded = true;
@@ -116,23 +116,20 @@ self.update = function () {
 								}
 								s--;
 							}
-					}
+							if (!!obj.voxels && obj.voxels.length > 0) {
+								v = obj.voxels.length;
+								while (v > 0) {
+									v--;
+									voxel = obj.voxels[v].cell;
+									if (distance3d(position, [-132000-10500+obj.position[0]+voxel[0]*10500, -10500+obj.position[1]+voxel[1]*10500, -132000+obj.position[2]+voxel[2]*10500]) < 14000) {
 
-					if (dist2dArrayCompare(position, obj.position, 132000)) {
-						if (!!obj.voxels && obj.voxels.length > 0) {
-							v = obj.voxels.length;
-							while (v > 0) {
-								v--;
-								voxel = obj.voxels[v].cell;
-								if (distance3d(position, [obj.position[0]+voxel[0]*10500, obj.position[1]+voxel[1]*10500, obj.position[2]+voxel[2]*10500]) < 12000) {
+										self.postMessage('{"command": "voxel collision", "data":{"position":[' + (position[0]-(voxel[0]*10500)-10500)
+																											   + ',' +(position[1]-(voxel[1]*10500)-10500)
+																											   + ',' +(position[2]-(voxel[2]*10500)) + '] }}');
 
-									self.postMessage('{"command": "voxel collision", "data":{"position":[' + (position[0]-(voxel[0]*10500))
-																										   + ',' +(position[1]-(voxel[1]*10500))
-																										   + ',' +(position[2]-(voxel[2]*10500)) + '] }}');
-
+									}
 								}
 							}
-						}
 					}
 		}
 

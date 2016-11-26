@@ -167,16 +167,16 @@ class Tower {
 				this.mesh.add(emblem);
 				emblem.position.set(this.width/2, 64000, this.length/2 );
 				emblem.scale.set(0.1, 0.4, 0.1);
-				let lightColor = 0x1010ff;
+				let lightColor = 0x00ff80;
 				if (Math.random() < 0.7) {
 					if (Math.random() < 0.6) {
-						lightColor = 0x00ff00;
+						lightColor = 0x30ff00;
 					} else {
 						if (Math.random() < 0.5) {
-							lightColor = 0xff00b0;
+							lightColor = 0x00ffff;
 						} else {
 							if (Math.random() < 0.4) {
-								lightColor = 0xff0000;
+								lightColor = 0x00ff00;
 							} else {
 								lightColor = 0x0080ff;
 							}
@@ -184,7 +184,7 @@ class Tower {
 						}
 					}
 				}
-				let light =  new THREE.PointLight(lightColor, 1.0, 1100000);
+				let light =  new THREE.PointLight(lightColor, 1.0, 900000);
 				emblem.add(light);
 		}
 }

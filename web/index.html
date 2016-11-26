@@ -83,17 +83,20 @@
 
                 if ((vUv.y >= 0.5)) {
                     glow =   0.9 * depth* depth;
+                } else if (vUv.y < 0.5 && vUv.y > 0.40) {
+                   glow =  mix((0.9 * depth* depth), -0.3+(depth* depth) - vUv.y, 1.0 - (vUv.y-0.40)*10.00);
                 } else {
                     glow = -0.3+(depth* depth) - vUv.y;
                 }
 
-              float red = 0.1;
-              float blue = 0.4;
-              float green = 0.0;
+              float red = 0.25;
+              float blue = 0.8;
+              float green = 0.15;
                float luminance = 0.0;
+               luminance += 0.5 * intense +  depth;
                // implement...
-               luminance += 0.1 + radial;
-               luminance += 0.1 + radial;
+              //  luminance += 0.1 + radial;
+              //  luminance += 0.1 + radial;
                vec4 color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
 
                gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));

@@ -11,7 +11,7 @@ export default class Platform {
             track = null,
             items = [],
             altitude = 0,
-            gridSize = 232000 / 16,
+            gridSize = 264000 / 16,
             narrow = gridSize * 0.87,
             mesh = null,
             bsp = null,
@@ -21,7 +21,7 @@ export default class Platform {
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
             // geom = new THREE.CylinderGeometry( 128000, 128000, 7000, 6, 1),
             geom = new THREE.CylinderGeometry( 132000, 132000, 50000, 6, 1),
-            voxelGeom = new THREE.CylinderGeometry( 132000 / 15, 132000 / 15, 132000 / 8.5, 6, 1),
+            voxelGeom = new THREE.CylinderGeometry( 132000 / 16, 132000 / 16, 132000 / 8.5, 6, 1),
             mat = new THREE.MeshPhongMaterial( {color: 0x282828, shininess: 20} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null;
 
@@ -42,8 +42,8 @@ export default class Platform {
             while (x >= 0 ) {
                 voxel = items[x];
                 cellMesh = new THREE.Mesh(voxelGeom, mat);
-               cellMesh.position.set((voxel.cell[0] * gridSize) + (voxel.cell[2] % 2==0 ? 0 : gridSize / 2),
-                                      voxel.cell[1] * gridSize,    voxel.cell[2] * gridSize);
+               cellMesh.position.set(-132000+(voxel.cell[0] * gridSize) + (voxel.cell[2] % 2==0 ? 0 : gridSize / 2),
+                                      voxel.cell[1] * gridSize,    -132000+voxel.cell[2] * gridSize);
                cellMesh.updateMatrix();
                base.merge(cellMesh.geometry, cellMesh.matrix);
                x --;
@@ -65,7 +65,7 @@ export default class Platform {
                 x--;
                 structure = new Tower(items[x], this);
                 // track = new Track(items[x], this);
-                	if (Math.random() < 0.08) {
+                	if (Math.random() < 0.16) {
                     structure.initLight();
                   }
                 // should switch here for other structure types

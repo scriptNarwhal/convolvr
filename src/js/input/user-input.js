@@ -264,19 +264,19 @@ export default class UserInput {
 	handleKeys () {
 		var velocity = this.device.velocity;
 		if (this.keys.a) {  // maybe insert more options here...
-			this.moveVector.x = -1200;
+			this.moveVector.x = -3200;
 		} else if (this.keys.d) {
-			this.moveVector.x = 1200;
+			this.moveVector.x = 3200;
 		}
 		if (this.keys.w) {
-			this.moveVector.z = -1200;
+			this.moveVector.z = -3200;
 		} else if (this.keys.s) {
-			this.moveVector.z = 1200;
+			this.moveVector.z = 3200;
 		}
 		if (this.keys.r) {
-			this.moveVector.y = 1200;
+			this.moveVector.y = 3200;
 		} else if (this.keys.f) {
-			this.moveVector.y = -1200;
+			this.moveVector.y = -3200;
 		}
 		if (this.keys.shift) {
 			velocity.x *= 1.02;
@@ -285,6 +285,21 @@ export default class UserInput {
 		if (this.keys.space && !this.device.falling) {
 			this.device.falling = true;
 			velocity.y = 160000;
+		}
+		if (velocity.x > 999999) {
+			velocity.x = 999999;
+		} else if (velocity.x < -999999) {
+			velocity.x = -999999;
+		}
+		if (velocity.y > 999999) {
+			velocity.y = 999999
+		} else if (velocity.y < -999999) {
+			velocity.y = -999999;
+		}
+		if (velocity.z > 999999) {
+			velocity.z = 999999
+		} else if (velocity.z < -999999) {
+			velocity.z = -999999;
 		}
 	}
 

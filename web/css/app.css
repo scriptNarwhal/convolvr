@@ -40,17 +40,17 @@ body {
   float: left !important;
 }
 .shell {
-  margin: auto;
-  position: fixed;
-  top: 4vh;
-  left: 18vw;
-  text-align: center;
-  width: 64vw;
-  height: 90vh;
-  display: inline-block;
-  background: linear-gradient(rgb(83, 83, 83), rgb(17, 17, 17));
-  border-radius: 0.8vh;
-  box-shadow: 0 0 4vh rgba(255, 255, 255, 0.3);
+    margin: auto;
+    position: fixed;
+    top: 4vh;
+    left: 18vw;
+    text-align: center;
+    width: 64vw;
+    height: 90vh;
+    display: inline-block;
+    background: rgba(0,0,0,0.2);
+    border-radius: 0.8vh;
+    box-shadow: 0px 11px 5vh -18px rgba(255, 255, 255, 0.3);
 }
 .tabs {
   height: auto;

@@ -14,7 +14,6 @@ export default class World {
 			coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 			material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
 			core = new THREE.Mesh(coreGeom, material),
-			light = null, //new THREE.PointLight(0xffffff, 1.0, 5000000),
 			skyShaderMat = null,
 			three = {},
 			x = 0,
@@ -41,12 +40,11 @@ export default class World {
 		this.lastChunkCoords = [0, 0, 0];
 		this.chunkCoords = [0, 0, 0];
 		this.cleanUpPlatforms = [];
-
+		this.HMDMode = "standard"; // "head-movement"
 
 		//scene.fog = new THREE.FogExp2(0x303030, 0.00000015);
-		this.ambientLight = new THREE.AmbientLight(0x020202);
+		this.ambientLight = new THREE.AmbientLight(0x020210);
 		scene.add(this.ambientLight);
-		// light.position.set(0, 60000, -32000);
 		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		document.body.appendChild( renderer.domElement );
@@ -70,11 +68,8 @@ export default class World {
 		this.ground = new THREE.Object3D();
 		this.ground.rotation.x = -Math.PI /2;
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat);
-		//this.skybox.add(light);
-		//camera.add(light);
 		scene.add(core);
 		core.position.set(0, 2000, 0);
-		//light.position.set(6000000, 1500000, 0);
 		scene.add(this.skybox);
 		this.skybox.position.set(camera.position.x, 0, camera.position.z);
 
@@ -167,19 +162,21 @@ export default class World {
 	}
 
 	render (last) {
-		var sys = this,
-			core = sys.three.core,
-			mobile = sys.mobile,
-			camera = sys.three.camera,
+		var core = this.three.core,
+			mobile = this.mobile,
+			camera = three.camera,
+			cPos = camera.position,
 			delta = ((Date.now() - last) / 10000.0),
 			time = (Date.now() / 4600),
 			image = "",
 			imageSize = [0, 0],
 			beforeHMD = [0, 0, 0],
 			beforeInput = [0, 0, 0],
-			userArms = sys.user.arms,
+			userArms = this.user.arms,
 			arms = [];
 
+		if (!! this.userInput) {
+			this.userInput.update(delta);
 			// Update VR headset position and apply to camera.
 			if(!! three.vrControls) {
 				beforeHMD = [camera.position.x, camera.position.y, camera.position.z];
@@ -187,18 +184,23 @@ export default class World {
 				camera.position.multiplyScalar(12000);
 
 			}
+			
+			if (this.mode == "stereo") {
+				if (this.HMDMode == "standard") {
+					camera.position.set(/*beforeHMD[0] + */ cPos.x / 2.0,
+															/*beforeHMD[1] + */ cPos.y / 2.0,
+															/*beforeHMD[2] + */ cPos.z / 2.0);
+				} else {
+					camera.position.set(beforeHMD[0] + cPos.x / 2.0,
+															beforeHMD[1] + cPos.y / 2.0,
+															beforeHMD[2] + cPos.z / 2.0);
+				}
 
-		if (!! sys.userInput) {
-			sys.userInput.update(delta);
-
-			if (sys.mode == "stereo") {
-				camera.position.set(beforeHMD[0] + camera.position.x / 2.0,
-														beforeHMD[1] + camera.position.y / 2.0,
-														beforeHMD[2] + camera.position.z / 2.0);
 			}
 		}
-		if (sys.sendUpdatePacket == 12) { // send image
-			if (sys.capturing) {
+		this.user.light && this.user.light.position.set(cPos.x, cPos.y, cPos.z);
+		if (this.sendUpdatePacket == 12) { // send image
+			if (this.capturing) {
 				var v = document.getElementById('webcam'),
 				 	canvas = document.getElementById('webcam-canvas'),
 				 	context = canvas.getContext('2d'),
@@ -209,41 +211,41 @@ export default class World {
 				canvas.width = 320;
 				canvas.height = 240;
 				context.drawImage(v, 0, 0, 320, 240);
-				sys.webcamImage = canvas.toDataURL("image/jpg", 0.6);
+				this.webcamImage = canvas.toDataURL("image/jpg", 0.6);
 			}
-			sys.sendUpdatePacket = 0;
+			this.sendUpdatePacket = 0;
 		}
-		sys.skybox.material.uniforms.time.value += delta;
-		sys.sendUpdatePacket += 1;
-		if (sys.sendUpdatePacket %(2*(mobile ? 2 : 1)) == 0 && (sys.mode == "vr" || sys.mode == "stereo")) {
+		this.skybox.material.uniforms.time.value += delta;
+		this.sendUpdatePacket += 1;
+		if (this.sendUpdatePacket %(2*(mobile ? 2 : 1)) == 0 && (this.mode == "vr" || this.mode == "stereo")) {
 
-			if (sys.userInput.leapMotion) {
+			if (this.userInput.leapMotion) {
 				userArms.forEach(function (arm) {
 					arms.push({pos: [arm.position.x, arm.position.y, arm.position.z],
 						quat: [arm.quaternion.x, arm.quaternion.y, arm.quaternion.z, arm.quaternion.w] });
 					});
 				}
 				/*send('/update', { // temporarily disabled
-					username: sys.user.username,
-					image: sys.webcamImage,
+					username: this.user.username,
+					image: this.webcamImage,
 					imageSize: imageSize,
 					arms: arms,
 					position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
 					quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
 				});*/
-					if (sys.capturing) {
-						sys.webcamImage = "";
+					if (this.capturing) {
+						this.webcamImage = "";
 					}
 				}
 
 				core.rotation.y += 0.005;
-				sys.skybox.material.uniforms.time.value += delta;
-				sys.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
-				sys.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
-				if (sys.mode == "vr" || sys.mode == "desktop") {
+				this.skybox.material.uniforms.time.value += delta;
+				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
+				this.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
+				if (this.mode == "vr" || this.mode == "desktop") {
 					// render for desktop / mobile (without cardboard)
-					sys.three.renderer.render(three.scene, camera);
-				} else if (sys.mode == "stereo") {
+					this.three.renderer.render(three.scene, camera);
+				} else if (this.mode == "stereo") {
 					// Render the scene in stereo for HMD.
 				 	!!three.vrEffect && three.vrEffect.render(three.scene, camera);
 				}
@@ -292,7 +294,11 @@ export default class World {
 						// });
 
 						setTimeout(()=> {
-							vrDisplay.requestPresent([{source: renderer.domElement}]);
+							if (vrDisplay) {
+								vrDisplay.requestPresent([{source: renderer.domElement}]);
+							} else {
+								alert("Connect VR Display and then reload page.")
+							}
 						}, 1000)
 
 						// document.querySelector('#viewport').addEventListener('click', function() {
