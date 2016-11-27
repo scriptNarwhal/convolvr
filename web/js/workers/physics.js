@@ -56,13 +56,13 @@ self.update = function () {
 			obj = platforms[i];
 			if (!!obj) {
 				if (dist2dArrayCompare(position, obj.position, 132000)) {
-					if (position[1] > obj.position[1] && position[1] < obj.position[1] + 8500) {
+					if (position[1] > obj.position[1] && position[1] < obj.position[1] + 12000) {
 							collision = true;
 							self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
 
-					} else if (position[1] < obj.position[1] && obj.position[1] > obj.position[1] - 56500) {
+					} else if (position[1] < obj.position[1] && obj.position[1] > obj.position[1] - 60000) {
 							collision = true;
-							self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + (obj.position[1]-56500) + ',' + obj.position[2] + '] }}');
+							self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + (obj.position[1]-60000) + ',' + obj.position[2] + '] }}');
 					}
 				}
 			}

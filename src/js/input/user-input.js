@@ -228,11 +228,7 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
-			//velocity.y -=  * delta;
-			//if (this.device.gravity > 0.25 ) {
-			if (this.device.falling) {
-				velocity.y -= 400000 * delta;
-			}
+			velocity.y -= 1000 + velocity.y*0.5 * delta; // weak gravity
 			this.moveVector.set(0, 0, 0);
 			if (this.camera.position.y < bottom + 500) {
 				if (this.keys.shift) {
@@ -264,19 +260,19 @@ export default class UserInput {
 	handleKeys () {
 		var velocity = this.device.velocity;
 		if (this.keys.a) {  // maybe insert more options here...
-			this.moveVector.x = -3200;
+			this.moveVector.x = -6400;
 		} else if (this.keys.d) {
-			this.moveVector.x = 3200;
+			this.moveVector.x = 6400;
 		}
 		if (this.keys.w) {
-			this.moveVector.z = -3200;
+			this.moveVector.z = -6400;
 		} else if (this.keys.s) {
-			this.moveVector.z = 3200;
+			this.moveVector.z = 6400;
 		}
 		if (this.keys.r) {
-			this.moveVector.y = 3200;
+			this.moveVector.y = 6400;
 		} else if (this.keys.f) {
-			this.moveVector.y = -3200;
+			this.moveVector.y = -6400;
 		}
 		if (this.keys.shift) {
 			velocity.x *= 1.02;

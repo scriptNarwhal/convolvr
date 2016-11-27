@@ -140,7 +140,7 @@ class Tower {
     			towerMesh = new THREE.Mesh(detailLevels[i][0], towerMaterial);
     			towerMesh.scale.set(1, 1, 1);
     			if (i == 1) {
-    				towerMesh.position.set(0, 0, -2500);
+    				towerMesh.position.set(0, 0, -width / 2.0);
     			}
     			towerMesh.updateMatrix();
     			towerMesh.matrixAutoUpdate = false;

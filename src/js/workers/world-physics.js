@@ -25,11 +25,11 @@ export default class WorldPhysics {
 	          console.log("collision");
 	          console.log(message.data);
 		  } else if (message.command == "platform collision") {
-	          if (three.camera.position.y > message.data.position[1] && three.camera.position.y < 8500 + message.data.position[1]) {
-				  three.camera.position.set(three.camera.position.x, message.data.position[1]+8500 , three.camera.position.z);
+	          if (three.camera.position.y > message.data.position[1] && three.camera.position.y < 12000 + message.data.position[1]) {
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]+12000 , three.camera.position.z);
 				  user.velocity.y *= -0.25;
-			  } else if (three.camera.position.y < message.data.position[1] && three.camera.position.y > message.data.position[1] - 8500){
-				  three.camera.position.set(three.camera.position.x, message.data.position[1]-8500 , three.camera.position.z);
+			  } else if (three.camera.position.y < message.data.position[1] && three.camera.position.y > message.data.position[1] - 12000){
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]-12000 , three.camera.position.z);
 				  user.velocity.y *= -0.25;
 			  }
 			  user.velocity.x *= 0.97;
