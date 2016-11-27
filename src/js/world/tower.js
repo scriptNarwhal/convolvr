@@ -23,7 +23,9 @@ class Tower {
 		this.towerMaterial = towerMaterial;
 		this.width = width;
 		this.length = length;
-
+		if (data.light !== false) {
+			this.initLight(data.light);
+		}
 
     this.mesh = new THREE.Mesh(LODGeometry, towerMaterial);
     this.platform.mesh.add(this.mesh);
@@ -153,9 +155,6 @@ class Tower {
 				this.platform.mesh.remove(this.mesh);
     		this.platform.mesh.add(building);
 				this.mesh = building;
-				if (Math.random() < 0.5) {
-					this.initLight();
-				}
     		return building;
     	}
 
@@ -163,33 +162,17 @@ class Tower {
 
     }
 
-		initLight () {
+		initLight (lightColor) {
 				let emblem = null,
 						geom = new THREE.CylinderGeometry( 132000, 132000, 50000, 6, 1),
 						emblemMat = new THREE.MeshBasicMaterial( {color: 0xffffff, fog: false, wireframe: false} );
 
 				emblem = new THREE.Mesh(geom, emblemMat);
-				this.mesh.add(emblem);
-				emblem.position.set(this.width/2, 64000, this.length/2 );
+				this.platform.mesh.add(emblem);
+				emblem.position.set(0, this.data.floors * 50000, 0);
 				emblem.scale.set(0.1, 0.4, 0.1);
-				let lightColor = 0x00ff80;
-				if (Math.random() < 0.7) {
-					if (Math.random() < 0.6) {
-						lightColor = 0x30ff00;
-					} else {
-						if (Math.random() < 0.5) {
-							lightColor = 0x00ffff;
-						} else {
-							if (Math.random() < 0.4) {
-								lightColor = 0x00ff00;
-							} else {
-								lightColor = 0x0080ff;
-							}
 
-						}
-					}
-				}
-				let light =  new THREE.PointLight(lightColor, 1.0, 900000);
+				let light =  new THREE.PointLight(lightColor, 1.0, 700000);
 				emblem.add(light);
 		}
 }

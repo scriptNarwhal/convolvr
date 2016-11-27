@@ -353,7 +353,7 @@ export default class World {
 							if (Math.random() < 0.2) {
 								voxels.push({
 									cell: [
-										x, 2+Math.floor(Math.sin(x)*Math.cos(y/2.0)), y
+										x, 2+Math.floor(Math.sin(x/4.0)*Math.cos(y/4.0)), y
 									]
 								})
 							}
@@ -465,7 +465,25 @@ export default class World {
 							if (c < 2 && pMap[x+".0."+y] == null) { // only if its not already loaded
 								c ++;
 								if (Math.random() < 0.5 ) {
-									let voxels = [];
+									let voxels = [],
+											lightColor = false;
+
+									if (Math.random() < 0.33) {
+										if (Math.random() < 0.6) {
+											lightColor = 0x00ff80;
+										} else {
+											if (Math.random() < 0.5) {
+												lightColor = 0x00ffff;
+											} else {
+												if (Math.random() < 0.4) {
+													lightColor = 0x00ff00;
+												} else {
+													lightColor = 0x0080ff;
+												}
+											}
+										}
+									}
+
 									if (Math.random() < 0.44) {
 										voxels = this.makeVoxels( Math.floor(Math.random() * 5) );
 									}
@@ -474,7 +492,8 @@ export default class World {
 											length: 1+Math.floor(Math.random()*3.0),
 											width: 1+Math.floor(Math.random()*3.0),
 											floors: 2+Math.floor(Math.random()*10.0),
-											position: [-1.0, 0, -1.0]
+											position: [-1.0, 0, -1.0],
+											light: lightColor
 										}
 								] : undefined}, [x, 0, y]);
 									three.scene.add(platform.mesh);
