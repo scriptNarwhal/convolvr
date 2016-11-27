@@ -83,15 +83,15 @@
 
                 if ((vUv.y >= 0.5)) {
                     glow =   0.9 * depth* depth;
-                } else if (vUv.y < 0.5 && vUv.y > 0.48) {
-                   glow =  mix((0.9 * depth* depth), -0.3+(depth* depth) - vUv.y, 1.0 - (vUv.y-0.48)*50.00);
+                } else if (vUv.y < 0.5 && vUv.y > 0.49) {
+                   glow =  mix((0.9 * depth* depth), -0.3+(depth* depth) - vUv.y, 1.0 - (vUv.y-0.49)*100.00);
                 } else {
                     glow = -0.3+(depth* depth) - vUv.y;
                 }
 
               float red = 0.15 + depth * 0.25;
               float blue = 0.8 + depth * 0.35;
-              float green = depth * 0.5;
+              float green = depth * 0.40;
                float luminance = 0.0;
                luminance += 0.5 * intense +  depth;
                // implement...

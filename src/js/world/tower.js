@@ -26,7 +26,8 @@ class Tower {
 		if (data.light !== false) {
 			this.initLight(data.light);
 		}
-
+		// LODGeometry.computeFaceNormals();
+		// LODGeometry.computeVertexNormals();
     this.mesh = new THREE.Mesh(LODGeometry, towerMaterial);
     this.platform.mesh.add(this.mesh);
     this.mesh.position.set(data.position[0]*50000, 500+(floors+1) * 25000, data.position[2]*50000);
@@ -42,7 +43,6 @@ class Tower {
 	}
 
     generateFullLOD () {
-			console.log("generating full lod", this.data);
 			var f = 0,
 					i = 0,
 					face = null,
@@ -100,7 +100,6 @@ class Tower {
 				for (f = 0; f < floors; f++) {
 					floorHeight = (-height / 2) + (f * 50000);
 					bsp = bsp.union(this.initFloor(floorHeight, xUnits, zUnits));
-					if (f > 0) {
 						windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
 						windowMesh.position.set(-width / 2, floorHeight - 17500, 0);
 						windowMesh.rotateY(Math.PI / 2);
@@ -123,7 +122,6 @@ class Tower {
 						windowMesh.updateMatrix();
 						windowBSP = new ThreeBSP(windowMesh);
 						bsp = bsp.subtract(windowBSP);
-					}
 				}
 
 				var elevator = new THREE.Mesh(shaftGeometry, towerMaterial);

@@ -66,25 +66,20 @@ self.update = function () {
 					}
 				}
 			}
-					if (dist2dArrayCompare(position, obj.position, 400000)) { 	// do collisions on voxels & structures... just walls at first..
+					if (dist2dArrayCompare(position, obj.position, 300000)) { 	// do collisions on voxels & structures... just walls at first..
 							s = !! obj.structures ? obj.structures.length - 1 : -1;
 							while (s > -1) {
 								structure = obj.structures[s];
 								objPos = [obj.position[0]+structure.position[0]*size,
 													obj.position[1]+structure.position[1]*size,
 													obj.position[2]+structure.position[2]*size];
-								if (dist2dArrayCompare(position, objPos, 350000)) {
-									if (structure.position != undefined) {
-										if (!structure.interiorLoaded) {
+								if (structure.position != undefined) {
+									if (!structure.interiorLoaded) {
 											structure.interiorLoaded = true;
-											console.log("loadInterior...");
 											self.postMessage('{"command":"load interior","data":{"coords": ' + JSON.stringify(obj.cell.join(".")) + '}}');
-										}
-										// if (!closeToVenue && dist2dArrayCompare(position, objPos, 320000)) {
-										// 	closeToVenue = true;
-										// 	self.postMessage('{"command":"enter interior", "data":{"name":"'+structure.name+'"}}');
-										// }
 									}
+								}
+								if (dist2dArrayCompare(position, objPos, 250000)) {
 									oPos = structure.position;
 									if (position[0] > (oPos[0] - size * structure.width) && position[0] < (oPos[0] + size * structure.width)) { 		// now actually check collisions using box method...
 										innerBox[0] = (position[0] > (oPos[0] - size * structure.width + 600) && position[0] < (oPos[0] + size * structure.width - 600));
