@@ -242,12 +242,12 @@ export default class World {
 				this.skybox.material.uniforms.time.value += delta;
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
 				this.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
-				this.three.scene.updateMatrixWorld();
-				this.three.scene.traverse( function ( object ) {
-					if ( object instanceof THREE.LOD ) {
-						object.update( camera );
-					}
-				} );
+				// this.three.scene.updateMatrixWorld();
+				// this.three.scene.traverse( function ( object ) {
+				// 	if ( object instanceof THREE.LOD ) {
+				// 		object.update( camera );
+				// 	}
+				// } );
 				if (this.mode == "vr" || this.mode == "desktop") {
 					// render for desktop / mobile (without cardboard)
 					this.three.renderer.render(three.scene, camera);
@@ -484,7 +484,7 @@ export default class World {
 										}
 									}
 
-									if (Math.random() < 0.44) {
+									if (Math.random() < 0.36) {
 										voxels = this.makeVoxels( Math.floor(Math.random() * 5) );
 									}
 									platform = new Platform({voxels: voxels, structures: Math.random() < 0.33 ? [

@@ -59,7 +59,6 @@ class Tower {
 						color: 0xf0f0f0,
 						wireframe: false
 					}),
-					LODGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 50000 * zUnits),
 					towerGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 5000),
 					towerGeometryB = new THREE.BoxGeometry(5000, height, 50000 * zUnits),
 					shaftGeometry = new THREE.BoxGeometry(25000 * zUnits, height, 25000 * zUnits),
@@ -71,8 +70,6 @@ class Tower {
 					building = null,
 					detailLevels = [],
     		  floorHeight = 1;
-
-    		detailLevels.push([LODGeometry, 1000000]);
 
 				towerMesh = new THREE.Mesh(towerGeometry, towerMaterial);
 				towerMesh.position.set(0, 0, -length / 2);
@@ -130,23 +127,10 @@ class Tower {
 				elevator.updateMatrix();
 				var elevatorBSP = new ThreeBSP(elevator);
 				bsp = bsp.subtract(elevatorBSP);
-
 				finalGeom = bsp.toGeometry();
 				finalGeom.computeFaceNormals();
-				detailLevels.push([finalGeom, 400000])
-    		building = new THREE.LOD();
 
-    		for (i = 0; i < detailLevels.length; i++) {
-    			towerMesh = new THREE.Mesh(detailLevels[i][0], towerMaterial);
-    			towerMesh.scale.set(1, 1, 1);
-    			if (i == 1) {
-    				towerMesh.position.set(0, 0, -width / 2.0);
-    			}
-    			towerMesh.updateMatrix();
-    			towerMesh.matrixAutoUpdate = false;
-    			building.addLevel(towerMesh, detailLevels[i][1]);
-    		}
-
+				building = new THREE.Mesh(finalGeom, towerMaterial);
     		building.position.set(this.data.position[0]*50000, 500+(floors+1) * 25000, this.data.position[2]*50000);
     		building.updateMatrix();
     		building.matrixAutoUpdate = false;
