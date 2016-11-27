@@ -1,10 +1,11 @@
 import Avatar from './avatar.js';
 import Platform from './platform.js';
 import WorldPhysics  from '../workers/world-physics.js';
-import {on,send,sendReceive} from '../network/socket'
+import io from 'socket.io-client'
+//import {on,send,sendReceive} from '../network/socket'
 
 export default class World {
-	constructor(userInput = false) {
+	constructor(userInput = false, socket) {
 
 		var scene = new THREE.Scene(),
 			camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4500000 ),
@@ -20,9 +21,11 @@ export default class World {
 			y = 0,
 			r = 4000;
 
+		this.socket = socket;
 		this.mode = "vr";
 		this.users = [];
 		this.user = {
+			id: 0,
 			username: "user"+Math.floor(1000000*Math.random()),
 			arms: [],
 			gravity: 1,
@@ -42,7 +45,6 @@ export default class World {
 		this.cleanUpPlatforms = [];
 		this.HMDMode = "non standard"; // "head-movement"
 
-		//scene.fog = new THREE.FogExp2(0x303030, 0.00000015);
 		this.ambientLight = new THREE.AmbientLight(0x020210);
 		scene.add(this.ambientLight);
 		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
@@ -50,8 +52,6 @@ export default class World {
 		document.body.appendChild( renderer.domElement );
 		renderer.domElement.setAttribute("id", "viewport");
 		renderer.setClearColor(0x3b3b3b);
-
-		//camera.position.set(-18391.370770019803, 5916.124890438994, -14620.440770421374);
 		camera.position.set(85000, 5916.124890438994, 155000);
 
 		skyShaderMat = new THREE.ShaderMaterial( {
@@ -72,7 +72,6 @@ export default class World {
 		core.position.set(0, 2000, 0);
 		scene.add(this.skybox);
 		this.skybox.position.set(camera.position.x, 0, camera.position.z);
-
 		userInput.init(this, camera, this.user);
 		this.worldPhysics = new WorldPhysics();
 		this.worldPhysics.init(self);
@@ -103,59 +102,6 @@ export default class World {
 			three.camera.aspect = innerWidth / innerHeight;
 			three.camera.updateProjectionMatrix();
 		}
-
-		setTimeout(() => {
-
-			sendReceive("/user/create", {
-				username: "Foo",
-				email: "foo@foo.com",
-				password: "abcdfooZ",
-			}, res => {
-				console.log("Create User!", res)
-			})
-
-			sendReceive("/user/create", {
-				username: "Foo2",
-				email: "foo2@foo.com",
-				password: "abcdfooZ",
-			}, res => {
-				console.log("Create User!", res)
-			})
-
-			sendReceive("/user/create", {
-				username: "Foo3",
-				email: "foo3@foo.com",
-				password: "abcdfooZ",
-			}, res => {
-				console.log("Create User!", res)
-			})
-		}, 5000)
-
-		on("/update", data => {
-			let entity = null,
-				user = null,
-				pos = null,
-				quat = null,
-				mesh = null;
-
-			if (!! data.entity) {
-				entity = data.entity;
-				pos = entity.pos;
-				quat = entity.quat;
-				user = self.users[entity.id];
-				if (user == null) {
-					user = self.users[entity.id] = {
-						id: entity.id,
-						avatar: new Avatar()
-					}
-				}
-				mesh = user.mesh;
-			}
-			if (!! mesh) {
-				mesh.position.set(pos.x, pos.y, pos.z);
-				mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w);
-			}
-		})
 
 		this.bufferPlatforms(true, 0);
 
@@ -217,7 +163,7 @@ export default class World {
 		}
 		this.skybox.material.uniforms.time.value += delta;
 		this.sendUpdatePacket += 1;
-		if (this.sendUpdatePacket %(2*(mobile ? 2 : 1)) == 0 && (this.mode == "vr" || this.mode == "stereo")) {
+		if (this.sendUpdatePacket %((2+(1*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
 
 			if (this.userInput.leapMotion) {
 				userArms.forEach(function (arm) {
@@ -225,14 +171,19 @@ export default class World {
 						quat: [arm.quaternion.x, arm.quaternion.y, arm.quaternion.z, arm.quaternion.w] });
 					});
 				}
-				/*send('/update', { // temporarily disabled
-					username: this.user.username,
-					image: this.webcamImage,
-					imageSize: imageSize,
-					arms: arms,
-					position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
-					quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
-				});*/
+
+				this.socket.emit('update', {
+					entity: {
+						id: this.user.id,
+						username: this.user.username,
+						image: this.webcamImage,
+						imageSize: imageSize,
+						arms: arms,
+						position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
+						quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
+					}
+				});
+
 					if (this.capturing) {
 						this.webcamImage = "";
 					}
@@ -242,12 +193,6 @@ export default class World {
 				this.skybox.material.uniforms.time.value += delta;
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
 				this.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
-				// this.three.scene.updateMatrixWorld();
-				// this.three.scene.traverse( function ( object ) {
-				// 	if ( object instanceof THREE.LOD ) {
-				// 		object.update( camera );
-				// 	}
-				// } );
 				if (this.mode == "vr" || this.mode == "desktop") {
 					// render for desktop / mobile (without cardboard)
 					this.three.renderer.render(three.scene, camera);
@@ -293,11 +238,6 @@ export default class World {
 						// Resize the WebGL canvas when we resize and also when we change modes.
 						window.addEventListener('resize', onResize);
 						window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
-
-						// Button click handlers.
-						// document.querySelector('button#fullscreen').addEventListener('click', function() {
-						//   three.world.userInput.toggleFullscreen(renderer.domElement);
-						// });
 
 						setTimeout(()=> {
 							if (vrDisplay) {

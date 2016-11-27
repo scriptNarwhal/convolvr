@@ -3,10 +3,11 @@ package main
 import (
     //"github.com/SpaceHexagon/convolvr/server/component"
     //"github.com/SpaceHexagon/convolvr/server/entity"
-    "github.com/SpaceHexagon/convolvr/server/platform"
+    //"github.com/SpaceHexagon/convolvr/server/platform"
     //"github.com/SpaceHexagon/convolvr/server/structure"
     //"github.com/SpaceHexagon/convolvr/server/user"
     "github.com/ant0ine/go-json-rest/rest"
+    "github.com/googollee/go-socket.io"
     "github.com/boltdb/bolt"
     "net/http"
     "log"
@@ -51,8 +52,36 @@ func main() {
     }
     api.SetApp(router)
     http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))
-    http.Handle("/", http.FileServer(http.Dir("./web")))
 
+    websocket, err := socketio.NewServer(nil)
+    if err != nil {
+        log.Fatal(err)
+    }
+    websocket.On("connection", func(so socketio.Socket) {
+        log.Println("user connected")
+        so.Join("overworld")
+        so.On("chat message", func(msg string) {
+            log.Println("emit:", so.Emit("chat message", msg))
+            so.BroadcastTo("overworld", "chat message", msg)
+        })
+        so.On("update", func(msg string) {
+            so.BroadcastTo("overworld", "update", msg)
+        })
+        so.On("spawn", func(msg string) {
+            log.Println("emit:", so.Emit("spawn", msg))
+            so.BroadcastTo("overworld", "spawn", msg)
+        })
+        so.On("disconnection", func() {
+            log.Println("user disconnected")
+            so.BroadcastTo("overworld", "chat message", "user disconnected")
+        })
+    })
+    websocket.On("error", func(so socketio.Socket, err error) {
+        log.Println("error:", err)
+    })
+
+    http.Handle("/socket.io/", websocket)
+    http.Handle("/", http.FileServer(http.Dir("./web")))
     log.Print("Convolvr Online "+port)
     log.Fatal(http.ListenAndServe(port, nil))
 }
