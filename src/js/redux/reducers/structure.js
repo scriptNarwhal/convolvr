@@ -7,7 +7,7 @@ import {
     DELETE_TOWER
 } from '../constants/action-types';
 
-module.exports = function towers (
+module.exports = function structures (
     state = {
         data: [],
         fetching: false,

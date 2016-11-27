@@ -4,7 +4,6 @@ import {
     homePlatformInit,
     initTestPlatforms
 } from '../redux/actions/platform-actions'
-import { fetchTracks } from '../redux/actions/track-actions'
 import { fetchUsers } from '../redux/actions/user-actions'
 
 class App extends Component {

@@ -7,10 +7,7 @@ var observer = {
 		velocity: [0, 0, 0]
 	},
 	entities = [],
-	platforms = [],
-	towers = [],
-	tracks = [],
-	towers = [];
+	platforms = [];
 
 function CollisionTower (data) {
 	this.data = data;
@@ -30,14 +27,20 @@ function distance2dArray (a, b) {
 	return Math.sqrt(Math.pow((a[0]-b[0]),2)+Math.pow((a[2]-b[2]),2));
 }
 
+function dist2dArrayCompare(a, b, n) {
+	return Math.pow((a[0]-b[0]),2)+Math.pow((a[2]-b[2]),2) < (n*n)
+}
+
 self.update = function () {
-	var 	entities = [],
+	var entities = [],
 			distance = 0,
+			objPos = [],
 			position = observer.position,
 			i = 0,
 			v = 0,
-			size = 2600,
+			size = 50000,
 			obj = null,
+			structure = null,
 			voxel = null,
 			delta = [0, 0],
 			innerBox = [false, false],
@@ -52,102 +55,90 @@ self.update = function () {
 		for (i = 0; i < platforms.length; i ++) {
 			obj = platforms[i];
 			if (!!obj) {
-				if (position[1] > obj.position[1] && position[1] < obj.position[1] + 8500) {
-					if (distance2dArray(position, obj.position) < 132000) {
-						collision = true;
-						self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
-					}
-				} else if (position[1] < obj.position[1] && obj.position[1] > obj.position[1] - 56500) {
-					if (distance2dArray(position, obj.position) < 132000) {
-						collision = true;
-						self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + (obj.position[1]-56500) + ',' + obj.position[2] + '] }}');
+				if (dist2dArrayCompare(position, obj.position, 132000)) {
+					if (position[1] > obj.position[1] && position[1] < obj.position[1] + 12000) {
+							collision = true;
+							self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
+
+					} else if (position[1] < obj.position[1] && obj.position[1] > obj.position[1] - 60000) {
+							collision = true;
+							self.postMessage('{"command": "platform collision", "data":{"position":[' + obj.position[0] + ',' + (obj.position[1]-60000) + ',' + obj.position[2] + '] }}');
 					}
 				}
-					if (distance2dArray(position, obj.position) < 132000) {
-						if (!!obj.voxels && obj.voxels.length > 0) {
-							v = obj.voxels.length;
-							while (v > 0) {
-								v--;
-								voxel = obj.voxels[v].cell;
-								if (distance3d(position, [obj.position[0]+voxel[0]*10500, obj.position[1]+voxel[1]*10500, obj.position[2]+voxel[2]*10500]) < 12000) {
-
-									self.postMessage('{"command": "voxel collision", "data":{"position":[' + (position[0]-(voxel[0]*10500))
-																										   + ',' +(position[1]-(voxel[1]*10500))
-																										   + ',' +(position[2]-(voxel[2]*10500)) + '] }}');
-
-								}
-
-							}
-						}
-					}
-
 			}
+					if (dist2dArrayCompare(position, obj.position, 300000)) { 	// do collisions on voxels & structures... just walls at first..
+							s = !! obj.structures ? obj.structures.length - 1 : -1;
+							while (s > -1) {
+								structure = obj.structures[s];
+								objPos = [obj.position[0]+structure.position[0]*size,
+													obj.position[1]+structure.position[1]*size,
+													obj.position[2]+structure.position[2]*size];
+								if (structure.position != undefined) {
+									if (!structure.interiorLoaded) {
+											structure.interiorLoaded = true;
+											self.postMessage('{"command":"load interior","data":{"coords": ' + JSON.stringify(obj.cell.join(".")) + '}}');
+									}
+								}
+								if (dist2dArrayCompare(position, objPos, 250000)) {
+									oPos = structure.position;
+									if (position[0] > (oPos[0] - size * structure.width) && position[0] < (oPos[0] + size * structure.width)) { 		// now actually check collisions using box method...
+										innerBox[0] = (position[0] > (oPos[0] - size * structure.width + 600) && position[0] < (oPos[0] + size * structure.width - 600));
+										delta[0] = Math.abs(position[0] - oPos[0]);
+										if (position[2] > (oPos[2] - size * structure.length) && position[2] < (oPos[2] + size * structure.length)) {
+											innerBox[1] = (position[2] > (oPos[2] - size * structure.length + 600) && position[2] < (oPos[2] + size * structure.length - 600));
+											delta[1] = Math.abs(position[2] - oPos[2]);
+											if ((position[0] > oPos[0])) {
+												position[0] = oPos[0] + size;
+											} else {
+												position[0] = oPos[0] - size;
+											}
+											if (position[2] > oPos[2]) {
+												position[2] = oPos[2] + size;
+											} else {
+												position[2] = oPos[2] - size;
+											}
 
+											// self.postMessage('{"command": "structure floor collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
+											// ', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}');
+
+											//if (distance > size * 1.18) {
+												collision = true;
+												self.postMessage('{"command": "structure collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
+												', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}');
+											//}
+										}
+									}
+								}
+								s--;
+							}
+							if (!!obj.voxels && obj.voxels.length > 0) {
+								v = obj.voxels.length;
+								while (v > 0) {
+									v--;
+									voxel = obj.voxels[v].cell;
+									if (distance3d(position, [-132000-10500+obj.position[0]+voxel[0]*10500, -10500+obj.position[1]+voxel[1]*10500, -132000+obj.position[2]+voxel[2]*10500]) < 14000) {
+
+										self.postMessage('{"command": "voxel collision", "data":{"position":[' + (position[0]-(voxel[0]*10500)-10500)
+																											   + ',' +(position[1]-(voxel[1]*10500)-10500)
+																											   + ',' +(position[2]-(voxel[2]*10500)) + '] }}');
+
+									}
+								}
+							}
+					}
 		}
 
 		for (i = 0; i < entities.length; i ++) {
 			obj = entities[i];
 			if (!!obj) {
 				if (position[1] < obj.position[1] + 1000 && position[1] > obj.position[1]-2000 ) {
-					if (distance2dArray(position, obj.position) < 128000) {
+					if (dist2dArrayCompare(position, obj.position, 32000)) {
 						collision = true;
 						self.postMessage('{"command": "entity collision", "data":{"position":[' +obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
 					}
 				}
 			}
 		}
-
-// do collisions on towers... just walls at first..
-	i = towers.length - 1;
-
-	while (i > -1) {
-		obj = towers[i];
-		distance = distance2dArray(position, obj.position);
-		if (distance < 12000) {
-			if (!obj.interiorLoaded) {
-				obj.interiorLoaded = true;
-				console.log("loadInterior...");
-				self.postMessage('{"command":"load interior","data":' + JSON.stringify(obj) + '}');
-			}
-
-			if (!closeToVenue && distance < 8000) {
-				closeToVenue = true;
-				self.postMessage('{"command":"enter interior", "data":{"name":"'+obj.name+'"}}');
-			}
-
-			oPos = obj.position;
-			if (position.x > (oPos[0] - size) && position.x < (oPos[0] + size)) { 		// now actually check collisions using box method...
-				innerBox[0] = (position.x > (oPos[0] - size + 600) && position.x < (oPos[0] + size - 600));
-				delta[0] = Math.abs(position.x - oPos[0]);
-
-				if (position.z > (oPos[2] - size) && position.z < (oPos[2] + size)) {
-					innerBox[1] = (position.z > (oPos[2] - size + 600) && position.z < (oPos[2] + size - 600));
-					delta[1] = Math.abs(position.z - oPos[2]);
-
-					if ((position.x > oPos[0])) {
-						position.x = oPos[0] + size;
-					} else {
-						position.x = oPos[0] - size;
-					}
-					if (position.z > oPos[2]) {
-						position.z = oPos[2] + size;
-					} else {
-						position.z = oPos[2] - size;
-					}
-
-					if (distance > size * 1.18) {
-						collision = true;
-						self.postMessage('{"command": "tower collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
-						', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position.x + ',' + position.y + ',' + position.z + '] }}');
-						// "velocity": ['+velocity[0]+','+velocity[1]+','+velocity[2]+']
-
-					}
-				}
-			}
-		}
-
-		i--;
-	}
 
 	if (!collision) {
 		observer.prevPos = [observer.position[0], observer.position[1], observer.position[2]];
@@ -196,30 +187,16 @@ self.onmessage = function (event) { // Do some work.
 				platform = platforms[c];
 				if (platform != null) {
 					if (platform.cell[0] == toRemove.cell[0] && platform.cell[1] == toRemove.cell[1]  && platform.cell[2] == toRemove.cell[2]) {
-						//platforms = platforms.splice(c, 1);
+						//platforms.splice(c, 1);
 					}
 				}
 				c--;
 			}
 			p --;
 		}
-
-	} else if (message.command == "add tracks") {
-		tracks = tracks.concat(message.data);
-
-	} else if (message.command == "remove track") {
-		c = tracks.length-1;
-		while (c >= 0) {
-			if (tracks[c].id == message.data) {
-				tracks = tracks.splice(c, 1);
-			}
-			c--;
-		}
-	}  else if (message.command == "clear") {
+	} else if (message.command == "clear") {
 		platforms = [];
 		entities = [];
-		tracks = [];
-		towers = [];
 
 	} else if (message.command == "start") {
 		self.update();
@@ -228,9 +205,11 @@ self.onmessage = function (event) { // Do some work.
 		self.stop();
 
 	} else if (message.command == "log") {
-		self.postMessage('{"command":"log","data":[' + user.position.x + ',' + user.position.y + ',' + user.position.z + ']}');
-		self.postMessage('{"command":"log","data":"' + JSON.stringify(entities)+'", platforms: "'+JSON.stringify(platforms)+'"}');
-
+		if (message.data == "") {
+			self.postMessage('{"command":"log","data":[' + user.position[0] + ',' + user.position[1] + ',' + user.position[2] + ']}');
+			self.postMessage('{"command":"log","data":' + JSON.stringify(platforms)+ '}');
+			self.postMessage('{"command":"log","data":"' + JSON.stringify(entities)+'"}');
+		}
 	}
 };
 

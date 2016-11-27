@@ -14,7 +14,6 @@ export default class World {
 			coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 			material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
 			core = new THREE.Mesh(coreGeom, material),
-			light = new THREE.PointLight(0xffffff, 1.5, 5000000),
 			skyShaderMat = null,
 			three = {},
 			x = 0,
@@ -41,16 +40,16 @@ export default class World {
 		this.lastChunkCoords = [0, 0, 0];
 		this.chunkCoords = [0, 0, 0];
 		this.cleanUpPlatforms = [];
+		this.HMDMode = "non standard"; // "head-movement"
 
-		scene.fog = new THREE.FogExp2(0x333333, 0.00000015);
-		this.ambientLight = new THREE.AmbientLight(0x050505);
+		//scene.fog = new THREE.FogExp2(0x303030, 0.00000015);
+		this.ambientLight = new THREE.AmbientLight(0x020210);
 		scene.add(this.ambientLight);
-		// light.position.set(0, 60000, -32000);
 		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		document.body.appendChild( renderer.domElement );
 		renderer.domElement.setAttribute("id", "viewport");
-		renderer.setClearColor(0x150840);
+		renderer.setClearColor(0x3b3b3b);
 
 		//camera.position.set(-18391.370770019803, 5916.124890438994, -14620.440770421374);
 		camera.position.set(85000, 5916.124890438994, 155000);
@@ -69,10 +68,8 @@ export default class World {
 		this.ground = new THREE.Object3D();
 		this.ground.rotation.x = -Math.PI /2;
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat);
-		this.skybox.add(light);
 		scene.add(core);
 		core.position.set(0, 2000, 0);
-		light.position.set(3000000, 750000, 0);
 		scene.add(this.skybox);
 		this.skybox.position.set(camera.position.x, 0, camera.position.z);
 
@@ -80,10 +77,8 @@ export default class World {
 		this.worldPhysics = new WorldPhysics();
 		this.worldPhysics.init(self);
 
-		this.core = {
-			physics: {}, // this.worldPhysics.worker,
-			// audio: this.worldAudio.worker,
-			// video: this.worldVideo.worker,
+		this.workers = {
+			physics: this.worldPhysics
 			// npc: this.npcLogic.worker
 		}
 
@@ -97,7 +92,8 @@ export default class World {
 			renderer: renderer
 		};
 		window.three = this.three;
-
+		console.log("window.three");
+		console.log(window.three);
 		this.render(0);
 
 		window.onresize = function () {
@@ -166,19 +162,21 @@ export default class World {
 	}
 
 	render (last) {
-		var sys = this,
-			core = sys.three.core,
-			mobile = sys.mobile,
-			camera = sys.three.camera,
+		var core = this.three.core,
+			mobile = this.mobile,
+			camera = three.camera,
+			cPos = camera.position,
 			delta = ((Date.now() - last) / 10000.0),
 			time = (Date.now() / 4600),
 			image = "",
 			imageSize = [0, 0],
 			beforeHMD = [0, 0, 0],
 			beforeInput = [0, 0, 0],
-			userArms = sys.user.arms,
+			userArms = this.user.arms,
 			arms = [];
 
+		if (!! this.userInput) {
+			this.userInput.update(delta);
 			// Update VR headset position and apply to camera.
 			if(!! three.vrControls) {
 				beforeHMD = [camera.position.x, camera.position.y, camera.position.z];
@@ -187,17 +185,22 @@ export default class World {
 
 			}
 
-		if (!! sys.userInput) {
-			sys.userInput.update(delta);
+			if (this.mode == "stereo") {
+				if (this.HMDMode == "standard") {
+					camera.position.set(/*beforeHMD[0] + */ cPos.x / 2.0,
+															/*beforeHMD[1] + */ cPos.y / 2.0,
+															/*beforeHMD[2] + */ cPos.z / 2.0);
+				} else {
+					camera.position.set(beforeHMD[0] + cPos.x / 2.0,
+															beforeHMD[1] + cPos.y / 2.0,
+															beforeHMD[2] + cPos.z / 2.0);
+				}
 
-			if (sys.mode == "stereo") {
-				camera.position.set(beforeHMD[0] + camera.position.x / 2.0,
-														beforeHMD[1] + camera.position.y / 2.0,
-														beforeHMD[2] + camera.position.z / 2.0);
 			}
 		}
-		if (sys.sendUpdatePacket == 12) { // send image
-			if (sys.capturing) {
+		this.user.light && this.user.light.position.set(cPos.x, cPos.y, cPos.z);
+		if (this.sendUpdatePacket == 12) { // send image
+			if (this.capturing) {
 				var v = document.getElementById('webcam'),
 				 	canvas = document.getElementById('webcam-canvas'),
 				 	context = canvas.getContext('2d'),
@@ -208,41 +211,47 @@ export default class World {
 				canvas.width = 320;
 				canvas.height = 240;
 				context.drawImage(v, 0, 0, 320, 240);
-				sys.webcamImage = canvas.toDataURL("image/jpg", 0.6);
+				this.webcamImage = canvas.toDataURL("image/jpg", 0.6);
 			}
-			sys.sendUpdatePacket = 0;
+			this.sendUpdatePacket = 0;
 		}
-		sys.skybox.material.uniforms.time.value += delta;
-		sys.sendUpdatePacket += 1;
-		if (sys.sendUpdatePacket %(2*(mobile ? 2 : 1)) == 0 && (sys.mode == "vr" || sys.mode == "stereo")) {
+		this.skybox.material.uniforms.time.value += delta;
+		this.sendUpdatePacket += 1;
+		if (this.sendUpdatePacket %(2*(mobile ? 2 : 1)) == 0 && (this.mode == "vr" || this.mode == "stereo")) {
 
-			if (sys.userInput.leapMotion) {
+			if (this.userInput.leapMotion) {
 				userArms.forEach(function (arm) {
 					arms.push({pos: [arm.position.x, arm.position.y, arm.position.z],
 						quat: [arm.quaternion.x, arm.quaternion.y, arm.quaternion.z, arm.quaternion.w] });
 					});
 				}
 				/*send('/update', { // temporarily disabled
-					username: sys.user.username,
-					image: sys.webcamImage,
+					username: this.user.username,
+					image: this.webcamImage,
 					imageSize: imageSize,
 					arms: arms,
 					position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
 					quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
 				});*/
-					if (sys.capturing) {
-						sys.webcamImage = "";
+					if (this.capturing) {
+						this.webcamImage = "";
 					}
 				}
 
 				core.rotation.y += 0.005;
-				sys.skybox.material.uniforms.time.value += delta;
-				sys.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
-				sys.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
-				if (sys.mode == "vr" || sys.mode == "desktop") {
+				this.skybox.material.uniforms.time.value += delta;
+				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
+				this.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
+				// this.three.scene.updateMatrixWorld();
+				// this.three.scene.traverse( function ( object ) {
+				// 	if ( object instanceof THREE.LOD ) {
+				// 		object.update( camera );
+				// 	}
+				// } );
+				if (this.mode == "vr" || this.mode == "desktop") {
 					// render for desktop / mobile (without cardboard)
-					sys.three.renderer.render(three.scene, camera);
-				} else if (sys.mode == "stereo") {
+					this.three.renderer.render(three.scene, camera);
+				} else if (this.mode == "stereo") {
 					// Render the scene in stereo for HMD.
 				 	!!three.vrEffect && three.vrEffect.render(three.scene, camera);
 				}
@@ -291,7 +300,11 @@ export default class World {
 						// });
 
 						setTimeout(()=> {
-							vrDisplay.requestPresent([{source: renderer.domElement}]);
+							if (vrDisplay) {
+								vrDisplay.requestPresent([{source: renderer.domElement}]);
+							} else {
+								alert("Connect VR Display and then reload page.")
+							}
 						}, 1000)
 
 						// document.querySelector('#viewport').addEventListener('click', function() {
@@ -304,6 +317,17 @@ export default class World {
 					}
 				}
 				window.onresize();
+		}
+
+		generateFullLOD (coords) {
+			let platform = this.pMap[coords];
+			if (platform != null) {
+				if (platform.structures != null) {
+					platform.structures.forEach(structure =>{
+							structure.generateFullLOD();
+					})
+				}
+			}
 		}
 
 		makeVoxels (t) {
@@ -329,7 +353,7 @@ export default class World {
 							if (Math.random() < 0.2) {
 								voxels.push({
 									cell: [
-										x, 2+Math.floor(Math.sin(x)*Math.cos(y/2.0)), y
+										x, 2+Math.floor(Math.sin(x/4.0)*Math.cos(y/4.0)), y
 									]
 								})
 							}
@@ -441,16 +465,35 @@ export default class World {
 							if (c < 2 && pMap[x+".0."+y] == null) { // only if its not already loaded
 								c ++;
 								if (Math.random() < 0.5 ) {
-									let voxels = [];
-									if (Math.random() < 0.44) {
+									let voxels = [],
+											lightColor = false;
+
+									if (Math.random() < 0.33) {
+										if (Math.random() < 0.6) {
+											lightColor = 0x00ff80;
+										} else {
+											if (Math.random() < 0.5) {
+												lightColor = 0x00ffff;
+											} else {
+												if (Math.random() < 0.4) {
+													lightColor = 0x00ff00;
+												} else {
+													lightColor = 0x0080ff;
+												}
+											}
+										}
+									}
+
+									if (Math.random() < 0.36) {
 										voxels = this.makeVoxels( Math.floor(Math.random() * 5) );
 									}
-									platform = new Platform({voxels: voxels, towers: Math.random() < 0.33 ? [
+									platform = new Platform({voxels: voxels, structures: Math.random() < 0.33 ? [
 										{
-											length: 1+Math.floor(Math.random()*4.0),
-											width: 1+Math.floor(Math.random()*4.0),
-											floors: 2+Math.floor(Math.random()*6.0),
-											position: [-1.0, 0, -1.0]
+											length: 1+Math.floor(Math.random()*3.0),
+											width: 1+Math.floor(Math.random()*3.0),
+											floors: 2+Math.floor(Math.random()*10.0),
+											position: [-1.0, 0, -1.0],
+											light: lightColor
 										}
 								] : undefined}, [x, 0, y]);
 									three.scene.add(platform.mesh);
@@ -493,7 +536,12 @@ export default class World {
 				setTimeout(() => { this.bufferPlatforms(force, phase); }, 32);
 			}
 
+			loadInterior (name) {
 
+			}
+			enterInterior (name) {
+
+			}
 
 
 	};

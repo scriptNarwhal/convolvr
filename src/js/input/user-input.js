@@ -141,7 +141,7 @@ export default class UserInput {
 			var data = event.touches, touch = data.length ;
 			//uInput.lastTouch = [[0,0],[0,0]];
 			if (isVRMode(world.mode)) {
-				event.preventDefault();
+				//event.preventDefault();
 				while (touch-- > 0) {
 					uInput.lastTouch[touch] = [data[touch].pageX, data[touch].pageY];
 				}
@@ -213,7 +213,7 @@ export default class UserInput {
 	}
 
 	update (delta) {
-		var bottom = -232000,
+		var bottom = -192000,
 				world = this.world,
 				velocity = this.device.velocity; //world.getElevation(this.camera.position);
 		if (isVRMode(world.mode)) {
@@ -228,11 +228,7 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
-			velocity.y -= 1000.1 * delta;
-			//if (this.device.gravity > 0.25 ) {
-			if (this.device.falling) {
-				velocity.y -= 1000.1 * delta;
-			}
+			velocity.y -= 1000 + velocity.y*0.5 * delta; // weak gravity
 			this.moveVector.set(0, 0, 0);
 			if (this.camera.position.y < bottom + 500) {
 				if (this.keys.shift) {
@@ -264,19 +260,19 @@ export default class UserInput {
 	handleKeys () {
 		var velocity = this.device.velocity;
 		if (this.keys.a) {  // maybe insert more options here...
-			this.moveVector.x = -1200;
+			this.moveVector.x = -6400;
 		} else if (this.keys.d) {
-			this.moveVector.x = 1200;
+			this.moveVector.x = 6400;
 		}
 		if (this.keys.w) {
-			this.moveVector.z = -1200;
+			this.moveVector.z = -6400;
 		} else if (this.keys.s) {
-			this.moveVector.z = 1200;
+			this.moveVector.z = 6400;
 		}
 		if (this.keys.r) {
-			this.moveVector.y = 1200;
+			this.moveVector.y = 6400;
 		} else if (this.keys.f) {
-			this.moveVector.y = -1200;
+			this.moveVector.y = -6400;
 		}
 		if (this.keys.shift) {
 			velocity.x *= 1.02;
@@ -284,7 +280,22 @@ export default class UserInput {
 		}
 		if (this.keys.space && !this.device.falling) {
 			this.device.falling = true;
-			velocity.y = 16000;
+			velocity.y = 160000;
+		}
+		if (velocity.x > 999999) {
+			velocity.x = 999999;
+		} else if (velocity.x < -999999) {
+			velocity.x = -999999;
+		}
+		if (velocity.y > 999999) {
+			velocity.y = 999999
+		} else if (velocity.y < -999999) {
+			velocity.y = -999999;
+		}
+		if (velocity.z > 999999) {
+			velocity.z = 999999
+		} else if (velocity.z < -999999) {
+			velocity.z = -999999;
 		}
 	}
 

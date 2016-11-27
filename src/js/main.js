@@ -38,14 +38,25 @@ import World from './world/world.js';
 
 var token = localStorage.getItem("token"),
 			userInput,
+			user = {
+				gravity: 1,
+				mesh:new THREE.Object3D(),
+				velocity: new THREE.Vector3(0, -10, 0),
+				light: new THREE.PointLight(0xffffff, 0.5, 300000),
+				arms: [],
+				falling: false
+			},
 			world,
 			avatar = null;
 
 	userInput = new UserInput();
 	world = new World(userInput);
-	userInput.init(world, world.camera, {gravity: 1, mesh:new THREE.Object3D(), velocity: new THREE.Vector3(0, -10, 0)});
+	world.user = user;
+	three.scene.add(user.light);
+	userInput.init(world, world.camera, user);
 	userInput.rotationVector = {x: 0, y: 9.95, z: 0};
 	three.camera.position.set(100000, 20000, 100000);
+	user.light.position.set(100000, 20000, 100000);
 
 const muiTheme = getMuiTheme({
       palette: {

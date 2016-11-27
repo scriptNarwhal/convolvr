@@ -25,30 +25,18 @@ export default class WorldPhysics {
 	          console.log("collision");
 	          console.log(message.data);
 		  } else if (message.command == "platform collision") {
-	          if (three.camera.position.y > message.data.position[1] && three.camera.position.y < 8500 + message.data.position[1]) {
-				  three.camera.position.set(three.camera.position.x, message.data.position[1]+8500 , three.camera.position.z);
-				  user.velocity.y = 0.0;
-			  } else if (three.camera.position.y < message.data.position[1] && three.camera.position.y > message.data.position[1] - 8500){
-				  three.camera.position.set(three.camera.position.x, message.data.position[1]-8500 , three.camera.position.z);
-				  user.velocity.y = 0.0;
+	          if (three.camera.position.y > message.data.position[1] && three.camera.position.y < 12000 + message.data.position[1]) {
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]+12000 , three.camera.position.z);
+				  user.velocity.y *= -0.25;
+			  } else if (three.camera.position.y < message.data.position[1] && three.camera.position.y > message.data.position[1] - 12000){
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]-12000 , three.camera.position.z);
+				  user.velocity.y *= -0.25;
 			  }
 			  user.velocity.x *= 0.97;
 			  user.velocity.z *= 0.97;
 			  user.falling = false;
 
-		 } else if (message.command == "track collision") { // same as platform for now
-			 if (three.camera.position.y > message.data.position[1] && three.camera.position.y < 8500 + message.data.position[1]) {
-				 three.camera.position.set(three.camera.position.x, message.data.position[1]+8500 , three.camera.position.z);
-				 user.velocity.y += 500.0;
-			 } else if (three.camera.position.y < message.data.position[1] && three.camera.position.y > message.data.position[1] - 8500){
-				 three.camera.position.set(three.camera.position.x, message.data.position[1]-8500 , three.camera.position.z);
-				 user.velocity.y -= 500.0;
-			 }
-			 user.velocity.x *= 0.97;
-			 user.velocity.z *= 0.97;
-			 user.falling = false;
-
-		}  else if (message.command == "voxel collision") {
+		 } else if (message.command == "voxel collision") {
 			let cameraPosition = three.camera.position;
 			cameraPosition.set(cameraPosition.x + message.data.position[0] / 80,
 									  cameraPosition.y + message.data.position[1] / 80,
@@ -62,37 +50,36 @@ export default class WorldPhysics {
 		} else if (message.command == "user collision") { // could trigger interaction / bater / chat screen
 	          console.log(message.data);
 
-		  } else if (message.command == "tower collision") { // left over from subnexus.fm ..might come in handy
+		  } else if (message.command == "structure collision") { // left over from subnexus.fm ..might come in handy
+						let cameraPosition = three.camera.position;
 	          position = message.data.position;
-	          if (sys.tcl && message.data.inner == 0) {
+	          if (message.data.inner == 0 ) {
 	            sys.user.falling = false;
 	            if (message.data.delta[0] > message.data.delta[1]) {
-	              three.camera.position.x = position[0];
-	              UserInput.device.velocity.x *= -0.85;
-
+	              cameraPosition.x = position[0];
+								user.velocity.x += position[0]*= -0.85;
 	            } else {
-	              three.camera.position.z = position[2];
-	              UserInput.device.velocity.z *= -0.85;
+	              cameraPosition.z = position[2];
+								user.velocity.z += position[2] *= -0.85;
 	            }
 	          }
-	          sys.vibrate(50);
-	        } else if (data.command == "load interior") {
-	          console.log("load interior... ", message.data.name);
-	          world.loadInterior(message.data.name);
+	          //sys.vibrate(50);
+	        } else if (message.command == "load interior") {
+	          world.generateFullLOD(message.data.coords);
 
-	        } else if (data.command == "enter interior") {
+	        } else if (message.command == "enter interior") {
 	          if (message.data.name != sys.venue) {
 	            //console.log("message.data.name", data.data.name);
 	            sys.venue = message.data.name;
 	            world.enterInterior(message.data.name);
 	          }
 	        } else {
-	          console.log(data);
+	          console.log(message.data);
 	        }
 
 	      };
 
-	      worker.postMessage('{"command":"start","data":""}');
+	    worker.postMessage('{"command":"start","data":""}');
 		  this.worker = worker;
 		  return worker;
 	}

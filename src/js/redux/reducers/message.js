@@ -1,5 +1,5 @@
 import {
-    ADD_MESSAGE,
+    SEND_MESSAGE,
     FETCH_MESSAGES,
     RECEIEVE_MESSAGES,
     FAILED_FETCH_MESSAGES,
@@ -9,19 +9,8 @@ import {
 
 module.exports = function messages (state = [], action) {
   switch (action.type) {
-    case ADD_MESSAGE:
-      return [
-        ...state,
-        {
-          id: action.id,
-          to: action.to,
-          from: action.from,
-          sent: action.sent,
-          title: action.title,
-          body: action.body,
-          attachments: action.attachments
-        }
-      ]
+    case SEND_MESSAGE:
+      return state;
     case DELETE_MESSAGE:
 
     case FETCH_MESSAGES:

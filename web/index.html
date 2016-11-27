@@ -4,37 +4,34 @@
         <title>Convolvr</title>
         <meta content="utf-8" http-equiv="encoding">
         <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' type='image/png' sizes='192x192' href='/data/renderwavetv.png' />
+        <link rel='icon' type='image/png' sizes='192x192' href='/data/convolvr.png' />
         <meta name='theme-color' content='rgb(20, 20, 20)' />
         <meta name="msapplication-TileColor" content="#151515" />
         <meta name="application-name" content="Convolvr" />
-        <meta name="description" content="WebVR server for hosting games, 3d chat and social events." />
+        <meta name="description" content="WebVR game engine, server and virtual reality authoring tool." />
         <meta property="og:title" content="Convolvr" />
-        <meta property="og:description" content="WebVR server for hosting games, 3d chat and social events." />
-        <meta property="og:image" content="https://convolvr.io/data/renderwavetv.png" / >
+        <meta property="og:description" content="WebVR game engine, server and virtual reality authoring tool." />
+        <meta property="og:image" content="https://convolvr.io/data/convolvr.png" / >
         <meta property="og:image:width" content="192" />
         <meta property="og:image:height" content="192" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="https://convolvr.io" />
         <meta name="twitter:title" content="Convolvr" />
-        <meta name="twitter:description" content="WebVR server for hosting games, 3d chat and social events." />
-        <meta name="twitter:image" content="https://convolvr.io/data/renderwavetv.png" />
+        <meta name="twitter:description" content="WebVR game engine, server and virtual reality authoring tool."  />
+        <meta name="twitter:image" content="https://convolvr.io/data/convolvr.png" />
         <style>
 			body {
 				padding: 0;
 				margin: 0;
-                width: 100%;
-                height:100%;
-                overflow-x: hidden;
-                position: absolute;
-                font-size: 20px;
-                font-family: sans-serif;
+        width: 100%;
+        height:100%;
+        overflow-x: hidden;
+        position: absolute;
+        font-size: 20px;
+        font-family: sans-serif;
 				background: #101010;
 				color: #ffffff;
 			}
-			h1 {
-
-            }
 			canvas {
 				position: fixed;
 				z-index: 2;
@@ -80,28 +77,26 @@
 
             void main( void ) {
                 float depth = (1.0 - (abs(0.5 - vUv.y) * 2.0));
-                float opacity =  2.0* (1.0-(abs(0.5 - (vUv.y)) * 2.0));
                 float intense = vUv.y*2.0*abs(0.25 - (vUv.x / 2.0));
                 float radial = abs(0.25 - (vUv.x / 2.0));
                 float glow = 0.0;
 
                 if ((vUv.y >= 0.5)) {
-                    glow = 0.9 * depth* depth;
-                    glow -= 0.2;
+                    glow =   0.9 * depth* depth;
+                } else if (vUv.y < 0.5 && vUv.y > 0.49) {
+                   glow =  mix((0.9 * depth* depth), -0.3+(depth* depth) - vUv.y, 1.0 - (vUv.y-0.49)*100.00);
                 } else {
-                    glow = -0.2+(depth* depth * vUv.y);
+                    glow = -0.3+(depth* depth) - vUv.y;
                 }
-              //  float red = -0.4+glow+radial+depth;
-              //  float blue = 1.2+glow+radial+(depth/2.0);
-              //  float green = -0.5+glow+radial+depth;
-              float red = 1.2;
-              float blue = 1.2;
-              float green = 1.2;
+
+              float red = 0.15 + depth * 0.25;
+              float blue = 0.8 + depth * 0.35;
+              float green = depth * 0.40;
                float luminance = 0.0;
+               luminance += 0.5 * intense +  depth;
                // implement...
-               luminance += 0.1 * depth *radial;
-               luminance += 0.1 + radial;
-               luminance += 0.1 + opacity * depth*radial;
+              //  luminance += 0.1 + radial;
+              //  luminance += 0.1 + radial;
                vec4 color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
 
                gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
