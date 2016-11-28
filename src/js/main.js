@@ -32,8 +32,9 @@ import UserInput from './input/user-input.js';
 import World from './world/world.js';
 //import Avatar from './world/avatar.js';
 import io from 'socket.io-client'
-let socket = io(window.location.origin+"/socket.io")
+let socket = io()
 socket.on('connection', function(socket) {
+	console.log("socket connected", socket)
 	let name = window.navigator && window.navigator.platform || "New User";
 	socket.emit("chat message", "Welcome "+name+"!")
 });

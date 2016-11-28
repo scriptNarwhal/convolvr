@@ -357,8 +357,8 @@ export default class World {
 				coords = [Math.floor(position.x/232000), 0, Math.floor(position.z/201840)],
 				lastCoords = this.lastChunkCoords,
 				moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
-				viewDistance = (this.mobile ? 6 : (window.innerWidth > 2100 ?  12  : 10)),
-				removeDistance = viewDistance + 2,
+				viewDistance = (this.mobile ? 6 : 11),
+				removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
 				endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
 				x = coords[0]-phase,
 				y = coords[2]-phase;
