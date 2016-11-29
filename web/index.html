@@ -89,9 +89,9 @@
                     glow = -0.3+(depth* depth) - vUv.y;
                 }
 
-              float red = 0.23;
-              float blue = 0.9 + depth * 0.23;
-              float green = 0.13 + depth * 0.23;
+              float red =  depth * 0.23;
+              float blue = 0.9 + depth * 0.43;
+              float green = depth * 0.43;
                float luminance = 0.0;
                luminance += 0.5 * intense +  depth;
 
