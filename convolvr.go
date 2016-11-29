@@ -3,7 +3,7 @@ package main
 import (
     //"github.com/SpaceHexagon/convolvr/server/component"
     //"github.com/SpaceHexagon/convolvr/server/entity"
-    "github.com/SpaceHexagon/convolvr/server/platform"
+    //"github.com/SpaceHexagon/convolvr/server/platform"
     //"github.com/SpaceHexagon/convolvr/server/structure"
     //"github.com/SpaceHexagon/convolvr/server/user"
     "github.com/ant0ine/go-json-rest/rest"
@@ -32,15 +32,28 @@ func main() {
           // implement after users, platforms and entities
             w.WriteJson(map[string][]int{"worlds": []int{}})
         }),
-        rest.Get("/platforms/:cell", func(w rest.ResponseWriter, req *rest.Request) {
-           cell := r.PathParam("cell")
-           platforms := []Platform{}
-           w.WriteJson(map[string][]Platform{}{"platforms": platforms})
+        rest.Get("/worlds/:id", func(w rest.ResponseWriter, req *rest.Request) { // load specific world
+          // implement after users, platforms and entities
+            w.WriteJson(map[string][]int{"worlds": []int{}})
         }),
+        rest.Get("/platforms/:world/:cell", func(w rest.ResponseWriter, req *rest.Request) {
+           cell := req.PathParam("cell")
+           //world := req.PathParam("world")
+
+           w.WriteJson(map[string]string{"cell": cell})
+        }),
+
         rest.Get("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
-            w.WriteJson(map[string][]int{"platforms": []int{}})
+            w.WriteJson(map[string][]int{"structures": []int{}})
         }),
-        rest.Get("/entities", func(w rest.ResponseWriter, req *rest.Request) {
+        rest.Get("/structures/:userId", func(w rest.ResponseWriter, req *rest.Request) { // custom structure types
+            w.WriteJson(map[string][]int{"structures": []int{}})
+        }),
+        rest.Get("/entities", func(w rest.ResponseWriter, req *rest.Request) { // entity types
+
+            w.WriteJson(map[string][]int{"entities": []int{}})
+        }),
+        rest.Get("/entities/:userId", func(w rest.ResponseWriter, req *rest.Request) { // custom entities
 
             w.WriteJson(map[string][]int{"entities": []int{}})
         }),
