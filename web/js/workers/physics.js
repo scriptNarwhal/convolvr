@@ -66,7 +66,7 @@ self.update = function () {
 					}
 				}
 			}
-					if (dist2dArrayCompare(position, obj.position, 300000)) { 	// do collisions on voxels & structures... just walls at first..
+					if (dist2dArrayCompare(position, obj.position, 400000)) { 	// do collisions on voxels & structures... just walls at first..
 							s = !! obj.structures ? obj.structures.length - 1 : -1;
 							while (s > -1) {
 								structure = obj.structures[s];
