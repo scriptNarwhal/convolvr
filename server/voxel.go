@@ -7,5 +7,5 @@ type Voxel struct {
 }
 
 func NewVoxel (cell []int, geom string, mat string) {
-
+  return &voxel{cell, geom, mat}
 }

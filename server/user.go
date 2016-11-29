@@ -8,5 +8,5 @@ type User struct {
 }
 
 func NewUser (name string,  password string, email string, data string) {
-
+  return &user{name, password, email, data}
 }

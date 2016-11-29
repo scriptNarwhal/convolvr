@@ -3,7 +3,7 @@ package main
 import (
     //"github.com/SpaceHexagon/convolvr/server/component"
     //"github.com/SpaceHexagon/convolvr/server/entity"
-    //"github.com/SpaceHexagon/convolvr/server/platform"
+    "github.com/SpaceHexagon/convolvr/server/platform"
     //"github.com/SpaceHexagon/convolvr/server/structure"
     //"github.com/SpaceHexagon/convolvr/server/user"
     "github.com/ant0ine/go-json-rest/rest"
@@ -32,9 +32,10 @@ func main() {
           // implement after users, platforms and entities
             w.WriteJson(map[string][]int{"worlds": []int{}})
         }),
-        rest.Get("/platforms", func(w rest.ResponseWriter, req *rest.Request) {
-
-            w.WriteJson(map[string]string{"platforms": ""})
+        rest.Get("/platforms/:cell", func(w rest.ResponseWriter, req *rest.Request) {
+           cell := r.PathParam("cell")
+           platforms := []Platform{}
+           w.WriteJson(map[string][]Platform{}{"platforms": platforms})
         }),
         rest.Get("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
             w.WriteJson(map[string][]int{"platforms": []int{}})

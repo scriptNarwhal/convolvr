@@ -19,6 +19,6 @@ type Structure struct {
   Light int  `json:"light"` // hex color
 }
 
-func NewStructure (name string, geom string, mat string, pos []int, quat []int, length int, width int, floors int, light int ) {
-
+func NewStructure (name string, geom string, mat string, Entities []*Entity, Voxels []*Voxel, pos []int, quat []int, length int, width int, floors int, light int ) {
+  return &structure{name, geom, mat, entities, voxels, pos, quat, length, width, floors, light}
 }
