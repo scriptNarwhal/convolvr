@@ -5,7 +5,7 @@ WebVR game engine, server and virtual reality authoring tool.
   git clone https://github.com/SpaceHexagon/convolvr.git
   go build
   npm install
-  ./build.sh # or watchman src build.sh # to continually build
+  ./build.sh # or watchman src ./build.sh # to continually build
   ./convolvr #(starts server on port 3000 defautly)
 
 ```
