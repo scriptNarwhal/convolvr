@@ -213,7 +213,7 @@ export default class UserInput {
 	}
 
 	update (delta) {
-		var bottom = -192000,
+		var bottom = -168000,
 				world = this.world,
 				velocity = this.device.velocity; //world.getElevation(this.camera.position);
 		if (isVRMode(world.mode)) {
@@ -228,7 +228,7 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
-			velocity.y -= 1000 + velocity.y*0.5 * delta; // weak gravity
+			velocity.y -= 1000 + velocity.y * delta; // weak gravity
 			this.moveVector.set(0, 0, 0);
 			if (this.camera.position.y < bottom + 500) {
 				if (this.keys.shift) {

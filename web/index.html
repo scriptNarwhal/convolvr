@@ -82,9 +82,10 @@
                 float glow = 0.0;
 
                 if ((vUv.y >= 0.5)) {
-                    glow = intense * 0.5 + 0.6 * depth* depth * depth;
+                    glow = -0.3+(depth* depth) - vUv.y;
+                    glow = intense * 0.25 + 0.5 * depth* depth * depth;
                 } else if (vUv.y < 0.5 && vUv.y > 0.46) {
-                   glow = mix(intense * 0.5 + 0.6 * depth* depth * depth, -0.3+(depth* depth) - vUv.y, 1.0 - (vUv.y-0.46)*25.00);
+                   glow = mix(intense * 0.25 + 0.5 * depth* depth * depth, -0.3+(depth* depth) - vUv.y, 1.0 - (vUv.y-0.46)*25.00);
                 } else {
                     glow = -0.3+(depth* depth) - vUv.y;
                 }

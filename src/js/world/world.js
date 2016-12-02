@@ -424,10 +424,10 @@ export default class World {
 										}
 									}
 
-									if (Math.random() < 0.36) {
+									if (Math.random() < 0.16) {
 										voxels = this.makeVoxels( Math.floor(Math.random() * 5) );
 									}
-									platform = new Platform({voxels: voxels, structures: Math.random() < 0.33 ? [
+									platform = new Platform({voxels: voxels, structures: Math.random() < 0.15 ? [
 										{
 											length: 1+Math.floor(Math.random()*3.0),
 											width: 1+Math.floor(Math.random()*3.0),
