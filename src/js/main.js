@@ -47,7 +47,7 @@ let token = localStorage.getItem("token"),
 				gravity: 1,
 				mesh:new THREE.Object3D(),
 				velocity: new THREE.Vector3(0, -10, 0),
-				light: new THREE.PointLight(0xffffff, 0.5, 300000),
+				light: new THREE.PointLight(0xffffff, 0.25, 300000),
 				arms: [],
 				falling: false
 			},

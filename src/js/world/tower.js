@@ -30,7 +30,7 @@ class Tower {
 		// LODGeometry.computeVertexNormals();
     this.mesh = new THREE.Mesh(LODGeometry, towerMaterial);
     this.platform.mesh.add(this.mesh);
-    this.mesh.position.set(data.position[0]*50000, 500+(floors+1) * 25000, data.position[2]*50000);
+    this.mesh.position.set(data.position[0]*50000, 500+(floors+1) * 25000, length/2.0+data.position[2]*50000);
 	}
 
     initFloor (y, width, length) {
