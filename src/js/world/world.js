@@ -45,7 +45,7 @@ export default class World {
 		this.cleanUpPlatforms = [];
 		this.HMDMode = "non standard"; // "head-movement"
 
-		this.ambientLight = new THREE.AmbientLight(0x020210);
+		this.ambientLight = new THREE.AmbientLight(0x060025);
 		scene.add(this.ambientLight);
 		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -410,15 +410,15 @@ export default class World {
 
 									if (Math.random() < 0.33) {
 										if (Math.random() < 0.6) {
-											lightColor = 0x00ff80;
+											lightColor = 0x00ff00;
 										} else {
 											if (Math.random() < 0.5) {
-												lightColor = 0x00ffff;
+												lightColor = 0x6000ff;
 											} else {
 												if (Math.random() < 0.4) {
-													lightColor = 0x00ff00;
+													lightColor = 0x00ff60;
 												} else {
-													lightColor = 0x0080ff;
+													lightColor = 0x0000ff;
 												}
 											}
 										}

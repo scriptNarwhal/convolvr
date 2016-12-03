@@ -147,14 +147,14 @@ class Tower {
 		initLight (lightColor) {
 				let emblem = null,
 						geom = new THREE.CylinderGeometry( 132000, 132000, 50000, 6, 1),
-						emblemMat = new THREE.MeshBasicMaterial( {color: 0xffffff, fog: false, wireframe: false} );
+						emblemMat = new THREE.MeshBasicMaterial( {color: lightColor, fog: false, wireframe: true} );
 
 				emblem = new THREE.Mesh(geom, emblemMat);
 				this.platform.mesh.add(emblem);
 				emblem.position.set(0, this.data.floors * 50000, 0);
 				emblem.scale.set(0.1, 0.4, 0.1);
 
-				let light =  new THREE.PointLight(lightColor, 1.0, 700000);
+				let light =  new THREE.PointLight(lightColor, 1.0, 900000);
 				emblem.add(light);
 		}
 }
