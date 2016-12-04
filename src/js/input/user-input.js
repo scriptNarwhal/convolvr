@@ -1,3 +1,7 @@
+import Touch from './touch'
+import Keyboard from './keyboard'
+import LeapMotion from './leap-motion'
+
 let isVRMode = (mode) => {
 	return (mode == "vr" || mode == "stereo");
 }
@@ -28,6 +32,7 @@ export default class UserInput {
 		this.lastTouch = [[0,0], [0,0]];
 		this.leapMotion = false;
 		this.leapMode = "movement";
+		this.gamepads = {};
 	}
 
 	init (world, camera, device) {
@@ -86,121 +91,9 @@ export default class UserInput {
 				}
 			});
 		}
-		document.addEventListener("keydown", function (event) {
-			if (isVRMode(world.mode)) { // 0 = chat, 1 = vr
-				switch (event.keyCode) {
-					case 87: uInput.keys.w = true; break;
-					case 65: uInput.keys.a = true; break;
-					case 83: uInput.keys.s = true; break;
-					case 68: uInput.keys.d = true; break;
-					case 82: uInput.keys.r = true; break;
-					case 70: uInput.keys.f = true; break;
-					case 16: uInput.keys.shift = true; break;
-					case 32: uInput.keys.space = true; break;
-					case 27: // escape key
-					if (world.user.username != "") {
-						//world.showChat();
-						//world.mode = "desktop";
-						document.body.setAttribute("class", "desktop");
-						//document.querySelector("#chatMode").click();
-					}
-					break;
-				}
-			}
-		}, true);
-		document.addEventListener("keyup", function (event) {
-			switch (event.keyCode) {
-				case 87: uInput.keys.w = false; break;
-				case 65: uInput.keys.a = false; break;
-				case 83: uInput.keys.s = false; break;
-				case 68: uInput.keys.d = false; break;
-				case 82: uInput.keys.r = false; break;
-				case 70: uInput.keys.f = false; break;
-				case 16: uInput.keys.shift = false; break;
-				case 32: uInput.keys.space = false; break;
-			}
-		}, true);
-		document.body.addEventListener("touchmove", function(event) {
-			var data = event.touches, touch = data.length;
-			if (isVRMode("vr")) {
-				event.preventDefault();
-				if (touch < 2) {
-					uInput.rotationVector.y += (data[0].pageX - uInput.lastTouch[0][0]) / 500.0;
-					uInput.rotationVector.x += (data[0].pageY - uInput.lastTouch[0][1]) / 500.0;
-					uInput.lastTouch = [ [data[0].pageX, data[0].pageY], [data[0].pageX, data[0].pageY]];
-				} else {
-					while (touch-- > 0) {
-						uInput.moveVector.x -= (data[touch].pageX - uInput.lastTouch[touch][0])*180;
-						uInput.moveVector.z -= (data[touch].pageY - uInput.lastTouch[touch][1])*180;
-						uInput.lastTouch[touch] = [data[touch].pageX, data[touch].pageY];
-					}
-				}
-			}
-		});
-		document.body.addEventListener("touchstart", function(event) {
-			var data = event.touches, touch = data.length ;
-			//uInput.lastTouch = [[0,0],[0,0]];
-			if (isVRMode(world.mode)) {
-				//event.preventDefault();
-				while (touch-- > 0) {
-					uInput.lastTouch[touch] = [data[touch].pageX, data[touch].pageY];
-				}
-			}
-		});
-
-		// leap code here
-		Leap.loop(function (frame) {
-			var mode = world.mode,
-				input = uInput,
-				user = world.user;
-				uInput.leapMotion = true;
-			if (isVRMode(mode)) { // if its VR mode and not chat mode
-				if (input.leapMode == "movement") {
-					frame.hands.forEach(function (hand, index) {
-						var position = hand.screenPosition();
-						input.moveVector.x = ((-window.innerWidth / 2) + position[0]);
-						input.moveVector.z = ((-window.innerWidth / 2) + position[2]);
-						input.rotationVector.y -= 0.025 * hand.yaw(); //((-window.innerWidth / 2) + position[0]) / 3000;
-						input.rotationVector.x += 0.015 * hand.pitch();
-					});
-				} else {
-					if (input.leapMode == "avatar") {
-						frame.hands.forEach(function (hand, index) {
-							var position = hand.screenPosition();
-							if (user.arms[index] != null) {
-								user.arms[index].visible = true;
-								user.arms[index].rotation.set(hand.pitch(), -hand.yaw(), 0);
-								user.arms[index].position.set(-50+((-window.innerWidth / 2) + position[0]), 0, -350 + position[2]);
-								user.arms[index].updateMatrix();
-							}
-						});
-					} else {
-						frame.hands.forEach(function (hand, index) {
-							var position = hand.screenPosition(),
-							handIndex = 0;
-							if (index == 0) { // if its the first hand, control the camera
-								input.moveVector.x = ((-window.innerWidth / 2) + position[0]);
-								input.moveVector.z = ((-window.innerWidth / 2) + position[2]);
-								input.rotationVector.y -= 0.025 * hand.yaw(); //((-window.innerWidth / 2) + position[0]) / 3000;
-								input.rotationVector.x += 0.015 * hand.pitch();
-							} else { // if its the second hand, control the arms/hands
-								while (handIndex < 2) {
-									if (user.arms[handIndex] != null) {
-										user.arms[handIndex].visible = true;
-										user.arms[handIndex].rotation.set(hand.pitch(), -hand.yaw(), 0);
-										user.arms[handIndex].position.set(-50+((300*handIndex)+((-window.innerWidth / 2) + position[0])), 0, -350 + position[2]);
-										user.arms[handIndex].updateMatrix();
-										handIndex ++;
-									}
-								}
-							}
-						});
-					}
-				}
-			}
-			// define more leapModes here...
-		}).use('screenPosition', {scale: 0.15});
-
+		this.touchControls = new Touch(this);
+		this.keyboard = new Keyboard(this, this.world);
+		this.leapControls = new LeapMotion(this, this.world);
 		this.tmpQuaternion = new THREE.Quaternion();
 		this.moveVector = new THREE.Vector3(0, 0, 0);
 	}
@@ -217,7 +110,7 @@ export default class UserInput {
 				world = this.world,
 				velocity = this.device.velocity; //world.getElevation(this.camera.position);
 		if (isVRMode(world.mode)) {
-				this.handleKeys();
+				this.keyboard.handleKeys(this);
 		}
 			if (world.mode != "stereo") {
 				this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ");
@@ -255,48 +148,6 @@ export default class UserInput {
 				world.user.mesh.rotation.y = (this.camera.rotation.y);
 			}
 
-	}
-
-	handleKeys () {
-		var velocity = this.device.velocity;
-		if (this.keys.a) {  // maybe insert more options here...
-			this.moveVector.x = -6400;
-		} else if (this.keys.d) {
-			this.moveVector.x = 6400;
-		}
-		if (this.keys.w) {
-			this.moveVector.z = -6400;
-		} else if (this.keys.s) {
-			this.moveVector.z = 6400;
-		}
-		if (this.keys.r) {
-			this.moveVector.y = 6400;
-		} else if (this.keys.f) {
-			this.moveVector.y = -6400;
-		}
-		if (this.keys.shift) {
-			velocity.x *= 1.02;
-			velocity.z *= 1.02;
-		}
-		if (this.keys.space && !this.device.falling) {
-			this.device.falling = true;
-			velocity.y = 160000;
-		}
-		if (velocity.x > 999999) {
-			velocity.x = 999999;
-		} else if (velocity.x < -999999) {
-			velocity.x = -999999;
-		}
-		if (velocity.y > 999999) {
-			velocity.y = 999999
-		} else if (velocity.y < -999999) {
-			velocity.y = -999999;
-		}
-		if (velocity.z > 999999) {
-			velocity.z = 999999
-		} else if (velocity.z < -999999) {
-			velocity.z = -999999;
-		}
 	}
 
 	toggleFullscreen (elem) {
