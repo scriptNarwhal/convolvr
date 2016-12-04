@@ -29,6 +29,7 @@ import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/col
 
 // World
 import UserInput from './input/user-input.js';
+import Toolbox from './world/tools/toolbox.js'
 import World from './world/world.js';
 //import Avatar from './world/avatar.js';
 import io from 'socket.io-client'
@@ -43,12 +44,13 @@ let token = localStorage.getItem("token"),
 			userInput,
 			user = {
 				id: Math.random(),
+				arms: [],
 				name: "Human",
-				gravity: 1,
-				mesh:new THREE.Object3D(),
+				toolbox: null,
+				mesh: new THREE.Object3D(),
 				velocity: new THREE.Vector3(0, -10, 0),
 				light: new THREE.PointLight(0xffffff, 0.25, 300000),
-				arms: [],
+				gravity: 1,
 				falling: false
 			},
 			world,
@@ -56,8 +58,10 @@ let token = localStorage.getItem("token"),
 
 	userInput = new UserInput();
 	world = new World(userInput, socket);
+	user.toolbox = new Toolbox(world);
 	world.user = user;
 	three.scene.add(user.light);
+
 	userInput.init(world, world.camera, user);
 	userInput.rotationVector = {x: 0, y: 9.95, z: 0};
 

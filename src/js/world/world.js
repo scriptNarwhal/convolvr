@@ -15,6 +15,7 @@ export default class World {
 			coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 			material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
 			core = new THREE.Mesh(coreGeom, material),
+			skyLight =  new THREE.PointLight(0x6000ff, 0.5, 3000000),
 			skyShaderMat = null,
 			three = {},
 			x = 0,
@@ -27,6 +28,7 @@ export default class World {
 		this.user = {
 			id: 0,
 			username: "user"+Math.floor(1000000*Math.random()),
+			toolbox: null,
 			arms: [],
 			gravity: 1,
 			velocity: new THREE.Vector3(),
@@ -68,6 +70,8 @@ export default class World {
 		this.ground = new THREE.Object3D();
 		this.ground.rotation.x = -Math.PI /2;
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat);
+		this.skybox.add(skyLight);
+		skyLight.position.set(0, 300000, 300000);
 		scene.add(core);
 		core.position.set(0, 2000, 0);
 		scene.add(this.skybox);

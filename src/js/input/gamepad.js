@@ -46,12 +46,12 @@ export default class GamePad {
           } else if (i == 1) {
             input.moveVector.z = gamepad.axes[1] * 16000;
           } else if (i == 2) {
-						if (Math.abs(gamepad.axes[2]) > 0.15) { // 15 percent deadzone
-							rotation.y += -gamepad.axes[2] / 30.0;
+						if (Math.abs(gamepad.axes[2]) > 0.10) { // 10 percent deadzone
+							rotation.y += -gamepad.axes[2] / 20.0;
 						}
           } else if (i == 3) {
-						if (Math.abs(gamepad.axes[3]) > 0.15) {
-            	rotation.x += -gamepad.axes[3] / 30.0;
+						if (Math.abs(gamepad.axes[3]) > 0.10) {
+            	rotation.x += -gamepad.axes[3] / 20.0;
 						}
           }
         }

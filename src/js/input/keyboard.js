@@ -5,7 +5,7 @@ let isVRMode = (mode) => {
 export default class Keyboard {
 	constructor (input, world) {
     let keys = input.keys;
-    
+
     document.addEventListener("keydown", function (event) {
       if (isVRMode(world.mode)) { // 0 = chat, 1 = vr
         switch (event.keyCode) {
@@ -47,14 +47,14 @@ export default class Keyboard {
         keys = input.keys;
 
     if (keys.a) {  // maybe insert more options here...
-      input.moveVector.x = -6400;
+      input.moveVector.x = -12000;
     } else if (keys.d) {
-      input.moveVector.x = 6400;
+      input.moveVector.x = 12000;
     }
     if (keys.w) {
-      input.moveVector.z = -6400;
+      input.moveVector.z = -12000;
     } else if (keys.s) {
-      input.moveVector.z = 6400;
+      input.moveVector.z = 12000;
     }
     if (keys.r) {
       input.moveVector.y = 6400;
