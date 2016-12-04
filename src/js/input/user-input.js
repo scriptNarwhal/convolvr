@@ -1,5 +1,6 @@
 import Touch from './touch'
 import Keyboard from './keyboard'
+import GamePad from './gamepad'
 import LeapMotion from './leap-motion'
 
 let isVRMode = (mode) => {
@@ -32,6 +33,7 @@ export default class UserInput {
 		this.lastTouch = [[0,0], [0,0]];
 		this.leapMotion = false;
 		this.leapMode = "movement";
+		this.gamepadMode = false;
 		this.gamepads = {};
 	}
 
@@ -93,6 +95,7 @@ export default class UserInput {
 		}
 		this.touchControls = new Touch(this);
 		this.keyboard = new Keyboard(this, this.world);
+		this.gamepad = new GamePad(this);
 		this.leapControls = new LeapMotion(this, this.world);
 		this.tmpQuaternion = new THREE.Quaternion();
 		this.moveVector = new THREE.Vector3(0, 0, 0);
@@ -111,6 +114,7 @@ export default class UserInput {
 				velocity = this.device.velocity; //world.getElevation(this.camera.position);
 		if (isVRMode(world.mode)) {
 				this.keyboard.handleKeys(this);
+				this.gamepad.update(this);
 		}
 			if (world.mode != "stereo") {
 				this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ");
