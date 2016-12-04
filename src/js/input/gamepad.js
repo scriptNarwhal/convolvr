@@ -3,9 +3,8 @@ export default class GamePad {
     let gamepads = input.gamepads;
     function gamepadHandler (e, connecting) {
       let gamepad = e.gamepad;
-      input.gamepadMode = true;
-      // Note:
-      // gamepad === navigator.getGamepads()[gamepad.index]
+		      input.gamepadMode = true;
+
       console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
                   gamepad.index, gamepad.id,
                   gamepad.buttons.length, gamepad.axes.length);
@@ -23,29 +22,37 @@ export default class GamePad {
   update (input) {
     let g = 0,
         gamepad = null,
-        gamepads = navigator.getGamepads();
+        gamepads = navigator.getGamepads(),
+				rotation = input.rotationVector;
 
     if (!gamepads) {
       return;
     }
     while (g < gamepads.length) {
       gamepad = gamepads[g];
-      let i = 0;
+      let i = 0,
+					a = 0;
+
       if (gamepad) {
+				a = gamepad.axes.length;
         for (i = 0; i < gamepad.buttons.length; i++) {
           let val = gamepad.buttons[i],
               pressed = this.buttonPressed(val);
 
         }
-        for (i = 0; i < gamepad.axes.length; i++) {
+        for (i = 0; i < a; i++) {
           if (i == 0) {
-            input.moveVector.x = gamepad.axes[i] * 10000;
+            input.moveVector.x = gamepad.axes[0] * 16000;
           } else if (i == 1) {
-            input.moveVector.z = gamepad.axes[i] * 10000;
+            input.moveVector.z = gamepad.axes[1] * 16000;
           } else if (i == 2) {
-            input.rotationVector.y += -gamepad.axes[i] / 50.0;
+						if (Math.abs(gamepad.axes[2]) > 0.15) { // 15 percent deadzone
+							rotation.y += -gamepad.axes[2] / 30.0;
+						}
           } else if (i == 3) {
-            input.rotationVector.x += -gamepad.axes[i] / 50.0;
+						if (Math.abs(gamepad.axes[3]) > 0.15) {
+            	rotation.x += -gamepad.axes[3] / 30.0;
+						}
           }
         }
       }

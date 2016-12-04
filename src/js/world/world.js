@@ -45,7 +45,7 @@ export default class World {
 		this.cleanUpPlatforms = [];
 		this.HMDMode = "non standard"; // "head-movement"
 
-		this.ambientLight = new THREE.AmbientLight(0x060025);
+		this.ambientLight = new THREE.AmbientLight(0x090037);
 		scene.add(this.ambientLight);
 		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -217,7 +217,8 @@ export default class World {
             };
 						controls = new THREE.VRControls(camera);
 						effect = new THREE.VREffect(renderer);
-						effect.setSize(window.innerWidth, window.innerHeight);
+						let ratio = window.devicePixelRatio || 1;
+						effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
 						three.vrEffect = effect;
 						three.vrControls = controls;
 						// Get the VRDisplay and save it for later.
@@ -229,7 +230,8 @@ export default class World {
 						});
 
 						function onResize() {
-						  effect.setSize(window.innerWidth, window.innerHeight);
+							let ratio = window.devicePixelRatio || 1;
+						  effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
 						}
 						function onVRDisplayPresentChange() {
 						  console.log('onVRDisplayPresentChange');
@@ -250,7 +252,6 @@ export default class World {
 						// document.querySelector('#viewport').addEventListener('click', function() {
 						//   vrDisplay.requestPresent([{source: renderer.domElement}]);
 						// });
-
 						// document.querySelector('button#reset').addEventListener('click', function() {
 						//   vrDisplay.resetPose();
 						// });
@@ -281,7 +282,7 @@ export default class World {
 						if (Math.random() < 0.1) {
 							voxels.push({
 								cell: [
-									x, 2+Math.floor(2*Math.sin(x/2.0)), x % 6
+									x, 2+Math.floor(2*Math.sin(x/6.0)), x % 6
 								]
 							})
 						}
@@ -293,7 +294,7 @@ export default class World {
 							if (Math.random() < 0.2) {
 								voxels.push({
 									cell: [
-										x, 2+Math.floor(Math.sin(x/4.0)*Math.cos(y/4.0)), y
+										x, 2+Math.floor(Math.sin(x/12.0)*Math.cos(y/12.0)), y
 									]
 								})
 							}
@@ -319,7 +320,7 @@ export default class World {
 						if (Math.random() < 0.75) {
 							voxels.push({
 								cell: [
-									x, 1+y%6, y
+									x, Math.floor(y+x/4.0), y
 								]
 							})
 						}
@@ -332,7 +333,7 @@ export default class World {
 						if (Math.random() < 0.25) {
 							voxels.push({
 								cell: [
-									x, 2+Math.floor(2*Math.sin(x/1.5)+2*Math.cos(y/1.5)), y
+									x, 2+Math.floor(2*Math.sin(x/3.5)+2*Math.cos(y/3.5)), y
 								]
 							})
 						}
@@ -395,8 +396,6 @@ export default class World {
 							c ++;
 						}
 					})
-
-
 					c = 0;
 					// load new platforms // at first just from client-side generation
 					while (x <= endCoords[0]) {
@@ -416,7 +415,7 @@ export default class World {
 												lightColor = 0x6000ff;
 											} else {
 												if (Math.random() < 0.4) {
-													lightColor = 0x00ff60;
+													lightColor = 0x00ff00;
 												} else {
 													lightColor = 0x0000ff;
 												}
@@ -452,8 +451,6 @@ export default class World {
 						y = coords[2]-viewDistance;
 						x += 1;
 					}
-
-				//}
 
 				if (physicalPlatforms.length > 0) {
 					this.worldPhysics.worker.postMessage(JSON.stringify({
