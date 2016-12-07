@@ -4,7 +4,8 @@ let isVRMode = (mode) => {
 
 export default class Keyboard {
 	constructor (input, world) {
-    let keys = input.keys;
+    let keys = input.keys,
+        tools = world.user.toolbox;
 
     document.addEventListener("keydown", function (event) {
       if (isVRMode(world.mode)) { // 0 = chat, 1 = vr
@@ -40,7 +41,17 @@ export default class Keyboard {
         case 32: keys.space = false; break;
       }
     }, true);
+    document.addEventListener("keypress", (e) => {
+      switch (e.which) {
+        case 49: tools.useTool("right", 0); break; // 0: component tool *right hand only until I test with oculus touch
+        case 50: tools.useTool("right", 1); break; // 0: entity tool
+        case 51: tools.useTool("right", 2); break; // 0: delete tool
+        case 52: tools.useTool("right", 3); break; // 0: voxel tool
+        case 53: tools.useTool("right", 4); break; // 0: projectile tool
+      }
+    }, true)
   }
+
 
   handleKeys (input) {
     let velocity = input.device.velocity,

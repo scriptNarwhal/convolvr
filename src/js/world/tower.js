@@ -146,8 +146,8 @@ class Tower {
 
 		initLight (lightColor) {
 				let emblem = null,
-						geom = new THREE.CylinderGeometry( 132000, 132000, 50000, 6, 1),
-						emblemMat = new THREE.MeshBasicMaterial( {color: lightColor, fog: false, wireframe: true} );
+						geom = new THREE.CylinderGeometry(132000, 132000, 50000, 6, 1),
+						emblemMat = new THREE.MeshBasicMaterial({color: lightColor, fog: false, wireframe: true} );
 
 				emblem = new THREE.Mesh(geom, emblemMat);
 				this.platform.mesh.add(emblem);
