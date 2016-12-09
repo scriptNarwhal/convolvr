@@ -43,11 +43,11 @@ export default class Keyboard {
     }, true);
     document.addEventListener("keypress", (e) => {
       switch (e.which) {
-        case 49: tools.useTool("right", 0); break; // 0: component tool *right hand only until I test with oculus touch
-        case 50: tools.useTool("right", 1); break; // 0: entity tool
-        case 51: tools.useTool("right", 2); break; // 0: delete tool
-        case 52: tools.useTool("right", 3); break; // 0: voxel tool
-        case 53: tools.useTool("right", 4); break; // 0: projectile tool
+        case 49: tools.useTool(0, 0); break; // 0: component tool *right hand only until I test with oculus touch
+        case 50: tools.useTool(1, 0); break; // 0: entity tool
+        case 51: tools.useTool(2, 0); break; // 0: delete tool
+        case 52: tools.useTool(3, 0); break; // 0: voxel tool
+        case 53: tools.useTool(4, 0); break; // 0: projectile tool
       }
     }, true)
   }

@@ -26,7 +26,11 @@ export default class DeleteTool {
     }
 
     primaryAction () {
-      // remove entity 
+      // remove entity
+    }
+
+    secondaryAction () {
+      //
     }
 
     equip (hand) {

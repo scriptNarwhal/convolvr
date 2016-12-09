@@ -43,13 +43,12 @@ export default class UserInput {
 		uInput.rotationVector = {x: 0.2, y: 5.65, z: 0};
 		var canvas = document.querySelector("canvas#viewport");
 		canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
-		canvas.onclick = function (event) {
+		canvas.onclick = (event) => {
 			var elem = event.target;
-			if (isVRMode(world.mode)) {
-
+			if (!uInput.fullscreen) {
+				elem.requestPointerLock();
+				uInput.toggleFullscreen();
 			}
-			elem.requestPointerLock();
-			uInput.toggleFullscreen();
 		};
 
 		if ("onpointerlockchange" in document) {
@@ -92,6 +91,21 @@ export default class UserInput {
 					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 300.0;
 				}
 			});
+			document.addEventListener("mouseclick", (e) => {
+				console.log(e);
+				switch (e.which) {
+					case 1: // left mouse
+						tools.usePrimary(0); // right hand
+					break;
+					case 2: // scroll wheel click
+						// tools.selectObject() .. might be handy
+					break;
+
+					case 3: // right click
+						tools.useSecondary(0); // right hand
+					break;
+				}
+			})
 		}
 		this.touchControls = new Touch(this);
 		this.keyboard = new Keyboard(this, this.world);
@@ -114,7 +128,7 @@ export default class UserInput {
 				velocity = this.device.velocity; //world.getElevation(this.camera.position);
 		if (isVRMode(world.mode)) {
 				this.keyboard.handleKeys(this);
-				this.gamepad.update(this);
+				this.gamepad.update(this, world);
 		}
 			if (world.mode != "stereo") {
 				this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ");

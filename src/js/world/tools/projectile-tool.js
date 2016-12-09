@@ -30,6 +30,10 @@ export default class ProjectileTool {
       // fire projectile
     }
 
+    secondaryAction () {
+      //
+    }
+
     equip (hand) {
       if (this.mesh == null) {
         three.camera.add(this.initMesh(this.data))

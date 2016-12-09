@@ -19,42 +19,58 @@ export default class GamePad {
     window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false);
   }
 
-  update (input) {
+  update (input, world) {
     let g = 0,
+				i = 0,
+				a = 0,
+				b = 0,
+				buttons = [],
         gamepad = null,
         gamepads = navigator.getGamepads(),
-				rotation = input.rotationVector;
+				rotation = input.rotationVector,
+				tools = world.user.toolbox;
 
     if (!gamepads) {
       return;
     }
     while (g < gamepads.length) {
       gamepad = gamepads[g];
-      let i = 0,
-					a = 0;
-
       if (gamepad) {
 				a = gamepad.axes.length;
-        for (i = 0; i < gamepad.buttons.length; i++) {
-          let val = gamepad.buttons[i],
-              pressed = this.buttonPressed(val);
+				buttons = gamepad.buttons,
+				b = buttons.length;
 
-        }
-        for (i = 0; i < a; i++) {
-          if (i == 0) {
-            input.moveVector.x = gamepad.axes[0] * 16000;
-          } else if (i == 1) {
-            input.moveVector.z = gamepad.axes[1] * 16000;
-          } else if (i == 2) {
+				if (b > 8) {
+					// face buttons: 0 1 2 3
+					if (this.buttonPressed(buttons[4])) { // top triggers: 4 5
+						tools.nextTool(-1, 0); // previous tool, right hand
+					}
+					if (this.buttonPressed(buttons[5])) {
+						tools.nextTool(1, 0); // next tool, right hand
+					}
+					if (this.buttonPressed(buttons[6])) { // bottom triggers: 6 7
+						tools.usePrimary(0); // right hand
+					}
+					if (this.buttonPressed(buttons[7])) {
+						tools.useSecondary(0); // right hand
+					}
+
+				}
+				if (b >= 16) {
+					// select / start: 8 9
+					// stick click(s): 10 11
+					// dpad buttons: 12 13 14 15
+				}
+				if (a >= 4) { // standard dual analogue controller
+					  input.moveVector.x = gamepad.axes[0] * 16000;
+						input.moveVector.z = gamepad.axes[1] * 16000;
 						if (Math.abs(gamepad.axes[2]) > 0.10) { // 10 percent deadzone
 							rotation.y += -gamepad.axes[2] / 20.0;
 						}
-          } else if (i == 3) {
 						if (Math.abs(gamepad.axes[3]) > 0.10) {
             	rotation.x += -gamepad.axes[3] / 20.0;
 						}
-          }
-        }
+				}
       }
       g ++;
     }
@@ -64,6 +80,6 @@ export default class GamePad {
     if (typeof(b) == "object") {
       return b.pressed;
     }
-    return b == 1.0;
+    return b == 1.0 || b > 0.9;
   }
 }
