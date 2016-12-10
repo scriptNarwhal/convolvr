@@ -1,13 +1,13 @@
 import {
     TOOL_ADD,
-    FETCH_TOOLS,
-    RECEIVE_TOOLS,
-    FAILED_FETCH_TOOLS,
+    TOOLS_FETCH,
+    TOOLS_FETCH_DONE,
+    TOOLS_FETCH_FAILED,
     UPDATE_TOOL,
-    DELETE_TOOL,
-    NEXT_TOOL,
-    PREVIOUS_TOOL,
-    SELECT_TOOL
+    TOOL_DELETE,
+    TOOL_NEXT,
+    TOOL_PREVIOUS,
+    TOOL_USE
 } from '../constants/action-types';
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
@@ -18,26 +18,28 @@ export function addTool (data) {
         data: data
     }
 }
-export function selectTool (id) {
+export function useTool (id) {
     return {
-        type: SELECT_TOOL,
-        id: id
+        type: TOOL_USE,
+        index: id
     }
 }
-export function nextTool () {
+export function nextTool (hand) {
     return {
-        type: NEXT_TOOL
+        type: TOOL_NEXT,
+        hand
     }
 }
-export function previousTool () {
+export function previousTool (hand) {
     return {
-        type: PREVIOUS_TOOL
+        type: TOOL_PREVIOUS,
+        hand
     }
 }
 export function fetchTools (id) {
     return dispatch => {
      dispatch({
-         type: FETCH_TOOLS,
+         type: TOOLS_FETCH,
          id: id
      })
      return axios.get(API_SERVER+"/api/tools"+id)
@@ -54,31 +56,20 @@ export function requestTools (tools) {
         tools: tools
     }
 }
-
 export function receiveTools (tools) {
     return {
-        type: RECEIVE_TOOLS,
+        type: TOOLS_FETCH_DONE,
         tools: tools
     }
 }
-
 export function failedFetchTools (err) {
     return {
-        type: FAILED_FETCH_TOOLS,
+        type: TOOLS_FETCH_FAILED,
         err: err
     }
 }
-
-export function updateTool (id, data) {
-    return {
-        type: UPDATE_TOOL,
-        data: data,
-        id: id
-    }
-}
-
 export function deleteTool (id) {
     return {
-        type: DELETE_TOOL
+        type: TOOL_DELETE
     }
 }

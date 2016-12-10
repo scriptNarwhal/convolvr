@@ -90,13 +90,10 @@ export default class World {
 			skyMat: skyShaderMat,
 			core: core,
 			scene: scene,
-			chunks: [],
 			camera: camera,
 			renderer: renderer
 		};
 		window.three = this.three;
-		console.log("window.three");
-		console.log(window.three);
 		this.render(0);
 
 		window.onresize = function () {

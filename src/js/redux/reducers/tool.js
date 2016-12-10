@@ -1,48 +1,59 @@
 import {
     TOOL_ADD,
-    FETCH_TOOLS,
-    RECEIVE_TOOLS,
-    FAILED_FETCH_TOOLS,
-    NEXT_TOOL,
-    PREVIOUS_TOOL,
-    UPDATE_TOOL,
-    DELETE_TOOL
+    TOOLS_FETCH,
+    TOOLS_FETCH_DONE,
+    TOOLS_FETCH_FAILED,
+    TOOL_NEXT,
+    TOOL_PREVIOUS,
+    TOOL_USE,
+    TOOL_DELETE
 } from '../constants/action-types';
 
-module.exports = function tools (state = [], action) {
+module.exports = function tools (state = {
+  currentTools: [0, 0],
+  allTools: [
+    {name:"Component"},
+    {name:"Entity"},
+    {name:"Delete"},
+    {name:"Voxel"},
+    {name:"Projectile"}
+    // {name: "Custom Tool"}
+  ]
+}, action) {
+  let n = state.allTools.length,
+      newCurrentTools = [0, 0];
+
   switch (action.type) {
     case TOOL_ADD:
-      return [
-        ...state,
-        {
-          name: action.url,
-          data: action.data,
-          pic: action.pic
-        }
-      ]
-    case NEXT_TOOL:
 
-    case PREVIOUS_TOOL:
-
-    case DELETE_TOOL:
-
-    case FETCH_TOOLS:
-
-    case RECEIVE_TOOLS:
-
-    case FAILED_FETCH_TOOLS:
-
-    case UPDATE_TOOL:
-    return state.map((tool, index) => {
-      if (index === action.index) {
-        return Object.assign({}, tool, {
-          name: action.url,
-          data: action.data,
-          pic: action.pic
-        })
-      }
-      return tool;
+    case TOOL_NEXT:
+    newCurrentTools = [state.currentTools[0], state.currentTools[1]];
+    newCurrentTools[hand] += 1;
+    if (newCurrentTools[hand] >= n) {
+      newCurrentTools[hand] = 0;
+    }
+    return Object.assign({}, state, {
+        currentTools: newCurrentTools
     })
+    case TOOL_PREVIOUS:
+    newCurrentTools = [state.currentTools[0], state.currentTools[1]];
+    newCurrentTools[hand] -= 1;
+    if (newCurrentTools[hand] < 0) {
+      newCurrentTools[hand] = n -1;
+    }
+    return Object.assign({}, state, {
+        currentTools: newCurrentTools
+    })
+    case TOOL_USE:
+
+    case TOOL_DELETE:
+
+    case TOOLS_FETCH:
+
+    case TOOLS_FETCH_DONE:
+
+    case TOOLS_FETCH_FAILED:
+
     default:
       return state;
   }

@@ -94,7 +94,7 @@ class Tower {
 				wallBSP = new ThreeBSP(towerMesh);
 				bsp = bsp.union(wallBSP);
 
-				for (f = 0; f < floors; f++) {
+				for (f = 0; f <= floors; f++) {
 					floorHeight = (-height / 2) + (f * 50000);
 					bsp = bsp.union(this.initFloor(floorHeight, xUnits, zUnits));
 						windowMesh = new THREE.Mesh(windowGeometry, towerMaterial);
@@ -145,21 +145,27 @@ class Tower {
     }
 
 		initLight () {
-				let emblem = null,
+				let led = null,
 					  lightColor = this.data.light,
+						xUnits = this.data.width,
+						zUnits = this.data.length,
 						geom = null,
 						light = null,
-						emblemMat = null;
+						ledMat = null;
 
-				if (lightColor) {		
-					geom = new THREE.CylinderGeometry(132000, 132000, 50000, 6, 1);
-					emblemMat = new THREE.MeshBasicMaterial({color: lightColor, fog: false, wireframe: true} );
-					emblem = new THREE.Mesh(geom, emblemMat);
-					this.platform.mesh.add(emblem);
-					emblem.position.set(0, this.data.floors * 50000, 0);
-					emblem.scale.set(0.1, 0.4, 0.1);
+				if (lightColor) {
+					//if (this.data.lightType == "billboard") {
+					geom = new THREE.PlaneGeometry(50000 * xUnits, 35000, 4, 4);
+					//} else {
+					//	geom = new THREE.CylinderGeometry(13200, 13200, 5000, 6, 1);
+					//}
+					ledMat = new THREE.MeshBasicMaterial({color: lightColor, fog: false, wireframe: true} );
+					led = new THREE.Mesh(geom, ledMat);
+					this.platform.mesh.add(led);
+					led.position.set(-3000 -(25000*xUnits), (1+this.data.floors * 50000), -3000-25000*zUnits);
+					//led.scale.set(0.1, 0.4, 0.1);
 					light =  new THREE.PointLight(lightColor, 1.0, 900000);
-					emblem.add(light);
+					led.add(light);
 				}
 
 		}
