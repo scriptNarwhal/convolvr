@@ -61,7 +61,7 @@ let token = localStorage.getItem("token"),
 			avatar = null;
 
 	userInput = new UserInput();
-	world = new World(userInput, socket);
+	world = new World(userInput, socket, store);
 	user.toolbox = new Toolbox(world);
 	user.hud = new HUDMenu([], user.toolbox);
 	user.hud.initMesh({}, user);

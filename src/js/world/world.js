@@ -5,7 +5,7 @@ import io from 'socket.io-client'
 //import {on,send,sendReceive} from '../network/socket'
 
 export default class World {
-	constructor(userInput = false, socket) {
+	constructor(userInput = false, socket, store) {
 
 		var scene = new THREE.Scene(),
 			camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4500000 ),
@@ -22,6 +22,7 @@ export default class World {
 			y = 0,
 			r = 4000;
 
+		this.appStore = store;
 		this.socket = socket;
 		this.mode = "vr";
 		this.users = [];
