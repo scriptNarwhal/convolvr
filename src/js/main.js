@@ -1,7 +1,7 @@
-console.log('Convolvr Client Initializing');
+console.log('Convolvr Client Initializing')
 // React
-import ReactDOM from 'react-dom';
-import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom'
+import React, { Component, PropTypes } from 'react'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 // Redux
@@ -9,7 +9,7 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import makeStore from './redux/makeStore'
-let store = makeStore(routerReducer);
+let store = makeStore(routerReducer)
 const history = syncHistoryWithStore(browserHistory, store)
 // 2d UI
 import App from './containers/app'
@@ -22,25 +22,26 @@ import Login from './containers/login'
 import Chat from './containers/chat'
 import HUD from './containers/hud'
 // World
-import UserInput from './input/user-input.js';
+import { send, events } from './network/socket'
+import UserInput from './input/user-input.js'
 import Toolbox from './world/tools/toolbox.js'
-import World from './world/world.js';
+import World from './world/world.js'
 // 3D UI
 import HUDMenu from './world/hud/menu'
 import Cursor from './world/hud/cursor'
-//import Avatar from './world/avatar.js';
+//import Avatar from './world/avatar.js'
 // Material UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/colors'
 import io from 'socket.io-client'
 
-let socket = io()
-socket.on('connection', function(socket) {
-	console.log("socket connected", socket)
-	let name = window.navigator && window.navigator.platform || "New User";
-	socket.emit("chat message", "Welcome "+name+"!")
-});
+let socket = events
+socket.on('connection', (evt) => {
+	console.log("socket connected", evt)
+	let name = window.navigator && window.navigator.platform || "New User"
+	send("chat message", "Welcome "+name+"!")
+})
 
 let token = localStorage.getItem("token"),
 			userInput,
@@ -58,54 +59,55 @@ let token = localStorage.getItem("token"),
 				falling: false
 			},
 			world,
-			avatar = null;
+			avatar = null
 
-	userInput = new UserInput();
-	world = new World(userInput, socket, store);
-	user.toolbox = new Toolbox(world);
-	user.hud = new HUDMenu([], user.toolbox);
-	user.hud.initMesh({}, user);
-	user.hud.hide();
-	user.cursor = new Cursor({}, user);
-	user.mesh.add(user.light);
-	world.user = user;
-	three.scene.add(user.mesh);
+	userInput = new UserInput()
+	world = new World(userInput, socket, store)
+	user.toolbox = new Toolbox(world)
+	user.hud = new HUDMenu([], user.toolbox)
+	user.hud.initMesh({}, user)
+	user.hud.hide()
+	user.cursor = new Cursor({}, user)
+	user.mesh.add(user.light)
+	world.user = user
+	three.scene.add(user.mesh)
 
-	userInput.init(world, world.camera, user);
-	userInput.rotationVector = {x: 0, y: 9.95, z: 0};
-
-	socket.on("update", data => {
-		let entity = null,
+	userInput.init(world, world.camera, user)
+	userInput.rotationVector = {x: 0, y: 9.95, z: 0}
+	//socket.send("update", { asdf: rawr  })
+	socket.on("update", packet => {
+		let data = packet.data,
+			entity = null,
 			user = null,
 			pos = null,
 			quat = null,
-			mesh = null;
+			mesh = null
 
 		if (!! data.entity) {
-			entity = data.entity;
-			pos = entity.pos;
-			quat = entity.quat;
-			user = world.users[entity.id];
+			entity = data.entity
+			pos = entity.pos
+			quat = entity.quat
+			user = world.users[entity.id]
 			if (user == null) {
 				user = world.users[entity.id] = {
 					id: entity.id,
 					avatar: new Avatar()
 				}
 			}
-			mesh = user.mesh;
+			mesh = user.mesh
 		}
 		if (!! mesh) {
-			mesh.position.set(pos.x, pos.y, pos.z);
-			mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w);
+			mesh.position.set(pos.x, pos.y, pos.z)
+			mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w)
 		}
 	})
 
 	socket.on("chat message", message => {
-		console.log(message);
+		console.log(message)
 	})
 
-	three.camera.position.set(100000, 20000, 100000);
-	user.light.position.set(100000, 20000, 100000);
+	three.camera.position.set(100000, 20000, 100000)
+	user.light.position.set(100000, 20000, 100000)
 
 const muiTheme = getMuiTheme({
       palette: {
@@ -117,7 +119,7 @@ const muiTheme = getMuiTheme({
       appBar: {
         height: 50,
       }
-    });
+    })
 
 ReactDOM.render(
   (<Provider store={store}>

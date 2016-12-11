@@ -1,63 +1,28 @@
 import { secure } from '../config.js'
+import EventEmitter from 'events'
+export let events = new EventEmitter()
 
-var websocket = new WebSocket((secure ? 'wss:' : 'ws:')+"//"+location.host+"/connect")
-
-let handlers = {}
-
-websocket.onmessage = (message) => {
-  let data = JSON.parse(message.data)
-  if (!!window.LOG_MSG) {
-    console.dir(data)
-  }
-
-  if (!!handlers[data.p]) {
-    handlers[data.p].map(v => v(JSON.parse(data.d)))
-  }
+let socket = new WebSocket((secure ? 'wss:' : 'ws:')+"//"+(location.host+"/connect"))
+// Connect to our server: go server
+socket.binaryType = "arraybuffer"; // We are talking binary
+export let connected = false
+socket.onopen = () => {
+  connected = true
 }
-
-// Handle a websocket message from server!
-export function on(path, handler) {
-  if (!handlers[path]) {
-    handlers[path] = []
-  }
-  handlers[path].push(handler)
+socket.onclose = () => {
+  connected = false
 }
-
-// Handle a websocket message from server!
-export function off(path, handler) {
-  if (!!handlers[path]) {
-    console.warn("trying to remove a handler that is not there")
-  }
-  handlers[path] = handlers[path].filter(v => v != handler)
+socket.onmessage = function(evt) {
+  let data = JSON.parse(evt.data)
+  events.emit(data.type, data)
 }
-
-// Send a websocket message to server!
-export function send(path, data) {
-  if (websocket.readyState == WebSocket.OPEN) {
-    websocket.send(JSON.stringify({
-      p: path,
-      d: JSON.stringify(data),
-    }))
-  } else {
-    console.warn("socket not ready, will not send", path)
+export let send = (type,data) => {
+  if (!connected) {
+    return;
   }
-}
-
-var rqid = 1;
-
-// Send a websocket message to server!
-export function sendReceive(path, data, cb) {
-  data.request_id = rqid
-  rqid++
-  let hook = res => {
-    if (typeof res.request_id !== 'undefined' && res.request_id == data.request_id) {
-      cb(res)
-      handlers[path] = handlers[path].filter(v => v != hook)
-    }
+  let packet = {
+    type: type,
+    data: JSON.stringify(data),
   }
-  if (!handlers[path]) {
-    handlers[path] = []
-  }
-  handlers[path].push(hook)
-  send(path, data)
+  socket.send(JSON.stringify(packet))
 }

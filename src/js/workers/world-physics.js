@@ -29,7 +29,7 @@ export default class WorldPhysics {
 				  three.camera.position.set(three.camera.position.x, message.data.position[1]+12000 , three.camera.position.z);
 				  user.velocity.y *= -0.45;
 			  } else if (message.data.type == "bottom"){
-				  three.camera.position.set(three.camera.position.x, message.data.position[1], three.camera.position.z);
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]-12000, three.camera.position.z);
 				  user.velocity.y *= -0.45;
 			  }
 			  user.velocity.x *= 0.97;
