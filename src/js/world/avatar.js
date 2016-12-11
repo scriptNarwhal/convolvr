@@ -5,17 +5,23 @@ export default class Avatar {
     constructor (name, type, data) {
         var mesh = null, // new THREE.Object3D();
             entity = null,
-            component = null;
+            component = null,
+            components = [],
+            n = 2;
+        while (n > 0) {
+          component = {
+              type: "structure",
+              shape: "cylinder",
+              color: 0xffffff,
+              size: {x: 900, y: 600, z: 900},
+              position: { x: 0, y: (n-1)*600, z: 0 },
+              quaternion: false
+          };
+          components.push(component);
+          n --;
+        }
 
-        component = {
-            type: "structure",
-            shape: "cylinder",
-            size: {x: 200, y: 200, z: 400},
-            position: false,
-            quaternion: false
-        };
-
-        entity = new Entity(name, [component], [{"avatar": true}]);
+        entity = new Entity(name, components, [{"avatar": true}]);
         entity.init(three.scene);
 
         this.entity = entity;

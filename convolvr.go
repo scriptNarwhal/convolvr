@@ -91,7 +91,7 @@ func chatMessage(c *nexus.Client, p *nexus.Packet) {
 	hub.All().Broadcast(p)
 }
 func update(c *nexus.Client, p *nexus.Packet) {
-	log.Printf(`broadcasting update "%s"`, p.Data)
+	// log.Printf(`broadcasting update "%s"`, p.Data)./
 	hub.All().Broadcast(p)
 }
 func spawn(c *nexus.Client, p *nexus.Packet) {

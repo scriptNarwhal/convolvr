@@ -7,9 +7,8 @@ export default class Component {
           quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : { x: 0, y: 0, z: 0 },
           geometry = null,
-          material = new THREE.MeshBasicMaterial({ // temporary material..
-              color: data.color || 0xffffff,
-              wireframe: true,
+          material = new THREE.MeshPhongMaterial({ // temporary material..
+              color: data.color || 0xff00ff,
               fog: false
           });
 

@@ -29,7 +29,7 @@ import World from './world/world.js'
 // 3D UI
 import HUDMenu from './world/hud/menu'
 import Cursor from './world/hud/cursor'
-//import Avatar from './world/avatar.js'
+import Avatar from './world/avatar.js'
 // Material UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -76,7 +76,7 @@ let token = localStorage.getItem("token"),
 	userInput.rotationVector = {x: 0, y: 9.95, z: 0}
 	//socket.send("update", { asdf: rawr  })
 	socket.on("update", packet => {
-		let data = packet.data,
+		let data = JSON.parse(packet.data),
 			entity = null,
 			user = null,
 			pos = null,
@@ -85,20 +85,24 @@ let token = localStorage.getItem("token"),
 
 		if (!! data.entity) {
 			entity = data.entity
-			pos = entity.pos
-			quat = entity.quat
-			user = world.users[entity.id]
-			if (user == null) {
-				user = world.users[entity.id] = {
-					id: entity.id,
-					avatar: new Avatar()
+			if (entity.id != world.user.id) {
+				pos = entity.position
+				quat = entity.quaternion
+				user = world.users[entity.id]
+				if (user == null) {
+					user = world.users[entity.id] = {
+						id: entity.id,
+						avatar: new Avatar(),
+						mesh: null
+					}
+				}
+				user.mesh = user.avatar.mesh;
+				mesh = user.mesh
+				if (!! mesh) {
+					mesh.position.set(pos.x, pos.y, pos.z)
+					mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w)
 				}
 			}
-			mesh = user.mesh
-		}
-		if (!! mesh) {
-			mesh.position.set(pos.x, pos.y, pos.z)
-			mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w)
 		}
 	})
 

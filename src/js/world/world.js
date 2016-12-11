@@ -1,6 +1,7 @@
 import Avatar from './avatar';
 import Platform from './platform';
 import WorldPhysics  from '../workers/world-physics';
+import Seed from '../seed'
 import { send } from '../network/socket'
 
 export default class World {
@@ -81,6 +82,7 @@ export default class World {
 		userInput.init(this, camera, this.user);
 		this.worldPhysics = new WorldPhysics();
 		this.worldPhysics.init(self);
+		this.seed = new Seed();
 
 		this.workers = {
 			physics: this.worldPhysics
@@ -285,7 +287,7 @@ export default class World {
 			switch(t) {
 				case 0:
 					for (x = 8; x >= 0; x--) {
-						if (Math.random() < 0.1) {
+						if (this.seed.random() < 0.1) {
 							voxels.push({
 								cell: [
 									x, 2+Math.floor(2*Math.sin(x/6.0)), x % 6
@@ -297,7 +299,7 @@ export default class World {
 				case 1:
 					for (x = 15; x >= 0; x--) {
 						for (y = 8; y >= 0; y--) {
-							if (Math.random() < 0.2) {
+							if (this.seed.random() < 0.2) {
 								voxels.push({
 									cell: [
 										x, 2+Math.floor(Math.sin(x/12.0)*Math.cos(y/12.0)), y
@@ -310,7 +312,7 @@ export default class World {
 				case 2:
 				for (x = 8; x >= 0; x--) {
 					for (y = 11; y >= 0; y--) {
-						if (Math.random() < 0.4) {
+						if (this.seed.random() < 0.4) {
 							voxels.push({
 								cell: [
 									x-y, 2+y%4, y+x
@@ -323,7 +325,7 @@ export default class World {
 				case 3:
 				for (x = 15; x >= 0; x--) {
 					for (y = 11; y >= 0; y--) {
-						if (Math.random() < 0.75) {
+						if (this.seed.random() < 0.75) {
 							voxels.push({
 								cell: [
 									x, Math.floor(y+x/4.0), y
@@ -336,7 +338,7 @@ export default class World {
 				case 4:
 				for (x = 15; x >= 0; x--) {
 					for (y = 11; y >= 0; y--) {
-						if (Math.random() < 0.25) {
+						if (this.seed.random() < 0.25) {
 							voxels.push({
 								cell: [
 									x, 2+Math.floor(2*Math.sin(x/3.5)+2*Math.cos(y/3.5)), y
@@ -409,34 +411,34 @@ export default class World {
 							//console.log("checking", x, y);
 							if (c < 2 && pMap[x+".0."+y] == null) { // only if its not already loaded
 								c ++;
-								if (Math.random() < 0.5 ) {
+								if (this.seed.random() < 0.5 ) {
 									let voxels = [],
 											lightColor = false;
 
-									if (Math.random() < 0.33) {
-										if (Math.random() < 0.6) {
-											lightColor = 0x00ff00;
+									if (this.seed.random() < 0.33) {
+										if (this.seed.random() < 0.6) {
+											lightColor = 0xff00ff;
 										} else {
-											if (Math.random() < 0.5) {
-												lightColor = 0x6000ff;
+											if (this.seed.random() < 0.5) {
+												lightColor = 0xffff00;
 											} else {
-												if (Math.random() < 0.4) {
+												if (this.seed.random() < 0.4) {
 													lightColor = 0x00ff00;
 												} else {
-													lightColor = 0x0000ff;
+													lightColor = 0xff8000;
 												}
 											}
 										}
 									}
 
-									if (Math.random() < 0.16) {
-										voxels = this.makeVoxels( Math.floor(Math.random() * 5) );
+									if (this.seed.random() < 0.16) {
+										voxels = this.makeVoxels( Math.floor(this.seed.random() * 5) );
 									}
-									platform = new Platform({voxels: voxels, structures: Math.random() < 0.15 ? [
+									platform = new Platform({voxels: voxels, structures: this.seed.random() < 0.15 ? [
 										{
-											length: 1+Math.floor(Math.random()*3.0),
-											width: 1+Math.floor(Math.random()*3.0),
-											floors: 2+Math.floor(Math.random()*10.0),
+											length: 1+Math.floor(this.seed.random()*3.0),
+											width: 1+Math.floor(this.seed.random()*3.0),
+											floors: 2+Math.floor(this.seed.random()*10.0),
 											position: [-1.0, 0, -1.0],
 											light: lightColor
 										}
