@@ -1,5 +1,5 @@
 import Avatar from './avatar'
-import Terrain from './terrain'
+import Terrain from './terrain/terrain'
 import WorldPhysics  from '../workers/world-physics'
 import Seed from '../seed'
 import { send } from '../network/socket'
@@ -63,7 +63,6 @@ export default class World {
 			fragmentShader: document.getElementById('sky-fragment').textContent
 
 		} );
-
 		this.ground = new THREE.Object3D();
 		this.ground.rotation.x = -Math.PI /2;
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat);
@@ -81,7 +80,6 @@ export default class World {
 
 		this.workers = {
 			physics: this.worldPhysics
-			// npc: this.npcLogic.worker
 		}
 
 		three = this.three = {
@@ -102,9 +100,7 @@ export default class World {
 			three.camera.aspect = innerWidth / innerHeight;
 			three.camera.updateProjectionMatrix();
 		}
-
 		this.terrain.bufferPlatforms(true, 0);
-
 	}
 
 	render (last) {
@@ -128,9 +124,7 @@ export default class World {
 				beforeHMD = [camera.position.x, camera.position.y, camera.position.z];
 				three.vrControls.update();
 				camera.position.multiplyScalar(12000);
-
 			}
-
 			if (this.mode == "stereo") {
 				if (this.HMDMode == "standard") {
 					camera.position.set(/*beforeHMD[0] + */ cPos.x / 2.0,
@@ -141,7 +135,6 @@ export default class World {
 															beforeHMD[1] + cPos.y / 2.0,
 															beforeHMD[2] + cPos.z / 2.0);
 				}
-
 			}
 		}
 		if (this.user && this.user.mesh) {
@@ -151,11 +144,11 @@ export default class World {
 		if (this.sendUpdatePacket == 12) { // send image
 			if (this.capturing) {
 				var v = document.getElementById('webcam'),
-				 	canvas = document.getElementById('webcam-canvas'),
-				 	context = canvas.getContext('2d'),
-				 	cw = Math.floor(v.videoWidth),
-				 	ch = Math.floor(v.videoHeight),
-					imageSize = [cw, ch];
+					 	canvas = document.getElementById('webcam-canvas'),
+					 	context = canvas.getContext('2d'),
+					 	cw = Math.floor(v.videoWidth),
+					 	ch = Math.floor(v.videoHeight),
+						imageSize = [cw, ch];
 
 				canvas.width = 320;
 				canvas.height = 240;
@@ -186,21 +179,18 @@ export default class World {
 						quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
 					}
 				});
-
-					if (this.capturing) {
+				if (this.capturing) {
 						this.webcamImage = "";
-					}
 				}
+			}
 
 				core.rotation.y += 0.005;
 				this.skybox.material.uniforms.time.value += delta;
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
 				this.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
-				if (this.mode == "vr" || this.mode == "desktop") {
-					// render for desktop / mobile (without cardboard)
+				if (this.mode == "vr" || this.mode == "desktop") { // render for desktop / mobile (without cardboard)
 					this.three.renderer.render(three.scene, camera);
-				} else if (this.mode == "stereo") {
-					// Render the scene in stereo for HMD.
+				} else if (this.mode == "stereo") { // Render the scene in stereo for HMD.
 				 	!!three.vrEffect && three.vrEffect.render(three.scene, camera);
 				}
 				last = Date.now();
@@ -231,7 +221,6 @@ export default class World {
 						    vrDisplay = displays[0];
 						  }
 						});
-
 						function onResize() {
 							let ratio = window.devicePixelRatio || 1;
 						  effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
@@ -274,10 +263,10 @@ export default class World {
 			}
 		}
 
-			loadInterior (name) {
+		loadInterior (name) {
 
-			}
-			enterInterior (name) {
+		}
+		enterInterior (name) {
 
-			}
-	};
+		}
+};

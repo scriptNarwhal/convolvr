@@ -1,5 +1,5 @@
-import Track from './track'
-import Tower from './tower'
+import Track from '../structures/track'
+import Tower from '../structures/tower'
 
 let physics = null;
 

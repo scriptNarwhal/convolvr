@@ -10,7 +10,7 @@ import {
 } from '../constants/action-types';
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
-import Platform from '../../world/platform.js'
+import Platform from '../../world/terrain/platform.js'
 
 export function addPlatform () {
     let physicsWorld = three.world.worldPhysics.worker;
