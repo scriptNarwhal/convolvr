@@ -1,8 +1,7 @@
 import Avatar from './avatar';
 import Platform from './platform';
 import WorldPhysics  from '../workers/world-physics';
-import io from 'socket.io-client'
-//import {on,send,sendReceive} from '../network/socket'
+import { send } from '../network/socket'
 
 export default class World {
 	constructor(userInput = false, socket, store) {
@@ -179,7 +178,7 @@ export default class World {
 					});
 				}
 
-				this.socket.emit('update', {
+				send('update', {
 					entity: {
 						id: this.user.id,
 						username: this.user.username,

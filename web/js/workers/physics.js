@@ -44,9 +44,9 @@ self.update = function () {
 							collision = true;
 							self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
 
-					} else if (position[1] < obj.position[1]+12000 && obj.position[1] > obj.position[1] - 12000) {
+					} else if (position[1] < obj.position[1] && obj.position[1] > obj.position[1] - 12000) {
 							collision = true;
-							self.postMessage('{"command": "platform collision", "data":{"type":"bottom", "position":[' + obj.position[0] + ',' + (obj.position[1]-12000) + ',' + obj.position[2] + '] }}');
+							self.postMessage('{"command": "platform collision", "data":{"type":"bottom", "position":[' + obj.position[0] + ',' + (obj.position[1]) + ',' + obj.position[2] + '] }}');
 					}
 				}
 			}
