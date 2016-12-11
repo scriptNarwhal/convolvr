@@ -1,6 +1,6 @@
-import Avatar from './avatar.js';
-import Platform from './platform.js';
-import WorldPhysics  from '../workers/world-physics.js';
+import Avatar from './avatar';
+import Platform from './platform';
+import WorldPhysics  from '../workers/world-physics';
 import io from 'socket.io-client'
 //import {on,send,sendReceive} from '../network/socket'
 
@@ -29,6 +29,8 @@ export default class World {
 			id: 0,
 			username: "user"+Math.floor(1000000*Math.random()),
 			toolbox: null,
+			hud: null,
+			cursor: null,
 			arms: [],
 			gravity: 1,
 			velocity: new THREE.Vector3(),
@@ -145,7 +147,10 @@ export default class World {
 
 			}
 		}
-		this.user.light && this.user.light.position.set(cPos.x, cPos.y, cPos.z);
+		if (this.user && this.user.mesh) {
+			this.user.mesh.position.set(cPos.x, cPos.y, cPos.z);
+			this.user.mesh.quaternion.set(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
+		}
 		if (this.sendUpdatePacket == 12) { // send image
 			if (this.capturing) {
 				var v = document.getElementById('webcam'),

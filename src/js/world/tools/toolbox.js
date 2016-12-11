@@ -8,6 +8,8 @@ import CustomTool from './custom-tool'
 
 export default class Toolbox {
     constructor (world) {
+      this.world = world;
+      this.fadeTimeout = 0;
       this.tools = [
         new ComponentTool({}, world.user),
         new EntityTool({}, world.user),
@@ -19,7 +21,21 @@ export default class Toolbox {
       this.currentTools = [0, 0];
     }
 
+    showMenu() {
+      this.updateUI();
+      this.world.user.hud.show();
+      clearTimeout(this.fadeTimeout);
+      this.fadeTimeout = setTimeout(()=>{
+        this.world.user.hud.hide();
+      },1000)
+    }
+
+    updateUI() {
+      this.world.user.hud.update();
+    }
+
     nextTool(direction, hand = 0) {
+      this.showMenu();
       this.currentTools[hand] += direction;
       if (this.currentTools[hand] < 0) {
         this.currentTools[hand] = this.tools.length - 1;
@@ -30,6 +46,7 @@ export default class Toolbox {
     }
 
     useTool (index, hand) {
+      this.showMenu();
       this.currentTools[hand] = index;
       this.tools[index].equip(hand);
     }

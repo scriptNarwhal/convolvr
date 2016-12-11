@@ -5,32 +5,51 @@ export default class HUDMenu {
         this.options = toolbox.getTools();
       }
       this.toolbox = toolbox;
+      this.lightColor = 0xffffff;
+      this.light = null;
     }
 
-    initMesh (data = {}) {
+    initMesh (data = {}, user) {
       let mesh = null,
           options = this.options,
           o = 0,
           color = data.color || 0xffffff,
-          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 1000) : false,
-          geom = new THREE.BoxGeometry(1000, 150, 75),
-          mat = new THREE.MeshPhongMaterial({color: color, fog: false, wireframe: true});
+          light = new THREE.PointLight(this.lightColor, 1.0, 2000),
+          geom = new THREE.BoxGeometry(5000, 1000, 200),
+          mat = new THREE.MeshPhongMaterial({color: color, fog: false});
 
       mesh = new THREE.Mesh(geom, mat);
       if (light) {
+        this.light = light;
         mesh.add(light);
         light.position.set(0, 100, -300);
       }
-
+      console.log(options);
       if (options.length > 0) {
-        while (o > 0) {
-          icon = option.icon.initMesh();
-          icon.position.set(o*150, 0, 0);
-          this.mesh.add(icon);
+        o = options.length -1;
+        while (o >= 0) {
+          let icon = options[o].icon.initMesh();
+          icon.position.set(-1200+o*600, -100, 300);
+          mesh.add(icon);
+          o --;
         }
       }
-      
       this.mesh = mesh;
+      user.mesh.add(mesh);
+      mesh.position.set(0, 3000, -5000);
       return this.mesh;
+    }
+
+    update () {
+      let index = this.toolbox.getCurrentTool(0);
+      this.light.position.set(-1200+index*600, -100, 300);
+    }
+
+    hide () {
+      this.mesh.visible = false;
+    }
+
+    show () {
+      this.mesh.visible = true;
     }
 }

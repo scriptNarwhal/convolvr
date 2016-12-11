@@ -9,10 +9,10 @@ export default class CustomToolIcon extends Icon {
 
     initMesh (data = {}) {
       let mesh = null,
-          color = data.color || 0x404040,
+          color = data.color || 0xffffff,
           light = data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
           geom = new THREE.CylinderGeometry(132, 132, 132, 6, 1),
-          mat = new THREE.MeshPhongMaterial({color: color, fog: false});
+          mat = new THREE.MeshBasicMaterial({color: color, wireframe: true, fog: false});
 
       mesh = new THREE.Mesh(geom, mat);
       if (light) {
