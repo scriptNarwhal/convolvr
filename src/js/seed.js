@@ -1,6 +1,6 @@
 class Seed {
 	constructor () {
-		this.seed = 1234
+		this.seed = 54321
 	}
 
 	random () {
