@@ -9,6 +9,9 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import makeStore from './redux/makeStore'
+let store = makeStore(routerReducer);
+const history = syncHistoryWithStore(browserHistory, store)
+// 2d UI
 import App from './containers/app'
 import Editor from './containers/editor'
 import Memory from './containers/memory'
@@ -18,20 +21,20 @@ import Home from './containers/home'
 import Login from './containers/login'
 import Chat from './containers/chat'
 import HUD from './containers/hud'
-
-let store = makeStore(routerReducer);
-const history = syncHistoryWithStore(browserHistory, store)
-
-// UI
+// World
+import UserInput from './input/user-input.js';
+import Toolbox from './world/tools/toolbox.js'
+import World from './world/world.js';
+// 3D UI
+import HUDMenu from './world/hud/menu'
+import Cursor from './world/hud/cursor'
+//import Avatar from './world/avatar.js';
+// Material UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/colors'
-
-// World
-import UserInput from './input/user-input.js';
-import World from './world/world.js';
-//import Avatar from './world/avatar.js';
 import io from 'socket.io-client'
+
 let socket = io()
 socket.on('connection', function(socket) {
 	console.log("socket connected", socket)
@@ -43,21 +46,31 @@ let token = localStorage.getItem("token"),
 			userInput,
 			user = {
 				id: Math.random(),
-				name: "Human",
-				gravity: 1,
-				mesh:new THREE.Object3D(),
-				velocity: new THREE.Vector3(0, -10, 0),
-				light: new THREE.PointLight(0xffffff, 0.5, 300000),
 				arms: [],
+				hud: null,
+				cursor: null,
+				name: "Human",
+				toolbox: null,
+				mesh: new THREE.Object3D(),
+				velocity: new THREE.Vector3(0, -10, 0),
+				light: new THREE.PointLight(0xffffff, 0.25, 300000),
+				gravity: 1,
 				falling: false
 			},
 			world,
 			avatar = null;
 
 	userInput = new UserInput();
-	world = new World(userInput, socket);
+	world = new World(userInput, socket, store);
+	user.toolbox = new Toolbox(world);
+	user.hud = new HUDMenu([], user.toolbox);
+	user.hud.initMesh({}, user);
+	user.hud.hide();
+	user.cursor = new Cursor({}, user);
+	user.mesh.add(user.light);
 	world.user = user;
-	three.scene.add(user.light);
+	three.scene.add(user.mesh);
+
 	userInput.init(world, world.camera, user);
 	userInput.rotationVector = {x: 0, y: 9.95, z: 0};
 

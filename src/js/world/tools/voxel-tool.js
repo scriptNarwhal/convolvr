@@ -1,13 +1,12 @@
-import Entity from '../entity'
-import ProjectileToolIcon from '../hud/icons/projectile-tool-icon'
-
-export default class ProjectileTool {
+import VoxelToolIcon from '../hud/icons/voxel-tool-icon'
+/* terrain voxel tool */
+export default class VoxelTool {
     constructor (data, user) {
       this.data = data;
       this.user = user;
       this.mesh = null;
-      this.name = data ? data.name : "Projectile Tool";
-      this.icon = new ProjectileToolIcon();
+      this.name = data ? data.name : "Voxel Tool";
+      this.icon = new VoxelToolIcon();
     }
 
     initMesh (data = {}) {
@@ -27,11 +26,11 @@ export default class ProjectileTool {
     }
 
     primaryAction () {
-      // fire projectile
+      // create voxel
     }
 
     secondaryAction () {
-      //
+      // remove voxel
     }
 
     equip (hand) {

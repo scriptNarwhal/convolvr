@@ -33,9 +33,6 @@ class HUD extends Component {
                       } }
               />
             ) : ""}
-            <div className="crosshair">
-                <div className="inner"></div>
-            </div>
         </div>
     )
   }

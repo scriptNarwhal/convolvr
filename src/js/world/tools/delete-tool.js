@@ -1,13 +1,12 @@
-import Entity from '../entity'
-import ProjectileToolIcon from '../hud/icons/projectile-tool-icon'
-
-export default class ProjectileTool {
+import DeleteToolIcon from '../hud/icons/delete-tool-icon'
+/* delete (voxel | component | entity) tool */
+export default class DeleteTool {
     constructor (data, user) {
       this.data = data;
       this.user = user;
       this.mesh = null;
-      this.name = data ? data.name : "Projectile Tool";
-      this.icon = new ProjectileToolIcon();
+      this.name = "Delete Tool";
+      this.icon = new DeleteToolIcon();
     }
 
     initMesh (data = {}) {
@@ -27,7 +26,7 @@ export default class ProjectileTool {
     }
 
     primaryAction () {
-      // fire projectile
+      // remove entity
     }
 
     secondaryAction () {

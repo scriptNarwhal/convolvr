@@ -1,11 +1,11 @@
-import Avatar from './avatar.js';
-import Platform from './platform.js';
-import WorldPhysics  from '../workers/world-physics.js';
+import Avatar from './avatar';
+import Platform from './platform';
+import WorldPhysics  from '../workers/world-physics';
 import io from 'socket.io-client'
 //import {on,send,sendReceive} from '../network/socket'
 
 export default class World {
-	constructor(userInput = false, socket) {
+	constructor(userInput = false, socket, store) {
 
 		var scene = new THREE.Scene(),
 			camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4500000 ),
@@ -15,18 +15,23 @@ export default class World {
 			coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 			material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
 			core = new THREE.Mesh(coreGeom, material),
+			skyLight =  new THREE.PointLight(0x6000ff, 0.5, 3000000),
 			skyShaderMat = null,
 			three = {},
 			x = 0,
 			y = 0,
 			r = 4000;
 
+		this.appStore = store;
 		this.socket = socket;
 		this.mode = "vr";
 		this.users = [];
 		this.user = {
 			id: 0,
 			username: "user"+Math.floor(1000000*Math.random()),
+			toolbox: null,
+			hud: null,
+			cursor: null,
 			arms: [],
 			gravity: 1,
 			velocity: new THREE.Vector3(),
@@ -45,7 +50,7 @@ export default class World {
 		this.cleanUpPlatforms = [];
 		this.HMDMode = "non standard"; // "head-movement"
 
-		this.ambientLight = new THREE.AmbientLight(0x020210);
+		this.ambientLight = new THREE.AmbientLight(0x090037);
 		scene.add(this.ambientLight);
 		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
 		renderer.setSize(window.innerWidth, window.innerHeight);
@@ -68,6 +73,8 @@ export default class World {
 		this.ground = new THREE.Object3D();
 		this.ground.rotation.x = -Math.PI /2;
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat);
+		this.skybox.add(skyLight);
+		skyLight.position.set(0, 300000, 300000);
 		scene.add(core);
 		core.position.set(0, 2000, 0);
 		scene.add(this.skybox);
@@ -86,13 +93,10 @@ export default class World {
 			skyMat: skyShaderMat,
 			core: core,
 			scene: scene,
-			chunks: [],
 			camera: camera,
 			renderer: renderer
 		};
 		window.three = this.three;
-		console.log("window.three");
-		console.log(window.three);
 		this.render(0);
 
 		window.onresize = function () {
@@ -144,7 +148,10 @@ export default class World {
 
 			}
 		}
-		this.user.light && this.user.light.position.set(cPos.x, cPos.y, cPos.z);
+		if (this.user && this.user.mesh) {
+			this.user.mesh.position.set(cPos.x, cPos.y, cPos.z);
+			this.user.mesh.quaternion.set(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
+		}
 		if (this.sendUpdatePacket == 12) { // send image
 			if (this.capturing) {
 				var v = document.getElementById('webcam'),
@@ -217,7 +224,8 @@ export default class World {
             };
 						controls = new THREE.VRControls(camera);
 						effect = new THREE.VREffect(renderer);
-						effect.setSize(window.innerWidth, window.innerHeight);
+						let ratio = window.devicePixelRatio || 1;
+						effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
 						three.vrEffect = effect;
 						three.vrControls = controls;
 						// Get the VRDisplay and save it for later.
@@ -229,7 +237,8 @@ export default class World {
 						});
 
 						function onResize() {
-						  effect.setSize(window.innerWidth, window.innerHeight);
+							let ratio = window.devicePixelRatio || 1;
+						  effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
 						}
 						function onVRDisplayPresentChange() {
 						  console.log('onVRDisplayPresentChange');
@@ -250,7 +259,6 @@ export default class World {
 						// document.querySelector('#viewport').addEventListener('click', function() {
 						//   vrDisplay.requestPresent([{source: renderer.domElement}]);
 						// });
-
 						// document.querySelector('button#reset').addEventListener('click', function() {
 						//   vrDisplay.resetPose();
 						// });
@@ -281,7 +289,7 @@ export default class World {
 						if (Math.random() < 0.1) {
 							voxels.push({
 								cell: [
-									x, 2+Math.floor(2*Math.sin(x/2.0)), x % 6
+									x, 2+Math.floor(2*Math.sin(x/6.0)), x % 6
 								]
 							})
 						}
@@ -293,7 +301,7 @@ export default class World {
 							if (Math.random() < 0.2) {
 								voxels.push({
 									cell: [
-										x, 2+Math.floor(Math.sin(x/4.0)*Math.cos(y/4.0)), y
+										x, 2+Math.floor(Math.sin(x/12.0)*Math.cos(y/12.0)), y
 									]
 								})
 							}
@@ -319,7 +327,7 @@ export default class World {
 						if (Math.random() < 0.75) {
 							voxels.push({
 								cell: [
-									x, 1+y%6, y
+									x, Math.floor(y+x/4.0), y
 								]
 							})
 						}
@@ -332,7 +340,7 @@ export default class World {
 						if (Math.random() < 0.25) {
 							voxels.push({
 								cell: [
-									x, 2+Math.floor(2*Math.sin(x/1.5)+2*Math.cos(y/1.5)), y
+									x, 2+Math.floor(2*Math.sin(x/3.5)+2*Math.cos(y/3.5)), y
 								]
 							})
 						}
@@ -395,8 +403,6 @@ export default class World {
 							c ++;
 						}
 					})
-
-
 					c = 0;
 					// load new platforms // at first just from client-side generation
 					while (x <= endCoords[0]) {
@@ -410,24 +416,24 @@ export default class World {
 
 									if (Math.random() < 0.33) {
 										if (Math.random() < 0.6) {
-											lightColor = 0x00ff80;
+											lightColor = 0x00ff00;
 										} else {
 											if (Math.random() < 0.5) {
-												lightColor = 0x00ffff;
+												lightColor = 0x6000ff;
 											} else {
 												if (Math.random() < 0.4) {
 													lightColor = 0x00ff00;
 												} else {
-													lightColor = 0x0080ff;
+													lightColor = 0x0000ff;
 												}
 											}
 										}
 									}
 
-									if (Math.random() < 0.36) {
+									if (Math.random() < 0.16) {
 										voxels = this.makeVoxels( Math.floor(Math.random() * 5) );
 									}
-									platform = new Platform({voxels: voxels, structures: Math.random() < 0.33 ? [
+									platform = new Platform({voxels: voxels, structures: Math.random() < 0.15 ? [
 										{
 											length: 1+Math.floor(Math.random()*3.0),
 											width: 1+Math.floor(Math.random()*3.0),
@@ -452,8 +458,6 @@ export default class World {
 						y = coords[2]-viewDistance;
 						x += 1;
 					}
-
-				//}
 
 				if (physicalPlatforms.length > 0) {
 					this.worldPhysics.worker.postMessage(JSON.stringify({

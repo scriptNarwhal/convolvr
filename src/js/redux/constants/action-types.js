@@ -36,13 +36,13 @@ export const UPDATE_COMPONENT = 'UPDATE_COMPONENT';
 export const DELETE_COMPONENT = 'DELETE_COMPONENT';
 
 export const TOOL_ADD = 'TOOL_ADD';
-export const FETCH_TOOLS = 'FETCH_TOOLS';
-export const RECEIVE_TOOLS = 'RECEIVE_TOOLS';
-export const FAILED_FETCH_TOOLS = 'FAILED_FETCH_TOOLS';
-export const UPDATE_TOOL = 'UPDATE_TOOL';
-export const DELETE_TOOL = 'DELETE_TOOL';
-export const NEXT_TOOL = 'NEXT_TOOL';
-export const PREVIOUS_TOOL = 'PREVIOUS_TOOL';
+export const TOOLS_FETCH = 'TOOLS_FETCH';
+export const TOOLS_FETCH_DONE = 'TOOLS_FETCH_DONE';
+export const TOOLS_FETCH_FAILED = 'TOOLS_FETCH_FAILED';
+export const TOOL_USE = 'TOOL_USE';
+export const TOOL_DELETE = 'TOOL_DELETE';
+export const TOOL_NEXT = 'TOOL_NEXT';
+export const TOOL_PREVIOUS = 'TOOL_PREVIOUS';
 
 export const USER_ADD = 'USER_ADD';
 export const USER_CONNECT = 'USER_CONNECT';

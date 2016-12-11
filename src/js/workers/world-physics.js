@@ -24,13 +24,13 @@ export default class WorldPhysics {
 		  } else if (message.command == "collision") { // not implemented
 	          console.log("collision");
 	          console.log(message.data);
-		  } else if (message.command == "platform collision") {
-	          if (three.camera.position.y > message.data.position[1] && three.camera.position.y < 12000 + message.data.position[1]) {
+		  } else if (message.command == "platform collision") { // consider sending "top" or "bottom" collision type
+	          if (message.data.type == "top") {
 				  three.camera.position.set(three.camera.position.x, message.data.position[1]+12000 , three.camera.position.z);
-				  user.velocity.y *= -0.25;
-			  } else if (three.camera.position.y < message.data.position[1] && three.camera.position.y > message.data.position[1] - 12000){
-				  three.camera.position.set(three.camera.position.x, message.data.position[1]-12000 , three.camera.position.z);
-				  user.velocity.y *= -0.25;
+				  user.velocity.y *= -0.45;
+			  } else if (message.data.type == "bottom"){
+				  three.camera.position.set(three.camera.position.x, message.data.position[1], three.camera.position.z);
+				  user.velocity.y *= -0.45;
 			  }
 			  user.velocity.x *= 0.97;
 			  user.velocity.z *= 0.97;

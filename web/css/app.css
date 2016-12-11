@@ -45,18 +45,25 @@ body {
   top: 0;
   left: 0;
   text-align: center;
-  width: 30vw;
+  width: 100vw;
   height: 100vh;
   min-width: 374px;
   display: inline-block;
-  background: rgba(255, 255, 255, 0.1);
   border-radius: 0.8vh;
-  box-shadow: 0px 11px 5vh -18px rgba(255, 255, 255, 0.3);
+}
+.shell > div.inner {
+  position: absolute;
+  top: 0;
+  left: 10vh;
+  min-height: 2.8vh;
+  margin: auto;
+  width: 95vw;
+  background: rgba(60, 0, 255, 0.16);
 }
 .tabs {
   height: 100vh;
   width: 10vh;
-  background: rgba(9, 9, 9, 0.86);
+  background: rgba(5, 10, 19, 1.0);
   border-top-left-radius: 0.6vh;
   border-top-right-radius: 0.6vh;
   box-shadow: 0 0.5vh 1vh rgba(0,0,0,0.3);
@@ -78,13 +85,13 @@ body {
 .tab .button .inner {
   height: 100%;
   width: 100%;
-  background-color: #262626;
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 
 .side-menu {
   width: 100%;
-  padding-top: 0.5vh;
+  padding-top: 0.75vh;
 }
 .menu-item {
     display: inline-block;
@@ -114,7 +121,7 @@ body {
     margin-right: 0.5em;
 }
 .button .inner {
-    transition: all 0.2s ease;
+    transition: all 0.2s linear;
     background-size: contain;
     height: 5vh;
     width: 5vh;
@@ -132,10 +139,12 @@ body {
     right: 0.5em;
 }
 .menu-item span {
-    opacity: 0.9;
+    opacity: 0.7;
 }
 .menu-item:hover .button .inner {
     opacity: 1;
+    background-color: rgba(255, 255, 255, 1);
+    cursor:pointer;
 }
 .tab:hover .button .inner {
     opacity: 1;
@@ -153,6 +162,10 @@ body {
   }
   .shell {
     min-width: 374px;
+  }
+  .shell > div.inner {
+    top: 9vh;
+    left:0;
   }
 }
 .radial-control {

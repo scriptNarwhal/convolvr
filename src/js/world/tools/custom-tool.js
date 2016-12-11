@@ -1,13 +1,12 @@
-import Entity from '../entity'
-import ProjectileToolIcon from '../hud/icons/projectile-tool-icon'
+import CustomToolIcon from '../hud/icons/custom-tool-icon'
 
-export default class ProjectileTool {
+export default class CustomTool {
     constructor (data, user) {
       this.data = data;
       this.user = user;
       this.mesh = null;
-      this.name = data ? data.name : "Projectile Tool";
-      this.icon = new ProjectileToolIcon();
+      this.name = data ? data.name : "New Custom Tool";
+      this.icon = new CustomToolIcon();
     }
 
     initMesh (data = {}) {
@@ -27,11 +26,11 @@ export default class ProjectileTool {
     }
 
     primaryAction () {
-      // fire projectile
+
     }
 
     secondaryAction () {
-      //
+
     }
 
     equip (hand) {

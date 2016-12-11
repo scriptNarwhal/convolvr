@@ -1,13 +1,13 @@
-import Entity from '../entity'
-import ProjectileToolIcon from '../hud/icons/projectile-tool-icon'
+import Component from '../component'
+import ComponentToolIcon from '../hud/icons/component-tool-icon'
 
-export default class ProjectileTool {
+export default class ComponentTool {
     constructor (data, user) {
-      this.data = data;
-      this.user = user;
-      this.mesh = null;
-      this.name = data ? data.name : "Projectile Tool";
-      this.icon = new ProjectileToolIcon();
+        this.data = data;
+        this.user = user;
+        this.mesh = null;
+        this.name = "Component Tool";
+        this.icon = new ComponentToolIcon();
     }
 
     initMesh (data = {}) {
@@ -27,11 +27,11 @@ export default class ProjectileTool {
     }
 
     primaryAction () {
-      // fire projectile
+      // place component
     }
 
     secondaryAction () {
-      //
+      // remove component.. but not delete?
     }
 
     equip (hand) {
