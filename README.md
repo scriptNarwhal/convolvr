@@ -6,8 +6,8 @@ WebVR game engine, server and virtual reality authoring tool.
   go build
   npm install
   ./build.sh # or watchman src ./build.sh # to continually build
-  ./convolvr #(starts server on port 3000 defautly)
+  ./convolvr # starts server on port 3007 defautly
 
 ```
-![environmental chunks / platforms](http://spacehexagon.com/app/Screenshot_138.png)
+![terrain chunks / platforms](http://spacehexagon.com/app/Screenshot_138.png)
 
