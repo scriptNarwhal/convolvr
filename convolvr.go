@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"golang.org/x/net/websocket"
-
+	"github.com/asdine/storm"
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/ds0nt/nexus"
 	"github.com/spf13/viper"
@@ -24,13 +24,26 @@ func main() {
 	if err != nil {                        // Handle errors reading the config file
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
-
 	port := fmt.Sprintf(":%d", viper.GetInt("host.port"))
 
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
+	api.Use(&rest.CorsMiddleware{
+			 RejectNonCorsRequests: false,
+			 OriginValidator: func(origin string, request *rest.Request) bool {
+					 return true
+			 },
+			 AllowedMethods: []string{"GET", "POST", "PUT"},
+			 AllowedHeaders: []string{
+					 "Accept", "Content-Type", "X-Custom-Header", "Origin"},
+			 AccessControlAllowCredentials: true,
+			 AccessControlMaxAge:           3600,
+	})
 
 	hub = nexus.NewNexus()
+
+	db, err := storm.Open("world.db")
+	defer db.Close()
 
 	router, err := rest.MakeRouter(
 		rest.Get("/users", func(w rest.ResponseWriter, req *rest.Request) {

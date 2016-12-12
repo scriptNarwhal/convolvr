@@ -81,12 +81,12 @@ export default class Terrain {
                     lightColor = 0x00ff00;
                   } else {
                     if (this.seed.random() < 0.5) {
-                      lightColor = 0xffff00;
+                      lightColor = 0x20ff00;
                     } else {
                       if (this.seed.random() < 0.4) {
-                        lightColor = 0x00ff00;
+                        lightColor = 0x00ff20;
                       } else {
-                        lightColor = 0xff8000;
+                        lightColor = 0x0020ff;
                       }
                     }
                   }
