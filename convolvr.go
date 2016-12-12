@@ -47,15 +47,19 @@ func main() {
 
 	router, err := rest.MakeRouter(
 		rest.Get("/users", func(w rest.ResponseWriter, req *rest.Request) {
-			// implement after platforms and entities
+
+			w.WriteJson(map[string][]int{"users": []int{}})
+		}),
+		rest.Post("/users", func(w rest.ResponseWriter, req *rest.Request) {
+
 			w.WriteJson(map[string][]int{"users": []int{}})
 		}),
 		rest.Get("/worlds", func(w rest.ResponseWriter, req *rest.Request) {
-			// implement after users, platforms and entities
+
 			w.WriteJson(map[string][]int{"worlds": []int{}})
 		}),
 		rest.Get("/worlds/:id", func(w rest.ResponseWriter, req *rest.Request) { // load specific world
-			// implement after users, platforms and entities
+
 			w.WriteJson(map[string][]int{"worlds": []int{}})
 		}),
 		rest.Get("/platforms/:world/:cell", func(w rest.ResponseWriter, req *rest.Request) {
@@ -68,10 +72,17 @@ func main() {
 		rest.Get("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
 			w.WriteJson(map[string][]int{"structures": []int{}})
 		}),
+		rest.Post("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
+			w.WriteJson(map[string][]int{"structures": []int{}})
+		}),
 		rest.Get("/structures/:userId", func(w rest.ResponseWriter, req *rest.Request) { // custom structure types
 			w.WriteJson(map[string][]int{"structures": []int{}})
 		}),
 		rest.Get("/entities", func(w rest.ResponseWriter, req *rest.Request) { // entity types
+
+			w.WriteJson(map[string][]int{"entities": []int{}})
+		}),
+		rest.Post("/entities", func(w rest.ResponseWriter, req *rest.Request) { // entity types
 
 			w.WriteJson(map[string][]int{"entities": []int{}})
 		}),
@@ -80,6 +91,9 @@ func main() {
 			w.WriteJson(map[string][]int{"entities": []int{}})
 		}),
 		rest.Get("/components", func(w rest.ResponseWriter, req *rest.Request) { // component types
+			w.WriteJson(map[string][]int{"entities": []int{}})
+		}),
+		rest.Post("/components", func(w rest.ResponseWriter, req *rest.Request) { // component types
 			w.WriteJson(map[string][]int{"entities": []int{}})
 		}),
 	)
@@ -97,6 +111,7 @@ func main() {
 	http.Handle("/", http.FileServer(http.Dir("./web")))
 	log.Print("Convolvr Online using port ", port)
 	log.Fatal(http.ListenAndServe(port, nil))
+	// handle tls here..
 }
 
 func chatMessage(c *nexus.Client, p *nexus.Packet) {
