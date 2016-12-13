@@ -1,3 +1,5 @@
+import { send } from '../network/socket'
+
 export let render = (world, last) => {
   var core = world.three.core,
       mobile = world.mobile,
@@ -84,7 +86,7 @@ export let render = (world, last) => {
       world.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
       world.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
       if (world.mode == "vr" || world.mode == "desktop") { // render for desktop / mobile (without cardboard)
-        world.three.renderer.render(three.scene, camera);
+        three.renderer.render(three.scene, camera);
       } else if (world.mode == "stereo") { // Render the scene in stereo for HMD.
         !!three.vrEffect && three.vrEffect.render(three.scene, camera);
       }

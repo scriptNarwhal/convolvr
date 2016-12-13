@@ -36,16 +36,10 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/colors'
 import io from 'socket.io-client'
 
-let socket = events
-socket.on('connection', (evt) => {
-	console.log("socket connected", evt)
-	let name = window.navigator && window.navigator.platform || "New User"
-	send("chat message", "Welcome "+name+"!")
-})
-
-let token = localStorage.getItem("token"),
-			userInput,
-			user = {
+let socket = events,
+    token = localStorage.getItem("token"),
+		userInput,
+		user = {
 				id: Math.random(),
 				arms: [],
 				hud: null,
@@ -57,12 +51,12 @@ let token = localStorage.getItem("token"),
 				light: new THREE.PointLight(0xffffff, 0.25, 300000),
 				gravity: 1,
 				falling: false
-			},
-			world,
-			avatar = null
+		},
+		world,
+		avatar = null
 
 	userInput = new UserInput()
-	world = new World(userInput, socket, store)
+	world = new World({}, userInput, socket, store)
 	user.toolbox = new Toolbox(world)
 	user.hud = new HUDMenu([], user.toolbox)
 	user.hud.initMesh({}, user)
@@ -74,6 +68,9 @@ let token = localStorage.getItem("token"),
 
 	userInput.init(world, world.camera, user)
 	userInput.rotationVector = {x: 0, y: 9.95, z: 0}
+	three.camera.position.set(100000, 20000, 100000)
+	user.light.position.set(100000, 20000, 100000)
+  world.start()
 	//socket.send("update", { asdf: rawr  })
 	socket.on("update", packet => {
 		let data = JSON.parse(packet.data),
@@ -110,8 +107,6 @@ let token = localStorage.getItem("token"),
 		console.log(message)
 	})
 
-	three.camera.position.set(100000, 20000, 100000)
-	user.light.position.set(100000, 20000, 100000)
 
 const muiTheme = getMuiTheme({
       palette: {

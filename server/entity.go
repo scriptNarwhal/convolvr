@@ -9,9 +9,9 @@ type Entity struct {
   World string `json:"world"`
   Position []int `json:"position"`
   Quaternion []int `json:"quaternion"`
-  Components []*Component `json:"components"`
+  Components []*server.Component `json:"components"`
 }
 
-func NewEntity (name string, world string, components []*Component, pos []int, quat []int) *entity {
+func NewEntity (name string, world string, components []*server.Component, pos []int, quat []int) *entity {
   return &entity{name, world, components, pos, quat}
 }

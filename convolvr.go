@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
+	//"github.com/SpaceHexagon/convolvr/server/user"
 	"golang.org/x/net/websocket"
 	"github.com/asdine/storm"
 	"github.com/ant0ine/go-json-rest/rest"
@@ -51,8 +51,13 @@ func main() {
 			w.WriteJson(map[string][]int{"users": []int{}})
 		}),
 		rest.Post("/users", func(w rest.ResponseWriter, req *rest.Request) {
-
-			w.WriteJson(map[string][]int{"users": []int{}})
+			// user := *user.User{}
+	    // err := req.DecodeJsonPayload(&user)
+	    // if err != nil {
+	    //     rest.Error(w, err.Error(), http.StatusInternalServerError)
+	    //     return
+	    // }
+			// w.WriteJson(&user)
 		}),
 		rest.Get("/worlds", func(w rest.ResponseWriter, req *rest.Request) {
 

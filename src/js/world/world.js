@@ -3,13 +3,11 @@ import Terrain from './terrain/terrain'
 import WorldPhysics  from '../workers/world-physics'
 import { render, toggleStereo } from './render'
 import Seed from '../seed'
-import { send } from '../network/socket'
 
 export default class World {
 	constructor(config, userInput = false, socket, store) {
-
 		let scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4500000 ),
+				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 4500000 ),
 				renderer = new THREE.WebGLRenderer({antialias: true}),
 				mobile = (window.innerWidth <= 640),
 				self = this,
@@ -100,12 +98,6 @@ export default class World {
 			three.camera.aspect = innerWidth / innerHeight;
 			three.camera.updateProjectionMatrix();
 		}
-		if (!!! config) {
-			this.start();
-		}
-	}
-
-	start (config) {
 		render(this, 0);
 		this.terrain.bufferPlatforms(true, 0);
 	}
