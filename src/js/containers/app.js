@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
-import {
-    fetchPlatforms,
-    homePlatformInit,
-    initTestPlatforms
-} from '../redux/actions/platform-actions'
 import { fetchUsers } from '../redux/actions/user-actions'
 
 class App extends Component {
 
   componentDidMount () {
-      //this.props.initHomePlatform();
-      //this.props.initTestPlatforms();
+
   }
 
   render() {
@@ -39,8 +33,6 @@ import { connect } from 'react-redux'
 export default connect(
   state => {
     return {
-      platforms: state.platforms,
-      tracks: state.tracks,
       tools: state.tools,
       users: state.users,
       menuOpen: state.app.menuOpen,
@@ -49,12 +41,7 @@ export default connect(
   },
   dispatch => {
     return {
-        initHomePlatform: () => {
-            dispatch(homePlatformInit())
-        },
-        initTestPlatforms: () => {
-            dispatch(initTestPlatforms())
-        }
+
     }
   }
 )(App)

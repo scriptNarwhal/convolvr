@@ -52,61 +52,64 @@ let socket = events,
 				gravity: 1,
 				falling: false
 		},
-		world,
-		avatar = null
+    worldConfig = {
+      name: "Convolvr",
+      sky: {
+        type: "gradient",
+        color: 0x3500ff,
+        layers: [
+          {
+            movement: [1, 1],
+            opacity: 1,
+            altitude: 800000,
+            texture: "clouds",
+            customTexture: ""
+          }
+        ]
+      },
+      light: {
+        color: 0xffffff,
+        intensity: 1.0,
+        angle: 0.5,
+        ambientColor: 0x000000
+      },
+      terrain: {
+        type: "both", // none, platforms, plane, both
+        height: 2,
+        color: 0x404040,
+        flatness: 0.5,
+        decorations: "misc"
+      },
+      spawn: {
+        entities: true,
+        structures: true,
+        npcs: true,
+        tools: true,
+        vehicles: true
+      }
+  },
+	world = null,
+	avatar = null
 
-	userInput = new UserInput()
-	world = new World({}, userInput, socket, store)
-	user.toolbox = new Toolbox(world)
-	user.hud = new HUDMenu([], user.toolbox)
-	user.hud.initMesh({}, user)
-	user.hud.hide()
-	user.cursor = new Cursor({}, user)
-	user.mesh.add(user.light)
-	world.user = user
-	three.scene.add(user.mesh)
+userInput = new UserInput()
+world = new World(worldConfig, userInput, socket, store)
+user.toolbox = new Toolbox(world)
+user.hud = new HUDMenu([], user.toolbox)
+user.hud.initMesh({}, user)
+user.hud.hide()
+user.cursor = new Cursor({}, user)
+user.mesh.add(user.light)
+world.user = user
+three.scene.add(user.mesh)
 
-	userInput.init(world, world.camera, user)
-	userInput.rotationVector = {x: 0, y: 9.95, z: 0}
-	three.camera.position.set(100000, 20000, 100000)
-	user.light.position.set(100000, 20000, 100000)
-  world.start()
-	//socket.send("update", { asdf: rawr  })
-	socket.on("update", packet => {
-		let data = JSON.parse(packet.data),
-			entity = null,
-			user = null,
-			pos = null,
-			quat = null,
-			mesh = null
+userInput.init(world, world.camera, user)
+userInput.rotationVector = {x: 0, y: 9.95, z: 0}
+three.camera.position.set(100000, 20000, 100000)
+user.light.position.set(100000, 20000, 100000)
 
-		if (!! data.entity) {
-			entity = data.entity
-			if (entity.id != world.user.id) {
-				pos = entity.position
-				quat = entity.quaternion
-				user = world.users[entity.id]
-				if (user == null) {
-					user = world.users[entity.id] = {
-						id: entity.id,
-						avatar: new Avatar(),
-						mesh: null
-					}
-				}
-				user.mesh = user.avatar.mesh;
-				mesh = user.mesh
-				if (!! mesh) {
-					mesh.position.set(pos.x, pos.y, pos.z)
-					mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w)
-				}
-			}
-		}
-	})
-
-	socket.on("chat message", message => {
-		console.log(message)
-	})
-
+socket.on("chat message", message => {
+	console.log(message)
+})
 
 const muiTheme = getMuiTheme({
       palette: {

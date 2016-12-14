@@ -9,3 +9,5 @@ _out
 *.pem
 *.key
 *.exe
+world.db
+world.db.lock
