@@ -1,4 +1,4 @@
-package server
+package convolvr
 
 type User struct {
   Name string `json:"name"`
@@ -7,6 +7,6 @@ type User struct {
   Data string `json:"data"`
 }
 
-func NewUser (name string,  password string, email string, data string) {
-  return &user{name, password, email, data}
+func NewUser (name string,  password string, email string, data string) *User {
+  return &User{name, password, email, data}
 }

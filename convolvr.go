@@ -1,10 +1,9 @@
-package main
+package convolvr
 
 import (
 	"fmt"
 	"log"
 	"net/http"
-	"github.com/SpaceHexagon/convolvr/server"
 	"golang.org/x/net/websocket"
 	"github.com/asdine/storm"
 	"github.com/ant0ine/go-json-rest/rest"
@@ -25,6 +24,12 @@ func main() {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 	port := fmt.Sprintf(":%d", viper.GetInt("host.port"))
+	useTLS := viper.GetBool("host.useTLS")
+	securePort := fmt.Sprintf(":%d", viper.GetInt("host.securePort"))
+	certificate := viper.GetString("host.certificate")
+  key := viper.GetString("host.key")
+
+
 
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
@@ -52,7 +57,7 @@ func main() {
 		}),
 		rest.Post("/users", func(w rest.ResponseWriter, req *rest.Request) {
 			var (
-				user *user.User
+				user *User
 			)
 	    err := req.DecodeJsonPayload(&user)
 	    if err != nil {
@@ -73,7 +78,7 @@ func main() {
 			cell := req.PathParam("chunk")
 			//world := req.PathParam("world")
 
-			//w.WriteJson()
+			w.WriteJson(cell)
 		}),
 
 		rest.Get("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
@@ -116,9 +121,14 @@ func main() {
 	hub.Handle("spawn", spawn)
 
 	http.Handle("/", http.FileServer(http.Dir("./web")))
-	log.Print("Convolvr Online using port ", port)
-	log.Fatal(http.ListenAndServe(port, nil))
-	// handle tls here..
+
+	if useTLS {
+		log.Fatal(http.ListenAndServeTLS(securePort, certificate, key, nil))
+		log.Print("Convolvr Online using port ", securePort)
+	} else {
+		log.Print("Convolvr Online using port ", port)
+		log.Fatal(http.ListenAndServe(port, nil))
+	}
 }
 
 func chatMessage(c *nexus.Client, p *nexus.Packet) {
