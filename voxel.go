@@ -1,4 +1,4 @@
-package server
+package convolvr
 
 type Voxel struct {
   Cell []int `json:"cell"`
@@ -6,6 +6,6 @@ type Voxel struct {
   Material string `json:"material"`
 }
 
-func NewVoxel (cell []int, geom string, mat string) {
-  return &voxel{cell, geom, mat}
+func NewVoxel (cell []int, geom string, mat string) *Voxel {
+  return &Voxel{cell, geom, mat}
 }

@@ -1,4 +1,4 @@
-package server
+package convolvr
 
 type Component struct {
   Name string `json:"name"`
@@ -9,6 +9,6 @@ type Component struct {
   Aspects []string `json:"aspects"`
 }
 
-func NewComponent (name string, geom string, mat string, pos []int, quat []int, aspects []string) *component {
-  return &component{name, geom, mat, pos, quat, aspects}
+func NewComponent (name string, geom string, mat string, pos []int, quat []int, aspects []string) *Component {
+  return &Component{name, geom, mat, pos, quat, aspects}
 }
