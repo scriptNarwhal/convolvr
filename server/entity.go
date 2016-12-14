@@ -1,7 +1,7 @@
 package server
 
 import (
-  "github.com/SpaceHexagon/convolvr/server/component"
+  "github.com/SpaceHexagon/convolvr/server"
 )
 
 type Entity struct {

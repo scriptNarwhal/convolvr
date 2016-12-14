@@ -3,7 +3,7 @@ import Tower from '../structures/tower'
 
 let physics = null;
 
-export default class Platform {
+export default class Chunk {
     constructor (data, cell) {
         let x = 8,
             voxel = null,
