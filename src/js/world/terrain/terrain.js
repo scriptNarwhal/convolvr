@@ -9,13 +9,13 @@ export default class Terrain {
 		this.pMap = []; // map of coord strings to platforms
 		this.lastChunkCoords = [0, 0, 0];
 		this.chunkCoords = [0, 0, 0];
-		this.cleanUpPlatforms = [];
+		this.cleanUpChunks = [];
   }
 
-  bufferPlatforms (force, phase) {
+  bufferChunks (force, phase) {
     let platforms = this.platforms,
       plat = null,
-      physicalPlatforms = [],
+      physicalChunks = [],
       removePhysicsChunks = [],
       chunkPos = [],
       pCell = [0,0,0],
@@ -46,13 +46,13 @@ export default class Terrain {
                                       pCell[2] > coords[2] + removeDistance)
             ) { 	// park platforms for removal
               platform.cleanUp = true;
-              this.cleanUpPlatforms.push({physics: {cell: [pCell[0], 0, pCell[2]]}, cell: pCell[0]+".0."+pCell[2]});
+              this.cleanUpChunks.push({physics: {cell: [pCell[0], 0, pCell[2]]}, cell: pCell[0]+".0."+pCell[2]});
             }
         }
       }
         c = 0;
-        let cleanUpPlats = this.cleanUpPlatforms;
-        this.cleanUpPlatforms.forEach(function (plat, i) {
+        let cleanUpPlats = this.cleanUpChunks;
+        this.cleanUpChunks.forEach(function (plat, i) {
           if (c < 4) {
             if (!!plat) {
               physicalPlat = pMap[plat.cell];
@@ -95,7 +95,7 @@ export default class Terrain {
                 if (this.seed.random() < 0.16) {
                   voxels = this.makeVoxels( Math.floor(this.seed.random() * 5) );
                 }
-                platform = new Platform({voxels: voxels, structures: this.seed.random() < 0.15 ? [
+                platform = new Chunk({voxels: voxels, structures: this.seed.random() < 0.15 ? [
                   {
                     length: 1+Math.floor(this.seed.random()*3.0),
                     width: 1+Math.floor(this.seed.random()*3.0),
@@ -105,7 +105,7 @@ export default class Terrain {
                   }
               ] : undefined}, [x, 0, y]);
                 three.scene.add(platform.mesh);
-                physicalPlatforms.push(platform.data);
+                physicalChunks.push(platform.data);
               } else {
                 platform = { data: {
                    cell: [x, 0, y]
@@ -121,10 +121,10 @@ export default class Terrain {
           x += 1;
         }
 
-      if (physicalPlatforms.length > 0) {
+      if (physicalChunks.length > 0) {
         this.worldPhysics.worker.postMessage(JSON.stringify({
               command: "add platforms",
-              data: physicalPlatforms
+              data: physicalChunks
           }))
       }
       if (removePhysicsChunks.length > 0) {
@@ -139,7 +139,7 @@ export default class Terrain {
       if (phase > viewDistance) {
         phase = 1;
       }
-      setTimeout(() => { this.bufferPlatforms(force, phase); }, 32);
+      setTimeout(() => { this.bufferChunks(force, phase); }, 32);
     }
 
   makeVoxels (t) {

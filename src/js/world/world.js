@@ -72,16 +72,15 @@ export default class World {
 		core.position.set(0, 2000, 0);
 		scene.add(this.skybox);
 		this.skybox.position.set(camera.position.x, 0, camera.position.z);
+
 		userInput.init(this, camera, this.user);
 		this.worldPhysics = new WorldPhysics();
 		this.worldPhysics.init(self);
 		this.seed = new Seed();
 		this.terrain = new Terrain(this);
-
 		this.workers = {
 			physics: this.worldPhysics
 		}
-
 		three = this.three = {
 			world: this,
 			skyMat: skyShaderMat,
@@ -90,6 +89,7 @@ export default class World {
 			camera: camera,
 			renderer: renderer
 		};
+
 		window.three = this.three;
 		window.onresize = function () {
 			if (three.world.mode != "stereo") {
@@ -98,8 +98,40 @@ export default class World {
 			three.camera.aspect = innerWidth / innerHeight;
 			three.camera.updateProjectionMatrix();
 		}
+
+		socket.on("update", packet => {
+			let data = JSON.parse(packet.data),
+				entity = null,
+				user = null,
+				pos = null,
+				quat = null,
+				mesh = null
+
+			if (!! data.entity) {
+				entity = data.entity
+				if (entity.id != this.user.id) {
+					pos = entity.position
+					quat = entity.quaternion
+					user = this.users[entity.id]
+					if (user == null) {
+						user = this.users[entity.id] = {
+							id: entity.id,
+							avatar: new Avatar(),
+							mesh: null
+						}
+					}
+					user.mesh = user.avatar.mesh;
+					mesh = user.mesh
+					if (!! mesh) {
+						mesh.position.set(pos.x, pos.y, pos.z)
+						mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w)
+					}
+				}
+			}
+		})
+
 		render(this, 0);
-		this.terrain.bufferPlatforms(true, 0);
+		this.terrain.bufferChunks(true, 0);
 	}
 
 		generateFullLOD (coords) {
