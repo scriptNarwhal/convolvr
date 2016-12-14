@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
+	"github.com/SpaceHexagon/convolvr/server"
 	"golang.org/x/net/websocket"
 	"github.com/asdine/storm"
 	"github.com/ant0ine/go-json-rest/rest"
@@ -48,53 +48,60 @@ func main() {
 	router, err := rest.MakeRouter(
 		rest.Get("/users", func(w rest.ResponseWriter, req *rest.Request) {
 
-			w.WriteJson(map[string][]int{"users": []int{}})
+			//w.WriteJson()
 		}),
 		rest.Post("/users", func(w rest.ResponseWriter, req *rest.Request) {
-
-			w.WriteJson(map[string][]int{"users": []int{}})
+			var (
+				user *user.User
+			)
+	    err := req.DecodeJsonPayload(&user)
+	    if err != nil {
+	        rest.Error(w, err.Error(), http.StatusInternalServerError)
+	        return
+	    }
+			w.WriteJson(&user)
 		}),
 		rest.Get("/worlds", func(w rest.ResponseWriter, req *rest.Request) {
 
-			w.WriteJson(map[string][]int{"worlds": []int{}})
+			//w.WriteJson()
 		}),
 		rest.Get("/worlds/:id", func(w rest.ResponseWriter, req *rest.Request) { // load specific world
 
 			w.WriteJson(map[string][]int{"worlds": []int{}})
 		}),
-		rest.Get("/platforms/:world/:cell", func(w rest.ResponseWriter, req *rest.Request) {
-			cell := req.PathParam("cell")
+		rest.Get("/terrain/:world/:chunk", func(w rest.ResponseWriter, req *rest.Request) {
+			cell := req.PathParam("chunk")
 			//world := req.PathParam("world")
 
-			w.WriteJson(map[string]string{"cell": cell})
+			//w.WriteJson()
 		}),
 
 		rest.Get("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
-			w.WriteJson(map[string][]int{"structures": []int{}})
+			//w.WriteJson()
 		}),
 		rest.Post("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
-			w.WriteJson(map[string][]int{"structures": []int{}})
+			//w.WriteJson()
 		}),
 		rest.Get("/structures/:userId", func(w rest.ResponseWriter, req *rest.Request) { // custom structure types
-			w.WriteJson(map[string][]int{"structures": []int{}})
+			//w.WriteJson()
 		}),
 		rest.Get("/entities", func(w rest.ResponseWriter, req *rest.Request) { // entity types
 
-			w.WriteJson(map[string][]int{"entities": []int{}})
+			//w.WriteJson()
 		}),
 		rest.Post("/entities", func(w rest.ResponseWriter, req *rest.Request) { // entity types
 
-			w.WriteJson(map[string][]int{"entities": []int{}})
+			//w.WriteJson()
 		}),
 		rest.Get("/entities/:userId", func(w rest.ResponseWriter, req *rest.Request) { // custom entities
 
-			w.WriteJson(map[string][]int{"entities": []int{}})
+			//w.WriteJson()
 		}),
 		rest.Get("/components", func(w rest.ResponseWriter, req *rest.Request) { // component types
-			w.WriteJson(map[string][]int{"entities": []int{}})
+			//w.WriteJson()
 		}),
 		rest.Post("/components", func(w rest.ResponseWriter, req *rest.Request) { // component types
-			w.WriteJson(map[string][]int{"entities": []int{}})
+			//w.WriteJson()
 		}),
 	)
 	if err != nil {

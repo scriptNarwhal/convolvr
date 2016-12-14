@@ -1,4 +1,4 @@
-import Platform from './platform'
+import Chunk from './chunk'
 
 export default class Terrain {
   constructor (world) {
