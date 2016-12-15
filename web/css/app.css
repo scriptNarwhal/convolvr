@@ -52,17 +52,11 @@ body {
   border-radius: 0.8vh;
 }
 .shell > div.inner {
-  position: absolute;
-  top: 0;
-  left: 10vh;
-  min-height: 2.8vh;
-  margin: auto;
-  width: 95vw;
-  background: rgba(60, 0, 255, 0.16);
+
 }
 .tabs {
-  height: 100vh;
-  width: 10vh;
+  height: 10vh;
+  width: 100vw;
   background: rgba(5, 10, 19, 1.0);
   border-top-left-radius: 0.6vh;
   border-top-right-radius: 0.6vh;
@@ -156,17 +150,14 @@ body {
 
 }
 @media screen and (max-width: 1024px) {
-  .tabs {
-    height: 10vh;
-    width: 100vw;
-  }
-  .shell {
-    min-width: 374px;
-  }
-  .shell > div.inner {
-    top: 9vh;
-    left:0;
-  }
+
+}
+.shell {
+  min-width: 374px;
+}
+.shell > div.inner {
+  top: 9vh;
+  left:0;
 }
 .radial-control {
   width: 60vh;

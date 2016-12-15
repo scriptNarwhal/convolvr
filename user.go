@@ -1,12 +1,13 @@
 package convolvr
 
 type User struct {
-  Name string `json:"name"`
-  Password string `json:"password"`
-  Email string `json:"email"`
+  ID int `storm:"id,increment" json:"id"`
+  Name string `storm:"index" json:"name"`
+  Password string
+  Email string `storm:"unique" json:"email"`
   Data string `json:"data"`
 }
 
-func NewUser (name string,  password string, email string, data string) *User {
-  return &User{name, password, email, data}
+func NewUser (id int, name string,  password string, email string, data string) *User {
+  return &User{id, name, password, email, data}
 }
