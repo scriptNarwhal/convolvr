@@ -92,7 +92,8 @@ let socket = events,
 	avatar = null
 
 userInput = new UserInput()
-world = new World(worldConfig, userInput, socket, store)
+world = new World(userInput, socket, store)
+world.init(worldConfig);
 user.toolbox = new Toolbox(world)
 user.hud = new HUDMenu([], user.toolbox)
 user.hud.initMesh({}, user)
@@ -101,8 +102,8 @@ user.cursor = new Cursor({}, user)
 user.mesh.add(user.light)
 world.user = user
 three.scene.add(user.mesh)
-
 userInput.init(world, world.camera, user)
+
 userInput.rotationVector = {x: 0, y: 9.95, z: 0}
 three.camera.position.set(100000, 20000, 100000)
 user.light.position.set(100000, 20000, 100000)
