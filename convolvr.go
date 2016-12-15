@@ -52,8 +52,10 @@ func main() {
 
 	router, err := rest.MakeRouter(
 		rest.Get("/users", func(w rest.ResponseWriter, req *rest.Request) {
-
-			//w.WriteJson()
+			var users []User
+			err := db.All(&users)
+			log.Fatal(err)
+			w.WriteJson(&users)
 		}),
 		rest.Post("/users", func(w rest.ResponseWriter, req *rest.Request) {
 			var (
@@ -67,8 +69,10 @@ func main() {
 			w.WriteJson(&user)
 		}),
 		rest.Get("/worlds", func(w rest.ResponseWriter, req *rest.Request) {
-
-			//w.WriteJson()
+			var worlds []World
+			err := db.All(&worlds)
+			log.Fatal(err)
+			w.WriteJson(&worlds)
 		}),
 		rest.Get("/worlds/:id", func(w rest.ResponseWriter, req *rest.Request) { // load specific world
 
