@@ -1,4 +1,4 @@
-package convolvr
+package main
 
 type Chunk struct {
   ID int

@@ -124,6 +124,7 @@ export let toggleStereo = (mode) => {
           }
           function onVRDisplayPresentChange() {
             console.log('onVRDisplayPresentChange');
+            //toggle vr here?
             onResize();
           }
           // Resize the WebGL canvas when we resize and also when we change modes.
