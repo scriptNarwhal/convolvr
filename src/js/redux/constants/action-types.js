@@ -1,5 +1,9 @@
 export const APP_TOGGLE_MENU = 'APP_TOGGLE_MENU';
 export const APP_TOGGLE_VR = 'APP_TOGGLE_VR';
+export const APP_SHOW_CHAT = 'APP_SHOW_CHAT'
+export const APP_HIDE_CHAT = 'APP_HIDE_CHAT'
+export const APP_SHOW_LOGIN = 'APP_SHOW_LOGIN'
+export const APP_HIDE_LOGIN = 'APP_HIDE_LOGIN'
 
 export const PLATFORM_ADD = 'PLATFORM_ADD';
 export const SET_HOME_PLATFORM = 'SET_HOME_PLATFORM';

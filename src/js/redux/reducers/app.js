@@ -1,11 +1,17 @@
 import {
     APP_TOGGLE_MENU,
-    APP_TOGGLE_VR
+    APP_TOGGLE_VR,
+    APP_SHOW_CHAT,
+    APP_HIDE_CHAT,
+    APP_SHOW_LOGIN,
+    APP_HIDE_LOGIN
 } from '../constants/action-types';
 
 module.exports = function app (state = {
     menuOpen: false,
-    vrMode: false
+    vrMode: false,
+    chatOpen: false,
+    loginOpen: false
 }, action) {
   switch (action.type) {
     case APP_TOGGLE_MENU:
@@ -20,7 +26,22 @@ module.exports = function app (state = {
         return Object.assign({}, state, {
             vrMode: !state.vrMode
         })
-
+    case APP_SHOW_CHAT:
+        return Object.assign({}, state, {
+            chatOpen: true
+        })
+    case APP_HIDE_CHAT:
+        return Object.assign({}, state, {
+            chatOpen: false
+        })
+    case APP_SHOW_LOGIN:
+        return Object.assign({}, state, {
+            loginOpen: true
+        })
+    case APP_HIDE_LOGIN:
+        return Object.assign({}, state, {
+            loginOpen: false
+        })
     default:
       return state;
   }
