@@ -15,6 +15,7 @@ import (
 
 var (
 	hub *nexus.Nexus
+	db  *storm.DB
 )
 
 func main() {
@@ -47,7 +48,7 @@ func main() {
 
 	hub = nexus.NewNexus()
 
-	db, err := storm.Open("world.db")
+	db, err = storm.Open("world.db")
 	defer db.Close()
 	userErr := db.Init(&User{})
 	worldErr := db.Init(&World{})
@@ -76,152 +77,20 @@ func main() {
 	}
 
 	router, err := rest.MakeRouter(
-		rest.Get("/users", func(w rest.ResponseWriter, req *rest.Request) {
-			var users []User
-			err := db.All(&users)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.WriteJson(&users)
-		}),
-		rest.Post("/users", func(w rest.ResponseWriter, req *rest.Request) {
-			var (
-				user *User
-			)
-			err := req.DecodeJsonPayload(&user)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			err = db.Save(user)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.WriteHeader(http.StatusOK)
-		}),
-		rest.Get("/worlds", func(w rest.ResponseWriter, req *rest.Request) {
-			var worlds []World
-			err := db.All(&worlds)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.WriteJson(&worlds)
-		}),
-		rest.Get("/worlds/:id", func(w rest.ResponseWriter, req *rest.Request) { // load specific world
-
-			w.WriteJson(map[string][]int{"worlds": []int{}})
-		}),
-		rest.Get("/world/:world/chunks/:chunks", func(w rest.ResponseWriter, req *rest.Request) {
-			chunk := req.PathParam("chunks")
-			world := req.PathParam("world")
-			chunks := strings.Split(chunk, ",")
-			for _, v := range chunks {
-				fmt.Println(v)
-			}
-			w.WriteJson(map[string]string{"chunks": world + " " + chunk})
-		}),
-		rest.Post("/worlds", func(w rest.ResponseWriter, req *rest.Request) {
-			var (
-				world *World
-			)
-			err := req.DecodeJsonPayload(&world)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			err = db.Save(world)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.WriteHeader(http.StatusOK)
-		}),
-		rest.Get("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
-			var structures []Structure
-			err := db.All(&structures)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.WriteJson(&structures)
-		}),
-		rest.Post("/structures", func(w rest.ResponseWriter, req *rest.Request) {
-			var (
-				structure *Structure
-			)
-			err := req.DecodeJsonPayload(&structure)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			err = db.Save(structure)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.WriteHeader(http.StatusOK)
-		}),
-		rest.Get("/structures/:userId", func(w rest.ResponseWriter, req *rest.Request) { // custom structure types
-			//w.WriteJson()
-		}),
-		rest.Get("/entities", func(w rest.ResponseWriter, req *rest.Request) { // entity types
-			var entities []Entity
-			err := db.All(&entities)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.WriteJson(&entities)
-			//w.WriteJson()
-		}),
-		rest.Post("/entities", func(w rest.ResponseWriter, req *rest.Request) {
-			var (
-				entity *Entity
-			)
-			err := req.DecodeJsonPayload(&entity)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			err = db.Save(entity)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.WriteHeader(http.StatusOK)
-		}),
-		rest.Get("/entities/:userId", func(w rest.ResponseWriter, req *rest.Request) { // custom entities
-
-			//w.WriteJson()
-		}),
-		rest.Get("/components", func(w rest.ResponseWriter, req *rest.Request) { // component types
-			var components []Component
-			err := db.All(&components)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.WriteJson(&components)
-		}),
-		rest.Post("/components", func(w rest.ResponseWriter, req *rest.Request) {
-			var (
-				component *Component
-			)
-			err := req.DecodeJsonPayload(&component)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			err = db.Save(component)
-			if err != nil {
-				rest.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			w.WriteHeader(http.StatusOK)
-		}),
+		rest.Get("/users", getUsers),
+		rest.Post("/users", postUsers),
+		rest.Get("/worlds", getWorlds),
+		rest.Get("/worlds/:worldId", getWorld),
+		rest.Get("/worlds/:worldId/chunks/:chunkId", getWorldChunks),
+		rest.Post("/worlds", postWorlds),
+		rest.Get("/structures", getStructures),
+		rest.Post("/structures", postStructures),
+		rest.Get("/structures/:userId", getStructuresByUser),
+		rest.Get("/entities", getEntities),
+		rest.Post("/entities", postEntities),
+		rest.Get("/entities/:userId", getEntitiesByUser),
+		rest.Get("/components", getComponents),
+		rest.Post("/components", postComponents),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -261,3 +130,163 @@ func spawn(c *nexus.Client, p *nexus.Packet) {
 // websocket.On("error", func(so socketio.Socket, err error) {
 //   log.Println("error:", err)
 // })
+
+func getUsers(w rest.ResponseWriter, req *rest.Request) {
+	var users []User
+	err := db.All(&users)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteJson(&users)
+}
+
+func postUsers(w rest.ResponseWriter, req *rest.Request) {
+	var (
+		user *User
+	)
+	err := req.DecodeJsonPayload(&user)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = db.Save(user)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func getWorlds(w rest.ResponseWriter, req *rest.Request) {
+	var worlds []World
+	err := db.All(&worlds)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteJson(&worlds)
+}
+
+func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
+
+	w.WriteJson(map[string][]int{"worlds": []int{}})
+}
+
+func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
+	chunk := req.PathParam("chunks")
+	world := req.PathParam("world")
+	chunks := strings.Split(chunk, ",")
+	for _, v := range chunks {
+		fmt.Println(v)
+	}
+	w.WriteJson(map[string]string{"chunks": world + " " + chunk})
+}
+
+func postWorlds(w rest.ResponseWriter, req *rest.Request) {
+	var (
+		world *World
+	)
+	err := req.DecodeJsonPayload(&world)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = db.Save(world)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func getStructures(w rest.ResponseWriter, req *rest.Request) { // structure types
+	var structures []Structure
+	err := db.All(&structures)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteJson(&structures)
+}
+
+func postStructures(w rest.ResponseWriter, req *rest.Request) {
+	var (
+		structure *Structure
+	)
+	err := req.DecodeJsonPayload(&structure)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = db.Save(structure)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func getStructuresByUser(w rest.ResponseWriter, req *rest.Request) { // custom structure types
+	//w.WriteJson()
+}
+
+func getEntities(w rest.ResponseWriter, req *rest.Request) { // entity types
+	var entities []Entity
+	err := db.All(&entities)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteJson(&entities)
+	//w.WriteJson()
+}
+
+func postEntities(w rest.ResponseWriter, req *rest.Request) {
+	var (
+		entity *Entity
+	)
+	err := req.DecodeJsonPayload(&entity)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = db.Save(entity)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func getEntitiesByUser(w rest.ResponseWriter, req *rest.Request) { // custom entities
+
+	//w.WriteJson()
+}
+
+func getComponents(w rest.ResponseWriter, req *rest.Request) { // component types
+	var components []Component
+	err := db.All(&components)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteJson(&components)
+}
+
+func postComponents(w rest.ResponseWriter, req *rest.Request) {
+	var (
+		component *Component
+	)
+	err := req.DecodeJsonPayload(&component)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = db.Save(component)
+	if err != nil {
+		rest.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
