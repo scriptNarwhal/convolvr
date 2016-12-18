@@ -3,13 +3,14 @@ package main
 import (
 	"fmt"
 	"log"
-	"strings"
 	"net/http"
-	"golang.org/x/net/websocket"
-	"github.com/asdine/storm"
+	"strings"
+
 	"github.com/ant0ine/go-json-rest/rest"
+	"github.com/asdine/storm"
 	"github.com/ds0nt/nexus"
 	"github.com/spf13/viper"
+	"golang.org/x/net/websocket"
 )
 
 var (
@@ -28,22 +29,20 @@ func main() {
 	useTLS := viper.GetBool("host.useTLS")
 	securePort := fmt.Sprintf(":%d", viper.GetInt("host.securePort"))
 	certificate := viper.GetString("host.certificate")
-  key := viper.GetString("host.key")
-
-
+	key := viper.GetString("host.key")
 
 	api := rest.NewApi()
 	api.Use(rest.DefaultDevStack...)
 	api.Use(&rest.CorsMiddleware{
-			 RejectNonCorsRequests: false,
-			 OriginValidator: func(origin string, request *rest.Request) bool {
-					 return true
-			 },
-			 AllowedMethods: []string{"GET", "POST", "PUT"},
-			 AllowedHeaders: []string{
-					 "Accept", "Content-Type", "X-Custom-Header", "Origin"},
-			 AccessControlAllowCredentials: true,
-			 AccessControlMaxAge:           3600,
+		RejectNonCorsRequests: false,
+		OriginValidator: func(origin string, request *rest.Request) bool {
+			return true
+		},
+		AllowedMethods: []string{"GET", "POST", "PUT"},
+		AllowedHeaders: []string{
+			"Accept", "Content-Type", "X-Custom-Header", "Origin"},
+		AccessControlAllowCredentials: true,
+		AccessControlMaxAge:           3600,
 	})
 
 	hub = nexus.NewNexus()
@@ -81,29 +80,35 @@ func main() {
 			var users []User
 			err := db.All(&users)
 			if err != nil {
-	        rest.Error(w, err.Error(), http.StatusInternalServerError)
-	        return
-	    }
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 			w.WriteJson(&users)
 		}),
 		rest.Post("/users", func(w rest.ResponseWriter, req *rest.Request) {
 			var (
 				user *User
 			)
-	    err := req.DecodeJsonPayload(&user)
-	    if err != nil {
-	        rest.Error(w, err.Error(), http.StatusInternalServerError)
-	        return
-	    }
-    	w.WriteHeader(http.StatusOK)
+			err := req.DecodeJsonPayload(&user)
+			if err != nil {
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			err = db.Save(user)
+			if err != nil {
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			w.WriteHeader(http.StatusOK)
 		}),
 		rest.Get("/worlds", func(w rest.ResponseWriter, req *rest.Request) {
 			var worlds []World
 			err := db.All(&worlds)
 			if err != nil {
-	        rest.Error(w, err.Error(), http.StatusInternalServerError)
-	        return
-	    }
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 			w.WriteJson(&worlds)
 		}),
 		rest.Get("/worlds/:id", func(w rest.ResponseWriter, req *rest.Request) { // load specific world
@@ -113,20 +118,20 @@ func main() {
 		rest.Get("/world/:world/chunks/:chunks", func(w rest.ResponseWriter, req *rest.Request) {
 			chunk := req.PathParam("chunks")
 			world := req.PathParam("world")
-			chunks := strings.Split(chunk, ",");
+			chunks := strings.Split(chunk, ",")
 			for _, v := range chunks {
 				fmt.Println(v)
 			}
-			w.WriteJson(map[string]string{"chunks": world+" "+chunk})
+			w.WriteJson(map[string]string{"chunks": world + " " + chunk})
 		}),
 
 		rest.Get("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
 			var structures []Structure
 			err := db.All(&structures)
 			if err != nil {
-	        rest.Error(w, err.Error(), http.StatusInternalServerError)
-	        return
-	    }
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 			w.WriteJson(&structures)
 		}),
 		rest.Post("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
@@ -139,9 +144,9 @@ func main() {
 			var entities []Entity
 			err := db.All(&entities)
 			if err != nil {
-	        rest.Error(w, err.Error(), http.StatusInternalServerError)
-	        return
-	    }
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 			w.WriteJson(&entities)
 			//w.WriteJson()
 		}),
@@ -157,9 +162,9 @@ func main() {
 			var components []Component
 			err := db.All(&components)
 			if err != nil {
-	        rest.Error(w, err.Error(), http.StatusInternalServerError)
-	        return
-	    }
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 			w.WriteJson(&components)
 		}),
 		rest.Post("/components", func(w rest.ResponseWriter, req *rest.Request) { // component types
