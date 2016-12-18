@@ -4,7 +4,7 @@ PATH=$PATH:$(dirname $(realpath $0))/node_modules/.bin
 
 output=$1
 if [[ "$output" == "" ]]; then
- output="$(dirname $0)/web"
+ output="$(dirname $0)/../web"
 else
  output=$(realpath $output)
 fi
