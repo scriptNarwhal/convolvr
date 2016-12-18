@@ -1,0 +1,14 @@
+{
+    "host": {
+        "port": 3007,
+        "securePort": 443,
+        "useTLS": false,
+        "certificate": "",
+        "key": ""
+    },
+    "datastore": {
+      "spark": {
+        "db": "world.db"
+      }
+    }
+}
