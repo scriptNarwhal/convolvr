@@ -99,7 +99,6 @@ func main() {
 				rest.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
-
 			w.WriteHeader(http.StatusOK)
 		}),
 		rest.Get("/worlds", func(w rest.ResponseWriter, req *rest.Request) {
@@ -124,7 +123,22 @@ func main() {
 			}
 			w.WriteJson(map[string]string{"chunks": world + " " + chunk})
 		}),
-
+		rest.Post("/worlds", func(w rest.ResponseWriter, req *rest.Request) {
+			var (
+				world *World
+			)
+			err := req.DecodeJsonPayload(&world)
+			if err != nil {
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			err = db.Save(world)
+			if err != nil {
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
+		}),
 		rest.Get("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
 			var structures []Structure
 			err := db.All(&structures)
@@ -134,8 +148,21 @@ func main() {
 			}
 			w.WriteJson(&structures)
 		}),
-		rest.Post("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
-			//w.WriteJson()
+		rest.Post("/structures", func(w rest.ResponseWriter, req *rest.Request) {
+			var (
+				structure *Structure
+			)
+			err := req.DecodeJsonPayload(&structure)
+			if err != nil {
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			err = db.Save(structure)
+			if err != nil {
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
 		}),
 		rest.Get("/structures/:userId", func(w rest.ResponseWriter, req *rest.Request) { // custom structure types
 			//w.WriteJson()
@@ -150,9 +177,21 @@ func main() {
 			w.WriteJson(&entities)
 			//w.WriteJson()
 		}),
-		rest.Post("/entities", func(w rest.ResponseWriter, req *rest.Request) { // entity types
-
-			//w.WriteJson()
+		rest.Post("/entities", func(w rest.ResponseWriter, req *rest.Request) {
+			var (
+				entity *Entity
+			)
+			err := req.DecodeJsonPayload(&entity)
+			if err != nil {
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			err = db.Save(entity)
+			if err != nil {
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
 		}),
 		rest.Get("/entities/:userId", func(w rest.ResponseWriter, req *rest.Request) { // custom entities
 
@@ -167,8 +206,21 @@ func main() {
 			}
 			w.WriteJson(&components)
 		}),
-		rest.Post("/components", func(w rest.ResponseWriter, req *rest.Request) { // component types
-			//w.WriteJson()
+		rest.Post("/components", func(w rest.ResponseWriter, req *rest.Request) {
+			var (
+				component *Component
+			)
+			err := req.DecodeJsonPayload(&component)
+			if err != nil {
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			err = db.Save(component)
+			if err != nil {
+				rest.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
 		}),
 	)
 	if err != nil {
