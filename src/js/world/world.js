@@ -6,15 +6,17 @@ import Seed from '../seed'
 
 export default class World {
 	constructor(userInput = false, socket, store) {
-		let scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 4500000 ),
-				renderer = new THREE.WebGLRenderer({antialias: true}),
+		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1,
 				mobile = (window.innerWidth <= 640),
+				scene = new THREE.Scene(),
+				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 4500000 ),
+				renderer = new THREE.WebGLRenderer({antialias: pixelRatio <= 1.5}),
 				self = this,
 				three = {}
 
 		this.appStore = store
 		this.socket = socket
+		this.config = false
 		this.mode = "vr"
 		this.users = []
 		this.user = {
@@ -37,7 +39,7 @@ export default class World {
 		this.webcamImage = ""
 		this.HMDMode = "non standard" // "head-movement"
 
-		renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1)
+		renderer.setPixelRatio(pixelRatio)
 		renderer.setSize(window.innerWidth, window.innerHeight)
 		document.body.appendChild( renderer.domElement )
 		renderer.domElement.setAttribute("id", "viewport")
@@ -110,6 +112,7 @@ export default class World {
 				skyLight =  new THREE.PointLight(0x6000ff, 0.5, 3000000),
 				skyShaderMat = null
 
+		this.config = config;
 		this.ambientLight = new THREE.AmbientLight(0x090037);
 		three.scene.add(this.ambientLight);
 		skyShaderMat = new THREE.ShaderMaterial( {
