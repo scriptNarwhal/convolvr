@@ -1,10 +1,11 @@
-package main
+package convolvr
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/asdine/storm"
@@ -18,8 +19,9 @@ var (
 	db  *storm.DB
 )
 
-func main() {
-	viper.SetConfigName("config")          // name of config file (without extension)
+func Start(configName string) {
+
+	viper.SetConfigName(configName)        // name of config file (without extension)
 	viper.AddConfigPath("$HOME/.convolvr") // call multiple times to add many search paths
 	viper.AddConfigPath(".")               // optionally look for config in the working directory
 	err := viper.ReadInConfig()            // Find and read the config file
@@ -48,7 +50,7 @@ func main() {
 
 	hub = nexus.NewNexus()
 
-	db, err = storm.Open("world.db")
+	db, err = storm.Open(viper.GetString("datastore.spark.db"))
 	defer db.Close()
 	userErr := db.Init(&User{})
 	worldErr := db.Init(&World{})
@@ -135,6 +137,7 @@ func getUsers(w rest.ResponseWriter, req *rest.Request) {
 	var users []User
 	err := db.All(&users)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -147,21 +150,25 @@ func postUsers(w rest.ResponseWriter, req *rest.Request) {
 	)
 	err := req.DecodeJsonPayload(&user)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	err = db.Save(user)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
+	// w.WriteHeader(http.StatusOK)
+	w.WriteJson(user)
 }
 
 func getWorlds(w rest.ResponseWriter, req *rest.Request) {
 	var worlds []World
 	err := db.All(&worlds)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -189,11 +196,13 @@ func postWorlds(w rest.ResponseWriter, req *rest.Request) {
 	)
 	err := req.DecodeJsonPayload(&world)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	err = db.Save(world)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -204,6 +213,7 @@ func getStructures(w rest.ResponseWriter, req *rest.Request) { // structure type
 	var structures []Structure
 	err := db.All(&structures)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -216,11 +226,13 @@ func postStructures(w rest.ResponseWriter, req *rest.Request) {
 	)
 	err := req.DecodeJsonPayload(&structure)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	err = db.Save(structure)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -235,6 +247,7 @@ func getEntities(w rest.ResponseWriter, req *rest.Request) { // entity types
 	var entities []Entity
 	err := db.All(&entities)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -248,11 +261,13 @@ func postEntities(w rest.ResponseWriter, req *rest.Request) {
 	)
 	err := req.DecodeJsonPayload(&entity)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	err = db.Save(entity)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -268,6 +283,7 @@ func getComponents(w rest.ResponseWriter, req *rest.Request) { // component type
 	var components []Component
 	err := db.All(&components)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -280,11 +296,13 @@ func postComponents(w rest.ResponseWriter, req *rest.Request) {
 	)
 	err := req.DecodeJsonPayload(&component)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	err = db.Save(component)
 	if err != nil {
+		log.Println(err)
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
