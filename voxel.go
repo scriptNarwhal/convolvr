@@ -1,4 +1,4 @@
-package convolvr
+package main
 
 type Voxel struct {
   Cell []int `json:"cell"`

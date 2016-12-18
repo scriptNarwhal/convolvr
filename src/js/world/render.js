@@ -1,7 +1,7 @@
 import { send } from '../network/socket'
 
 export let render = (world, last) => {
-  var core = world.three.core,
+  var core = three.core,
       mobile = world.mobile,
       camera = three.camera,
       cPos = camera.position,
@@ -54,7 +54,7 @@ export let render = (world, last) => {
     }
     world.sendUpdatePacket = 0;
   }
-  world.skybox.material.uniforms.time.value += delta;
+
   world.sendUpdatePacket += 1;
   if (world.sendUpdatePacket %((2+(1*world.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
 
@@ -81,10 +81,10 @@ export let render = (world, last) => {
       }
     }
 
-      core.rotation.y += 0.005;
-      world.skybox.material.uniforms.time.value += delta;
-      world.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
-      world.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
+      core && ()=>{ core.rotation.y += 0.005 }
+      world.skybox && world.skybox.material && ()=>{world.skybox.material.uniforms.time.value += delta }
+      world.skybox && world.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
+      world.skybox && world.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
       if (world.mode == "vr" || world.mode == "desktop") { // render for desktop / mobile (without cardboard)
         three.renderer.render(three.scene, camera);
       } else if (world.mode == "stereo") { // Render the scene in stereo for HMD.
@@ -124,6 +124,7 @@ export let toggleStereo = (mode) => {
           }
           function onVRDisplayPresentChange() {
             console.log('onVRDisplayPresentChange');
+            //toggle vr here?
             onResize();
           }
           // Resize the WebGL canvas when we resize and also when we change modes.

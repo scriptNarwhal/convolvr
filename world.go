@@ -1,4 +1,4 @@
-package convolvr
+package main
 
 type World struct {
   ID int `json:"id"`

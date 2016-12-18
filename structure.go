@@ -1,4 +1,4 @@
-package convolvr
+package main
 
 type Structure struct {
   ID int `storm:"id,increment" json:"id"`

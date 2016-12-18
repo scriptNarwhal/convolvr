@@ -1,8 +1,9 @@
-package convolvr
+package main
 
 import (
 	"fmt"
 	"log"
+	"strings"
 	"net/http"
 	"golang.org/x/net/websocket"
 	"github.com/asdine/storm"
@@ -49,12 +50,40 @@ func main() {
 
 	db, err := storm.Open("world.db")
 	defer db.Close()
+	userErr := db.Init(&User{})
+	worldErr := db.Init(&World{})
+	chunkErr := db.Init(&Chunk{})
+	componentErr := db.Init(&Component{})
+	entityErr := db.Init(&Entity{})
+	structureErr := db.Init(&Structure{})
+
+	if userErr != nil {
+		log.Fatal(userErr)
+	}
+	if worldErr != nil {
+		log.Fatal(worldErr)
+	}
+	if chunkErr != nil {
+		log.Fatal(chunkErr)
+	}
+	if componentErr != nil {
+		log.Fatal(componentErr)
+	}
+	if entityErr != nil {
+		log.Fatal(entityErr)
+	}
+	if structureErr != nil {
+		log.Fatal(structureErr)
+	}
 
 	router, err := rest.MakeRouter(
 		rest.Get("/users", func(w rest.ResponseWriter, req *rest.Request) {
 			var users []User
 			err := db.All(&users)
-			log.Fatal(err)
+			if err != nil {
+	        rest.Error(w, err.Error(), http.StatusInternalServerError)
+	        return
+	    }
 			w.WriteJson(&users)
 		}),
 		rest.Post("/users", func(w rest.ResponseWriter, req *rest.Request) {
@@ -66,27 +95,39 @@ func main() {
 	        rest.Error(w, err.Error(), http.StatusInternalServerError)
 	        return
 	    }
-			w.WriteJson(&user)
+    	w.WriteHeader(http.StatusOK)
 		}),
 		rest.Get("/worlds", func(w rest.ResponseWriter, req *rest.Request) {
 			var worlds []World
 			err := db.All(&worlds)
-			log.Fatal(err)
+			if err != nil {
+	        rest.Error(w, err.Error(), http.StatusInternalServerError)
+	        return
+	    }
 			w.WriteJson(&worlds)
 		}),
 		rest.Get("/worlds/:id", func(w rest.ResponseWriter, req *rest.Request) { // load specific world
 
 			w.WriteJson(map[string][]int{"worlds": []int{}})
 		}),
-		rest.Get("/terrain/:world/:chunk", func(w rest.ResponseWriter, req *rest.Request) {
-			cell := req.PathParam("chunk")
-			//world := req.PathParam("world")
-
-			w.WriteJson(cell)
+		rest.Get("/world/:world/chunks/:chunks", func(w rest.ResponseWriter, req *rest.Request) {
+			chunk := req.PathParam("chunks")
+			world := req.PathParam("world")
+			chunks := strings.Split(chunk, ",");
+			for _, v := range chunks {
+				fmt.Println(v)
+			}
+			w.WriteJson(map[string]string{"chunks": world+" "+chunk})
 		}),
 
 		rest.Get("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
-			//w.WriteJson()
+			var structures []Structure
+			err := db.All(&structures)
+			if err != nil {
+	        rest.Error(w, err.Error(), http.StatusInternalServerError)
+	        return
+	    }
+			w.WriteJson(&structures)
 		}),
 		rest.Post("/structures", func(w rest.ResponseWriter, req *rest.Request) { // structure types
 			//w.WriteJson()
@@ -95,7 +136,13 @@ func main() {
 			//w.WriteJson()
 		}),
 		rest.Get("/entities", func(w rest.ResponseWriter, req *rest.Request) { // entity types
-
+			var entities []Entity
+			err := db.All(&entities)
+			if err != nil {
+	        rest.Error(w, err.Error(), http.StatusInternalServerError)
+	        return
+	    }
+			w.WriteJson(&entities)
 			//w.WriteJson()
 		}),
 		rest.Post("/entities", func(w rest.ResponseWriter, req *rest.Request) { // entity types
@@ -107,7 +154,13 @@ func main() {
 			//w.WriteJson()
 		}),
 		rest.Get("/components", func(w rest.ResponseWriter, req *rest.Request) { // component types
-			//w.WriteJson()
+			var components []Component
+			err := db.All(&components)
+			if err != nil {
+	        rest.Error(w, err.Error(), http.StatusInternalServerError)
+	        return
+	    }
+			w.WriteJson(&components)
 		}),
 		rest.Post("/components", func(w rest.ResponseWriter, req *rest.Request) { // component types
 			//w.WriteJson()
