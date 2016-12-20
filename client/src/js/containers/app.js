@@ -4,7 +4,7 @@ import { fetchUsers } from '../redux/actions/user-actions'
 class App extends Component {
 
   componentDidMount () {
-
+    this.props.fetchWorlds()
   }
 
   render() {
@@ -29,6 +29,7 @@ App.defaultProps = {
 }
 
 import { connect } from 'react-redux'
+import { fetchWorlds } from '../redux/actions/world-actions'
 
 export default connect(
   state => {
@@ -41,7 +42,9 @@ export default connect(
   },
   dispatch => {
     return {
-
+      fetchWorlds: () => {
+          dispatch(fetchWorlds())
+      },
     }
   }
 )(App)
