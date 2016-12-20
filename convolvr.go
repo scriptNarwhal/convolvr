@@ -105,7 +105,7 @@ func Start(configName string) {
 	hub.Handle("update", update)
 	hub.Handle("spawn", spawn)
 
-	http.Handle("/", http.FileServer(http.Dir("./web")))
+	http.Handle("/", http.FileServer(http.Dir("../web")))
 
 	if useTLS {
 		log.Fatal(http.ListenAndServeTLS(securePort, certificate, key, nil))
