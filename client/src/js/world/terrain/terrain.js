@@ -10,29 +10,31 @@ export default class Terrain {
 		this.lastChunkCoords = [0, 0, 0];
 		this.chunkCoords = [0, 0, 0];
 		this.cleanUpChunks = [];
+    this.reqChunks = [];
   }
 
   bufferChunks (force, phase) {
     let platforms = this.platforms,
-      plat = null,
-      physicalChunks = [],
-      removePhysicsChunks = [],
-      chunkPos = [],
-      pCell = [0,0,0],
-      pMap = this.pMap,
-      position = three.camera.position,
-      platform = null,
-      physicalPlat = null,
-      c = 0,
-      coords = [Math.floor(position.x/232000), 0, Math.floor(position.z/201840)],
-      lastCoords = this.lastChunkCoords,
-      moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
-      viewDistance = (this.world.mobile ? 6 : 11),
-      removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
-      endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
-      x = coords[0]-phase,
-      y = coords[2]-phase;
-      this.chunkCoords = coords;
+        plat = null,
+        chunk = null,
+        physicalChunks = [],
+        removePhysicsChunks = [],
+        chunkPos = [],
+        pCell = [0,0,0],
+        pMap = this.pMap,
+        position = three.camera.position,
+        platform = null,
+        physicalPlat = null,
+        c = 0,
+        coords = [Math.floor(position.x/232000), 0, Math.floor(position.z/201840)],
+        lastCoords = this.lastChunkCoords,
+        moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
+        viewDistance = (this.world.mobile ? 6 : 11),
+        removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
+        endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
+        x = coords[0]-phase,
+        y = coords[2]-phase;
+        this.chunkCoords = coords;
 
     if (force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2]) {
       lastCoords = this.lastChunkCoords = [coords[0], coords[1], coords[2]];
@@ -50,9 +52,9 @@ export default class Terrain {
             }
         }
       }
-        c = 0;
-        let cleanUpPlats = this.cleanUpChunks;
-        this.cleanUpChunks.forEach(function (plat, i) {
+      c = 0;
+      let cleanUpPlats = this.cleanUpChunks;
+      this.cleanUpChunks.forEach(function (plat, i) {
           if (c < 4) {
             if (!!plat) {
               physicalPlat = pMap[plat.cell];
@@ -67,59 +69,25 @@ export default class Terrain {
         })
         c = 0;
         // load new platforms // at first just from client-side generation
-        while (x <= endCoords[0]) {
-          while (y <= endCoords[1]) {
-            //console.log("checking", x, y);
-            if (c < 2 && pMap[x+".0."+y] == null) { // only if its not already loaded
-              c ++;
-              if (this.seed.random() < 0.5 ) {
-                let voxels = [],
-                    lightColor = false;
-
-                if (this.seed.random() < 0.33) {
-                  if (this.seed.random() < 0.6) {
-                    lightColor = 0x00ff00;
-                  } else {
-                    if (this.seed.random() < 0.5) {
-                      lightColor = 0x20ff00;
-                    } else {
-                      if (this.seed.random() < 0.4) {
-                        lightColor = 0x00ff20;
-                      } else {
-                        lightColor = 0x0020ff;
-                      }
-                    }
-                  }
+        if (c < 2) {
+          while (x <= endCoords[0]) {
+            while (y <= endCoords[1]) {
+              //console.log("checking", x, y);
+              if (pMap[x+".0."+y] == null) { // only if its not already loaded
+                c ++;
+                chunk = this.generateChunk(x, y)
+                if (!!chunk.data.position) { // if its not empty space
+                  physicalChunks.push(chunk.data);
+                  platforms.push(chunk);
                 }
-
-                if (this.seed.random() < 0.16) {
-                  voxels = this.makeVoxels( Math.floor(this.seed.random() * 5) );
-                }
-                platform = new Chunk({voxels: voxels, structures: this.seed.random() < 0.15 ? [
-                  {
-                    length: 1+Math.floor(this.seed.random()*3.0),
-                    width: 1+Math.floor(this.seed.random()*3.0),
-                    floors: 2+Math.floor(this.seed.random()*10.0),
-                    position: [-1.0, 0, -1.0],
-                    light: lightColor
-                  }
-              ] : undefined}, [x, 0, y]);
-                three.scene.add(platform.mesh);
-                physicalChunks.push(platform.data);
-              } else {
-                platform = { data: {
-                   cell: [x, 0, y]
-                }};
+                pMap[x+".0."+y] = chunk;
               }
-
-              platforms.push(platform);
-              pMap[x+".0."+y] = platform;
+              y += 1;
             }
-            y += 1;
+            y = coords[2]-viewDistance;
+            x += 1;
           }
-          y = coords[2]-viewDistance;
-          x += 1;
-        }
+      }
 
       if (physicalChunks.length > 0) {
         this.worldPhysics.worker.postMessage(JSON.stringify({
@@ -141,6 +109,49 @@ export default class Terrain {
       }
       setTimeout(() => { this.bufferChunks(force, phase); }, 32);
     }
+
+  generateChunk (x, y) {
+    let voxels = [],
+        chunk = null,
+        lightColor = false;
+
+    if (this.seed.random() < 0.5 ) {
+      if (this.seed.random() < 0.33) {
+        if (this.seed.random() < 0.6) {
+          lightColor = 0x00ff00;
+        } else {
+          if (this.seed.random() < 0.5) {
+            lightColor = 0x20ff00;
+          } else {
+            if (this.seed.random() < 0.4) {
+              lightColor = 0x00ff20;
+            } else {
+              lightColor = 0x0020ff;
+            }
+          }
+        }
+      }
+
+      if (this.seed.random() < 0.16) {
+        voxels = this.makeVoxels( Math.floor(this.seed.random() * 5) );
+      }
+      chunk = new Chunk({voxels: voxels, structures: this.seed.random() < 0.15 ? [
+        {
+          length: 1+Math.floor(this.seed.random()*3.0),
+          width: 1+Math.floor(this.seed.random()*3.0),
+          floors: 2+Math.floor(this.seed.random()*10.0),
+          position: [-1.0, 0, -1.0],
+          light: lightColor
+        }
+    ] : []}, [x, 0, y]);
+      three.scene.add(chunk.mesh);
+    } else {
+      chunk = { data: {
+         cell: [x, 0, y]
+      }};
+    }
+    return chunk;
+  }
 
   makeVoxels (t) {
     let voxels = [],
