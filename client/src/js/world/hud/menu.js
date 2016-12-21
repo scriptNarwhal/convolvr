@@ -18,7 +18,7 @@ export default class HUDMenu {
           geom = new THREE.BoxGeometry(5000, 1000, 200),
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});
 
-      mesh = new THREE.Mesh(geom, mat);
+      mesh = new THREE.Object3D() //THREE.Mesh(geom, mat);
       if (light) {
         this.light = light;
         mesh.add(light);
@@ -29,14 +29,14 @@ export default class HUDMenu {
         o = options.length -1;
         while (o >= 0) {
           let icon = options[o].icon.initMesh();
-          icon.position.set(-1200+o*600, -100, 300);
+          icon.position.set(-1300+o*650, -100, 300);
           mesh.add(icon);
           o --;
         }
       }
       this.mesh = mesh;
       user.mesh.add(mesh);
-      mesh.position.set(0, 3000, -5000);
+      mesh.position.set(0, 3600, -5000);
       return this.mesh;
     }
 
@@ -51,5 +51,13 @@ export default class HUDMenu {
 
     show () {
       this.mesh.visible = true;
+    }
+
+    toggleVRHUD() {
+      if (this.mesh.position.y != 2200) {
+        this.mesh.position.set(0, 2200, -5000);
+      } else {
+        this.mesh.position.set(0, 3600, -5000);
+      }
     }
 }

@@ -147,5 +147,6 @@ export let toggleStereo = (mode) => {
           // });
         }
       }
+      three.world.user.hud.toggleVRHUD();
       window.onresize();
   }

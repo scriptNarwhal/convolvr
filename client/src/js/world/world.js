@@ -105,6 +105,7 @@ export default class World {
 	}
 
 	init (config) {
+
 		let camera = three.camera,
 				coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 				material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
