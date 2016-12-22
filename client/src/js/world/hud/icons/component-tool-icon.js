@@ -10,8 +10,8 @@ export default class ComponentToolIcon extends Icon {
     initMesh (data = {}) {
       let mesh = null,
           part = null,
-          color = data.color || 0xffffff,
-          light = data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
+          color = data.color || 0x003bff,
+          light = data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 1200) : false,
           geom = new THREE.CylinderGeometry(132, 132, 132, 6, 1),
           geomB = new THREE.BoxGeometry(20, 20, 20),
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});

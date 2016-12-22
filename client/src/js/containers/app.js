@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { fetchUsers } from '../redux/actions/user-actions'
+import Shell from '../components/shell';
 
 class App extends Component {
 
@@ -15,6 +16,7 @@ class App extends Component {
 
     return (
         <div className="root">
+            <Shell className="hud-side-menu tabs" menuOpen={this.props.menuOpen} ></Shell>
             {this.props.children}
             <div className="lightbox" style={{display: "none"}}></div>
             <canvas id="webcam-canvas"></canvas>

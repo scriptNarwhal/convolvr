@@ -9,8 +9,8 @@ export default class VoxelToolIcon extends Icon {
 
     initMesh (data = {}) {
       let mesh = null,
-          color = data.color || 0xffffff,
-          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
+          color = data.color || 0xff8707,
+          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 1200) : false,
           geom = new THREE.CylinderGeometry(132, 132, 132, 6, 1),
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});
 

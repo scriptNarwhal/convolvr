@@ -9,8 +9,8 @@ export default class EntityToolIcon extends Icon {
 
     initMesh (data = {}) {
       let mesh = null,
-          color = data.color || 0xffffff,
-          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
+          color = data.color || 0x15ff15,
+          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 1200) : false,
           geom = new THREE.BoxGeometry(132, 132, 132),
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});
 
