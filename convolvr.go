@@ -82,7 +82,7 @@ func Start(configName string) {
 		rest.Get("/users", getUsers),
 		rest.Post("/users", postUsers),
 		rest.Get("/worlds", getWorlds),
-		rest.Get("/worlds/:name", getWorld),
+		rest.Get("/worlds/name/:name", getWorld),
 		rest.Get("/worlds/:worldId/chunks/:chunkId", getWorldChunks),
 		rest.Post("/worlds", postWorlds),
 		rest.Get("/structures", getStructures),
