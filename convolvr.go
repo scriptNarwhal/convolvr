@@ -82,7 +82,7 @@ func Start(configName string) {
 		rest.Get("/users", getUsers),
 		rest.Post("/users", postUsers),
 		rest.Get("/worlds", getWorlds),
-		rest.Get("/worlds/:worldId", getWorld),
+		rest.Get("/worlds/:name", getWorld),
 		rest.Get("/worlds/:worldId/chunks/:chunkId", getWorldChunks),
 		rest.Post("/worlds", postWorlds),
 		rest.Get("/structures", getStructures),
@@ -176,18 +176,35 @@ func getWorlds(w rest.ResponseWriter, req *rest.Request) {
 }
 
 func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
-
-	w.WriteJson(map[string][]int{"worlds": []int{}})
+  var world World
+  name := req.PathParam("name")
+  err := db.One("Name", name, &world)
+  if err != nil {
+    log.Println(err)
+    rest.Error(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+  w.WriteJson(&world)
 }
 
 func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
+  var (
+    chunksData []Chunk
+    chunkData Chunk
+  )
 	chunk := req.PathParam("chunks")
 	world := req.PathParam("world")
 	chunks := strings.Split(chunk, ",")
 	for _, v := range chunks {
-		fmt.Println(v)
+    err := db.One("XYZ", world+":"+v, &chunkData) // example: testWorld:-1.2.0
+    if err != nil {
+      log.Println(err)
+      rest.Error(w, err.Error(), http.StatusInternalServerError)
+      return
+    }
+    chunksData = append(chunksData, chunkData)
 	}
-	w.WriteJson(map[string]string{"chunks": world + " " + chunk})
+	w.WriteJson(chunksData)
 }
 
 func postWorlds(w rest.ResponseWriter, req *rest.Request) {

@@ -2,9 +2,7 @@ package convolvr
 
 type Chunk struct {
 	ID         int
-	X          int          `storm:"index" json:"x"`
-	Y          int          `storm:"index" json:"y"`
-	Z          int          `storm:"index" json:"z"`
+	XYZ        string       `storm:"index" json:"xyz"` // for example: "-2.0.7"
 	Name       string       `json:"name"`
 	Geometry   string       `json:"geometry"`
 	Material   string       `json:"material"`
@@ -14,6 +12,6 @@ type Chunk struct {
 	Entities   []*Entity    `json:"entities"`
 }
 
-func NewChunk(id, x int, y int, z int, name string, geom string, mat string, pos []int, structures []*Structure, voxels []*Voxel, entities []*Entity) *Chunk {
-	return &Chunk{id, x, y, z, name, geom, mat, pos, structures, voxels, entities}
+func NewChunk(id int, xyz, string, name string, geom string, mat string, pos []int, structures []*Structure, voxels []*Voxel, entities []*Entity) *Chunk {
+	return &Chunk{id, xyz, name, geom, mat, pos, structures, voxels, entities}
 }
