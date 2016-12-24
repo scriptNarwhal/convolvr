@@ -17,6 +17,7 @@ export default class World {
 		this.appStore = store
 		this.socket = socket
 		this.config = false
+		this.name = "convolvr"
 		this.mode = "vr"
 		this.users = []
 		this.user = {
