@@ -60,7 +60,10 @@ func Start(configName string) {
 	componentErr := db.Init(&Component{})
 	entityErr := db.Init(&Entity{})
 	structureErr := db.Init(&Structure{})
-
+  // indexErr := db.ReIndex(&Chunk{})
+  // if indexErr != nil {
+	// 	log.Fatal(indexErr)
+	// }
 	if userErr != nil {
 		log.Fatal(userErr)
 	}
