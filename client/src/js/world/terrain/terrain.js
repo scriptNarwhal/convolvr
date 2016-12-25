@@ -19,7 +19,6 @@ export default class Terrain {
     let platforms = this.platforms,
         plat = null,
         chunk = null,
-        physicalChunks = [],
         removePhysicsChunks = [],
         chunkPos = [],
         pCell = [0,0,0],
@@ -99,6 +98,7 @@ export default class Terrain {
         this.reqChunks = []; // empty array
         axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`)
            .then(response => {
+             let physicalChunks = []
              response.data.map(c =>{
                  let chunk = new Chunk({voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
                  if (!!chunk.geometry != "space") { // if its not empty space
@@ -108,17 +108,17 @@ export default class Terrain {
                  platforms.push(chunk);
                  pMap[c.x+".0."+c.z] = chunk;
              })
+             if (physicalChunks.length > 0) {
+               this.worldPhysics.worker.postMessage(JSON.stringify({
+                     command: "add platforms",
+                     data: physicalChunks
+                 }))
+             }
           }).catch(response => {
              console.log("Chunk Error", response)
           });
       }
 
-      if (physicalChunks.length > 0) {
-        this.worldPhysics.worker.postMessage(JSON.stringify({
-              command: "add platforms",
-              data: physicalChunks
-          }))
-      }
       if (removePhysicsChunks.length > 0) {
         this.worldPhysics.worker.postMessage('{"command":"remove platforms","data":'+JSON.stringify(removePhysicsChunks)+'}');
       }

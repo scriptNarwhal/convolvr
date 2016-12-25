@@ -229,7 +229,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 
 	    if (len(chunkData) == 0) {
 	      chunkGeom := "flat"
-	      if (rand.Intn(10) < 5) {
+	      if (rand.Intn(10) < 6) {
 	        chunkGeom = "space"
 	      }
 	      generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", nil, nil, nil)
