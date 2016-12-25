@@ -203,44 +203,44 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	chunks := strings.Split(chunk, ",")
 
 	for _, v := range chunks {
-    coords := strings.Split(v, "x")
-    x, xErr := strconv.Atoi(coords[0])
-    y, yErr := strconv.Atoi(coords[1])
-    z, zErr := strconv.Atoi(coords[2])
-    if xErr != nil {
-      log.Println(xErr)
-    }
-    if yErr != nil {
-      log.Println(yErr)
-    }
-    if zErr != nil {
-      log.Println(zErr)
-    }
+	    coords := strings.Split(v, "x")
+	    x, xErr := strconv.Atoi(coords[0])
+	    y, yErr := strconv.Atoi(coords[1])
+	    z, zErr := strconv.Atoi(coords[2])
+	    if xErr != nil {
+	      log.Println(xErr)
+	    }
+	    if yErr != nil {
+	      log.Println(yErr)
+	    }
+	    if zErr != nil {
+	      log.Println(zErr)
+	    }
 
-    err := db.Select(q.And(
-      q.Eq("X", x),
-      q.Eq("Y", y),
-      q.Eq("Z", z),
-      q.Eq("World", world),
-    )).Find(&chunkData)
-    if err != nil {
-      log.Println(err)
-    }
+	    err := db.Select(q.And(
+	      q.Eq("X", x),
+	      q.Eq("Y", y),
+	      q.Eq("Z", z),
+	      q.Eq("World", world),
+	    )).Find(&chunkData)
+	    if err != nil {
+	      log.Println(err)
+	    }
 
-    if (len(chunkData) == 0) {
-      chunkGeom := "flat"
-      if (rand.Intn(10) < 5) {
-        chunkGeom = "space"
-      }
-      generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", nil, nil, nil)
-      chunksData = append(chunksData, generatedChunk)
-      saveErr := db.Save(&generatedChunk)
-      if saveErr != nil {
-        log.Println(saveErr)
-      }
-    } else {
-      chunksData = append(chunksData, chunkData[0])
-    }
+	    if (len(chunkData) == 0) {
+	      chunkGeom := "flat"
+	      if (rand.Intn(10) < 5) {
+	        chunkGeom = "space"
+	      }
+	      generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", nil, nil, nil)
+	      chunksData = append(chunksData, generatedChunk)
+	      saveErr := db.Save(&generatedChunk)
+	      if saveErr != nil {
+	        log.Println(saveErr)
+	      }
+	    } else {
+	      chunksData = append(chunksData, chunkData[0])
+	    }
 	}
 	w.WriteJson(chunksData)
 }

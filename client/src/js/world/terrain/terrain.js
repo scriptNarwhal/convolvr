@@ -71,21 +71,23 @@ export default class Terrain {
         })
         c = 0;
         // load new platforms // at first just from client-side generation
-        if (c < 2) {
+
           while (x <= endCoords[0]) {
             while (y <= endCoords[1]) {
-              //console.log("checking", x, y);
-              if (pMap[x+".0."+y] == null) { // only if its not already loaded
-                pMap[x+".0."+y] = true
-                c ++;
-                this.reqChunks.push({x, y})
+              if (c < 6) {
+                  //console.log("checking", x, y);
+                  if (pMap[x+".0."+y] == null) { // only if its not already loaded
+                    pMap[x+".0."+y] = true
+                    c ++;
+                    this.reqChunks.push({x, y})
+                  }
               }
               y += 1;
             }
             y = coords[2]-viewDistance;
             x += 1;
           }
-      }
+
       if (this.reqChunks.length > 0) {
         let chunks = ""
         this.reqChunks.map( (rc, i) => {
@@ -94,17 +96,18 @@ export default class Terrain {
           }
           chunks += rc.x+"x0x"+rc.y
         })
-        console.log(this.reqChunks)
         this.reqChunks = []; // empty array
         axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`)
            .then(response => {
-             let chunk = new Chunk({voxels: [], structures: []}, [x, 0, y]);
-             if (!!chunk.geometry != "space") { // if its not empty space
-                 physicalChunks.push(chunk.data);
-                 three.scene.add(chunk.mesh);
-             }
-             platforms.push(chunk);
-             pMap[x+".0."+y] = chunk;
+             response.data.map(c =>{
+                 let chunk = new Chunk({voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
+                 if (!!chunk.geometry != "space") { // if its not empty space
+                     physicalChunks.push(chunk.data);
+                     three.scene.add(chunk.mesh);
+                 }
+                 platforms.push(chunk);
+                 pMap[c.x+".0."+c.z] = chunk;
+             })
           }).catch(response => {
              console.log("Chunk Error", response)
           });
