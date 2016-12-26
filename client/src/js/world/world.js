@@ -1,7 +1,9 @@
+import axios from 'axios'
 import Avatar from './avatar'
 import Terrain from './terrain/terrain'
 import WorldPhysics  from '../workers/world-physics'
 import { render, toggleStereo } from './render'
+import { API_SERVER } from '../config.js'
 import Seed from '../seed'
 
 export default class World {
@@ -106,7 +108,7 @@ export default class World {
 	}
 
 	init (config) {
-
+		console.log(config)
 		let camera = three.camera,
 				coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 				material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
@@ -121,7 +123,10 @@ export default class World {
 			side: 1,
 			fog: false,
 			uniforms: {
-				time: { type: "f", value: 1.0 }
+				time: { type: "f", value: 1.0 },
+				red: { type: "f", value: 1.0 },
+				green: { type: "f", value: 1.0 },
+				blue: { type: "f", value: 1.0 }
 			},
 			vertexShader: document.getElementById('sky-vertex').textContent,
 			fragmentShader: document.getElementById('sky-fragment').textContent
@@ -139,6 +144,15 @@ export default class World {
 		core.position.set(0, 2000, 0)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
+	}
+
+	load (name) {
+		axios.get(`${API_SERVER}/api/worlds/name/${name}`)
+           .then(response => {
+			 this.init(response.data)
+          }).catch(response => {
+             console.log("World Error", response)
+          });
 	}
 
 	generateFullLOD (coords) {
