@@ -3,14 +3,15 @@ package convolvr
 import (
 	"fmt"
 	"net/http"
+	"html/template"
 	"strings"
-  "strconv"
-  "math/rand"
+  	"strconv"
+  	"math/rand"
 	log "github.com/Sirupsen/logrus"
 
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/asdine/storm"
-  "github.com/asdine/storm/q"
+  	"github.com/asdine/storm/q"
 	"github.com/ds0nt/nexus"
 	"github.com/spf13/viper"
 	"golang.org/x/net/websocket"
@@ -103,7 +104,9 @@ func Start(configName string) {
 		log.Fatal(err)
 	}
 	api.SetApp(router)
+
 	http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))
+	http.HandleFunc("/world/", worldHandler)
 	http.Handle("/connect", websocket.Handler(hub.Serve))
 
 	hub.Handle("chat message", chatMessage)
@@ -262,6 +265,11 @@ func postWorlds(w rest.ResponseWriter, req *rest.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+}
+
+func worldHandler(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("../web/index.html");
+    t.Execute(w, "")
 }
 
 func getStructures(w rest.ResponseWriter, req *rest.Request) { // structure types
