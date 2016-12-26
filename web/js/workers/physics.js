@@ -1,6 +1,3 @@
-/*  Pylon Desktop | physics.js
-Jeremy Evans Openspacehexagon@gmail.com
-*/
 var observer = {
 		position: [0, 0, 0],
 		prevPos: [0, 0, 0],
@@ -133,7 +130,7 @@ self.update = function () {
 	self.postMessage('{"command": "update"}');
 	self.updateLoop = setTimeout(function () {
 		self.update();
-	}, 33);
+	}, 15);
 }
 
 self.onmessage = function (event) { // Do some work.

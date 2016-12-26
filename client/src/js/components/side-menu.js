@@ -16,12 +16,11 @@ class SideMenu extends Component {
     return (
         <div className="side-menu" >
             <Tab image="data/x.png"
-                 title="Close Menu"
-                 clickHandler={ ()=> { browserHistory.push("/") } }
-            />
-            <Tab image="data/square-a.png"
-                 title="Home"
-                 clickHandler={ ()=> { browserHistory.push("/home") } }
+                  title="Close Menu"
+                  clickHandler={() => {
+                    this.toggleMenu()
+                    browserHistory.push("/")
+                  }}
             />
             <Tab image="data/circle-a.png"
                  title="Switch Worlds"

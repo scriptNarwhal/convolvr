@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
+  "strconv"
+  "math/rand"
 	log "github.com/Sirupsen/logrus"
 
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/asdine/storm"
+  "github.com/asdine/storm/q"
 	"github.com/ds0nt/nexus"
 	"github.com/spf13/viper"
 	"golang.org/x/net/websocket"
@@ -58,7 +60,10 @@ func Start(configName string) {
 	componentErr := db.Init(&Component{})
 	entityErr := db.Init(&Entity{})
 	structureErr := db.Init(&Structure{})
-
+  // indexErr := db.ReIndex(&Chunk{})
+  // if indexErr != nil {
+	// 	log.Fatal(indexErr)
+	// }
 	if userErr != nil {
 		log.Fatal(userErr)
 	}
@@ -82,8 +87,8 @@ func Start(configName string) {
 		rest.Get("/users", getUsers),
 		rest.Post("/users", postUsers),
 		rest.Get("/worlds", getWorlds),
-		rest.Get("/worlds/:worldId", getWorld),
-		rest.Get("/worlds/:worldId/chunks/:chunkId", getWorldChunks),
+		rest.Get("/worlds/name/:name", getWorld),
+		rest.Get("/chunks/:worldId/:chunks", getWorldChunks),
 		rest.Post("/worlds", postWorlds),
 		rest.Get("/structures", getStructures),
 		rest.Post("/structures", postStructures),
@@ -176,18 +181,68 @@ func getWorlds(w rest.ResponseWriter, req *rest.Request) {
 }
 
 func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
-
-	w.WriteJson(map[string][]int{"worlds": []int{}})
+  var world World
+  name := req.PathParam("name")
+  err := db.One("Name", name, &world)
+  if err != nil {
+    log.Println(err)
+    rest.Error(w, err.Error(), http.StatusInternalServerError)
+    return
+  }
+  w.WriteJson(&world)
 }
 
 func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
+  var (
+    generatedChunk Chunk
+    chunksData []Chunk
+    chunkData []Chunk
+  )
 	chunk := req.PathParam("chunks")
-	world := req.PathParam("world")
+	world := req.PathParam("worldId")
 	chunks := strings.Split(chunk, ",")
+
 	for _, v := range chunks {
-		fmt.Println(v)
+	    coords := strings.Split(v, "x")
+	    x, xErr := strconv.Atoi(coords[0])
+	    y, yErr := strconv.Atoi(coords[1])
+	    z, zErr := strconv.Atoi(coords[2])
+	    if xErr != nil {
+	      log.Println(xErr)
+	    }
+	    if yErr != nil {
+	      log.Println(yErr)
+	    }
+	    if zErr != nil {
+	      log.Println(zErr)
+	    }
+
+	    err := db.Select(q.And(
+	      q.Eq("X", x),
+	      q.Eq("Y", y),
+	      q.Eq("Z", z),
+	      q.Eq("World", world),
+	    )).Find(&chunkData)
+	    if err != nil {
+	      log.Println(err)
+	    }
+
+	    if (len(chunkData) == 0) {
+	      chunkGeom := "flat"
+	      if (rand.Intn(10) < 6) {
+	        chunkGeom = "space"
+	      }
+	      generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", nil, nil, nil)
+	      chunksData = append(chunksData, generatedChunk)
+	      saveErr := db.Save(&generatedChunk)
+	      if saveErr != nil {
+	        log.Println(saveErr)
+	      }
+	    } else {
+	      chunksData = append(chunksData, chunkData[0])
+	    }
 	}
-	w.WriteJson(map[string]string{"chunks": world + " " + chunk})
+	w.WriteJson(chunksData)
 }
 
 func postWorlds(w rest.ResponseWriter, req *rest.Request) {

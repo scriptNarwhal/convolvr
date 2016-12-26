@@ -29,7 +29,7 @@ export default class Icon {
       x --;
     }
 
-    mesh.add(new THREE.Mesh(finalGeom, mat));
+    mesh = new THREE.Mesh(finalGeom, mat);
     return mesh;
   }
 }

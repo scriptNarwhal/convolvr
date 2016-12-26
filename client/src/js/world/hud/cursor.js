@@ -3,7 +3,7 @@ export default class Cursor {
       let mesh = null,
           color = 0xffffff,
           light = false,
-          geom = new THREE.CylinderGeometry(250, 250, 250, 4, 1, true),
+          geom = new THREE.CylinderGeometry(200, 200, 200, 4, 1, true),
           mat = new THREE.MeshBasicMaterial({color: color,
                                             wireframe: true,
                                             fog: false})

@@ -9,7 +9,7 @@ export default class World {
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1,
 				mobile = (window.innerWidth <= 640),
 				scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 4500000 ),
+				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4500000 ),
 				renderer = new THREE.WebGLRenderer({antialias: pixelRatio <= 1.5}),
 				self = this,
 				three = {}
@@ -17,6 +17,7 @@ export default class World {
 		this.appStore = store
 		this.socket = socket
 		this.config = false
+		this.name = "convolvr"
 		this.mode = "vr"
 		this.users = []
 		this.user = {
@@ -105,6 +106,7 @@ export default class World {
 	}
 
 	init (config) {
+
 		let camera = three.camera,
 				coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 				material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),

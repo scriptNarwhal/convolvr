@@ -14,7 +14,6 @@ body {
 }
 .root {
     position: fixed;
-    left: 0;
 }
 #viewport {
     cursor: pointer;
@@ -37,7 +36,7 @@ body {
     background-color: rgba(0,0,0,0.1);
 }
 .hud .button {
-  float: left !important;
+  margin-right: 0;
 }
 .shell {
   margin: auto;

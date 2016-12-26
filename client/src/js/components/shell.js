@@ -5,7 +5,7 @@ import SideMenu from './side-menu';
 class Shell extends Component {
   render() {
     return (
-        <div className="shell" >
+        <div className="shell" style={{display: (this.props.menuOpen ? "block" : "none")}}>
             <div className="tabs">
                 <SideMenu />
             </div>

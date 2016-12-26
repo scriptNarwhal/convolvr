@@ -9,8 +9,8 @@ export default class DeleteToolIcon extends Icon {
 
     initMesh (data = {}) {
       let mesh = null,
-          color = data.color || 0xffffff,
-          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
+          color = data.color || 0xff0707,
+          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 1200) : false,
           geom = new THREE.BoxGeometry(66, 20, 20),
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});
 

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { fetchUsers } from '../redux/actions/user-actions'
+import Shell from '../components/shell';
 
 class App extends Component {
 
   componentDidMount () {
-
+    this.props.fetchWorlds()
   }
 
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
 
     return (
         <div className="root">
+            <Shell className="hud-side-menu tabs" menuOpen={this.props.menuOpen} ></Shell>
             {this.props.children}
             <div className="lightbox" style={{display: "none"}}></div>
             <canvas id="webcam-canvas"></canvas>
@@ -29,6 +31,7 @@ App.defaultProps = {
 }
 
 import { connect } from 'react-redux'
+import { fetchWorlds } from '../redux/actions/world-actions'
 
 export default connect(
   state => {
@@ -41,7 +44,9 @@ export default connect(
   },
   dispatch => {
     return {
-
+      fetchWorlds: () => {
+          dispatch(fetchWorlds())
+      },
     }
   }
 )(App)

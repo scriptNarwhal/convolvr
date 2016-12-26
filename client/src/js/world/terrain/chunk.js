@@ -73,27 +73,20 @@ export default class Chunk {
             }
         }
 
-        if (!!data.position) {
-            if (!!data.offset) {
-                mesh.rotation.y = Math.PI;
-                data.position.x -= 64000;
-            }
-            mesh.position.set(data.position[0], data.position[1] - 25000, data.position[2]);
+        if (!! cell) {
+            mesh.position.set((cell[0]*232000) + (cell[2] % 2 == 0 ? 0 : 232000 / 2),
+                               cell[1]*232000 - 25000,
+                               cell[2]*232000 * 0.87);
+            data.cell = cell;
+            data.position = [
+                mesh.position.x,
+                mesh.position.y + 25000,
+                mesh.position.z
+            ]
         } else {
-            if (!! cell) {
-                mesh.position.set((cell[0]*232000) + (cell[2] % 2 == 0 ? 0 : 232000 / 2),
-                                  cell[1]*232000 - 25000,
-                                  cell[2]*232000 * 0.87);
-                data.cell = cell;
-                data.position = [
-                    mesh.position.x,
-                    mesh.position.y + 25000,
-                    mesh.position.z
-                ]
-            } else {
-                data.position = [0, 0, 0];
-            }
+            data.position = [0, 0, 0];
         }
+
         if (data.size == null) {
             data.size = { x: 132000, y: 132000, z: 48000 };
         }
