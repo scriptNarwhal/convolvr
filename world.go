@@ -2,7 +2,7 @@ package convolvr
 
 type World struct {
 	ID      int    `storm:"id,increment" json:"id"`
-	Name    string `storm:"id" json:"name"`
+	Name    string `storm:"index" json:"name"`
 	Sky     `storm:"inline" json:"sky"`
 	Light   `storm:"inline" json:"light"`
 	Terrain `storm:"inline" json:"terrain"`
