@@ -113,20 +113,20 @@ export default class World {
 				coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 				material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
 				core = new THREE.Mesh(coreGeom, material),
-				skyLight =  new THREE.PointLight(0x6000ff, 0.5, 3000000),
+				skyLight =  new THREE.PointLight(config.light.color, 0.5, 3000000),
 				skyShaderMat = null
 
 		this.config = config;
-		this.ambientLight = new THREE.AmbientLight(0x090037);
+		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor);
 		three.scene.add(this.ambientLight);
 		skyShaderMat = new THREE.ShaderMaterial( {
 			side: 1,
 			fog: false,
 			uniforms: {
 				time: { type: "f", value: 1.0 },
-				red: { type: "f", value: 1.0 },
-				green: { type: "f", value: 1.0 },
-				blue: { type: "f", value: 1.0 }
+				red: { type: "f", value: config.sky.red },
+				green: { type: "f", value: config.sky.green },
+				blue: { type: "f", value: config.sky.blue }
 			},
 			vertexShader: document.getElementById('sky-vertex').textContent,
 			fragmentShader: document.getElementById('sky-fragment').textContent

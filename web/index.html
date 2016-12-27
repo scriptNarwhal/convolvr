@@ -57,6 +57,9 @@
             #endif
             varying vec2 vUv;
             uniform float time;
+            uniform float red;
+            uniform float green;
+            uniform float blue;
             //3.141592654
             float hash( float n ) {
                 return fract(sin(n)*43758.5453);
@@ -90,9 +93,13 @@
                     glow = -0.3+(depth) - vUv.y;
                 }
 
-              float red =  0.22 + depth * 0.05;
-              float blue = 0.7 + depth * 0.4;
-              float green = depth * 0.05;
+            //   float red =  0.22 + depth * 0.05;
+            //   float blue = 0.7 + depth * 0.4;
+            //   float green = depth * 0.05;
+                // red += red * depth * 0.05;
+                // green += green * depth * 0.05;
+                // blue += blue * depth * 0.05;
+
                float luminance = 0.0;
                luminance += 0.4 + depth / 1.25;
 

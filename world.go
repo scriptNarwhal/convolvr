@@ -11,7 +11,9 @@ type World struct {
 
 type Sky struct {
 	SkyType string  `json:"skyType"`
-	Color   int     `json:"color"`
+	Red   float32    `json:"red"`
+	Green  float32    `json:"green"`
+	Blue float32    `json:"blue"`
 	Layers  []Layer `storm:"inline"`
 }
 
