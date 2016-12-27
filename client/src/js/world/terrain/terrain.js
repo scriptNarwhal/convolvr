@@ -5,6 +5,7 @@ import { API_SERVER } from '../../config.js'
 export default class Terrain {
   constructor (world) {
     this.world = world;
+    this.config = world.config.terrain;
     this.seed = world.seed;
     this.worldPhysics = world.worldPhysics;
     this.platforms = [];
@@ -78,7 +79,7 @@ export default class Terrain {
                   if (pMap[x+".0."+y] == null) { // only if its not already loaded
                     pMap[x+".0."+y] = true
                     c ++;
-                    this.reqChunks.push({x, y})
+                    this.reqChunks.push(x+"x0x"+y)
                   }
               }
               y += 1;
@@ -87,20 +88,20 @@ export default class Terrain {
             x += 1;
           }
 
-      if (this.reqChunks.length > 0) {
+      if (this.reqChunks.length >= 6) {
         let chunks = ""
         this.reqChunks.map( (rc, i) => {
           if (i > 0) {
             chunks += ","
           }
-          chunks += rc.x+"x0x"+rc.y
+          chunks += rc
         })
         this.reqChunks = []; // empty array
         axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`)
            .then(response => {
              let physicalChunks = []
              response.data.map(c =>{
-                 let chunk = new Chunk({voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
+                 let chunk = new Chunk({color: c.color, voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
                  if (!!chunk.geometry != "space") { // if its not empty space
                      physicalChunks.push(chunk.data);
                      three.scene.add(chunk.mesh);

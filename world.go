@@ -2,7 +2,7 @@ package convolvr
 
 type World struct {
 	ID      int    `storm:"id,increment" json:"id"`
-	Name    string `storm:"id" json:"name"`
+	Name    string `storm:"index" json:"name"`
 	Sky     `storm:"inline" json:"sky"`
 	Light   `storm:"inline" json:"light"`
 	Terrain `storm:"inline" json:"terrain"`
@@ -11,7 +11,9 @@ type World struct {
 
 type Sky struct {
 	SkyType string  `json:"skyType"`
-	Color   int     `json:"color"`
+	Red   float32    `json:"red"`
+	Green  float32    `json:"green"`
+	Blue float32    `json:"blue"`
 	Layers  []Layer `storm:"inline"`
 }
 
@@ -46,6 +48,6 @@ type Spawn struct {
 	Vehicles   bool `json:"vehicles"`
 }
 
-func NewWorld() *World {
-	return &World{}
+func NewWorld(id int, name string, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
+	return &World{id, name, sky, light, terrain, spawn}
 }

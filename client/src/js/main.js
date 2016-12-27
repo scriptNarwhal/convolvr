@@ -36,7 +36,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/colors'
 import io from 'socket.io-client'
 
-let socket = events,
+let worldName = window.location.href.indexOf("/world/") > -1 ? window.location.href.split("/world/")[1] : "overworld",
+    socket = events,
     token = localStorage.getItem("token"),
 		userInput,
 		user = {
@@ -52,48 +53,12 @@ let socket = events,
 				gravity: 1,
 				falling: false
 		},
-    worldConfig = {
-      name: "Convolvr",
-      sky: {
-        type: "gradient",
-        color: 0x3500ff,
-        layers: [
-          {
-            movement: [1, 1],
-            opacity: 1,
-            altitude: 800000,
-            texture: "clouds",
-            customTexture: ""
-          }
-        ]
-      },
-      light: {
-        color: 0xffffff,
-        intensity: 1.0,
-        angle: 0.5,
-        ambientColor: 0x000000
-      },
-      terrain: {
-        type: "both", // none, platforms, plane, both
-        height: 2,
-        color: 0x404040,
-        flatness: 0.5,
-        decorations: "misc"
-      },
-      spawn: {
-        entities: true,
-        structures: true,
-        npcs: true,
-        tools: true,
-        vehicles: true
-      }
-  },
 	world = null,
 	avatar = null
 
 userInput = new UserInput()
 world = new World(userInput, socket, store)
-world.init(worldConfig);
+world.load(worldName) //world.init(worldConfig)
 user.toolbox = new Toolbox(world)
 user.hud = new HUDMenu([], user.toolbox)
 user.hud.initMesh({}, user)
@@ -130,6 +95,7 @@ ReactDOM.render(
 		<Router history={history}>
 	  		<Route path="/" component={App} >
 				<IndexRoute component={HUD}/>
+                <Route path="/world/:name" component={HUD} />
 				<Route path="/login" component={Login} />
 				<Route path="/home" component={Home} />
 				<Route path="/chat" component={Chat} />

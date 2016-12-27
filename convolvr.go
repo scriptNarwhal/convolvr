@@ -3,14 +3,15 @@ package convolvr
 import (
 	"fmt"
 	"net/http"
+	"html/template"
 	"strings"
-  "strconv"
-  "math/rand"
+  	"strconv"
+  	"math/rand"
 	log "github.com/Sirupsen/logrus"
 
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/asdine/storm"
-  "github.com/asdine/storm/q"
+  	"github.com/asdine/storm/q"
 	"github.com/ds0nt/nexus"
 	"github.com/spf13/viper"
 	"golang.org/x/net/websocket"
@@ -60,10 +61,10 @@ func Start(configName string) {
 	componentErr := db.Init(&Component{})
 	entityErr := db.Init(&Entity{})
 	structureErr := db.Init(&Structure{})
-  // indexErr := db.ReIndex(&Chunk{})
+  // indexErr := db.ReIndex(&World{})
   // if indexErr != nil {
-	// 	log.Fatal(indexErr)
-	// }
+  // log.Fatal(indexErr)
+  // }
 	if userErr != nil {
 		log.Fatal(userErr)
 	}
@@ -103,7 +104,9 @@ func Start(configName string) {
 		log.Fatal(err)
 	}
 	api.SetApp(router)
+
 	http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))
+	http.HandleFunc("/world/", worldHandler)
 	http.Handle("/connect", websocket.Handler(hub.Serve))
 
 	hub.Handle("chat message", chatMessage)
@@ -181,14 +184,26 @@ func getWorlds(w rest.ResponseWriter, req *rest.Request) {
 }
 
 func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
-  var world World
+  var (
+	  world World
+  )
   name := req.PathParam("name")
+  log.Println(name)
   err := db.One("Name", name, &world)
   if err != nil {
     log.Println(err)
-    rest.Error(w, err.Error(), http.StatusInternalServerError)
-    return
+    //create world record
+	sky := Sky{SkyType: "standard", Red: rand.Float32(), Green: rand.Float32(), Blue: rand.Float32(), Layers: nil }
+	light := Light{Color:0xffffff, Intensity: 1.0, Angle: 3.14, AmbientColor: 0x000000}
+	terrain := Terrain{TerrainType: "both", Height: 20000, Color: rand.Intn(0xffffff), Flatness: 1.0, Decorations: ""}
+	spawn := Spawn{Entities: true, Structures: true, NPCS: true, Tools:true, Vehicles:true }
+	world = *NewWorld(0, name, sky, light, terrain, spawn)
+	saveErr := db.Save(&world)
+    if saveErr != nil {
+     log.Println(saveErr)
+    }
   }
+
   w.WriteJson(&world)
 }
 
@@ -232,7 +247,9 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	      if (rand.Intn(10) < 6) {
 	        chunkGeom = "space"
 	      }
-	      generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", nil, nil, nil)
+		  bright := rand.Intn(255)
+		  color := (bright << 16) | (bright << 8) | bright
+	      generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", color, nil, nil, nil)
 	      chunksData = append(chunksData, generatedChunk)
 	      saveErr := db.Save(&generatedChunk)
 	      if saveErr != nil {
@@ -262,6 +279,11 @@ func postWorlds(w rest.ResponseWriter, req *rest.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+}
+
+func worldHandler(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("../web/index.html");
+    t.Execute(w, "")
 }
 
 func getStructures(w rest.ResponseWriter, req *rest.Request) { // structure types
