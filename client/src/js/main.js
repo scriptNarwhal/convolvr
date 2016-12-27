@@ -53,42 +53,6 @@ let worldName = window.location.href.indexOf("/world/") > -1 ? window.location.h
 				gravity: 1,
 				falling: false
 		},
-    worldConfig = {
-      name: "Convolvr",
-      sky: {
-        type: "gradient",
-        color: 0x3500ff,
-        layers: [
-          {
-            movement: [1, 1],
-            opacity: 1,
-            altitude: 800000,
-            texture: "clouds",
-            customTexture: ""
-          }
-        ]
-      },
-      light: {
-        color: 0xffffff,
-        intensity: 1.0,
-        angle: 0.5,
-        ambientColor: 0x000000
-      },
-      terrain: {
-        type: "both", // none, platforms, plane, both
-        height: 2,
-        color: 0x404040,
-        flatness: 0.5,
-        decorations: "misc"
-      },
-      spawn: {
-        entities: true,
-        structures: true,
-        npcs: true,
-        tools: true,
-        vehicles: true
-      }
-  },
 	world = null,
 	avatar = null
 

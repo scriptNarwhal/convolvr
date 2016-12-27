@@ -147,6 +147,7 @@ export default class World {
 	}
 
 	load (name) {
+		this.name = name;
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`)
            .then(response => {
 			 this.init(response.data)

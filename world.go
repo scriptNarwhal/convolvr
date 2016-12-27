@@ -46,6 +46,6 @@ type Spawn struct {
 	Vehicles   bool `json:"vehicles"`
 }
 
-func NewWorld() *World {
-	return &World{}
+func NewWorld(id int, name string, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
+	return &World{id, name, sky, light, terrain, spawn}
 }

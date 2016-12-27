@@ -61,10 +61,10 @@ func Start(configName string) {
 	componentErr := db.Init(&Component{})
 	entityErr := db.Init(&Entity{})
 	structureErr := db.Init(&Structure{})
-  // indexErr := db.ReIndex(&Chunk{})
+  // indexErr := db.ReIndex(&World{})
   // if indexErr != nil {
-	// 	log.Fatal(indexErr)
-	// }
+  // log.Fatal(indexErr)
+  //
 	if userErr != nil {
 		log.Fatal(userErr)
 	}
@@ -184,14 +184,26 @@ func getWorlds(w rest.ResponseWriter, req *rest.Request) {
 }
 
 func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
-  var world World
+  var (
+	  world World
+	  layers []Layer
+  )
   name := req.PathParam("name")
   err := db.One("Name", name, &world)
   if err != nil {
     log.Println(err)
-    rest.Error(w, err.Error(), http.StatusInternalServerError)
-    return
+    //create world record
+	sky := Sky{SkyType: "standard", Color: rand.Intn(0xffffff), Layers: layers }
+	light := Light{Color:0xffffff, Intensity: 1.0, Angle: 3.14, AmbientColor: 0x000000}
+	terrain := Terrain{TerrainType: "both", Height: 20000, Color: rand.Intn(0xffffff), Flatness: 1.0, Decorations: ""}
+	spawn := Spawn{Entities: true, Structures: true, NPCS: true, Tools:true, Vehicles:true }
+	world = *NewWorld(0, name, sky, light, terrain, spawn)
+	saveErr := db.Save(&world)
+    if saveErr != nil {
+     log.Println(saveErr)
+    }
   }
+
   w.WriteJson(&world)
 }
 
