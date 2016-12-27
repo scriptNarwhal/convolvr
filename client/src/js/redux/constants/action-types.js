@@ -96,12 +96,8 @@ export const PAGES_FETCH_FAIL = 'PAGES_FETCH_FAIL';
 export const UPDATE_PAGE = 'UPDATE_PAGE';
 export const DELETE_PAGE = 'DELETE_PAGE';
 
-export const SEND_MESSAGE = 'SEND_MESSAGE';
-export const FETCH_MESSAGES = 'FETCH_MESSAGES';
-export const RECEIVE_MESSAGES = 'RECEIVE_MESSAGES';
-export const FAILED_FETCH_MESSAGES = 'FAILED_FETCH_MESSAGES';
-export const UPDATE_MESSAGE = 'UPDATE_MESSAGE';
-export const DELETE_MESSAGE = 'DELETE_MESSAGE';
+export const MESSAGE_SEND = 'MESSAGE_SEND';
+export const MESSAGE_GET = 'MESSAGE_GET';
 
 export const ADD_FILE = 'ADD_FILE';
 export const FETCH_FILE = 'FETCH_FILES';
