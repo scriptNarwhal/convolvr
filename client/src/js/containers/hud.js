@@ -12,7 +12,7 @@ class HUD extends Component {
     return (
         <div className="hud">
             <Button title="Options"
-                    image="data/configure.png"
+                    image="/data/configure.png"
                     className="options-button"
                     style={{display: this.props.menuOpen ? "none" : "inline-block"}}
                     onClick={ (evt, title) => {
@@ -27,7 +27,7 @@ class HUD extends Component {
                         right: 0,
                         top: 0
                       }}
-                      image="data/x.png"
+                      image="/data/x.png"
                       onClick={ (evt, title) => {
                           //this.toggleMenu()
                           this.props.toggleVRMode();

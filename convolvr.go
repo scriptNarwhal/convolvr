@@ -212,6 +212,8 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
     generatedChunk Chunk
     chunksData []Chunk
     chunkData []Chunk
+	structures []Structure
+	structure Structure
   )
 	chunk := req.PathParam("chunks")
 	world := req.PathParam("worldId")
@@ -244,12 +246,22 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 
 	    if (len(chunkData) == 0) {
 	      chunkGeom := "flat"
-	      if (rand.Intn(10) < 6) {
+	      if rand.Intn(10) < 8 {
 	        chunkGeom = "space"
-	      }
-		  bright := rand.Intn(255)
+	      } else {
+			  if rand.Intn(24) > 20{
+				  light := 0
+				  if rand.Intn(6) > 4 {
+					  light = 0xffffff
+				  }
+				  structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0,0,0}, []int{0,0,0,0}, rand.Intn(12), rand.Intn(3), rand.Intn(6), light)
+	    		  structures = append(structures, structure)
+			  }
+		  }
+		  bright := 96 + rand.Intn(127)
 		  color := (bright << 16) | (bright << 8) | bright
-	      generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", color, nil, nil, nil)
+
+		  generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", color, structures, nil, nil)
 	      chunksData = append(chunksData, generatedChunk)
 	      saveErr := db.Save(&generatedChunk)
 	      if saveErr != nil {

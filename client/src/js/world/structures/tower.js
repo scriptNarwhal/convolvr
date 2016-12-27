@@ -153,7 +153,7 @@ class Tower {
 						light = null,
 						ledMat = null;
 
-				if (lightColor) {
+				if (lightColor && lightColor != 0) {
 					//if (this.data.lightType == "billboard") {
 					geom = new THREE.PlaneGeometry(50000 * xUnits, 35000, 4, 4);
 					//} else {
