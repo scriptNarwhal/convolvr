@@ -247,7 +247,9 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	      if (rand.Intn(10) < 6) {
 	        chunkGeom = "space"
 	      }
-	      generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", nil, nil, nil)
+		  bright := rand.Intn(255)
+		  color := (bright << 16) | (bright << 8) | bright
+	      generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", color, nil, nil, nil)
 	      chunksData = append(chunksData, generatedChunk)
 	      saveErr := db.Save(&generatedChunk)
 	      if saveErr != nil {

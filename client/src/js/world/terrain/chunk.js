@@ -15,14 +15,14 @@ export default class Chunk {
             narrow = gridSize * 0.87,
             mesh = null,
             bsp = null,
-			      cellMesh = null,
+			cellMesh = null,
             finalGeom = new THREE.Geometry(),
             base = new THREE.Geometry(),
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
             // geom = new THREE.CylinderGeometry( 128000, 128000, 7000, 6, 1),
             geom = new THREE.CylinderGeometry( 132000, 132000, 50000, 6, 1),
-            voxelGeom = new THREE.CylinderGeometry( 132000 / 16, 132000 / 16, 132000 / 8.5, 6, 1),
-            mat = new THREE.MeshPhongMaterial( {color: 0x282828, shininess: 20} ),
+            voxelGeom = null,
+            mat = new THREE.MeshPhongMaterial( {color: data.color, shininess: 20} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null;
 
         this.structures = [];
@@ -33,6 +33,7 @@ export default class Chunk {
         }
 
         if (!!data && !!data.voxels) { // terrain voxels
+            voxelGeom = new THREE.CylinderGeometry( 132000 / 16, 132000 / 16, 132000 / 8.5, 6, 1);
             items = data.voxels;
             cellMesh = new THREE.Mesh(geom, mat);
             cellMesh.updateMatrix();
