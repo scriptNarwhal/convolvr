@@ -5,7 +5,7 @@ import SideMenu from './side-menu';
 class Shell extends Component {
   render() {
     return (
-        <div className="shell" style={{display: (this.props.menuOpen ? "block" : "none")}}>
+        <div className="shell" style={{display: (this.props.menuOpen  ? "block" : "none")}}>
             <div className="tabs">
                 <SideMenu />
             </div>
@@ -28,6 +28,7 @@ import { toggleMenu, toggleVR } from '../redux/actions/app-actions'
 export default connect(
   state => {
     return {
+      menuOpen: state.app.menuOpen,
       platforms: state.platforms,
       tracks: state.tracks,
       tools: state.tools,

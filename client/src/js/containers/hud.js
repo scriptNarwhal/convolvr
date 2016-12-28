@@ -5,7 +5,7 @@ import { browserHistory } from 'react-router';
 class HUD extends Component {
 
     toggleMenu () {
-        this.props.toggleMenu();
+        this.props.toggleMenu(true);
     }
 
   render() {
@@ -60,8 +60,8 @@ export default connect(
   },
   dispatch => {
     return {
-      toggleMenu: () => {
-          dispatch(toggleMenu())
+      toggleMenu: (force) => {
+          dispatch(toggleMenu(force))
       },
       toggleVRMode: () => {
           dispatch(toggleVR())

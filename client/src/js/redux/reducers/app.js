@@ -16,7 +16,7 @@ module.exports = function app (state = {
   switch (action.type) {
     case APP_TOGGLE_MENU:
         return Object.assign({}, state, {
-            menuOpen: !state.menuOpen
+            menuOpen: !state.menuOpen || action.force
         })
     case APP_TOGGLE_VR:
         console.log("APP_TOGGLE_VR")

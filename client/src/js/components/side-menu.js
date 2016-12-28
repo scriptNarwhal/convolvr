@@ -19,12 +19,12 @@ class SideMenu extends Component {
                   title="Close Menu"
                   clickHandler={() => {
                     this.toggleMenu()
-                    browserHistory.push("/")
+                    browserHistory.goBack()
                   }}
             />
             <Tab image="/data/circle-a.png"
                  title="Switch Worlds"
-                 clickHandler={ ()=> { browserHistory.push("/worlds") } }
+                 clickHandler={ ()=> { browserHistory.push("/worlds") }}
             />
             {/* <Tab image="/data/voxel-white.png"
                  title="Inventory"
