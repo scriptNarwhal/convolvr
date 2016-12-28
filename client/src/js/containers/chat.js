@@ -24,6 +24,7 @@ class Chat extends Component {
         }
   }
   send () {
+      console.log("send button")
       this.props.sendMessage(this.state.text)
   }
   render() {

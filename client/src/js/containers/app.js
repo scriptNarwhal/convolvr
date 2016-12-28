@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { events } from '../network/socket'
 import { fetchUsers } from '../redux/actions/user-actions'
 import Shell from '../components/shell';
 
@@ -6,6 +7,9 @@ class App extends Component {
 
   componentDidMount () {
     this.props.fetchWorlds()
+    events.on("chat message", message => {
+    	this.props.getMessage(message.data)
+    })
   }
 
   render() {
@@ -32,6 +36,7 @@ App.defaultProps = {
 
 import { connect } from 'react-redux'
 import { fetchWorlds } from '../redux/actions/world-actions'
+import { getMessage } from '../redux/actions/message-actions'
 
 export default connect(
   state => {
@@ -47,6 +52,9 @@ export default connect(
       fetchWorlds: () => {
           dispatch(fetchWorlds())
       },
+      getMessage: (message) => {
+          dispatch(getMessage(message))
+      }
     }
   }
 )(App)

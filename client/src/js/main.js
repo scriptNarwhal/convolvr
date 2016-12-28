@@ -73,10 +73,6 @@ userInput.rotationVector = {x: 0, y: 9.95, z: 0}
 three.camera.position.set(100000, 20000, 100000)
 user.light.position.set(100000, 20000, 100000)
 
-socket.on("chat message", message => {
-	console.log(message)
-})
-
 const muiTheme = getMuiTheme({
       palette: {
           primary1Color: indigo500,
