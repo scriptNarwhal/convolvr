@@ -31,23 +31,27 @@ self.update = function () {
 			velocity = observer.velocity,
 			closeToVenue =  false,
 			cKey = "",
-			collision = false;
+			collision = false,
+			yPos = 0;
 
 		for (i = 0; i < platforms.length; i ++) {
 			obj = platforms[i];
 			if (!!obj) {
-				if (distance2dCompare(position, obj.position, 132000)) {
-					if (position[1] > obj.position[1]-12000 && position[1] < obj.position[1] + 12000) {
-							collision = true;
-							self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
+					if (distance2dCompare(position, obj.position, 500000)) { 	// do collisions on voxels & structures... just walls at first..
 
-					} else if (position[1] < obj.position[1] && obj.position[1] > obj.position[1] - 12000) {
-							collision = true;
-							self.postMessage('{"command": "platform collision", "data":{"type":"bottom", "position":[' + obj.position[0] + ',' + (obj.position[1]) + ',' + obj.position[2] + '] }}');
-					}
-				}
-			}
-					if (distance2dCompare(position, obj.position, 400000)) { 	// do collisions on voxels & structures... just walls at first..
+						let alt = obj.altitude || 0
+						yPos = obj.position[1]
+						if (distance2dCompare(position, obj.position, 132000)) {
+							if (position[1] > yPos - 6000  && position[1] < yPos + 6000) {
+									collision = true;
+									self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');
+
+							} else if (position[1] < yPos - 12000 && position[1]  > yPos - 22000 ) {
+									collision = true;
+									self.postMessage('{"command": "platform collision", "data":{"type":"bottom", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');
+							}
+						}
+
 							s = !! obj.structures ? obj.structures.length - 1 : -1;
 							while (s > -1) {
 								structure = obj.structures[s];
@@ -109,6 +113,7 @@ self.update = function () {
 								}
 							}
 					}
+			 }
 		}
 
 		for (i = 0; i < entities.length; i ++) {

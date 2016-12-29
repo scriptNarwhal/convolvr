@@ -11,7 +11,7 @@ export default class World {
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1,
 				mobile = (window.innerWidth <= 640),
 				scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4500000 ),
+				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 4500000 ),
 				renderer = new THREE.WebGLRenderer({antialias: pixelRatio <= 1.5}),
 				self = this,
 				three = {}
@@ -111,7 +111,7 @@ export default class World {
 		console.log(config)
 		let camera = three.camera,
 				material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
-				skyLight =  new THREE.PointLight(config.light.color, 0.5, 3000000),
+				skyLight =  new THREE.PointLight(config.light.color, 0.5, 4000000),
 				skyShaderMat = null
 
 		this.config = config;
