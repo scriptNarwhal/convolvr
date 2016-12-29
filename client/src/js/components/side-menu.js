@@ -5,12 +5,17 @@ import Tab from './tab'
 class SideMenu extends Component {
 
   toggleMenu () {
-      this.props.toggleMenu();
+      this.props.toggleMenu()
+  }
+
+  goBack () {
+    browserHistory.push(`/world/${this.props.world}`)
   }
 
   toggleVRMode () {
-      this.props.toggleVRMode();
+      this.props.toggleVRMode()
   }
+
 
   render() {
     return (
@@ -19,7 +24,7 @@ class SideMenu extends Component {
                   title="Close Menu"
                   clickHandler={() => {
                     this.toggleMenu()
-                    browserHistory.goBack()
+                    this.goBack()
                   }}
             />
             <Tab image="/data/circle-a.png"
@@ -67,6 +72,7 @@ import {
 export default connect(
   (state, ownProps) => {
     return {
+        world: state.worlds.current,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen
     }

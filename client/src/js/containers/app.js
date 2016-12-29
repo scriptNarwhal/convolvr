@@ -10,6 +10,7 @@ class App extends Component {
     events.on("chat message", message => {
     	this.props.getMessage(message.data)
     })
+    this.props.setCurrentWorld(window.worldName)
   }
 
   render() {
@@ -35,7 +36,7 @@ App.defaultProps = {
 }
 
 import { connect } from 'react-redux'
-import { fetchWorlds } from '../redux/actions/world-actions'
+import { fetchWorlds, setCurrentWorld } from '../redux/actions/world-actions'
 import { getMessage } from '../redux/actions/message-actions'
 
 export default connect(
@@ -54,6 +55,9 @@ export default connect(
       },
       getMessage: (message) => {
           dispatch(getMessage(message))
+      },
+      setCurrentWorld: (world) => {
+        dispatch(setCurrentWorld(world))
       }
     }
   }

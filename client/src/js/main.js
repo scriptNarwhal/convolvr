@@ -36,8 +36,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/colors'
 import io from 'socket.io-client'
 
-let worldName = window.location.href.indexOf("/world/") > -1 ? window.location.href.split("/world/")[1] : "overworld",
-    socket = events,
+    let socket = events,
     token = localStorage.getItem("token"),
 		userInput,
 		user = {
@@ -55,6 +54,8 @@ let worldName = window.location.href.indexOf("/world/") > -1 ? window.location.h
 		},
 	world = null,
 	avatar = null
+
+window.worldName = window.location.href.indexOf("/world/") > -1 ? window.location.href.split("/world/")[1] : "overworld"
 
 userInput = new UserInput()
 world = new World(userInput, socket, store)
