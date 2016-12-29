@@ -42,7 +42,7 @@ self.update = function () {
 						let alt = obj.altitude || 0
 						yPos = obj.position[1]
 						if (distance2dCompare(position, obj.position, 132000)) {
-							if (position[1] > yPos - 6000  && position[1] < yPos + 6000) {
+							if (position[1] > yPos - 6000  && position[1] < yPos + 12000 ) {
 									collision = true;
 									self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');
 

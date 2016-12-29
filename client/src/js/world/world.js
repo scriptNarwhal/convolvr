@@ -111,7 +111,7 @@ export default class World {
 		console.log(config)
 		let camera = three.camera,
 				material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
-				skyLight =  new THREE.PointLight(config.light.color, 0.5, 4000000),
+				skyLight =  new THREE.PointLight(config.light.color, 0.5, 3200000),
 				skyShaderMat = null
 
 		this.config = config;

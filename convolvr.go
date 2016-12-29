@@ -202,38 +202,38 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
   if err != nil {
     log.Println(err)
 
-	first = 0.4 + (rand.Float64() * 0.6)
-	second = first / 4
-	third = second / 2
+	first = 0.4 + (rand.Float64() * 0.7)
+	second = first / 4 + rand.Float64() * 0.1
+	third = second / 2 + rand.Float64() * 0.1
 	if rand.Intn(10) > 6 {
 		if rand.Intn(5) > 2 {
 			red = first
-			green = second + rand.Float64() * 0.15
-			blue = third + rand.Float64() * 0.15
+			green = second
+			blue = third
 		} else {
 			red = third / 2.0
-			green = first + rand.Float64() * 0.15
-			blue = second + rand.Float64() * 0.15
+			green = first
+			blue = second
 		}
 	} else if rand.Intn(10) > 4 {
 		if rand.Intn(5) > 2 {
 			red = second / 2.0
-			green = third + rand.Float64() * 0.15
-			blue = first + rand.Float64() * 0.15
+			green = third
+			blue = first
 		} else {
 			red = third
-			green = second / 2.0  + rand.Float64() * 0.15
-			blue = first  + rand.Float64() * 0.15
+			green = second / 2.0
+			blue = first
 		}
 	} else {
 		if rand.Intn(5) > 2 {
-			red = first  + rand.Float64() * 0.15
-			green = first / 1.5 + rand.Float64() * 0.15
+			red = first
+			green = first / 1.5
 			blue = third / 2.0
 		} else {
-			red = third + rand.Float64() * 0.15
+			red = third
 			green = first / 1.5
-			blue = first + rand.Float64() * 0.15
+			blue = first
 		}
 	}
 	lightColor = int(math.Floor(red * 255)) << 16 | int(math.Floor(green * 255)) << 8 | int(math.Floor(blue * 255));
