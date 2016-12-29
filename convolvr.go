@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"strings"
   	"strconv"
+		"math"
   	"math/rand"
 	log "github.com/Sirupsen/logrus"
 
@@ -186,15 +187,49 @@ func getWorlds(w rest.ResponseWriter, req *rest.Request) {
 func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
   var (
 	  world World
+		red float64
+		green float64
+		blue float64
+		first float64
+		second float64
+		third float64
+		lightColor int
+		ambientColor int
   )
   name := req.PathParam("name")
   log.Println(name)
   err := db.One("Name", name, &world)
   if err != nil {
     log.Println(err)
-    //create world record
-	sky := Sky{SkyType: "standard", Red: rand.Float32(), Green: rand.Float32(), Blue: rand.Float32(), Layers: nil }
-	light := Light{Color:0xffffff, Intensity: 1.0, Angle: 3.14, AmbientColor: 0x000000}
+
+	first = 0.4 + (rand.Float64() * 0.6)
+	second = first / 4
+	third = second / 2
+	if rand.Intn(5) > 2 {
+		if rand.Intn(5) > 2 {
+			red = first
+			green = second
+			blue = third
+		} else {
+			red = third
+			green = first
+			blue = second
+		}
+	} else {
+		if rand.Intn(5) > 2 {
+			red = second
+			green = third
+			blue = first
+		} else {
+			red = third
+			green = second
+			blue = first
+		}
+	}
+	lightColor = int(math.Floor(red * 255)) << 16 | int(math.Floor(green * 255)) << 8 | int(math.Floor(blue * 255));
+	ambientColor = int(math.Floor(red * 6)) << 16 | int(math.Floor(green * 6)) << 8 | int(math.Floor(blue * 6));
+	sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil }
+	light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}
 	terrain := Terrain{TerrainType: "both", Height: 20000, Color: rand.Intn(0xffffff), Flatness: 1.0, Decorations: ""}
 	spawn := Spawn{Entities: true, Structures: true, NPCS: true, Tools:true, Vehicles:true }
 	world = *NewWorld(0, name, sky, light, terrain, spawn)
@@ -252,13 +287,21 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 			  if rand.Intn(24) > 20{
 				  light := 0
 				  if rand.Intn(6) > 4 {
-					  light = 0xffffff
+					  if rand.Intn(4) > 2 {
+							light = 0x00ff00
+						} else {
+							if rand.Intn(4) > 2 {
+								light = 0x0030ff
+							} else {
+								light = 0x3000ff
+							}
+						}
 				  }
-				  structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0,0,0}, []int{0,0,0,0}, rand.Intn(12), rand.Intn(3), rand.Intn(6), light)
+				  structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0,0,0}, []int{0,0,0,0}, rand.Intn(12), rand.Intn(3), rand.Intn(3), light)
 	    		  structures = append(structures, structure)
 			  }
 		  }
-		  bright := 96 + rand.Intn(127)
+		  bright := 63 + rand.Intn(192)
 		  color := (bright << 16) | (bright << 8) | bright
 
 		  generatedChunk = *NewChunk(0, x, y, z, world, "", chunkGeom, "metal", color, structures, nil, nil)

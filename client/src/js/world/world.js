@@ -110,9 +110,7 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 				material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
-				core = new THREE.Mesh(coreGeom, material),
 				skyLight =  new THREE.PointLight(config.light.color, 0.5, 3000000),
 				skyShaderMat = null
 
@@ -134,14 +132,11 @@ export default class World {
 		} )
 
 		three.skyMat = skyShaderMat
-		three.core = core
 		this.ground = new THREE.Object3D()
 		this.ground.rotation.x = -Math.PI /2
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat)
 		this.skybox.add(skyLight)
 		skyLight.position.set(0, 300000, 300000)
-		three.scene.add(core)
-		core.position.set(0, 2000, 0)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
 	}

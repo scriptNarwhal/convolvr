@@ -29,7 +29,7 @@ type Light struct {
 	Color        int     `json:"color"`
 	Intensity    float64 `json:"intensity"`
 	Angle        float64 `json:"angle"`
-	AmbientColor float64 `json:"ambientColor"`
+	AmbientColor int `json:"ambientColor"`
 }
 
 type Terrain struct {

@@ -81,7 +81,6 @@ export let render = (world, last) => {
       }
     }
 
-      core && ()=>{ core.rotation.y += 0.005 }
       world.skybox && world.skybox.material && ()=>{world.skybox.material.uniforms.time.value += delta }
       world.skybox && world.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
       world.skybox && world.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
