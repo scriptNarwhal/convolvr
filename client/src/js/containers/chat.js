@@ -58,7 +58,7 @@ class Chat extends Component {
     }
   }
   componentDidMount () {
-
+    this.textInput.focus()
   }
   send (message) {
       console.log("send button")
