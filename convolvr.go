@@ -240,7 +240,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 		}
 	}
 	lightColor = int(math.Floor(red * 255)) << 16 | int(math.Floor(green * 255)) << 8 | int(math.Floor(blue * 255));
-	ambientColor = int(math.Floor(red * 4)) << 16 | int(math.Floor(green * 4)) << 8 | int(math.Floor(blue * 4));
+	ambientColor = int(4+math.Floor(red * 4)) << 16 | int(4+math.Floor(green * 4)) << 8 | int(4+math.Floor(blue * 4));
 	sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil }
 	light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}
 	terrain := Terrain{TerrainType: "both", Height: 20000, Color: rand.Intn(0xffffff), Flatness: float64(1.0+rand.Float64()*16.0), Decorations: ""}
@@ -303,14 +303,18 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	      } else {
 			  if rand.Intn(24) > 20{
 				  light := 0
-				  if rand.Intn(6) > 4 {
-					  if rand.Intn(4) > 2 {
-							light = 0x00ff00
+				  if rand.Intn(6) > 3 {
+					  if rand.Intn(5) > 4 {
+							light = 0xffffff
 						} else {
 							if rand.Intn(4) > 2 {
-								light = 0x0030ff
-							} else {
 								light = 0x3000ff
+							} else {
+								if rand.Intn(4) > 2 {
+									light = 0x30ff00
+								} else {
+									light = 0xff3000
+								}
 							}
 						}
 				  }
@@ -318,7 +322,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	    		  structures = append(structures, structure)
 			  }
 		  }
-		  bright := 63 + rand.Intn(192)
+		  bright := 100 + rand.Intn(155)
 		  color := (bright << 16) | (bright << 8) | bright
 			altitude := float32((math.Sin(float64(x)/2)*2.5+math.Cos(float64(z)/2)*2.5) / worldData.Terrain.Flatness)
 		  generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", color, structures, nil, nil)

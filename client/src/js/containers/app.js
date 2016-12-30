@@ -9,7 +9,11 @@ class App extends Component {
   componentDidMount () {
     this.props.fetchWorlds()
     events.on("chat message", message => {
-    	this.props.getMessage(message.data)
+      let chatMessage = message.data
+      if (chatMessage[0] == '"') {
+        chatMessage = chatMessage.substr(1, chatMessage.length -2)
+      }
+    	this.props.getMessage(chatMessage)
     })
     this.props.setCurrentWorld(window.worldName)
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
