@@ -139,20 +139,20 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
-			velocity.y -= 1000 + velocity.y * delta; // weak gravity
+			velocity.y -= 1000 + velocity.y * 2.0 * delta; // weak gravity
 			this.moveVector.set(0, 0, 0);
-			if (this.camera.position.y < bottom + 500) {
-				if (this.keys.shift) {
-					velocity.y *= -0.70;
-				} else {
-					velocity.y *= -0.20;
-				}
-				this.device.falling = false;
-				this.camera.position.y = bottom + 500;
-				if (velocity.y > 1000) {
-					//world.vibrate(50);
-				}
-			}
+			// if (this.camera.position.y < bottom + 500) {
+			// 	if (this.keys.shift) {
+			// 		velocity.y *= -0.70;
+			// 	} else {
+			// 		velocity.y *= -0.20;
+			// 	}
+			// 	this.device.falling = false;
+			// 	this.camera.position.y = bottom + 500;
+			// 	if (velocity.y > 1000) {
+			// 		//world.vibrate(50);
+			// 	}
+			// }
 
 			if (world.mode != "stereo") {
 				this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);

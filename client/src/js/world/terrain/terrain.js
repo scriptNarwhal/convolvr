@@ -33,8 +33,8 @@ export default class Terrain {
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
         viewDistance = (this.world.mobile ? 6 : 11),
         removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
-        endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
-        x = coords[0]-phase,
+        endCoords = [coords[0]+viewDistance -2, coords[2]+viewDistance],
+        x = coords[0]-phase+1,
         y = coords[2]-phase;
         this.chunkCoords = coords;
 
@@ -100,8 +100,9 @@ export default class Terrain {
         axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`)
            .then(response => {
              let physicalChunks = []
+             typeof response.data.map == 'function' &&
              response.data.map(c =>{
-                 let chunk = new Chunk({color: c.color, voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
+                 let chunk = new Chunk({altitude: c.altitude, color: c.color, voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
                  if (!!chunk.geometry != "space") { // if its not empty space
                      physicalChunks.push(chunk.data);
                      three.scene.add(chunk.mesh);

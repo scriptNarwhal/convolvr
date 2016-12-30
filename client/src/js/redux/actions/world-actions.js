@@ -1,4 +1,5 @@
 import {
+  WORLD_SET_CURRENT,
   WORLD_CREATE_FETCH,
   WORLD_CREATE_DONE,
   WORLD_CREATE_FAIL,
@@ -67,7 +68,12 @@ export function createWorldFail (err) {
         err
     }
 }
-
+export function setCurrentWorld (world) {
+  return {
+    type: WORLD_SET_CURRENT,
+    current: world
+  }
+}
 export function updateWorld (id, data) {
     return dispatch => {
      dispatch({

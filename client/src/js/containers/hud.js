@@ -5,14 +5,14 @@ import { browserHistory } from 'react-router';
 class HUD extends Component {
 
     toggleMenu () {
-        this.props.toggleMenu();
+        this.props.toggleMenu(true);
     }
 
   render() {
     return (
         <div className="hud">
             <Button title="Options"
-                    image="data/configure.png"
+                    image="/data/configure.png"
                     className="options-button"
                     style={{display: this.props.menuOpen ? "none" : "inline-block"}}
                     onClick={ (evt, title) => {
@@ -27,7 +27,7 @@ class HUD extends Component {
                         right: 0,
                         top: 0
                       }}
-                      image="data/x.png"
+                      image="/data/x.png"
                       onClick={ (evt, title) => {
                           //this.toggleMenu()
                           this.props.toggleVRMode();
@@ -60,12 +60,12 @@ export default connect(
   },
   dispatch => {
     return {
-      toggleMenu: () => {
-          dispatch(toggleMenu())
+      toggleMenu: (force) => {
+          dispatch(toggleMenu(force))
       },
       toggleVRMode: () => {
           dispatch(toggleVR())
       }
-      }
+    }
   }
 )(HUD)

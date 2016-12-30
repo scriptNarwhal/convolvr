@@ -1,4 +1,5 @@
 import {
+    WORLD_SET_CURRENT,
     WORLD_CREATE_FETCH,
     WORLD_CREATE_DONE,
     WORLD_CREATE_FAIL,
@@ -14,7 +15,7 @@ import {
 } from '../constants/action-types';
 
 module.exports = function worlds (state = {
-    here: 0,
+    current: "overworld",
     all: [],
     updated: false,
     created: false,
@@ -22,6 +23,10 @@ module.exports = function worlds (state = {
     fetching: false
 }, action) {
   switch (action.type) {
+    case WORLD_SET_CURRENT:
+      return Object.assign({}, state, {
+          current: action.current
+      })
     case WORLD_CREATE_FETCH:
       return Object.assign({}, state, {
           fetching: true

@@ -1,38 +1,21 @@
 import {
-    SEND_MESSAGE,
-    FETCH_MESSAGES,
-    RECEIEVE_MESSAGES,
-    FAILED_FETCH_MESSAGES,
-    UPDATE_MESSAGE,
-    DELETE_MESSAGE
+    MESSAGE_SEND,
+    MESSAGE_GET
 } from '../constants/action-types';
 
-module.exports = function messages (state = [], action) {
+module.exports = function messages (state = {
+    messages:[]
+}, action) {
   switch (action.type) {
-    case SEND_MESSAGE:
+    case MESSAGE_SEND:
       return state;
-    case DELETE_MESSAGE:
-
-    case FETCH_MESSAGES:
-
-    case RECEIEVE_MESSAGES:
-
-    case FAILED_FETCH_MESSAGES:
-
-    case UPDATE_MESSAGE:
-    return state.map((message, index) => {
-      if (index === action.index) {
-        return Object.assign({}, message, {
-            to: action.to,
-            from: action.from,
-            sent: action.sent,
-            title: action.title,
-            body: action.body,
-            attachments: action.attachments
-        })
-      }
-      return message;
-    })
+    case MESSAGE_GET:
+        return Object.assign({}, state, {
+            messages: [
+                ...state.messages,
+                action.message
+            ]
+      })
     default:
       return state;
   }

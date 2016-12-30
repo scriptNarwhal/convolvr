@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
+import { events } from '../network/socket'
 import { fetchUsers } from '../redux/actions/user-actions'
 import Shell from '../components/shell';
 
@@ -6,8 +8,20 @@ class App extends Component {
 
   componentDidMount () {
     this.props.fetchWorlds()
+    events.on("chat message", message => {
+    	this.props.getMessage(message.data)
+    })
+    this.props.setCurrentWorld(window.worldName)
+    window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
   }
-
+  handleKeyDown (e) {
+    if (e.which == 13) {
+      if (!this.props.menuOpen) {
+        this.props.toggleMenu(true);
+        browserHistory.push("/chat")
+      }
+    }
+  }
   render() {
     var content = "";
     if (window.location.href.split("host/").length > 1) {
@@ -31,7 +45,9 @@ App.defaultProps = {
 }
 
 import { connect } from 'react-redux'
-import { fetchWorlds } from '../redux/actions/world-actions'
+import { toggleMenu } from '../redux/actions/app-actions'
+import { fetchWorlds, setCurrentWorld } from '../redux/actions/world-actions'
+import { getMessage } from '../redux/actions/message-actions'
 
 export default connect(
   state => {
@@ -47,6 +63,15 @@ export default connect(
       fetchWorlds: () => {
           dispatch(fetchWorlds())
       },
+      getMessage: (message) => {
+          dispatch(getMessage(message))
+      },
+      toggleMenu: (force) => {
+          dispatch(toggleMenu(force))
+      },
+      setCurrentWorld: (world) => {
+        dispatch(setCurrentWorld(world))
+      }
     }
   }
 )(App)

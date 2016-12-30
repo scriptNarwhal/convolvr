@@ -11,7 +11,7 @@ export default class World {
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1,
 				mobile = (window.innerWidth <= 640),
 				scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 4500000 ),
+				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 4500000 ),
 				renderer = new THREE.WebGLRenderer({antialias: pixelRatio <= 1.5}),
 				self = this,
 				three = {}
@@ -47,7 +47,7 @@ export default class World {
 		document.body.appendChild( renderer.domElement )
 		renderer.domElement.setAttribute("id", "viewport")
 		renderer.setClearColor(0x3b3b3b);
-		camera.position.set(85000, 5916.124890438994, 155000);
+		camera.position.set(85000, 15000.124890438994, 155000);
 
 		userInput.init(this, camera, this.user);
 		this.worldPhysics = new WorldPhysics();
@@ -110,10 +110,8 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				coreGeom = new THREE.CylinderGeometry(8096, 8096, 1024, 9),
 				material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
-				core = new THREE.Mesh(coreGeom, material),
-				skyLight =  new THREE.PointLight(config.light.color, 0.5, 3000000),
+				skyLight =  new THREE.PointLight(config.light.color, 0.5, 3200000),
 				skyShaderMat = null
 
 		this.config = config;
@@ -134,14 +132,11 @@ export default class World {
 		} )
 
 		three.skyMat = skyShaderMat
-		three.core = core
 		this.ground = new THREE.Object3D()
 		this.ground.rotation.x = -Math.PI /2
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat)
 		this.skybox.add(skyLight)
 		skyLight.position.set(0, 300000, 300000)
-		three.scene.add(core)
-		core.position.set(0, 2000, 0)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
 	}

@@ -9,9 +9,10 @@ import {
 } from '../constants/action-types';
 import { API_SERVER } from '../../config.js'
 
-export function toggleMenu (id) {
+export function toggleMenu (force) {
     return {
-        type: APP_TOGGLE_MENU
+        type: APP_TOGGLE_MENU,
+        force: force || false
     }
 }
 

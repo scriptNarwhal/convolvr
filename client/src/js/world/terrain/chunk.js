@@ -66,22 +66,22 @@ export default class Chunk {
                 x--;
                 structure = new Tower(items[x], this);
                 // track = new Track(items[x], this);
-                	if (Math.random() < 0.16) {
+                	if (Math.random() < 0.2) {
                     structure.initLight();
                   }
                 // should switch here for other structure types
                 this.structures.push(structure);
             }
         }
-
+        altitude = data.altitude || 0
         if (!! cell) {
             mesh.position.set((cell[0]*232000) + (cell[2] % 2 == 0 ? 0 : 232000 / 2),
-                               cell[1]*232000 - 25000,
+                               altitude * 50000+cell[1]*232000 - 25000,
                                cell[2]*232000 * 0.87);
             data.cell = cell;
             data.position = [
                 mesh.position.x,
-                mesh.position.y + 25000,
+                altitude * 50000 + mesh.position.y + 25000,
                 mesh.position.z
             ]
         } else {
