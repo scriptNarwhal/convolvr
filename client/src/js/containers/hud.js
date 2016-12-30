@@ -66,6 +66,6 @@ export default connect(
       toggleVRMode: () => {
           dispatch(toggleVR())
       }
-      }
+    }
   }
 )(HUD)

@@ -47,7 +47,7 @@ export default class World {
 		document.body.appendChild( renderer.domElement )
 		renderer.domElement.setAttribute("id", "viewport")
 		renderer.setClearColor(0x3b3b3b);
-		camera.position.set(85000, 5916.124890438994, 155000);
+		camera.position.set(85000, 15000.124890438994, 155000);
 
 		userInput.init(this, camera, this.user);
 		this.worldPhysics = new WorldPhysics();

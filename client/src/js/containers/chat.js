@@ -22,6 +22,7 @@ const styles = {
     message : {
       display: "block",
       marginRight: "50%",
+      minWidth: "410px",
       marginBottom: "0.5em"
     },
     innerMessage: {

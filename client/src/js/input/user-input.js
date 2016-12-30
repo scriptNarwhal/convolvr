@@ -139,7 +139,7 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
-			velocity.y -= 1000 + velocity.y * delta; // weak gravity
+			velocity.y -= 1000 + velocity.y * 2.0 * delta; // weak gravity
 			this.moveVector.set(0, 0, 0);
 			// if (this.camera.position.y < bottom + 500) {
 			// 	if (this.keys.shift) {
