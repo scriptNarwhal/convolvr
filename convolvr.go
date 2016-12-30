@@ -108,6 +108,9 @@ func Start(configName string) {
 
 	http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))
 	http.HandleFunc("/world/", worldHandler)
+	http.HandleFunc("/worlds", worldHandler)
+	http.HandleFunc("/chat", worldHandler)
+	http.HandleFunc("/settings", worldHandler)
 	http.Handle("/connect", websocket.Handler(hub.Serve))
 
 	hub.Handle("chat message", chatMessage)

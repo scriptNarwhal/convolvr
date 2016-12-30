@@ -110,7 +110,6 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				material = new THREE.MeshPhongMaterial( {color: 0xffffff} ),
 				skyLight =  new THREE.PointLight(config.light.color, 0.5, 3200000),
 				skyShaderMat = null
 
@@ -135,6 +134,7 @@ export default class World {
 		this.ground = new THREE.Object3D()
 		this.ground.rotation.x = -Math.PI /2
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat)
+		this.skyLight = skyLight
 		this.skybox.add(skyLight)
 		skyLight.position.set(0, 300000, 300000)
 		three.scene.add(this.skybox)
@@ -149,6 +149,26 @@ export default class World {
           }).catch(response => {
              console.log("World Error", response)
           });
+	}
+
+	reload (name) {
+		if (!!this.skyLight) {
+			three.scene.remove(this.skyLight)
+		}
+		if (!!this.skybox) {
+			three.scene.remove(this.skybox)
+		}
+		if (!!this.ground) {
+			three.scene.remove(this.ground)
+		}
+		this.terrain.platforms.map(p => {
+			if (p.mesh) {
+				three.scene.remove(p.mesh)
+			}
+		})
+		this.terrain.platforms = []
+		this.terrain.pMap = []
+		this.load(name)
 	}
 
 	generateFullLOD (coords) {

@@ -58,7 +58,7 @@ class Chat extends Component {
     }
   }
   componentDidMount () {
-
+    this.textInput.focus()
   }
   send (message) {
       console.log("send button")
@@ -73,8 +73,8 @@ class Chat extends Component {
         <Shell className="chat">
             <section style={styles.messages}>
                 {
-                    this.props.messages.map(m => (
-                        <span style={styles.message} >
+                    this.props.messages.map((m, i) => (
+                        <span key={i} style={styles.message} >
                           <span style={styles.innerMessage}>
                             {m}
                           </span>
