@@ -4,6 +4,7 @@ import Button from './button';
 let styles = {
   worldCard: (image) => {
     return {
+      cursor: "pointer",
       width: "6em",
       height: "3em",
       display: "inline-block",

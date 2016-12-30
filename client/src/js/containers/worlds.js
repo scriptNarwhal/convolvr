@@ -5,19 +5,23 @@ import Card from '../components/card'
 
 const styles = {
   worlds: {
-
+    width: "45%",
+    minWidth: "320px",
+    margin: "auto"
   }
 }
 
 class Worlds extends Component {
   switchWorlds (name) {
     browserHistory.push("/world/"+name)
-    this.props.setCurrentWorld(name)
-    three.world.reload(name)
+    window.location.href = window.location.href // workaround..
+    // this.props.setCurrentWorld(name)
+    // three.world.reload(name)
   }
   render() {
     return (
         <Shell className="worlds">
+          <div style={styles.worlds}>
           {
             this.props.worlds.map((world, i) => {
               return (
@@ -27,6 +31,7 @@ class Worlds extends Component {
               )
             })
           }
+          </div>
         </Shell>
     )
   }
