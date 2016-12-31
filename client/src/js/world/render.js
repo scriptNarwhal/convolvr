@@ -24,13 +24,13 @@ export let render = (world, last) => {
     }
     if (world.mode == "stereo") {
       if (world.HMDMode == "standard") {
-        camera.position.set(/*beforeHMD[0] + */ cPos.x / 2.0,
-                            /*beforeHMD[1] + */ cPos.y / 2.0,
-                            /*beforeHMD[2] + */ cPos.z / 2.0);
+        camera.position.set(beforeHMD[0] + cPos.x,
+                            beforeHMD[1] + cPos.y,
+                            beforeHMD[2] + cPos.z);
       } else {
-        camera.position.set(beforeHMD[0] + cPos.x / 2.0,
-                            beforeHMD[1] + cPos.y / 2.0,
-                            beforeHMD[2] + cPos.z / 2.0);
+        camera.position.set(beforeHMD[0] + cPos.x * 7.0,
+                            beforeHMD[1] + cPos.y * 7.0,
+                            beforeHMD[2] + cPos.z * 7.0);
       }
     }
     world.userInput.update(delta);

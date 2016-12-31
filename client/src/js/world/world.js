@@ -40,7 +40,7 @@ export default class World {
 		this.sendUpdatePacket = 0
 		this.capturing = false
 		this.webcamImage = ""
-		this.HMDMode = "non standard" // "head-movement"
+		this.HMDMode = "standard" // "head-movement"
 
 		renderer.setPixelRatio(pixelRatio)
 		renderer.setSize(window.innerWidth, window.innerHeight)
