@@ -15,12 +15,12 @@ export let render = (world, last) => {
       arms = [];
 
   if (!! world.userInput) {
-    world.userInput.update(delta);
+
     // Update VR headset position and apply to camera.
     if(!! three.vrControls) {
       beforeHMD = [camera.position.x, camera.position.y, camera.position.z];
       three.vrControls.update();
-      camera.position.multiplyScalar(12000);
+      camera.position.multiplyScalar(1200);
     }
     if (world.mode == "stereo") {
       if (world.HMDMode == "standard") {
@@ -33,6 +33,7 @@ export let render = (world, last) => {
                             beforeHMD[2] + cPos.z / 2.0);
       }
     }
+    world.userInput.update(delta);
   }
   if (world.user && world.user.mesh) {
     world.user.mesh.position.set(cPos.x, cPos.y, cPos.z);

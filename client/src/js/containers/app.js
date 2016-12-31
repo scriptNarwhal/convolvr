@@ -9,10 +9,7 @@ class App extends Component {
   componentDidMount () {
     this.props.fetchWorlds()
     events.on("chat message", message => {
-      let chatMessage = message.data
-      if (chatMessage[0] == '"') {
-        chatMessage = chatMessage.substr(1, chatMessage.length -2)
-      }
+      let chatMessage = JSON.parse(message.data)
     	this.props.getMessage(chatMessage)
     })
     this.props.setCurrentWorld(window.worldName)

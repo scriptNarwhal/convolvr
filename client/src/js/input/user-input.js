@@ -154,11 +154,11 @@ export default class UserInput {
 			// 	}
 			// }
 
-			if (world.mode != "stereo") {
+			// if (world.mode != "stereo") {
 				this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 				this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
 				this.camera.matrixWorldNeedsUpdate = true;
-			}
+			// }
 			velocity.x *= 0.98;
 			velocity.z *= 0.98;
 			if (!! world.user.mesh) {
