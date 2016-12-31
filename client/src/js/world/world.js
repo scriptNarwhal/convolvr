@@ -2,6 +2,7 @@ import axios from 'axios'
 import Avatar from './avatar'
 import Terrain from './terrain/terrain'
 import WorldPhysics  from '../workers/world-physics'
+import EntityGenerator from './entities/entity-generator'
 import { render, toggleStereo } from './render'
 import { API_SERVER } from '../config.js'
 import Seed from '../seed'
@@ -46,10 +47,11 @@ export default class World {
 		renderer.setSize(window.innerWidth, window.innerHeight)
 		document.body.appendChild( renderer.domElement )
 		renderer.domElement.setAttribute("id", "viewport")
-		renderer.setClearColor(0x3b3b3b);
-		userInput.init(this, camera, this.user);
-		this.worldPhysics = new WorldPhysics();
-		this.worldPhysics.init(self);
+		renderer.setClearColor(0x3b3b3b)
+		userInput.init(this, camera, this.user)
+		this.worldPhysics = new WorldPhysics()
+		this.worldPhysics.init(self)
+		this.generator = new EntityGenerator()
 		this.seed = new Seed();
 		this.terrain = new Terrain(this);
 		this.workers = {
@@ -106,7 +108,8 @@ export default class World {
 			console.log("on tool action.. ",data.tool)
 			switch (data.tool) {
 				case "Entity Tool":
-
+					// use this.generator...
+					
 				break;
 				case "Component Tool":
 
