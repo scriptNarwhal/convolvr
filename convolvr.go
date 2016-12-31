@@ -140,7 +140,9 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 	//log.Printf(`broadcasting toolAction "%s"`, p.Data)
 	// modify chunk where this tool was used...
 	// ...for all but projectile tools.. probably
+
 	type ToolAction struct {
+		World string `json:"world"`
 		User string `json:"user"`
 		UserId int `json:"userId"`
 		Position []float64 `json:"position"`
@@ -155,6 +157,10 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 			 panic(err)
 	}
 	log.Printf(`broadcasting tool action: "%s"`, action.Tool)
+	log.Printf(`world: "%s"`, action.World)
+	log.Printf(`x: "%s"`, int(math.Floor(action.Position[0] / 232000)))
+	log.Printf(`z: "%s"`, int(math.Floor(action.Position[2] / 201840)))
+
 	hub.All().Broadcast(p)
 }
 

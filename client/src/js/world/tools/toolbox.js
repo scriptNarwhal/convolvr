@@ -70,28 +70,26 @@ export default class Toolbox {
       //console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera
-      tool.primaryAction();
-      send("tool action", {
-        user: this.world.user.username,
-        userId: this.world.user.id,
-        position: [camera.position.x, camera.position.y, camera.position.z],
-        quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
-        tool: tool.name,
-        primary: true
-      })
+      tool.primaryAction()
+      this.sendToolAction(true, tool, camera)
     }
 
     useSecondary(hand) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera
-      tool.secondaryAction();
+      tool.secondaryAction()
+      this.sendToolAction(false, tool, camera)
+    }
+
+    sendToolAction (primary, tool, camera) {
       send("tool action", {
+        world: this.world.name,
         user: this.world.user.username,
         userId: this.world.user.id,
         position: [camera.position.x, camera.position.y, camera.position.z],
         quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
         tool: tool.name,
-        primary: false
+        primary
       })
     }
 }
