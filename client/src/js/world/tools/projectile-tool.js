@@ -3,11 +3,11 @@ import ProjectileToolIcon from '../hud/icons/projectile-tool-icon'
 
 export default class ProjectileTool {
     constructor (data, user) {
-      this.data = data;
-      this.user = user;
-      this.mesh = null;
-      this.name = data ? data.name : "Projectile Tool";
-      this.icon = new ProjectileToolIcon();
+      this.data = data
+      this.user = user
+      this.mesh = null
+      this.name = "Projectile Tool"
+      this.icon = new ProjectileToolIcon()
     }
 
     initMesh (data = {}) {

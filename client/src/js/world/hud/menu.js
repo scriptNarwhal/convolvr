@@ -22,7 +22,7 @@ export default class HUDMenu {
       if (light) {
         this.light = light;
         mesh.add(light);
-        light.position.set(0, 100, -300);
+        light.position.set(0, 100, -1000);
       }
       console.log(options);
       if (options.length > 0) {

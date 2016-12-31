@@ -5,7 +5,7 @@ export default class VoxelTool {
       this.data = data;
       this.user = user;
       this.mesh = null;
-      this.name = data ? data.name : "Voxel Tool";
+      this.name = "Voxel Tool"
       this.icon = new VoxelToolIcon();
     }
 

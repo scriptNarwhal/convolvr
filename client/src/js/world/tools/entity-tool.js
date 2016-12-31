@@ -3,11 +3,11 @@ import EntityToolIcon from '../hud/icons/entity-tool-icon'
 
 export default class EntityTool {
     constructor (data, user) {
-      this.data = data;
-      this.user = user;
-      this.mesh = null;
-      this.name = data ? data.name : "Entity Tool";
-      this.icon = new EntityToolIcon();
+      this.data = data
+      this.user = user
+      this.mesh = null
+      this.name = "Entity Tool"
+      this.icon = new EntityToolIcon()
     }
 
     initMesh (data = {}) {

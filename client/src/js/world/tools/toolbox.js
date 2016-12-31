@@ -46,10 +46,9 @@ export default class Toolbox {
     }
 
     useTool (index, hand) {
-      this.showMenu();
-      this.currentTools[hand] = index;
-      this.tools[index].equip(hand);
-      console.log(this.tools[index])
+      this.currentTools[hand] = index
+      this.tools[index].equip(hand)
+      this.showMenu()
     }
 
     getTools () {
@@ -65,7 +64,7 @@ export default class Toolbox {
     }
 
     usePrimary (hand) {
-      console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
+      //console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
       this.tools[this.currentTools[hand]].primaryAction();
     }
 

@@ -94,7 +94,6 @@ export default class UserInput {
 			console.log("adding event listener.. mouseclick")
 			setTimeout(()=> {
 				document.addEventListener("mousedown", (e) => {
-				console.log(e);
 				switch (e.which) {
 					case 1: // left mouse
 						this.user.toolbox.usePrimary(0); // right hand
@@ -107,7 +106,7 @@ export default class UserInput {
 						this.user.toolbox.useSecondary(0); // right hand
 					break;
 				}
-			}, true)	
+				}, true)	
 			},250)
 			
 		}
