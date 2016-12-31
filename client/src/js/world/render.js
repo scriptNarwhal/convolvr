@@ -20,12 +20,12 @@ export let render = (world, last) => {
     if(!! three.vrControls) {
       beforeHMD = [camera.position.x, camera.position.y, camera.position.z];
       three.vrControls.update();
-      camera.position.multiplyScalar(1200);
+      camera.position.multiplyScalar(1500);
     }
     if (world.mode == "stereo") {
       if (world.HMDMode == "standard") {
         camera.position.set(beforeHMD[0] + cPos.x,
-                            beforeHMD[1] + cPos.y,
+                            beforeHMD[1] + cPos.y / 2.0,
                             beforeHMD[2] + cPos.z);
       } else {
         camera.position.set(beforeHMD[0] + cPos.x * 7.0,
