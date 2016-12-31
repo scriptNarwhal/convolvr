@@ -49,6 +49,7 @@ export default class Toolbox {
       this.showMenu();
       this.currentTools[hand] = index;
       this.tools[index].equip(hand);
+      console.log(this.tools[index])
     }
 
     getTools () {

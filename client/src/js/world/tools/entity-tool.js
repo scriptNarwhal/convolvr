@@ -36,7 +36,9 @@ export default class EntityTool {
 
     equip (hand) {
       if (this.mesh == null) {
-        three.camera.add(this.initMesh(this.data))
+        let toolMesh = this.initMesh(this.data)
+        toolMesh.position.set(-3000+((hand)*6000), 0, 100000)
+        three.camera.add(toolMesh)
         // add to respective hand (when implemented)
       } else {
         this.mesh.visible = true;

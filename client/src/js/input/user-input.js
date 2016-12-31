@@ -91,21 +91,25 @@ export default class UserInput {
 					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 300.0;
 				}
 			});
-			document.addEventListener("mouseclick", (e) => {
+			console.log("adding event listener.. mouseclick")
+			setTimeout(()=> {
+				document.addEventListener("mousedown", (e) => {
 				console.log(e);
 				switch (e.which) {
 					case 1: // left mouse
-						tools.usePrimary(0); // right hand
+						this.user.toolbox.usePrimary(0); // right hand
 					break;
 					case 2: // scroll wheel click
 						// tools.selectObject() .. might be handy
 					break;
 
 					case 3: // right click
-						tools.useSecondary(0); // right hand
+						this.user.toolbox.useSecondary(0); // right hand
 					break;
 				}
-			})
+			}, true)	
+			},250)
+			
 		}
 		this.touchControls = new Touch(this);
 		this.keyboard = new Keyboard(this, this.world);
@@ -116,10 +120,11 @@ export default class UserInput {
 	}
 
 	connect (world, camera, device) {
-		this.world = world;
-		this.camera = camera;
-		this.device = device;
-		device.userInput = this;
+		this.world = world
+		this.camera = camera
+		this.device = device
+		this.user = this.world.user
+		device.userInput = this
 	}
 
 	update (delta) {
@@ -141,6 +146,9 @@ export default class UserInput {
 			}
 			velocity.y -= 500 + velocity.y * (0.005 * delta); // weak gravity
 			this.moveVector.set(0, 0, 0);
+			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
+			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
+			this.camera.matrixWorldNeedsUpdate = true;
 			// if (this.camera.position.y < bottom + 500) {
 			// 	if (this.keys.shift) {
 			// 		velocity.y *= -0.70;
@@ -152,12 +160,6 @@ export default class UserInput {
 			// 	if (velocity.y > 1000) {
 			// 		//world.vibrate(50);
 			// 	}
-			// }
-
-			// if (world.mode != "stereo") {
-				this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
-				this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
-				this.camera.matrixWorldNeedsUpdate = true;
 			// }
 			velocity.x *= 0.98;
 			velocity.z *= 0.98;
