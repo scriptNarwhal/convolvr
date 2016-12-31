@@ -101,6 +101,27 @@ export default class World {
 				}
 			}
 		})
+		socket.on("tool action", packet => {
+			let data = JSON.parse(packet.data)
+			console.log("on tool action.. ",data.tool)
+			switch (data.tool) {
+				case "Entity Tool":
+
+				break;
+				case "Component Tool":
+
+				break;
+				case "Voxel Tool":
+
+				break;
+				case "Projectile Tool":
+
+				break;
+				case "Delete Tool":
+
+				break;
+			}
+		})
 		render(this, 0)
 		this.terrain.bufferChunks(true, 0)
 	}

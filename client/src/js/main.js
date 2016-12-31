@@ -40,7 +40,7 @@ import io from 'socket.io-client'
     token = localStorage.getItem("token"),
 		userInput,
 		user = {
-				id: Math.random(),
+				id: Math.floor(Math.random()*99999999),
 				arms: [],
 				hud: null,
 				cursor: null,

@@ -2,17 +2,17 @@ package convolvr
 
 import (
 	"fmt"
+	"encoding/json"
 	"net/http"
 	"html/template"
 	"strings"
-  	"strconv"
-		"math"
-  	"math/rand"
+  "strconv"
+	"math"
+  "math/rand"
 	log "github.com/Sirupsen/logrus"
-
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/asdine/storm"
-  	"github.com/asdine/storm/q"
+  "github.com/asdine/storm/q"
 	"github.com/ds0nt/nexus"
 	"github.com/spf13/viper"
 	"golang.org/x/net/websocket"
@@ -115,7 +115,7 @@ func Start(configName string) {
 
 	hub.Handle("chat message", chatMessage)
 	hub.Handle("update", update)
-	hub.Handle("spawn", spawn)
+	hub.Handle("tool action", toolAction)
 
 	http.Handle("/", http.FileServer(http.Dir("../web")))
 
@@ -136,8 +136,25 @@ func update(c *nexus.Client, p *nexus.Packet) {
 	// log.Printf(`broadcasting update "%s"`, p.Data)./
 	hub.All().Broadcast(p)
 }
-func spawn(c *nexus.Client, p *nexus.Packet) {
-	log.Printf(`broadcasting spawn "%s"`, p.Data)
+func toolAction(c *nexus.Client, p *nexus.Packet) {
+	//log.Printf(`broadcasting toolAction "%s"`, p.Data)
+	// modify chunk where this tool was used...
+	// ...for all but projectile tools.. probably
+	type ToolAction struct {
+		User string `json:"user"`
+		UserId int `json:"userId"`
+		Position []float64 `json:"position"`
+		Quaternion []float64 `json:"quaternion"`
+		Tool string `json:"tool"`
+		Primary bool `json:"primary"`
+	}
+	var (
+		action ToolAction
+	)
+	if err := json.Unmarshal([]byte(p.Data), &action); err != nil {
+			 panic(err)
+	}
+	log.Printf(`broadcasting tool action: "%s"`, action.Tool)
 	hub.All().Broadcast(p)
 }
 

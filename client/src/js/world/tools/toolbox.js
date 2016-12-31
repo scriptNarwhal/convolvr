@@ -1,4 +1,5 @@
 /* toolbox */
+import {send} from '../../network/socket'
 import ComponentTool from './component-tool'
 import EntityTool from './entity-tool'
 import DeleteTool from './delete-tool'
@@ -67,10 +68,30 @@ export default class Toolbox {
 
     usePrimary (hand) {
       //console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
-      this.tools[this.currentTools[hand]].primaryAction();
+      let tool = this.tools[this.currentTools[hand]],
+          camera = this.world.camera
+      tool.primaryAction();
+      send("tool action", {
+        user: this.world.user.username,
+        userId: this.world.user.id,
+        position: [camera.position.x, camera.position.y, camera.position.z],
+        quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
+        tool: tool.name,
+        primary: true
+      })
     }
 
     useSecondary(hand) {
-      this.tools[this.currentTools[hand]].secondaryAction();
+      let tool = this.tools[this.currentTools[hand]],
+          camera = this.world.camera
+      tool.secondaryAction();
+      send("tool action", {
+        user: this.world.user.username,
+        userId: this.world.user.id,
+        position: [camera.position.x, camera.position.y, camera.position.z],
+        quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
+        tool: tool.name,
+        primary: false
+      })
     }
 }

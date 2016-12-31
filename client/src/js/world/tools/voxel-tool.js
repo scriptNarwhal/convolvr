@@ -18,6 +18,7 @@ export default class VoxelTool extends Tool {
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});
 
       mesh = new THREE.Mesh(geom, mat);
+      mesh.rotation.x = Math.PI / 2.0
       if (light) {
         mesh.add(light);
         light.position.set(0, 100, -100);
