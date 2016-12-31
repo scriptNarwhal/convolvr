@@ -1,10 +1,11 @@
+import Tool from './tool'
 import Entity from '../entity'
 import EntityToolIcon from '../hud/icons/entity-tool-icon'
 
-export default class EntityTool {
-    constructor (data, user) {
+export default class EntityTool extends Tool  {
+    constructor (data, world) {
       this.data = data
-      this.user = user
+      this.world = world
       this.mesh = null
       this.name = "Entity Tool"
       this.icon = new EntityToolIcon()
@@ -12,7 +13,7 @@ export default class EntityTool {
 
     initMesh (data = {}) {
       let mesh = null,
-          color = data.color || 0xffffff,
+          color = 0xffffff,
           light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
           geom = new THREE.BoxGeometry(200, 1000, 100),
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});
@@ -32,22 +33,5 @@ export default class EntityTool {
 
     secondaryAction () {
       // clone entity
-    }
-
-    equip (hand) {
-      if (this.mesh == null) {
-        let toolMesh = this.initMesh(this.data)
-        toolMesh.position.set(-3000+((hand)*6000), 0, 100000)
-        three.camera.add(toolMesh)
-        // add to respective hand (when implemented)
-      } else {
-        this.mesh.visible = true;
-      }
-    }
-
-    unequip (hand) {
-      if (this.mesh != null) {
-        this.mesh.visible = false;
-      }
     }
 }

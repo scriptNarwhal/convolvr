@@ -1,10 +1,11 @@
+import Tool from './tool'
 import Entity from '../entity'
 import ProjectileToolIcon from '../hud/icons/projectile-tool-icon'
 
-export default class ProjectileTool {
-    constructor (data, user) {
+export default class ProjectileTool extends Tool  {
+    constructor (data, world) {
       this.data = data
-      this.user = user
+      this.world = world
       this.mesh = null
       this.name = "Projectile Tool"
       this.icon = new ProjectileToolIcon()
@@ -32,20 +33,5 @@ export default class ProjectileTool {
 
     secondaryAction () {
       //
-    }
-
-    equip (hand) {
-      if (this.mesh == null) {
-        three.camera.add(this.initMesh(this.data))
-        // add to respective hand (when implemented)
-      } else {
-        this.mesh.visible = true;
-      }
-    }
-
-    unequip (hand) {
-      if (this.mesh != null) {
-        this.mesh.visible = false;
-      }
     }
 }

@@ -1,9 +1,10 @@
+import Tool from './tool'
 import VoxelToolIcon from '../hud/icons/voxel-tool-icon'
 /* terrain voxel tool */
-export default class VoxelTool {
-    constructor (data, user) {
+export default class VoxelTool extends Tool {
+    constructor (data, world) {
       this.data = data;
-      this.user = user;
+      this.world = world;
       this.mesh = null;
       this.name = "Voxel Tool"
       this.icon = new VoxelToolIcon();
@@ -31,20 +32,5 @@ export default class VoxelTool {
 
     secondaryAction () {
       // remove voxel
-    }
-
-    equip (hand) {
-      if (this.mesh == null) {
-        three.camera.add(this.initMesh(this.data))
-        // add to respective hand (when implemented)
-      } else {
-        this.mesh.visible = true;
-      }
-    }
-
-    unequip (hand) {
-      if (this.mesh != null) {
-        this.mesh.visible = false;
-      }
     }
 }

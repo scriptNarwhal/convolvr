@@ -10,12 +10,13 @@ export default class Toolbox {
     constructor (world) {
       this.world = world;
       this.fadeTimeout = 0;
+      console.log(world.user)
       this.tools = [
-        new ComponentTool({}, world.user),
-        new EntityTool({}, world.user),
-        new DeleteTool({}, world.user),
-        new VoxelTool({}, world.user),
-        new ProjectileTool({}, world.user)
+        new ComponentTool({}, world),
+        new EntityTool({}, world),
+        new DeleteTool({}, world),
+        new VoxelTool({}, world),
+        new ProjectileTool({}, world)
         //new CustomTool(),
       ];
       this.currentTools = [0, 0];
@@ -46,6 +47,7 @@ export default class Toolbox {
     }
 
     useTool (index, hand) {
+      this.tools[this.currentTools[hand]].unequip()
       this.currentTools[hand] = index
       this.tools[index].equip(hand)
       this.showMenu()
