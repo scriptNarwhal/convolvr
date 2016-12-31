@@ -1,4 +1,4 @@
-import Component from './component.js';
+import Component from '../components/component.js';
 
 export default class Entity {
   constructor (id, components, aspects = [], position, quaternion) {

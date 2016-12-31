@@ -1,5 +1,5 @@
 import Tool from './tool'
-import Component from '../component'
+import Component from '../components/component'
 import ComponentToolIcon from '../hud/icons/component-tool-icon'
 
 export default class ComponentTool extends Tool {

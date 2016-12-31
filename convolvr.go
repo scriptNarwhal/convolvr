@@ -231,7 +231,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 	first = 0.4 + (rand.Float64() * 0.7)
 	second = first / 4 + rand.Float64() * 0.1
 	third = second / 2 + rand.Float64() * 0.1
-	if rand.Intn(10) > 6 {
+	if rand.Intn(10) > 7 {
 		if rand.Intn(5) > 2 {
 			red = first
 			green = second
@@ -241,7 +241,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 			green = first
 			blue = second
 		}
-	} else if rand.Intn(10) > 4 {
+	} else if rand.Intn(10) > 5 {
 		if rand.Intn(5) > 2 {
 			red = second / 2.0
 			green = third
@@ -252,7 +252,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 			blue = first
 		}
 	} else {
-		if rand.Intn(5) > 2 {
+		if rand.Intn(5) > 3 {
 			red = first
 			green = first / 1.5
 			blue = third / 2.0

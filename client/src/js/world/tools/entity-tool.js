@@ -1,5 +1,5 @@
 import Tool from './tool'
-import Entity from '../entity'
+import Entity from '../entities/entity'
 import EntityToolIcon from '../hud/icons/entity-tool-icon'
 
 export default class EntityTool extends Tool  {
