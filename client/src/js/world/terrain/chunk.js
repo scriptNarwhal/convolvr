@@ -20,7 +20,7 @@ export default class Chunk {
             base = new THREE.Geometry(),
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
             // geom = new THREE.CylinderGeometry( 128000, 128000, 7000, 6, 1),
-            geom = new THREE.CylinderGeometry( 132000, 132000, 50000, 6, 1),
+            geom = new THREE.CylinderGeometry( 133000, 133000, 133000, 6, 1),
             voxelGeom = null,
             mat = new THREE.MeshPhongMaterial( {color: data.color, shininess: 20} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null;
@@ -33,7 +33,7 @@ export default class Chunk {
         }
 
         if (!!data && !!data.voxels) { // terrain voxels
-            voxelGeom = new THREE.CylinderGeometry( 132000 / 16, 132000 / 16, 132000 / 8.5, 6, 1);
+            voxelGeom = new THREE.CylinderGeometry( 133000 / 16, 133000 / 16, 133000 / 8.5, 6, 1);
             items = data.voxels;
             cellMesh = new THREE.Mesh(geom, mat);
             cellMesh.updateMatrix();
@@ -43,8 +43,8 @@ export default class Chunk {
             while (x >= 0 ) {
                 voxel = items[x];
                 cellMesh = new THREE.Mesh(voxelGeom, mat);
-               cellMesh.position.set(-132000+(voxel.cell[0] * gridSize) + (voxel.cell[2] % 2==0 ? 0 : gridSize / 2),
-                                      voxel.cell[1] * gridSize,    -132000+voxel.cell[2] * gridSize);
+               cellMesh.position.set((voxel.cell[0] * gridSize) + (voxel.cell[2] % 2==0 ? 0 : gridSize / 2),
+                                      voxel.cell[1] * gridSize,    voxel.cell[2] * gridSize);
                cellMesh.updateMatrix();
                base.merge(cellMesh.geometry, cellMesh.matrix);
                x --;
@@ -76,12 +76,12 @@ export default class Chunk {
         altitude = data.altitude || 0
         if (!! cell) {
             mesh.position.set((cell[0]*232000) + (cell[2] % 2 == 0 ? 0 : 232000 / 2),
-                               altitude * 50000+cell[1]*232000 - 25000,
+                               altitude * 50000 + (cell[1]*232000) - 132000,
                                cell[2]*232000 * 0.87);
             data.cell = cell;
             data.position = [
                 mesh.position.x,
-                altitude * 50000 + mesh.position.y + 25000,
+                mesh.position.y,
                 mesh.position.z
             ]
         } else {
@@ -89,7 +89,7 @@ export default class Chunk {
         }
 
         if (data.size == null) {
-            data.size = { x: 132000, y: 132000, z: 48000 };
+            data.size = { x: 132000, y: 132000, z: 132000 };
         }
         this.data = data;
         this.mesh = mesh;

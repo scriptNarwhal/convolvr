@@ -2,17 +2,17 @@ package convolvr
 
 import (
 	"fmt"
+	"encoding/json"
 	"net/http"
 	"html/template"
 	"strings"
-  	"strconv"
-		"math"
-  	"math/rand"
+  "strconv"
+	"math"
+  "math/rand"
 	log "github.com/Sirupsen/logrus"
-
 	"github.com/ant0ine/go-json-rest/rest"
 	"github.com/asdine/storm"
-  	"github.com/asdine/storm/q"
+  "github.com/asdine/storm/q"
 	"github.com/ds0nt/nexus"
 	"github.com/spf13/viper"
 	"golang.org/x/net/websocket"
@@ -115,7 +115,7 @@ func Start(configName string) {
 
 	hub.Handle("chat message", chatMessage)
 	hub.Handle("update", update)
-	hub.Handle("spawn", spawn)
+	hub.Handle("tool action", toolAction)
 
 	http.Handle("/", http.FileServer(http.Dir("../web")))
 
@@ -136,8 +136,31 @@ func update(c *nexus.Client, p *nexus.Packet) {
 	// log.Printf(`broadcasting update "%s"`, p.Data)./
 	hub.All().Broadcast(p)
 }
-func spawn(c *nexus.Client, p *nexus.Packet) {
-	log.Printf(`broadcasting spawn "%s"`, p.Data)
+func toolAction(c *nexus.Client, p *nexus.Packet) {
+	//log.Printf(`broadcasting toolAction "%s"`, p.Data)
+	// modify chunk where this tool was used...
+	// ...for all but projectile tools.. probably
+
+	type ToolAction struct {
+		World string `json:"world"`
+		User string `json:"user"`
+		UserId int `json:"userId"`
+		Position []float64 `json:"position"`
+		Quaternion []float64 `json:"quaternion"`
+		Tool string `json:"tool"`
+		Primary bool `json:"primary"`
+	}
+	var (
+		action ToolAction
+	)
+	if err := json.Unmarshal([]byte(p.Data), &action); err != nil {
+			 panic(err)
+	}
+	log.Printf(`broadcasting tool action: "%s"`, action.Tool)
+	log.Printf(`world: "%s"`, action.World)
+	log.Printf(`x: "%s"`, int(math.Floor(action.Position[0] / 232000)))
+	log.Printf(`z: "%s"`, int(math.Floor(action.Position[2] / 201840)))
+
 	hub.All().Broadcast(p)
 }
 
@@ -208,7 +231,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 	first = 0.4 + (rand.Float64() * 0.7)
 	second = first / 4 + rand.Float64() * 0.1
 	third = second / 2 + rand.Float64() * 0.1
-	if rand.Intn(10) > 6 {
+	if rand.Intn(10) > 7 {
 		if rand.Intn(5) > 2 {
 			red = first
 			green = second
@@ -218,7 +241,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 			green = first
 			blue = second
 		}
-	} else if rand.Intn(10) > 4 {
+	} else if rand.Intn(10) > 5 {
 		if rand.Intn(5) > 2 {
 			red = second / 2.0
 			green = third
@@ -229,7 +252,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 			blue = first
 		}
 	} else {
-		if rand.Intn(5) > 2 {
+		if rand.Intn(5) > 3 {
 			red = first
 			green = first / 1.5
 			blue = third / 2.0
@@ -240,7 +263,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 		}
 	}
 	lightColor = int(math.Floor(red * 255)) << 16 | int(math.Floor(green * 255)) << 8 | int(math.Floor(blue * 255));
-	ambientColor = int(math.Floor(red * 4)) << 16 | int(math.Floor(green * 4)) << 8 | int(math.Floor(blue * 4));
+	ambientColor = int(4+math.Floor(red * 4)) << 16 | int(4+math.Floor(green * 4)) << 8 | int(4+math.Floor(blue * 4));
 	sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil }
 	light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}
 	terrain := Terrain{TerrainType: "both", Height: 20000, Color: rand.Intn(0xffffff), Flatness: float64(1.0+rand.Float64()*16.0), Decorations: ""}
@@ -301,16 +324,20 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	      if rand.Intn(10) < 8 {
 	        chunkGeom = "space"
 	      } else {
-			  if rand.Intn(24) > 20{
+			  if rand.Intn(24) > 19{
 				  light := 0
-				  if rand.Intn(6) > 4 {
-					  if rand.Intn(4) > 2 {
-							light = 0x00ff00
+				  if rand.Intn(6) > 3 {
+					  if rand.Intn(5) > 4 {
+							light = 0xffffff
 						} else {
 							if rand.Intn(4) > 2 {
-								light = 0x0030ff
-							} else {
 								light = 0x3000ff
+							} else {
+								if rand.Intn(4) > 2 {
+									light = 0xffff00
+								} else {
+									light = 0x00ff00
+								}
 							}
 						}
 				  }
@@ -318,7 +345,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	    		  structures = append(structures, structure)
 			  }
 		  }
-		  bright := 63 + rand.Intn(192)
+		  bright := 100 + rand.Intn(155)
 		  color := (bright << 16) | (bright << 8) | bright
 			altitude := float32((math.Sin(float64(x)/2)*2.5+math.Cos(float64(z)/2)*2.5) / worldData.Terrain.Flatness)
 		  generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", color, structures, nil, nil)

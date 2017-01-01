@@ -52,7 +52,7 @@ class SideMenu extends Component {
             />
             <Tab image="/data/configure.png"
                  title="Settings"
-                 clickHandler={ ()=> { browserHistory.push("/settings") } }
+                 clickHandler={ ()=> { /*browserHistory.push("/settings")*/ alert("Not Implemented") } }
             />
         </div>
     )

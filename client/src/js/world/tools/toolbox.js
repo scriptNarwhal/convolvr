@@ -1,4 +1,5 @@
 /* toolbox */
+import {send} from '../../network/socket'
 import ComponentTool from './component-tool'
 import EntityTool from './entity-tool'
 import DeleteTool from './delete-tool'
@@ -10,12 +11,13 @@ export default class Toolbox {
     constructor (world) {
       this.world = world;
       this.fadeTimeout = 0;
+      console.log(world.user)
       this.tools = [
-        new ComponentTool({}, world.user),
-        new EntityTool({}, world.user),
-        new DeleteTool({}, world.user),
-        new VoxelTool({}, world.user),
-        new ProjectileTool({}, world.user)
+        new EntityTool({}, world),
+        new ComponentTool({}, world),
+        new DeleteTool({}, world),
+        new VoxelTool({}, world),
+        new ProjectileTool({}, world)
         //new CustomTool(),
       ];
       this.currentTools = [0, 0];
@@ -46,9 +48,10 @@ export default class Toolbox {
     }
 
     useTool (index, hand) {
-      this.showMenu();
-      this.currentTools[hand] = index;
-      this.tools[index].equip(hand);
+      this.tools[this.currentTools[hand]].unequip()
+      this.currentTools[hand] = index
+      this.tools[index].equip(hand)
+      this.showMenu()
     }
 
     getTools () {
@@ -64,11 +67,38 @@ export default class Toolbox {
     }
 
     usePrimary (hand) {
-      console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
-      this.tools[this.currentTools[hand]].primaryAction();
+      //console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
+      let tool = this.tools[this.currentTools[hand]],
+          camera = this.world.camera
+      if (tool.mesh == null) {
+        tool.equip(hand)
+      }
+      tool.primaryAction()
+      this.sendToolAction(true, tool, camera)
     }
 
     useSecondary(hand) {
-      this.tools[this.currentTools[hand]].secondaryAction();
+      let tool = this.tools[this.currentTools[hand]],
+          camera = this.world.camera
+      if (tool.mesh == null) {
+          tool.equip(hand)
+      }
+      if (tool.secondaryAction() === false) {
+        return
+      }
+      this.sendToolAction(false, tool, camera)
+    }
+
+    sendToolAction (primary, tool, camera) {
+      send("tool action", {
+        tool: tool.name,
+        world: this.world.name,
+        user: this.world.user.username,
+        userId: this.world.user.id,
+        position: [camera.position.x, camera.position.y, camera.position.z],
+        quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
+        options: tool.options,
+        primary
+      })
     }
 }

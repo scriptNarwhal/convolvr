@@ -1144,6 +1144,10 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
+notifyjs@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/notifyjs/-/notifyjs-2.0.3.tgz#6a4fe28efc2bfad737c491477c2486a6de1b9721"
+
 number-is-nan@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/number-is-nan/-/number-is-nan-1.0.1.tgz#097b602b53422a522c1afb8790318336941a011d"

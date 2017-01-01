@@ -1,6 +1,8 @@
 export default class GamePad {
 	constructor (input) {
-    let gamepads = input.gamepads;
+    let gamepads = input.gamepads
+		this.cooldownTimeout = null
+		this.cooldown = 0
     function gamepadHandler (e, connecting) {
       let gamepad = e.gamepad;
 		      input.gamepadMode = true;
@@ -31,30 +33,35 @@ export default class GamePad {
 				tools = world.user.toolbox;
 
     if (!gamepads) {
-      return;
+      return
     }
     while (g < gamepads.length) {
-      gamepad = gamepads[g];
+      gamepad = gamepads[g]
       if (gamepad) {
 				a = gamepad.axes.length;
 				buttons = gamepad.buttons,
-				b = buttons.length;
+				b = buttons.length
 
 				if (b > 8) {
 					// face buttons: 0 1 2 3
 					if (this.buttonPressed(buttons[4])) { // top triggers: 4 5
-						tools.nextTool(-1, 0); // previous tool, right hand
+						tools.nextTool(-1, 0) // previous tool, right hand
 					}
 					if (this.buttonPressed(buttons[5])) {
-						tools.nextTool(1, 0); // next tool, right hand
+						tools.nextTool(1, 0) // next tool, right hand
 					}
 					if (this.buttonPressed(buttons[6])) { // bottom triggers: 6 7
-						tools.usePrimary(0); // right hand
+						if (this.cooldown == false) {
+							tools.usePrimary(0) // right hand
+							this.triggerCooldown()
+						}
 					}
 					if (this.buttonPressed(buttons[7])) {
-						tools.useSecondary(0); // right hand
+						if (this.cooldown == false) {
+							tools.useSecondary(0) // right hand
+							this.triggerCooldown()
+						}
 					}
-
 				}
 				if (b >= 16) {
 					// select / start: 8 9
@@ -62,19 +69,27 @@ export default class GamePad {
 					// dpad buttons: 12 13 14 15
 				}
 				if (a >= 4) { // standard dual analogue controller
-					  input.moveVector.x = gamepad.axes[0] * 16000;
-						input.moveVector.z = gamepad.axes[1] * 16000;
+					  input.moveVector.x = gamepad.axes[0] * 30000
+						input.moveVector.z = gamepad.axes[1] * 30000
 						if (Math.abs(gamepad.axes[2]) > 0.10) { // 10 percent deadzone
-							rotation.y += -gamepad.axes[2] / 20.0;
+							rotation.y += -gamepad.axes[2] / 20.0
 						}
 						if (Math.abs(gamepad.axes[3]) > 0.10) {
-            	rotation.x += -gamepad.axes[3] / 20.0;
+            	rotation.x += -gamepad.axes[3] / 20.0
 						}
 				}
       }
       g ++;
     }
   }
+
+	triggerCooldown () {
+		this.cooldown = true
+		clearTimeout(this.cooldownTimeout)
+		this.cooldownTimeout = setTimeout(()=>{
+			this.cooldown = false
+		}, 125)
+	}
 
   buttonPressed (b) {
     if (typeof(b) == "object") {

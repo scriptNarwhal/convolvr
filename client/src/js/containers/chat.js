@@ -7,7 +7,9 @@ const styles = {
         width: '100%'
     },
     input: {
-        minHeight: '2em'
+        minHeight: '2em',
+        border: 0,
+        borderBottom: "0.2em solid white"
     },
     text: {
         width: '70%',
@@ -37,7 +39,7 @@ const styles = {
       textAlign: "left",
       position: "fixed",
       left: "2vw",
-      bottom: "7vh"
+      bottom: "3em"
     },
     inputs: {
       minHeight: "2em",

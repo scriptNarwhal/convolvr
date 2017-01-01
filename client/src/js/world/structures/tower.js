@@ -30,7 +30,7 @@ class Tower {
 		// LODGeometry.computeVertexNormals();
     this.mesh = new THREE.Mesh(LODGeometry, towerMaterial);
     this.platform.mesh.add(this.mesh);
-    this.mesh.position.set(data.position[0]*50000, 500+(floors+1) * 25000, length/2.0+data.position[2]*50000);
+    this.mesh.position.set(data.position[0]*50000, 43000+(floors+1) * 25000, length/2.0+data.position[2]*50000);
 	}
 
     initFloor (y, width, length) {
@@ -131,7 +131,7 @@ class Tower {
 				finalGeom.computeFaceNormals();
 
 				building = new THREE.Mesh(finalGeom, towerMaterial);
-    		building.position.set(this.data.position[0]*50000, 500+(floors+1) * 25000, this.data.position[2]*50000);
+    		building.position.set(this.data.position[0]*50000, 43000+(floors+1) * 25000, this.data.position[2]*50000);
     		building.updateMatrix();
     		building.matrixAutoUpdate = false;
 				this.platform.mesh.remove(this.mesh);

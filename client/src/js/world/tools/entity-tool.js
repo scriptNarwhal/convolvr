@@ -1,23 +1,30 @@
-import Entity from '../entity'
+import Tool from './tool'
+import Entity from '../entities/entity'
 import EntityToolIcon from '../hud/icons/entity-tool-icon'
 
-export default class EntityTool {
-    constructor (data, user) {
-      this.data = data;
-      this.user = user;
-      this.mesh = null;
-      this.name = data ? data.name : "Entity Tool";
-      this.icon = new EntityToolIcon();
+export default class EntityTool extends Tool  {
+    constructor (data, world) {
+      this.data = data
+      this.world = world
+      this.mesh = null
+      this.name = "Entity Tool"
+      this.icon = new EntityToolIcon()
+      this.options = {
+        entityType: "panel",
+        all: ["panel", "block", "column"],
+        current: 0
+      }
     }
 
     initMesh (data = {}) {
       let mesh = null,
-          color = data.color || 0xffffff,
+          color = 0xffffff,
           light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
           geom = new THREE.BoxGeometry(200, 1000, 100),
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});
 
       mesh = new THREE.Mesh(geom, mat);
+      mesh.rotation.x = Math.PI / 2.0
       if (light) {
         mesh.add(light);
         light.position.set(0, 100, -100);
@@ -31,21 +38,12 @@ export default class EntityTool {
     }
 
     secondaryAction () {
-      // clone entity
-    }
-
-    equip (hand) {
-      if (this.mesh == null) {
-        three.camera.add(this.initMesh(this.data))
-        // add to respective hand (when implemented)
-      } else {
-        this.mesh.visible = true;
+      // cycle entities
+      this.options.current ++
+      if (this.options.current >= this.options.all.length) {
+        this.options.current = 0
       }
-    }
-
-    unequip (hand) {
-      if (this.mesh != null) {
-        this.mesh.visible = false;
-      }
+      this.options.entityType = this.options.all[this.options.current]
+      return false // no socket event
     }
 }

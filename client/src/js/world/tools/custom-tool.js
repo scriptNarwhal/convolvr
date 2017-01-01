@@ -1,12 +1,16 @@
+import Tool from './tool'
 import CustomToolIcon from '../hud/icons/custom-tool-icon'
 
-export default class CustomTool {
-    constructor (data, user) {
+export default class CustomTool extends Tool {
+    constructor (data, world) {
       this.data = data;
-      this.user = user;
+      this.world = world;
       this.mesh = null;
       this.name = data ? data.name : "New Custom Tool";
       this.icon = new CustomToolIcon();
+      this.options = {
+
+      }
     }
 
     initMesh (data = {}) {
@@ -33,18 +37,4 @@ export default class CustomTool {
 
     }
 
-    equip (hand) {
-      if (this.mesh == null) {
-        three.camera.add(this.initMesh(this.data))
-        // add to respective hand (when implemented)
-      } else {
-        this.mesh.visible = true;
-      }
-    }
-
-    unequip (hand) {
-      if (this.mesh != null) {
-        this.mesh.visible = false;
-      }
-    }
 }

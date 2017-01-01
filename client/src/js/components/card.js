@@ -5,15 +5,20 @@ let styles = {
   worldCard: (image) => {
     return {
       cursor: "pointer",
-      width: "6em",
+      width: "8em",
       height: "3em",
       display: "inline-block",
-      paddingLeft: "36px",
-      paddingTop: "0.5em",
-      marginLeft: "1em",
+      paddingLeft: "26px",
+      paddingTop: "0.75em",
+      marginRight: "0.25em",
       backgroundSize: "48px",
       backgroundRepeat: "no-repeat",
-      backgroundImage: `url(${image})`
+      backgroundImage: `url(${image})`,
+      backgroundColor: "#252525",
+      backgroundPositionY: "0.25em",
+      backgroundPositionX: "0.25em",
+      borderBottom: "#141414 solid 0.25em",
+      textAlign: "center"
     }
   }
 }

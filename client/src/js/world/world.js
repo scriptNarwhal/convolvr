@@ -2,9 +2,12 @@ import axios from 'axios'
 import Avatar from './avatar'
 import Terrain from './terrain/terrain'
 import WorldPhysics  from '../workers/world-physics'
+import EntityGenerator from './entities/entity-generator'
 import { render, toggleStereo } from './render'
 import { API_SERVER } from '../config.js'
 import Seed from '../seed'
+
+let world = null
 
 export default class World {
 	constructor(userInput = false, socket, store) {
@@ -40,18 +43,17 @@ export default class World {
 		this.sendUpdatePacket = 0
 		this.capturing = false
 		this.webcamImage = ""
-		this.HMDMode = "non standard" // "head-movement"
+		this.HMDMode = "standard" // "head-movement"
 
 		renderer.setPixelRatio(pixelRatio)
 		renderer.setSize(window.innerWidth, window.innerHeight)
 		document.body.appendChild( renderer.domElement )
 		renderer.domElement.setAttribute("id", "viewport")
-		renderer.setClearColor(0x3b3b3b);
-		camera.position.set(85000, 15000.124890438994, 155000);
-
-		userInput.init(this, camera, this.user);
-		this.worldPhysics = new WorldPhysics();
-		this.worldPhysics.init(self);
+		renderer.setClearColor(0x3b3b3b)
+		userInput.init(this, camera, this.user)
+		this.worldPhysics = new WorldPhysics()
+		this.worldPhysics.init(self)
+		this.generator = new EntityGenerator()
 		this.seed = new Seed();
 		this.terrain = new Terrain(this);
 		this.workers = {
@@ -63,7 +65,7 @@ export default class World {
 			camera: camera,
 			renderer: renderer
 		};
-
+		world = this
 		window.three = this.three;
 		window.onresize = function () {
 			if (three.world.mode != "stereo") {
@@ -101,6 +103,47 @@ export default class World {
 						mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w)
 					}
 				}
+			}
+		})
+		socket.on("tool action", packet => {
+			let data = JSON.parse(packet.data),
+					user = world.user,
+					pos = data.position,
+					coords = [Math.floor(pos[0] / 232000), 0, Math.floor(pos[2] / 201840)],
+					chunk = world.terrain.pMap[coords[0]+".0."+coords[2]],
+					chunkPos = chunk.mesh.position,
+					quat = data.quaternion
+
+			switch (data.tool) {
+				case "Entity Tool":
+					let entityType = data.options.entityType,
+							entity = world.generator.makeEntity(entityType)
+					entity.quaternion = {
+						x: quat[0],
+						y: quat[1],
+						z: quat[2],
+						w: quat[3]
+					}
+					entity.position = {
+						x: pos[0] - chunkPos.x,
+						y: pos[1] - chunkPos.y,
+						z: pos[2] - chunkPos.z
+					}
+					entity.init(chunk.mesh)
+					entity.mesh.translateZ(-5000)
+				break;
+				case "Component Tool":
+
+				break;
+				case "Voxel Tool":
+
+				break;
+				case "Projectile Tool":
+
+				break;
+				case "Delete Tool":
+
+				break;
 			}
 		})
 		render(this, 0)

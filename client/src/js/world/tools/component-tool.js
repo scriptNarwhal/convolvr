@@ -1,13 +1,17 @@
-import Component from '../component'
+import Tool from './tool'
+import Component from '../components/component'
 import ComponentToolIcon from '../hud/icons/component-tool-icon'
 
-export default class ComponentTool {
-    constructor (data, user) {
+export default class ComponentTool extends Tool {
+    constructor (data, world) {
         this.data = data;
-        this.user = user;
+        this.world = world;
         this.mesh = null;
         this.name = "Component Tool";
         this.icon = new ComponentToolIcon();
+        this.options = {
+
+        }
     }
 
     initMesh (data = {}) {
@@ -18,6 +22,7 @@ export default class ComponentTool {
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});
 
       mesh = new THREE.Mesh(geom, mat);
+      mesh.rotation.x = Math.PI / 2.0
       if (light) {
         mesh.add(light);
         light.position.set(0, 100, -100);
@@ -36,7 +41,9 @@ export default class ComponentTool {
 
     equip (hand) {
       if (this.mesh == null) {
-        three.camera.add(this.initMesh(this.data))
+        let toolMesh = this.initMesh(this.data)
+        this.world.user.mesh.add(toolMesh)
+        toolMesh.position.set(1500-(2500*hand), -250, -1350)
         // add to respective hand (when implemented)
       } else {
         this.mesh.visible = true;

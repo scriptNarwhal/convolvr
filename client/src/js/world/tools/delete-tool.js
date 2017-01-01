@@ -1,12 +1,16 @@
+import Tool from './tool'
 import DeleteToolIcon from '../hud/icons/delete-tool-icon'
 /* delete (voxel | component | entity) tool */
-export default class DeleteTool {
-    constructor (data, user) {
+export default class DeleteTool extends Tool  {
+    constructor (data, world) {
       this.data = data;
-      this.user = user;
+      this.world = world;
       this.mesh = null;
       this.name = "Delete Tool";
       this.icon = new DeleteToolIcon();
+      this.options = {
+
+      }
     }
 
     initMesh (data = {}) {
@@ -31,20 +35,5 @@ export default class DeleteTool {
 
     secondaryAction () {
       //
-    }
-
-    equip (hand) {
-      if (this.mesh == null) {
-        three.camera.add(this.initMesh(this.data))
-        // add to respective hand (when implemented)
-      } else {
-        this.mesh.visible = true;
-      }
-    }
-
-    unequip (hand) {
-      if (this.mesh != null) {
-        this.mesh.visible = false;
-      }
     }
 }

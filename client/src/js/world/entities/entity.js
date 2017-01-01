@@ -1,4 +1,4 @@
-import Component from './component.js';
+import Component from '../components/component.js';
 
 export default class Entity {
   constructor (id, components, aspects = [], position, quaternion) {
@@ -22,10 +22,10 @@ export default class Entity {
         c ++;
     }
     if (!! this.quaternion) {
-        mesh.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+        mesh.quaternion.set(this.quaternion.x, this.quaternion.y, this.quaternion.z, this.quaternion.w);
     }
     if (!! this.position) {
-        mesh.position.set(position.x, position.y, position.z);
+        mesh.position.set(this.position.x, this.position.y, this.position.z);
     }
     scene.add(mesh);
     this.mesh = mesh;
