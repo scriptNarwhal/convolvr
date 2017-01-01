@@ -77,7 +77,9 @@ export default class Toolbox {
     useSecondary(hand) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera
-      tool.secondaryAction()
+      if (tool.secondaryAction() === false) {
+        return
+      }
       this.sendToolAction(false, tool, camera)
     }
 

@@ -44,5 +44,6 @@ export default class EntityTool extends Tool  {
         this.options.current = 0
       }
       this.options.entityType = this.options.all[this.options.current]
+      return false // no socket event
     }
 }

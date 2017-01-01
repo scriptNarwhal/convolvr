@@ -1,6 +1,8 @@
 export default class GamePad {
 	constructor (input) {
-    let gamepads = input.gamepads;
+    let gamepads = input.gamepads
+		this.cooldownTimeout = null
+		this.cooldown = 0
     function gamepadHandler (e, connecting) {
       let gamepad = e.gamepad;
 		      input.gamepadMode = true;
@@ -49,12 +51,18 @@ export default class GamePad {
 						tools.nextTool(1, 0); // next tool, right hand
 					}
 					if (this.buttonPressed(buttons[6])) { // bottom triggers: 6 7
-						tools.usePrimary(0); // right hand
+							tools.useSecondary(0); // right hand
 					}
 					if (this.buttonPressed(buttons[7])) {
-						tools.useSecondary(0); // right hand
+						if (this.cooldown == false) {
+							tools.usePrimary(0); // right hand
+							this.cooldown = true
+							clearTimeout(this.cooldownTimeout)
+							this.cooldownTimeout = setTimeout(()=>{
+								this.cooldown = false
+							}, 125)
+						}
 					}
-
 				}
 				if (b >= 16) {
 					// select / start: 8 9
