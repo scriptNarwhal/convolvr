@@ -8,6 +8,9 @@ export default class DeleteTool extends Tool  {
       this.mesh = null;
       this.name = "Delete Tool";
       this.icon = new DeleteToolIcon();
+      this.options = {
+
+      }
     }
 
     initMesh (data = {}) {

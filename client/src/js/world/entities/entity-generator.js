@@ -1,3 +1,5 @@
+import Entity from './entity'
+
 export default class EntityGenerator {
   constructor () {
     this.entities = []
@@ -59,7 +61,7 @@ export default class EntityGenerator {
         aspects = entity.aspects,
         position = entity.position,
         quaternion = entity.quaternion
-    return new Entity((id, components, aspects = [], position, quaternion))
+    return new Entity(-1, components, aspects, position, quaternion)
   }
 
 }

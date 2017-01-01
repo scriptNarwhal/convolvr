@@ -8,6 +8,9 @@ export default class VoxelTool extends Tool {
       this.mesh = null;
       this.name = "Voxel Tool"
       this.icon = new VoxelToolIcon();
+      this.options = {
+
+      }
     }
 
     initMesh (data = {}) {

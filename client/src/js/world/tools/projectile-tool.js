@@ -9,6 +9,9 @@ export default class ProjectileTool extends Tool  {
       this.mesh = null
       this.name = "Projectile Tool"
       this.icon = new ProjectileToolIcon()
+      this.options = {
+
+      }
     }
 
     initMesh (data = {}) {

@@ -13,8 +13,8 @@ export default class Toolbox {
       this.fadeTimeout = 0;
       console.log(world.user)
       this.tools = [
-        new ComponentTool({}, world),
         new EntityTool({}, world),
+        new ComponentTool({}, world),
         new DeleteTool({}, world),
         new VoxelTool({}, world),
         new ProjectileTool({}, world)
@@ -83,12 +83,13 @@ export default class Toolbox {
 
     sendToolAction (primary, tool, camera) {
       send("tool action", {
+        tool: tool.name,
         world: this.world.name,
         user: this.world.user.username,
         userId: this.world.user.id,
         position: [camera.position.x, camera.position.y, camera.position.z],
         quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
-        tool: tool.name,
+        options: tool.options,
         primary
       })
     }

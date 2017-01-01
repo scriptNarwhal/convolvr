@@ -7,6 +7,8 @@ import { render, toggleStereo } from './render'
 import { API_SERVER } from '../config.js'
 import Seed from '../seed'
 
+let world = null
+
 export default class World {
 	constructor(userInput = false, socket, store) {
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1,
@@ -63,7 +65,7 @@ export default class World {
 			camera: camera,
 			renderer: renderer
 		};
-
+		world = this
 		window.three = this.three;
 		window.onresize = function () {
 			if (three.world.mode != "stereo") {
@@ -104,12 +106,22 @@ export default class World {
 			}
 		})
 		socket.on("tool action", packet => {
-			let data = JSON.parse(packet.data)
+			let data = JSON.parse(packet.data),
+					user = world.user,
+					pos = world.user.mesh.position
 			console.log("on tool action.. ",data.tool)
 			switch (data.tool) {
 				case "Entity Tool":
-					// use this.generator...
-					
+				console.log(data.options.entityType)
+					let entityType = data.options.entityType,
+							entity = world.generator.makeEntity(entityType)
+					entity.position = {
+						x: pos.x,
+						y: pos.y,
+						z: pos.z - 2000
+					}
+					entity.init(three.scene)
+
 				break;
 				case "Component Tool":
 

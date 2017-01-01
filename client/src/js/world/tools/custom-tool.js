@@ -8,6 +8,9 @@ export default class CustomTool extends Tool {
       this.mesh = null;
       this.name = data ? data.name : "New Custom Tool";
       this.icon = new CustomToolIcon();
+      this.options = {
+
+      }
     }
 
     initMesh (data = {}) {

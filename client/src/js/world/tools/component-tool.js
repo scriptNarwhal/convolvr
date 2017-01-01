@@ -9,6 +9,9 @@ export default class ComponentTool extends Tool {
         this.mesh = null;
         this.name = "Component Tool";
         this.icon = new ComponentToolIcon();
+        this.options = {
+
+        }
     }
 
     initMesh (data = {}) {

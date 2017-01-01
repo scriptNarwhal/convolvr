@@ -9,6 +9,9 @@ export default class EntityTool extends Tool  {
       this.mesh = null
       this.name = "Entity Tool"
       this.icon = new EntityToolIcon()
+      this.options = {
+        entityType: "panel"
+      }
     }
 
     initMesh (data = {}) {
