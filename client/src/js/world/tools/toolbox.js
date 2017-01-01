@@ -70,6 +70,9 @@ export default class Toolbox {
       //console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera
+      if (tool.mesh == null) {
+        tool.equip(hand)
+      }
       tool.primaryAction()
       this.sendToolAction(true, tool, camera)
     }
@@ -77,6 +80,9 @@ export default class Toolbox {
     useSecondary(hand) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera
+      if (tool.mesh == null) {
+          tool.equip(hand)
+      }
       if (tool.secondaryAction() === false) {
         return
       }
