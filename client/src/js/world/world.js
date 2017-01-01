@@ -130,7 +130,7 @@ export default class World {
 						z: pos[2] - chunkPos.z
 					}
 					entity.init(chunk.mesh)
-					entity.mesh.translateZ(5000)
+					entity.mesh.translateZ(-5000)
 				break;
 				case "Component Tool":
 
