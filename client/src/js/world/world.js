@@ -109,6 +109,9 @@ export default class World {
 			let data = JSON.parse(packet.data),
 					user = world.user,
 					pos = data.position,
+					coords = [Math.floor(pos[0] / 232000), 0, Math.floor(pos[2] / 201840)],
+					chunk = world.terrain.pMap[coords[0]+".0."+coords[2]],
+					chunkPos = chunk.mesh.position,
 					quat = data.quaternion
 
 			switch (data.tool) {
@@ -122,12 +125,12 @@ export default class World {
 						w: quat[3]
 					}
 					entity.position = {
-						x: pos[0],
-						y: pos[1],
-						z: pos[2]
+						x: pos[0] - chunkPos.x,
+						y: pos[1] - chunkPos.y,
+						z: pos[2] - chunkPos.z
 					}
-					entity.init(three.scene)
-					entity.mesh.translateZ(3600)
+					entity.init(chunk.mesh)
+					entity.mesh.translateZ(5000)
 				break;
 				case "Component Tool":
 
