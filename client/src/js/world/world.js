@@ -108,20 +108,26 @@ export default class World {
 		socket.on("tool action", packet => {
 			let data = JSON.parse(packet.data),
 					user = world.user,
-					pos = world.user.mesh.position
-			console.log("on tool action.. ",data.tool)
+					pos = data.position,
+					quat = data.quaternion
+
 			switch (data.tool) {
 				case "Entity Tool":
-				console.log(data.options.entityType)
 					let entityType = data.options.entityType,
 							entity = world.generator.makeEntity(entityType)
+					entity.quaternion = {
+						x: quat[0],
+						y: quat[1],
+						z: quat[2],
+						w: quat[3]
+					}
 					entity.position = {
-						x: pos.x,
-						y: pos.y,
-						z: pos.z - 2000
+						x: pos[0],
+						y: pos[1],
+						z: pos[2]
 					}
 					entity.init(three.scene)
-
+					entity.mesh.translateZ(3600)
 				break;
 				case "Component Tool":
 

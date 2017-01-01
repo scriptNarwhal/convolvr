@@ -10,7 +10,9 @@ export default class EntityTool extends Tool  {
       this.name = "Entity Tool"
       this.icon = new EntityToolIcon()
       this.options = {
-        entityType: "panel"
+        entityType: "panel",
+        all: ["panel", "block", "column"],
+        current: 0
       }
     }
 
@@ -36,6 +38,11 @@ export default class EntityTool extends Tool  {
     }
 
     secondaryAction () {
-      // clone entity
+      // cycle entities
+      this.options.current ++
+      if (this.options.current >= this.options.all.length) {
+        this.options.current = 0
+      }
+      this.options.entityType = this.options.all[this.options.current]
     }
 }
