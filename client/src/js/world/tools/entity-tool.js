@@ -10,6 +10,7 @@ export default class EntityTool extends Tool  {
       this.name = "Entity Tool"
       this.icon = new EntityToolIcon()
       this.options = {
+        translateZ: -8000,
         entityType: "panel",
         all: ["panel", "block", "column", "wirebox"],
         current: 0

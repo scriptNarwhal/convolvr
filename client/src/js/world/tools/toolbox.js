@@ -91,14 +91,17 @@ export default class Toolbox {
 
     sendToolAction (primary, tool, camera) {
       let cPos = camera.position,
-          coords = [Math.floor(cPos.x/232000), Math.floor(cPos.y/232000), Math.floor(cPos.z/201840)]
+          coords = [Math.floor(cPos.x/232000), 0, Math.floor(cPos.z/201840)],
+          chunk = this.world.terrain.pMap[coords[0]+".0."+coords[2]],
+          chunkPos = chunk.mesh.position
+
       send("tool action", {
         tool: tool.name,
         world: this.world.name,
         user: this.world.user.username,
         userId: this.world.user.id,
         coords: coords,
-        position: [cPos.x, cPos.y, cPos.z],
+        position: [cPos.x -chunkPos.x, cPos.y -chunkPos.y, cPos.z -chunkPos.z],
         quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
         options: tool.options,
         primary

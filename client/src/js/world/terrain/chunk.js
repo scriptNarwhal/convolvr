@@ -16,7 +16,7 @@ export default class Chunk {
             narrow = gridSize * 0.87,
             mesh = null,
             bsp = null,
-			cellMesh = null,
+			      cellMesh = null,
             finalGeom = new THREE.Geometry(),
             base = new THREE.Geometry(),
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
@@ -24,10 +24,10 @@ export default class Chunk {
             geom = new THREE.CylinderGeometry( 133000, 133000, 133000, 6, 1),
             voxelGeom = null,
             mat = new THREE.MeshPhongMaterial( {color: data.color, shininess: 20} ),
-            modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null;
+            modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null
 
-        this.structures = [];
-        physics = window.three.world.worldPhysics.worker;
+        this.structures = []
+        physics = window.three.world.worldPhysics.worker
 
         if (data == null) {
             data = { }
@@ -36,33 +36,34 @@ export default class Chunk {
             voxelGeom = new THREE.CylinderGeometry( 133000 / 16, 133000 / 16, 133000 / 8.5, 6, 1);
             items = data.voxels;
             cellMesh = new THREE.Mesh(geom, mat);
-            cellMesh.updateMatrix();
+            cellMesh.updateMatrix()
             base.merge(cellMesh.geometry, cellMesh.matrix);
 
             x = items.length - 1;
             while (x >= 0 ) {
-                voxel = items[x];
+                voxel = items[x]
                 cellMesh = new THREE.Mesh(voxelGeom, mat);
                cellMesh.position.set((voxel.cell[0] * gridSize) + (voxel.cell[2] % 2==0 ? 0 : gridSize / 2),
-                                      voxel.cell[1] * gridSize,    voxel.cell[2] * gridSize);
+                                      voxel.cell[1] * gridSize,    voxel.cell[2] * gridSize)
                cellMesh.updateMatrix();
-               base.merge(cellMesh.geometry, cellMesh.matrix);
+               base.merge(cellMesh.geometry, cellMesh.matrix)
                x --;
             }
-            mesh = new THREE.Mesh(base, mat);
+            mesh = new THREE.Mesh(base, mat)
         } else {
             if (smooth) {
-                geom = modifier.modify( geom );
+                geom = modifier.modify( geom )
             }
-            mesh = new THREE.Mesh(geom, mat);
+            mesh = new THREE.Mesh(geom, mat)
         }
-        three.scene.add(mesh);
-        this.mesh = mesh;
+        three.scene.add(mesh)
+        this.mesh = mesh
         if (!!data.entities) {
           data.entities.map(e => {
             let pos = e.position,
                 quat = e.quaternion,
-                entity = new Entity(e.id, e.components, [], {x: pos[0], y: pos[1], z:pos[2]}, {x: quat[0], y: quat[1], z: quat[2], w: quat[3]})
+                entity = new Entity(e.id, e.components, [], {x: pos[0], y: pos[1], z:pos[2]},
+                                                            {x: quat[0], y: quat[1], z: quat[2], w: quat[3]})
             entity.init(mesh)
             // probably need to offset the position for the chunk..
           })
@@ -72,13 +73,13 @@ export default class Chunk {
             x = items.length;
             while (x > 0) {
                 x--;
-                structure = new Tower(items[x], this);
+                structure = new Tower(items[x], this)
                 // track = new Track(items[x], this);
                 	if (Math.random() < 0.2) {
                     structure.initLight();
                   }
                 // should switch here for other structure types
-                this.structures.push(structure);
+                this.structures.push(structure)
             }
         }
         altitude = data.altitude || 0

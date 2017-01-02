@@ -151,29 +151,36 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 	if action.Tool == "Entity Tool" {
 		getChunkErr := db.Select(q.And(
 			q.Eq("X", action.Coords[0]),
-			q.Eq("Y", action.Coords[0]),
-			q.Eq("Z", action.Coords[0]),
+			q.Eq("Y", action.Coords[1]),
+			q.Eq("Z", action.Coords[2]),
 			q.Eq("World", action.World),
 		)).Find(&chunkData)
 		if getChunkErr != nil {
 			log.Println(getChunkErr)
 		}
+		nChunks := len(chunkData)
+		if (nChunks > 0) {
+			if (nChunks < 64) {
 
-		if (len(chunkData) > 0) {
-			component = *NewComponent(0, "", "box", "plastic", 0xf0f0f0, []float64{2000, 2000, 1000}, []int{0, 0, 0}, nil, []string{})
-			components = append(components, &component)
-			entities = chunkData[0].Entities
-			entity = *NewEntity(0, "", action.World, components, []int{int(action.Position[0]), int(action.Position[1]), int(action.Position[2])}, []int{int(action.Quaternion[0]), int(action.Quaternion[1]), int(action.Quaternion[2]), int(action.Quaternion[3])})
-			entities = append(entities, &entity)
-			chunkData[0].Entities = entities
-			saveErr := db.Update(&chunkData[0])
-			if saveErr != nil {
-				log.Println(saveErr)
+				component = *NewComponent(0, "", "box", "plastic", 0xf0f0f0, []float64{2000, 2000, 1000}, []int{0, 0, 0}, nil, []string{})
+				components = append(components, &component)
+				position := []int{int(action.Position[0]), int(action.Position[1]), int(action.Position[2])}
+				entities = chunkData[0].Entities
+
+				entity = *NewEntity(0, "", action.World, components, position, action.Quaternion, 8000)
+				entities = append(entities, &entity)
+				chunkData[0].Entities = entities
+				saveErr := db.Update(&chunkData[0])
+				if saveErr != nil {
+					log.Println(saveErr)
+				}
+				log.Printf(`broadcasting tool action: "%s"`, action.Tool)    // modify chunk where this tool was used...
+			} else {
+				log.Println("Too Many Chunks")
+				log.Printf(`world: "%s"`, action.World)
+				log.Printf(`x: "%s"`, action.Coords[0])
+				log.Printf(`z: "%s"`, action.Coords[2])
 			}
-			log.Printf(`broadcasting tool action: "%s"`, action.Tool)    // modify chunk where this tool was used...
-			log.Printf(`world: "%s"`, action.World)
-			log.Printf(`x: "%s"`, action.Coords[0])
-			log.Printf(`z: "%s"`, action.Coords[2])
 		}
 	}
 	hub.All().Broadcast(p)
@@ -336,7 +343,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 
 	    if (len(chunkData) == 0) {
 	      chunkGeom := "flat"
-	      if rand.Intn(10) < 8 {
+	      if rand.Intn(10) < 6 {
 	        chunkGeom = "space"
 	      } else {
 			  if rand.Intn(24) > 19{

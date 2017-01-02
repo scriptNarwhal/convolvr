@@ -111,7 +111,6 @@ export default class World {
 					pos = data.position,
 					coords = data.coords,
 					chunk = world.terrain.pMap[coords[0]+".0."+coords[2]],
-					chunkPos = chunk.mesh.position,
 					quat = data.quaternion
 
 			switch (data.tool) {
@@ -125,12 +124,12 @@ export default class World {
 						w: quat[3]
 					}
 					entity.position = {
-						x: pos[0] - chunkPos.x,
-						y: pos[1] - chunkPos.y,
-						z: pos[2] - chunkPos.z
+						x: pos[0],
+						y: pos[1],
+						z: pos[2]
 					}
 					entity.init(chunk.mesh)
-					entity.mesh.translateZ(-5000)
+					entity.mesh.translateZ(data.options.translateZ)
 				break;
 				case "Component Tool":
 
