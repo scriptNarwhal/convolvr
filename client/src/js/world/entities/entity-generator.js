@@ -8,12 +8,12 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: {x: 3000, y: 3000, z: 200},
+          size: [3000, 3000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: {x: 0, y: 0, z: 0},
+          position: [0, 0, 0]
         }
       ],
       aspects: [],
@@ -25,12 +25,12 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: {x: 3000, y: 3000, z: 3000},
+          size: [3000, 3000, 3000],
           color: 0xff0000,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: {x: 0, y: 0, z: 0},
+          position: [0, 0, 0]
         }
       ],
       aspects: [],
@@ -42,12 +42,12 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: {x: 2000, y: 8000, z: 2000},
+          size: [2000, 8000, 2000],
           material: "plastic",
           color: 0x808080,
           text: "",
           quaternion: null,
-          position: {x: 0, y: 0, z: 0},
+          position: [0, 0, 0]
         }
       ],
       aspects: [],
@@ -59,12 +59,12 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: {x: 2000, y: 2000, z: 2000},
+          size: [2000, 2000, 2000],
           material: "wireframe",
           color: 0x808080,
           text: "",
           quaternion: null,
-          position: {x: 0, y: 0, z: 0},
+          position: [0, 0, 0]
         }
       ],
       aspects: [],

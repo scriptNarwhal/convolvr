@@ -33,6 +33,7 @@ export default class Entity {
         c = 0;
         while (c < aspects.length) {
             // connect entity to appropriate system
+            c ++
         }
     }
   }

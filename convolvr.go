@@ -137,30 +137,45 @@ func update(c *nexus.Client, p *nexus.Packet) {
 	hub.All().Broadcast(p)
 }
 func toolAction(c *nexus.Client, p *nexus.Packet) {
-	//log.Printf(`broadcasting toolAction "%s"`, p.Data)
-	// modify chunk where this tool was used...
-	// ...for all but projectile tools.. probably
-
-	type ToolAction struct {
-		World string `json:"world"`
-		User string `json:"user"`
-		UserId int `json:"userId"`
-		Position []float64 `json:"position"`
-		Quaternion []float64 `json:"quaternion"`
-		Tool string `json:"tool"`
-		Primary bool `json:"primary"`
-	}
 	var (
 		action ToolAction
+		chunkData []Chunk
+		components []*Component
+		component Component
+		entities []*Entity
+		entity Entity
 	)
 	if err := json.Unmarshal([]byte(p.Data), &action); err != nil {
 			 panic(err)
 	}
-	log.Printf(`broadcasting tool action: "%s"`, action.Tool)
-	log.Printf(`world: "%s"`, action.World)
-	log.Printf(`x: "%s"`, int(math.Floor(action.Position[0] / 232000)))
-	log.Printf(`z: "%s"`, int(math.Floor(action.Position[2] / 201840)))
+	if action.Tool == "Entity Tool" {
+		getChunkErr := db.Select(q.And(
+			q.Eq("X", int(math.Floor(action.Position[0] / 232000))),
+			q.Eq("Y", int(math.Floor(action.Position[1] / 232000))),
+			q.Eq("Z", int(math.Floor(action.Position[2] / 201840))),
+			q.Eq("World", action.World),
+		)).Find(&chunkData)
+		if getChunkErr != nil {
+			log.Println(getChunkErr)
+		}
 
+		if (len(chunkData) > 0) {
+			component = *NewComponent(0, "", "box", "plastic", 0xf0f0f0, []float64{2000, 2000, 1000}, []int{0, 0, 0}, nil, []string{})
+			components = append(components, &component)
+			entities = chunkData[0].Entities
+			entity = *NewEntity(0, "", action.World, components, []int{int(action.Position[0]), int(action.Position[1]), int(action.Position[2])}, []int{int(action.Quaternion[0]), int(action.Quaternion[1]), int(action.Quaternion[2]), int(action.Quaternion[3])})
+			entities = append(entities, &entity)
+			chunkData[0].Entities = entities
+			saveErr := db.Update(&chunkData[0])
+			if saveErr != nil {
+				log.Println(saveErr)
+			}
+			log.Printf(`broadcasting tool action: "%s"`, action.Tool)    // modify chunk where this tool was used...
+			log.Printf(`world: "%s"`, action.World)
+			log.Printf(`x: "%s"`, int(math.Floor(action.Position[0] / 232000)))
+			log.Printf(`z: "%s"`, int(math.Floor(action.Position[2] / 201840)))
+		}
+	}
 	hub.All().Broadcast(p)
 }
 

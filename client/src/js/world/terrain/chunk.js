@@ -1,3 +1,4 @@
+import Entity from '../entities/entity'
 import Track from '../structures/track'
 import Tower from '../structures/tower'
 
@@ -31,8 +32,7 @@ export default class Chunk {
         if (data == null) {
             data = { }
         }
-
-        if (!!data && !!data.voxels) { // terrain voxels
+        if (!!data.voxels) { // terrain voxels
             voxelGeom = new THREE.CylinderGeometry( 133000 / 16, 133000 / 16, 133000 / 8.5, 6, 1);
             items = data.voxels;
             cellMesh = new THREE.Mesh(geom, mat);
@@ -58,8 +58,16 @@ export default class Chunk {
         }
         three.scene.add(mesh);
         this.mesh = mesh;
-
-        if (!!data && !!data.structures) { // multiple structures per platform
+        if (!!data.entities) {
+          data.entities.map(e => {
+            let pos = e.position,
+                quat = e.quaternion,
+                entity = new Entity(e.id, e.components, [], {x: pos[0], y: pos[1], z:pos[2]}, {x: quat[0], y: quat[1], z: quat[2], w: quat[3]})
+            entity.init(mesh)
+            // probably need to offset the position for the chunk..
+          })
+        }
+        if (!!data.structures) { // multiple structures per platform
             items = data.structures;
             x = items.length;
             while (x > 0) {

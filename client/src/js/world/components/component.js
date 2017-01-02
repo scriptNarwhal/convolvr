@@ -5,7 +5,7 @@ export default class Component {
           shape = data.shape,
           size = data.size,
           quaternion = data.quaternion ? data.quaternion : false,
-          position = data.position ? data.position : { x: 0, y: 0, z: 0 },
+          position = data.position ? data.position : [0, 0, 0],
           geometry = null,
           material = null,
           materialName = data.material || "",
@@ -19,12 +19,14 @@ export default class Component {
                 wireframe: true
               }
               basic = true
-            break
+            break;
+            default:
             mat = {
                 color: data.color || 0xff00ff,
                 fog: false
             }
             basic = false
+            break;
           }
           if (basic) {
             material = new THREE.MeshBasicMaterial(mat);
@@ -37,25 +39,25 @@ export default class Component {
             mesh = new THREE.Object3D();
           break;
           case "plane":
-            geometry = new THREE.PlaneGeometry( size.x, size.y);
+            geometry = new THREE.PlaneGeometry( size[0], size[1]);
           break;
           case "box":
-            geometry = new THREE.BoxGeometry( size.x, size.y, size.z);
+            geometry = new THREE.BoxGeometry( size[0], size[1], size[2]);
           break;
           case "octahedron":
-            geometry = new THREE.OctahedronGeometry( size.x, 0);
+            geometry = new THREE.OctahedronGeometry( size[0], 0);
           break;
           case "sphere":
-            geometry = new THREE.OctahedronGeometry( size.x, 3);
+            geometry = new THREE.OctahedronGeometry( size[0], 3);
           break;
           case "cylinder":
-            geometry = new THREE.CylinderGeometry( size.x, size.x, size.y, 14, 1);
+            geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 14, 1);
           break;
           case "torus":
-            geometry = new THREE.TorusBufferGeometry( size.x, 6.3, 5, 12 );
+            geometry = new THREE.TorusBufferGeometry( size[0], 6.3, 5, 12 );
           break;
           case "hexagon":
-            geometry = new THREE.CylinderGeometry(size.x, size.z, size.y, 6);
+            geometry = new THREE.CylinderGeometry(size[0], size[2], size[1], 6);
           break;
           case "text":
             geometry = new THREE.TextGeometry(data.text, data.text_params);
@@ -63,9 +65,9 @@ export default class Component {
       }
       mesh = new THREE.Mesh(geometry, material);
       if (!! quaternion) {
-          mesh.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+          mesh.quaternion.set(quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
       }
-      mesh.position.set(position.x, position.y, position.z)
+      mesh.position.set(position[0], position[1], position[2])
       this.data = data;
       this.type = type;
       this.mesh = mesh;
