@@ -11,7 +11,7 @@ export default class EntityTool extends Tool  {
       this.icon = new EntityToolIcon()
       this.options = {
         entityType: "panel",
-        all: ["panel", "block", "column"],
+        all: ["panel", "block", "column", "wirebox"],
         current: 0
       }
     }

@@ -8,18 +8,27 @@ export default class Avatar {
             component = null,
             components = [],
             n = 2;
-        while (n > 0) {
+
           component = {
               type: "structure",
               shape: "cylinder",
               color: 0xffffff,
-              size: {x: 900, y: 600, z: 900},
+              material: "plastic",
+              size: {x: 1800, y: 1200, z: 1800},
               position: { x: 0, y: (n-1)*600, z: 0 },
               quaternion: false
           };
           components.push(component);
-          n --;
-        }
+          component = {
+              type: "structure",
+              shape: "octahedron",
+              color: 0xffffff,
+              material: "wireframe",
+              size: {x: 2800, y: 2800, z: 2800},
+              position: { x: 0, y: (n-1)*600, z: 0 },
+              quaternion: false
+          };
+          components.push(component);
 
         entity = new Entity(name, components, [{"avatar": true}]);
         entity.init(three.scene);

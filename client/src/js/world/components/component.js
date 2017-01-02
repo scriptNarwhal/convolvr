@@ -7,10 +7,30 @@ export default class Component {
           quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : { x: 0, y: 0, z: 0 },
           geometry = null,
-          material = new THREE.MeshPhongMaterial({ // temporary material..
-              color: data.color || 0xff00ff,
-              fog: false
-          });
+          material = null,
+          materialName = data.material || "",
+          mat = {},
+          basic = false
+
+          switch(materialName) {
+            case "wireframe":
+              mat = {
+                color: data.color || 0x00ff00,
+                wireframe: true
+              }
+              basic = true
+            break
+            mat = {
+                color: data.color || 0xff00ff,
+                fog: false
+            }
+            basic = false
+          }
+          if (basic) {
+            material = new THREE.MeshBasicMaterial(mat);
+          } else {
+            material = new THREE.MeshPhongMaterial(mat);
+          }
 
       switch (shape) {
           case "node":
@@ -24,6 +44,7 @@ export default class Component {
           break;
           case "octahedron":
             geometry = new THREE.OctahedronGeometry( size.x, 0);
+          break;
           case "sphere":
             geometry = new THREE.OctahedronGeometry( size.x, 3);
           break;
@@ -40,7 +61,7 @@ export default class Component {
             geometry = new THREE.TextGeometry(data.text, data.text_params);
           break;
       }
-      mesh = new THREE.Mesh(geometry , material);
+      mesh = new THREE.Mesh(geometry, material);
       if (!! quaternion) {
           mesh.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
       }
