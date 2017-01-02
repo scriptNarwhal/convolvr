@@ -116,7 +116,8 @@ export default class World {
 			switch (data.tool) {
 				case "Entity Tool":
 					let entityType = data.options.entityType,
-							entity = world.generator.makeEntity(entityType)
+							translateZ = data.options.translateZ,
+							entity = world.generator.makeEntity(entityType, translateZ)
 					entity.quaternion = {
 						x: quat[0],
 						y: quat[1],

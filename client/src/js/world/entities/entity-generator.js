@@ -25,7 +25,7 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [3000, 3000, 3000],
+          size: [4000, 4000, 4000],
           color: 0xff0000,
           material: "plastic",
           text: "",
@@ -42,7 +42,7 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [2000, 8000, 2000],
+          size: [3000, 14000, 3000],
           material: "plastic",
           color: 0x808080,
           text: "",
@@ -59,7 +59,7 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [2000, 2000, 2000],
+          size: [4000, 4000, 4000],
           material: "wireframe",
           color: 0x808080,
           text: "",
@@ -72,13 +72,13 @@ export default class EntityGenerator {
       quaternion: null
     }
   }
-  makeEntity (type) {
+  makeEntity (type, translate) {
     let entity = this.entities[type],
         components = entity.components,
         aspects = entity.aspects,
         position = entity.position,
         quaternion = entity.quaternion
-    return new Entity(-1, components, aspects, position, quaternion)
+    return new Entity(-1, components, aspects, position, quaternion, translate)
   }
 
 }

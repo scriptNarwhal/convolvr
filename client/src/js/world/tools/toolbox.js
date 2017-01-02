@@ -69,27 +69,30 @@ export default class Toolbox {
     usePrimary (hand) {
       //console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
       let tool = this.tools[this.currentTools[hand]],
-          camera = this.world.camera
+          camera = this.world.camera,
+          entities = null
       if (tool.mesh == null) {
         tool.equip(hand)
       }
-      tool.primaryAction()
-      this.sendToolAction(true, tool, camera)
+      entities = tool.primaryAction() || []
+      this.sendToolAction(true, tool, camera, entities)
     }
 
     useSecondary(hand) {
       let tool = this.tools[this.currentTools[hand]],
-          camera = this.world.camera
+          camera = this.world.camera,
+          entities = false
       if (tool.mesh == null) {
           tool.equip(hand)
       }
-      if (tool.secondaryAction() === false) {
+      entities = tool.secondaryAction()
+      if (entities === false) {
         return
       }
-      this.sendToolAction(false, tool, camera)
+      this.sendToolAction(false, tool, camera, entities)
     }
 
-    sendToolAction (primary, tool, camera) {
+    sendToolAction (primary, tool, camera, entities) {
       let cPos = camera.position,
           coords = [Math.floor(cPos.x/232000), 0, Math.floor(cPos.z/201840)],
           chunk = this.world.terrain.pMap[coords[0]+".0."+coords[2]],
@@ -104,6 +107,7 @@ export default class Toolbox {
         position: [cPos.x -chunkPos.x, cPos.y -chunkPos.y, cPos.z -chunkPos.z],
         quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
         options: tool.options,
+        entities: entities,
         primary
       })
     }

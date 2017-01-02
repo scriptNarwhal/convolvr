@@ -1,11 +1,12 @@
 import Component from '../components/component.js';
 
 export default class Entity {
-  constructor (id, components, aspects = [], position, quaternion) {
+  constructor (id, components, aspects = [], position, quaternion, z) {
       this.id = id;
       this.components = components;
       this.position = position ? position : false;
       this.quaternion = quaternion ? quaternion : false;
+      this.z = z //translateZ
       this.mesh = null;
   }
 
@@ -28,6 +29,7 @@ export default class Entity {
         mesh.position.set(this.position.x, this.position.y, this.position.z);
     }
     scene.add(mesh);
+    this.z > 0 && mesh.translateZ(this.z)
     this.mesh = mesh;
     if (!!aspects) {
         c = 0;
