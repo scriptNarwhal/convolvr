@@ -90,12 +90,15 @@ export default class Toolbox {
     }
 
     sendToolAction (primary, tool, camera) {
+      let cPos = camera.position,
+          coords = [Math.floor(cPos.x/232000), Math.floor(cPos.y/232000), Math.floor(cPos.z/201840)]
       send("tool action", {
         tool: tool.name,
         world: this.world.name,
         user: this.world.user.username,
         userId: this.world.user.id,
-        position: [camera.position.x, camera.position.y, camera.position.z],
+        coords: coords,
+        position: [cPos.x, cPos.y, cPos.z],
         quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
         options: tool.options,
         primary

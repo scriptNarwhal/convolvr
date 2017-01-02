@@ -109,7 +109,7 @@ export default class World {
 			let data = JSON.parse(packet.data),
 					user = world.user,
 					pos = data.position,
-					coords = [Math.floor(pos[0] / 232000), 0, Math.floor(pos[2] / 201840)],
+					coords = data.coords,
 					chunk = world.terrain.pMap[coords[0]+".0."+coords[2]],
 					chunkPos = chunk.mesh.position,
 					quat = data.quaternion

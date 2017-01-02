@@ -150,9 +150,9 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 	}
 	if action.Tool == "Entity Tool" {
 		getChunkErr := db.Select(q.And(
-			q.Eq("X", int(math.Floor(action.Position[0] / 232000))),
-			q.Eq("Y", int(math.Floor(action.Position[1] / 232000))),
-			q.Eq("Z", int(math.Floor(action.Position[2] / 201840))),
+			q.Eq("X", action.Coords[0]),
+			q.Eq("Y", action.Coords[0]),
+			q.Eq("Z", action.Coords[0]),
 			q.Eq("World", action.World),
 		)).Find(&chunkData)
 		if getChunkErr != nil {
@@ -172,8 +172,8 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 			}
 			log.Printf(`broadcasting tool action: "%s"`, action.Tool)    // modify chunk where this tool was used...
 			log.Printf(`world: "%s"`, action.World)
-			log.Printf(`x: "%s"`, int(math.Floor(action.Position[0] / 232000)))
-			log.Printf(`z: "%s"`, int(math.Floor(action.Position[2] / 201840)))
+			log.Printf(`x: "%s"`, action.Coords[0])
+			log.Printf(`z: "%s"`, action.Coords[2])
 		}
 	}
 	hub.All().Broadcast(p)
