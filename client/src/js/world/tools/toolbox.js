@@ -70,33 +70,35 @@ export default class Toolbox {
       //console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
-          entities = null
+          entity = null
       if (tool.mesh == null) {
         tool.equip(hand)
       }
-      entities = tool.primaryAction() || []
-      this.sendToolAction(true, tool, camera, entities)
+      entity = tool.primaryAction() || null
+      this.sendToolAction(true, tool, camera, entity)
     }
 
     useSecondary(hand) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
-          entities = false
+          entity = false
       if (tool.mesh == null) {
           tool.equip(hand)
       }
-      entities = tool.secondaryAction()
-      if (entities === false) {
+      entity = tool.secondaryAction()
+      if (entity === false) {
         return
       }
-      this.sendToolAction(false, tool, camera, entities)
+      this.sendToolAction(false, tool, camera, entity)
     }
 
-    sendToolAction (primary, tool, camera, entities) {
+    sendToolAction (primary, tool, camera, entity) {
       let cPos = camera.position,
           coords = [Math.floor(cPos.x/232000), 0, Math.floor(cPos.z/201840)],
           chunk = this.world.terrain.pMap[coords[0]+".0."+coords[2]],
-          chunkPos = chunk.mesh.position
+          chunkPos = chunk.mesh.position,
+          relativePosition = [cPos.x -chunkPos.x, cPos.y -chunkPos.y, cPos.z -chunkPos.z],
+          quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w]
 
       send("tool action", {
         tool: tool.name,
@@ -104,10 +106,10 @@ export default class Toolbox {
         user: this.world.user.username,
         userId: this.world.user.id,
         coords: coords,
-        position: [cPos.x -chunkPos.x, cPos.y -chunkPos.y, cPos.z -chunkPos.z],
-        quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
+        position: relativePosition,
+        quaternion: quaternion,
         options: tool.options,
-        entities: entities,
+        entity: entity,
         primary
       })
     }

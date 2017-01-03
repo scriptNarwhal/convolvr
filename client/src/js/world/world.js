@@ -1,8 +1,8 @@
 import axios from 'axios'
 import Avatar from './avatar'
+import Entity from './entities/entity'
 import Terrain from './terrain/terrain'
 import WorldPhysics  from '../workers/world-physics'
-import EntityGenerator from './entities/entity-generator'
 import { render, toggleStereo } from './render'
 import { API_SERVER } from '../config.js'
 import Seed from '../seed'
@@ -53,7 +53,6 @@ export default class World {
 		userInput.init(this, camera, this.user)
 		this.worldPhysics = new WorldPhysics()
 		this.worldPhysics.init(self)
-		this.generator = new EntityGenerator()
 		this.seed = new Seed();
 		this.terrain = new Terrain(this);
 		this.workers = {
@@ -115,22 +114,9 @@ export default class World {
 
 			switch (data.tool) {
 				case "Entity Tool":
-					let entityType = data.options.entityType,
-							translateZ = data.options.translateZ,
-							entity = world.generator.makeEntity(entityType, translateZ)
-					entity.quaternion = {
-						x: quat[0],
-						y: quat[1],
-						z: quat[2],
-						w: quat[3]
-					}
-					entity.position = {
-						x: pos[0],
-						y: pos[1],
-						z: pos[2]
-					}
+					let ent = data.entity,
+							entity = new Entity(ent.id, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
 					entity.init(chunk.mesh)
-					entity.mesh.translateZ(data.options.translateZ)
 				break;
 				case "Component Tool":
 

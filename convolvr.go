@@ -140,8 +140,6 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 	var (
 		action ToolAction
 		chunkData []Chunk
-		components []*Component
-		component Component
 		entities []*Entity
 		entity Entity
 	)
@@ -161,13 +159,8 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 		nChunks := len(chunkData)
 		if (nChunks > 0) {
 			if (nChunks < 64) {
-
-				component = *NewComponent(0, "", "box", "plastic", 0xf0f0f0, []float64{2000, 2000, 1000}, []int{0, 0, 0}, nil, []string{})
-				components = append(components, &component)
-				position := []int{int(action.Position[0]), int(action.Position[1]), int(action.Position[2])}
 				entities = chunkData[0].Entities
-
-				entity = *NewEntity(0, "", action.World, components, position, action.Quaternion, 8000)
+				entity = *NewEntity(0, "", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, 0)
 				entities = append(entities, &entity)
 				chunkData[0].Entities = entities
 				saveErr := db.Update(&chunkData[0])

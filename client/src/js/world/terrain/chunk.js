@@ -62,8 +62,7 @@ export default class Chunk {
           data.entities.map(e => {
             let pos = e.position,
                 quat = e.quaternion,
-                entity = new Entity(e.id, e.components, [], {x: pos[0], y: pos[1], z:pos[2]},
-                                                            {x: quat[0], y: quat[1], z: quat[2], w: quat[3]}, e.translateZ)
+                entity = new Entity(e.id, e.components, [], pos, quat, e.translateZ)
             entity.init(mesh)
             // probably need to offset the position for the chunk..
           })

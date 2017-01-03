@@ -3,7 +3,14 @@ import Entity from './entity'
 export default class EntityGenerator {
   constructor () {
     this.entities = []
+    this.init()
+  }
+  makeEntity (type) {
+    return this.entities[type]
+  }
+  init () {
     this.entities["panel"] = {
+      id: 0,
       components: [
         {
           type: "structure",
@@ -21,6 +28,7 @@ export default class EntityGenerator {
       quaternion: null
     }
     this.entities["block"] = {
+      id: 0,
       components: [
         {
           type: "structure",
@@ -38,6 +46,7 @@ export default class EntityGenerator {
       quaternion: null
     }
     this.entities["column"] = {
+      id: 0,
       components: [
         {
           type: "structure",
@@ -55,6 +64,7 @@ export default class EntityGenerator {
       quaternion: null
     }
     this.entities["wirebox"] = {
+      id: 0,
       components: [
         {
           type: "structure",
@@ -72,13 +82,4 @@ export default class EntityGenerator {
       quaternion: null
     }
   }
-  makeEntity (type, translate) {
-    let entity = this.entities[type],
-        components = entity.components,
-        aspects = entity.aspects,
-        position = entity.position,
-        quaternion = entity.quaternion
-    return new Entity(-1, components, aspects, position, quaternion, translate)
-  }
-
 }

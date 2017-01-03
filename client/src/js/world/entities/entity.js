@@ -2,12 +2,13 @@ import Component from '../components/component.js';
 
 export default class Entity {
   constructor (id, components, aspects = [], position, quaternion, z) {
-      this.id = id;
-      this.components = components;
-      this.position = position ? position : false;
-      this.quaternion = quaternion ? quaternion : false;
-      this.z = z //translateZ
-      this.mesh = null;
+      this.id = id
+      this.components = components
+      this.aspects = aspects
+      this.position = position ? position : false
+      this.quaternion = quaternion ? quaternion : false
+      this.z = z //translate from
+      this.mesh = null
   }
 
   init (scene) {
@@ -23,13 +24,13 @@ export default class Entity {
         c ++;
     }
     if (!! this.quaternion) {
-        mesh.quaternion.set(this.quaternion.x, this.quaternion.y, this.quaternion.z, this.quaternion.w);
+        mesh.quaternion.set(this.quaternion[0], this.quaternion[1], this.quaternion[2], this.quaternion[3]);
     }
     if (!! this.position) {
-        mesh.position.set(this.position.x, this.position.y, this.position.z);
+        mesh.position.set(this.position[0], this.position[1], this.position[2]);
     }
     scene.add(mesh);
-    this.z > 0 && mesh.translateZ(this.z)
+    this.z != 0 && mesh.translateZ(this.z)
     this.mesh = mesh;
     if (!!aspects) {
         c = 0;

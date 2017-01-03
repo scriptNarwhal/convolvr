@@ -5,11 +5,12 @@ type Entity struct {
 	Name       string       `storm:"index" json:"name"`
 	World      string       `json:"world"`
 	Components []*Component `storm:"inline" json:"components"`
-	Position   []int        `json:"position"`
+	Aspects    []string     `json:"aspects"`
+	Position   []float64        `json:"position"`
 	Quaternion []float64     `json:"quaternion"`
 	TranslateZ float64      `json:"translateZ"`
 }
 
-func NewEntity(id int, name string, world string, components []*Component, pos []int, quat []float64, z float64) *Entity {
-	return &Entity{id, name, world, components, pos, quat, z}
+func NewEntity(id int, name string, world string, components []*Component, aspects []string, pos []float64, quat []float64, z float64) *Entity {
+	return &Entity{id, name, world, components, aspects, pos, quat, z}
 }
