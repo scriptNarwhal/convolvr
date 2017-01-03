@@ -339,7 +339,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	      if rand.Intn(10) < 6 {
 	        chunkGeom = "space"
 	      } else {
-			  if rand.Intn(24) > 19{
+			  if rand.Intn(25) > 22{
 				  light := 0
 				  if rand.Intn(6) > 3 {
 					  if rand.Intn(5) > 4 {
@@ -349,7 +349,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 								light = 0x3000ff
 							} else {
 								if rand.Intn(4) > 2 {
-									light = 0xffff00
+									light = 0x8000ff
 								} else {
 									light = 0x00ff00
 								}
