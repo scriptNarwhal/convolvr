@@ -23,7 +23,7 @@ export default class World {
 		this.socket = socket
 		this.config = false
 		this.name = "convolvr"
-		this.mode = "vr"
+		this.mode = "web"
 		this.users = []
 		this.user = {
 			id: 0,
@@ -91,7 +91,7 @@ export default class World {
 					if (user == null) {
 						user = this.users["user"+entity.id] = {
 							id: entity.id,
-							avatar: new Avatar(),
+							avatar: new Avatar(entity.id, "standard", {}),
 							mesh: null
 						}
 					}

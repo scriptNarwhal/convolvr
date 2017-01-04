@@ -85,7 +85,7 @@ export let render = (world, last) => {
       world.skybox && world.skybox.material && ()=>{world.skybox.material.uniforms.time.value += delta }
       world.skybox && world.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
       world.skybox && world.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
-      if (world.mode == "vr" || world.mode == "desktop") { // render for desktop / mobile (without cardboard)
+      if (world.mode == "vr" || world.mode == "web") {
         three.renderer.render(three.scene, camera);
       } else if (world.mode == "stereo") { // Render the scene in stereo for HMD.
         !!three.vrEffect && three.vrEffect.render(three.scene, camera);

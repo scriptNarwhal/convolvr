@@ -65,7 +65,7 @@ export default class UserInput {
 			uInput.fullscreen = uInput.focus;
 			if (!uInput.fullscreen && world.user.username != "") {
 				//world.showChat();
-				//world.mode = "desktop";
+				world.mode = "web";
 				while (a < world.user.arms.length) {
 					world.user.arms[a].visible = false;
 					a ++;
@@ -94,21 +94,23 @@ export default class UserInput {
 			console.log("adding event listener.. mouseclick")
 			setTimeout(()=> {
 				document.addEventListener("mousedown", (e) => {
-				switch (e.which) {
-					case 1: // left mouse
-						this.user.toolbox.usePrimary(0); // right hand
-					break;
-					case 2: // scroll wheel click
-						// tools.selectObject() .. might be handy
-					break;
+					if (world.mode != "web") {
+						switch (e.which) {
+							case 1: // left mouse
+								this.user.toolbox.usePrimary(0); // right hand
+							break;
+							case 2: // scroll wheel click
+								// tools.selectObject() .. might be handy
+							break;
 
-					case 3: // right click
-						this.user.toolbox.useSecondary(0); // right hand
-					break;
-				}
-				}, true)	
+							case 3: // right click
+								this.user.toolbox.useSecondary(0); // right hand
+							break;
+						}
+					}
+				}, true)
 			},250)
-			
+
 		}
 		this.touchControls = new Touch(this);
 		this.keyboard = new Keyboard(this, this.world);

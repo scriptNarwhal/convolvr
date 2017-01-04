@@ -2,10 +2,11 @@ import Entity from './entities/entity'
 import Component from './components/component'
 
 export default class Avatar {
-    constructor (name, type, data) {
+    constructor (id, type, data) {
         var mesh = null, // new THREE.Object3D();
             entity = null,
             component = null,
+            componentB = null,
             components = [],
             n = 2;
 
@@ -19,7 +20,7 @@ export default class Avatar {
               quaternion: false
           };
           components.push(component);
-          component = {
+          componentB = {
               type: "structure",
               shape: "octahedron",
               color: 0xffffff,
@@ -28,9 +29,9 @@ export default class Avatar {
               position: { x: 0, y: (n-1)*600, z: 0 },
               quaternion: false
           };
-          components.push(component);
+          components.push(componentB);
 
-        entity = new Entity(name, components, [{"avatar": true}]);
+        entity = new Entity(id, components, [{"avatar": true}], null, null, 0);
         entity.init(three.scene);
 
         this.entity = entity;
