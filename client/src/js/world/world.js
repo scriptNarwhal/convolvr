@@ -87,9 +87,9 @@ export default class World {
 				if (entity.id != this.user.id) {
 					pos = entity.position
 					quat = entity.quaternion
-					user = this.users[entity.id]
+					user = this.users["user"+entity.id]
 					if (user == null) {
-						user = this.users[entity.id] = {
+						user = this.users["user"+entity.id] = {
 							id: entity.id,
 							avatar: new Avatar(),
 							mesh: null

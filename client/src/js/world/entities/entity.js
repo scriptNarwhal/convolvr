@@ -30,6 +30,7 @@ export default class Entity {
         mesh.position.set(this.position[0], this.position[1], this.position[2]);
     }
     scene.add(mesh);
+    console.log(this.z)
     this.z != 0 && mesh.translateZ(this.z)
     this.mesh = mesh;
     if (!!aspects) {

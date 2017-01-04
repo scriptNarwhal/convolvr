@@ -40,6 +40,7 @@ export default class EntityTool extends Tool  {
       // place entity
       let entity = this.generator.makeEntity(this.options.entityType)
       entity.translateZ = this.options.translateZ
+      console.log(entity.translateZ)
       return entity
     }
 

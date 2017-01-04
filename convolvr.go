@@ -160,7 +160,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 		if (nChunks > 0) {
 			if (nChunks < 64) {
 				entities = chunkData[0].Entities
-				entity = *NewEntity(0, "", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, 0)
+				entity = *NewEntity(0, "", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, action.Entity.TranslateZ)
 				entities = append(entities, &entity)
 				chunkData[0].Entities = entities
 				saveErr := db.Update(&chunkData[0])
