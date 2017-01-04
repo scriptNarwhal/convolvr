@@ -110,6 +110,7 @@ func Start(configName string) {
 	http.HandleFunc("/world/", worldHandler)
 	http.HandleFunc("/worlds", worldHandler)
 	http.HandleFunc("/chat", worldHandler)
+	http.HandleFunc("/login", worldHandler)
 	http.HandleFunc("/settings", worldHandler)
 	http.Handle("/connect", websocket.Handler(hub.Serve))
 
@@ -339,7 +340,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	      if rand.Intn(10) < 6 {
 	        chunkGeom = "space"
 	      } else {
-			  if rand.Intn(25) > 22{
+			  if rand.Intn(26) > 24{
 				  light := 0
 				  if rand.Intn(6) > 3 {
 					  if rand.Intn(5) > 4 {

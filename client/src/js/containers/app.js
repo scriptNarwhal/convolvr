@@ -15,7 +15,7 @@ class App extends Component {
     })
     this.props.setCurrentWorld(window.worldName)
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
-    if (window.location.href.indexOf("/chat") > -1) {
+    if (window.location.href.indexOf("/chat") > -1 || window.location.href.indexOf("/login") > -1) {
       this.props.toggleMenu(true);
     }
   }

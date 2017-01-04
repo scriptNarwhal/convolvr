@@ -145,7 +145,7 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
-			velocity.y -= 500 + velocity.y * (0.005 * delta); // weak gravity
+			velocity.y -= 1600000* delta; // weak gravity
 			this.moveVector.set(0, 0, 0);
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );

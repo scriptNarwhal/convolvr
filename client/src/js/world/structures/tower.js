@@ -164,7 +164,7 @@ class Tower {
 					this.platform.mesh.add(led);
 					led.position.set(-3000 -(25000*xUnits), (1+this.data.floors * 50000), -3000-25000*zUnits);
 					//led.scale.set(0.1, 0.4, 0.1);
-					light =  new THREE.PointLight(lightColor, 1.0, 700000);
+					light =  new THREE.PointLight(lightColor, 1.0, 600000);
 					led.add(light);
 				}
 

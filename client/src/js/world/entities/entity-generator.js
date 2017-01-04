@@ -15,7 +15,7 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [3000, 3000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
@@ -51,7 +51,7 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [3000, 14000, 3000],
+          size: [3000, 24000, 3000],
           material: "plastic",
           color: 0x808080,
           text: "",
@@ -69,7 +69,7 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [4000, 4000, 4000],
+          size: [10000, 10000, 10000],
           material: "wireframe",
           color: 0x808080,
           text: "",
