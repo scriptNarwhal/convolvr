@@ -92,7 +92,7 @@ ReactDOM.render(
 		<Router history={history}>
 	  		<Route path="/" component={App} >
 				<IndexRoute component={HUD}/>
-                <Route path="/world/:name" component={HUD} />
+        <Route path="/world/:name" component={HUD} />
 				<Route path="/login" component={Login} />
 				<Route path="/home" component={Home} />
 				<Route path="/chat" component={Chat} />
