@@ -24,6 +24,7 @@ export default class World {
 		this.config = false
 		this.name = "convolvr"
 		this.mode = "web"
+		this.rPos = false
 		this.users = []
 		this.user = {
 			id: 0,

@@ -1,6 +1,8 @@
 import Tool from './tool'
 import Component from '../components/component'
 import ComponentToolIcon from '../hud/icons/component-tool-icon'
+import ComponentGenerator from '../components/component-generator'
+import EntityGenerator from '../entities/entity-generator'
 
 export default class ComponentTool extends Tool {
     constructor (data, world) {
@@ -8,10 +10,15 @@ export default class ComponentTool extends Tool {
         this.world = world;
         this.mesh = null;
         this.name = "Component Tool";
-        this.icon = new ComponentToolIcon();
+        this.icon = new ComponentToolIcon()
+        this.entities = new EntityGenerator()
+        this.components = new ComponentGenerator()
         this.options = {
-
+          translateZ: -9500,
+          entityType: "panel"
         }
+        this.all = ["panel", "block", "column", "wirebox"]
+        this.current = 0
     }
 
     initMesh (data = {}) {
@@ -33,10 +40,22 @@ export default class ComponentTool extends Tool {
 
     primaryAction () {
       // place component
+      // ray cast, find entity, else, make new one
+      // implement ray cast *** ... world.raycast() ?
+
+      let entity = this.entities.makeEntity(this.options.entityType)
+      entity.translateZ = this.options.translateZ
+      return entity
     }
 
     secondaryAction () {
-      // remove component.. but not delete?
+      // cycle components
+      this.current ++
+      if (this.current >= this.all.length) {
+        this.current = 0
+      }
+      this.options.entityType = this.all[this.current]
+      return false // no socket event
     }
 
     equip (hand) {
