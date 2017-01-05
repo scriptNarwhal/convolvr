@@ -122,9 +122,9 @@ func Start(configName string) {
 
 	if useTLS {
 		log.Fatal(http.ListenAndServeTLS(securePort, certificate, key, nil))
-		log.Print("Convolvr Online using port ", securePort)
+		log.Print("Convolvr Online ", securePort)
 	} else {
-		log.Print("Convolvr Online using port ", port)
+		log.Print("Convolvr Online ", port)
 		log.Fatal(http.ListenAndServe(port, nil))
 	}
 }

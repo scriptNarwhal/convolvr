@@ -38,8 +38,9 @@ const styles = {
       margin: "auto",
       textAlign: "left",
       position: "fixed",
-      left: "2vw",
-      bottom: "3em"
+      left: '10.5vh',
+      marginLeft: '0.5em',
+      bottom: '2.5em'
     },
     inputs: {
       minHeight: "2em",
@@ -48,7 +49,8 @@ const styles = {
       bottom: "1vh",
       width: "48vw",
       textAlign: "left",
-      left: "2vw"
+      left: '10.5vh',
+      marginLeft: '0.5em'
     }
 }
 

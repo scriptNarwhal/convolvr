@@ -4,14 +4,16 @@ import {
     APP_SHOW_CHAT,
     APP_HIDE_CHAT,
     APP_SHOW_LOGIN,
-    APP_HIDE_LOGIN
+    APP_HIDE_LOGIN,
+    APP_TOGGLE_FULLSCREEN
 } from '../constants/action-types';
 
 module.exports = function app (state = {
     menuOpen: false,
     vrMode: false,
     chatOpen: false,
-    loginOpen: false
+    loginOpen: false,
+    fullscreen: false
 }, action) {
   switch (action.type) {
     case APP_TOGGLE_MENU:
@@ -25,6 +27,10 @@ module.exports = function app (state = {
         window.three.world.toggleStereo(!state.vrMode ? "stereo" : "vr");
         return Object.assign({}, state, {
             vrMode: !state.vrMode
+        })
+    case APP_TOGGLE_FULLSCREEN:
+        return Object.assign({}, state, {
+            fullscreen: !state.fullscreen || action.force
         })
     case APP_SHOW_CHAT:
         return Object.assign({}, state, {

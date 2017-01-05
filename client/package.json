@@ -41,6 +41,7 @@
     "redux-thunk": "^2.1.0",
     "socket.io": "^1.4.8",
     "socket.io-client": "^1.5.0",
+    "stylus": "^0.54.5",
     "webvr-boilerplate": "^0.4.6"
   }
 }
