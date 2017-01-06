@@ -13,11 +13,9 @@ let store = makeStore(routerReducer)
 const history = syncHistoryWithStore(browserHistory, store)
 // 2d UI
 import App from './containers/app'
-import Editor from './containers/editor'
 import Memory from './containers/memory'
 import Worlds from './containers/worlds'
 import Settings from './containers/settings'
-import Home from './containers/home'
 import Login from './containers/login'
 import Chat from './containers/chat'
 import HUD from './containers/hud'
@@ -94,10 +92,8 @@ ReactDOM.render(
 				<IndexRoute component={HUD}/>
         <Route path="/world/:name" component={HUD} />
 				<Route path="/login" component={Login} />
-				<Route path="/home" component={Home} />
 				<Route path="/chat" component={Chat} />
-				<Route path="/editor" component={Editor} />
-				<Route path="/memory" component={Memory} />
+				<Route path="/data" component={Memory} />
 				<Route path="/worlds" component={Worlds} />
 				<Route path="/settings" component={Settings} />
 			</Route>

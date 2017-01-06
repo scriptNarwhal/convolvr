@@ -1,3 +1,5 @@
+import Label from './label'
+
 export default class HUDMenu {
     constructor (options = [], toolbox = false) {
       this.options = options;
@@ -11,6 +13,7 @@ export default class HUDMenu {
 
     initMesh (data = {}, user) {
       let mesh = null,
+          label = null,
           options = this.options,
           o = 0,
           color = data.color || 0xffffff,
@@ -24,7 +27,6 @@ export default class HUDMenu {
         mesh.add(light);
         light.position.set(0, 100, -1000);
       }
-      console.log(options);
       if (options.length > 0) {
         o = options.length -1;
         while (o >= 0) {
@@ -34,15 +36,19 @@ export default class HUDMenu {
           o --;
         }
       }
-      this.mesh = mesh;
-      user.mesh.add(mesh);
-      mesh.position.set(0, 3600, -5000);
-      return this.mesh;
+      this.mesh = mesh
+      user.mesh.add(mesh)
+      mesh.position.set(0, 3600, -5000)
+      this.label = new Label({ color: 0x00ff00, lightColor: 0xffffff, text: "Hello World" }, this.mesh)
+      return this.mesh
     }
 
     update () {
-      let index = this.toolbox.getCurrentTool(0);
-      this.light.position.set(-1200+index*600, -100, 300);
+      let toolbox = this.toolbox,
+          index = toolbox.currentTools[0],
+          label = toolbox.tools[index].name
+      this.label.update({ color: '#ffffff', lightColor: 0xffffff, text: label })
+      this.light.position.set(-1200+index*600, -100, 300)
     }
 
     hide () {
