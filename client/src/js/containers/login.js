@@ -58,13 +58,15 @@ export default class Login extends Component {
     this.state = {
       username: "",
       password: "",
+      email: "",
+      data: "",
       world: "overworld",
       loginError: ""
     }
   }
 
   signIn() {
-
+    this.props.login(this.state.username, this.state.password, this.state.email, this.state.data)
   }
 
   render() {
@@ -84,7 +86,7 @@ export default class Login extends Component {
                 <input type='password' onBlur={(e)=>{ this.setState({password: e.target.value }) }} style={styles.input} />
               </div>
               <div style={styles.go}>
-                <input type="button" value="Enter" onClick={e=> { this.signIn() } } />
+                <input type="button" value="Sign In" onClick={e=> { this.signIn() } } />
               </div>
             </div>
           </div>
@@ -94,5 +96,25 @@ export default class Login extends Component {
 }
 
 Login.defaultProps = {
-
 }
+
+import { connect } from 'react-redux'
+import { login } from '../redux/actions/user-actions'
+
+export default connect(
+  state => {
+    return {
+      tools: state.tools,
+      users: state.users,
+      menuOpen: state.app.menuOpen,
+      stereoMode: state.app.vrMode
+    }
+  },
+  dispatch => {
+    return {
+      login: (user, pass, email, data) => {
+        dispatch(login(user, pass, email, data))
+      }
+    }
+  }
+)(Login)

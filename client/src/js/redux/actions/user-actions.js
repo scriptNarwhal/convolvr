@@ -72,14 +72,17 @@ export function deleteUser (id) {
 }
 
 
-export function login (user, pass) {
+export function login (user, pass, email, data) {
     return dispatch => {
          dispatch({
              type: LOGIN_FETCH
          })
-         return axios.post(API_SERVER+"/api/login", {
-             user: user,
-             pass: pass
+         return axios.post(API_SERVER+"/api/users", {
+             id: 0,
+             name: user,
+             password: pass,
+             email: email,
+             data: data
          })
          .then(response => {
              dispatch(loginDone(response))
@@ -89,15 +92,15 @@ export function login (user, pass) {
    }
 }
 
-export function loginDone () {
+export function loginDone (response) {
     return {
         type: LOGIN_DONE,
-        data: {}
+        data: response.data
     }
 }
-export function loginFailed () {
+export function loginFailed (response) {
     return {
         type: LOGIN_FAIL,
-        data: {}
+        data: response.data
     }
 }

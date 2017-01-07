@@ -159,22 +159,22 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 		}
 		nChunks := len(chunkData)
 		if (nChunks > 0) {
-			if (nChunks < 64) {
 				entities = chunkData[0].Entities
-				entity = *NewEntity(0, "", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, action.Entity.TranslateZ)
-				entities = append(entities, &entity)
-				chunkData[0].Entities = entities
-				saveErr := db.Update(&chunkData[0])
-				if saveErr != nil {
-					log.Println(saveErr)
+				if (len(entities) < 48) {
+					entity = *NewEntity(0, "", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, action.Entity.TranslateZ)
+					entities = append(entities, &entity)
+					chunkData[0].Entities = entities
+					saveErr := db.Update(&chunkData[0])
+					if saveErr != nil {
+						log.Println(saveErr)
+					}
+				} else {
+					log.Println("Too Many Entities:")
+					log.Printf(`world: "%s"`, action.World)
+					log.Printf(`x: "%s"`, action.Coords[0])
+					log.Printf(`z: "%s"`, action.Coords[2])
 				}
 				log.Printf(`broadcasting tool action: "%s"`, action.Tool)    // modify chunk where this tool was used...
-			} else {
-				log.Println("Too Many Chunks")
-				log.Printf(`world: "%s"`, action.World)
-				log.Printf(`x: "%s"`, action.Coords[0])
-				log.Printf(`z: "%s"`, action.Coords[2])
-			}
 		}
 	}
 	hub.All().Broadcast(p)
@@ -198,6 +198,8 @@ func getUsers(w rest.ResponseWriter, req *rest.Request) {
 func postUsers(w rest.ResponseWriter, req *rest.Request) {
 	var (
 		user *User
+		foundUser User
+		authUsersFound []User
 	)
 	err := req.DecodeJsonPayload(&user)
 	if err != nil {
@@ -205,14 +207,30 @@ func postUsers(w rest.ResponseWriter, req *rest.Request) {
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = db.Save(user)
-	if err != nil {
-		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	err = db.One("Name", user.Name, &foundUser)
+  if err != nil { // if user doesn't exist
+    log.Println(err)
+		err = db.Save(user)
+		if err != nil {
+			log.Println(err)
+			rest.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.WriteJson(&user)
+	} else {
+		lookupErr := db.Select(q.And(
+			q.Eq("Name", user.Name),
+			q.Eq("Password", user.Password),
+		)).Find(&authUsersFound)
+		if lookupErr != nil {
+			log.Println(lookupErr)
+		}
+		if len(authUsersFound) == 0 {
+			w.WriteHeader(http.StatusOK) // invalid password
+		} else {
+			w.WriteJson(&authUsersFound[0]) // valid login
+		}
 	}
-	// w.WriteHeader(http.StatusOK)
-	w.WriteJson(user)
 }
 
 func getWorlds(w rest.ResponseWriter, req *rest.Request) {
