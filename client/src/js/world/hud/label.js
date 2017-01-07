@@ -11,24 +11,29 @@ export default class Label {
       let mesh = null,
           color = this.color,
           light =  this.lightColor ? new THREE.PointLight(this.lightColor, 1.0, 200) : false,
-          geom = new THREE.BoxGeometry(1600, 400, 132),
+          geom = new THREE.BoxGeometry(1600, 400, 40),
           mat = this.renderText(this.text, color, "#000000")
-
-      mesh = new THREE.Mesh(geom, mat)
-      if (light) {
-        mesh.add(light)
-        light.position.set(0, 100, -100)
+      if (this.mesh == null) {
+        mesh = new THREE.Mesh(geom, mat)
+        if (light) {
+          mesh.add(light)
+          light.position.set(0, 100, -100)
+        }
+        this.mesh = mesh
+        this.mesh.position.set(0, -600, 0)
+        this.mount.add(mesh)
+      } else {
+        this.mesh.material = mat
+        this.mesh.material.needsUpdate = true
       }
-      this.mesh = mesh
-      this.mesh.position.set(0, -600, 0)
-      this.mount.add(mesh)
+
     }
 
     update (data) {
       this.text = data.text
       this.color = data.color
       this.lightColor = data.lightColor
-      three.scene.remove(this.mesh)
+      // three.scene.remove(this.mesh)
       this.initMesh()
     }
 
@@ -37,7 +42,7 @@ export default class Label {
           textMaterial = null,
           duplicate = document.getElementById(text),
           textCanvas = null,
-          textCanvasSize = 2048,
+          textCanvasSize = 1024,
           fontSize = 0,
           textLine = '',
           lines = 0,
@@ -52,12 +57,12 @@ export default class Label {
         textCanvasContext = textCanvas.getContext("2d")
         textCanvas.width = textCanvasSize
         textCanvas.height = textCanvasSize/4
-        fontSize = (36+Math.round(2200 / text.length))
+        fontSize = (28+Math.round(1500 / (text.length*1.5)))
         textCanvasContext.fillStyle = background
-        textCanvasContext.fillRect(0,0,textCanvasSize,textCanvasSize)
+        textCanvasContext.fillRect(0, 0, textCanvasSize, textCanvasSize)
         textCanvasContext.font = fontSize+"pt helvetica"
         textCanvasContext.textBaseline = "top"
-        textCanvasContext.fillStyle = color //"rgb("+Math.round(color[0]*255)+","+Math.round(color[1]*255)+","+Math.round(color[2]*255)+")"
+        textCanvasContext.fillStyle = color
 
              if (lines > 1) {
                for (let line=0; line < lines; line++) {
