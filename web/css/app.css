@@ -1,4 +1,11 @@
 /* app.css */
+@font-face {
+  font-family: RobotoThin;
+  src: url(/fonts/Roboto-Thin.ttf);
+}
+body {
+  font-family: RobotoThin, sans-serif;
+}
 #root {
   position: absolute;
   top: 0;

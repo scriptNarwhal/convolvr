@@ -1,4 +1,6 @@
-export default class Label {
+import Text from './text'
+
+export default class Label extends Text {
     constructor (data, mount) {
         this.mount = mount
         this.mesh = null
@@ -26,62 +28,13 @@ export default class Label {
         this.mesh.material = mat
         this.mesh.material.needsUpdate = true
       }
-
     }
 
     update (data) {
       this.text = data.text
       this.color = data.color
       this.lightColor = data.lightColor
-      // three.scene.remove(this.mesh)
       this.initMesh()
-    }
-
-    renderText (text, color, background) {
-      let textTexture = null,
-          textMaterial = null,
-          duplicate = document.getElementById(text),
-          textCanvas = null,
-          textCanvasSize = 1024,
-          fontSize = 0,
-          textLine = '',
-          lines = 0,
-          textCanvasContext = null
-
-  		if (!duplicate) {
-        lines = Math.ceil(0.00025*text.length*fontSize)
-        textCanvas = document.createElement("canvas")
-        textCanvas.setAttribute("id", text)
-        document.body.appendChild(textCanvas)
-        textCanvas.setAttribute("style","display:none;")
-        textCanvasContext = textCanvas.getContext("2d")
-        textCanvas.width = textCanvasSize
-        textCanvas.height = textCanvasSize/4
-        fontSize = (28+Math.round(1500 / (text.length*1.5)))
-        textCanvasContext.fillStyle = background
-        textCanvasContext.fillRect(0, 0, textCanvasSize, textCanvasSize)
-        textCanvasContext.font = fontSize+"pt helvetica"
-        textCanvasContext.textBaseline = "top"
-        textCanvasContext.fillStyle = color
-
-             if (lines > 1) {
-               for (let line=0; line < lines; line++) {
-                 textLine = text.substr(line*Math.ceil(text.length/lines),Math.ceil(text.length/lines))
-                 textCanvasContext.fillText(textLine, 20, line*fontSize)
-               }
-             } else {
-               textCanvasContext.fillText(text, 20, 20)
-             }
-       } else {
-         textCanvas = duplicate
-       }
-      textTexture = new THREE.Texture(textCanvas)
-      textTexture.needsUpdate = true
-      textMaterial = new THREE.MeshBasicMaterial({
-             map: textTexture,
-             side: 0
-      })
-      return textMaterial;
     }
 
     onActivate () {
