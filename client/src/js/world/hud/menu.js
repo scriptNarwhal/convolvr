@@ -1,4 +1,4 @@
-import Label from './label'
+import Label from './text/label'
 
 export default class HUDMenu {
     constructor (options = [], toolbox = false) {

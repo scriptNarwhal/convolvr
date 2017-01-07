@@ -13,7 +13,6 @@ let styles = {
   inner: {
     height: '100%',
     width: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.07)',
     transition: 'all 0.2s linear',
     backgroundSize: 'contain',
     height: '7.5vh',

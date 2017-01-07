@@ -10,11 +10,11 @@ const styles = {
   inner: {
     position: 'absolute',
     top: '0',
-    paddingTop: '25vh',
+    paddingTop: '1vh',
     width: '10vh',
     bottom: 0,
     margin: 'auto',
-    backgroundColor: 'black'
+    backgroundColor: 'rgb(27, 27, 27)'
   }
 }
 
@@ -51,10 +51,6 @@ class SideMenu extends Component {
                  title="Manage Data"
                  clickHandler={ ()=> { browserHistory.push("/memory") } }
             /> */}
-            {/* <Tab image="/data/stack.png"
-                 title="Editor"
-                 clickHandler={ ()=> { browserHistory.push("/editor") } }
-            /> */}
             <Tab image="/data/chat.png"
                  title="Chat"
                  clickHandler={ ()=> { browserHistory.push("/chat") } }
@@ -65,6 +61,10 @@ class SideMenu extends Component {
                    this.toggleVRMode()
                    browserHistory.push("/")
                  } }
+            />
+            <Tab image="/data/logout.png"
+                 title="Sign In / Switch Accounts"
+                 clickHandler={ ()=> { browserHistory.push("/login") } }
             />
             <Tab image="/data/configure.png"
                  title="Settings"

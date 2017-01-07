@@ -14,8 +14,8 @@ const styles = {
     left: 0,
     right: 0,
     bottom: "5vh",
-    border: "rgb(26, 252, 30) solid 0.5vh",
-    background: "rgba(0, 0, 0, 0.76)"
+    borderTop: '0.8vh solid rgb(43, 43, 43)',
+    background: 'rgb(27, 27, 27)'
   },
   title: {
     fontSize: "4vh",
@@ -27,6 +27,12 @@ const styles = {
   },
   label: {
     marginRight: "1em"
+  },
+  input: {
+    background: 'transparent',
+    color: 'white',
+    padding: '0.5em',
+    border: '2px solid rgba(255,255,255,0.25)'
   },
   username: {
     marginBottom: "1em"
@@ -71,11 +77,11 @@ export default class Login extends Component {
             <div style={styles.form}>
               <div style={styles.username}>
                 <span style={styles.label}>Username</span>
-                <input type='text' onBlur={(e)=>{ this.setState({username: e.target.value }) }} />
+                <input type='text' onBlur={(e)=>{ this.setState({username: e.target.value }) }} style={styles.input} />
               </div>
               <div style={styles.password}>
                 <span style={styles.label}>Password</span>
-                <input type='password' onBlur={(e)=>{ this.setState({password: e.target.value }) }} />
+                <input type='password' onBlur={(e)=>{ this.setState({password: e.target.value }) }} style={styles.input} />
               </div>
               <div style={styles.go}>
                 <input type="button" value="Enter" onClick={e=> { this.signIn() } } />
