@@ -54,8 +54,8 @@ export default connect(
   },
   dispatch => {
     return {
-      sendMessage: (message) => {
-          dispatch(sendMessage(message))
+      sendMessage: (message, from) => {
+          dispatch(sendMessage(message, from))
       },
       setCurrentWorld: (world) => {
           dispatch(setCurrentWorld(world))

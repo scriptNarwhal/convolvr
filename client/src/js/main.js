@@ -13,11 +13,9 @@ let store = makeStore(routerReducer)
 const history = syncHistoryWithStore(browserHistory, store)
 // 2d UI
 import App from './containers/app'
-import Editor from './containers/editor'
 import Memory from './containers/memory'
 import Worlds from './containers/worlds'
 import Settings from './containers/settings'
-import Home from './containers/home'
 import Login from './containers/login'
 import Chat from './containers/chat'
 import HUD from './containers/hud'
@@ -34,7 +32,6 @@ import Avatar from './world/avatar.js'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/colors'
-import io from 'socket.io-client'
 
     let socket = events,
     token = localStorage.getItem("token"),
@@ -92,12 +89,10 @@ ReactDOM.render(
 		<Router history={history}>
 	  		<Route path="/" component={App} >
 				<IndexRoute component={HUD}/>
-                <Route path="/world/:name" component={HUD} />
+        <Route path="/world/:name" component={HUD} />
 				<Route path="/login" component={Login} />
-				<Route path="/home" component={Home} />
 				<Route path="/chat" component={Chat} />
-				<Route path="/editor" component={Editor} />
-				<Route path="/memory" component={Memory} />
+				<Route path="/data" component={Memory} />
 				<Route path="/worlds" component={Worlds} />
 				<Route path="/settings" component={Settings} />
 			</Route>

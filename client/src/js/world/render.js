@@ -5,35 +5,34 @@ export let render = (world, last) => {
       mobile = world.mobile,
       camera = three.camera,
       cPos = camera.position,
-      delta = ((Date.now() - last) / 10000.0),
-      time = (Date.now() / 4600),
+      delta = (Date.now() - last) / 16000 ,
+      time = Date.now(),
       image = "",
       imageSize = [0, 0],
       beforeHMD = [0, 0, 0],
-      beforeInput = [0, 0, 0],
       userArms = world.user.arms,
       arms = [];
 
   if (!! world.userInput) {
 
     // Update VR headset position and apply to camera.
+    world.userInput.update(delta);
     if(!! three.vrControls) {
-      beforeHMD = [camera.position.x, camera.position.y, camera.position.z];
-      three.vrControls.update();
-      camera.position.multiplyScalar(1500);
+      beforeHMD = [cPos.x, cPos.y, cPos.z]
+      three.vrControls.update()
+      camera.position.multiplyScalar(4000)
     }
     if (world.mode == "stereo") {
       if (world.HMDMode == "standard") {
-        camera.position.set(beforeHMD[0] + cPos.x,
-                            beforeHMD[1] + cPos.y / 2.0,
-                            beforeHMD[2] + cPos.z);
-      } else {
-        camera.position.set(beforeHMD[0] + cPos.x * 7.0,
-                            beforeHMD[1] + cPos.y * 7.0,
-                            beforeHMD[2] + cPos.z * 7.0);
-      }
+        camera.position.set(beforeHMD[0],
+                            beforeHMD[1],
+                            beforeHMD[2])
+      } else if (world.HMDMode == "fly-mode") {
+        camera.position.set(beforeHMD[0] + cPos.x * 2.0,
+                            beforeHMD[1] + cPos.y * 2.0,
+                            beforeHMD[2] + cPos.z * 2.0)
+      } // else use 'room scale' head tracking
     }
-    world.userInput.update(delta);
   }
   if (world.user && world.user.mesh) {
     world.user.mesh.position.set(cPos.x, cPos.y, cPos.z);
@@ -85,12 +84,12 @@ export let render = (world, last) => {
       world.skybox && world.skybox.material && ()=>{world.skybox.material.uniforms.time.value += delta }
       world.skybox && world.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
       world.skybox && world.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
-      if (world.mode == "vr" || world.mode == "desktop") { // render for desktop / mobile (without cardboard)
+      if (world.mode == "vr" || world.mode == "web") {
         three.renderer.render(three.scene, camera);
       } else if (world.mode == "stereo") { // Render the scene in stereo for HMD.
         !!three.vrEffect && three.vrEffect.render(three.scene, camera);
       }
-      last = Date.now();
+      last = Date.now()
       requestAnimationFrame( () => { render(world, last) } )
   }
 

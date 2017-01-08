@@ -1,4 +1,6 @@
 /* structure actions */
+import axios from 'axios';
+import { browserHistory } from 'react-router'
 import {
     USER_ADD,
     USER_CONNECT,
@@ -12,7 +14,6 @@ import {
     LOGIN_DONE,
     LOGIN_FAIL
 } from '../constants/action-types';
-import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 
 export function addUser () {
@@ -72,14 +73,17 @@ export function deleteUser (id) {
 }
 
 
-export function login (user, pass) {
+export function login (user, pass, email, data) {
     return dispatch => {
          dispatch({
              type: LOGIN_FETCH
          })
-         return axios.post(API_SERVER+"/api/login", {
-             user: user,
-             pass: pass
+         return axios.post(API_SERVER+"/api/users", {
+             id: 0,
+             name: user,
+             password: pass,
+             email: email,
+             data: data
          })
          .then(response => {
              dispatch(loginDone(response))
@@ -89,15 +93,21 @@ export function login (user, pass) {
    }
 }
 
-export function loginDone () {
+export function loginDone (response) {
+    let data = response.data,
+        worldUser = three.world.user
+    worldUser.name = data.name
+    worldUser.email = data.email
+    worldUser.id = data.id
+    browserHistory.push("/chat")
     return {
         type: LOGIN_DONE,
-        data: {}
+        data: response.data
     }
 }
-export function loginFailed () {
+export function loginFailed (response) {
     return {
         type: LOGIN_FAIL,
-        data: {}
+        data: response.data
     }
 }

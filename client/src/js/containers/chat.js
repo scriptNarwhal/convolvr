@@ -13,13 +13,16 @@ const styles = {
     },
     text: {
         width: '70%',
-        background: "black",
-        color: "white"
+        background: 'black',
+        color: 'white',
+        fontSize: '1em',
+        marginLeft: '0.15em'
     },
     button: {
         background: "black",
         color: "white",
-        width: '15%'
+        width: '15%',
+        fontSize: '1em'
     },
     message : {
       display: "block",
@@ -32,14 +35,21 @@ const styles = {
       color: "white",
       padding: "0.25em"
     },
+    username: {
+      paddingRight: '0.66em'
+    },
+    messageText: {
+
+    },
     messages: {
       width: "85vw",
       minWidth: "410px",
       margin: "auto",
       textAlign: "left",
       position: "fixed",
-      left: "2vw",
-      bottom: "3em"
+      left: '10.5vh',
+      marginLeft: '0.5em',
+      bottom: '2.5em'
     },
     inputs: {
       minHeight: "2em",
@@ -48,7 +58,8 @@ const styles = {
       bottom: "1vh",
       width: "48vw",
       textAlign: "left",
-      left: "2vw"
+      left: '10.5vh',
+      marginLeft: '0.5em'
     }
 }
 
@@ -64,7 +75,8 @@ class Chat extends Component {
   }
   send (message) {
       console.log("send button")
-      this.props.sendMessage(message || this.state.text)
+      let from = this.props.username
+      this.props.sendMessage(message || this.state.text, from)
       this.setState({
         text: ""
       })
@@ -78,7 +90,8 @@ class Chat extends Component {
                     this.props.messages.map((m, i) => (
                         <span key={i} style={styles.message} >
                           <span style={styles.innerMessage}>
-                            {m}
+                            <span style={styles.username}>{m.from}:</span>
+                            <span style={styles.messageText}>{m.message}</span>
                           </span>
                         </span>
                     ))
@@ -112,6 +125,8 @@ import {
 export default connect(
   (state, ownProps) => {
     return {
+        loggedIn: state.users.loggedIn,
+        username: state.users.loggedIn != false ? state.users.loggedIn.name : "Human",
         messages: state.messages.messages,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
@@ -120,8 +135,8 @@ export default connect(
   },
   dispatch => {
     return {
-      sendMessage: (message) => {
-          dispatch(sendMessage(message))
+      sendMessage: (message, from) => {
+          dispatch(sendMessage(message, from))
         }
       }
   }

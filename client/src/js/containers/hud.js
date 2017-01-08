@@ -11,15 +11,17 @@ class HUD extends Component {
   render() {
     return (
         <div className="hud">
+            {this.props.fullscreen == false ? (
             <Button title="Options"
                     image="/data/configure.png"
                     className="options-button"
-                    style={{display: this.props.menuOpen ? "none" : "inline-block"}}
+                    style={{display: this.props.menuOpen ? "none" : "inline-block", backgroundColor: 'transparent'}}
                     onClick={ (evt, title) => {
                         this.toggleMenu()
                         //browserHistory.push("/menu")
                     } }
             />
+            ) : ""}
             {this.props.vrMode ? (
               <Button title="Exit VR"
                       style={{
@@ -55,7 +57,8 @@ export default connect(
         section: state.routing.locationBeforeTransitions.pathname,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
-        vrMode: state.app.vrMode
+        vrMode: state.app.vrMode,
+        fullscreen: state.app.fullscreen
     }
   },
   dispatch => {

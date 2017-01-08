@@ -13,7 +13,10 @@ module.exports = function messages (state = {
         return Object.assign({}, state, {
             messages: [
                 ...state.messages,
-                action.message
+                {
+                  message: action.message,
+                  from: action.from
+                }
             ]
       })
     default:

@@ -110,6 +110,7 @@ func Start(configName string) {
 	http.HandleFunc("/world/", worldHandler)
 	http.HandleFunc("/worlds", worldHandler)
 	http.HandleFunc("/chat", worldHandler)
+	http.HandleFunc("/login", worldHandler)
 	http.HandleFunc("/settings", worldHandler)
 	http.Handle("/connect", websocket.Handler(hub.Serve))
 
@@ -121,9 +122,9 @@ func Start(configName string) {
 
 	if useTLS {
 		log.Fatal(http.ListenAndServeTLS(securePort, certificate, key, nil))
-		log.Print("Convolvr Online using port ", securePort)
+		log.Print("Convolvr Online ", securePort)
 	} else {
-		log.Print("Convolvr Online using port ", port)
+		log.Print("Convolvr Online ", port)
 		log.Fatal(http.ListenAndServe(port, nil))
 	}
 }
@@ -137,30 +138,45 @@ func update(c *nexus.Client, p *nexus.Packet) {
 	hub.All().Broadcast(p)
 }
 func toolAction(c *nexus.Client, p *nexus.Packet) {
-	//log.Printf(`broadcasting toolAction "%s"`, p.Data)
-	// modify chunk where this tool was used...
-	// ...for all but projectile tools.. probably
-
-	type ToolAction struct {
-		World string `json:"world"`
-		User string `json:"user"`
-		UserId int `json:"userId"`
-		Position []float64 `json:"position"`
-		Quaternion []float64 `json:"quaternion"`
-		Tool string `json:"tool"`
-		Primary bool `json:"primary"`
-	}
 	var (
 		action ToolAction
+		chunkData []Chunk
+		entities []*Entity
+		entity Entity
 	)
 	if err := json.Unmarshal([]byte(p.Data), &action); err != nil {
 			 panic(err)
 	}
-	log.Printf(`broadcasting tool action: "%s"`, action.Tool)
-	log.Printf(`world: "%s"`, action.World)
-	log.Printf(`x: "%s"`, int(math.Floor(action.Position[0] / 232000)))
-	log.Printf(`z: "%s"`, int(math.Floor(action.Position[2] / 201840)))
-
+	if action.Tool == "Entity Tool" {
+		getChunkErr := db.Select(q.And(
+			q.Eq("X", action.Coords[0]),
+			q.Eq("Y", action.Coords[1]),
+			q.Eq("Z", action.Coords[2]),
+			q.Eq("World", action.World),
+		)).Find(&chunkData)
+		if getChunkErr != nil {
+			log.Println(getChunkErr)
+		}
+		nChunks := len(chunkData)
+		if (nChunks > 0) {
+				entities = chunkData[0].Entities
+				if (len(entities) < 48) {
+					entity = *NewEntity(0, "", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, action.Entity.TranslateZ)
+					entities = append(entities, &entity)
+					chunkData[0].Entities = entities
+					saveErr := db.Update(&chunkData[0])
+					if saveErr != nil {
+						log.Println(saveErr)
+					}
+				} else {
+					log.Println("Too Many Entities:")
+					log.Printf(`world: "%s"`, action.World)
+					log.Printf(`x: "%s"`, action.Coords[0])
+					log.Printf(`z: "%s"`, action.Coords[2])
+				}
+				log.Printf(`broadcasting tool action: "%s"`, action.Tool)    // modify chunk where this tool was used...
+		}
+	}
 	hub.All().Broadcast(p)
 }
 
@@ -182,6 +198,8 @@ func getUsers(w rest.ResponseWriter, req *rest.Request) {
 func postUsers(w rest.ResponseWriter, req *rest.Request) {
 	var (
 		user *User
+		foundUser User
+		authUsersFound []User
 	)
 	err := req.DecodeJsonPayload(&user)
 	if err != nil {
@@ -189,14 +207,30 @@ func postUsers(w rest.ResponseWriter, req *rest.Request) {
 		rest.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	err = db.Save(user)
-	if err != nil {
-		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	err = db.One("Name", user.Name, &foundUser)
+  if err != nil { // if user doesn't exist
+    log.Println(err)
+		err = db.Save(user)
+		if err != nil {
+			log.Println(err)
+			rest.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		w.WriteJson(&user)
+	} else {
+		lookupErr := db.Select(q.And(
+			q.Eq("Name", user.Name),
+			q.Eq("Password", user.Password),
+		)).Find(&authUsersFound)
+		if lookupErr != nil {
+			log.Println(lookupErr)
+		}
+		if len(authUsersFound) == 0 {
+			w.WriteHeader(http.StatusOK) // invalid password
+		} else {
+			w.WriteJson(&authUsersFound[0]) // valid login
+		}
 	}
-	// w.WriteHeader(http.StatusOK)
-	w.WriteJson(user)
 }
 
 func getWorlds(w rest.ResponseWriter, req *rest.Request) {
@@ -228,9 +262,9 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
   if err != nil {
     log.Println(err)
 
-	first = 0.4 + (rand.Float64() * 0.7)
-	second = first / 4 + rand.Float64() * 0.1
-	third = second / 2 + rand.Float64() * 0.1
+	first = 0.9 + (rand.Float64() * 0.1)
+	second = first / 5 + rand.Float64() * 0.05
+	third = second / 5 + rand.Float64() * 0.05
 	if rand.Intn(10) > 7 {
 		if rand.Intn(5) > 2 {
 			red = first
@@ -243,13 +277,13 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 		}
 	} else if rand.Intn(10) > 5 {
 		if rand.Intn(5) > 2 {
-			red = second / 2.0
+			red = second
 			green = third
 			blue = first
 		} else {
-			red = third
+			red = first
 			green = second / 2.0
-			blue = first
+			blue = third
 		}
 	} else {
 		if rand.Intn(5) > 3 {
@@ -257,8 +291,8 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 			green = first / 1.5
 			blue = third / 2.0
 		} else {
-			red = third
-			green = first / 1.5
+			red = second
+			green = first / 5.0
 			blue = first
 		}
 	}
@@ -321,10 +355,10 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 
 	    if (len(chunkData) == 0) {
 	      chunkGeom := "flat"
-	      if rand.Intn(10) < 8 {
+	      if rand.Intn(10) < 6 {
 	        chunkGeom = "space"
 	      } else {
-			  if rand.Intn(24) > 19{
+			  if rand.Intn(26) > 24{
 				  light := 0
 				  if rand.Intn(6) > 3 {
 					  if rand.Intn(5) > 4 {
@@ -334,7 +368,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 								light = 0x3000ff
 							} else {
 								if rand.Intn(4) > 2 {
-									light = 0xffff00
+									light = 0x8000ff
 								} else {
 									light = 0x00ff00
 								}

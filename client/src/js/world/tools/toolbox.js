@@ -69,35 +69,47 @@ export default class Toolbox {
     usePrimary (hand) {
       //console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
       let tool = this.tools[this.currentTools[hand]],
-          camera = this.world.camera
+          camera = this.world.camera,
+          entity = null
       if (tool.mesh == null) {
         tool.equip(hand)
       }
-      tool.primaryAction()
-      this.sendToolAction(true, tool, camera)
+      entity = tool.primaryAction() || null
+      this.sendToolAction(true, tool, camera, entity)
     }
 
     useSecondary(hand) {
       let tool = this.tools[this.currentTools[hand]],
-          camera = this.world.camera
+          camera = this.world.camera,
+          entity = false
       if (tool.mesh == null) {
           tool.equip(hand)
       }
-      if (tool.secondaryAction() === false) {
+      entity = tool.secondaryAction()
+      if (entity === false) {
         return
       }
-      this.sendToolAction(false, tool, camera)
+      this.sendToolAction(false, tool, camera, entity)
     }
 
-    sendToolAction (primary, tool, camera) {
+    sendToolAction (primary, tool, camera, entity) {
+      let cPos = camera.position,
+          coords = [Math.floor(cPos.x/232000), 0, Math.floor(cPos.z/201840)],
+          chunk = this.world.terrain.pMap[coords[0]+".0."+coords[2]],
+          chunkPos = chunk.mesh.position,
+          relativePosition = [cPos.x -chunkPos.x, cPos.y -chunkPos.y, cPos.z -chunkPos.z],
+          quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w]
+
       send("tool action", {
         tool: tool.name,
         world: this.world.name,
         user: this.world.user.username,
         userId: this.world.user.id,
-        position: [camera.position.x, camera.position.y, camera.position.z],
-        quaternion: [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
+        coords: coords,
+        position: relativePosition,
+        quaternion: quaternion,
         options: tool.options,
+        entity: entity,
         primary
       })
     }

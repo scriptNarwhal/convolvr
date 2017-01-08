@@ -1,6 +1,7 @@
 import Tool from './tool'
 import Entity from '../entities/entity'
 import EntityToolIcon from '../hud/icons/entity-tool-icon'
+import EntityGenerator from '../entities/entity-generator'
 
 export default class EntityTool extends Tool  {
     constructor (data, world) {
@@ -9,11 +10,13 @@ export default class EntityTool extends Tool  {
       this.mesh = null
       this.name = "Entity Tool"
       this.icon = new EntityToolIcon()
+      this.generator = new EntityGenerator()
       this.options = {
-        entityType: "panel",
-        all: ["panel", "block", "column"],
-        current: 0
+        translateZ: -9500,
+        entityType: "panel"
       }
+      this.all = ["panel", "block", "column", "wirebox"]
+      this.current = 0
     }
 
     initMesh (data = {}) {
@@ -35,15 +38,18 @@ export default class EntityTool extends Tool  {
 
     primaryAction () {
       // place entity
+      let entity = this.generator.makeEntity(this.options.entityType)
+      entity.translateZ = this.options.translateZ
+      return entity
     }
 
     secondaryAction () {
       // cycle entities
-      this.options.current ++
-      if (this.options.current >= this.options.all.length) {
-        this.options.current = 0
+      this.current ++
+      if (this.current >= this.all.length) {
+        this.current = 0
       }
-      this.options.entityType = this.options.all[this.options.current]
+      this.options.entityType = this.all[this.current]
       return false // no socket event
     }
 }
