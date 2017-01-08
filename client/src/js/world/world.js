@@ -11,11 +11,12 @@ let world = null
 
 export default class World {
 	constructor(userInput = false, socket, store) {
-		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1,
-				mobile = (window.innerWidth <= 640),
+		let mobile = (window.innerWidth <= 640),
 				scene = new THREE.Scene(),
 				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 4500000 ),
-				renderer = new THREE.WebGLRenderer({antialias: pixelRatio <= 1.5}),
+				screenResX = window.devicePixelRatio * window.innerWidth,
+				rendererAA = new THREE.WebGLRenderer({antialias: true}),
+				renderer = screenResX < 2000 ? new THREE.WebGLRenderer({antialias: false}) : null,
 				self = this,
 				three = {}
 
@@ -45,12 +46,11 @@ export default class World {
 		this.capturing = false
 		this.webcamImage = ""
 		this.HMDMode = "standard" // "head-movement"
-
-		renderer.setPixelRatio(pixelRatio)
-		renderer.setSize(window.innerWidth, window.innerHeight)
-		document.body.appendChild( renderer.domElement )
-		renderer.domElement.setAttribute("id", "viewport")
-		renderer.setClearColor(0x3b3b3b)
+		this.screenResX = screenResX
+		this.initRenderer(rendererAA, "viewportAA")
+		if (!!renderer) {
+			this.initRenderer(renderer, "viewport")
+		}
 		userInput.init(this, camera, this.user)
 		this.worldPhysics = new WorldPhysics()
 		this.worldPhysics.init(self)
@@ -61,19 +61,34 @@ export default class World {
 		}
 		three = this.three = {
 			world: this,
-			scene: scene,
-			camera: camera,
-			renderer: renderer
+			scene,
+			camera,
+			renderer,
+			rendererAA
 		};
 		world = this
 		window.three = this.three;
 		window.onresize = function () {
+			world.screenResX = window.devicePixelRatio * window.innerWidth
 			if (three.world.mode != "stereo") {
-				three.renderer.setSize(window.innerWidth, window.innerHeight);
+				three.renderer && three.renderer.setSize(window.innerWidth, window.innerHeight)
+				three.rendererAA.setSize(window.innerWidth, window.innerHeight)
+				let viewport = document.querySelector("#viewport"),
+						viewportAA = document.querySelector("#viewportAA")
+				if (viewport) {
+					if (world.screenResX > 2000) {
+						viewport.style.visibility = 'hidden'
+						viewportAA.style.visibility = ''
+					} else {
+						viewport.style.visibility = ''
+						viewportAA.style.visibility = 'hidden'
+					}
+				}
 			}
-			three.camera.aspect = innerWidth / innerHeight;
-			three.camera.updateProjectionMatrix();
+			three.camera.aspect = innerWidth / innerHeight
+			three.camera.updateProjectionMatrix()
 		}
+		window.onresize()
 
 		socket.on("update", packet => {
 			let data = JSON.parse(packet.data),
@@ -171,14 +186,23 @@ export default class World {
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
 	}
 
+	initRenderer (renderer, id) {
+		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1
+		renderer.setClearColor(0x3b3b3b)
+		renderer.setPixelRatio(pixelRatio)
+		renderer.setSize(window.innerWidth, window.innerHeight)
+			document.body.appendChild( renderer.domElement )
+			renderer.domElement.setAttribute("class", "viewport")
+			renderer.domElement.setAttribute("id", id)
+	}
+
 	load (name) {
 		this.name = name;
-		axios.get(`${API_SERVER}/api/worlds/name/${name}`)
-           .then(response => {
+		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
 			 this.init(response.data)
-          }).catch(response => {
-             console.log("World Error", response)
-          });
+    }).catch(response => {
+        console.log("World Error", response)
+    });
 	}
 
 	reload (name) {

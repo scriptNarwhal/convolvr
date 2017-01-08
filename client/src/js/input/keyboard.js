@@ -80,20 +80,8 @@ export default class Keyboard {
       input.device.falling = true;
       velocity.y = 160000;
     }
-    if (velocity.x > 999999) {
-      velocity.x = 999999;
-    } else if (velocity.x < -999999) {
-      velocity.x = -999999;
-    }
-    if (velocity.y > 999999) {
-      velocity.y = 999999
-    } else if (velocity.y < -999999) {
-      velocity.y = -999999;
-    }
-    if (velocity.z > 999999) {
-      velocity.z = 999999
-    } else if (velocity.z < -999999) {
-      velocity.z = -999999;
+    if (velocity.length() > 1899999) {
+      velocity.multiplyScalar(0.98)
     }
   }
 }

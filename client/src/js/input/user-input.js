@@ -38,52 +38,32 @@ export default class UserInput {
 	}
 
 	init (world, camera, device) {
-		var uInput = this;
+		let uInput = this,
+				viewports = document.querySelectorAll("canvas.viewport")
 		this.connect(world, camera, device);
 		uInput.rotationVector = {x: 0.2, y: 5.65, z: 0};
-		var canvas = document.querySelector("canvas#viewport");
-		canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
-		canvas.onclick = (event) => {
-			var elem = event.target;
-			if (!uInput.fullscreen) {
-				elem.requestPointerLock();
-				uInput.toggleFullscreen();
-			}
-		};
 
-		if ("onpointerlockchange" in document) {
-			document.addEventListener('pointerlockchange', lockChangeAlert, false);
-		} else if ("onmozpointerlockchange" in document) {
-			document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
-		} else if ("onwebkitpointerlockchange" in document) {
-			document.addEventListener('webkitpointerlockchange', lockChangeAlert, false);
-		}
-
-		function lockChangeAlert() {
-			var a = 0;
-			uInput.focus =(document.pointerLockElement===canvas||document.mozPointerLockElement===canvas||document.webkitPointerLockElement===canvas);
-			uInput.fullscreen = uInput.focus;
-			if (!uInput.fullscreen && world.user.username != "") {
-				//world.showChat();
-				world.mode = "web";
-				while (a < world.user.arms.length) {
-					world.user.arms[a].visible = false;
-					a ++;
-				}
-				document.body.setAttribute("class", "desktop");
-			} else {
-				if (world.user.username != "") {
-					if (world.mode != "stereo") {
-						world.mode = "vr";
+		Array.prototype.map.call(viewports, (canvas, i) => {
+			if (true) {
+				canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
+				canvas.onclick = (event) => {
+					let elem = event.target;
+					if (!uInput.fullscreen) {
+						elem.requestPointerLock();
+						uInput.toggleFullscreen();
 					}
-					while (a < world.user.arms.length) {
-						world.user.arms[a].visible = true;
-						a ++;
-					}
-					document.body.setAttribute("class", "vr");
+				};
+				canvas.style.pointerEvents = ''
+				if ("onpointerlockchange" in document) {
+					document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false);
+				} else if ("onmozpointerlockchange" in document) {
+					document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false);
+				} else if ("onwebkitpointerlockchange" in document) {
+					document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false);
 				}
 			}
-		}
+		})
+
 		if (!world.mobile) {
 			document.addEventListener("mousemove", function (e) {
 				if (uInput.focus) {
@@ -169,6 +149,33 @@ export default class UserInput {
 				world.user.mesh.rotation.y = (this.camera.rotation.y);
 			}
 
+	}
+
+	lockChangeAlert (canvas) {
+		var a = 0,
+				world = this.world
+		this.focus =(document.pointerLockElement===canvas||document.mozPointerLockElement===canvas||document.webkitPointerLockElement===canvas);
+		this.fullscreen = this.focus;
+		if (!this.fullscreen && world.user.username != "") {
+			//world.showChat();
+			world.mode = "web";
+			while (a < world.user.arms.length) {
+				world.user.arms[a].visible = false;
+				a ++;
+			}
+			document.body.setAttribute("class", "desktop");
+		} else {
+			if (world.user.username != "") {
+				if (world.mode != "stereo") {
+					world.mode = "vr";
+				}
+				while (a < world.user.arms.length) {
+					world.user.arms[a].visible = true;
+					a ++;
+				}
+				document.body.setAttribute("class", "vr");
+			}
+		}
 	}
 
 	toggleFullscreen (elem) {

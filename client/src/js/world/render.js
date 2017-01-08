@@ -14,7 +14,6 @@ export let render = (world, last) => {
       arms = [];
 
   if (!! world.userInput) {
-
     // Update VR headset position and apply to camera.
     world.userInput.update(delta);
     if(!! three.vrControls) {
@@ -52,7 +51,7 @@ export let render = (world, last) => {
       context.drawImage(v, 0, 0, 320, 240);
       world.webcamImage = canvas.toDataURL("image/jpg", 0.6);
     }
-    world.sendUpdatePacket = 0;
+    world.sendUpdatePacket  = 0;
   }
 
   world.sendUpdatePacket += 1;
@@ -85,7 +84,11 @@ export let render = (world, last) => {
       world.skybox && world.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
       world.skybox && world.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
       if (world.mode == "vr" || world.mode == "web") {
-        three.renderer.render(three.scene, camera);
+        if (world.screenResX > 2000 || three.renderer == null) {
+          three.rendererAA.render(three.scene, camera)
+        } else {
+          three.renderer.render(three.scene, camera);
+        }
       } else if (world.mode == "stereo") { // Render the scene in stereo for HMD.
         !!three.vrEffect && three.vrEffect.render(three.scene, camera);
       }
@@ -94,7 +97,7 @@ export let render = (world, last) => {
   }
 
 export let toggleStereo = (mode) => {
-    let renderer = three.renderer,
+    let renderer = three.rendererAA,
         camera = three.camera,
         controls = null,
         effect = null;

@@ -72,6 +72,12 @@ class Chat extends Component {
   }
   componentDidMount () {
     this.textInput.focus()
+    if (this.props.menuOpen == false) {
+      this.props.toggleMenu(true)
+    }
+    if (this.props.chatOpen == false) {
+      this.props.showChat()
+    }
   }
   send (message) {
       console.log("send button")
@@ -121,7 +127,10 @@ import { connect } from 'react-redux';
 import {
     sendMessage
 } from '../redux/actions/message-actions'
-
+import {
+  toggleMenu,
+  showChat
+} from '../redux/actions/app-actions'
 export default connect(
   (state, ownProps) => {
     return {
@@ -130,6 +139,7 @@ export default connect(
         messages: state.messages.messages,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
+        chatOpen: state.app.chatOpen,
         vrMode: state.app.vrMode
     }
   },
@@ -137,7 +147,13 @@ export default connect(
     return {
       sendMessage: (message, from) => {
           dispatch(sendMessage(message, from))
-        }
+      },
+      toggleMenu: (toggle) => {
+        dispatch(toggleMenu(toggle))
+      },
+      showChat: () => {
+        dispatch(showChat())
       }
+    }
   }
 )(Chat)
