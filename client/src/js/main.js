@@ -32,7 +32,6 @@ import Avatar from './world/avatar.js'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/colors'
-import io from 'socket.io-client'
 
     let socket = events,
     token = localStorage.getItem("token"),

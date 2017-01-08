@@ -14,7 +14,7 @@ const styles = {
     width: '10vh',
     bottom: 0,
     margin: 'auto',
-    backgroundColor: 'rgb(27, 27, 27)'
+    backgroundColor: 'rgb(12, 12, 12)'
   }
 }
 

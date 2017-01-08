@@ -6,17 +6,20 @@ import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 import { send } from '../../network/socket.js'
 
-export function sendMessage (message) {
-    console.log("send")
-    send("chat message", message)
+export function sendMessage (message, from) {
+    send('chat message', {
+      message,
+      from
+    })
     return {
-        type: MESSAGE_SEND
+        type: MESSAGE_SEND,
     }
 }
 
-export function getMessage (message) {
+export function getMessage (message, from) {
     return {
         type: MESSAGE_GET,
-        message
+        message,
+        from
     }
 }
