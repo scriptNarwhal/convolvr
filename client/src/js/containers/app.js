@@ -7,11 +7,26 @@ import Shell from '../components/shell'
 class App extends Component {
 
   componentDidMount () {
+    this.state = {
+      unread: 0
+    }
     this.props.fetchWorlds()
     events.on("chat message", message => {
-      let chatMessage = JSON.parse(message.data)
+      let chatMessage = JSON.parse(message.data),
+          worldName = ''
     	this.props.getMessage(chatMessage.message, chatMessage.from)
       this.notify(chatMessage.message, chatMessage.from)
+      worldName = this.props.world == "overworld" ? "Convolvr" : this.props.world
+      if (this.props.focus == false) {
+        this.setState({
+          unread: this.state.unread +1
+        })
+        if (this.state.unread > 0) {
+            document.title = `[${this.state.unread}] ${worldName}`
+        }
+      } else {
+        document.title = worldName
+      }
     })
     this.props.setCurrentWorld(window.worldName)
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
@@ -21,16 +36,29 @@ class App extends Component {
     // detect user credentials
     let rememberUser = localStorage.getItem("rememberUser"),
         username = '',
-        password = ''
+        password = '',
+        autoSignIn = false
     if (rememberUser != null) {
       username = localStorage.getItem("username")
       password = localStorage.getItem("password")
       if (username != null && username != '') {
+        autoSignIn = true
         this.props.login(username, password, "", "")
       }
     }
-    if (window.location.href.indexOf("/chat") >-1 && this.props.loggedIn == false) {
+    if (!autoSignIn && this.props.loggedIn == false && window.location.href.indexOf("/chat") >-1) {
       browserHistory.push("/login")
+    }
+    window.onblur = () => {
+      this.props.setWindowFocus(false)
+      three.world.windowFocus = false
+    }
+    window.onfocus = () => {
+      this.props.setWindowFocus(true)
+      three.world.windowFocus = true
+      this.setState({
+        unread: 0
+      })
     }
   }
   handleKeyDown (e) {
@@ -86,7 +114,7 @@ App.defaultProps = {
 }
 
 import { connect } from 'react-redux'
-import { toggleMenu } from '../redux/actions/app-actions'
+import { toggleMenu, setWindowFocus } from '../redux/actions/app-actions'
 import { fetchWorlds, setCurrentWorld } from '../redux/actions/world-actions'
 import { getMessage } from '../redux/actions/message-actions'
 import { login } from '../redux/actions/user-actions'
@@ -98,7 +126,9 @@ export default connect(
       tools: state.tools,
       users: state.users,
       menuOpen: state.app.menuOpen,
-      stereoMode: state.app.vrMode
+      stereoMode: state.app.vrMode,
+      focus: state.app.windowFocus,
+      world: state.worlds.current
     }
   },
   dispatch => {
@@ -117,6 +147,9 @@ export default connect(
       },
       setCurrentWorld: (world) => {
         dispatch(setCurrentWorld(world))
+      },
+      setWindowFocus: (t) => {
+        dispatch(setWindowFocus(t))
       }
     }
   }
