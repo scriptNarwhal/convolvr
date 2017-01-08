@@ -13,7 +13,7 @@ import {
 } from '../constants/action-types';
 
 module.exports = function users (state = {
-    current: null,
+    loggedIn: false,
     all: [],
     fetching: false
 }, action) {
@@ -52,12 +52,13 @@ module.exports = function users (state = {
     case UPDATE_USER:
     case LOGIN_FETCH:
     return Object.assign({}, state, {
-        fetching: true
+        fetching: true,
+        loggedIn: false
     })
     case LOGIN_DONE:
     return Object.assign({}, state, {
             fetching: false,
-            current: action.data.user
+            loggedIn: action.data != "" ? action.data : false
     })
     case LOGIN_FAIL:
     return Object.assign({}, state, {

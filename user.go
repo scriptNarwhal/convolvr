@@ -3,7 +3,7 @@ package convolvr
 type User struct {
 	ID       int    `storm:"id,increment" json:"id"`
 	Name     string `storm:"index" json:"name"`
-	Password string
+	Password string `json:"Password"`
 	Email    string `storm:"unique" json:"email"`
 	Data     string `json:"data"`
 }
