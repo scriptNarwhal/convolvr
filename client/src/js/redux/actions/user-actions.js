@@ -1,4 +1,6 @@
 /* structure actions */
+import axios from 'axios';
+import { browserHistory } from 'react-router'
 import {
     USER_ADD,
     USER_CONNECT,
@@ -12,7 +14,6 @@ import {
     LOGIN_DONE,
     LOGIN_FAIL
 } from '../constants/action-types';
-import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 
 export function addUser () {
@@ -98,6 +99,7 @@ export function loginDone (response) {
     worldUser.name = data.name
     worldUser.email = data.email
     worldUser.id = data.id
+    browserHistory.push("/chat")
     return {
         type: LOGIN_DONE,
         data: response.data

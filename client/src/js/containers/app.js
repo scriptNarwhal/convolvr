@@ -18,6 +18,20 @@ class App extends Component {
     if (window.location.href.indexOf("/chat") > -1 || window.location.href.indexOf("/login") > -1) {
       this.props.toggleMenu(true);
     }
+    // detect user credentials
+    let rememberUser = localStorage.getItem("rememberUser"),
+        username = '',
+        password = ''
+    if (rememberUser != null) {
+      username = localStorage.getItem("username")
+      password = localStorage.getItem("password")
+      if (username != null && username != '') {
+        this.props.login(username, password, "", "")
+      }
+    }
+    if (window.location.href.indexOf("/chat") >-1 && this.props.loggedIn == false) {
+      browserHistory.push("/login")
+    }
   }
   handleKeyDown (e) {
     if (e.which == 13) {
@@ -56,11 +70,6 @@ class App extends Component {
   }
 
   render() {
-    var content = "";
-    if (window.location.href.split("host/").length > 1) {
-    	//content = <SignIn />;
-    }
-
     return (
         <div className="root">
             <Shell className="hud-side-menu tabs" menuOpen={this.props.menuOpen} ></Shell>
@@ -81,10 +90,12 @@ import { connect } from 'react-redux'
 import { toggleMenu } from '../redux/actions/app-actions'
 import { fetchWorlds, setCurrentWorld } from '../redux/actions/world-actions'
 import { getMessage } from '../redux/actions/message-actions'
+import { login } from '../redux/actions/user-actions'
 
 export default connect(
   state => {
     return {
+      loggedIn: state.users.loggedIn,
       tools: state.tools,
       users: state.users,
       menuOpen: state.app.menuOpen,
@@ -93,14 +104,17 @@ export default connect(
   },
   dispatch => {
     return {
-      fetchWorlds: () => {
-          dispatch(fetchWorlds())
+      login: (user, pass, email, data) => {
+            dispatch(login(user, pass, email, data))
       },
       getMessage: (message) => {
           dispatch(getMessage(message))
       },
       toggleMenu: (force) => {
           dispatch(toggleMenu(force))
+      },
+      fetchWorlds: () => {
+          dispatch(fetchWorlds())
       },
       setCurrentWorld: (world) => {
         dispatch(setCurrentWorld(world))
