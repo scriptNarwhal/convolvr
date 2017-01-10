@@ -84,7 +84,7 @@ export let render = (world, last) => {
       world.skybox && world.skybox.position.set(camera.position.x, camera.position.y, camera.position.z);
       world.skybox && world.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z);
       if (world.mode == "vr" || world.mode == "web") {
-        if (world.screenResX > 2000 || three.renderer == null) {
+        if (world.screenResX > 1900 || three.renderer == null) {
           three.rendererAA.render(three.scene, camera)
         } else {
           three.renderer.render(three.scene, camera);

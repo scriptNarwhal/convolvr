@@ -16,7 +16,7 @@ export default class World {
 				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 4500000 ),
 				screenResX = window.devicePixelRatio * window.innerWidth,
 				rendererAA = new THREE.WebGLRenderer({antialias: true}),
-				renderer = screenResX < 2000 ? new THREE.WebGLRenderer({antialias: false}) : null,
+				renderer = screenResX < 1900 ? new THREE.WebGLRenderer({antialias: false}) : null,
 				self = this,
 				three = {}
 
@@ -76,7 +76,7 @@ export default class World {
 				let viewport = document.querySelector("#viewport"),
 						viewportAA = document.querySelector("#viewportAA")
 				if (viewport) {
-					if (world.screenResX > 2000) {
+					if (world.screenResX > 1900) {
 						viewport.style.visibility = 'hidden'
 						viewportAA.style.visibility = ''
 					} else {

@@ -5,13 +5,16 @@ import Tab from './tab'
 const styles = {
   sideMenu: {
     width: '10vh',
+    maxWidth: '98px',
     height: '100%'
   },
   inner: {
     position: 'absolute',
     top: '0',
     paddingTop: '1vh',
+    paddingTop: '6px',
     width: '10vh',
+    maxWidth: '98px',
     bottom: 0,
     margin: 'auto',
     backgroundColor: 'rgb(12, 12, 12)'
@@ -25,7 +28,7 @@ class SideMenu extends Component {
   }
 
   goBack () {
-    browserHistory.push(`/world/${this.props.world}`)
+    browserHistory.push(`/subspace/${this.props.world}`)
   }
 
   toggleVRMode () {

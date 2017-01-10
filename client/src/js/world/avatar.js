@@ -15,8 +15,8 @@ export default class Avatar {
               shape: "cylinder",
               color: 0xffffff,
               material: "plastic",
-              size: {x: 1800, y: 1200, z: 1800},
-              position: { x: 0, y: (n-1)*600, z: 0 },
+              size: [1800, 1200, 1800],
+              position: [0, (n-1)*600, 0],
               quaternion: false
           };
           components.push(component);
@@ -25,8 +25,8 @@ export default class Avatar {
               shape: "octahedron",
               color: 0xffffff,
               material: "wireframe",
-              size: {x: 2800, y: 2800, z: 2800},
-              position: { x: 0, y: (n-1)*600, z: 0 },
+              size: [2800, 2800, 2800],
+              position: [0, (n-1)*600, 0],
               quaternion: false
           };
           components.push(componentB);

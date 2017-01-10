@@ -52,7 +52,7 @@ import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/col
 	world = null,
 	avatar = null
 
-window.worldName = window.location.href.indexOf("/world/") > -1 ? window.location.href.split("/world/")[1] : "overworld"
+window.worldName = window.location.href.indexOf("/subspace/") > -1 ? window.location.href.split("/subspace/")[1] : "overworld"
 
 userInput = new UserInput()
 world = new World(userInput, socket, store)
@@ -89,7 +89,7 @@ ReactDOM.render(
 		<Router history={history}>
 	  		<Route path="/" component={App} >
 				<IndexRoute component={HUD}/>
-        <Route path="/world/:name" component={HUD} />
+        <Route path="/subspace/:name" component={HUD} />
 				<Route path="/login" component={Login} />
 				<Route path="/chat" component={Chat} />
 				<Route path="/data" component={Memory} />

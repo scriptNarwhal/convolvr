@@ -13,7 +13,7 @@ const styles = {
 
 class Worlds extends Component {
   switchWorlds (name) {
-    browserHistory.push("/world/"+name)
+    browserHistory.push("/subspace/"+name)
     window.location.href = window.location.href // workaround..
     // this.props.setCurrentWorld(name)
     // three.world.reload(name)
