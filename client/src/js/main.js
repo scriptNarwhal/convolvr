@@ -68,7 +68,7 @@ three.scene.add(user.mesh)
 userInput.init(world, world.camera, user)
 
 userInput.rotationVector = {x: 0, y: 9.95, z: 0}
-three.camera.position.set(-300000, 50000, -300000)
+three.camera.position.set(-300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
 user.light.position.set(100000, 20000, 100000)
 
 const muiTheme = getMuiTheme({
