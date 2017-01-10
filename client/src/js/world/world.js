@@ -13,7 +13,7 @@ export default class World {
 	constructor(userInput = false, socket, store) {
 		let mobile = (window.innerWidth <= 640),
 				scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 4500000 ),
+				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 6000000 ),
 				screenResX = window.devicePixelRatio * window.innerWidth,
 				rendererAA = new THREE.WebGLRenderer({antialias: true}),
 				renderer = screenResX < 1900 ? new THREE.WebGLRenderer({antialias: false}) : null,
@@ -52,6 +52,7 @@ export default class World {
 		if (!!renderer) {
 			this.initRenderer(renderer, "viewport")
 		}
+		this.raycaster = new THREE.Raycaster()
 		userInput.init(this, camera, this.user)
 		this.worldPhysics = new WorldPhysics()
 		this.worldPhysics.init(self)
@@ -180,7 +181,7 @@ export default class World {
 		three.skyMat = skyShaderMat
 		this.ground = new THREE.Object3D()
 		this.ground.rotation.x = -Math.PI /2
-		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(4400000, 4), skyShaderMat)
+		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyShaderMat)
 		this.skyLight = skyLight
 		this.skybox.add(skyLight)
 		skyLight.position.set(0, 300000, 300000)

@@ -41,7 +41,7 @@ export default class UserInput {
 		let uInput = this,
 				viewports = document.querySelectorAll("canvas.viewport")
 		this.connect(world, camera, device);
-		uInput.rotationVector = {x: 0.2, y: 5.65, z: 0};
+		uInput.rotationVector = {x: 0.2, y: 4.6, z: 0};
 
 		Array.prototype.map.call(viewports, (canvas, i) => {
 			if (true) {
@@ -134,14 +134,14 @@ export default class UserInput {
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
 			this.camera.matrixWorldNeedsUpdate = true;
-			if (this.camera.position.y < bottom + 2000) {
+			if (this.camera.position.y < bottom + 12000) {
 				if (this.keys.shift) {
 					velocity.y *= -0.70;
 				} else {
 					velocity.y *= -0.20;
 				}
 				this.device.falling = false;
-				this.camera.position.y = bottom + 2000;
+				this.camera.position.y = bottom + 12000;
 				if (velocity.y > 1000) {
 					//world.vibrate(50);
 				}
