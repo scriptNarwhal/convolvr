@@ -109,8 +109,9 @@ export default class UserInput {
 	}
 
 	update (delta) {
-		var bottom = -168000,
-				world = this.world,
+		var world = this.world,
+				terrainMesh = world.terrain.mesh,
+				bottom = terrainMesh ? terrainMesh.position.y : -168000,
 				velocity = this.device.velocity; //world.getElevation(this.camera.position);
 		if (isVRMode(world.mode)) {
 				this.keyboard.handleKeys(this);
@@ -125,30 +126,36 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
+			if (world.windowFocus) {
+				velocity.y -= 1600000* delta; // weak gravity
+			}
 			velocity.y -= 1600000* delta; // weak gravity
 			this.moveVector.set(0, 0, 0);
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
 			this.camera.matrixWorldNeedsUpdate = true;
-			// if (this.camera.position.y < bottom + 500) {
-			// 	if (this.keys.shift) {
-			// 		velocity.y *= -0.70;
-			// 	} else {
-			// 		velocity.y *= -0.20;
-			// 	}
-			// 	this.device.falling = false;
-			// 	this.camera.position.y = bottom + 500;
-			// 	if (velocity.y > 1000) {
-			// 		//world.vibrate(50);
-			// 	}
-			// }
+			if (this.camera.position.y < bottom + 2000) {
+				if (this.keys.shift) {
+					velocity.y *= -0.70;
+				} else {
+					velocity.y *= -0.20;
+				}
+				this.device.falling = false;
+				this.camera.position.y = bottom + 2000;
+				if (velocity.y > 1000) {
+					//world.vibrate(50);
+				}
+			}
 			velocity.x *= 0.98;
 			velocity.z *= 0.98;
 			if (!! world.user.mesh) {
 				world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
 				world.user.mesh.rotation.y = (this.camera.rotation.y);
 			}
-
+			if (terrainMesh) {
+				terrainMesh.position.x = this.camera.position.x
+				terrainMesh.position.z = this.camera.position.z
+			}
 	}
 
 	lockChangeAlert (canvas) {

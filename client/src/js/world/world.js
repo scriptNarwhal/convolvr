@@ -23,6 +23,7 @@ export default class World {
 		this.appStore = store
 		this.socket = socket
 		this.config = false
+		this.windowFocus = true
 		this.name = "convolvr"
 		this.mode = "web"
 		this.rPos = false
@@ -159,6 +160,7 @@ export default class World {
 				skyShaderMat = null
 
 		this.config = config;
+		this.terrain.init(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor);
 		three.scene.add(this.ambientLight);
 		skyShaderMat = new THREE.ShaderMaterial( {

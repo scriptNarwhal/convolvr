@@ -16,6 +16,17 @@ export default class Terrain {
     this.reqChunks = [];
   }
 
+  init (config) {
+    this.config = config
+    let geom = new THREE.PlaneGeometry(8000000, 8000000, 2, 2),
+        mat = new THREE.MeshPhongMaterial({color: this.config.color}),
+        mesh = new THREE.Mesh(geom, mat)
+    this.mesh = mesh
+    mesh.rotation.x = -Math.PI/2
+    mesh.position.y = -168000 - 125000 / this.config.flatness
+    three.scene.add(mesh)
+  }
+
   bufferChunks (force, phase) {
     let platforms = this.platforms,
         plat = null,

@@ -56,6 +56,7 @@ class App extends Component {
     window.onfocus = () => {
       this.props.setWindowFocus(true)
       three.world.windowFocus = true
+      three.world.user.velocity.y = 0
       this.setState({
         unread: 0
       })
