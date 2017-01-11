@@ -16,7 +16,7 @@ export let render = (world, last) => {
   if (!! world.userInput) {
     world.userInput.update(delta); // Update keyboard / mouse / gamepad
     world.raycaster.setFromCamera( world.userInput.castPos, camera );
-    rayCast(false, world, camera)
+    //rayCastArea(world, camera) // only check surrounding chunks for entities pointed at
     if(!! three.vrControls) { // Update VR headset position and apply to camera.
       beforeHMD = [cPos.x, cPos.y, cPos.z]
       three.vrControls.update()
@@ -103,6 +103,7 @@ let rayCast = (objects, world, camera) => {
       intersects = world.raycaster.intersectObjects( objects || three.scene.children )
 	for ( i = 0; i < intersects.length; i++ ) {
     o = intersects[ i ].object
+    console.log(o.userData)
 	}
 }
 

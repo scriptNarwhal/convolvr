@@ -303,7 +303,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 	}
 	lightColor = int(math.Floor(red * 255)) << 16 | int(math.Floor(green * 255)) << 8 | int(math.Floor(blue * 255));
 	ambientColor = int(4+math.Floor(red * 4)) << 16 | int(4+math.Floor(green * 4)) << 8 | int(4+math.Floor(blue * 4));
-	sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil }
+	sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: "" }
 	light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}
 	terrain := Terrain{TerrainType: "both", Height: 20000, Color: rand.Intn(0xffffff), Flatness: float64(1.0+rand.Float64()*16.0), Decorations: ""}
 	spawn := Spawn{Entities: true, Structures: true, NPCS: true, Tools:true, Vehicles:true }
