@@ -29,6 +29,7 @@ export default class Entity {
     if (!! this.position) {
         mesh.position.set(this.position[0], this.position[1], this.position[2]);
     }
+    mesh.userData = { entity: this }
     scene.add(mesh);
     this.z != 0 && mesh.translateZ(this.z)
     this.mesh = mesh;

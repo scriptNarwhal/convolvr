@@ -17,6 +17,7 @@ export default class UserInput {
 				x: 0, y: 0, z: 0
 			}
 		};
+		this.castPos = new THREE.Vector2()
 		this.world = null;
 		this.focus = false;
 		this.fullscreen = false;

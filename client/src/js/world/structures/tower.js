@@ -29,6 +29,7 @@ class Tower {
 		// LODGeometry.computeFaceNormals();
 		// LODGeometry.computeVertexNormals();
     this.mesh = new THREE.Mesh(LODGeometry, towerMaterial);
+		this.mesh.userData = { structure: this }
     this.platform.mesh.add(this.mesh);
     this.mesh.position.set(data.position[0]*50000, 43000+(floors+1) * 25000, length/2.0+data.position[2]*50000);
 	}
@@ -137,6 +138,7 @@ class Tower {
 				this.platform.mesh.remove(this.mesh);
     		this.platform.mesh.add(building);
 				this.mesh = building;
+				this.mesh.userData = { structure: this }
     		return building;
     	}
 

@@ -14,9 +14,10 @@ export let render = (world, last) => {
       arms = [];
 
   if (!! world.userInput) {
-    // Update VR headset position and apply to camera.
-    world.userInput.update(delta);
-    if(!! three.vrControls) {
+    world.userInput.update(delta); // Update keyboard / mouse / gamepad
+    world.raycaster.setFromCamera( world.userInput.castPos, camera );
+    rayCast(false, world, camera)
+    if(!! three.vrControls) { // Update VR headset position and apply to camera.
       beforeHMD = [cPos.x, cPos.y, cPos.z]
       three.vrControls.update()
       camera.position.multiplyScalar(4000)
@@ -51,10 +52,10 @@ export let render = (world, last) => {
       context.drawImage(v, 0, 0, 320, 240);
       world.webcamImage = canvas.toDataURL("image/jpg", 0.6);
     }
-    world.sendUpdatePacket  = 0;
+    world.sendUpdatePacket  = 0
   }
 
-  world.sendUpdatePacket += 1;
+  world.sendUpdatePacket += 1
   if (world.sendUpdatePacket %((2+(1*world.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
 
     if (world.userInput.leapMotion) {
@@ -76,7 +77,7 @@ export let render = (world, last) => {
         }
       });
       if (world.capturing) {
-          world.webcamImage = "";
+          world.webcamImage = ""
       }
     }
 
@@ -87,7 +88,7 @@ export let render = (world, last) => {
         if (world.screenResX > 1900 || three.renderer == null) {
           three.rendererAA.render(three.scene, camera)
         } else {
-          three.renderer.render(three.scene, camera);
+          three.renderer.render(three.scene, camera)
         }
       } else if (world.mode == "stereo") { // Render the scene in stereo for HMD.
         !!three.vrEffect && three.vrEffect.render(three.scene, camera);
@@ -95,6 +96,34 @@ export let render = (world, last) => {
       last = Date.now()
       requestAnimationFrame( () => { render(world, last) } )
   }
+
+let rayCast = (objects, world, camera) => {
+	let i = 0,
+      o = null,
+      intersects = world.raycaster.intersectObjects( objects || three.scene.children )
+	for ( i = 0; i < intersects.length; i++ ) {
+    o = intersects[ i ].object
+	}
+}
+
+let rayCastArea = (world, camera) => {
+  let coords = three.world.terrain.chunkCoords,
+      chunks = three.world.terrain.pMap,
+      chunk = null,
+      x = -2,
+      z = -2
+   while (x < 3) {
+     while (z < 3) {
+       chunk = chunks[`${coords[0]+x}.0.${coords[2]+z}`]
+       if (chunk && chunk.mesh) {
+         rayCast(chunk.mesh.children, world, camera)
+       }
+       z ++
+     }
+     x++
+   }
+
+}
 
 export let toggleStereo = (mode) => {
     let renderer = three.rendererAA,
