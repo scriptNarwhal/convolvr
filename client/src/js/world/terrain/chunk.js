@@ -21,7 +21,7 @@ export default class Chunk {
             base = new THREE.Geometry(),
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
             // geom = new THREE.CylinderGeometry( 128000, 128000, 7000, 6, 1),
-            geom = new THREE.CylinderGeometry( 133000, 133000, 133000, 6, 1),
+            geom = new THREE.CylinderGeometry( 266000, 266000, 133000, 6, 1),
             voxelGeom = null,
             mat = new THREE.MeshPhongMaterial( {color: data.color, shininess: 20} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null
@@ -33,7 +33,7 @@ export default class Chunk {
             data = { }
         }
         if (!!data.voxels) { // terrain voxels
-            voxelGeom = new THREE.CylinderGeometry( 133000 / 16, 133000 / 16, 133000 / 8.5, 6, 1);
+            voxelGeom = new THREE.CylinderGeometry( 264000 / 16, 264000 / 16, 264000 / 8.5, 6, 1);
             items = data.voxels;
             cellMesh = new THREE.Mesh(geom, mat);
             cellMesh.updateMatrix()
@@ -83,9 +83,9 @@ export default class Chunk {
         }
         altitude = data.altitude || 0
         if (!! cell) {
-            mesh.position.set((cell[0]*232000) + (cell[2] % 2 == 0 ? 0 : 232000 / 2),
-                               altitude * 50000 + (cell[1]*232000) - 132000,
-                               cell[2]*232000 * 0.87);
+            mesh.position.set((cell[0]*464000) + (cell[2] % 2 == 0 ? 0 : 464000 / 2),
+                               altitude * 50000 + (cell[1]*464000) - 132000,
+                               cell[2]*403680);
             data.cell = cell;
             data.position = [
                 mesh.position.x,

@@ -39,12 +39,12 @@ export default class Terrain {
         platform = null,
         physicalPlat = null,
         c = 0,
-        coords = [Math.floor(position.x/232000), 0, Math.floor(position.z/201840)],
+        coords = [Math.floor(position.x/464000), 0, Math.floor(position.z/403680)],
         lastCoords = this.lastChunkCoords,
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
-        viewDistance = (this.world.mobile ? 6 : 11),
+        viewDistance = (this.world.mobile ? 7 : 8),
         removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
-        endCoords = [coords[0]+viewDistance -2, coords[2]+viewDistance],
+        endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
         x = coords[0]-phase+1,
         y = coords[2]-phase;
         this.chunkCoords = coords;

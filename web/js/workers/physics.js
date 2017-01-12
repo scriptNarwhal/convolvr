@@ -37,11 +37,11 @@ self.update = function () {
 		for (i = 0; i < platforms.length; i ++) {
 			obj = platforms[i];
 			if (!!obj) {
-					if (distance2dCompare(position, obj.position, 500000)) { 	// do collisions on voxels & structures... just walls at first..
+					if (distance2dCompare(position, obj.position, 600000)) { 	// do collisions on voxels & structures... just walls at first..
 
 						let alt = obj.altitude || 0
 						yPos = obj.position[1]
-						if (distance2dCompare(position, obj.position, 132000)) {
+						if (distance2dCompare(position, obj.position, 264000)) {
 							if (position[1] > yPos - 62000  && position[1] < yPos + 82000 ) {
 									collision = true;
 									self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');

@@ -94,9 +94,9 @@ export default class Toolbox {
 
     sendToolAction (primary, tool, camera, entity) {
       let cPos = camera.position,
-          coords = [Math.floor(cPos.x/232000), 0, Math.floor(cPos.z/201840)],
+          coords = [Math.floor(cPos.x/464000), 0, Math.floor(cPos.z/403680)],
           chunk = this.world.terrain.pMap[coords[0]+".0."+coords[2]],
-          chunkPos = chunk.mesh.position,
+          chunkPos = chunk != null ? chunk.mesh.position : {x: 0, y: 0, z: 0},
           relativePosition = [cPos.x -chunkPos.x, cPos.y -chunkPos.y, cPos.z -chunkPos.z],
           quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w]
 
