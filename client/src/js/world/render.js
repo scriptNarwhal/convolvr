@@ -92,6 +92,7 @@ export let render = (world, last) => {
         }
       } else if (world.mode == "stereo") { // Render the scene in stereo for HMD.
         !!three.vrEffect && three.vrEffect.render(three.scene, camera);
+        //!!three.vrDisplay && three.vrDisplay.requestAnimationFrame(animate);
       }
       last = Date.now()
       requestAnimationFrame( () => { render(world, last) } )
@@ -111,10 +112,10 @@ let rayCastArea = (world, camera) => {
   let coords = three.world.terrain.chunkCoords,
       chunks = three.world.terrain.pMap,
       chunk = null,
-      x = -2,
-      z = -2
-   while (x < 3) {
-     while (z < 3) {
+      x = -1,
+      z = -1
+   while (x < 2) {
+     while (z < 2) {
        chunk = chunks[`${coords[0]+x}.0.${coords[2]+z}`]
        if (chunk && chunk.mesh) {
          rayCast(chunk.mesh.children, world, camera)
@@ -123,6 +124,12 @@ let rayCastArea = (world, camera) => {
      }
      x++
    }
+
+}
+
+export let vrRender = () => {
+  let renderer = three.rendererAA,
+      camera = three.camera
 
 }
 
@@ -147,9 +154,11 @@ export let toggleStereo = (mode) => {
           var vrDisplay = null;
           navigator.getVRDisplays().then(function(displays) {
             if (displays.length > 0) {
-              vrDisplay = displays[0];
+              vrDisplay = displays[0]
+              three.vrDisplay = vrDisplay
             }
           });
+
           function onResize() {
             let ratio = window.devicePixelRatio || 1;
             effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
@@ -170,6 +179,8 @@ export let toggleStereo = (mode) => {
               alert("Connect VR Display and then reload page.")
             }
           }, 1000)
+          //vrDisplay.requestPresent([{source: renderer.domElement}]);
+
 
           // document.querySelector('#viewport').addEventListener('click', function() {
           //   vrDisplay.requestPresent([{source: renderer.domElement}]);

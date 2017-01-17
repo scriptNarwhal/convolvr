@@ -28,7 +28,7 @@ class SideMenu extends Component {
   }
 
   goBack () {
-    browserHistory.push(`/subspace/${this.props.world}`)
+    browserHistory.push(`/world/${this.props.world}`)
   }
 
   toggleVRMode () {

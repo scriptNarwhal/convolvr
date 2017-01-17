@@ -130,6 +130,7 @@ class App extends Component {
                       right:0,
                       bottom: 0
                   }}
+                  image="/data/vr.png"
                   onClick={ (evt, title) => {
                     let renderer = three.rendererAA,
                         camera = three.camera,
@@ -146,40 +147,33 @@ class App extends Component {
                           effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
                           three.vrEffect = effect;
                           three.vrControls = controls;
-                          // Get the VRDisplay and save it for later.
-                          var vrDisplay = null;
-                          navigator.getVRDisplays().then(function(displays) {
-                            if (displays.length > 0) {
-                              vrDisplay = displays[0];
-                            }
-                          });
+
                           function onResize() {
                             let ratio = window.devicePixelRatio || 1;
                             effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
                           }
                           function onVRDisplayPresentChange() {
                             console.log('onVRDisplayPresentChange');
-                            //toggle vr here?
                             onResize();
                           }
                           // Resize the WebGL canvas when we resize and also when we change modes.
                           window.addEventListener('resize', onResize);
                           window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
 
-                          setTimeout(()=> {
-                            if (vrDisplay) {
-                              vrDisplay.requestPresent([{source: renderer.domElement}]);
-                            } else {
-                              alert("Connect VR Display and then reload page.")
-                            }
-                          }, 1000)
-
+                          let vrAnimate = () => {}
+                          console.log("vrDisplay", three.vrDisplay)
+                          if (three.vrDisplay != null) {
+                            three.vrDisplay.requestPresent([{source: renderer.domElement}]);
+                            three.vrDisplay.requestAnimationFrame(vrAnimate);
+                          } else {
+                            alert("Connect VR Display and then reload page.")
+                          }
                           // document.querySelector('#viewport').addEventListener('click', function() {
                           //   vrDisplay.requestPresent([{source: renderer.domElement}]);
                           // });
                            setTimeout(() => {
                              document.querySelector('#reset-pose').addEventListener('click', function() {
-                               vrDisplay.resetPose();
+                               three.vrDisplay.resetPose();
                              });
                            }, 500)
                       }
@@ -192,7 +186,7 @@ class App extends Component {
   render() {
     return (
         <div className="root">
-         {/* <Shell className="hud-side-menu tabs" menuOpen={this.props.menuOpen} ></Shell> */}
+         <Shell className="hud-side-menu tabs" menuOpen={this.props.menuOpen} ></Shell>
          { this.renderVRButtons() }
             {this.props.children}
             <div className="lightbox" style={{display: "none"}}></div>

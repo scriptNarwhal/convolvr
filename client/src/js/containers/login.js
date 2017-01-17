@@ -95,7 +95,7 @@ export default class Login extends Component {
   }
   render() {
     return (
-        <Shell className="login">
+        <div className="login">
           <div style={styles.innerLogin}>
             <div style={styles.title}>
               Sign in to Convolvr
@@ -139,7 +139,7 @@ export default class Login extends Component {
               </div>
             </div>
           </div>
-        </Shell>
+        </div>
     )
   }
 }

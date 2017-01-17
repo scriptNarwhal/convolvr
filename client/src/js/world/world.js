@@ -3,7 +3,7 @@ import Avatar from './avatar'
 import Entity from './entities/entity'
 import Terrain from './terrain/terrain'
 import WorldPhysics  from '../workers/world-physics'
-import { render, toggleStereo } from './render'
+import { render, vrRender, toggleStereo } from './render'
 import { API_SERVER } from '../config.js'
 import Seed from '../seed'
 
@@ -66,7 +66,8 @@ export default class World {
 			scene,
 			camera,
 			renderer,
-			rendererAA
+			rendererAA,
+			vrDisplay: null
 		};
 		world = this
 		window.three = this.three;
@@ -152,6 +153,15 @@ export default class World {
 		})
 		render(this, 0)
 		this.terrain.bufferChunks(true, 0)
+
+		three.vrDisplay = null
+		navigator.getVRDisplays().then(function(displays) {
+			console.log("displays", displays)
+		  if (displays.length > 0) {
+		    three.vrDisplay = displays[0];
+		    //vrDisplay.requestAnimationFrame(vrRender)
+		  }
+		})
 	}
 
 	init (config) {

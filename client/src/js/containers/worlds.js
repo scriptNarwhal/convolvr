@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
-import Shell from '../components/shell'
 import Card from '../components/card'
 
 const styles = {
@@ -13,14 +12,14 @@ const styles = {
 
 class Worlds extends Component {
   switchWorlds (name) {
-    browserHistory.push("/subspace/"+name)
+    browserHistory.push("/world/"+name)
     window.location.href = window.location.href // workaround..
     // this.props.setCurrentWorld(name)
     // three.world.reload(name)
   }
   render() {
     return (
-        <Shell className="worlds">
+        <div className="worlds">
           <div style={styles.worlds}>
           {
             this.props.worlds.map((world, i) => {
@@ -32,7 +31,7 @@ class Worlds extends Component {
             })
           }
           </div>
-        </Shell>
+        </div>
     )
   }
 }

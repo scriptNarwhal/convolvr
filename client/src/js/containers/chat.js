@@ -90,7 +90,7 @@ class Chat extends Component {
   }
   render() {
     return (
-        <Shell className="chat">
+        <div className="chat">
             <section style={styles.messages}>
                 {
                     this.props.messages.map((m, i) => (
@@ -115,7 +115,7 @@ class Chat extends Component {
                        style={styles.text} />
                 <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button} />
             </section>
-        </Shell>
+        </div>
     )
   }
 }
