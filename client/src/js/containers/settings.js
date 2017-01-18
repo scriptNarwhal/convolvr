@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import Shell from '../components/shell'
 
 export default class Settings extends Component {
   render() {
     return (
-        <div className="settings">
+        <Shell className="settings">
 
-        </div>
+        </Shell>
     )
   }
 }

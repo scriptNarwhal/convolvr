@@ -4,20 +4,17 @@ import Tab from './tab'
 
 const styles = {
   sideMenu: {
-    width: '10vh',
-    maxWidth: '98px',
-    height: '100%'
+    width: '100%',
+    maxHeight: '98px',
+    height: '10vh'
   },
   inner: {
-    position: 'absolute',
-    top: '0',
-    paddingTop: '1vh',
-    paddingTop: '6px',
-    width: '10vh',
-    maxWidth: '98px',
+    height: '9vh',
     bottom: 0,
     margin: 'auto',
-    backgroundColor: 'rgb(12, 12, 12)'
+    maxHeight: '96px',
+    maxWidth: '60%',
+    paddingTop: '0.5vh'
   }
 }
 
@@ -39,39 +36,40 @@ class SideMenu extends Component {
     return (
         <div style={styles.sideMenu} >
           <div style={styles.inner}>
+            <Tab image="/data/circle-a.png"
+                 title="Switch Worlds"
+                 clickHandler={ ()=> { browserHistory.push("/worlds") }}
+            />
+            <Tab image="/data/logout.png"
+                 title="Sign In / Switch Accounts"
+                 clickHandler={ ()=> { browserHistory.push("/login") } }
+            />
+            <Tab image="/data/chat.png"
+                 title="Chat"
+                 clickHandler={ ()=> { browserHistory.push("/chat") } }
+            />
+            {/* <Tab image="/data/vr.png"
+                 title="Enter VR"
+                 clickHandler={ (e)=> {
+                   this.toggleVRMode()
+                   browserHistory.push("/")
+                 } }
+            /> */}
+
+            <Tab image="/data/voxel-white.png"
+                 title="Manage Data"
+                 clickHandler={ ()=> { alert("Not Implemented") } }
+            />
+            <Tab image="/data/configure.png"
+                 title="Settings"
+                 clickHandler={ ()=> { /*browserHistory.push("/settings")*/ alert("Not Implemented") } }
+            />
             <Tab image="/data/x.png"
                   title="Close Menu"
                   clickHandler={() => {
                     this.toggleMenu()
                     this.goBack()
                   }}
-            />
-            <Tab image="/data/circle-a.png"
-                 title="Switch Worlds"
-                 clickHandler={ ()=> { browserHistory.push("/worlds") }}
-            />
-            {/* <Tab image="/data/voxel-white.png"
-                 title="Manage Data"
-                 clickHandler={ ()=> { browserHistory.push("/memory") } }
-            /> */}
-            <Tab image="/data/chat.png"
-                 title="Chat"
-                 clickHandler={ ()=> { browserHistory.push("/chat") } }
-            />
-            <Tab image="/data/vr.png"
-                 title="Enter VR"
-                 clickHandler={ (e)=> {
-                   this.toggleVRMode()
-                   browserHistory.push("/")
-                 } }
-            />
-            <Tab image="/data/logout.png"
-                 title="Sign In / Switch Accounts"
-                 clickHandler={ ()=> { browserHistory.push("/login") } }
-            />
-            <Tab image="/data/configure.png"
-                 title="Settings"
-                 clickHandler={ ()=> { /*browserHistory.push("/settings")*/ alert("Not Implemented") } }
             />
           </div>
         </div>

@@ -91,7 +91,7 @@ export let render = (world, last) => {
           three.renderer.render(three.scene, camera)
         }
       } else if (world.mode == "stereo") { // Render the scene in stereo for HMD.
-        !!three.vrEffect && three.vrEffect.render(three.scene, camera);
+        //!!three.vrEffect && three.vrEffect.render(three.scene, camera);
         //!!three.vrDisplay && three.vrDisplay.requestAnimationFrame(animate);
       }
       last = Date.now()

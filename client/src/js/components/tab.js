@@ -11,6 +11,8 @@ const styles = {
     marginTop: '0.5vh',
     maxHeight: '72px',
     maxWidth: '72px',
+    marginRight: '0.35vh',
+    marginLeft: '0.35vh'
   }
 }
 

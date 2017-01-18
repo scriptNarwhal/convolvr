@@ -134,6 +134,7 @@ class App extends Component {
                   onClick={ (evt, title) => {
                     let renderer = three.rendererAA,
                         camera = three.camera,
+                        scene = three.scene,
                         controls = null,
                         effect = null
 
@@ -160,7 +161,14 @@ class App extends Component {
                           window.addEventListener('resize', onResize);
                           window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
 
-                          let vrAnimate = () => {}
+                          // Request animation frame loop function
+                          let vrAnimate = (time) => {
+                            let now = Date.now(),
+                                delta = Math.min(now - time, 500)
+                            controls.update() // Update VR headset position and apply to camera.
+                            effect.render(scene, camera) // Render the scene.
+                            three.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now) }) // Keep looping.
+                          }
                           console.log("vrDisplay", three.vrDisplay)
                           if (three.vrDisplay != null) {
                             three.vrDisplay.requestPresent([{source: renderer.domElement}]);
@@ -186,7 +194,10 @@ class App extends Component {
   render() {
     return (
         <div className="root">
-         <Shell className="hud-side-menu tabs" menuOpen={this.props.menuOpen} ></Shell>
+         <Shell className="hud-side-menu tabs"
+                hasMenu={true}
+                menuOnly={true}
+                menuOpen={this.props.menuOpen} ></Shell>
          { this.renderVRButtons() }
             {this.props.children}
             <div className="lightbox" style={{display: "none"}}></div>

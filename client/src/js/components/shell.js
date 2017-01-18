@@ -2,16 +2,34 @@
 import React, { Component } from 'react';
 import SideMenu from './side-menu';
 
+const styles = {
+  inner: {
+    top: '10vh',
+    left: 0,
+    position: 'relative'
+  }
+}
+
 class Shell extends Component {
   render() {
+    let hasMenu = !!this.props.hasMenu,
+        menuOnly = !!this.props.menuOnly
     return (
-        <div className="shell" style={{display: (this.props.menuOpen  ? "block" : "none")}}>
-            <div className="tabs">
-                <SideMenu />
-            </div>
-            <div className="inner">
-                {this.props.children}
-            </div>
+        <div className="shell" style={{
+          display: (this.props.menuOpen  ? "block" : "none"),
+          zIndex: (hasMenu ? 999999 : 1),
+          height: (menuOnly ? '10vh' : '100%')
+        }}>
+            {hasMenu ? (
+              <div className="tabs">
+                  <SideMenu />
+              </div>
+            ) : ''}
+            {menuOnly ? '' : (
+              <div style={styles.inner}>
+                  {this.props.children}
+              </div>
+            )}
         </div>
     )
   }

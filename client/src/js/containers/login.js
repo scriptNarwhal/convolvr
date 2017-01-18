@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import Shell from '../components/shell';
+import React, { Component } from 'react'
+import Shell from '../components/shell'
 
 const styles = {
   innerLogin: {
-    width: "60vh",
-    height: "38vh",
-    minHeight: "320px",
-    minWidth: "320px",
-    margin: "auto",
-    display: "block",
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: "5vh",
+    width: '55vh',
+    height: '26vh',
+    minHeight: '291px',
+    minWidth: '252px',
+    margin: 'auto',
+    display: 'block',
+    position: 'relative',
+    top: '6vh',
+    left: '0px',
+    right: '0px',
+    bottom: '5vh',
     borderTop: '0.8vh solid rgb(43, 43, 43)',
     background: 'rgb(27, 27, 27)'
   },
@@ -95,7 +95,7 @@ export default class Login extends Component {
   }
   render() {
     return (
-        <div className="login">
+        <Shell className="login">
           <div style={styles.innerLogin}>
             <div style={styles.title}>
               Sign in to Convolvr
@@ -139,7 +139,7 @@ export default class Login extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </Shell>
     )
   }
 }

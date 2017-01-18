@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import Card from '../components/card'
+import Shell from '../components/shell'
 
 const styles = {
   worlds: {
@@ -19,7 +20,7 @@ class Worlds extends Component {
   }
   render() {
     return (
-        <div className="worlds">
+        <Shell className="worlds">
           <div style={styles.worlds}>
           {
             this.props.worlds.map((world, i) => {
@@ -31,7 +32,7 @@ class Worlds extends Component {
             })
           }
           </div>
-        </div>
+        </Shell>
     )
   }
 }

@@ -22,7 +22,7 @@ let styles = {
     maxWidth: '72px',
     maxHeight: '72px',
     display: 'block',
-    opacity: 0.8,
+    opacity: 0.9,
     backgroundSize: '60%',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: '50%',

@@ -1,6 +1,6 @@
 /* chat container */
-import React, { Component } from 'react';
-import Shell from '../components/shell';
+import React, { Component } from 'react'
+import Shell from '../components/shell'
 
 const styles = {
     chat: {
@@ -47,7 +47,7 @@ const styles = {
       margin: "auto",
       textAlign: "left",
       position: "fixed",
-      left: '10.5vh',
+      left: '1.5vh',
       marginLeft: '0.5em',
       bottom: '2.5em'
     },
@@ -58,7 +58,7 @@ const styles = {
       bottom: "1vh",
       width: "48vw",
       textAlign: "left",
-      left: '10.5vh',
+      left: '1.5vh',
       marginLeft: '0.5em'
     }
 }
@@ -90,7 +90,7 @@ class Chat extends Component {
   }
   render() {
     return (
-        <div className="chat">
+        <Shell className="chat">
             <section style={styles.messages}>
                 {
                     this.props.messages.map((m, i) => (
@@ -115,7 +115,7 @@ class Chat extends Component {
                        style={styles.text} />
                 <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button} />
             </section>
-        </div>
+        </Shell>
     )
   }
 }
