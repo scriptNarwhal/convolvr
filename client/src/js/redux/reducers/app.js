@@ -23,10 +23,7 @@ module.exports = function app (state = {
             menuOpen: !state.menuOpen || action.force
         })
     case APP_TOGGLE_VR:
-        console.log("APP_TOGGLE_VR")
-        console.log("state.vrMode", !state.vrMode);
         three.world.mode = !state.vrMode ? "stereo" : "vr";
-        window.three.world.toggleStereo(!state.vrMode ? "stereo" : "vr");
         return Object.assign({}, state, {
             vrMode: !state.vrMode
         })

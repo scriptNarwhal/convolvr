@@ -128,10 +128,13 @@ class App extends Component {
                   style={{
                       position: "fixed",
                       right:0,
-                      bottom: 0
+                      bottom: 0,
+                      zIndex: 9999,
+                      background: 'none'
                   }}
                   image="/data/vr.png"
                   onClick={ (evt, title) => {
+                    this.props.toggleVRMode()
                     let renderer = three.rendererAA,
                         camera = three.camera,
                         scene = three.scene,
@@ -142,20 +145,20 @@ class App extends Component {
                           window.WebVRConfig = {
                             MOUSE_KEYBOARD_CONTROLS_DISABLED: true
                           };
-                          controls = new THREE.VRControls(camera);
-                          effect = new THREE.VREffect(renderer);
-                          let ratio = window.devicePixelRatio || 1;
-                          effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
-                          three.vrEffect = effect;
-                          three.vrControls = controls;
+                          controls = new THREE.VRControls(camera)
+                          effect = new THREE.VREffect(renderer)
+                          let ratio = window.devicePixelRatio || 1
+                          effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
+                          three.vrEffect = effect
+                          three.vrControls = controls
 
                           function onResize() {
-                            let ratio = window.devicePixelRatio || 1;
-                            effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
+                            let ratio = window.devicePixelRatio || 1
+                            effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
                           }
                           function onVRDisplayPresentChange() {
-                            console.log('onVRDisplayPresentChange');
-                            onResize();
+                            console.log('onVRDisplayPresentChange')
+                            onResize()
                           }
                           // Resize the WebGL canvas when we resize and also when we change modes.
                           window.addEventListener('resize', onResize);
@@ -172,21 +175,18 @@ class App extends Component {
                           console.log("vrDisplay", three.vrDisplay)
                           if (three.vrDisplay != null) {
                             three.vrDisplay.requestPresent([{source: renderer.domElement}]);
-                            three.vrDisplay.requestAnimationFrame(vrAnimate);
                           } else {
                             alert("Connect VR Display and then reload page.")
                           }
-                          // document.querySelector('#viewport').addEventListener('click', function() {
-                          //   vrDisplay.requestPresent([{source: renderer.domElement}]);
-                          // });
-                           setTimeout(() => {
-                             document.querySelector('#reset-pose').addEventListener('click', function() {
-                               three.vrDisplay.resetPose();
-                             });
-                           }, 500)
+                          //  setTimeout(() => {
+                          //    document.querySelector('#reset-pose').addEventListener('click', function() {
+                          //      three.vrDisplay.resetPose();
+                          //    });
+                          //  }, 500)
                       }
-                      three.world.user.hud.toggleVRHUD();
-                      window.onresize();
+                      this.props.toggleVRMode()
+                      three.world.user.hud.toggleVRHUD()
+                      window.onresize()
                   }
                 }
             />
@@ -213,8 +213,15 @@ App.defaultProps = {
 }
 
 import { connect } from 'react-redux'
-import { toggleMenu, setWindowFocus } from '../redux/actions/app-actions'
-import { fetchWorlds, setCurrentWorld } from '../redux/actions/world-actions'
+import {
+  toggleMenu,
+  toggleVR,
+  setWindowFocus
+} from '../redux/actions/app-actions'
+import {
+  fetchWorlds,
+  setCurrentWorld
+} from '../redux/actions/world-actions'
 import { getMessage } from '../redux/actions/message-actions'
 import { login } from '../redux/actions/user-actions'
 
@@ -249,6 +256,9 @@ export default connect(
       },
       setWindowFocus: (t) => {
         dispatch(setWindowFocus(t))
+      },
+      toggleVRMode: () => {
+          dispatch(toggleVR())
       }
     }
   }

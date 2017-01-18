@@ -17,11 +17,11 @@ export let render = (world, last) => {
     world.userInput.update(delta); // Update keyboard / mouse / gamepad
     world.raycaster.setFromCamera( world.userInput.castPos, camera );
     //rayCastArea(world, camera) // only check surrounding chunks for entities pointed at
-    if(!! three.vrControls) { // Update VR headset position and apply to camera.
-      beforeHMD = [cPos.x, cPos.y, cPos.z]
-      three.vrControls.update()
-      camera.position.multiplyScalar(4000)
-    }
+    // if(!! three.vrControls) { // Update VR headset position and apply to camera.
+    //   beforeHMD = [cPos.x, cPos.y, cPos.z]
+    //   three.vrControls.update()
+    //   camera.position.multiplyScalar(4000)
+    // }
     if (world.mode == "stereo") {
       if (world.HMDMode == "standard") {
         camera.position.set(beforeHMD[0],
@@ -90,12 +90,17 @@ export let render = (world, last) => {
         } else {
           three.renderer.render(three.scene, camera)
         }
+        last = Date.now()
+        requestAnimationFrame( () => { render(world, last) } )
       } else if (world.mode == "stereo") { // Render the scene in stereo for HMD.
-        //!!three.vrEffect && three.vrEffect.render(three.scene, camera);
-        //!!three.vrDisplay && three.vrDisplay.requestAnimationFrame(animate);
+        //console.log(three.vrDisplay)
+        !!three.vrEffect && three.vrEffect.render(three.scene, camera);
+        !!three.vrDisplay && three.vrDisplay.requestAnimationFrame(()=> {
+          //console.log("animation frame from rift")
+          last = Date.now()
+          render(world, last)
+        })
       }
-      last = Date.now()
-      requestAnimationFrame( () => { render(world, last) } )
   }
 
 let rayCast = (objects, world, camera) => {
@@ -127,69 +132,11 @@ let rayCastArea = (world, camera) => {
 
 }
 
-export let vrRender = () => {
-  let renderer = three.rendererAA,
-      camera = three.camera
-
+let vrAnimate = (time) => {
+  let now = Date.now(),
+      delta = Math.min(now - time, 500),
+      t = three
+  controls.update() // Update VR headset position and apply to camera.
+  t.vrEffect.render(t.scene, t.camera) // Render the scene.
+  t.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now) }) // Keep looping.
 }
-
-export let toggleStereo = (mode) => {
-    let renderer = three.rendererAA,
-        camera = three.camera,
-        controls = null,
-        effect = null;
-
-      if (mode == "stereo") {
-        if (three.vrControls == null) {
-          window.WebVRConfig = {
-            MOUSE_KEYBOARD_CONTROLS_DISABLED: true
-          };
-          controls = new THREE.VRControls(camera);
-          effect = new THREE.VREffect(renderer);
-          let ratio = window.devicePixelRatio || 1;
-          effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
-          three.vrEffect = effect;
-          three.vrControls = controls;
-          // Get the VRDisplay and save it for later.
-          var vrDisplay = null;
-          navigator.getVRDisplays().then(function(displays) {
-            if (displays.length > 0) {
-              vrDisplay = displays[0]
-              three.vrDisplay = vrDisplay
-            }
-          });
-
-          function onResize() {
-            let ratio = window.devicePixelRatio || 1;
-            effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio);
-          }
-          function onVRDisplayPresentChange() {
-            console.log('onVRDisplayPresentChange');
-            //toggle vr here?
-            onResize();
-          }
-          // Resize the WebGL canvas when we resize and also when we change modes.
-          window.addEventListener('resize', onResize);
-          window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
-
-          setTimeout(()=> {
-            if (vrDisplay) {
-              vrDisplay.requestPresent([{source: renderer.domElement}]);
-            } else {
-              alert("Connect VR Display and then reload page.")
-            }
-          }, 1000)
-          //vrDisplay.requestPresent([{source: renderer.domElement}]);
-
-
-          // document.querySelector('#viewport').addEventListener('click', function() {
-          //   vrDisplay.requestPresent([{source: renderer.domElement}]);
-          // });
-          // document.querySelector('button#reset').addEventListener('click', function() {
-          //   vrDisplay.resetPose();
-          // });
-        }
-      }
-      three.world.user.hud.toggleVRHUD();
-      window.onresize();
-  }

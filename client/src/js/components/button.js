@@ -31,12 +31,13 @@ let styles = {
 }
 export default class Button extends Component {
   render() {
-      let style = this.props.style != false ? Object.assign({}, styles.inner, this.props.style) : styles.inner;
-      style.backgroundImage = 'url('+(this.props.image != null ? this.props.image : "")+')';
+      let innerStyle = this.props.innerStyle != false ? Object.assign({}, styles.inner, this.props.innerStyle) : styles.inner,
+          style = this.props.style != false ? Object.assign({}, styles.button, this.props.style) : styles.button
+      innerStyle.backgroundImage = 'url('+(this.props.image != null ? this.props.image : "")+')';
 
     return (
-        <div style={styles.button}>
-            <div style={style}
+        <div style={style}>
+            <div style={innerStyle}
                 title={this.props.title }
                  onClick={ (evt) => {
                    this.props.onClick && this.props.onClick(evt, this.props.title)

@@ -3,7 +3,7 @@ import Avatar from './avatar'
 import Entity from './entities/entity'
 import Terrain from './terrain/terrain'
 import WorldPhysics  from '../workers/world-physics'
-import { render, vrRender, toggleStereo } from './render'
+import { render, vrRender} from './render'
 import { API_SERVER } from '../config.js'
 import Seed from '../seed'
 
@@ -41,7 +41,6 @@ export default class World {
 		}
 		this.camera = camera
 		this.mobile = mobile
-		this.toggleStereo = toggleStereo
 		this.userInput = userInput
 		this.sendUpdatePacket = 0
 		this.capturing = false
