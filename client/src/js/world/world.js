@@ -248,6 +248,23 @@ export default class World {
 			}
 	}
 
+	sendVideoFrame () {
+		if (this.capturing) {
+		 var v = document.getElementById('webcam'),
+				 canvas = document.getElementById('webcam-canvas'),
+				 context = canvas.getContext('2d'),
+				 cw = Math.floor(v.videoWidth),
+				 ch = Math.floor(v.videoHeight),
+				 imageSize = [cw, ch];
+
+		 canvas.width = 320;
+		 canvas.height = 240;
+		 context.drawImage(v, 0, 0, 320, 240);
+		 this.webcamImage = canvas.toDataURL("image/jpg", 0.6);
+	 }
+	 this.sendUpdatePacket = 0;
+	}
+
 	loadInterior (name) {
 
 	}
