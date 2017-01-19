@@ -17,11 +17,11 @@ export let render = (world, last) => {
     world.userInput.update(delta); // Update keyboard / mouse / gamepad
     world.raycaster.setFromCamera( world.userInput.castPos, camera );
     //rayCastArea(world, camera) // only check surrounding chunks for entities pointed at
-    // if(!! three.vrControls) { // Update VR headset position and apply to camera.
-    //   beforeHMD = [cPos.x, cPos.y, cPos.z]
-    //   three.vrControls.update()
-    //   camera.position.multiplyScalar(4000)
-    // }
+    if(!! three.vrControls) { // Update VR headset position and apply to camera.
+      beforeHMD = [cPos.x, cPos.y, cPos.z]
+      three.vrControls.update()
+      camera.position.multiplyScalar(4000)
+    }
     if (world.mode == "stereo") {
       if (world.HMDMode == "standard") {
         camera.position.set(beforeHMD[0],
@@ -90,17 +90,13 @@ export let render = (world, last) => {
         } else {
           three.renderer.render(three.scene, camera)
         }
-        last = Date.now()
-        requestAnimationFrame( () => { render(world, last) } )
+
       } else if (world.mode == "stereo") { // Render the scene in stereo for HMD.
         //console.log(three.vrDisplay)
-        !!three.vrEffect && three.vrEffect.render(three.scene, camera);
-        !!three.vrDisplay && three.vrDisplay.requestAnimationFrame(()=> {
-          //console.log("animation frame from rift")
-          last = Date.now()
-          render(world, last)
-        })
+
       }
+      last = Date.now()
+      requestAnimationFrame( () => { render(world, last) } )
   }
 
 let rayCast = (objects, world, camera) => {
@@ -132,11 +128,10 @@ let rayCastArea = (world, camera) => {
 
 }
 
-let vrAnimate = (time) => {
+export let vrAnimate = (time) => {
   let now = Date.now(),
       delta = Math.min(now - time, 500),
       t = three
-  controls.update() // Update VR headset position and apply to camera.
   t.vrEffect.render(t.scene, t.camera) // Render the scene.
   t.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now) }) // Keep looping.
 }

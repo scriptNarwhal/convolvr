@@ -3,7 +3,8 @@ import { browserHistory } from 'react-router'
 import { events } from '../network/socket'
 import { fetchUsers } from '../redux/actions/user-actions'
 import Shell from '../components/shell'
-import Button from '../components/button';
+import Button from '../components/button'
+import { vrAnimate } from '../world/render'
 
 class App extends Component {
 
@@ -135,7 +136,8 @@ class App extends Component {
                   image="/data/vr.png"
                   onClick={ (evt, title) => {
                     this.props.toggleVRMode()
-                    let renderer = three.rendererAA,
+                    let renderer = three.rendererAA || three.renderer,
+                        ratio = window.devicePixelRatio || 1,
                         camera = three.camera,
                         scene = three.scene,
                         controls = null,
@@ -147,7 +149,6 @@ class App extends Component {
                           };
                           controls = new THREE.VRControls(camera)
                           effect = new THREE.VREffect(renderer)
-                          let ratio = window.devicePixelRatio || 1
                           effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
                           three.vrEffect = effect
                           three.vrControls = controls
@@ -163,18 +164,12 @@ class App extends Component {
                           // Resize the WebGL canvas when we resize and also when we change modes.
                           window.addEventListener('resize', onResize);
                           window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
-
-                          // Request animation frame loop function
-                          let vrAnimate = (time) => {
-                            let now = Date.now(),
-                                delta = Math.min(now - time, 500)
-                            controls.update() // Update VR headset position and apply to camera.
-                            effect.render(scene, camera) // Render the scene.
-                            three.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now) }) // Keep looping.
-                          }
                           console.log("vrDisplay", three.vrDisplay)
                           if (three.vrDisplay != null) {
                             three.vrDisplay.requestPresent([{source: renderer.domElement}]);
+                            three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
+                              vrAnimate(Date.now())
+                            })
                           } else {
                             alert("Connect VR Display and then reload page.")
                           }
@@ -185,6 +180,7 @@ class App extends Component {
                           //  }, 500)
                       }
                       this.props.toggleVRMode()
+                      three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
                       three.world.user.hud.toggleVRHUD()
                       window.onresize()
                   }
