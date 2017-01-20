@@ -90,15 +90,14 @@ let rayCastArea = (world, camera) => {
      }
      x++
    }
-
 }
 
 export let vrAnimate = (time, oldPos) => {
   let now = Date.now(),
       delta = Math.min(now - time, 500) / 16000,
-      frame = new VRFrameData(),
       t = three,
       world = t.world,
+      frame = world.vrFrame,
       camera = t.camera,
       cPos = camera.position,
       vrPos = [],

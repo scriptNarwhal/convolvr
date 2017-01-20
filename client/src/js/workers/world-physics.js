@@ -8,28 +8,33 @@ export default class WorldPhysics {
 	      worker.onmessage = function (event) {
 	        let message = JSON.parse(event.data),
 	          sys = world,
+						vrFrame = world.vrFrame,
+						vrHeight = 0,
 	          cam = three.camera,
 	          user = sys.user,
 	          position = [],
 	          velocity = [];
-
-	        if (message.command == "update") {
+			if (vrFrame != null && vrFrame.pose.position != null) {
+					vrHeight = 20000 * vrFrame.pose.position[1]
+			}
+	    if (message.command == "update") {
 	          worker.postMessage('{"command":"update","data":{"position":['+cam.position.x+
 	          ', '+cam.position.y+
 	          ', '+cam.position.z+
 	          '],"velocity":['+user.velocity.x+
 	          ','+user.velocity.y+
-	          ','+user.velocity.z+'] }}');
+	          ','+user.velocity.z+
+						'],"vrHeight":'+vrHeight+'}}');
 
 		  } else if (message.command == "collision") { // not implemented
 	          console.log("collision");
 	          console.log(message.data);
 		  } else if (message.command == "platform collision") { // consider sending "top" or "bottom" collision type
-	          if (message.data.type == "top") {
-				  three.camera.position.set(three.camera.position.x, message.data.position[1]+82000 , three.camera.position.z);
+	      if (message.data.type == "top") {
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]+82000 +vrHeight, three.camera.position.z);
 				  user.velocity.y *= -0.45;
 			  } else if (message.data.type == "bottom"){
-				  three.camera.position.set(three.camera.position.x, message.data.position[1]-82000, three.camera.position.z);
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]-82000 +vrHeight, three.camera.position.z);
 				  user.velocity.y *= -0.45;
 			  }
 			  user.velocity.x *= 0.97;

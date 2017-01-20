@@ -40,6 +40,7 @@ export default class World {
 			falling: false
 		}
 		this.camera = camera
+		this.vrFrame = !!window.VRFrameData ? new VRFrameData() : null
 		this.mobile = mobile
 		this.userInput = userInput
 		this.sendUpdatePacket = 0
