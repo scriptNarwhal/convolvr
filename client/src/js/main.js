@@ -45,7 +45,7 @@ import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/col
 				toolbox: null,
 				mesh: new THREE.Object3D(),
 				velocity: new THREE.Vector3(0, -10, 0),
-				light: new THREE.PointLight(0xffffff, 0.25, 300000),
+				light: new THREE.PointLight(0xffffff, 0.15, 200000),
 				gravity: 1,
 				falling: false
 		},

@@ -168,7 +168,7 @@ class App extends Component {
                           if (three.vrDisplay != null) {
                             three.vrDisplay.requestPresent([{source: renderer.domElement}]);
                             three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
-                              vrAnimate(Date.now())
+                              vrAnimate(Date.now(), [0,0,0])
                             })
                           } else {
                             alert("Connect VR Display and then reload page.")

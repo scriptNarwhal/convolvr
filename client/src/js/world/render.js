@@ -93,29 +93,29 @@ let rayCastArea = (world, camera) => {
 
 }
 
-export let vrAnimate = (time) => {
+export let vrAnimate = (time, oldPos) => {
   let now = Date.now(),
       delta = Math.min(now - time, 500) / 16000,
+      frame = new VRFrameData(),
       t = three,
       world = t.world,
       camera = t.camera,
       cPos = camera.position,
-      beforeHMD = [0,0,0]
-      world.userInput.update(delta)
-      if(!! three.vrControls) { // Update VR headset position and apply to camera.
-        beforeHMD = [cPos.x, cPos.y, cPos.z]
-        three.vrControls.update()
-        camera.position.multiplyScalar(4000)
+      vrPos = [],
+      vrWorldPos = []
+
+      if (world.HMDMode != "flymode") {  // otherwise room scale + gamepad movement
+        camera.position.set(cPos.x - oldPos[0], cPos.y - oldPos[1], cPos.z -oldPos[2])
       }
-      if (world.HMDMode == "standard") {
-          camera.position.set(beforeHMD[0],
-                              beforeHMD[1],
-                              beforeHMD[2])
-      } else if (world.HMDMode == "fly-mode") {
-          camera.position.set(beforeHMD[0] + cPos.x * 2.0,
-                              beforeHMD[1] + cPos.y * 2.0,
-                              beforeHMD[2] + cPos.z * 2.0)
-      } // else use 'room scale' head tracking
+      world.userInput.update(delta)
+      t.vrDisplay.getFrameData(frame)
+      vrPos = frame.pose.position
+      vrWorldPos = [20000 * vrPos[0], 20000 * vrPos[1], 20000 * vrPos[2]]
+      camera.quaternion.fromArray(frame.pose.orientation)
+      world.user.mesh.quaternion.fromArray(frame.pose.orientation)
+      world.user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+      camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+
   t.vrEffect.render(t.scene, t.camera) // Render the scene.
-  t.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now) }) // Keep looping.
+  t.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now, vrWorldPos) }) // Keep looping.
 }
