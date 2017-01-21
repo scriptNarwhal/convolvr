@@ -16,23 +16,24 @@ export default class Entity {
         aspects = this.aspects,
         ncomps = this.components.length,
         comp = null,
-        c = 0;
+        c = 0
 
     while (c < ncomps) {
-        comp = new Component(this.components[c]);
-        mesh.add(comp.mesh);
-        c ++;
+        comp = new Component(this.components[c])
+        mesh.add(comp.mesh)
+        c ++
     }
     if (!! this.quaternion) {
-        mesh.quaternion.set(this.quaternion[0], this.quaternion[1], this.quaternion[2], this.quaternion[3]);
+        mesh.quaternion.set(this.quaternion[0], this.quaternion[1], this.quaternion[2], this.quaternion[3])
     }
     if (!! this.position) {
-        mesh.position.set(this.position[0], this.position[1], this.position[2]);
+        mesh.position.set(this.position[0], this.position[1], this.position[2])
     }
     mesh.userData = { entity: this }
-    scene.add(mesh);
+    three.world.octree.add(mesh)
+    scene.add(mesh)
     this.z != 0 && mesh.translateZ(this.z)
-    this.mesh = mesh;
+    this.mesh = mesh
     if (!!aspects) {
         c = 0;
         while (c < aspects.length) {

@@ -52,6 +52,20 @@ export default class World {
 		if (!!renderer) {
 			this.initRenderer(renderer, "viewport")
 		}
+		this.octree = new THREE.Octree({
+			// when undeferred = true, objects are inserted immediately
+			// instead of being deferred until next octree.update() call
+			// this may decrease performance as it forces a matrix update
+			undeferred: false,
+			depthMax: Infinity,
+			// max number of objects before nodes split or merge
+			objectsThreshold: 8,
+			// percent between 0 and 1 that nodes will overlap each other
+			// helps insert objects that lie over more than one node
+			overlapPct: 0.15,
+			scene
+		})
+		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
 		userInput.init(this, camera, this.user)
 		this.worldPhysics = new WorldPhysics()
@@ -135,7 +149,8 @@ export default class World {
 				case "Entity Tool":
 					let ent = data.entity,
 							entity = new Entity(ent.id, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
-					entity.init(chunk.mesh)
+				//entity.init(chunk.mesh)
+					entity.init(three.scene)
 				break;
 				case "Component Tool":
 

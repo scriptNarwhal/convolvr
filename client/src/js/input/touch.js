@@ -5,7 +5,8 @@ let isVRMode = (mode) => {
 export default class Touch {
   constructor (input) {
     document.body.addEventListener("touchmove", function(event) {
-			var data = event.touches, touch = data.length;
+			var data = event.touches,
+					touch = data.length;
 			if (isVRMode("vr")) {
 				event.preventDefault();
 				if (touch < 2) {
@@ -22,13 +23,23 @@ export default class Touch {
 			}
 		});
 		document.body.addEventListener("touchstart", function(event) {
-			var data = event.touches, touch = data.length ;
-			//input.lastTouch = [[0,0],[0,0]];
-			if (isVRMode(world.mode)) {
-				//event.preventDefault();
-				while (touch-- > 0) {
+			var data = event.touches,
+					touch = data.length
+			while (touch-- >= 0) {
 					input.lastTouch[touch] = [data[touch].pageX, data[touch].pageY];
-				}
+			}
+		});
+		document.body.addEventListener("touchend", function(event) {
+			var data = event.touches,
+					touch = data.length,
+					last = input.lastTouch;
+			// if (touch == 1) {
+			// 	if (Math.abs(data[0].pageX - last[0][0]) < 48 && Math.abs(data[0].pageY - last[0][1]) < 48 ) {
+			//
+			// 	}
+			// }
+			while (touch-- > 0) {
+					input.lastTouch[touch] = [data[touch].pageX, data[touch].pageY];
 			}
 		});
   }

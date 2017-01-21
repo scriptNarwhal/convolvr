@@ -14,7 +14,7 @@ export default class WorldPhysics {
 	          user = sys.user,
 	          position = [],
 	          velocity = [];
-			if (vrFrame != null && vrFrame.pose.position != null) {
+			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
 					vrHeight = 20000 * vrFrame.pose.position[1]
 			}
 	    if (message.command == "update") {

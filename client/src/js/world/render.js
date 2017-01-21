@@ -59,6 +59,7 @@ export let render = (world, last) => {
       } else {
         three.renderer.render(three.scene, camera)
       }
+      world.octree.update()
     }
     last = Date.now()
     requestAnimationFrame( () => { render(world, last) } )
@@ -103,8 +104,10 @@ export let vrAnimate = (time, oldPos) => {
       vrPos = [],
       vrWorldPos = []
 
-      if (world.HMDMode != "flymode") {  // otherwise room scale + gamepad movement
+      if (world.HMDMode != "flymode") {  // room scale + gamepad movement
         camera.position.set(cPos.x - oldPos[0], cPos.y - oldPos[1], cPos.z -oldPos[2])
+      } else {
+        camera.position.set(cPos.x - oldPos[0]*0.8, cPos.y - oldPos[1]*0.8, cPos.z -oldPos[2]*0.8)
       }
       world.userInput.update(delta)
       t.vrDisplay.getFrameData(frame)
@@ -116,5 +119,6 @@ export let vrAnimate = (time, oldPos) => {
       camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
 
   t.vrEffect.render(t.scene, t.camera) // Render the scene.
+  world.octree.update()
   t.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now, vrWorldPos) }) // Keep looping.
 }

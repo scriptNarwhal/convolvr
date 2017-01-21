@@ -56,14 +56,13 @@ export default class Chunk {
             }
             mesh = new THREE.Mesh(geom, mat)
         }
-        three.scene.add(mesh)
         this.mesh = mesh
         if (!!data.entities) {
           data.entities.map(e => {
             let pos = e.position,
                 quat = e.quaternion,
                 entity = new Entity(e.id, e.components, [], pos, quat, e.translateZ)
-            entity.init(mesh)
+            entity.init(three.scene)
             // probably need to offset the position for the chunk..
           })
         }
@@ -101,5 +100,8 @@ export default class Chunk {
         }
         this.data = data;
         this.mesh = mesh;
+        // add to octree
+        three.world.octree.add(mesh)
+        three.scene.add(mesh)
     }
 }
