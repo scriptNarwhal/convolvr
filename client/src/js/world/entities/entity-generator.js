@@ -15,42 +15,42 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: [-5125, 5125, 0]
+          position: [-4625, 4625, 0]
         },
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: [5125, 5125, 0]
+          position: [4625, 4625, 0]
         },
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: [-5125, -5125, 0]
+          position: [-4625, -4625, 0]
         },
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: [5125, -5125, 0]
+          position: [4625, -4625, 0]
         },
       ],
       aspects: [],
@@ -63,27 +63,27 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: [-5125, 0, 0]
+          position: [-4625, 0, 0]
         },
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: [5125, 0, 0]
+          position: [4625, 0, 0]
         },
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
@@ -93,7 +93,7 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
@@ -111,7 +111,7 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
@@ -121,17 +121,17 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: [0, 5125, 0]
+          position: [0, 4625, 0]
         },
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
@@ -141,12 +141,12 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [10000, 10000, 200],
+          size: [8000, 8000, 200],
           color: 0x404040,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: [0, -5125, 0]
+          position: [0, -4625, 0]
         },
       ],
       aspects: [],

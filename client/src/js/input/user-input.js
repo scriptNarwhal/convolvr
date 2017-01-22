@@ -50,8 +50,8 @@ export default class UserInput {
 				canvas.onclick = (event) => {
 					let elem = event.target;
 					if (!uInput.fullscreen) {
-						elem.requestPointerLock();
-						uInput.toggleFullscreen();
+						elem.requestPointerLock()
+						uInput.toggleFullscreen()
 					}
 				};
 				canvas.style.pointerEvents = ''
@@ -127,10 +127,7 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
-			if (world.windowFocus) {
-				velocity.y -= 1600000* delta; // weak gravity
-			}
-			velocity.y -= 1600000* delta; // weak gravity
+			velocity.y -= 4600; // weak gravity
 			this.moveVector.set(0, 0, 0);
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
@@ -147,11 +144,13 @@ export default class UserInput {
 					//world.vibrate(50);
 				}
 			}
-			velocity.x *= 0.98;
-			velocity.z *= 0.98;
+			if ((velocity.x * velocity.x) + (velocity.z * velocity.z) > 2000000) {
+				velocity.x *=  0.993
+				velocity.z *= 0.993
+			}
 			if (!! world.user.mesh) {
 				world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
-				world.user.mesh.rotation.y = (this.camera.rotation.y);
+				//world.user.mesh.rotation.y = (this.camera.rotation.y);
 			}
 			if (terrainMesh) {
 				terrainMesh.position.x = this.camera.position.x

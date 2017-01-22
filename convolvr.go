@@ -363,7 +363,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	      if rand.Intn(10) < 6 {
 	        chunkGeom = "space"
 	      } else {
-			  if rand.Intn(26) > 22{
+			  if rand.Intn(26) > 23{
 				  light := 0
 				  if rand.Intn(6) > 3 {
 					  if rand.Intn(5) > 4 {
