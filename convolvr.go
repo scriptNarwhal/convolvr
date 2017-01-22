@@ -386,7 +386,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 		  }
 		  bright := 100 + rand.Intn(155)
 		  color := (bright << 16) | (bright << 8) | bright
-			altitude := float32((math.Sin(float64(x)/2)*2.5+math.Cos(float64(z)/2)*2.5) / worldData.Terrain.Flatness)
+			altitude := float32((math.Sin(float64(x)/2)*9+math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness)
 		  generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", color, structures, nil, nil)
 	      chunksData = append(chunksData, generatedChunk)
 	      saveErr := db.Save(&generatedChunk)
