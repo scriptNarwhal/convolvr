@@ -12,7 +12,7 @@ export default class EntityTool extends Tool  {
       this.icon = new EntityToolIcon()
       this.generator = new EntityGenerator()
       this.options = {
-        translateZ: -12000,
+        translateZ: -14000,
         entityType: "panel"
       }
       this.all = ["panel", "panel2", "panel3", "block", "column", "wirebox"]
