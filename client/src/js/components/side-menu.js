@@ -48,18 +48,10 @@ class SideMenu extends Component {
                  title="Chat"
                  clickHandler={ ()=> { browserHistory.push("/chat") } }
             />
-            {/* <Tab image="/data/vr.png"
-                 title="Enter VR"
-                 clickHandler={ (e)=> {
-                   this.toggleVRMode()
-                   browserHistory.push("/")
-                 } }
-            /> */}
-
-            <Tab image="/data/voxel-white.png"
+            {/* <Tab image="/data/voxel-white.png"
                  title="Manage Data"
                  clickHandler={ ()=> { alert("Not Implemented") } }
-            />
+            /> */}
             <Tab image="/data/configure.png"
                  title="Settings"
                  clickHandler={ ()=> { /*browserHistory.push("/settings")*/ alert("Not Implemented") } }

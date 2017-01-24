@@ -29,6 +29,11 @@ class App extends Component {
       } else {
         document.title = worldName
       }
+      if (!this.props.menuOpen) {
+        this.props.toggleMenu()
+      }
+      // this.props.showChat()
+      browserHistory.push("/chat")
     })
     this.props.setCurrentWorld(window.worldName)
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
@@ -212,7 +217,8 @@ import { connect } from 'react-redux'
 import {
   toggleMenu,
   toggleVR,
-  setWindowFocus
+  setWindowFocus,
+  showChat
 } from '../redux/actions/app-actions'
 import {
   fetchWorlds,
@@ -240,6 +246,9 @@ export default connect(
       },
       getMessage: (message, from) => {
           dispatch(getMessage(message, from))
+      },
+      showChat: () => {
+        dispatch(showChat())
       },
       toggleMenu: (force) => {
           dispatch(toggleMenu(force))
