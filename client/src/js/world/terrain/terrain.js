@@ -7,6 +7,7 @@ export default class Terrain {
     this.world = world;
     this.config = world.config.terrain;
     this.seed = world.seed;
+    this.octree = world.octree
     this.worldPhysics = world.worldPhysics;
     this.platforms = [];
 		this.pMap = []; // map of coord strings to platforms
@@ -37,7 +38,7 @@ export default class Terrain {
         pMap = this.pMap,
         position = three.camera.position,
         platform = null,
-        physicalPlat = null,
+        terrainChunk = null,
         c = 0,
         coords = [Math.floor(position.x/464000), 0, Math.floor(position.z/403680)],
         lastCoords = this.lastChunkCoords,
@@ -67,38 +68,44 @@ export default class Terrain {
       }
       c = 0;
       let cleanUpPlats = this.cleanUpChunks;
-      this.cleanUpChunks.forEach(function (plat, i) {
+      this.cleanUpChunks.map((plat, i) => {
           if (c < 4) {
-            if (!!plat) {
-              physicalPlat = pMap[plat.cell];
-              !! physicalPlat && !! physicalPlat.mesh && three.scene.remove(physicalPlat.mesh);
-              removePhysicsChunks.push(plat.physics);
-              platforms.splice(platforms.indexOf(physicalPlat), 1);
-              delete pMap[plat.cell];
-              cleanUpPlats.splice(i, 1);
+              if (!!plat) {
+                terrainChunk = pMap[plat.cell];
+                if (terrainChunk) {
+                  if (terrainChunk.mesh) {
+                    three.scene.remove(terrainChunk.mesh);
+                  }
+                  if (terrainChunk.entities) {
+                    terrainChunk.entities.map(e => {
+                      this.octree.remove(e.mesh)
+                    })
+                  }
+                }
+                removePhysicsChunks.push(plat.physics);
+                platforms.splice(platforms.indexOf(terrainChunk), 1);
+                delete pMap[plat.cell];
+                cleanUpPlats.splice(i, 1);
             }
             c ++;
           }
-        })
-        c = 0;
-        // load new platforms // at first just from client-side generation
-
-          while (x <= endCoords[0]) {
-            while (y <= endCoords[1]) {
-              if (c < 6) {
-                  //console.log("checking", x, y);
-                  if (pMap[x+".0."+y] == null) { // only if its not already loaded
-                    pMap[x+".0."+y] = true
+      })
+      c = 0;
+      // load new platforms // at first just from client-side generation
+      while (x <= endCoords[0]) {
+        while (y <= endCoords[1]) {
+            if (c < 6) {
+              if (pMap[x+".0."+y] == null) { // only if its not already loaded
+                  pMap[x+".0."+y] = true
                     c ++;
                     this.reqChunks.push(x+"x0x"+y)
-                  }
               }
-              y += 1;
             }
-            y = coords[2]-viewDistance;
-            x += 1;
-          }
-
+            y += 1;
+        }
+        y = coords[2]-viewDistance;
+        x += 1;
+      }
       if (this.reqChunks.length >= 6) {
         let chunks = ""
         this.reqChunks.map( (rc, i) => {

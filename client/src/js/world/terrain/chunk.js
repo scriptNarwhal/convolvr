@@ -27,6 +27,7 @@ export default class Chunk {
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null
 
         this.structures = []
+        this.entities = []
         physics = window.three.world.worldPhysics.worker
 
         if (data == null) {
@@ -62,6 +63,7 @@ export default class Chunk {
             let pos = e.position,
                 quat = e.quaternion,
                 entity = new Entity(e.id, e.components, [], pos, quat, e.translateZ)
+            this.entities.push(entity)
             entity.init(three.scene)
             // probably need to offset the position for the chunk..
           })

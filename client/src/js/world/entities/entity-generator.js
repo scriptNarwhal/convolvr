@@ -15,43 +15,23 @@ export default class EntityGenerator {
         {
           type: "structure",
           shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
+          size: [10000, 10000, 400],
+          color: 0xf5f5f5,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: [-4625, 4625, 0]
+          position: [-0, 0, 0]
         },
         {
           type: "structure",
           shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
+          size: [9000, 9000, 400],
+          color: 0xf5f5f5,
           material: "plastic",
           text: "",
           quaternion: null,
-          position: [4625, 4625, 0]
-        },
-        {
-          type: "structure",
-          shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
-          material: "plastic",
-          text: "",
-          quaternion: null,
-          position: [-4625, -4625, 0]
-        },
-        {
-          type: "structure",
-          shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
-          material: "plastic",
-          text: "",
-          quaternion: null,
-          position: [4625, -4625, 0]
-        },
+          position: [-250, -200, 400]
+        }
       ],
       aspects: [],
       position: null,

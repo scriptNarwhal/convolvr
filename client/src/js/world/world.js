@@ -5,6 +5,7 @@ import Terrain from './terrain/terrain'
 import WorldPhysics  from '../workers/world-physics'
 import { render, vrRender} from './render'
 import { API_SERVER } from '../config.js'
+import { send } from '../network/socket'
 import Seed from '../seed'
 
 let world = null
@@ -182,7 +183,7 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				skyLight =  new THREE.PointLight(config.light.color, 0.5, 3200000),
+				skyLight =  new THREE.PointLight(config.light.color, 0.75, 3200000),
 				skyShaderMat = null
 
 		this.config = config;
@@ -209,7 +210,7 @@ export default class World {
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyShaderMat)
 		this.skyLight = skyLight
 		this.skybox.add(skyLight)
-		skyLight.position.set(0, 300000, 300000)
+		skyLight.position.set(0, 1000000, 1000000)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
 	}
@@ -264,21 +265,72 @@ export default class World {
 			}
 	}
 
+	sendUserData () {
+		let camera = three.camera,
+				mobile = this.mobile,
+	      image = "",
+	      imageSize = [0, 0],
+	      userArms = world.user.arms,
+	      arms = []
+
+		if (this.sendUpdatePacket == 12) { // send image
+	    imageSize = this.sendVideoFrame()
+	  }
+	  this.sendUpdatePacket += 1
+	  if (this.sendUpdatePacket %((2+(1*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
+	    if (this.userInput.leapMotion) {
+	      userArms.forEach(function (arm) {
+	        arms.push({pos: [arm.position.x, arm.position.y, arm.position.z],
+	          quat: [arm.quaternion.x, arm.quaternion.y, arm.quaternion.z, arm.quaternion.w] });
+	        })
+	      }
+	      send('update', {
+	        entity: {
+	          id: this.user.id,
+	          username: this.user.username,
+	          image: this.webcamImage,
+	          imageSize: imageSize,
+	          arms: arms,
+	          position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
+	          quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
+	        }
+	      })
+	      if (this.capturing) {
+	          this.webcamImage = ""
+	      }
+	    }
+	}
+
 	sendVideoFrame () {
+		let imageSize = [0, 0]
 		if (this.capturing) {
-		 var v = document.getElementById('webcam'),
+		 let v = document.getElementById('webcam'),
 				 canvas = document.getElementById('webcam-canvas'),
 				 context = canvas.getContext('2d'),
 				 cw = Math.floor(v.videoWidth),
 				 ch = Math.floor(v.videoHeight),
-				 imageSize = [cw, ch];
 
-		 canvas.width = 320;
-		 canvas.height = 240;
+		 imageSize = [cw, ch]
+		 canvas.width = 320
+		 canvas.height = 240
 		 context.drawImage(v, 0, 0, 320, 240);
-		 this.webcamImage = canvas.toDataURL("image/jpg", 0.6);
+		 this.webcamImage = canvas.toDataURL("image/jpg", 0.6)
 	 }
-	 this.sendUpdatePacket = 0;
+	 this.sendUpdatePacket = 0
+	 return imageSize
+	}
+
+	updateSkybox (delta) {
+		let camera = three.camera
+		if (this.skybox) {
+			if (this.skybox.material) {
+				this.skybox.material.uniforms.time.value += delta
+				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
+			}
+    }
+		if (this.ground) {
+			this.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z)
+		}
 	}
 
 	loadInterior (name) {

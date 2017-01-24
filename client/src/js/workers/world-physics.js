@@ -37,8 +37,8 @@ export default class WorldPhysics {
 				  three.camera.position.set(three.camera.position.x, message.data.position[1]-82000 +vrHeight, three.camera.position.z);
 				  user.velocity.y *= -0.45;
 			  }
-			  user.velocity.x *= 0.97;
-			  user.velocity.z *= 0.97;
+			  user.velocity.x *= 0.99;
+			  user.velocity.z *= 0.99;
 			  user.falling = false;
 
 		 } else if (message.command == "voxel collision") {
