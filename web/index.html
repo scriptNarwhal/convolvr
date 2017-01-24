@@ -68,7 +68,6 @@
                 // The noise function returns a value in the range -1.0f -> 1.0f
                 vec3 p = floor(x);
                 vec3 f = fract(x);
-
                 f       = f*f*(3.0-2.0*f);
                 float n = p.x + p.y*57.0 + 113.0*p.z;
 
@@ -92,17 +91,8 @@
                 } else {
                     glow = -0.3+(depth) - vUv.y;
                 }
-
-            //   float red =  0.22 + depth * 0.05;
-            //   float blue = 0.7 + depth * 0.4;
-            //   float green = depth * 0.05;
-                // red += red * depth * 0.05;
-                // green += green * depth * 0.05;
-                // blue += blue * depth * 0.05;
-
                float luminance = 0.0;
                luminance += 0.4 + depth / 1.25;
-
                vec4 color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
                gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
             }
@@ -112,6 +102,7 @@
         <script src='/lib/csg.js'></script>
         <script src='/lib/ThreeCSG.js'></script>
         <script src='/lib/BufferSubdivisionModifier.js'></script>
+        <script src='/lib/threeoctree.js'></script>
         <script src='/lib/webvr-polyfill.js'></script>
         <script src='/lib/VRControls.js'></script>
         <script src='/lib/VREffect.js'></script>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
-import Shell from '../components/shell'
 import Card from '../components/card'
+import Shell from '../components/shell'
 
 const styles = {
   worlds: {

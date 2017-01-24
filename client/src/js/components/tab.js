@@ -8,7 +8,11 @@ const styles = {
     width: '7.5vh',
     fontSize: '15px',
     display: 'inline-block',
-    marginTop: '0.5vh'
+    marginTop: '0.5vh',
+    maxHeight: '72px',
+    maxWidth: '72px',
+    marginRight: '0.35vh',
+    marginLeft: '0.35vh'
   }
 }
 

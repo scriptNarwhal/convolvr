@@ -3,6 +3,9 @@ export default class GamePad {
     let gamepads = input.gamepads
 		this.cooldownTimeout = null
 		this.cooldown = 0
+		this.bumperCooldown = 0
+		this.bumperCooldownTimeout = null
+		
     function gamepadHandler (e, connecting) {
       let gamepad = e.gamepad;
 		      input.gamepadMode = true;
@@ -44,22 +47,22 @@ export default class GamePad {
 
 				if (b > 8) {
 					// face buttons: 0 1 2 3
-					if (this.buttonPressed(buttons[4])) { // top triggers: 4 5
-						tools.nextTool(-1, 0) // previous tool, right hand
-					}
-					if (this.buttonPressed(buttons[5])) {
-						tools.nextTool(1, 0) // next tool, right hand
-					}
-					if (this.buttonPressed(buttons[6])) { // bottom triggers: 6 7
-						if (this.cooldown == false) {
-							tools.usePrimary(0) // right hand
-							this.triggerCooldown()
+					if (this.bumperCooldown == false) {
+						if (this.buttonPressed(buttons[4])) { // top triggers: 4 5
+								tools.nextTool(-1, 0) // previous tool, right hand
+						}
+						if (this.buttonPressed(buttons[5])) {
+							tools.nextTool(1, 0) // next tool, right hand
 						}
 					}
-					if (this.buttonPressed(buttons[7])) {
-						if (this.cooldown == false) {
-							tools.useSecondary(0) // right hand
-							this.triggerCooldown()
+					if (this.cooldown == false) {
+						if (this.buttonPressed(buttons[6])) { // bottom triggers: 6 7
+								tools.usePrimary(0) // right hand
+								this.triggerCooldown()
+						}
+						if (this.buttonPressed(buttons[7])) {
+								tools.useSecondary(0) // right hand
+								this.triggerCooldown()
 						}
 					}
 				}
@@ -88,6 +91,14 @@ export default class GamePad {
 		clearTimeout(this.cooldownTimeout)
 		this.cooldownTimeout = setTimeout(()=>{
 			this.cooldown = false
+		}, 333)
+	}
+
+	bumperCoolDown () {
+		this.bumperCooldown = true
+		clearTimeout(this.bumperCooldownTimeout)
+		this.bumperCooldownTimeout = setTimeout(()=>{
+			this.bumperCooldown = false
 		}, 125)
 	}
 

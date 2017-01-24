@@ -107,7 +107,8 @@ func Start(configName string) {
 	api.SetApp(router)
 
 	http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))
-	http.HandleFunc("/world/", worldHandler)
+	http.HandleFunc("/world/", worldHandler) // eventually make this route name configurable to the specific use case, 'world', 'venue', 'event', etc..
+	http.HandleFunc("/hyperspace/", worldHandler) // client should generate a meta-world out of (portals to) networked convolvr sites
 	http.HandleFunc("/worlds", worldHandler)
 	http.HandleFunc("/chat", worldHandler)
 	http.HandleFunc("/login", worldHandler)
@@ -147,7 +148,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 	if err := json.Unmarshal([]byte(p.Data), &action); err != nil {
 			 panic(err)
 	}
-	if action.Tool == "Entity Tool" {
+	if action.Tool == "Entity Tool" || action.Tool == "Structure Tool" {
 		getChunkErr := db.Select(q.And(
 			q.Eq("X", action.Coords[0]),
 			q.Eq("Y", action.Coords[1]),
@@ -159,20 +160,24 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 		}
 		nChunks := len(chunkData)
 		if (nChunks > 0) {
-				entities = chunkData[0].Entities
-				if (len(entities) < 48) {
-					entity = *NewEntity(0, "", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, action.Entity.TranslateZ)
-					entities = append(entities, &entity)
-					chunkData[0].Entities = entities
-					saveErr := db.Update(&chunkData[0])
-					if saveErr != nil {
-						log.Println(saveErr)
+				if action.Tool == "Entity Tool" {
+					entities = chunkData[0].Entities
+					if (len(entities) < 48) {
+						entity = *NewEntity(0, "", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, action.Entity.TranslateZ)
+						entities = append(entities, &entity)
+						chunkData[0].Entities = entities
+						saveErr := db.Update(&chunkData[0])
+						if saveErr != nil {
+							log.Println(saveErr)
+						}
+					} else {
+						log.Println("Too Many Entities:")
+						log.Printf(`world: "%s"`, action.World)
+						log.Printf(`x: "%s"`, action.Coords[0])
+						log.Printf(`z: "%s"`, action.Coords[2])
 					}
-				} else {
-					log.Println("Too Many Entities:")
-					log.Printf(`world: "%s"`, action.World)
-					log.Printf(`x: "%s"`, action.Coords[0])
-					log.Printf(`z: "%s"`, action.Coords[2])
+				} else { // structure tool
+					// implement adding structure
 				}
 				log.Printf(`broadcasting tool action: "%s"`, action.Tool)    // modify chunk where this tool was used...
 		}
@@ -298,7 +303,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 	}
 	lightColor = int(math.Floor(red * 255)) << 16 | int(math.Floor(green * 255)) << 8 | int(math.Floor(blue * 255));
 	ambientColor = int(4+math.Floor(red * 4)) << 16 | int(4+math.Floor(green * 4)) << 8 | int(4+math.Floor(blue * 4));
-	sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil }
+	sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: "" }
 	light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}
 	terrain := Terrain{TerrainType: "both", Height: 20000, Color: rand.Intn(0xffffff), Flatness: float64(1.0+rand.Float64()*16.0), Decorations: ""}
 	spawn := Spawn{Entities: true, Structures: true, NPCS: true, Tools:true, Vehicles:true }
@@ -358,7 +363,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	      if rand.Intn(10) < 6 {
 	        chunkGeom = "space"
 	      } else {
-			  if rand.Intn(26) > 24{
+			  if rand.Intn(26) > 23{
 				  light := 0
 				  if rand.Intn(6) > 3 {
 					  if rand.Intn(5) > 4 {
@@ -381,7 +386,7 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 		  }
 		  bright := 100 + rand.Intn(155)
 		  color := (bright << 16) | (bright << 8) | bright
-			altitude := float32((math.Sin(float64(x)/2)*2.5+math.Cos(float64(z)/2)*2.5) / worldData.Terrain.Flatness)
+			altitude := float32((math.Sin(float64(x)/2)*9+math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness)
 		  generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", color, structures, nil, nil)
 	      chunksData = append(chunksData, generatedChunk)
 	      saveErr := db.Save(&generatedChunk)

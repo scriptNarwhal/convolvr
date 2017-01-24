@@ -72,28 +72,13 @@ export default class Keyboard {
     } else if (keys.f) {
       input.moveVector.y = -6400;
     }
-    if (keys.shift) {
-      velocity.x *= 1.02;
-      velocity.z *= 1.02;
-    }
+    // if (keys.shift) {
+    //   velocity.x *= 1.02;
+    //   velocity.z *= 1.02;
+    // }
     if (keys.space && !input.device.falling) {
       input.device.falling = true;
       velocity.y = 160000;
-    }
-    if (velocity.x > 999999) {
-      velocity.x = 999999;
-    } else if (velocity.x < -999999) {
-      velocity.x = -999999;
-    }
-    if (velocity.y > 999999) {
-      velocity.y = 999999
-    } else if (velocity.y < -999999) {
-      velocity.y = -999999;
-    }
-    if (velocity.z > 999999) {
-      velocity.z = 999999
-    } else if (velocity.z < -999999) {
-      velocity.z = -999999;
     }
   }
 }

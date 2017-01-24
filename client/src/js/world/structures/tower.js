@@ -29,6 +29,7 @@ class Tower {
 		// LODGeometry.computeFaceNormals();
 		// LODGeometry.computeVertexNormals();
     this.mesh = new THREE.Mesh(LODGeometry, towerMaterial);
+		this.mesh.userData = { structure: this }
     this.platform.mesh.add(this.mesh);
     this.mesh.position.set(data.position[0]*50000, 43000+(floors+1) * 25000, length/2.0+data.position[2]*50000);
 	}
@@ -137,6 +138,7 @@ class Tower {
 				this.platform.mesh.remove(this.mesh);
     		this.platform.mesh.add(building);
 				this.mesh = building;
+				this.mesh.userData = { structure: this }
     		return building;
     	}
 
@@ -162,9 +164,9 @@ class Tower {
 					ledMat = new THREE.MeshBasicMaterial({color: lightColor, fog: false, wireframe: true} );
 					led = new THREE.Mesh(geom, ledMat);
 					this.platform.mesh.add(led);
-					led.position.set(-3000 -(25000*xUnits), (1+this.data.floors * 50000), -3000-25000*zUnits);
+					led.position.set(-3000 -(25000*xUnits), 10000+(1+this.data.floors * 50000), -3000-25000*zUnits);
 					//led.scale.set(0.1, 0.4, 0.1);
-					light =  new THREE.PointLight(lightColor, 1.0, 600000);
+					light =  new THREE.PointLight(lightColor, 1.0, 500000);
 					led.add(light);
 				}
 

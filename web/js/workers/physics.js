@@ -1,7 +1,8 @@
 var observer = {
 		position: [0, 0, 0],
 		prevPos: [0, 0, 0],
-		velocity: [0, 0, 0]
+		velocity: [0, 0, 0],
+		vrHeight: 0
 	},
 	entities = [],
 	platforms = [];
@@ -29,6 +30,7 @@ self.update = function () {
 			oPos = [],
 			speed = 0,
 			velocity = observer.velocity,
+			vrHeight = observer.vrHeight,
 			closeToVenue =  false,
 			cKey = "",
 			collision = false,
@@ -37,12 +39,12 @@ self.update = function () {
 		for (i = 0; i < platforms.length; i ++) {
 			obj = platforms[i];
 			if (!!obj) {
-					if (distance2dCompare(position, obj.position, 500000)) { 	// do collisions on voxels & structures... just walls at first..
+					if (distance2dCompare(position, obj.position, 600000)) { 	// do collisions on voxels & structures... just walls at first..
 
 						let alt = obj.altitude || 0
 						yPos = obj.position[1]
-						if (distance2dCompare(position, obj.position, 132000)) {
-							if (position[1] > yPos - 62000  && position[1] < yPos + 82000 ) {
+						if (distance2dCompare(position, obj.position, 264000)) {
+							if (position[1] > yPos - 62000 + vrHeight  && position[1] < yPos + 82000 + vrHeight) {
 									collision = true;
 									self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');
 
@@ -140,36 +142,38 @@ self.update = function () {
 
 self.onmessage = function (event) { // Do some work.
 	var message = JSON.parse(event.data),
-		user = observer,
-		c = 0,
-		p = 0,
-		items = [],
-		platform = null,
-		toRemove = null;
+			data = message.data,
+			user = observer,
+			c = 0,
+			p = 0,
+			items = [],
+			platform = null,
+			toRemove = null
 
 	if (message.command == "update") {
 		// user.prevPos = [user.position[0], user.position[1], user.position[2]];
-		user.position = message.data.position;
-		user.velocity = message.data.velocity;
+		user.position = data.position
+		user.velocity = data.velocity
+		user.vrHeight = data.vrHeight
 		//self.postMessage(JSON.stringify(self.observer));
 	} else if (message.command == "add entities") {
-		entities = entities.concat(message.data);
+		entities = entities.concat(data);
 
 	} else if (message.command == "remove entity") {
 		c = entities.length-1;
 		while (c >= 0) {
-			if (entities[c].id == message.data) {
+			if (entities[c].id == data) {
 				entities = entities.splice(c, 1);
 			}
 			c--;
 		}
 	} else if (message.command == "add platforms") {
-		platforms = platforms.concat(message.data);
+		platforms = platforms.concat(data);
 
 	} else if (message.command == "remove platforms") {
-		p = message.data.length -1;
+		p = data.length -1;
 		while (p >= 0) {
-			toRemove = message.data[p];
+			toRemove = data[p];
 			c = platforms.length-1;
 			while (c >= 0) {
 				platform = platforms[c];
@@ -193,7 +197,7 @@ self.onmessage = function (event) { // Do some work.
 		self.stop();
 
 	} else if (message.command == "log") {
-		if (message.data == "") {
+		if (data == "") {
 			self.postMessage('{"command":"log","data":[' + user.position[0] + ',' + user.position[1] + ',' + user.position[2] + ']}');
 			self.postMessage('{"command":"log","data":' + JSON.stringify(platforms)+ '}');
 			self.postMessage('{"command":"log","data":"' + JSON.stringify(entities)+'"}');

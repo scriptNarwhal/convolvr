@@ -14,7 +14,7 @@ export default class ComponentTool extends Tool {
         this.entities = new EntityGenerator()
         this.components = new ComponentGenerator()
         this.options = {
-          translateZ: -9500,
+          translateZ: -14000,
           entityType: "panel"
         }
         this.all = ["panel", "block", "column", "wirebox"]

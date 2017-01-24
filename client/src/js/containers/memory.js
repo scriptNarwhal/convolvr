@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import Shell from '../components/shell';
+import React, { Component } from 'react'
+import Shell from '../components/shell'
 
 export default class Memory extends Component {
   render() {

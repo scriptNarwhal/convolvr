@@ -10,7 +10,7 @@ export default class ComponentGenerator {
     this.components["panel"] = {
       type: "structure",
       shape: "box",
-      size: [8000, 8000, 200],
+      size: [12000, 12000, 200],
       color: 0x404040,
       material: "plastic",
       text: "",
@@ -20,7 +20,7 @@ export default class ComponentGenerator {
     this.components["block"] = {
       type: "structure",
       shape: "box",
-      size: [4000, 4000, 4000],
+      size: [6000, 6000, 6000],
       color: 0xff0000,
       material: "plastic",
       text: "",
@@ -30,9 +30,9 @@ export default class ComponentGenerator {
     this.components["column"] = {
         type: "structure",
         shape: "box",
-        size: [3000, 24000, 3000],
+        size: [3000, 48000, 3000],
         material: "plastic",
-        color: 0x808080,
+        color: 0xffffff,
         text: "",
         quaternion: null,
         position: [0, 0, 0]
@@ -42,7 +42,7 @@ export default class ComponentGenerator {
       shape: "box",
       size: [10000, 10000, 10000],
       material: "wireframe",
-      color: 0x808080,
+      color: 0xff00ff,
       text: "",
       quaternion: null,
       position: [0, 0, 0]

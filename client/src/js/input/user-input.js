@@ -17,6 +17,7 @@ export default class UserInput {
 				x: 0, y: 0, z: 0
 			}
 		};
+		this.castPos = new THREE.Vector2()
 		this.world = null;
 		this.focus = false;
 		this.fullscreen = false;
@@ -38,52 +39,32 @@ export default class UserInput {
 	}
 
 	init (world, camera, device) {
-		var uInput = this;
+		let uInput = this,
+				viewports = document.querySelectorAll("canvas.viewport")
 		this.connect(world, camera, device);
-		uInput.rotationVector = {x: 0.2, y: 5.65, z: 0};
-		var canvas = document.querySelector("canvas#viewport");
-		canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
-		canvas.onclick = (event) => {
-			var elem = event.target;
-			if (!uInput.fullscreen) {
-				elem.requestPointerLock();
-				uInput.toggleFullscreen();
-			}
-		};
+		uInput.rotationVector = {x: 0.2, y: 4.6, z: 0};
 
-		if ("onpointerlockchange" in document) {
-			document.addEventListener('pointerlockchange', lockChangeAlert, false);
-		} else if ("onmozpointerlockchange" in document) {
-			document.addEventListener('mozpointerlockchange', lockChangeAlert, false);
-		} else if ("onwebkitpointerlockchange" in document) {
-			document.addEventListener('webkitpointerlockchange', lockChangeAlert, false);
-		}
-
-		function lockChangeAlert() {
-			var a = 0;
-			uInput.focus =(document.pointerLockElement===canvas||document.mozPointerLockElement===canvas||document.webkitPointerLockElement===canvas);
-			uInput.fullscreen = uInput.focus;
-			if (!uInput.fullscreen && world.user.username != "") {
-				//world.showChat();
-				world.mode = "web";
-				while (a < world.user.arms.length) {
-					world.user.arms[a].visible = false;
-					a ++;
-				}
-				document.body.setAttribute("class", "desktop");
-			} else {
-				if (world.user.username != "") {
-					if (world.mode != "stereo") {
-						world.mode = "vr";
+		Array.prototype.map.call(viewports, (canvas, i) => {
+			if (true) {
+				canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
+				canvas.onclick = (event) => {
+					let elem = event.target;
+					if (!uInput.fullscreen) {
+						elem.requestPointerLock()
+						uInput.toggleFullscreen()
 					}
-					while (a < world.user.arms.length) {
-						world.user.arms[a].visible = true;
-						a ++;
-					}
-					document.body.setAttribute("class", "vr");
+				};
+				canvas.style.pointerEvents = ''
+				if ("onpointerlockchange" in document) {
+					document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false);
+				} else if ("onmozpointerlockchange" in document) {
+					document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false);
+				} else if ("onwebkitpointerlockchange" in document) {
+					document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false);
 				}
 			}
-		}
+		})
+
 		if (!world.mobile) {
 			document.addEventListener("mousemove", function (e) {
 				if (uInput.focus) {
@@ -129,8 +110,9 @@ export default class UserInput {
 	}
 
 	update (delta) {
-		var bottom = -168000,
-				world = this.world,
+		var world = this.world,
+				terrainMesh = world.terrain.mesh,
+				bottom = terrainMesh ? terrainMesh.position.y : -168000,
 				velocity = this.device.velocity; //world.getElevation(this.camera.position);
 		if (isVRMode(world.mode)) {
 				this.keyboard.handleKeys(this);
@@ -145,30 +127,62 @@ export default class UserInput {
 					velocity.y *= 0.95;
 				}
 			}
-			velocity.y -= 1600000* delta; // weak gravity
+			velocity.y -= 4600; // weak gravity
 			this.moveVector.set(0, 0, 0);
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
 			this.camera.matrixWorldNeedsUpdate = true;
-			// if (this.camera.position.y < bottom + 500) {
-			// 	if (this.keys.shift) {
-			// 		velocity.y *= -0.70;
-			// 	} else {
-			// 		velocity.y *= -0.20;
-			// 	}
-			// 	this.device.falling = false;
-			// 	this.camera.position.y = bottom + 500;
-			// 	if (velocity.y > 1000) {
-			// 		//world.vibrate(50);
-			// 	}
-			// }
-			velocity.x *= 0.98;
-			velocity.z *= 0.98;
+			if (this.camera.position.y < bottom + 12000) {
+				if (this.keys.shift) {
+					velocity.y *= -0.70;
+				} else {
+					velocity.y *= -0.20;
+				}
+				this.device.falling = false;
+				this.camera.position.y = bottom + 12000;
+				if (velocity.y > 1000) {
+					//world.vibrate(50);
+				}
+			}
+			if ((velocity.x * velocity.x) + (velocity.z * velocity.z) > 2000000) {
+				velocity.x *=  0.993
+				velocity.z *= 0.993
+			}
 			if (!! world.user.mesh) {
 				world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
-				world.user.mesh.rotation.y = (this.camera.rotation.y);
+				//world.user.mesh.rotation.y = (this.camera.rotation.y);
 			}
+			if (terrainMesh) {
+				terrainMesh.position.x = this.camera.position.x
+				terrainMesh.position.z = this.camera.position.z
+			}
+	}
 
+	lockChangeAlert (canvas) {
+		var a = 0,
+				world = this.world
+		this.focus =(document.pointerLockElement===canvas||document.mozPointerLockElement===canvas||document.webkitPointerLockElement===canvas);
+		this.fullscreen = this.focus;
+		if (!this.fullscreen && world.user.username != "") {
+			//world.showChat();
+			world.mode = "web";
+			while (a < world.user.arms.length) {
+				world.user.arms[a].visible = false;
+				a ++;
+			}
+			document.body.setAttribute("class", "desktop");
+		} else {
+			if (world.user.username != "") {
+				if (world.mode != "stereo") {
+					world.mode = "vr";
+				}
+				while (a < world.user.arms.length) {
+					world.user.arms[a].visible = true;
+					a ++;
+				}
+				document.body.setAttribute("class", "vr");
+			}
+		}
 	}
 
 	toggleFullscreen (elem) {

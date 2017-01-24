@@ -6,7 +6,8 @@ import {
     APP_HIDE_CHAT,
     APP_SHOW_CHAT,
     APP_HIDE_LOGIN,
-    APP_TOGGLE_FULLSCREEN
+    APP_TOGGLE_FULLSCREEN,
+    APP_SET_WINDOW_FOCUS
 } from '../constants/action-types';
 import { API_SERVER } from '../../config.js'
 
@@ -45,5 +46,11 @@ export function showLogin (id) {
 export function hideLogin (id) {
     return {
         type: APP_HIDE_LOGIN
+    }
+}
+export function setWindowFocus (focus) {
+    return {
+        type: APP_SET_WINDOW_FOCUS,
+        focus
     }
 }

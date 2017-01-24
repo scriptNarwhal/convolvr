@@ -5,8 +5,8 @@ export default class Cursor {
           light = false,
           geom = new THREE.CylinderGeometry(200, 200, 200, 4, 1, true),
           mat = new THREE.MeshBasicMaterial({color: color,
-                                            wireframe: true,
-                                            fog: false})
+                                             wireframe: true,
+                                             fog: false})
 
       mesh = new THREE.Mesh(geom, mat)
       if (light) {
@@ -14,7 +14,7 @@ export default class Cursor {
         light.position.set(0, 100, -100)
       }
       this.mesh = mesh
-      mesh.position.set(0, 0, -12000)
+      mesh.position.set(0, 0, -14000)
       //mesh.rotation.y = Math.PI / 4.0
       mesh.rotation.x = Math.PI / 2.0
       //mesh.rotation.z = Math.PI / 4.0

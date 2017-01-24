@@ -5,10 +5,11 @@ let styles = {
   worldCard: (image) => {
     return {
       cursor: "pointer",
-      width: "8em",
+      width: "auto",
       height: "3em",
       display: "inline-block",
-      paddingLeft: "26px",
+      paddingLeft: '54px',
+      paddingRight: '26px',
       paddingTop: "0.75em",
       marginRight: "0.25em",
       backgroundSize: "48px",

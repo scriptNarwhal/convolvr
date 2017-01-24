@@ -99,11 +99,13 @@ export function loginDone (response) {
     worldUser.name = data.name
     worldUser.email = data.email
     worldUser.id = data.id
-    browserHistory.push("/chat")
-    return {
-        type: LOGIN_DONE,
-        data: response.data
-    }
+  if (three.world.name == "overworld" || window.location.href.indexOf("/login") > -1) {
+      browserHistory.push("/chat")
+  }
+  return {
+      type: LOGIN_DONE,
+      data: response.data
+  }
 }
 export function loginFailed (response) {
     return {

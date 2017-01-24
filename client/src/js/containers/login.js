@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import Shell from '../components/shell';
+import React, { Component } from 'react'
+import Shell from '../components/shell'
 
 const styles = {
   innerLogin: {
-    width: "60vh",
-    height: "38vh",
-    minHeight: "320px",
-    minWidth: "320px",
-    margin: "auto",
-    display: "block",
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: "5vh",
+    width: '55vh',
+    height: '26vh',
+    minHeight: '291px',
+    minWidth: '252px',
+    margin: 'auto',
+    display: 'block',
+    position: 'relative',
+    top: '6vh',
+    left: '0px',
+    right: '0px',
+    bottom: '5vh',
     borderTop: '0.8vh solid rgb(43, 43, 43)',
     background: 'rgb(27, 27, 27)'
   },
@@ -50,6 +50,16 @@ const styles = {
     borderRadius: "0.2vh",
     border: "rgb(107, 104, 104) 0.4vh solid",
     cursor: "pointer"
+  },
+  signInButton: {
+    fontSize: '1em',
+    marginRight: '1em'
+  },
+  remember: {
+
+  },
+  rememberLabel: {
+
   }
 }
 
@@ -61,14 +71,28 @@ export default class Login extends Component {
       email: "",
       data: "",
       world: "overworld",
-      loginError: ""
+      loginError: "",
+      remember: false
     }
   }
-
   signIn() {
     this.props.login(this.state.username, this.state.password, this.state.email, this.state.data)
+    if (this.state.remember) {
+      localStorage.setItem("username", this.state.username)
+      localStorage.setItem("password", this.state.password)
+    }
   }
-
+  handleKeyDown (e) {
+    if (e.which == 13) {
+      this.signIn()
+    }
+  }
+  rememberUser (e) {
+    localStorage.setItem("rememberUser", !this.state.remember)
+    this.setState({
+      remember: !this.state.remember
+    })
+  }
   render() {
     return (
         <Shell className="login">
@@ -79,14 +103,39 @@ export default class Login extends Component {
             <div style={styles.form}>
               <div style={styles.username}>
                 <span style={styles.label}>Username</span>
-                <input type='text' onBlur={(e)=>{ this.setState({username: e.target.value }) }} style={styles.input} />
+                <input name="convolvr-login"
+                       autoComplete="false"
+                       ref={(input) => { this.nameInput = input }}
+                       type='text'
+                       onBlur={(e)=>{ this.setState({username: e.target.value }) }}
+                       style={styles.input}
+                />
               </div>
               <div style={styles.password}>
                 <span style={styles.label}>Password</span>
-                <input type='password' onBlur={(e)=>{ this.setState({password: e.target.value }) }} style={styles.input} />
+                <input name="convolvr-password"
+                       autoComplete="new-password"
+                       ref={(input) => { this.passwordInput = input }}
+                       type='password'
+                       onKeyDown={e=> { this.handleKeyDown(e) }}
+                       onBlur={(e)=>{ this.setState({password: e.target.value }) }}
+                       style={styles.input}
+                />
               </div>
               <div style={styles.go}>
-                <input type="button" value="Sign In" onClick={e=> { this.signIn() } } />
+                <input type="button"
+                        value="Sign In"
+                        style={styles.signInButton}
+                        onClick={e=> { this.signIn() } } />
+                <input type="checkbox"
+                        name='remember'
+                        style={styles.remember}
+                        onClick={e=> this.rememberUser(e) } />
+                <label htmlFor='remember'
+                       style={styles.rememberLabel}
+                >
+                  Stay Signed In
+                </label>
               </div>
             </div>
           </div>

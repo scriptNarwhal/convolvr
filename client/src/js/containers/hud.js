@@ -22,21 +22,8 @@ class HUD extends Component {
                     } }
             />
             ) : ""}
-            {this.props.vrMode ? (
-              <Button title="Exit VR"
-                      style={{
-                        position: "fixed",
-                        right: 0,
-                        top: 0
-                      }}
-                      image="/data/x.png"
-                      onClick={ (evt, title) => {
-                          //this.toggleMenu()
-                          this.props.toggleVRMode();
-                      } }
-              />
-            ) : ""}
-        </div>
+            
+          </div>
     )
   }
 }

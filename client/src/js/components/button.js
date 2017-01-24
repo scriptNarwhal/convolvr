@@ -5,6 +5,8 @@ let styles = {
     display: 'inline-block',
     width: '7.5vh',
     height: '7.5vh',
+    maxWidth: '72px',
+    maxHeight: '72px',
     marginRight: 0,
     background: 'linear-gradient(to top, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.13))',
     borderRadius: '0.4vh',
@@ -17,8 +19,10 @@ let styles = {
     backgroundSize: 'contain',
     height: '7.5vh',
     width: '7.5vh',
+    maxWidth: '72px',
+    maxHeight: '72px',
     display: 'block',
-    opacity: 0.8,
+    opacity: 0.9,
     backgroundSize: '60%',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: '50%',
@@ -27,12 +31,13 @@ let styles = {
 }
 export default class Button extends Component {
   render() {
-      let style = this.props.style != false ? Object.assign({}, styles.inner, this.props.style) : styles.inner;
-      style.backgroundImage = 'url('+(this.props.image != null ? this.props.image : "")+')';
+      let innerStyle = this.props.innerStyle != false ? Object.assign({}, styles.inner, this.props.innerStyle) : styles.inner,
+          style = this.props.style != false ? Object.assign({}, styles.button, this.props.style) : styles.button
+      innerStyle.backgroundImage = 'url('+(this.props.image != null ? this.props.image : "")+')';
 
     return (
-        <div style={styles.button}>
-            <div style={style}
+        <div style={style}>
+            <div style={innerStyle}
                 title={this.props.title }
                  onClick={ (evt) => {
                    this.props.onClick && this.props.onClick(evt, this.props.title)
