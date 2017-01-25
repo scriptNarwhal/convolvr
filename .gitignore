@@ -11,3 +11,5 @@ _out
 *.exe
 world.db
 world.db.lock
+/cmd/cmd
+/cmd/cmd.exe
