@@ -15,6 +15,7 @@ const history = syncHistoryWithStore(browserHistory, store)
 import App from './containers/app'
 import Memory from './containers/memory'
 import Worlds from './containers/worlds'
+import NewWorld from './containers/new-world'
 import Settings from './containers/settings'
 import Login from './containers/login'
 import Chat from './containers/chat'
@@ -94,6 +95,7 @@ ReactDOM.render(
 				<Route path="/chat" component={Chat} />
 				<Route path="/data" component={Memory} />
 				<Route path="/worlds" component={Worlds} />
+        <Route path="/worlds/new" component={NewWorld} />
 				<Route path="/settings" component={Settings} />
 			</Route>
 		</Router>

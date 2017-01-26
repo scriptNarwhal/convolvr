@@ -110,6 +110,7 @@ func Start(configName string) {
 	http.HandleFunc("/world/", worldHandler) // eventually make this route name configurable to the specific use case, 'world', 'venue', 'event', etc..
 	http.HandleFunc("/hyperspace/", worldHandler) // client should generate a meta-world out of (portals to) networked convolvr sites
 	http.HandleFunc("/worlds", worldHandler)
+	http.HandleFunc("/worlds/new", worldHandler)
 	http.HandleFunc("/chat", worldHandler)
 	http.HandleFunc("/login", worldHandler)
 	http.HandleFunc("/settings", worldHandler)
