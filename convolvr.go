@@ -2,6 +2,7 @@ package convolvr
 
 import (
 	"fmt"
+  "io/ioutil"
 	"encoding/json"
 	"net/http"
 	"html/template"
@@ -100,6 +101,13 @@ func Start(configName string) {
 		rest.Get("/entities/:userId", getEntitiesByUser),
 		rest.Get("/components", getComponents),
 		rest.Post("/components", postComponents),
+		rest.Get("/files/list", listFiles),
+		rest.Get("/files/download/:dir/:filename", getFiles),
+		rest.Post("/files/upload", postFiles),
+		rest.Get("/directories/list/:userId", getDirectories),
+		rest.Post("/directories", postDirectories),
+		rest.Get("/documents/:path/:filename", getText),
+		rest.Post("/documents/:path/:filename", postText),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -491,7 +499,6 @@ func postEntities(w rest.ResponseWriter, req *rest.Request) {
 }
 
 func getEntitiesByUser(w rest.ResponseWriter, req *rest.Request) { // custom entities
-
 	//w.WriteJson()
 }
 
@@ -523,4 +530,29 @@ func postComponents(w rest.ResponseWriter, req *rest.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
+}
+
+func listFiles(w rest.ResponseWriter, req *rest.Request) { // Get /files/list
+	files, _ := ioutil.ReadDir("./")
+  for _, f := range files {
+    log.Println(f.Name())
+  }
+}
+func getFiles(w rest.ResponseWriter, req *rest.Request) { // Get /files/download/:dir/:filename
+	//w.WriteJson()
+}
+func postFiles(w rest.ResponseWriter, req *rest.Request) { // Post /files/upload
+
+}
+func getDirectories(w rest.ResponseWriter, req *rest.Request) { // Get /directories/list/:userId
+	//w.WriteJson()
+}
+func postDirectories(w rest.ResponseWriter, req *rest.Request) { // Post("/directories
+	//w.WriteJson()
+}
+func getText(w rest.ResponseWriter, req *rest.Request) { // Get /documents/:path/:filename
+	//w.WriteJson()
+}
+func postText(w rest.ResponseWriter, req *rest.Request) { // Post /documents/:path/:filename
+	//w.WriteJson()
 }
