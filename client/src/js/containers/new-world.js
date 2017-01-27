@@ -28,7 +28,7 @@ const styles = {
   },
   label: {
     marginRight: "1em",
-    color: '#727272'
+    color: 'rgba(255, 255, 255, 0.85)'
   },
   input: {
     background: 'transparent',
@@ -93,15 +93,15 @@ export default class NewWorld extends Component {
       name: this.state.name,
       sky: {
         skyType: this.state.skyType,
-        red: this.state.red,
-        green: this.state.green,
-        blue: this.state.blue,
+        red: parseFloat(this.state.red),
+        green: parseFloat(this.state.green),
+        blue: parseFloat(this.state.blue),
         layers: this.state.layers,
         photosphere: this.state.photosphere
       },
       light: {
         color: 0xffffff,
-        intensity: this.state.intensity,
+        intensity: parseFloat(this.state.intensity),
         angle: 2.0,
         ambientColor: 0x000000
       },
@@ -109,8 +109,8 @@ export default class NewWorld extends Component {
         type: this.state.terrainType,
         height: 20000,
         color: this.state.terrainColor,
-        flatness: this.state.flatness,
-        decorations: true
+        flatness: parseFloat(this.state.flatness),
+        decorations: ""
       },
       spawn: {
         entities: this.state.entities,
