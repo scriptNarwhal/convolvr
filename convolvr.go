@@ -2,15 +2,16 @@ package convolvr
 
 import (
 	"fmt"
+  "io/ioutil"
 	"encoding/json"
 	"net/http"
-	"html/template"
 	"strings"
   "strconv"
 	"math"
   "math/rand"
 	log "github.com/Sirupsen/logrus"
-	"github.com/ant0ine/go-json-rest/rest"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"github.com/asdine/storm"
   "github.com/asdine/storm/q"
 	"github.com/ds0nt/nexus"
@@ -33,29 +34,15 @@ func Start(configName string) {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 	port := fmt.Sprintf(":%d", viper.GetInt("host.port"))
-	useTLS := viper.GetBool("host.useTLS")
-	securePort := fmt.Sprintf(":%d", viper.GetInt("host.securePort"))
-	certificate := viper.GetString("host.certificate")
-	key := viper.GetString("host.key")
 
-	api := rest.NewApi()
-	api.Use(rest.DefaultDevStack...)
-	api.Use(&rest.CorsMiddleware{
-		RejectNonCorsRequests: false,
-		OriginValidator: func(origin string, request *rest.Request) bool {
-			return true
-		},
-		AllowedMethods: []string{"GET", "POST", "PUT"},
-		AllowedHeaders: []string{
-			"Accept", "Content-Type", "X-Custom-Header", "Origin"},
-		AccessControlAllowCredentials: true,
-		AccessControlMaxAge:           3600,
-	})
-
+	e := echo.New()
+	e.Use(middleware.CORS())
 	hub = nexus.NewNexus()
-
 	db, err = storm.Open(viper.GetString("datastore.spark.db"))
 	defer db.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
 	userErr := db.Init(&User{})
 	worldErr := db.Init(&World{})
 	chunkErr := db.Init(&Chunk{})
@@ -84,50 +71,49 @@ func Start(configName string) {
 	if structureErr != nil {
 		log.Fatal(structureErr)
 	}
+	api := e.Group("/api")
+	api.GET("/users", getUsers)
+	api.POST("/users", postUsers)
+	api.GET("/worlds", getWorlds)
+	api.GET("/worlds/name/:name", getWorld)
+	api.GET("/chunks/:worldId/:chunks", getWorldChunks)
+	api.POST("/worlds", postWorlds)
+	api.GET("/structures", getStructures)
+	api.POST("/structures", postStructures)
+	api.GET("/structures/:userId", getStructuresByUser)
+	api.GET("/entities", getEntities)
+	api.POST("/entities", postEntities)
+	api.GET("/entities/:userId", getEntitiesByUser)
+	api.GET("/components", getComponents)
+	api.POST("/components", postComponents)
+	api.GET("/files/list", listFiles)
+	api.GET("/files/download/:dir/:filename", getFiles)
+	api.POST("/files/upload", postFiles)
+	api.GET("/directories/list/:userId", getDirectories)
+	api.POST("/directories", postDirectories)
+	api.GET("/documents/:path/:filename", getText)
+	api.POST("/documents/:path/:filename", postText)
 
-	router, err := rest.MakeRouter(
-		rest.Get("/users", getUsers),
-		rest.Post("/users", postUsers),
-		rest.Get("/worlds", getWorlds),
-		rest.Get("/worlds/name/:name", getWorld),
-		rest.Get("/chunks/:worldId/:chunks", getWorldChunks),
-		rest.Post("/worlds", postWorlds),
-		rest.Get("/structures", getStructures),
-		rest.Post("/structures", postStructures),
-		rest.Get("/structures/:userId", getStructuresByUser),
-		rest.Get("/entities", getEntities),
-		rest.Post("/entities", postEntities),
-		rest.Get("/entities/:userId", getEntitiesByUser),
-		rest.Get("/components", getComponents),
-		rest.Post("/components", postComponents),
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	api.SetApp(router)
-
-	http.Handle("/api/", http.StripPrefix("/api", api.MakeHandler()))
-	http.HandleFunc("/world/", worldHandler) // eventually make this route name configurable to the specific use case, 'world', 'venue', 'event', etc..
-	http.HandleFunc("/hyperspace/", worldHandler) // client should generate a meta-world out of (portals to) networked convolvr sites
-	http.HandleFunc("/worlds", worldHandler)
-	http.HandleFunc("/chat", worldHandler)
-	http.HandleFunc("/login", worldHandler)
-	http.HandleFunc("/settings", worldHandler)
-	http.Handle("/connect", websocket.Handler(hub.Serve))
+	e.Static("/", "../web")
+	e.Static("/world/:name", "../web/index.html") // eventually make this route name configurable to the specific use case, 'world', 'venue', 'event', etc..
+	e.File("/hyperspace", "../web/index.html") // client should generate a meta-world out of (portals to) networked convolvr sites
+	e.File("/worlds", "../web/index.html")
+	e.File("/worlds/new", "../web/index.html")
+	e.File("/chat", "../web/index.html")
+	e.File("/login", "../web/index.html")
+	e.File("/settings", "../web/index.html")
 
 	hub.Handle("chat message", chatMessage)
 	hub.Handle("update", update)
 	hub.Handle("tool action", toolAction)
+	e.GET("/connect", nexusHandler)
 
-	http.Handle("/", http.FileServer(http.Dir("../web")))
+	e.Logger.Fatal(e.Start(port))
+}
 
-	if useTLS {
-		log.Fatal(http.ListenAndServeTLS(securePort, certificate, key, nil))
-		log.Print("Convolvr Online ", securePort)
-	} else {
-		log.Print("Convolvr Online ", port)
-		log.Fatal(http.ListenAndServe(port, nil))
-	}
+func nexusHandler(c echo.Context) error {
+	websocket.Handler(hub.Serve).ServeHTTP(c.Response(), c.Request())
+	return nil
 }
 
 func chatMessage(c *nexus.Client, p *nexus.Packet) {
@@ -189,39 +175,35 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 //   log.Println("error:", err)
 // })
 
-func getUsers(w rest.ResponseWriter, req *rest.Request) {
+func getUsers(c echo.Context) error {
 	var users []User
 	err := db.All(&users)
 	if err != nil {
 		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
-	w.WriteJson(&users)
+	return c.JSON(http.StatusOK, &users)
 }
 
-func postUsers(w rest.ResponseWriter, req *rest.Request) {
+func postUsers(c echo.Context) (err error) {
 	var (
 		user *User
 		foundUser User
 		authUsersFound []User
 	)
-	err := req.DecodeJsonPayload(&user)
-	if err != nil {
-		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = db.One("Name", user.Name, &foundUser)
-  if err != nil { // if user doesn't exist
-    log.Println(err)
-		err = db.Save(user)
-		if err != nil {
-			log.Println(err)
-			rest.Error(w, err.Error(), http.StatusInternalServerError)
-			return
+	user = new(User)
+	if err := c.Bind(user); err != nil {
+    return err
+  }
+	dbErr := db.One("Name", user.Name, &foundUser)
+  if dbErr != nil { // if user doesn't exist
+    log.Println(dbErr)
+		dbErr := db.Save(user)
+		if dbErr != nil {
+			log.Println(dbErr)
+			return dbErr
 		}
-		w.WriteJson(&user)
+		return c.JSON(http.StatusOK, &user)
 	} else {
 		lookupErr := db.Select(q.And(
 			q.Eq("Name", user.Name),
@@ -231,25 +213,24 @@ func postUsers(w rest.ResponseWriter, req *rest.Request) {
 			log.Println(lookupErr)
 		}
 		if len(authUsersFound) == 0 {
-			w.WriteHeader(http.StatusOK) // invalid password
+			return c.JSON(http.StatusOK, nil)
 		} else {
-			w.WriteJson(&authUsersFound[0]) // valid login
+			return c.JSON(http.StatusOK, &authUsersFound[0]) // valid login
 		}
 	}
 }
 
-func getWorlds(w rest.ResponseWriter, req *rest.Request) {
+func getWorlds(c echo.Context) error {
 	var worlds []World
 	err := db.All(&worlds)
 	if err != nil {
 		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
-	w.WriteJson(&worlds)
+	return c.JSON(http.StatusOK, &worlds)
 }
 
-func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
+func getWorld(c echo.Context) error { // load specific world
   var (
 	  world World
 		red float64
@@ -261,7 +242,7 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
 		lightColor int
 		ambientColor int
   )
-  name := req.PathParam("name")
+  name := c.Param("name")
   log.Println(name)
   err := db.One("Name", name, &world)
   if err != nil {
@@ -313,11 +294,10 @@ func getWorld(w rest.ResponseWriter, req *rest.Request) { // load specific world
      log.Println(saveErr)
     }
   }
-
-  w.WriteJson(&world)
+  return c.JSON(http.StatusOK, &world)
 }
 
-func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
+func getWorldChunks(c echo.Context) error {
   var (
 		worldData World
     generatedChunk Chunk
@@ -326,8 +306,8 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 		structures []Structure
 		structure Structure
   )
-	chunk := req.PathParam("chunks")
-	world := req.PathParam("worldId")
+	chunk := c.Param("chunks")
+	world := c.Param("worldId")
 	chunks := strings.Split(chunk, ",")
   worldErr := db.One("Name", world, &worldData)
   if worldErr != nil {
@@ -380,13 +360,17 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 							}
 						}
 				  }
-				  structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0,0,0}, []int{0,0,0,0}, 1+rand.Intn(9), rand.Intn(3), rand.Intn(3), light)
+				  structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0,0,0}, []int{0,0,0,0}, 1+rand.Intn(7), 1+rand.Intn(3), 1+rand.Intn(3), light)
 	    		  structures = append(structures, structure)
 			  }
 		  }
 		  bright := 100 + rand.Intn(155)
 		  color := (bright << 16) | (bright << 8) | bright
-			altitude := float32((math.Sin(float64(x)/2)*9+math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness)
+			altitude := float32(0)
+			if (worldData.Terrain.TerrainType == "voxels" ||
+					worldData.Terrain.TerrainType == "both") {
+					altitude = float32((math.Sin(float64(x)/2)*9+math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness)
+			}
 		  generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", color, structures, nil, nil)
 	      chunksData = append(chunksData, generatedChunk)
 	      saveErr := db.Save(&generatedChunk)
@@ -397,129 +381,133 @@ func getWorldChunks(w rest.ResponseWriter, req *rest.Request) {
 	      chunksData = append(chunksData, chunkData[0])
 	    }
 	}
-	w.WriteJson(chunksData)
+	return c.JSON(http.StatusOK, &chunksData)
 }
 
-func postWorlds(w rest.ResponseWriter, req *rest.Request) {
+func postWorlds(c echo.Context) error {
 	var (
 		world *World
 	)
-	err := req.DecodeJsonPayload(&world)
+	world = new(World)
+	if err := c.Bind(world); err != nil {
+		return err
+	}
+	err := db.Save(world)
 	if err != nil {
 		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
-	err = db.Save(world)
-	if err != nil {
-		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.WriteHeader(http.StatusOK)
+	return c.JSON(http.StatusOK, nil)
 }
 
-func worldHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("../web/index.html");
-    t.Execute(w, "")
-}
-
-func getStructures(w rest.ResponseWriter, req *rest.Request) { // structure types
+func getStructures(c echo.Context) error { // structure types
 	var structures []Structure
 	err := db.All(&structures)
 	if err != nil {
 		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
-	w.WriteJson(&structures)
+	return c.JSON(http.StatusOK, &structures)
 }
 
-func postStructures(w rest.ResponseWriter, req *rest.Request) {
+func postStructures(c echo.Context) error {
 	var (
 		structure *Structure
 	)
-	err := req.DecodeJsonPayload(&structure)
-	if err != nil {
-		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	structure = new(Structure)
+	if err := c.Bind(&structure); err != nil {
+		return err
 	}
-	err = db.Save(structure)
-	if err != nil {
-		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	dbErr := db.Save(&structure)
+	if dbErr != nil {
+		log.Println(dbErr)
+		return dbErr
 	}
-	w.WriteHeader(http.StatusOK)
+	return c.JSON(http.StatusOK, nil)
 }
 
-func getStructuresByUser(w rest.ResponseWriter, req *rest.Request) { // custom structure types
-	//w.WriteJson()
+func getStructuresByUser(c echo.Context) error { // custom structure types
+	return c.JSON(http.StatusOK, nil)
 }
 
-func getEntities(w rest.ResponseWriter, req *rest.Request) { // entity types
+func getEntities(c echo.Context) error { // entity types
 	var entities []Entity
 	err := db.All(&entities)
 	if err != nil {
 		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
-	w.WriteJson(&entities)
-	//w.WriteJson()
+	return c.JSON(http.StatusOK, entities)
 }
 
-func postEntities(w rest.ResponseWriter, req *rest.Request) {
+func postEntities(c echo.Context) error {
 	var (
 		entity *Entity
 	)
-	err := req.DecodeJsonPayload(&entity)
-	if err != nil {
-		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	entity = new(Entity)
+	if err := c.Bind(&entity); err != nil {
+		return err
 	}
-	err = db.Save(entity)
-	if err != nil {
-		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	dbErr := db.Save(&entity)
+	if dbErr != nil {
+		log.Println(dbErr)
+		return dbErr
 	}
-	w.WriteHeader(http.StatusOK)
+	return c.JSON(http.StatusOK, nil)
 }
 
-func getEntitiesByUser(w rest.ResponseWriter, req *rest.Request) { // custom entities
-
-	//w.WriteJson()
+func getEntitiesByUser(c echo.Context) error { // custom entities
+	return c.JSON(http.StatusOK, nil)
 }
 
-func getComponents(w rest.ResponseWriter, req *rest.Request) { // component types
+func getComponents(c echo.Context) error { // component types
 	var components []Component
 	err := db.All(&components)
 	if err != nil {
 		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
-	w.WriteJson(&components)
+	return c.JSON(http.StatusOK, components)
 }
 
-func postComponents(w rest.ResponseWriter, req *rest.Request) {
+func postComponents(c echo.Context) error {
 	var (
 		component *Component
 	)
-	err := req.DecodeJsonPayload(&component)
-	if err != nil {
-		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	component = new(Component)
+	if err := c.Bind(&component); err != nil {
+		return err
 	}
-	err = db.Save(component)
-	if err != nil {
-		log.Println(err)
-		rest.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+	dbErr := db.Save(&component)
+	if dbErr != nil {
+		log.Println(dbErr)
+		return dbErr
 	}
-	w.WriteHeader(http.StatusOK)
+	return c.JSON(http.StatusOK, nil)
+}
+
+func listFiles(c echo.Context) error { // Get /files/list
+	files, _ := ioutil.ReadDir("./")
+  for _, f := range files {
+    log.Println(f.Name())
+  }
+	return c.JSON(http.StatusOK, nil)
+}
+func getFiles(c echo.Context) error { // Get /files/download/:dir/:filename
+	return c.JSON(http.StatusOK, nil)
+}
+func postFiles(c echo.Context) error { // Post /files/upload
+	return c.JSON(http.StatusOK, nil)
+}
+func getDirectories(c echo.Context) error { // Get /directories/list/:userId
+	return c.JSON(http.StatusOK, nil)
+}
+func postDirectories(c echo.Context) error { // Post("/directories
+	return c.JSON(http.StatusOK, nil)
+}
+func getText(c echo.Context) error { // Get /documents/:path/:filename
+	return c.JSON(http.StatusOK, nil)
+}
+func postText(c echo.Context) error  { // Post /documents/:path/:filename
+	return c.JSON(http.StatusOK, nil)
 }

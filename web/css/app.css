@@ -11,8 +11,10 @@ body {
   top: 0;
   right: 0;
   z-index: 9999;
-  min-width: 7.5vh;
-  min-height: 7.5vh;
+  width: 7.5vh;
+  height: 7.5vh;
+  max-width: 72px;
+  max-height: 72px;
   border-top-left-radius: 4px;
 }
 .root {

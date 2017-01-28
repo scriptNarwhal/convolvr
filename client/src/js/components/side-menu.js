@@ -36,22 +36,22 @@ class SideMenu extends Component {
     return (
         <div style={styles.sideMenu} >
           <div style={styles.inner}>
+            <Tab image="/data/plus.png"
+                 title="Create New World"
+                 clickHandler={ ()=> { browserHistory.push("/worlds/new") } }
+            />
             <Tab image="/data/circle-a.png"
                  title="Switch Worlds"
                  clickHandler={ ()=> { browserHistory.push("/worlds") }}
-            />
-            <Tab image="/data/logout.png"
-                 title="Sign In / Switch Accounts"
-                 clickHandler={ ()=> { browserHistory.push("/login") } }
             />
             <Tab image="/data/chat.png"
                  title="Chat"
                  clickHandler={ ()=> { browserHistory.push("/chat") } }
             />
-            {/* <Tab image="/data/voxel-white.png"
-                 title="Manage Data"
-                 clickHandler={ ()=> { alert("Not Implemented") } }
-            /> */}
+            <Tab image="/data/logout.png"
+                 title="Sign In / Switch Accounts"
+                 clickHandler={ ()=> { browserHistory.push("/login") } }
+            />
             <Tab image="/data/configure.png"
                  title="Settings"
                  clickHandler={ ()=> { /*browserHistory.push("/settings")*/ alert("Not Implemented") } }

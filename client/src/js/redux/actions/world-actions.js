@@ -12,8 +12,9 @@ import {
   WORLD_DELETE_FETCH,
   WORLD_DELETE_DONE,
   WORLD_DELETE_FAIL
-} from '../constants/action-types';
-import axios from 'axios';
+} from '../constants/action-types'
+import axios from 'axios'
+import { browserHistory } from 'react-router'
 import { API_SERVER } from '../../config.js'
 
 export function fetchWorlds () {
@@ -48,9 +49,11 @@ export function createWorld (data) {
         type: WORLDS_FETCH,
         data
      })
-     return axios.post(API_SERVER+"/api/worlds")
+     return axios.post(API_SERVER+"/api/worlds", data)
         .then(response => {
             dispatch(createWorldDone(response))
+            browserHistory.push("/world/"+data.name)
+            window.location.href = window.location.href  /* work around */
         }).catch(response => {
             dispatch(createWorldFail(response))
         });

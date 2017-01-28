@@ -15,7 +15,7 @@ export default class WorldPhysics {
 	          position = [],
 	          velocity = [];
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
-					vrHeight = 20000 * vrFrame.pose.position[1]
+					vrHeight = 10000 + 28000 * vrFrame.pose.position[1]
 			}
 	    if (message.command == "update") {
 	          worker.postMessage('{"command":"update","data":{"position":['+cam.position.x+

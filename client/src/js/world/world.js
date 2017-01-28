@@ -168,14 +168,12 @@ export default class World {
 			}
 		})
 		render(this, 0)
-		this.terrain.bufferChunks(true, 0)
 
 		three.vrDisplay = null
 		navigator.getVRDisplays().then(function(displays) {
 			console.log("displays", displays)
 		  if (displays.length > 0) {
-		    three.vrDisplay = displays[0];
-		    //vrDisplay.requestAnimationFrame(vrRender)
+		    three.vrDisplay = displays[0]
 		  }
 		})
 	}
@@ -213,6 +211,7 @@ export default class World {
 		skyLight.position.set(0, 1000000, 1000000)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
+		this.terrain.bufferChunks(true, 0)
 	}
 
 	initRenderer (renderer, id) {

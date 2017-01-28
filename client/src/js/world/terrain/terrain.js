@@ -19,17 +19,21 @@ export default class Terrain {
 
   init (config) {
     this.config = config
-    let geom = new THREE.PlaneGeometry(12000000, 12000000, 2, 2),
-        mat = new THREE.MeshPhongMaterial({color: this.config.color}),
-        mesh = new THREE.Mesh(geom, mat)
-    this.mesh = mesh
-    mesh.rotation.x = -Math.PI/2
-    mesh.position.y = -168000 - 125000 / this.config.flatness
-    three.scene.add(mesh)
+    let type = this.config.type
+    if (type == "both" || type == "plane") {
+      let geom = new THREE.PlaneGeometry(12000000, 12000000, 2, 2),
+          mat = new THREE.MeshPhongMaterial({color: this.config.color}),
+          mesh = new THREE.Mesh(geom, mat)
+      this.mesh = mesh
+      mesh.rotation.x = -Math.PI/2
+      mesh.position.y = -168000 - 125000 / this.config.flatness
+      three.scene.add(mesh)
+    }
   }
 
   bufferChunks (force, phase) {
     let platforms = this.platforms,
+        config = this.config,
         plat = null,
         chunk = null,
         removePhysicsChunks = [],
@@ -115,12 +119,16 @@ export default class Terrain {
           chunks += rc
         })
         this.reqChunks = []; // empty array
+        let showVoxels = true
+        if (!!config) {
+          showVoxels = config.type == "voxels" || config.type == "both"
+        }
         axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`)
            .then(response => {
              let physicalChunks = []
              typeof response.data.map == 'function' &&
              response.data.map(c =>{
-                 let chunk = new Chunk({altitude: c.altitude, color: c.color,
+                 let chunk = new Chunk({visible: showVoxels, altitude: c.altitude, color: c.color,
                                         entities: c.entities, voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
                  if (!!chunk.geometry != "space") { // if its not empty space
                      physicalChunks.push(chunk.data);

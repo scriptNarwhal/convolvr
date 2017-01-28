@@ -20,7 +20,7 @@ export default class Chunk {
             finalGeom = new THREE.Geometry(),
             base = new THREE.Geometry(),
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
-            // geom = new THREE.CylinderGeometry( 128000, 128000, 7000, 6, 1),
+            visible = data.visible,
             geom = new THREE.CylinderGeometry( 266000, 266000, 133000, 6, 1),
             voxelGeom = null,
             mat = new THREE.MeshPhongMaterial( {color: data.color, shininess: 20} ),
@@ -33,10 +33,13 @@ export default class Chunk {
         if (data == null) {
             data = { }
         }
-        if (!!data.voxels) { // terrain voxels
+        if (!!data.voxels && data.voxels.length > 0) { // terrain (sub)voxels
             voxelGeom = new THREE.CylinderGeometry( 264000 / 16, 264000 / 16, 264000 / 8.5, 6, 1);
             items = data.voxels;
-            cellMesh = new THREE.Mesh(geom, mat);
+            cellMesh = new THREE.Mesh(geom, mat)
+            if (visible != null && visible === false) {
+              cellMesh.scale.set(0.01, 0.01, 0.01)
+            }
             cellMesh.updateMatrix()
             base.merge(cellMesh.geometry, cellMesh.matrix);
 
@@ -52,10 +55,14 @@ export default class Chunk {
             }
             mesh = new THREE.Mesh(base, mat)
         } else {
+          if (visible) {
             if (smooth) {
                 geom = modifier.modify( geom )
             }
             mesh = new THREE.Mesh(geom, mat)
+          } else {
+            mesh = new THREE.Object3D()
+          }
         }
         this.mesh = mesh
         if (!!data.entities) {
