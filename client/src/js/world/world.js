@@ -48,6 +48,7 @@ export default class World {
 		this.capturing = false
 		this.webcamImage = ""
 		this.HMDMode = "standard" // "head-movement"
+		this.vrHeight = 0
 		this.screenResX = screenResX
 		this.initRenderer(rendererAA, "viewportAA")
 		if (!!renderer) {
@@ -203,8 +204,6 @@ export default class World {
 		} )
 
 		three.skyMat = skyShaderMat
-		this.ground = new THREE.Object3D()
-		this.ground.rotation.x = -Math.PI /2
 		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyShaderMat)
 		this.skyLight = skyLight
 		this.skybox.add(skyLight)
@@ -240,8 +239,8 @@ export default class World {
 		if (!!this.skybox) {
 			three.scene.remove(this.skybox)
 		}
-		if (!!this.ground) {
-			three.scene.remove(this.ground)
+		if (!!this.terrain.mesh) {
+			three.scene.remove(this.terrain.mesh)
 		}
 		this.terrain.platforms.map(p => {
 			if (p.mesh) {
@@ -320,15 +319,17 @@ export default class World {
 	}
 
 	updateSkybox (delta) {
-		let camera = three.camera
+		let camera = three.camera,
+				terrainMesh = this.terrain.mesh
 		if (this.skybox) {
 			if (this.skybox.material) {
 				this.skybox.material.uniforms.time.value += delta
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
 			}
     }
-		if (this.ground) {
-			this.ground.position.set(camera.position.x, camera.position.y - 2000, camera.position.z)
+		if (terrainMesh) {
+			terrainMesh.position.x = camera.position.x
+			terrainMesh.position.z = camera.position.z
 		}
 	}
 

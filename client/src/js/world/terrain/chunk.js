@@ -23,7 +23,10 @@ export default class Chunk {
             visible = data.visible,
             geom = new THREE.CylinderGeometry( 266000, 266000, 133000, 6, 1),
             voxelGeom = null,
-            mat = new THREE.MeshPhongMaterial( {color: data.color, shininess: 20} ),
+            mobile = three.world.mobile,
+            mat = mobile ?
+              new THREE.MeshLambertMaterial( {color: data.color, shininess: 20} )
+            : new THREE.MeshPhongMaterial( {color: data.color, shininess: 20} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null
 
         this.structures = []

@@ -14,6 +14,7 @@ export default class Entity {
   init (scene) {
     var mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
+        mobile = three.world.mobile,
         aspects = this.aspects,
         ncomps = this.components.length,
         compMesh = null,
@@ -23,7 +24,7 @@ export default class Entity {
         s = 0
 
     while (c < ncomps) {
-        comp = new Component(this.components[c])
+        comp = new Component(this.components[c], {mobile}) // use simpler shading for mobile gpus
         compMesh = comp.mesh
         if (comp.type == 'structure') {
           if (s == 0) {

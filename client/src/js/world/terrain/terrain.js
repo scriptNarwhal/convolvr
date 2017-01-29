@@ -20,13 +20,19 @@ export default class Terrain {
   init (config) {
     this.config = config
     let type = this.config.type
-    if (type == "both" || type == "plane") {
+    if (type == 'both' || type == 'plane') {
       let geom = new THREE.PlaneGeometry(12000000, 12000000, 2, 2),
-          mat = new THREE.MeshPhongMaterial({color: this.config.color}),
+          mat = this.world.mobile ?
+            new THREE.MeshLambertMaterial({color: this.config.color})
+          : new THREE.MeshPhongMaterial({color: this.config.color}),
           mesh = new THREE.Mesh(geom, mat)
       this.mesh = mesh
       mesh.rotation.x = -Math.PI/2
-      mesh.position.y = -168000 - 125000 / this.config.flatness
+      if (type == 'plane') {
+        mesh.position.y = -64500
+      } else {
+        mesh.position.y = -168000 - 125000 / this.config.flatness
+      }
       three.scene.add(mesh)
     }
   }

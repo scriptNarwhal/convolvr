@@ -10,17 +10,19 @@ import (
   "github.com/labstack/echo"
 )
 
-func listFiles(c echo.Context) error { // Get /files/list
+func listFiles(c echo.Context) error {
 	files, _ := ioutil.ReadDir("./")
   for _, f := range files {
     log.Println(f.Name())
   }
 	return c.JSON(http.StatusOK, nil)
 }
-func getFiles(c echo.Context) error { // Get /files/download/:dir/:filename
+
+func getFiles(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
-func postFiles(c echo.Context) error { // Post /files/upload
+
+func postFiles(c echo.Context) error {
 	file, err := c.FormFile("file") // Source
 	username := c.Param("username")
 	dir := c.Param("dir")
@@ -44,6 +46,7 @@ func postFiles(c echo.Context) error { // Post /files/upload
 	}
 	return c.HTML(http.StatusOK, fmt.Sprintf("<p>File %s uploaded successfully</p>", file.Filename))
 }
+
 func postMultipleFiles(c echo.Context) error {
 	form, err := c.MultipartForm()
 	username := c.Param("username")
@@ -70,32 +73,46 @@ func postMultipleFiles(c echo.Context) error {
 	}
 	return c.HTML(http.StatusOK, fmt.Sprintf("<p>Uploaded successfully %d files</p>", len(files)))
 }
-func getDirectories(c echo.Context) error { // Get /directories/list/:userId
+
+func getDirectories(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
-func postDirectories(c echo.Context) error { // Post("/directories
+
+func postDirectories(c echo.Context) error {
 	username := c.Param("username")
 	dir := c.Param("dir")
 	createDataDir(username, dir)
 	return c.JSON(http.StatusOK, nil)
 }
-func getText(c echo.Context) error { // Get /documents/:dir/:filename
-	return c.JSON(http.StatusOK, nil)
-}
-func postText(c echo.Context) error  { // Post /documents/:dir/:filename
+
+func getText(c echo.Context) error {
 	username := c.Param("username")
 	dir := c.Param("dir")
 	filename := c.Param("filename")
+	filepath := "../web/data/"+username+"/"+dir+"/"+filename
+	file, err := ioutil.ReadFile(filepath)
+		if err != nil {
+				log.Fatal("Cannot open file", err)
+		}
+	return c.JSON(http.StatusOK, map[string]string{"text": string(file)})
+}
+
+func postText(c echo.Context) error  {
+	username := c.Param("username")
+	dir := c.Param("dir")
+	filename := c.Param("filename")
+	text := c.FormValue("text")
   filepath := "../web/data/"+username+"/"+dir+"/"+filename
 	createFileIfMissing(username, dir, filename)
-	file, err := os.Open(filepath)
+	file, err := os.OpenFile(filepath, os.O_WRONLY | os.O_CREATE | os.O_TRUNC, 0777)
 		if err != nil {
 				log.Fatal("Cannot open file", err)
 		}
   defer file.Close()
-  fmt.Fprintf(file, "Hello Readers of golangcode.com")
+  fmt.Fprintf(file, text)
 	return c.JSON(http.StatusOK, nil)
 }
+
 func createDataDir(username string, dir string) {
 	if _, err := os.Stat("../web/data/"+username+"/"+dir); err != nil {
 			if os.IsNotExist(err) {
@@ -103,10 +120,12 @@ func createDataDir(username string, dir string) {
 			}
 	}
 }
+
 func createFileIfMissing(username string, dir string, filename string) {
 	filepath := "../web/data/"+username+"/"+dir+"/"+filename
 	if _, err := os.Stat(filepath); err != nil {
 			if os.IsNotExist(err) {
+				createDataDir(username, dir)
 				_, err := os.Create(filepath)
 					if err != nil {
 							log.Fatal("Cannot create file", err)
