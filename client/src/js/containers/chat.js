@@ -71,7 +71,10 @@ class Chat extends Component {
     }
   }
   componentDidMount () {
-    this.textInput.focus()
+    let worldMode = three.world.mode
+    if (worldMode != 'vr' && worldMode != 'stereo') {
+      this.textInput.focus()
+    } 
     if (this.props.menuOpen == false) {
       this.props.toggleMenu(true)
     }
