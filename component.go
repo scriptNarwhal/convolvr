@@ -1,5 +1,11 @@
 package convolvr
 
+import (
+	"net/http"
+	log "github.com/Sirupsen/logrus"
+	"github.com/labstack/echo"
+)
+
 type Component struct {
 	ID         int      `storm:"id,increment" json:"id"`
 	Name       string   `json:"name"`
@@ -14,4 +20,30 @@ type Component struct {
 
 func NewComponent(id int, name string, shape string, mat string, color int, size []float64, pos []int, quat []int, componentType string) *Component {
 	return &Component{id, name, shape, mat, color, size, pos, quat, componentType}
+}
+
+func getComponents(c echo.Context) error { // component types
+	var components []Component
+	err := db.All(&components)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return c.JSON(http.StatusOK, components)
+}
+
+func postComponents(c echo.Context) error {
+	var (
+		component *Component
+	)
+	component = new(Component)
+	if err := c.Bind(&component); err != nil {
+		return err
+	}
+	dbErr := db.Save(&component)
+	if dbErr != nil {
+		log.Println(dbErr)
+		return dbErr
+	}
+	return c.JSON(http.StatusOK, nil)
 }
