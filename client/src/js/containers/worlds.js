@@ -27,7 +27,7 @@ class Worlds extends Component {
               return (
                 <Card key={i} showTitle={true} clickHandler={(e, v) => {
                   this.switchWorlds(world.name)
-                }} image="/data/circle-a.png" title={world.name}  />
+                }} image="/images/circle-a.png" title={world.name}  />
               )
             })
           }

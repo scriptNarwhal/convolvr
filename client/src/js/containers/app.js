@@ -113,7 +113,7 @@ class App extends Component {
                   bottom: 0
                 }}
                 key='1'
-                image="/data/x.png"
+                image="/images/x.png"
                 onClick={ (evt, title) => {
 
                 } }
@@ -125,7 +125,7 @@ class App extends Component {
                   top: 0
                 }}
                 key='2'
-                image="/data/x.png"
+                image="/images/x.png"
                 onClick={ (evt, title) => {
                     this.props.toggleVRMode();
                 } }
@@ -138,7 +138,7 @@ class App extends Component {
                       zIndex: 9999,
                       background: 'none'
                   }}
-                  image="/data/vr.png"
+                  image="/images/vr.png"
                   onClick={ (evt, title) => {
                     this.props.toggleVRMode()
                     let renderer = three.rendererAA || three.renderer,

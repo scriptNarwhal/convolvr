@@ -43,5 +43,5 @@ export default class Card extends Component {
 Card.defaultProps = {
     title: "Menu Item",
     showTitle: false,
-    image: "/data/circle-a.png"
+    image: "/images/circle-a.png"
 }

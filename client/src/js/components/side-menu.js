@@ -36,27 +36,27 @@ class SideMenu extends Component {
     return (
         <div style={styles.sideMenu} >
           <div style={styles.inner}>
-            <Tab image="/data/plus.png"
+            <Tab image="/images/plus.png"
                  title="Create New World"
                  clickHandler={ ()=> { browserHistory.push("/worlds/new") } }
             />
-            <Tab image="/data/circle-a.png"
+            <Tab image="/images/circle-a.png"
                  title="Switch Worlds"
                  clickHandler={ ()=> { browserHistory.push("/worlds") }}
             />
-            <Tab image="/data/chat.png"
+            <Tab image="/images/chat.png"
                  title="Chat"
                  clickHandler={ ()=> { browserHistory.push("/chat") } }
             />
-            <Tab image="/data/logout.png"
+            <Tab image="/images/logout.png"
                  title="Sign In / Switch Accounts"
                  clickHandler={ ()=> { browserHistory.push("/login") } }
             />
-            <Tab image="/data/configure.png"
+            <Tab image="/images/configure.png"
                  title="Settings"
                  clickHandler={ ()=> { /*browserHistory.push("/settings")*/ alert("Not Implemented") } }
             />
-            <Tab image="/data/x.png"
+            <Tab image="/images/x.png"
                   title="Close Menu"
                   clickHandler={() => {
                     this.toggleMenu()
