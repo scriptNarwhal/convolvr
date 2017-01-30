@@ -88,19 +88,21 @@ export default class NewWorld extends Component {
   }
 
   createWorld() {
-    let data = {
+    let
+      lightColor = [parseFloat(this.state.red), parseFloat(this.state.green), parseFloat(this.state.blue)],
+      data = {
       id: 0,
       name: this.state.name,
       sky: {
         skyType: this.state.skyType,
-        red: parseFloat(this.state.red),
-        green: parseFloat(this.state.green),
-        blue: parseFloat(this.state.blue),
+        red: lightColor[0],
+        green: lightColor[1],
+        blue: lightColor[2],
         layers: this.state.layers,
         photosphere: this.state.photosphere
       },
       light: {
-        color: 0xffffff,
+        color: 0x1000000 + (Math.floor(lightColor[0] * 255) << 16) + (Math.floor(lightColor[1] * 255) << 8) + Math.floor(lightColor[2] * 255),
         intensity: parseFloat(this.state.intensity),
         angle: 2.0,
         ambientColor: 0x000000
@@ -139,7 +141,13 @@ export default class NewWorld extends Component {
     })
   }
   upload (e) {
-
+    let data = new FormData(),
+        username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
+    data.append('file', e.target.files[0])
+    this.setState({
+      photosphere: username+"/"+e.target.files[0].name
+    })
+    this.props.uploadFile(data, username, "")
   }
   render() {
     return (
@@ -174,15 +182,15 @@ export default class NewWorld extends Component {
                   </div>
                 ) : (
                   [<div style={styles.option} key='1'>
-                    <span style={styles.label}>Sky Color (red)</span>
+                    <span style={styles.label}>Light Color / Red</span>
                       <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/>
                   </div>,
                   <div style={styles.option} key='2'>
-                    <span style={styles.label}>Sky Color (green)</span>
+                    <span style={styles.label}>Light Color / Green</span>
                       <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/>
                   </div>,
                   <div style={styles.option} key='3'>
-                    <span style={styles.label}>Sky Color (blue)</span>
+                    <span style={styles.label}>Light Color / Blue</span>
                     <input type='range' min='0' max='1' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} />
                   </div>]
                 )
@@ -225,20 +233,25 @@ NewWorld.defaultProps = {
 
 import { connect } from 'react-redux'
 import { createWorld } from '../redux/actions/world-actions'
-
+import { uploadFile } from '../redux/actions/file-actions'
 export default connect(
   state => {
     return {
       tools: state.tools,
       users: state.users,
+      loggedInUser: state.users.loggedIn,
       menuOpen: state.app.menuOpen,
-      stereoMode: state.app.vrMode
+      stereoMode: state.app.vrMode,
+      uploading: state.files.upload.fetching
     }
   },
   dispatch => {
     return {
       createWorld: (data) => {
         dispatch(createWorld(data))
+      },
+      uploadFile: (file, username, dir) => {
+        dispatch(uploadFile(file, username, dir))
       }
     }
   }

@@ -15,12 +15,6 @@ build() {
  echo "browserify" $(pwd)/src/js/main.js
  browserify -d -e src/js/main.js -t babelify -o "$dist/js/app.js" -v
 
- #echo "myth $(pwd)/app/src/css/app.css"
- #myth src/css/app.css "web/css/app.css"
-
- #echo "copy echo $(pwd)/web"
- #cp -urv app/web/* "app/data/"
-
 }
 
 build $output

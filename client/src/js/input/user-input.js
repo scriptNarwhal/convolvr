@@ -112,8 +112,15 @@ export default class UserInput {
 	update (delta) {
 		var world = this.world,
 				terrainMesh = world.terrain.mesh,
-				bottom = terrainMesh ? terrainMesh.position.y : -168000,
+				terrainMode = '',
+				bottom = -600000,
 				velocity = this.device.velocity; //world.getElevation(this.camera.position);
+		if (world.terrain.config) {
+			terrainMode = world.terrain.config.type
+			if (terrainMode == "plane" || terrainMode == "both") {
+				bottom = terrainMesh.position.y + 6000 + world.vrHeight
+			}
+		}
 		if (isVRMode(world.mode)) {
 				this.keyboard.handleKeys(this);
 				this.gamepad.update(this, world);
@@ -149,12 +156,7 @@ export default class UserInput {
 				velocity.z *= 0.993
 			}
 			if (!! world.user.mesh) {
-				world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
-				//world.user.mesh.rotation.y = (this.camera.rotation.y);
-			}
-			if (terrainMesh) {
-				terrainMesh.position.x = this.camera.position.x
-				terrainMesh.position.z = this.camera.position.z
+				world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z)
 			}
 	}
 

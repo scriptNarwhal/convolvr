@@ -29,11 +29,18 @@ class App extends Component {
       } else {
         document.title = worldName
       }
+      let worldMode = three.world.mode
       if (!this.props.menuOpen) {
-        this.props.toggleMenu()
+        browserHistory.push("/chat")
+        if (worldMode != 'vr' && worldMode != 'stereo') { // 3d ui will show the chat in vr without interrupting things
+          this.props.toggleMenu()
+        } else {
+          setTimeout(()=>{
+            browserHistory.push(`/world/${this.props.world}`)
+            this.props.toggleMenu()
+          }, 3500)
+        }
       }
-      // this.props.showChat()
-      browserHistory.push("/chat")
     })
     this.props.setCurrentWorld(window.worldName)
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
@@ -113,7 +120,7 @@ class App extends Component {
                   bottom: 0
                 }}
                 key='1'
-                image="/data/x.png"
+                image="/images/x.png"
                 onClick={ (evt, title) => {
 
                 } }
@@ -125,7 +132,7 @@ class App extends Component {
                   top: 0
                 }}
                 key='2'
-                image="/data/x.png"
+                image="/images/x.png"
                 onClick={ (evt, title) => {
                     this.props.toggleVRMode();
                 } }
@@ -138,7 +145,7 @@ class App extends Component {
                       zIndex: 9999,
                       background: 'none'
                   }}
-                  image="/data/vr.png"
+                  image="/images/vr.png"
                   onClick={ (evt, title) => {
                     this.props.toggleVRMode()
                     let renderer = three.rendererAA || three.renderer,

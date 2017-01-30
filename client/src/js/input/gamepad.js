@@ -5,7 +5,7 @@ export default class GamePad {
 		this.cooldown = 0
 		this.bumperCooldown = 0
 		this.bumperCooldownTimeout = null
-		
+
     function gamepadHandler (e, connecting) {
       let gamepad = e.gamepad;
 		      input.gamepadMode = true;
@@ -72,8 +72,12 @@ export default class GamePad {
 					// dpad buttons: 12 13 14 15
 				}
 				if (a >= 4) { // standard dual analogue controller
-					  input.moveVector.x = gamepad.axes[0] * 30000
-						input.moveVector.z = gamepad.axes[1] * 30000
+						if (Math.abs(gamepad.axes[0]) > 0.1) {
+							input.moveVector.x = gamepad.axes[0] * 16000
+						}
+						if (Math.abs(gamepad.axes[1]) > 0.1) {
+							input.moveVector.z = gamepad.axes[1] * 16000
+						}
 						if (Math.abs(gamepad.axes[2]) > 0.10) { // 10 percent deadzone
 							rotation.y += -gamepad.axes[2] / 20.0
 						}

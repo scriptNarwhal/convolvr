@@ -1,5 +1,5 @@
 export default class Component {
-  constructor (data) {
+  constructor (data, config = false) {
       var mesh = null,
           type = data.type,
           shape = data.shape,
@@ -10,7 +10,8 @@ export default class Component {
           material = null,
           materialName = data.material || "",
           mat = {},
-          basic = false
+          basic = false,
+          mobile = config && config.mobile
 
           switch(materialName) {
             case "wireframe":
@@ -31,7 +32,11 @@ export default class Component {
           if (basic) {
             material = new THREE.MeshBasicMaterial(mat)
           } else {
-            material = new THREE.MeshPhongMaterial(mat)
+            if (mobile) {
+              material = new THREE.MeshLambertMaterial(mat)
+            } else {
+              material = new THREE.MeshPhongMaterial(mat)
+            }
           }
 
       switch (shape) {

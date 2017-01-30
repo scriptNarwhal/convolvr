@@ -15,7 +15,8 @@ export default class WorldPhysics {
 	          position = [],
 	          velocity = [];
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
-					vrHeight = 10000 + 28000 * vrFrame.pose.position[1]
+					vrHeight = 6000 + 22000 * vrFrame.pose.position[1]
+					sys.vrHeight = vrHeight
 			}
 	    if (message.command == "update") {
 	          worker.postMessage('{"command":"update","data":{"position":['+cam.position.x+
@@ -31,10 +32,10 @@ export default class WorldPhysics {
 	          console.log(message.data);
 		  } else if (message.command == "platform collision") { // consider sending "top" or "bottom" collision type
 	      if (message.data.type == "top") {
-				  three.camera.position.set(three.camera.position.x, message.data.position[1]+82000 +vrHeight, three.camera.position.z);
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]+85000 +vrHeight, three.camera.position.z);
 				  user.velocity.y *= -0.45;
 			  } else if (message.data.type == "bottom"){
-				  three.camera.position.set(three.camera.position.x, message.data.position[1]-82000 +vrHeight, three.camera.position.z);
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]-85000 +vrHeight, three.camera.position.z);
 				  user.velocity.y *= -0.45;
 			  }
 			  user.velocity.x *= 0.99;
