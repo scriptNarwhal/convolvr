@@ -10,18 +10,28 @@ import (
   "github.com/labstack/echo"
 )
 
+/* /files/list/:username/:dir */
 func listFiles(c echo.Context) error {
-	files, _ := ioutil.ReadDir("./")
+	username := c.Param("username")
+	dir := c.Param("dir")
+	filepath := "../web/data/"+username+"/"
+	if (dir != "") {
+		filepath = filepath+dir
+	}
+	files, _ := ioutil.ReadDir(filepath)
+	fileNames := []string{}
   for _, f := range files {
-    log.Println(f.Name())
+		if f.IsDir() == false {
+			fileNames = append(fileNames, f.Name())
+		}
   }
-	return c.JSON(http.StatusOK, nil)
+	return c.JSON(http.StatusOK, fileNames)
 }
-
+/* /files/download/:username/:dir/:filename (redundant at the moment) */
 func getFiles(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
-
+/* /files/upload/:username/:dir */
 func postFiles(c echo.Context) error {
 	file, err := c.FormFile("file") // Source
 	username := c.Param("username")
@@ -46,7 +56,7 @@ func postFiles(c echo.Context) error {
 	}
 	return c.HTML(http.StatusOK, fmt.Sprintf("<p>File %s uploaded successfully</p>", file.Filename))
 }
-
+/* /files/upload-multiple/:username/:dir */
 func postMultipleFiles(c echo.Context) error {
 	form, err := c.MultipartForm()
 	username := c.Param("username")
@@ -73,18 +83,33 @@ func postMultipleFiles(c echo.Context) error {
 	}
 	return c.HTML(http.StatusOK, fmt.Sprintf("<p>Uploaded successfully %d files</p>", len(files)))
 }
-
+/* /directories/list/:username/:dir */
 func getDirectories(c echo.Context) error {
-	return c.JSON(http.StatusOK, nil)
+	username := c.Param("username")
+	dir := c.Param("dir")
+	filepath := "../web/data/"
+	if dir != "" {
+		filepath = filepath+username+"/"+dir
+	} else {
+		filepath = filepath+username
+	}
+	files, _ := ioutil.ReadDir(filepath)
+	fileNames := []string{}
+  for _, f := range files {
+		if (f.IsDir()) {
+			fileNames = append(fileNames, f.Name())
+		}
+  }
+	return c.JSON(http.StatusOK, fileNames)
 }
-
+/* /directories/:username/:dir */
 func postDirectories(c echo.Context) error {
 	username := c.Param("username")
 	dir := c.Param("dir")
 	createDataDir(username, dir)
 	return c.JSON(http.StatusOK, nil)
 }
-
+/* /documents/:username/:dir/:filename */
 func getText(c echo.Context) error {
 	username := c.Param("username")
 	dir := c.Param("dir")
@@ -96,7 +121,7 @@ func getText(c echo.Context) error {
 		}
 	return c.JSON(http.StatusOK, map[string]string{"text": string(file)})
 }
-
+/* /documents/:username/:dir/:filename */
 func postText(c echo.Context) error  {
 	username := c.Param("username")
 	dir := c.Param("dir")
