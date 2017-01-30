@@ -45,8 +45,14 @@ func postFiles(c echo.Context) error {
 		return err
 	}
 	defer src.Close() // Destination
-	createDataDir(username, dir)
-	dst, err := os.Create("../web/data/"+username+"/"+dir+"/"+file.Filename)
+	filepath := "../web/data/"
+	if dir != "" {
+		createDataDir(username, dir)
+		filepath = filepath+username+"/"+dir
+	} else {
+		filepath = filepath+username
+	}
+	dst, err := os.Create(filepath+"/"+file.Filename)
 	if err != nil {
 		return err
 	}
@@ -64,6 +70,13 @@ func postMultipleFiles(c echo.Context) error {
 	if err != nil {
 		return err
 	}
+	filepath := "../web/data/"
+	if dir != "" {
+		createDataDir(username, dir)
+		filepath = filepath+username+"/"+dir
+	} else {
+		filepath = filepath+username
+	}
 	files := form.File["files"]
 	for _, file := range files {
 		src, err := file.Open() // Source
@@ -71,8 +84,7 @@ func postMultipleFiles(c echo.Context) error {
 			return err
 		}
 		defer src.Close()
-		createDataDir(username, dir)
-		dst, err := os.Create("../web/data/"+username+"/"+dir+"/"+file.Filename) // Destination
+		dst, err := os.Create(filepath+"/"+file.Filename) // Destination
 		if err != nil {
 			return err
 		}

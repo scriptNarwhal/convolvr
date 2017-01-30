@@ -141,7 +141,13 @@ export default class NewWorld extends Component {
     })
   }
   upload (e) {
-
+    let data = new FormData(),
+        username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
+    data.append('file', e.target.files[0])
+    this.setState({
+      photosphere: username+"/"+e.target.files[0].name
+    })
+    this.props.uploadFile(data, username, "")
   }
   render() {
     return (
@@ -227,20 +233,25 @@ NewWorld.defaultProps = {
 
 import { connect } from 'react-redux'
 import { createWorld } from '../redux/actions/world-actions'
-
+import { uploadFile } from '../redux/actions/file-actions'
 export default connect(
   state => {
     return {
       tools: state.tools,
       users: state.users,
+      loggedInUser: state.users.loggedIn,
       menuOpen: state.app.menuOpen,
-      stereoMode: state.app.vrMode
+      stereoMode: state.app.vrMode,
+      uploading: state.files.upload.fetching
     }
   },
   dispatch => {
     return {
       createWorld: (data) => {
         dispatch(createWorld(data))
+      },
+      uploadFile: (file, username, dir) => {
+        dispatch(uploadFile(file, username, dir))
       }
     }
   }

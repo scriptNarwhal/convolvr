@@ -1,56 +1,85 @@
 import {
-    ADD_FILE,
-    FETCH_FILES,
-    RECEIVE_FILES,
-    FAILED_FETCH_FILES,
-    UPDATE_FILE,
-    DELETE_FILE
+    FILES_LIST_FETCH,
+    FILES_LIST_FAIL,
+    FILES_LIST_DONE,
+    FILE_DELETE_FETCH,
+    FILE_DELETE_DONE,
+    FILE_DELETE_FAIL,
+    FILE_UPLOAD_FETCH,
+    FILE_UPLOAD_DONE,
+    FILE_UPLOAD_FAIL,
+    FILES_UPLOAD_FETCH,
+    FILES_UPLOAD_DONE,
+    FILES_UPLOAD_FAIL,
+    TEXT_READ_FETCH,
+    TEXT_READ_DONE,
+    TEXT_READ_FAIL,
+    TEXT_WRITE_FETCH,
+    TEXT_WRITE_DONE,
+    TEXT_WRITE_FAIL,
+    DIRECTORIES_LIST_FETCH,
+    DIRECTORIES_LIST_FAIL,
+    DIRECTORIES_LIST_DONE,
+    DIRECTORIES_MAKE_FETCH,
+    DIRECTORIES_MAKE_FAIL,
+    DIRECTORIES_MAKE_DONE,
 } from '../constants/action-types';
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 
-export function addFile (name, src) {
-    return {
-        type: ADD_FILE,
-        name: name,
-        src: src
-    }
-}
-export function fetchFiles (id) {
+export function listFiles (username, dir) {
     return dispatch => {
      dispatch({
-         type: FETCH_FILES,
+         type: FILES_LIST_FETCH,
          id: id
      })
-     return axios.get(API_SERVER+"/api/files"+id)
+     let dir = !!dir ? "/"+dir : ""
+     return axios.get(API_SERVER+"/api/files/list"+username+dir)
         .then(response => {
-            dispatch(receiveFiles(response))
+            dispatch(listFilesDone(response))
         }).catch(response => {
-            dispatch(failedFetchFiles(response))
-        });
+            dispatch(listFilesFail(response))
+        })
    }
 }
-export function receiveFiles (files) {
+export function listFilesDone (files) {
     return {
-        type: RECEIVE_FILES,
-        files: files
+        type: FILES_LIST_DONE,
+        data: files
     }
 }
-export function failedFetchFiles (err) {
+export function listFilesFail (error) {
     return {
-        type: FAILED_FETCH_FILES,
-        err: err
+        type: FILES_LIST_FAIL,
+        error: error
     }
 }
-export function updateFile (id, data) {
+
+export function uploadFile (file, username, dir) {
+    return dispatch => {
+     dispatch({
+         type: FILE_UPLOAD_FETCH,
+         username,
+         dir
+     })
+     let dir = !!dir && dir != "" ? "/"+dir : ""
+     return axios.post(API_SERVER+"/api/files/upload/"+username+dir, file)
+        .then(response => {
+            dispatch(uploadFileDone(response))
+        }).catch(response => {
+            dispatch(uploadFileFail(response))
+        })
+   }
+}
+export function uploadFileDone (files) {
     return {
-        type: UPDATE_FILE,
-        data: data,
-        id: id
+        type: FILE_UPLOAD_DONE,
+        data: files
     }
 }
-export function deleteFile (id) {
+export function uploadFileFail (error) {
     return {
-        type: DELETE_FILE
+        type: FILE_UPLOAD_FAIL,
+        error: error
     }
 }
