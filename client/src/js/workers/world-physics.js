@@ -15,7 +15,7 @@ export default class WorldPhysics {
 	          position = [],
 	          velocity = [];
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
-					vrHeight = 8000 + 20000 * vrFrame.pose.position[1]
+					vrHeight = 6000 + 22000 * vrFrame.pose.position[1]
 					sys.vrHeight = vrHeight
 			}
 	    if (message.command == "update") {
