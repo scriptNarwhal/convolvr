@@ -14,7 +14,7 @@ export default class World {
 	constructor(userInput = false, socket, store) {
 		let mobile = (window.innerWidth <= 640),
 				scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1000, 6000000 ),
+				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 6000000 ),
 				screenResX = window.devicePixelRatio * window.innerWidth,
 				rendererAA = new THREE.WebGLRenderer({antialias: true}),
 				renderer = screenResX < 1900 ? new THREE.WebGLRenderer({antialias: false}) : null,

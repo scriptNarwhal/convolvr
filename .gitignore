@@ -13,4 +13,4 @@ world.db
 world.db.lock
 /cmd/cmd
 /cmd/cmd.exe
-/web/data/*
+/web/data/*/*
