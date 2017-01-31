@@ -183,28 +183,35 @@ export default class World {
 		console.log(config)
 		let camera = three.camera,
 				skyLight =  new THREE.PointLight(config.light.color, 0.75, 3200000),
-				skyShaderMat = null
+				skyMaterial = null,
+				skybox = null
 
 		this.config = config;
 		this.terrain.init(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor);
 		three.scene.add(this.ambientLight);
-		skyShaderMat = new THREE.ShaderMaterial( {
-			side: 1,
-			fog: false,
-			uniforms: {
-				time: { type: "f", value: 1.0 },
-				red: { type: "f", value: config.sky.red },
-				green: { type: "f", value: config.sky.green },
-				blue: { type: "f", value: config.sky.blue }
-			},
-			vertexShader: document.getElementById('sky-vertex').textContent,
-			fragmentShader: document.getElementById('sky-fragment').textContent
-
-		} )
-
-		three.skyMat = skyShaderMat
-		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyShaderMat)
+		if (config.sky.skyType == 'shader' || config.sky.skyType == 'standard') {
+			skyMaterial = new THREE.ShaderMaterial({
+				side: 1,
+				fog: false,
+				uniforms: {
+					time: { type: "f", value: 1.0 },
+					red: { type: "f", value: config.sky.red },
+					green: { type: "f", value: config.sky.green },
+					blue: { type: "f", value: config.sky.blue }
+				},
+				vertexShader: document.getElementById('sky-vertex').textContent,
+				fragmentShader: document.getElementById('sky-fragment').textContent
+			})
+		} else {
+			// load sky texture
+			skyMaterial = new THREE.MeshBasicMaterial({color:0x303030})
+			let skyTexture = THREE.ImageUtils.loadTexture('/data/'+this.config.sky.photosphere, false, function() {
+				 	skyTexture.magFilter = THREE.LinearFilter
+	 				skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
+			})
+		}
+		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyMaterial)
 		this.skyLight = skyLight
 		this.skybox.add(skyLight)
 		skyLight.position.set(0, 1000000, 1000000)
@@ -320,10 +327,14 @@ export default class World {
 
 	updateSkybox (delta) {
 		let camera = three.camera,
-				terrainMesh = this.terrain.mesh
+				terrainMesh = this.terrain.mesh,
+				skyMat = null
 		if (this.skybox) {
-			if (this.skybox.material) {
-				this.skybox.material.uniforms.time.value += delta
+			skyMat = this.skybox.material
+			if (skyMat) {
+				if (skyMat.uniforms) {
+					skyMat.uniforms.time.value += delta
+				}
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
 			}
     }

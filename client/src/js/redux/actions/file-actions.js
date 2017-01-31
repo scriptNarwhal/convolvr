@@ -36,25 +36,18 @@ export function listFiles (username, dir) {
      let dir = !!dir ? "/"+dir : ""
      return axios.get(API_SERVER+"/api/files/list"+username+dir)
         .then(response => {
-            dispatch(listFilesDone(response))
+            dispatch({
+                type: FILES_LIST_DONE,
+                data: response
+            })
         }).catch(response => {
-            dispatch(listFilesFail(response))
+            dispatch(listFilesFail({
+                type: FILES_LIST_FAIL,
+                error: response
+            }))
         })
    }
 }
-export function listFilesDone (files) {
-    return {
-        type: FILES_LIST_DONE,
-        data: files
-    }
-}
-export function listFilesFail (error) {
-    return {
-        type: FILES_LIST_FAIL,
-        error: error
-    }
-}
-
 export function uploadFile (file, username, dir) {
     return dispatch => {
      dispatch({
@@ -65,21 +58,15 @@ export function uploadFile (file, username, dir) {
      let dir = !!dir && dir != "" ? "/"+dir : ""
      return axios.post(API_SERVER+"/api/files/upload/"+username+dir, file)
         .then(response => {
-            dispatch(uploadFileDone(response))
+            dispatch({
+                type: FILE_UPLOAD_DONE,
+                data: response
+            })
         }).catch(response => {
-            dispatch(uploadFileFail(response))
+            dispatch({
+                type: FILE_UPLOAD_FAIL,
+                error: response
+            })
         })
    }
-}
-export function uploadFileDone (files) {
-    return {
-        type: FILE_UPLOAD_DONE,
-        data: files
-    }
-}
-export function uploadFileFail (error) {
-    return {
-        type: FILE_UPLOAD_FAIL,
-        error: error
-    }
 }

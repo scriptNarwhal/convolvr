@@ -180,21 +180,20 @@ export default class NewWorld extends Component {
                     <span style={styles.label}>Skybox Photosphere</span>
                     <input style={styles.fileUpload} type='file' onChange={ (e)=> this.upload(e) } />
                   </div>
-                ) : (
-                  [<div style={styles.option} key='1'>
-                    <span style={styles.label}>Light Color / Red</span>
-                      <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/>
-                  </div>,
-                  <div style={styles.option} key='2'>
-                    <span style={styles.label}>Light Color / Green</span>
-                      <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/>
-                  </div>,
-                  <div style={styles.option} key='3'>
-                    <span style={styles.label}>Light Color / Blue</span>
-                    <input type='range' min='0' max='1' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} />
-                  </div>]
-                )
+                ) : ""
               }
+              <div style={styles.option}>
+                <span style={styles.label}>Light Color / Red</span>
+                    <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/>
+                </div>
+                <div style={styles.option}>
+                  <span style={styles.label}>Light Color / Green</span>
+                    <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/>
+                </div>
+                <div style={styles.option}>
+                  <span style={styles.label}>Light Color / Blue</span>
+                  <input type='range' min='0' max='1' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} />
+                </div>
               <div style={styles.option}>
                 <span style={styles.label}>Light Intensity</span>
                   <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({intensity: e.target.value })}}/>
