@@ -14,7 +14,8 @@ class Tower {
 				intensity = 0,
 				towerMaterial = new THREE.MeshLambertMaterial({
 					color: 0xf0f0f0,
-					wireframe: false
+					wireframe: false,
+					specular: 0xf0f0f0
 				}),
 				LODGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 50000 * zUnits);
 

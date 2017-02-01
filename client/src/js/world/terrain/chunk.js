@@ -23,16 +23,16 @@ export default class Chunk {
             visible = data.visible,
             geom = new THREE.CylinderGeometry( 266000, 266000, 133000, 6, 1),
             voxelGeom = null,
+            map = three.world.textures.grid, // make this configurable
             mobile = three.world.mobile,
             mat = mobile ?
-              new THREE.MeshLambertMaterial( {color: data.color, shininess: 20} )
-            : new THREE.MeshPhongMaterial( {color: data.color, shininess: 20} ),
+              new THREE.MeshLambertMaterial( {color: data.color, shininess: 20, map: map} )
+            : new THREE.MeshPhongMaterial( {color: data.color, shininess: 20, map: map} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null
 
         this.structures = []
         this.entities = []
         physics = window.three.world.worldPhysics.worker
-
         if (data == null) {
             data = { }
         }

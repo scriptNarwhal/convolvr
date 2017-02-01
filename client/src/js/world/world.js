@@ -86,7 +86,16 @@ export default class World {
 			vrDisplay: null
 		};
 		world = this
-		window.three = this.three;
+		window.three = this.three
+
+		this.textures = {}
+		let gridTexture = this.textures.grid = THREE.ImageUtils.loadTexture('/images/textures/gplaypattern_@2X.png', false, () => {
+			gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping
+			gridTexture.repeat.set(12, 12)
+			gridTexture.anisotropy = renderer.getMaxAnisotropy()
+				//skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
+		})
+		console.log("grid texture", this.textures.grid)
 		window.onresize = function () {
 			world.screenResX = window.devicePixelRatio * window.innerWidth
 			if (three.world.mode != "stereo") {

@@ -18,8 +18,10 @@ export default class Entity {
         aspects = this.aspects,
         ncomps = this.components.length,
         compMesh = null,
-        firstMat = null,
+        materials = [],
         comp = null,
+        face = 0,
+        faces = null,
         c = 0,
         s = 0
 
@@ -27,10 +29,14 @@ export default class Entity {
         comp = new Component(this.components[c], {mobile}) // use simpler shading for mobile gpus
         compMesh = comp.mesh
         if (comp.type == 'structure') {
-          if (s == 0) {
-            firstMat = comp.mesh.material
-          }
+          materials.push(compMesh.material)
           compMesh.updateMatrix()
+          faces = compMesh.geometry.faces
+          face = faces.length-1
+          while (face > -1) {
+              faces[face].materialIndex = s
+              face --
+          }
           base.merge(compMesh.geometry, compMesh.matrix);
           s ++
         } else {
@@ -39,7 +45,7 @@ export default class Entity {
         c ++
     }
     if (s > 0) {
-      mesh.add(new THREE.Mesh(base, firstMat))
+      mesh.add(new THREE.Mesh(base, new THREE.MultiMaterial(materials)))
     }
     if (!! this.quaternion) {
         mesh.quaternion.set(this.quaternion[0], this.quaternion[1], this.quaternion[2], this.quaternion[3])
