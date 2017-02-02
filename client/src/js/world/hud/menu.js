@@ -11,34 +11,35 @@ export default class HUDMenu {
       this.light = null;
     }
 
-    initMesh (data = {}, user) {
+    initMesh (data = {}, parent) {
       let mesh = null,
           label = null,
           options = this.options,
           o = 0,
           color = data.color || 0xffffff,
-          light = new THREE.PointLight(this.lightColor, 1.0, 2000),
-          geom = new THREE.BoxGeometry(5000, 1000, 200),
+          light = new THREE.PointLight(this.lightColor, 1.0, 4000),
+          geom = new THREE.BoxGeometry(10000, 2000, 400),
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});
 
       mesh = new THREE.Object3D() //THREE.Mesh(geom, mat);
       if (light) {
         this.light = light;
         mesh.add(light);
-        light.position.set(0, 100, -1000);
+        light.position.set(0, 200, -2000);
       }
       if (options.length > 0) {
         o = options.length -1;
         while (o >= 0) {
           let icon = options[o].icon.initMesh();
-          icon.position.set(-1300+o*650, -100, 300);
+          icon.position.set(-1300+o*650, -200, 600);
           mesh.add(icon);
           o --;
         }
       }
       this.mesh = mesh
-      user.mesh.add(mesh)
-      mesh.position.set(0, 3600, -5000)
+      this.parent = parent
+      three.scene.add(mesh)
+      mesh.position.set(0, 7200, -10000)
       this.label = new Label({ color: 0x00ff00, lightColor: 0xffffff, text: "Hello World" }, this.mesh)
       return this.mesh
     }
@@ -47,8 +48,18 @@ export default class HUDMenu {
       let toolbox = this.toolbox,
           index = toolbox.currentTools[0],
           label = toolbox.tools[index].name
+
       this.label.update({ color: '#ffffff', lightColor: 0xffffff, text: label })
-      this.light.position.set(-1200+index*600, -100, 300)
+      this.light.position.set(-1200+index*600, -200, 600)
+    }
+
+    updatePosition () {
+      let pPos = this.parent.position
+      this.mesh.position.set( pPos.x, pPos.y, pPos.z )
+      this.mesh.translateZ(-5000)
+      this.mesh.translateY(2000)
+      this.mesh.rotation.y = this.parent.rotation.y
+      this.update()
     }
 
     hide () {
@@ -57,13 +68,6 @@ export default class HUDMenu {
 
     show () {
       this.mesh.visible = true;
-    }
-
-    toggleVRHUD() {
-      if (this.mesh.position.y != 2200) {
-        this.mesh.position.set(0, 2200, -5000);
-      } else {
-        this.mesh.position.set(0, 3600, -5000);
-      }
+      this.updatePosition()
     }
 }

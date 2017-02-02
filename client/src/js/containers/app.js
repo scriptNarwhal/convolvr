@@ -193,7 +193,6 @@ class App extends Component {
                       }
                       this.props.toggleVRMode()
                       three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
-                      three.world.user.hud.toggleVRHUD()
                       window.onresize()
                   }
                 }

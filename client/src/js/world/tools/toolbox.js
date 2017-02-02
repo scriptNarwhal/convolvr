@@ -26,10 +26,6 @@ export default class Toolbox {
     showMenu() {
       this.updateUI();
       this.world.user.hud.show();
-      clearTimeout(this.fadeTimeout);
-      this.fadeTimeout = setTimeout(()=>{
-        this.world.user.hud.hide();
-      },1000)
     }
 
     updateUI() {
