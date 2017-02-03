@@ -1,27 +1,24 @@
+import Entity from '../entities/entity'
+
 export default class Cursor {
-    constructor (data, user) {
-      let mesh = null,
-          color = 0xf0f0f0,
+    constructor (data, mount) {
+      let color = 0xe5e5e5,
           light = false,
-          geom = new THREE.CylinderGeometry(65, 65, 65, 4, 1, true),
-          mat = new THREE.MeshBasicMaterial({
-            color: color,
-            wireframe: true,
-            fog: false,
+          entity = new Entity(0, [{
+              type: 'structure',
+              shape: 'box',
+              color: 0xf0f0f0,
+              size: [80, 80, 80],
+              material: "wireframe",
+          }], [], [0, 0, -14000], null, 0).init(mount)
 
-          })
-
-      mesh = new THREE.Mesh(geom, mat)
+      this.mesh = entity.mesh
       if (light) {
-        mesh.add(light)
+        this.mesh.add(light)
         light.position.set(0, 100, -100)
       }
-      this.mesh = mesh
-      mesh.position.set(0, 0, -14000)
-      mesh.rotation.x = Math.PI / 2.0
-      user && user.mesh.add(mesh)
+      this.mesh.rotation.x = Math.PI / 2.0
     }
-
     hide () {
       this.mesh.visible = false
     }
@@ -33,5 +30,22 @@ export default class Cursor {
     }
     deactivate () {
       this.mesh.scale.set(1.0, 1.0, 1.0)
+    }
+    update (position, quaternion, translateZ) {
+        this.position = position ? position : false;
+        this.quaternion = quaternion ? quaternion : false;
+        if (quaternion) {
+            this.mesh.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+        }
+        if (position) {
+            this.mesh.position.set(position.x, position.y, position.z);
+        }
+        if (translateZ) {
+          this.mesh.translateZ(translateZ)
+        }
+    }
+    color (color) {
+        this.mesh.material.color.set(color);
+        this.mesh.material.needsUpdate = true;
     }
 }

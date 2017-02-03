@@ -15,7 +15,7 @@ export default class WorldPhysics {
 	          position = [],
 	          velocity = [];
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
-					vrHeight = 6000 + 22000 * vrFrame.pose.position[1]
+					vrHeight = 22000 * vrFrame.pose.position[1] + 6000
 					sys.vrHeight = vrHeight
 			}
 	    if (message.command == "update") {
@@ -33,13 +33,17 @@ export default class WorldPhysics {
 		  } else if (message.command == "platform collision") { // consider sending "top" or "bottom" collision type
 	      if (message.data.type == "top") {
 				  three.camera.position.set(three.camera.position.x, message.data.position[1]+85000 +vrHeight, three.camera.position.z);
-				  user.velocity.y *= -0.45;
+					if (Math.abs(user.velocity.y) > 3000) {
+						user.velocity.y *= -0.47;
+					} else {
+						user.velocity.y *= 0.95;
+					}
 			  } else if (message.data.type == "bottom"){
 				  three.camera.position.set(three.camera.position.x, message.data.position[1]-85000 +vrHeight, three.camera.position.z);
 				  user.velocity.y *= -0.45;
 			  }
-			  user.velocity.x *= 0.99;
-			  user.velocity.z *= 0.99;
+			  user.velocity.x *= 0.98
+			  user.velocity.z *= 0.98
 			  user.falling = false;
 
 		 } else if (message.command == "voxel collision") {

@@ -17,7 +17,8 @@ export default class Component {
             case "wireframe":
               mat = {
                 color: data.color || 0x00ff00,
-                wireframe: true
+                wireframe: true,
+                fog: false
               }
               basic = true
             break

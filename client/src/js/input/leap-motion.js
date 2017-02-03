@@ -18,11 +18,11 @@ export default class LeapMotion {
           if (input.leapMode == "avatar") {
             frame.hands.forEach(function (hand, index) {
               var position = hand.screenPosition();
-              if (user.arms[index] != null) {
-                user.arms[index].visible = true;
-                user.arms[index].rotation.set(hand.pitch(), -hand.yaw(), 0);
-                user.arms[index].position.set(-50+((-window.innerWidth / 2) + position[0]), 0, -350 + position[2]);
-                user.arms[index].updateMatrix();
+              if (user.hands[index] != null) {
+                user.hands[index].visible = true;
+                user.hands[index].rotation.set(hand.pitch(), -hand.yaw(), 0);
+                user.hands[index].position.set(-50+((-window.innerWidth / 2) + position[0]), 0, -350 + position[2]);
+                user.hands[index].updateMatrix();
               }
             });
           } else {
@@ -34,13 +34,13 @@ export default class LeapMotion {
                 input.moveVector.z = ((-window.innerWidth / 2) + position[2]);
                 input.rotationVector.y -= 0.025 * hand.yaw(); //((-window.innerWidth / 2) + position[0]) / 3000;
                 input.rotationVector.x += 0.015 * hand.pitch();
-              } else { // if its the second hand, control the arms/hands
+              } else { // if its the second hand, control the hands/hands
                 while (handIndex < 2) {
-                  if (user.arms[handIndex] != null) {
-                    user.arms[handIndex].visible = true;
-                    user.arms[handIndex].rotation.set(hand.pitch(), -hand.yaw(), 0);
-                    user.arms[handIndex].position.set(-50+((300*handIndex)+((-window.innerWidth / 2) + position[0])), 0, -350 + position[2]);
-                    user.arms[handIndex].updateMatrix();
+                  if (user.hands[handIndex] != null) {
+                    user.hands[handIndex].visible = true;
+                    user.hands[handIndex].rotation.set(hand.pitch(), -hand.yaw(), 0);
+                    user.hands[handIndex].position.set(-50+((300*handIndex)+((-window.innerWidth / 2) + position[0])), 0, -350 + position[2]);
+                    user.hands[handIndex].updateMatrix();
                     handIndex ++;
                   }
                 }

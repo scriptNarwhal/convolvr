@@ -64,7 +64,8 @@ export default class Entity {
             // connect entity to appropriate system
             c ++
         }
-    }
+      }
+      return this
   }
 
 }

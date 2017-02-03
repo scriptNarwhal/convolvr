@@ -57,7 +57,7 @@ export default class HUDMenu {
       let pPos = this.parent.position
       this.mesh.position.set( pPos.x, pPos.y, pPos.z )
       this.mesh.translateZ(-5000)
-      this.mesh.translateY(2000)
+      this.mesh.translateY(1750)
       this.mesh.rotation.y = this.parent.rotation.y
       this.update()
     }

@@ -58,19 +58,19 @@ export default class Keyboard {
         keys = input.keys;
 
     if (keys.a) {  // maybe insert more options here...
-      input.moveVector.x = -12000;
+      input.moveVector.x = -20000;
     } else if (keys.d) {
-      input.moveVector.x = 12000;
+      input.moveVector.x = 20000;
     }
     if (keys.w) {
-      input.moveVector.z = -12000;
+      input.moveVector.z = -20000;
     } else if (keys.s) {
-      input.moveVector.z = 12000;
+      input.moveVector.z = 22000;
     }
     if (keys.r) {
-      input.moveVector.y = 6400;
+      input.moveVector.y = 12800;
     } else if (keys.f) {
-      input.moveVector.y = -6400;
+      input.moveVector.y = -12800;
     }
     // if (keys.shift) {
     //   velocity.x *= 1.02;

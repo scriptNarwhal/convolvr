@@ -152,8 +152,9 @@ export default class UserInput {
 				}
 			}
 			if ((velocity.x * velocity.x) + (velocity.z * velocity.z) > 2000000) {
-				velocity.x *=  0.993
-				velocity.z *= 0.993
+				 velocity.x *=  0.996
+				 velocity.z *= 0.996
+				//velocity.multiplyScalar(0.995)
 			}
 			if (!! world.user.mesh) {
 				world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z)
@@ -168,8 +169,8 @@ export default class UserInput {
 		if (!this.fullscreen && world.user.username != "") {
 			//world.showChat();
 			world.mode = "web";
-			while (a < world.user.arms.length) {
-				world.user.arms[a].visible = false;
+			while (a < world.user.hands.length) {
+				world.user.hands[a].visible = false;
 				a ++;
 			}
 			document.body.setAttribute("class", "desktop");
@@ -178,8 +179,8 @@ export default class UserInput {
 				if (world.mode != "stereo") {
 					world.mode = "vr";
 				}
-				while (a < world.user.arms.length) {
-					world.user.arms[a].visible = true;
+				while (a < world.user.hands.length) {
+					world.user.hands[a].visible = true;
 					a ++;
 				}
 				document.body.setAttribute("class", "vr");

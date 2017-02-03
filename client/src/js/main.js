@@ -34,12 +34,12 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/colors'
 
-    let socket = events,
+let socket = events,
     token = localStorage.getItem("token"),
 		userInput,
 		user = {
 				id: Math.floor(Math.random()*99999999),
-				arms: [],
+				hands: [],
 				hud: null,
 				cursor: null,
 				name: "Human",
@@ -62,7 +62,7 @@ user.toolbox = new Toolbox(world)
 user.hud = new HUDMenu([], user.toolbox)
 user.hud.initMesh({}, three.camera)
 user.hud.hide()
-user.cursor = new Cursor({}, user)
+user.cursor = new Cursor({}, user.mesh)
 user.mesh.add(user.light)
 world.user = user
 three.scene.add(user.mesh)
