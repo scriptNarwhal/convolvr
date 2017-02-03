@@ -31,7 +31,7 @@ export default class HUDMenu {
         o = options.length -1;
         while (o >= 0) {
           let icon = options[o].icon.initMesh();
-          icon.position.set(-1300+o*650, -200, 600);
+          icon.position.set(-2600+o*1300, -200, 600);
           mesh.add(icon);
           o --;
         }
@@ -40,7 +40,12 @@ export default class HUDMenu {
       this.parent = parent
       three.scene.add(mesh)
       mesh.position.set(0, 7200, -10000)
-      this.label = new Label({ color: 0x00ff00, lightColor: 0xffffff, text: "Hello World" }, this.mesh)
+      this.label = new Label({
+        text: "Hello World",
+        color: 0x00ff00,
+        lightColor: 0xffffff,
+        position: [0, -1200, 0]
+      }, this.mesh)
       return this.mesh
     }
 
@@ -56,8 +61,8 @@ export default class HUDMenu {
     updatePosition () {
       let pPos = this.parent.position
       this.mesh.position.set( pPos.x, pPos.y, pPos.z )
-      this.mesh.translateZ(-5000)
-      this.mesh.translateY(1750)
+      this.mesh.translateZ(-10000)
+      this.mesh.translateY(3000)
       this.mesh.rotation.y = this.parent.rotation.y
       this.update()
     }

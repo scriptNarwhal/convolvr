@@ -11,9 +11,9 @@ export default class ComponentToolIcon extends Icon {
       let mesh = null,
           part = null,
           color = data.color || 0x003bff,
-          light = data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 1200) : false,
-          geom = new THREE.CylinderGeometry(132, 132, 132, 6, 1),
-          geomB = new THREE.BoxGeometry(20, 20, 20),
+          light = data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 2400) : false,
+          geom = new THREE.CylinderGeometry(264, 264, 264, 6, 1),
+          geomB = new THREE.BoxGeometry(40, 40, 40),
           mat = new THREE.MeshPhongMaterial({color: color, fog: false});
 
       mesh = this.initButtonMesh();
@@ -23,7 +23,7 @@ export default class ComponentToolIcon extends Icon {
 
       if (light) {
         mesh.add(light);
-        light.position.set(0, 100, -100);
+        light.position.set(0, 200, -200);
       }
       this.mesh = mesh;
       return mesh;
