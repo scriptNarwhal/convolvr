@@ -7,11 +7,12 @@ export let render = (world, last) => {
 
   if (!! world.userInput) {
     world.userInput.update(delta) // Update keyboard / mouse / gamepad
-    rayCast(world, camera)
   }
   if (world.user && world.user.mesh) {
+    world.user.cursor.deactivate()
     world.user.mesh.position.set(cPos.x, cPos.y, cPos.z);
     world.user.mesh.quaternion.set(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
+    rayCast(world, camera, cursorCallback)
   }
   world.sendUserData()
   world.updateSkybox(delta)
@@ -23,7 +24,7 @@ export let render = (world, last) => {
     requestAnimationFrame( () => { render(world, last) } )
 }
 
-let rayCast = (world, camera) => {
+let rayCast = (world, camera, callback) => {
 	let raycaster = world.raycaster,
       octreeObjects = [],
       intersections = [],
@@ -38,14 +39,19 @@ let rayCast = (world, camera) => {
     obj = intersections[i]
     entity = obj.object.userData.entity
     if (entity != null) {
-        if (obj.distance < 30000) {
-          // touching / interacting range
-          // let xScale = obj.object.scale.x * 0.95
-          // obj.object.scale.set(xScale, xScale, xScale)
-          //console.log("Entity", obj.distance, entity)
-        }
+      callback(obj, entity, world)
     }
     i --
+  }
+}
+
+let cursorCallback = (obj, entity, world) => {
+  if (obj.distance < 30000) {
+    world.user.cursor.activate()
+    // touching / interacting range
+    // let xScale = obj.object.scale.x * 0.95
+    // obj.object.scale.set(xScale, xScale, xScale)
+    //console.log("Entity", obj.distance, entity)
   }
 }
 
@@ -54,6 +60,7 @@ export let vrAnimate = (time, oldPos) => {
       delta = Math.min(now - time, 500) / 16000,
       t = three,
       world = t.world,
+      user = world.user,
       frame = world.vrFrame,
       camera = t.camera,
       cPos = camera.position,
@@ -70,9 +77,10 @@ export let vrAnimate = (time, oldPos) => {
     vrWorldPos = [22000 * vrPos[0], 22000 * vrPos[1], 22000 * vrPos[2]]
     camera.quaternion.fromArray(frame.pose.orientation)
     world.userInput.update(delta)
-    rayCast(world, camera)
-    world.user.mesh.quaternion.fromArray(frame.pose.orientation)
-    world.user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+    user.cursor.deactivate()
+    rayCast(world, camera, cursorCallback)
+    user.mesh.quaternion.fromArray(frame.pose.orientation)
+    user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     world.updateSkybox(delta)
     world.sendUserData()
