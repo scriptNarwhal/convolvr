@@ -6,9 +6,8 @@ export let render = (world, last) => {
       time = Date.now()
 
   if (!! world.userInput) {
-    world.userInput.update(delta); // Update keyboard / mouse / gamepad
-    world.raycaster.setFromCamera( world.userInput.castPos, camera );
-    //rayCastArea(world, camera) // only check surrounding chunks for entities pointed at
+    world.userInput.update(delta) // Update keyboard / mouse / gamepad
+    rayCast(world, camera)
   }
   if (world.user && world.user.mesh) {
     world.user.mesh.position.set(cPos.x, cPos.y, cPos.z);
@@ -24,14 +23,30 @@ export let render = (world, last) => {
     requestAnimationFrame( () => { render(world, last) } )
 }
 
-let rayCast = (objects, world, camera) => {
-	let i = 0,
-      o = null,
-      intersects = world.raycaster.intersectObjects( objects || three.scene.children )
-	for ( i = 0; i < intersects.length; i++ ) {
-    o = intersects[ i ].object
-    console.log(o.userData)
-	}
+let rayCast = (world, camera) => {
+	let raycaster = world.raycaster,
+      octreeObjects = [],
+      intersections = [],
+      entity = null,
+      obj = null,
+      i = 0
+  raycaster.setFromCamera(new THREE.Vector2(0, 0), camera)
+  octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
+  intersections = raycaster.intersectOctreeObjects( octreeObjects )
+  i = intersections.length -1
+  while (i > -1) {
+    obj = intersections[i]
+    entity = obj.object.userData.entity
+    if (entity != null) {
+        if (obj.distance < 30000) {
+          // touching / interacting range
+          // let xScale = obj.object.scale.x * 0.95
+          // obj.object.scale.set(xScale, xScale, xScale)
+          //console.log("Entity", obj.distance, entity)
+        }
+    }
+    i --
+  }
 }
 
 export let vrAnimate = (time, oldPos) => {
@@ -55,6 +70,7 @@ export let vrAnimate = (time, oldPos) => {
     vrWorldPos = [22000 * vrPos[0], 22000 * vrPos[1], 22000 * vrPos[2]]
     camera.quaternion.fromArray(frame.pose.orientation)
     world.userInput.update(delta)
+    rayCast(world, camera)
     world.user.mesh.quaternion.fromArray(frame.pose.orientation)
     world.user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])

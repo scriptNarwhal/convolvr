@@ -1,5 +1,5 @@
 import Tool from './tool'
-import CustomToolIcon from '../hud/icons/custom-tool-icon'
+import CustomToolIcon from '../../vr-ui/icons/custom-tool-icon'
 
 export default class CustomTool extends Tool {
     constructor (data, world) {

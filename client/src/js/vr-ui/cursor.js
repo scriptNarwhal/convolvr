@@ -1,4 +1,4 @@
-import Entity from '../entities/entity'
+import Entity from '../world/entities/entity'
 
 export default class Cursor {
     constructor (data, mount) {
@@ -10,7 +10,7 @@ export default class Cursor {
               color: 0xf0f0f0,
               size: [80, 80, 80],
               material: "wireframe",
-          }], [], [0, 0, -14000], null, 0).init(mount)
+          }], ["no-raycast"], [0, 0, -14000], null, 0).init(mount)
 
       this.mesh = entity.mesh
       if (light) {

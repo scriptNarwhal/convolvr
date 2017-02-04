@@ -1,6 +1,6 @@
 import Tool from './tool'
 import Entity from '../entities/entity'
-import ProjectileToolIcon from '../hud/icons/projectile-tool-icon'
+import ProjectileToolIcon from '../../vr-ui/icons/projectile-tool-icon'
 
 export default class ProjectileTool extends Tool  {
     constructor (data, world) {

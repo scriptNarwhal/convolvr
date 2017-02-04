@@ -58,13 +58,12 @@ export default class Chunk {
             }
             mesh = new THREE.Mesh(base, mat)
         } else {
-          if (visible) {
-            if (smooth) {
-                geom = modifier.modify( geom )
-            }
-            mesh = new THREE.Mesh(geom, mat)
-          } else {
-            mesh = new THREE.Object3D()
+          if (smooth) {
+            geom = modifier.modify( geom )
+          }
+          mesh = new THREE.Mesh(geom, mat)
+          if (visible == false) {
+            mesh.visible = false
           }
         }
         this.mesh = mesh
@@ -83,7 +82,7 @@ export default class Chunk {
             x = items.length;
             while (x > 0) {
                 x--;
-                structure = new Tower(items[x], this)
+                structure = new Tower(items[x], this, mobile)
                 // track = new Track(items[x], this);
                 	if (Math.random() < 0.2) {
                     structure.initLight();

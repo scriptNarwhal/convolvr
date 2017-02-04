@@ -1,7 +1,7 @@
 import Structure from './Structure'
 
 class Tower extends Structure {
-	constructor (data, platform) {
+	constructor (data, platform, mobile = false) {
 		var f = 0,
 				i = 0,
 				face = null,
@@ -14,9 +14,12 @@ class Tower extends Structure {
 				width = 50000 * xUnits,
 				length = 50000 * zUnits,
 				intensity = 0,
-				towerMaterial = new THREE.MeshLambertMaterial({
+				towerMaterial = mobile ?
+				new THREE.MeshLambertMaterial({
+					color: 0xf0f0f0
+				}) :
+				new THREE.MeshPhongMaterial({
 					color: 0xf0f0f0,
-					wireframe: false,
 					specular: 0xf0f0f0
 				}),
 				LODGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 50000 * zUnits);

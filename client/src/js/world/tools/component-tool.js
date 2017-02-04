@@ -1,6 +1,6 @@
 import Tool from './tool'
 import Component from '../components/component'
-import ComponentToolIcon from '../hud/icons/component-tool-icon'
+import ComponentToolIcon from '../../vr-ui/icons/component-tool-icon'
 import ComponentGenerator from '../components/component-generator'
 import EntityGenerator from '../entities/entity-generator'
 

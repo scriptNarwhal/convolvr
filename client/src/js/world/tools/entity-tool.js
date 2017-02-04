@@ -1,6 +1,6 @@
 import Tool from './tool'
 import Entity from '../entities/entity'
-import EntityToolIcon from '../hud/icons/entity-tool-icon'
+import EntityToolIcon from '../../vr-ui/icons/entity-tool-icon'
 import EntityGenerator from '../entities/entity-generator'
 
 export default class EntityTool extends Tool  {

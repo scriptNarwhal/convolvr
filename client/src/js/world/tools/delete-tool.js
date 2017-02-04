@@ -1,5 +1,5 @@
 import Tool from './tool'
-import DeleteToolIcon from '../hud/icons/delete-tool-icon'
+import DeleteToolIcon from '../../vr-ui/icons/delete-tool-icon'
 /* delete (voxel | component | entity) tool */
 export default class DeleteTool extends Tool  {
     constructor (data, world) {

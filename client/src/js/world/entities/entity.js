@@ -17,8 +17,10 @@ export default class Entity {
         mobile = three.world.mobile,
         aspects = this.aspects,
         ncomps = this.components.length,
+        nonStructural = [],
         compMesh = null,
         materials = [],
+        addToOctree = true,
         comp = null,
         face = 0,
         faces = null,
@@ -37,15 +39,21 @@ export default class Entity {
               faces[face].materialIndex = s
               face --
           }
-          base.merge(compMesh.geometry, compMesh.matrix);
+          base.merge(compMesh.geometry, compMesh.matrix)
           s ++
         } else {
-          mesh.add(comp.mesh)
+          nonStructural.push(comp.mesh)
         }
         c ++
     }
     if (s > 0) {
-      mesh.add(new THREE.Mesh(base, new THREE.MultiMaterial(materials)))
+      mesh = new THREE.Mesh(base, new THREE.MultiMaterial(materials))
+    } else {
+      mesh = staticComps[0]
+      s = 1
+      while (s < staticComps.length) {
+        mesh.add(staticComps[s])
+      }
     }
     if (!! this.quaternion) {
         mesh.quaternion.set(this.quaternion[0], this.quaternion[1], this.quaternion[2], this.quaternion[3])
@@ -53,19 +61,25 @@ export default class Entity {
     if (!! this.position) {
         mesh.position.set(this.position[0], this.position[1], this.position[2])
     }
-    mesh.userData = { entity: this }
-    three.world.octree.add(mesh)
-    scene.add(mesh)
-    this.z != 0 && mesh.translateZ(this.z)
-    this.mesh = mesh
     if (!!aspects) {
         c = 0;
         while (c < aspects.length) {
             // connect entity to appropriate system
+            if (aspects[c] == "no-raycast") {
+              addToOctree = false
+            }
             c ++
         }
-      }
-      return this
+    }
+    mesh.userData = { entity: this }
+    if (addToOctree) {
+      three.world.octree.add(mesh)
+    }
+    scene.add(mesh)
+    this.z != 0 && mesh.translateZ(this.z)
+    this.mesh = mesh
+
+    return this
   }
 
 }

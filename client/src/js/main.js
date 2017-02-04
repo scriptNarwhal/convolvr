@@ -26,8 +26,8 @@ import UserInput from './input/user-input.js'
 import Toolbox from './world/tools/toolbox.js'
 import World from './world/world.js'
 // 3D UI
-import HUDMenu from './world/hud/menu'
-import Cursor from './world/hud/cursor'
+import HUDMenu from './/vr-ui/menu'
+import Cursor from './/vr-ui/cursor'
 import Avatar from './world/avatar.js'
 // Material UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'

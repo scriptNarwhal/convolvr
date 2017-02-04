@@ -1,5 +1,5 @@
 import Tool from './tool'
-import VoxelToolIcon from '../hud/icons/voxel-tool-icon'
+import VoxelToolIcon from '../../vr-ui/icons/voxel-tool-icon'
 /* terrain voxel tool */
 export default class VoxelTool extends Tool {
     constructor (data, world) {
