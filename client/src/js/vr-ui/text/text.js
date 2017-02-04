@@ -42,8 +42,9 @@ export default class Text {
         duplicate = document.getElementById(id),
         textCanvas = null,
         textCanvasSize = 1024,
-        fontSize = 32,
+        fontSize = 36,
         textLine = '',
+        lines = 0,
         textCanvasContext = null
 
     if (!duplicate) {
@@ -63,8 +64,9 @@ export default class Text {
       textCanvasContext.font = fontSize+"pt RobotoThin"
       textCanvasContext.textBaseline = "top"
       textCanvasContext.fillStyle = color
+      lines = text.length
       text.map((line, l) => {
-        textCanvasContext.fillText(line, 20, 1004-l*fontSize)
+        textCanvasContext.fillText(line, 20, 1004-(1+(lines-l)*fontSize*1.2))
       })
 
     textTexture = new THREE.Texture(textCanvas)

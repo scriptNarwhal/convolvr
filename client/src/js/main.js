@@ -22,13 +22,14 @@ import Chat from './containers/chat'
 import HUD from './containers/hud'
 // World
 import { send, events } from './network/socket'
-import UserInput from './input/user-input.js'
-import Toolbox from './world/tools/toolbox.js'
+import UserInput from './input/user-input'
+import Toolbox from './world/tools/toolbox'
 import World from './world/world.js'
 // 3D UI
-import HUDMenu from './/vr-ui/menu'
-import Cursor from './/vr-ui/cursor'
-import Avatar from './world/avatar.js'
+import HUDMenu from './vr-ui/menu'
+import ListView from './vr-ui/text/list-view'
+import Cursor from './vr-ui/cursor'
+import Avatar from './world/avatar'
 // Material UI
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -67,6 +68,13 @@ user.mesh.add(user.light)
 world.user = user
 three.scene.add(user.mesh)
 userInput.init(world, world.camera, user)
+
+world.chat = new ListView({
+  color: "#000000",
+  background: "#ffffff",
+  position: [0, 180000, 0],
+  textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
+}, three.scene).initMesh()
 
 userInput.rotationVector = {x: 0, y: 9.95, z: 0}
 three.camera.position.set(-300000+Math.random()*150000, 55000, -300000+Math.random()*150000)

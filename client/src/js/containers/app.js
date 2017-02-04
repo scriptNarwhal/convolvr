@@ -17,6 +17,7 @@ class App extends Component {
       let chatMessage = JSON.parse(message.data),
           worldName = ''
     	this.props.getMessage(chatMessage.message, chatMessage.from)
+      three.world.chat.write(`${chatMessage.from}: ${chatMessage.message}`)
       this.notify(chatMessage.message, chatMessage.from)
       worldName = this.props.world == "overworld" ? "Convolvr" : this.props.world
       if (this.props.focus == false) {
