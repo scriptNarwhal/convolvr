@@ -1,4 +1,6 @@
-class Tower {
+import Structure from './Structure'
+
+class Tower extends Structure {
 	constructor (data, platform) {
 		var f = 0,
 				i = 0,
@@ -20,6 +22,7 @@ class Tower {
 				LODGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 50000 * zUnits);
 
 		this.data = data;
+		super(this.data)
 		this.platform = platform;
 		this.towerMaterial = towerMaterial;
 		this.width = width;

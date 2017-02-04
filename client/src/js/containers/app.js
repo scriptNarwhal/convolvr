@@ -148,7 +148,7 @@ class App extends Component {
                   image="/images/vr.png"
                   onClick={ (evt, title) => {
                     this.props.toggleVRMode()
-                    let renderer = three.rendererAA || three.renderer,
+                    let renderer = three.renderer,
                         ratio = window.devicePixelRatio || 1,
                         camera = three.camera,
                         scene = three.scene,

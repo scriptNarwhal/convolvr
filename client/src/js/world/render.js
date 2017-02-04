@@ -17,11 +17,7 @@ export let render = (world, last) => {
   world.sendUserData()
   world.updateSkybox(delta)
     if (world.mode == "vr" || world.mode == "web") {
-      if (world.screenResX > 1900 || three.renderer == null) {
-        three.rendererAA.render(three.scene, camera)
-      } else {
-        three.renderer.render(three.scene, camera)
-      }
+      three.renderer.render(three.scene, camera)
       world.octree.update()
     }
     last = Date.now()

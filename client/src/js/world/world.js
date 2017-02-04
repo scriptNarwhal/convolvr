@@ -16,11 +16,12 @@ export default class World {
 				scene = new THREE.Scene(),
 				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 6000000 ),
 				screenResX = window.devicePixelRatio * window.innerWidth,
-				rendererAA = new THREE.WebGLRenderer({antialias: true}),
-				renderer = screenResX < 1900 ? new THREE.WebGLRenderer({antialias: false}) : null,
+				renderer = null,
 				self = this,
-				three = {}
+				three = {},
+				aa = true // make configurable
 
+		renderer = new THREE.WebGLRenderer({antialias: aa})
 		this.appStore = store
 		this.socket = socket
 		this.config = false
@@ -50,10 +51,7 @@ export default class World {
 		this.HMDMode = "standard" // "head-movement"
 		this.vrHeight = 0
 		this.screenResX = screenResX
-		this.initRenderer(rendererAA, "viewportAA")
-		if (!!renderer) {
-			this.initRenderer(renderer, "viewport")
-		}
+		this.initRenderer(renderer, "viewport")
 		this.octree = new THREE.Octree({
 			// when undeferred = true, objects are inserted immediately
 			// instead of being deferred until next octree.update() call
@@ -82,7 +80,6 @@ export default class World {
 			scene,
 			camera,
 			renderer,
-			rendererAA,
 			vrDisplay: null
 		};
 		world = this
@@ -99,19 +96,7 @@ export default class World {
 		window.onresize = function () {
 			world.screenResX = window.devicePixelRatio * window.innerWidth
 			if (three.world.mode != "stereo") {
-				three.renderer && three.renderer.setSize(window.innerWidth, window.innerHeight)
-				three.rendererAA.setSize(window.innerWidth, window.innerHeight)
-				let viewport = document.querySelector("#viewport"),
-						viewportAA = document.querySelector("#viewportAA")
-				if (viewport) {
-					if (world.screenResX > 1900) {
-						viewport.style.visibility = 'hidden'
-						viewportAA.style.visibility = ''
-					} else {
-						viewport.style.visibility = ''
-						viewportAA.style.visibility = 'hidden'
-					}
-				}
+				three.renderer.setSize(window.innerWidth, window.innerHeight)
 			}
 			three.camera.aspect = innerWidth / innerHeight
 			three.camera.updateProjectionMatrix()
