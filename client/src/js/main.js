@@ -22,9 +22,10 @@ import Chat from './containers/chat'
 import HUD from './containers/hud'
 // World
 import { send, events } from './network/socket'
+import { initUser } from './user'
 import UserInput from './input/user-input'
 import Toolbox from './world/tools/toolbox'
-import World from './world/world.js'
+import World from './world/world'
 // 3D UI
 import HUDMenu from './vr-ui/menu'
 import ListView from './vr-ui/text/list-view'
@@ -38,27 +39,19 @@ import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/col
 let socket = events,
     token = localStorage.getItem("token"),
 		userInput,
-		user = {
-				id: Math.floor(Math.random()*99999999),
-				hands: [],
-				hud: null,
-				cursor: null,
-				name: "Human",
-				toolbox: null,
-				mesh: new THREE.Object3D(),
-				velocity: new THREE.Vector3(0, -10, 0),
-				light: new THREE.PointLight(0xffffff, 0.15, 200000),
-				gravity: 1,
-				falling: false
-		},
-	world = null,
-	avatar = null
+		user = initUser(),
+	  world = null,
+	  avatar = null
 
 window.worldName = window.location.href.indexOf("/world/") > -1 ? window.location.href.split("/world/")[1] : "overworld"
 
 userInput = new UserInput()
 world = new World(userInput, socket, store)
-world.load(worldName) //world.init(worldConfig)
+world.load(worldName, ()=> {
+  setTimeout(()=>{
+    initChatUI() // wait for world & terrain to load before placing this
+  }, 250)
+})
 user.toolbox = new Toolbox(world)
 user.hud = new HUDMenu([], user.toolbox)
 user.hud.initMesh({}, three.camera)
@@ -69,28 +62,30 @@ world.user = user
 three.scene.add(user.mesh)
 userInput.init(world, world.camera, user)
 
-world.chat = new ListView({
-  color: "#000000",
-  background: "#ffffff",
-  position: [0, 180000, 0],
-  textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
-}, three.scene).initMesh()
-
 userInput.rotationVector = {x: 0, y: 9.95, z: 0}
 three.camera.position.set(-300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
 user.light.position.set(100000, 20000, 100000)
 
+let initChatUI = () => {
+  world.chat = new ListView({
+    color: "#000000",
+    background: "#ffffff",
+    position: [0, (world.terrain.pMap["0.0.0"].data.altitude * 50000) - 35000, 0],
+    textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
+  }, three.scene).initMesh()
+}
+
 const muiTheme = getMuiTheme({
-      palette: {
-          primary1Color: indigo500,
-          primary2Color: indigo600,
-          accent1Color: amber800,
-          accent2Color: amber500,
-      },
-      appBar: {
-        height: 50,
-      }
-    })
+  palette: {
+    primary1Color: indigo500,
+    primary2Color: indigo600,
+    accent1Color: amber800,
+    accent2Color: amber500,
+  },
+  appBar: {
+    height: 50,
+  }
+})
 
 ReactDOM.render(
   (<Provider store={store}>

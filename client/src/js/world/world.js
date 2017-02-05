@@ -224,10 +224,11 @@ export default class World {
 			renderer.domElement.setAttribute("id", id)
 	}
 
-	load (name) {
+	load (name, callback) {
 		this.name = name;
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
 			 this.init(response.data)
+			 callback && callback(this)
     }).catch(response => {
         console.log("World Error", response)
     });

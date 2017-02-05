@@ -17,14 +17,14 @@ export default class ListView extends Text {
       let mesh = null,
           color = this.color,
           background = this.background,
-          light =  this.lightColor ? new THREE.PointLight(this.lightColor, 1.0, 200) : false,
+          light =  this.lightColor ? new THREE.PointLight(this.lightColor, 0.666, 100000) : false,
           geom = new THREE.BoxGeometry(36000, 36000, 40),
           mat = this.renderTextLines(this.id, this.textLines, color, background)
       if (this.mesh == null) {
         mesh = new THREE.Mesh(geom, mat)
         if (light) {
           mesh.add(light)
-          light.position.set(0, 100, -100)
+          light.position.set(0, -10000, 0)
         }
         this.mesh = mesh
         this.mesh.position.set(this.position[0], this.position[1], this.position[2])

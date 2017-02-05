@@ -1,10 +1,10 @@
 /* app.css */
 @font-face {
-  font-family: RobotoThin;
-  src: url(/fonts/Roboto-Thin.ttf);
+  font-family: RobotoLight;
+  src: url(/fonts/Roboto-Light.ttf);
 }
 body {
-  font-family: RobotoThin, sans-serif;
+  font-family: RobotoLight, sans-serif;
 }
 #root {
   position: absolute;

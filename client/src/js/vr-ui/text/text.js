@@ -20,7 +20,7 @@ export default class Text {
         fontSize = (26+Math.round(1500 / (text.length*1.4)))
         textCanvasContext.fillStyle = background
         textCanvasContext.fillRect(0, 0, textCanvasSize, textCanvasSize)
-        textCanvasContext.font = fontSize+"pt RobotoThin"
+        textCanvasContext.font = fontSize+"pt RobotoLight"
         textCanvasContext.textBaseline = "top"
         textCanvasContext.fillStyle = color
         textCanvasContext.fillText(text, 20, 36-fontSize/4)
@@ -28,6 +28,7 @@ export default class Text {
          textCanvas = duplicate
        }
       textTexture = new THREE.Texture(textCanvas)
+      textTexture.anisotropy = three.renderer.getMaxAnisotropy()
       textTexture.needsUpdate = true
       textMaterial = new THREE.MeshBasicMaterial({
              map: textTexture,
@@ -42,10 +43,12 @@ export default class Text {
         duplicate = document.getElementById(id),
         textCanvas = null,
         textCanvasSize = 1024,
+        textCanvasContext = null,
         fontSize = 36,
         textLine = '',
         lines = 0,
-        textCanvasContext = null
+        line = '',
+        l = 0
 
     if (!duplicate) {
       textCanvas = document.createElement("canvas")
@@ -57,19 +60,29 @@ export default class Text {
     } else {
       textCanvas = duplicate
     }
+    textCanvasContext = textCanvas.getContext("2d")
+    textCanvasContext.fillStyle = background
+    textCanvasContext.fillRect(0, 0, textCanvasSize, textCanvasSize)
+    textCanvasContext.font = fontSize+"pt RobotoLight"
+    textCanvasContext.textBaseline = "top"
+    textCanvasContext.fillStyle = color
+    lines = text.length
 
-      textCanvasContext = textCanvas.getContext("2d")
-      textCanvasContext.fillStyle = background
-      textCanvasContext.fillRect(0, 0, textCanvasSize, textCanvasSize)
-      textCanvasContext.font = fontSize+"pt RobotoThin"
-      textCanvasContext.textBaseline = "top"
-      textCanvasContext.fillStyle = color
-      lines = text.length
-      text.map((line, l) => {
-        textCanvasContext.fillText(line, 20, 1004-(1+(lines-l)*fontSize*1.2))
-      })
+    while (l < text.length) {
+      line = text[l]
+      if (line.length > 42) {
+        let multiLines = line.match(/.{1,42}/g)
+        text.splice(l, 1, ...multiLines)
+        lines = text.length
+      }
+      ++l
+    }
+    text.map((line, l) => {
+      textCanvasContext.fillText(line, 20, 960-(1+(lines-l)*fontSize*1.35))
+    })
 
     textTexture = new THREE.Texture(textCanvas)
+    textTexture.anisotropy = three.renderer.getMaxAnisotropy()
     textTexture.needsUpdate = true
     textMaterial = new THREE.MeshBasicMaterial({
            map: textTexture,
