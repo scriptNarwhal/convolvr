@@ -1,6 +1,7 @@
 package convolvr
 
 import (
+	"strconv"
 	"encoding/json"
   log "github.com/Sirupsen/logrus"
 	"github.com/ds0nt/nexus"
@@ -23,13 +24,19 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 	if err := json.Unmarshal([]byte(p.Data), &action); err != nil {
 			 panic(err)
 	}
-	voxel := db.From("World_"+action.World).From("X_"+string(action.Coords[0])).From("Y_"+string(action.Coords[1])).From("Z_"+string(action.Coords[2]))
+	x := strconv.Itoa(action.Coords[0])
+	y := strconv.Itoa(action.Coords[1])
+	z := strconv.Itoa(action.Coords[2])
+	voxel := db.From("World_"+action.World).From("X_"+x).From("Y_"+y).From("Z_"+z)
+	voxelEntities := voxel.From("entities")
 	if action.Tool == "Entity Tool" || action.Tool == "Structure Tool" {
 			if action.Tool == "Entity Tool" {
 					entity = *NewEntity("", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, action.Entity.TranslateZ)
-					saveErr := voxel.Save(&entity)
+					saveErr := voxelEntities.Save(&entity)
 					if saveErr != nil {
 						log.Println(saveErr)
+					} else {
+						log.Println("Saved Entity")
 					}
 			} else { // structure tool
 				// implement adding structure
@@ -43,10 +50,10 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 						newComp := *NewComponent(v.Name, v.Shape, v.Material, v.Color, v.Size, v.Position, v.Quaternion, v.ComponentType)
 						newComps = append(newComps, &newComp)
 					}
-					readErr := voxel.One("ID", action.EntityId, &entity)
+					readErr := voxelEntities.One("ID", action.EntityId, &entity)
 					if readErr == nil {
 						entity.Components = append(entity.Components, newComps...)
-						saveErr := voxel.Save(&entity)
+						saveErr := voxelEntities.Save(&entity)
 						if saveErr != nil {
 							log.Println(saveErr)
 						}

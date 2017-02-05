@@ -70,7 +70,7 @@ let initChatUI = () => {
   world.chat = new ListView({
     color: "#000000",
     background: "#ffffff",
-    position: [0, (world.terrain.pMap["0.0.0"].data.altitude * 50000) - 35000, 0],
+    position: [0, (world.terrain.pMap["0.0.0"].data.altitude * 50000) - 35000, -5000],
     textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
   }, three.scene).initMesh()
 }
