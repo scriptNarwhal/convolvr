@@ -63,7 +63,6 @@ export default class Toolbox {
     }
 
     usePrimary (hand) {
-      //console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
           entity = null
@@ -88,25 +87,37 @@ export default class Toolbox {
       this.sendToolAction(false, tool, camera, entity)
     }
 
-    sendToolAction (primary, tool, camera, entity) {
+    sendToolAction (primary, tool, camera, entity, entityId = -1, components = []) {
       let cPos = camera.position,
-          coords = [Math.floor(cPos.x/464000), 0, Math.floor(cPos.z/403680)],
-          // chunk = this.world.terrain.pMap[coords[0]+".0."+coords[2]],
-          // chunkPos = chunk != null ? chunk.mesh.position : {x: 0, y: 0, z: 0},
-          //relativePosition = [cPos.x -chunkPos.x, cPos.y -chunkPos.y, cPos.z -chunkPos.z],
+          coords = [Math.floor(cPos.x / 464000), 0, Math.floor(cPos.z / 403680)],
           position = [cPos.x, cPos.y, cPos.z],
-          quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w]
+          quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
+          cursor = this.world.user.cursor,
+          selected = cursor.entity,
+          toolName = tool.name
+          
+      if (selected) {
+        if (cursor.distance < 33000 &&
+            (tool.name == "Entity Tool" || tool.name == "Component Tool")) {
+            toolName = "Component Tool"
+            entityId = selected.id
+            components = entity.components
+            console.log("ADDING COMPONENTS TO ENTITY")
+        }
+      }
 
       send("tool action", {
-        tool: tool.name,
+        tool: toolName,
         world: this.world.name,
         user: this.world.user.username,
         userId: this.world.user.id,
-        coords: coords,
-        position: position, //relativePosition,
+        position: position,
         quaternion: quaternion,
         options: tool.options,
-        entity: entity,
+        coords,
+        components,
+        entity,
+        entityId,
         primary
       })
     }

@@ -3,15 +3,16 @@ export let render = (world, last) => {
       camera = three.camera,
       cPos = camera.position,
       delta = (Date.now() - last) / 16000 ,
-      time = Date.now()
+      time = Date.now(),
+      user = world.user != null ? world.user : false
 
   if (!! world.userInput) {
     world.userInput.update(delta) // Update keyboard / mouse / gamepad
   }
-  if (world.user && world.user.mesh) {
-    world.user.cursor.deactivate()
-    world.user.mesh.position.set(cPos.x, cPos.y, cPos.z);
-    world.user.mesh.quaternion.set(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
+  if (user && user.mesh) {
+    user.cursor.deactivate()
+    user.mesh.position.set(cPos.x, cPos.y, cPos.z);
+    user.mesh.quaternion.set(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
     rayCast(world, camera, cursorCallback)
   }
   world.sendUserData()
@@ -46,8 +47,10 @@ let rayCast = (world, camera, callback) => {
 }
 
 let cursorCallback = (obj, entity, world) => {
-  if (obj.distance < 30000) {
-    world.user.cursor.activate()
+  let cursor = world.user.cursor
+  if (obj.distance < 33000) {
+    cursor.activate()
+    cursor.setEntity(entity, obj.distance)
     // touching / interacting range
     // let xScale = obj.object.scale.x * 0.95
     // obj.object.scale.set(xScale, xScale, xScale)

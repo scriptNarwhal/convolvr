@@ -4,15 +4,18 @@ export default class Cursor {
     constructor (data, mount) {
       let color = 0xe5e5e5,
           light = false,
+          distance = 14000,
           entity = new Entity(0, [{
               type: 'structure',
               shape: 'box',
               color: 0xf0f0f0,
               size: [80, 80, 80],
               material: "wireframe",
-          }], ["no-raycast"], [0, 0, -14000], null, 0).init(mount)
+          }], ["no-raycast"], [0, 0, -distance], null, 0).init(mount)
 
       this.mesh = entity.mesh
+      this.entity = null
+      this.distance = distance
       if (light) {
         this.mesh.add(light)
         light.position.set(0, 100, -100)
@@ -29,7 +32,12 @@ export default class Cursor {
       this.mesh.scale.set(3.0, 3.0, 3.0)
     }
     deactivate () {
+      this.entity = false
       this.mesh.scale.set(1.0, 1.0, 1.0)
+    }
+    setEntity (e, dist) {
+      this.entity = e
+      this.distance = dist
     }
     update (position, quaternion, translateZ) {
         this.position = position ? position : false;

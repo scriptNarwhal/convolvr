@@ -9,6 +9,8 @@ type ToolAction struct {
   Quaternion  []float64   `json:"quaternion"`
   Tool        string      `json:"tool"`
   Options     interface{} `json:"options"`
-  Entity      Entity    `json:"entity"`
+  Components  []Component `storm:"inline" json:"components"`
+  Entity      Entity      `json:"entity"`
+  EntityId    int         `json:"entityId"`
   Primary     bool        `json:"primary"`
 }

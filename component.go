@@ -18,8 +18,8 @@ type Component struct {
 	ComponentType    string `json:"type"`
 }
 
-func NewComponent(id int, name string, shape string, mat string, color int, size []float64, pos []int, quat []int, componentType string) *Component {
-	return &Component{id, name, shape, mat, color, size, pos, quat, componentType}
+func NewComponent(name string, shape string, mat string, color int, size []float64, pos []int, quat []int, componentType string) *Component {
+	return &Component{Name: name, Shape: shape, Material: mat, Color: color, Size: size, Position: pos, Quaternion: quat, ComponentType: componentType}
 }
 
 func getComponents(c echo.Context) error { // component types

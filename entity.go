@@ -17,8 +17,8 @@ type Entity struct {
 	TranslateZ float64      `json:"translateZ"`
 }
 
-func NewEntity(id int, name string, world string, components []*Component, aspects []string, pos []float64, quat []float64, z float64) *Entity {
-	return &Entity{id, name, world, components, aspects, pos, quat, z}
+func NewEntity(name string, world string, components []*Component, aspects []string, pos []float64, quat []float64, z float64) *Entity {
+	return &Entity{Name: name, World: world, Components: components, Aspects: aspects, Position: pos, Quaternion: quat, TranslateZ: z}
 }
 
 func getEntities(c echo.Context) error { // entity types
