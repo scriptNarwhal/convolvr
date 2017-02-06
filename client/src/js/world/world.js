@@ -92,7 +92,6 @@ export default class World {
 			gridTexture.anisotropy = renderer.getMaxAnisotropy()
 				//skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
 		})
-		console.log("grid texture", this.textures.grid)
 		window.onresize = function () {
 			world.screenResX = window.devicePixelRatio * window.innerWidth
 			if (three.world.mode != "stereo") {
@@ -144,12 +143,12 @@ export default class World {
 			switch (data.tool) {
 				case "Entity Tool":
 					let ent = data.entity,
-							entity = new Entity(ent.id, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
-				//entity.init(chunk.mesh)
+							entity = new Entity(chunk.entities.length+1, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
 					entity.init(three.scene)
 				break;
 				case "Component Tool":
-
+					// concat with existing components array
+					// re-init entity
 				break;
 				case "Voxel Tool":
 

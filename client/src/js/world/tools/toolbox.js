@@ -95,7 +95,7 @@ export default class Toolbox {
           cursor = this.world.user.cursor,
           selected = cursor.entity,
           toolName = tool.name
-          
+
       if (selected) {
         if (cursor.distance < 33000 &&
             (tool.name == "Entity Tool" || tool.name == "Component Tool")) {
@@ -103,6 +103,7 @@ export default class Toolbox {
             entityId = selected.id
             components = entity.components
             console.log("ADDING COMPONENTS TO ENTITY")
+            // components may have to be translated before setting Action Position
         }
       }
 

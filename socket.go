@@ -35,8 +35,6 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 					saveErr := voxelEntities.Save(&entity)
 					if saveErr != nil {
 						log.Println(saveErr)
-					} else {
-						log.Println("Saved Entity")
 					}
 			} else { // structure tool
 				// implement adding structure
@@ -45,13 +43,22 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 		}
 		if action.Tool == "Component Tool" || action.Tool == "Voxel Tool" {
 				if action.Tool == "Component Tool" {
-					newComps := []*Component{}
-					for _, v := range action.Components {
-						newComp := *NewComponent(v.Name, v.Shape, v.Material, v.Color, v.Size, v.Position, v.Quaternion, v.ComponentType)
-						newComps = append(newComps, &newComp)
-					}
 					readErr := voxelEntities.One("ID", action.EntityId, &entity)
 					if readErr == nil {
+						newComps := []*Component{}
+						for _, v := range action.Components {
+							if v.Position == nil {
+								v.Position = action.Position
+								v.Position[0] -= entity.Position[0]
+								v.Position[1] -= entity.Position[1]
+								v.Position[2] -= entity.Position[2]
+							}
+							if v.Quaternion == nil {
+								v.Quaternion = action.Quaternion
+							}
+							newComp := *NewComponent(v.Name, v.Shape, v.Material, v.Color, v.Size, v.Position, v.Quaternion, v.ComponentType)
+							newComps = append(newComps, &newComp)
+						}
 						entity.Components = append(entity.Components, newComps...)
 						saveErr := voxelEntities.Save(&entity)
 						if saveErr != nil {
