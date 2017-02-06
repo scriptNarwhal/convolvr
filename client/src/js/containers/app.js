@@ -162,6 +162,7 @@ class App extends Component {
                           };
                           controls = new THREE.VRControls(camera)
                           effect = new THREE.VREffect(renderer)
+                          effect.scale = 22000
                           effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
                           three.vrEffect = effect
                           three.vrControls = controls

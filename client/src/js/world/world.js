@@ -149,6 +149,12 @@ export default class World {
 				case "Component Tool":
 					// concat with existing components array
 					// re-init entity
+					// work-around
+					if (data.entity) {
+						let ent = data.entity,
+								entity = new Entity(chunk.entities.length+1, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
+						entity.init(three.scene)
+					}
 				break;
 				case "Voxel Tool":
 
