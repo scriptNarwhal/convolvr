@@ -17,21 +17,22 @@ export default class HUDMenu {
           options = this.options,
           o = 0,
           color = data.color || 0xffffff,
-          light = new THREE.PointLight(this.lightColor, 1.0, 4000),
-          geom = new THREE.BoxGeometry(10000, 2000, 400),
-          mat = new THREE.MeshPhongMaterial({color: color, fog: false});
+          light = new THREE.PointLight(this.lightColor, 1.0, 40000),
+          geom = new THREE.BoxGeometry(100000, 20000, 4000),
+          mat = new THREE.MeshPhongMaterial({color: color, fog: false})
 
       mesh = new THREE.Object3D() //THREE.Mesh(geom, mat);
       if (light) {
         this.light = light;
         mesh.add(light);
-        light.position.set(0, 200, -2000);
+        light.position.set(0, 2000, -20000);
       }
       if (options.length > 0) {
         o = options.length -1;
         while (o >= 0) {
-          let icon = options[o].icon.initMesh();
-          icon.position.set(-2600+o*1300, -200, 600);
+          let icon = options[o].icon.initMesh(),
+              curvature = 0 //-Math.sin(Math.PI*((o+1)/(options.length+1)))
+          icon.position.set(-26000+o*13000, -2000, curvature*12000)
           mesh.add(icon);
           o --;
         }
@@ -39,12 +40,12 @@ export default class HUDMenu {
       this.mesh = mesh
       this.parent = parent
       three.scene.add(mesh)
-      mesh.position.set(0, 7200, -10000)
+      mesh.position.set(0, 72000, -100000)
       this.label = new Label({
         text: "Hello World",
         color: 0x00ff00,
         lightColor: 0xffffff,
-        position: [0, -1200, 0]
+        position: [0, -15000, -5000]
       }, this.mesh)
       return this.mesh
     }
@@ -55,14 +56,14 @@ export default class HUDMenu {
           label = toolbox.tools[index].name
 
       this.label.update({ color: '#ffffff', lightColor: 0xffffff, text: label })
-      this.light.position.set(-1200+index*600, -200, 600)
+      this.light.position.set(-12000+index*6000, -2000, 6000)
     }
 
     updatePosition () {
       let pPos = this.parent.position
       this.mesh.position.set( pPos.x, pPos.y, pPos.z )
-      this.mesh.translateZ(-10000)
-      this.mesh.translateY(3000)
+      this.mesh.translateZ(-80000)
+      this.mesh.translateY(30000)
       this.mesh.rotation.y = this.parent.rotation.y
       this.update()
     }

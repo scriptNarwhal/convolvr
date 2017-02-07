@@ -14,14 +14,14 @@ export default class Label extends Text {
       let mesh = null,
           color = this.color,
           pos = this.position,
-          light =  this.lightColor ? new THREE.PointLight(this.lightColor, 1.0, 200) : false,
-          geom = new THREE.BoxGeometry(3200, 800, 80),
+          light =  this.lightColor ? new THREE.PointLight(this.lightColor, 1.0, 2000) : false,
+          geom = new THREE.BoxGeometry(32000, 8000, 800),
           mat = this.renderText(this.text, color, "#000000")
       if (this.mesh == null) {
         mesh = new THREE.Mesh(geom, mat)
         if (light) {
           mesh.add(light)
-          light.position.set(0, 100, -100)
+          light.position.set(0, 1000, -1000)
         }
         this.mesh = mesh
         this.mount.add(mesh)
