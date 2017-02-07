@@ -93,21 +93,25 @@ export default class Toolbox {
           position = [cPos.x, cPos.y, cPos.z],
           quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
           cursor = this.world.user.cursor,
+          cursorPos = null,
           selected = cursor.entity,
           toolName = tool.name
-
-      if (selected) {
-        if (cursor.distance < 33000 &&
-            (tool.name == "Entity Tool" || tool.name == "Component Tool")) {
-            toolName = "Component Tool"
-            entityId = selected.id
-            components = entity.components
-            console.log("ADDING COMPONENTS TO ENTITY")
-            // components may have to be translated before setting Action Position
-        }
+      if (false) { // set position from tracked controller
+        // implement
+      } else {
+        cursorPos = new THREE.Vector3().applyMatrix4(cursor.mesh.matrixWorld)
+        position = [cursorPos.x, cursorPos.y, cursorPos.z]
       }
-
-      send("tool action", {
+      console.log("creating entity", entity)
+      if (selected) {
+        if (cursor.distance < 33000 && tool.name == "Component Tool" || tool.name == "Entity Tool") {
+            tool.name = "Component Tool"
+            entityId = selected.id
+        }
+        console.log(selected.id)
+        console.log("ADDING COMPONENTS TO ENTITY")
+      }
+      let actionData = {
         tool: toolName,
         world: this.world.name,
         user: this.world.user.username,
@@ -120,6 +124,8 @@ export default class Toolbox {
         entity,
         entityId,
         primary
-      })
+      }
+      console.log("tool action", actionData)
+      send("tool action", actionData)
     }
 }

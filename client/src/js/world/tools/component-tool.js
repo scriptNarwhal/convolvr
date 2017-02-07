@@ -1,5 +1,6 @@
 import Tool from './tool'
 import Component from '../components/component'
+import Entity from '../entities/entity'
 import ComponentToolIcon from '../../vr-ui/icons/component-tool-icon'
 import ComponentGenerator from '../components/component-generator'
 import EntityGenerator from '../entities/entity-generator'
@@ -14,8 +15,8 @@ export default class ComponentTool extends Tool {
         this.entities = new EntityGenerator()
         this.components = new ComponentGenerator()
         this.options = {
-          translateZ: -14000,
-          entityType: "panel"
+          translateZ: 0,
+          componentType: "panel"
         }
         this.all = ["panel", "block", "column", "wirebox"]
         this.current = 0
@@ -39,12 +40,10 @@ export default class ComponentTool extends Tool {
     }
 
     primaryAction () {
-      // place component
-      // ray cast, find entity, else, make new one
-      // implement ray cast *** ... world.raycast() ?
-
-      let entity = this.entities.makeEntity(this.options.entityType)
-      entity.translateZ = this.options.translateZ
+      // place component (into entity if pointing at one)
+      let component = this.components.makeComponent(this.options.componentType),
+          entity = new Entity(0, [component], [], [0, 0, 0], null, this.options.translateZ)
+      //entity.init(three.scene)
       return entity
     }
 

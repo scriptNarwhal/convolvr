@@ -4,7 +4,7 @@ export default class Cursor {
     constructor (data, mount) {
       let color = 0xe5e5e5,
           light = false,
-          distance = 14000,
+          distance = 12000,
           entity = new Entity(0, [{
               type: 'structure',
               shape: 'box',
@@ -36,6 +36,7 @@ export default class Cursor {
       this.mesh.scale.set(1.0, 1.0, 1.0)
     }
     setEntity (e, dist) {
+      console.log(e) // remove this
       this.entity = e
       this.distance = dist
     }

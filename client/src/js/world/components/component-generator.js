@@ -3,7 +3,7 @@ export default class ComponentGenerator {
     this.components = []
     this.init()
   }
-  makeEntity (type) {
+  makeComponent (type) {
     return this.components[type]
   }
   init () {

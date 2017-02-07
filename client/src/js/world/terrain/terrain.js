@@ -10,7 +10,7 @@ export default class Terrain {
     this.octree = world.octree
     this.worldPhysics = world.worldPhysics;
     this.platforms = [];
-		this.pMap = []; // map of coord strings to platforms
+		this.voxels = []; // map of coord strings to platforms
 		this.lastChunkCoords = [0, 0, 0];
 		this.chunkCoords = [0, 0, 0];
 		this.cleanUpChunks = [];
@@ -45,7 +45,7 @@ export default class Terrain {
         removePhysicsChunks = [],
         chunkPos = [],
         pCell = [0,0,0],
-        pMap = this.pMap,
+        voxels = this.voxels,
         position = three.camera.position,
         platform = null,
         terrainChunk = null,
@@ -78,10 +78,10 @@ export default class Terrain {
       }
       c = 0;
       let cleanUpPlats = this.cleanUpChunks;
-      this.cleanUpChunks.map((plat, i) => {
+      this.cleanUpChunks.map((cleanUp, i) => {
           if (c < 4) {
-              if (!!plat) {
-                terrainChunk = pMap[plat.cell];
+              if (!!cleanUp) {
+                terrainChunk = voxels[cleanUp.cell];
                 if (terrainChunk) {
                   if (terrainChunk.mesh) {
                     three.scene.remove(terrainChunk.mesh);
@@ -92,9 +92,9 @@ export default class Terrain {
                     })
                   }
                 }
-                removePhysicsChunks.push(plat.physics);
+                removePhysicsChunks.push(cleanUp.physics);
                 platforms.splice(platforms.indexOf(terrainChunk), 1);
-                delete pMap[plat.cell];
+                delete voxels[cleanUp.cell];
                 cleanUpPlats.splice(i, 1);
             }
             c ++;
@@ -105,8 +105,8 @@ export default class Terrain {
       while (x <= endCoords[0]) {
         while (y <= endCoords[1]) {
             if (c < 6) {
-              if (pMap[x+".0."+y] == null) { // only if its not already loaded
-                  pMap[x+".0."+y] = true
+              if (voxels[x+".0."+y] == null) { // only if its not already loaded
+                  voxels[x+".0."+y] = true
                     c ++;
                     this.reqChunks.push(x+"x0x"+y)
               }
@@ -141,7 +141,7 @@ export default class Terrain {
                      three.scene.add(chunk.mesh);
                  }
                  platforms.push(chunk);
-                 pMap[c.x+".0."+c.z] = chunk;
+                 voxels[c.x+".0."+c.z] = chunk;
              })
              if (physicalChunks.length > 0) {
                this.worldPhysics.worker.postMessage(JSON.stringify({

@@ -137,13 +137,13 @@ export default class World {
 					user = world.user,
 					pos = data.position,
 					coords = data.coords,
-					chunk = world.terrain.pMap[coords[0]+".0."+coords[2]],
+					chunk = world.terrain.voxels[coords[0]+".0."+coords[2]],
 					quat = data.quaternion
 
 			switch (data.tool) {
 				case "Entity Tool":
 					let ent = data.entity,
-							entity = new Entity(chunk.entities.length+1, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
+							entity = new Entity(ent.id, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
 					entity.init(three.scene)
 				break;
 				case "Component Tool":
@@ -152,7 +152,7 @@ export default class World {
 					// work-around
 					if (data.entity) {
 						let ent = data.entity,
-								entity = new Entity(chunk.entities.length+1, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
+								entity = new Entity(-1, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
 						entity.init(three.scene)
 					}
 				break;
@@ -255,12 +255,12 @@ export default class World {
 			}
 		})
 		this.terrain.platforms = []
-		this.terrain.pMap = []
+		this.terrain.voxels = []
 		this.load(name)
 	}
 
 	generateFullLOD (coords) {
-			let platform = this.terrain.pMap[coords]
+			let platform = this.terrain.voxels[coords]
 			if (platform != null) {
 				if (platform.structures != null) {
 					platform.structures.forEach(structure =>{

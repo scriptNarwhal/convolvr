@@ -125,8 +125,6 @@ func getWorldChunks(c echo.Context) error {
 				voxelEntities.All(&entities)
 				voxelStructures.All(&structures)
 				subVoxels.All(&chunkVoxels)
-				log.Println("Found Entities")
-				log.Println(len(entities))
 				foundChunks[0].Entities = entities
 				foundChunks[0].Structures = structures
 				foundChunks[0].Voxels = chunkVoxels

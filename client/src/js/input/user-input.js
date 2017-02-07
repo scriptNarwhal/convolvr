@@ -128,13 +128,14 @@ export default class UserInput {
 			if (world.mode != "stereo") {
 				this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ");
 			}
-			velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion));
+			velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*3000))
+
 			if (this.leapMotion && this.moveVector.length() > 0) {
 				if (velocity.y < 0) {
 					velocity.y *= 0.95;
 				}
 			}
-			velocity.y -= 4600; // weak gravity
+			velocity.y -= 1000*(delta*16000); // weak gravity
 			this.moveVector.set(0, 0, 0);
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
