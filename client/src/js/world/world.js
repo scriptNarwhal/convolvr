@@ -144,17 +144,18 @@ export default class World {
 				case "Entity Tool":
 					let ent = data.entity,
 							entity = new Entity(ent.id, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
+					chunk.entities.push(entity)
 					entity.init(three.scene)
 				break;
 				case "Component Tool":
 					// concat with existing components array
 					// re-init entity
-					// work-around: insert new entity with same id
-					if (data.entity) {
-						let ent = data.entity,
-								entity = new Entity(ent.id, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
-						entity.init(three.scene)
-					}
+					chunk.entities.map(voxelEnt => {
+						if (voxelEnt.id == data.entityId) {
+							voxelEnt.components = voxelEnt.components.concat(data.entity.components)
+							voxelEnt.init(three.scene)
+						}
+					})
 				break;
 				case "Voxel Tool":
 

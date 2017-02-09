@@ -41,11 +41,12 @@ export default class ComponentTool extends Tool {
     primaryAction () {
       // place component (into entity if pointing at one)
       let cursor = this.world.user.cursor,
+          quat = three.camera.quaternion,
           selected = cursor.entity,
           entityId = -1,
           components = [],
           component = this.components.makeComponent(this.options.componentType),
-          entity = new Entity(0, [component], [], [0, 0, 0], null, this.options.translateZ)
+          entity = new Entity(0, [component], [], [0, 0, 0], [quat[0], quat[1], quat[2], quat[3]])
       //entity.init(three.scene)
       // create / add mesh to scene here, but don't send with ```entity```
       if (selected) {
@@ -54,8 +55,11 @@ export default class ComponentTool extends Tool {
           if (components.length == 0) {
             components = entity.components
           }
-          selected.components = selected.components.concat(components)
-          selected.init(three.scene)
+          let selectedPos = selected.mesh.position
+
+          components.map((comp)=> {
+            // apply transformation and offset
+          })
         }
         console.log(selected.id)
         console.log("ADDING COMPONENTS TO ENTITY")

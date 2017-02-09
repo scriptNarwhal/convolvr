@@ -75,7 +75,6 @@ export default class UserInput {
 			});
 			setTimeout(()=> {
 				document.addEventListener("mousedown", (e) => {
-					console.log(e)
 					if (world.mode != "web") {
 						switch (e.which) {
 							case 1: // left mouse

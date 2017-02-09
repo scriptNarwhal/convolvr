@@ -36,7 +36,18 @@ export default class EntityTool extends Tool  {
     }
 
     primaryAction () { // place entity
-      let entity = this.generator.makeEntity(this.options.entityType)
+      let cursor = this.world.user.cursor,
+          selected = cursor.entity,
+          entity = this.generator.makeEntity(this.options.entityType)
+      if (selected) {
+          if (cursor.distance < 33000) {
+            // switch to component tool
+            this.world.user.toolbox.useTool(1, 0)
+            this.world.user.hud.show()
+            this.world.user.toolbox.usePrimary(0)
+            return false
+          }
+      }
       return {
         entity
       }

@@ -62,54 +62,69 @@ export default class Toolbox {
       this.tools.push(new CustomTool(data))
     }
 
+    initActionTelemetry (camera, useCursor) {
+      let cPos = camera.position,
+          position = [cPos.x, cPos.y, cPos.z],
+          quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
+          cursor = this.world.user.cursor,
+          cursorPos = null
+      if (useCursor) {
+        if (false) { // set position from tracked controller
+            // implement
+        } else {
+          cursorPos = new THREE.Vector3().applyMatrix4(cursor.mesh.matrixWorld)
+          position = [cursorPos.x, cursorPos.y, cursorPos.z]
+        }
+      }
+
+      return {
+        position,
+        quaternion
+      }
+    }
     usePrimary (hand) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
+          telemetry = this.initActionTelemetry(camera, true),
+        { position, quaternion } = telemetry,
           toolAction = null
       if (tool.mesh == null) {
         tool.equip(hand)
       }
-      toolAction = tool.primaryAction() || null
-      this.sendToolAction(true, tool, camera, toolAction.entity, toolAction.entityId, toolAction.components)
+      toolAction = tool.primaryAction()
+      if (toolAction !== false) {
+        this.sendToolAction(true, tool, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
+      }
     }
 
     useSecondary(hand) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
+          telemetry = this.initActionTelemetry(camera, true),
+        { position, quaternion } = telemetry,
           toolAction = false
       if (tool.mesh == null) {
           tool.equip(hand)
       }
       toolAction = tool.secondaryAction()
-      if (toolAction === false) {
-        return
+      if (toolAction !== false) {
+        this.sendToolAction(false, tool, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
-      this.sendToolAction(false, tool, camera, toolAction.entity, toolAction.entityId, toolAction.components)
     }
 
-    sendToolAction (primary, tool, camera, entity, entityId = -1, components = []) {
-      let cPos = camera.position,
+    sendToolAction (primary, tool, position, quaternion, entity, entityId = -1, components = []) {
+      let camera = this.world.camera,
+          cPos = camera.position,
           coords = [Math.floor(cPos.x / 464000), 0, Math.floor(cPos.z / 403680)],
-          position = [cPos.x, cPos.y, cPos.z],
-          quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
-          cursor = this.world.user.cursor,
-          cursorPos = null,
-          selected = cursor.entity,
           toolName = tool.name
-      if (false) { // set position from tracked controller
-        // implement
-      } else {
-        cursorPos = new THREE.Vector3().applyMatrix4(cursor.mesh.matrixWorld)
-        position = [cursorPos.x, cursorPos.y, cursorPos.z]
-      }
 
       let actionData = {
         tool: toolName,
         world: this.world.name,
         user: this.world.user.username,
         userId: this.world.user.id,
-        position: position,
-        quaternion: quaternion,
+        position,
+        quaternion,
         options: tool.options,
         coords,
         components,
