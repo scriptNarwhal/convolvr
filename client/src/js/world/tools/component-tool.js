@@ -15,7 +15,6 @@ export default class ComponentTool extends Tool {
         this.entities = new EntityGenerator()
         this.components = new ComponentGenerator()
         this.options = {
-          translateZ: 0,
           componentType: "panel"
         }
         this.all = ["panel", "block", "column", "wirebox"]
@@ -41,10 +40,31 @@ export default class ComponentTool extends Tool {
 
     primaryAction () {
       // place component (into entity if pointing at one)
-      let component = this.components.makeComponent(this.options.componentType),
+      let cursor = this.world.user.cursor,
+          selected = cursor.entity,
+          entityId = -1,
+          components = [],
+          component = this.components.makeComponent(this.options.componentType),
           entity = new Entity(0, [component], [], [0, 0, 0], null, this.options.translateZ)
       //entity.init(three.scene)
-      return entity
+      // create / add mesh to scene here, but don't send with ```entity```
+      if (selected) {
+        if (cursor.distance < 33000) {
+          entityId = selected.id
+          if (components.length == 0) {
+            components = entity.components
+          }
+          selected.components = selected.components.concat(components)
+          selected.init(three.scene)
+        }
+        console.log(selected.id)
+        console.log("ADDING COMPONENTS TO ENTITY")
+      }
+      return {
+        entity,
+        entityId,
+        components
+      }
     }
 
     secondaryAction () {
@@ -55,22 +75,5 @@ export default class ComponentTool extends Tool {
       }
       this.options.entityType = this.all[this.current]
       return false // no socket event
-    }
-
-    equip (hand) {
-      if (this.mesh == null) {
-        let toolMesh = this.initMesh(this.data)
-        this.world.user.mesh.add(toolMesh)
-        toolMesh.position.set(1500-(2500*hand), -250, -1350)
-        // add to respective hand (when implemented)
-      } else {
-        this.mesh.visible = true;
-      }
-    }
-
-    unequip (hand) {
-      if (this.mesh != null) {
-        this.mesh.visible = false;
-      }
     }
 }

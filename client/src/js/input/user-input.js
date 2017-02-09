@@ -4,45 +4,46 @@ import GamePad from './gamepad'
 import LeapMotion from './leap-motion'
 
 let isVRMode = (mode) => {
-	return (mode == "vr" || mode == "stereo");
+	return (mode == "vr" || mode == "stereo")
 }
 
 export default class UserInput {
 	constructor (socket) {
 		this.camera = {
 			rotation: new THREE.Vector3()
-		};
+		}
 		this.device = {
 			velocity: {
 				x: 0, y: 0, z: 0
 			}
-		};
+		}
 		this.castPos = new THREE.Vector2()
-		this.world = null;
-		this.focus = false;
-		this.fullscreen = false;
+		this.world = null
+		this.focus = false
+		this.fullscreen = false
 		this.rotationVector = {
 			x: 0,
 			y: 0,
 			z: 0
-		};
-		this.tmpQuaternion = null;
-		this.moveVector = null;
+		}
+		this.tmpQuaternion = null
+		this.moveVector = null
 		this.keys = {
 			w: false, a: false, s: false, d: false, r: false, f: false, shift: false, space: false
-		},
-		this.lastTouch = [[0,0], [0,0]];
-		this.leapMotion = false;
-		this.leapMode = "movement";
-		this.gamepadMode = false;
-		this.gamepads = {};
+		}
+		this.lastTouch = [[0,0], [0,0]]
+		this.leapMotion = false
+		this.leapMode = "movement"
+		this.gamepadMode = false
+		this.gamepads = {},
+		this.initDone = false
 	}
 
 	init (world, camera, device) {
 		let uInput = this,
 				viewports = document.querySelectorAll("canvas.viewport")
-		this.connect(world, camera, device);
-		uInput.rotationVector = {x: 0.2, y: 4.6, z: 0};
+		this.connect(world, camera, device)
+		uInput.rotationVector = {x: 0.2, y: 4.6, z: 0}
 
 		Array.prototype.map.call(viewports, (canvas, i) => {
 			if (true) {
@@ -56,11 +57,11 @@ export default class UserInput {
 				};
 				canvas.style.pointerEvents = ''
 				if ("onpointerlockchange" in document) {
-					document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false);
+					document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false)
 				} else if ("onmozpointerlockchange" in document) {
-					document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false);
+					document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false)
 				} else if ("onwebkitpointerlockchange" in document) {
-					document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false);
+					document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false)
 				}
 			}
 		})
@@ -68,37 +69,38 @@ export default class UserInput {
 		if (!world.mobile) {
 			document.addEventListener("mousemove", function (e) {
 				if (uInput.focus) {
-					uInput.rotationVector.y  -=(e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 300.0;
-					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 300.0;
+					uInput.rotationVector.y  -=(e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 300.0
+					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 300.0
 				}
 			});
-			console.log("adding event listener.. mouseclick")
 			setTimeout(()=> {
 				document.addEventListener("mousedown", (e) => {
+					console.log(e)
 					if (world.mode != "web") {
 						switch (e.which) {
 							case 1: // left mouse
-								this.user.toolbox.usePrimary(0); // right hand
+								this.user.toolbox.usePrimary(0) // right hand
 							break;
 							case 2: // scroll wheel click
 								// tools.selectObject() .. might be handy
 							break;
 
 							case 3: // right click
-								this.user.toolbox.useSecondary(0); // right hand
+								this.user.toolbox.useSecondary(0) // right hand
 							break;
 						}
 					}
-				}, true)
+				}, false)
 			},250)
 
 		}
-		this.touchControls = new Touch(this);
-		this.keyboard = new Keyboard(this, this.world);
-		this.gamepad = new GamePad(this);
-		this.leapControls = new LeapMotion(this, this.world);
-		this.tmpQuaternion = new THREE.Quaternion();
-		this.moveVector = new THREE.Vector3(0, 0, 0);
+		this.touchControls = new Touch(this)
+		this.keyboard = new Keyboard(this, this.world)
+		this.gamepad = new GamePad(this)
+		this.leapControls = new LeapMotion(this, this.world)
+		this.tmpQuaternion = new THREE.Quaternion()
+		this.moveVector = new THREE.Vector3(0, 0, 0)
+		this.initDone = true
 	}
 
 	connect (world, camera, device) {
@@ -110,7 +112,10 @@ export default class UserInput {
 	}
 
 	update (delta) {
-		var world = this.world,
+		if (!this.initDone) {
+			return
+		}
+		let world = this.world,
 				terrainMesh = world.terrain.mesh,
 				terrainMode = '',
 				bottom = -600000,

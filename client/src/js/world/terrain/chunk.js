@@ -69,9 +69,7 @@ export default class Chunk {
         this.mesh = mesh
         if (!!data.entities) {
           data.entities.map(e => {
-            let pos = e.position,
-                quat = e.quaternion,
-                entity = new Entity(e.id, e.components, [], pos, quat, e.translateZ)
+            let entity = new Entity(e.id, e.components, [], e.position, e.quaternion)
             this.entities.push(entity)
             entity.init(three.scene)
             // probably need to offset the position for the chunk..

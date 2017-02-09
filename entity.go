@@ -2,6 +2,7 @@ package convolvr
 
 import (
 	"net/http"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 )
@@ -14,11 +15,10 @@ type Entity struct {
 	Aspects    []string     `json:"aspects"`
 	Position   []float64    `json:"position"`
 	Quaternion []float64    `json:"quaternion"`
-	TranslateZ float64      `json:"translateZ"`
 }
 
-func NewEntity(name string, world string, components []*Component, aspects []string, pos []float64, quat []float64, z float64) *Entity {
-	return &Entity{Name: name, World: world, Components: components, Aspects: aspects, Position: pos, Quaternion: quat, TranslateZ: z}
+func NewEntity(name string, world string, components []*Component, aspects []string, pos []float64, quat []float64) *Entity {
+	return &Entity{Name: name, World: world, Components: components, Aspects: aspects, Position: pos, Quaternion: quat}
 }
 
 func getEntities(c echo.Context) error { // entity types

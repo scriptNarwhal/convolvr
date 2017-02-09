@@ -65,26 +65,26 @@ export default class Toolbox {
     usePrimary (hand) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
-          entity = null
+          toolAction = null
       if (tool.mesh == null) {
         tool.equip(hand)
       }
-      entity = tool.primaryAction() || null
-      this.sendToolAction(true, tool, camera, entity)
+      toolAction = tool.primaryAction() || null
+      this.sendToolAction(true, tool, camera, toolAction.entity, toolAction.entityId, toolAction.components)
     }
 
     useSecondary(hand) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
-          entity = false
+          toolAction = false
       if (tool.mesh == null) {
           tool.equip(hand)
       }
-      entity = tool.secondaryAction()
-      if (entity === false) {
+      toolAction = tool.secondaryAction()
+      if (toolAction === false) {
         return
       }
-      this.sendToolAction(false, tool, camera, entity)
+      this.sendToolAction(false, tool, camera, toolAction.entity, toolAction.entityId, toolAction.components)
     }
 
     sendToolAction (primary, tool, camera, entity, entityId = -1, components = []) {
@@ -102,15 +102,7 @@ export default class Toolbox {
         cursorPos = new THREE.Vector3().applyMatrix4(cursor.mesh.matrixWorld)
         position = [cursorPos.x, cursorPos.y, cursorPos.z]
       }
-      console.log("creating entity", entity)
-      if (selected) {
-        if (cursor.distance < 33000 && tool.name == "Component Tool" || tool.name == "Entity Tool") {
-            tool.name = "Component Tool"
-            entityId = selected.id
-        }
-        console.log(selected.id)
-        console.log("ADDING COMPONENTS TO ENTITY")
-      }
+
       let actionData = {
         tool: toolName,
         world: this.world.name,

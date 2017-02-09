@@ -68,9 +68,9 @@ user.light.position.set(100000, 20000, 100000)
 
 let initChatUI = () => {
   world.chat = new ListView({
-    color: "#000000",
-    background: "#ffffff",
-    position: [0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 37000, -5000],
+    color: "#ffffff",
+    background: "#000000",
+    position: [0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 22000, -5000],
     textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
   }, three.scene).initMesh()
 }

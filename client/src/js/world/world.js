@@ -67,7 +67,7 @@ export default class World {
 		})
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
-		userInput.init(this, camera, this.user)
+		// userInput.init(this, camera, this.user)
 		this.worldPhysics = new WorldPhysics()
 		this.worldPhysics.init(self)
 		this.seed = new Seed();
@@ -149,10 +149,10 @@ export default class World {
 				case "Component Tool":
 					// concat with existing components array
 					// re-init entity
-					// work-around
+					// work-around: insert new entity with same id
 					if (data.entity) {
 						let ent = data.entity,
-								entity = new Entity(-1, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
+								entity = new Entity(ent.id, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
 						entity.init(three.scene)
 					}
 				break;

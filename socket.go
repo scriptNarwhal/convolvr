@@ -33,7 +33,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 	voxelEntities := voxel.From("entities")
 	if action.Tool == "Entity Tool" || action.Tool == "Structure Tool" {
 		if action.Tool == "Entity Tool" {
-			entity = *NewEntity("", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, action.Entity.TranslateZ)
+			entity = *NewEntity("", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion)
 			saveErr := voxelEntities.Save(&entity)
 			if saveErr != nil {
 				log.Println(saveErr)
@@ -52,13 +52,13 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 		if action.Tool == "Component Tool" {
 			readErr := voxelEntities.One("ID", action.EntityId, &entity)
 			if readErr == nil {
-				pos := action.Position
+				//pos := action.Position
 				newComps := []*Component{}
 				for _, v := range action.Components {
 					if v.Quaternion == nil {
 						v.Quaternion = action.Quaternion
 					}
-					newComp := *NewComponent(v.Name, v.Shape, v.Material, v.Color, v.Size, []float64{pos[0] + v.Position[0], pos[1] + v.Position[1], pos[2] + v.Position[2]}, v.Quaternion, v.ComponentType)
+					newComp := *NewComponent(v.Name, v.Shape, v.Material, v.Color, v.Size, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.ComponentType)
 					newComps = append(newComps, &newComp)
 				}
 				entity.Components = append(entity.Components, newComps...)

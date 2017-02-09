@@ -1,13 +1,12 @@
 import Component from '../components/component.js';
 
 export default class Entity {
-  constructor (id, components, aspects = [], position, quaternion, z) {
+  constructor (id, components, aspects = [], position, quaternion) {
       this.id = id
       this.components = components
       this.aspects = aspects
       this.position = position ? position : false
       this.quaternion = quaternion ? quaternion : false
-      this.z = z //translate from
       this.mesh = null
   }
 
@@ -26,7 +25,11 @@ export default class Entity {
         faces = null,
         c = 0,
         s = 0
-
+        
+    if (this.mesh != null) {
+      three.world.octree.remove(this.mesh)
+      scene.remove(this.mesh)
+    }
     while (c < ncomps) {
         comp = new Component(this.components[c], {mobile}) // use simpler shading for mobile gpus
         compMesh = comp.mesh
@@ -76,7 +79,6 @@ export default class Entity {
       three.world.octree.add(mesh)
     }
     scene.add(mesh)
-    this.z != 0 && mesh.translateZ(this.z)
     this.mesh = mesh
 
     return this

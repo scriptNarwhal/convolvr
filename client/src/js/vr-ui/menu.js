@@ -25,7 +25,7 @@ export default class HUDMenu {
       if (light) {
         this.light = light;
         mesh.add(light);
-        light.position.set(0, 2000, -20000);
+        light.position.set(0, 2000, 20000)
       }
       if (options.length > 0) {
         o = options.length -1;
@@ -33,7 +33,7 @@ export default class HUDMenu {
           let icon = options[o].icon.initMesh(),
               curvature = 0 //-Math.sin(Math.PI*((o+1)/(options.length+1)))
           icon.position.set(-26000+o*13000, -2000, curvature*12000)
-          mesh.add(icon);
+          mesh.add(icon)
           o --;
         }
       }
@@ -62,7 +62,7 @@ export default class HUDMenu {
     updatePosition () {
       let pPos = this.parent.position
       this.mesh.position.set( pPos.x, pPos.y, pPos.z )
-      this.mesh.translateZ(-80000)
+      this.mesh.translateZ(-70000)
       this.mesh.translateY(30000)
       this.mesh.rotation.y = this.parent.rotation.y
       this.update()

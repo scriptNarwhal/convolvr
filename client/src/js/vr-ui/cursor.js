@@ -36,7 +36,7 @@ export default class Cursor {
       this.mesh.scale.set(1.0, 1.0, 1.0)
     }
     setEntity (e, dist) {
-      console.log(e) // remove this
+      //console.log(e) // remove this
       this.entity = e
       this.distance = dist
     }

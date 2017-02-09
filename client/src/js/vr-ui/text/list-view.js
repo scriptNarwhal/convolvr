@@ -18,7 +18,7 @@ export default class ListView extends Text {
           color = this.color,
           background = this.background,
           light =  this.lightColor ? new THREE.PointLight(this.lightColor, 0.666, 100000) : false,
-          geom = new THREE.BoxGeometry(36000, 36000, 40),
+          geom = new THREE.BoxGeometry(72000, 72000, 40),
           mat = this.renderTextLines(this.id, this.textLines, color, background)
       if (this.mesh == null) {
         mesh = new THREE.Mesh(geom, mat)

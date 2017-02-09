@@ -12,7 +12,6 @@ export default class EntityTool extends Tool  {
       this.icon = new EntityToolIcon()
       this.generator = new EntityGenerator()
       this.options = {
-        translateZ: 0,
         entityType: "panel"
       }
       this.all = ["panel", "panel2", "panel3", "block", "column", "wirebox"]
@@ -24,23 +23,23 @@ export default class EntityTool extends Tool  {
           color = 0xffffff,
           light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
           geom = new THREE.BoxGeometry(200, 1000, 100),
-          mat = new THREE.MeshPhongMaterial({color: color, fog: false});
+          mat = new THREE.MeshPhongMaterial({color: color, fog: false})
 
-      mesh = new THREE.Mesh(geom, mat);
+      mesh = new THREE.Mesh(geom, mat)
       mesh.rotation.x = Math.PI / 2.0
       if (light) {
-        mesh.add(light);
-        light.position.set(0, 100, -100);
+        mesh.add(light)
+        light.position.set(0, 100, -100)
       }
-      this.mesh = mesh;
-      return this.mesh;
+      this.mesh = mesh
+      return this.mesh
     }
 
-    primaryAction () {
-      // place entity
+    primaryAction () { // place entity
       let entity = this.generator.makeEntity(this.options.entityType)
-      entity.translateZ = this.options.translateZ
-      return entity
+      return {
+        entity
+      }
     }
 
     secondaryAction () {
