@@ -1,4 +1,4 @@
-import Structure from './Structure'
+import Structure from './structure'
 
 class Tower extends Structure {
 	constructor (data, platform, mobile = false) {

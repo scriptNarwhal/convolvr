@@ -1,4 +1,4 @@
-import Structure from './Structure'
+import Structure from './structure'
 
 export default class Track extends Structure {
   constructor (data) {
