@@ -55,9 +55,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 				//pos := action.Position
 				newComps := []*Component{}
 				for _, v := range action.Components {
-					if v.Quaternion == nil {
-						v.Quaternion = action.Quaternion
-					}
+					//v.Quaternion = action.Quaternion
 					newComp := *NewComponent(v.Name, v.Shape, v.Material, v.Color, v.Size, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.ComponentType)
 					newComps = append(newComps, &newComp)
 				}

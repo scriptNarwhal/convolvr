@@ -10,7 +10,7 @@ export default class ComponentGenerator {
     this.components["panel"] = {
       type: "structure",
       shape: "box",
-      size: [12000, 12000, 200],
+      size: [22000, 22000, 1000],
       color: 0x404040,
       material: "plastic",
       text: "",

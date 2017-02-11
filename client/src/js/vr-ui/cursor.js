@@ -16,6 +16,7 @@ export default class Cursor {
       this.mesh = entity.mesh
       this.entity = null
       this.distance = distance
+      this.point = new THREE.Vector3()
       if (light) {
         this.mesh.add(light)
         light.position.set(0, 100, -100)
@@ -35,10 +36,11 @@ export default class Cursor {
       this.entity = false
       this.mesh.scale.set(1.0, 1.0, 1.0)
     }
-    setEntity (e, dist) {
+    setEntity (e, dist, point) {
       //console.log(e) // remove this
       this.entity = e
       this.distance = dist
+      this.point = point
     }
     update (position, quaternion, translateZ) {
         this.position = position ? position : false;

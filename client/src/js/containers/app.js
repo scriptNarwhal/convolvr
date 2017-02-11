@@ -78,6 +78,10 @@ class App extends Component {
     }
   }
   handleKeyDown (e) {
+    if (e.which == 27) {
+      this.props.toggleMenu(true)
+      this.props.toggleMenu(true)
+    }
     if (e.which == 13) {
       if (!this.props.menuOpen) {
         this.props.toggleMenu(true);

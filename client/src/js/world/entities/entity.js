@@ -25,7 +25,7 @@ export default class Entity {
         faces = null,
         c = 0,
         s = 0
-        
+
     if (this.mesh != null) {
       three.world.octree.remove(this.mesh)
       scene.remove(this.mesh)

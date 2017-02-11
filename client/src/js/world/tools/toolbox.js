@@ -72,7 +72,8 @@ export default class Toolbox {
         if (false) { // set position from tracked controller
             // implement
         } else {
-          cursorPos = new THREE.Vector3().applyMatrix4(cursor.mesh.matrixWorld)
+          cursor.mesh.updateMatrixWorld()
+          cursorPos = cursor.mesh.localToWorld(new THREE.Vector3())
           position = [cursorPos.x, cursorPos.y, cursorPos.z]
         }
       }
@@ -91,7 +92,7 @@ export default class Toolbox {
       if (tool.mesh == null) {
         tool.equip(hand)
       }
-      toolAction = tool.primaryAction()
+      toolAction = tool.primaryAction(telemetry)
       if (toolAction !== false) {
         this.sendToolAction(true, tool, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
@@ -106,7 +107,7 @@ export default class Toolbox {
       if (tool.mesh == null) {
           tool.equip(hand)
       }
-      toolAction = tool.secondaryAction()
+      toolAction = tool.secondaryAction(telemetry)
       if (toolAction !== false) {
         this.sendToolAction(false, tool, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }

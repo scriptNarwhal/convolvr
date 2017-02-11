@@ -50,7 +50,7 @@ let cursorCallback = (obj, entity, world) => {
   let cursor = world.user.cursor
   if (obj.distance < 33000) {
     cursor.activate()
-    cursor.setEntity(entity, obj.distance)
+    cursor.setEntity(entity, obj.distance, obj.point)
     // touching / interacting range
     // let xScale = obj.object.scale.x * 0.95
     // obj.object.scale.set(xScale, xScale, xScale)

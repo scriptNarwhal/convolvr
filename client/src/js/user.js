@@ -10,6 +10,6 @@ export let initUser = () => {
      velocity: new THREE.Vector3(0, -10, 0),
      light: new THREE.PointLight(0xffffff, 0.15, 200000),
      gravity: 1,
-     falling: false
+     falling: true
  }
 }

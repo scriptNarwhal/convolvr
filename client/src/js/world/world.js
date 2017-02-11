@@ -148,10 +148,10 @@ export default class World {
 					entity.init(three.scene)
 				break;
 				case "Component Tool":
-					// concat with existing components array
-					// re-init entity
-					chunk.entities.map(voxelEnt => {
+					chunk.entities.map(voxelEnt => { // find & re-init entity
 						if (voxelEnt.id == data.entityId) {
+							console.log("got component tool message") // concat with existing components array
+							console.log(data.entity.components)
 							voxelEnt.components = voxelEnt.components.concat(data.entity.components)
 							voxelEnt.init(three.scene)
 						}
@@ -214,7 +214,7 @@ export default class World {
 		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyMaterial)
 		this.skyLight = skyLight
 		this.skybox.add(skyLight)
-		skyLight.position.set(0, 1000000, 1000000)
+		skyLight.position.set(0, 1000000, 500000)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
 		this.terrain.bufferChunks(true, 0)

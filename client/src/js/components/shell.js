@@ -1,6 +1,7 @@
 /* General shell / dashboard UI */
-import React, { Component } from 'react';
-import SideMenu from './side-menu';
+import React, { Component } from 'react'
+import SideMenu from './side-menu'
+import { browserHistory } from 'react-router'
 
 const styles = {
   inner: {
@@ -15,11 +16,20 @@ class Shell extends Component {
     let hasMenu = !!this.props.hasMenu,
         menuOnly = !!this.props.menuOnly
     return (
-        <div className="shell" style={{
-          display: (this.props.menuOpen  ? "block" : "none"),
-          zIndex: (hasMenu ? 999999 : 1),
-          height: (menuOnly ? '10vh' : '100%')
-        }}>
+        <div style={{
+            display: (this.props.menuOpen  ? "block" : "none"),
+            zIndex: (hasMenu ? 999999 : 1),
+            cursor: 'pointer',
+            height: (menuOnly ? '10vh' : '100%')
+          }}
+          onClick={e=> {
+            if (e.target.getAttribute('id') == 'shell') {
+              this.props.toggleMenu()
+            }
+          }}
+          className='shell'
+          id='shell'
+        >
             {hasMenu ? (
               <div className="tabs">
                   <SideMenu />
@@ -56,7 +66,9 @@ export default connect(
   },
   dispatch => {
     return {
-
+      toggleMenu: () => {
+        dispatch(toggleMenu())
+      },
     }
   }
 )(Shell)

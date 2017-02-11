@@ -15,7 +15,7 @@ export default class WorldPhysics {
 	          position = [],
 	          velocity = [];
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
-					vrHeight = 22000 * vrFrame.pose.position[1] + 6000
+					vrHeight = 22000 * vrFrame.pose.position[1] + 3000
 					sys.vrHeight = vrHeight
 			}
 	    if (message.command == "update") {
@@ -33,28 +33,30 @@ export default class WorldPhysics {
 		  } else if (message.command == "platform collision") { // consider sending "top" or "bottom" collision type
 	      if (message.data.type == "top") {
 				  three.camera.position.set(three.camera.position.x, message.data.position[1]+85000 +vrHeight, three.camera.position.z);
-					if (Math.abs(user.velocity.y) > 3000) {
-						user.velocity.y *= -0.47;
+					if (Math.abs(user.velocity.y) > 8000) {
+						user.velocity.y *= -0.56
+						user.falling = true
 					} else {
-						user.velocity.y *= 0.95;
+						user.falling = false
+						user.velocity.y *= 0.2
 					}
 			  } else if (message.data.type == "bottom"){
 				  three.camera.position.set(three.camera.position.x, message.data.position[1]-85000 +vrHeight, three.camera.position.z);
-				  user.velocity.y *= -0.45;
+				  user.velocity.y *= -0.45
 			  }
 			  user.velocity.x *= 0.98
 			  user.velocity.z *= 0.98
-			  user.falling = false;
+			  user.falling = false
 
 		 } else if (message.command == "voxel collision") {
 			let cameraPosition = three.camera.position;
 			cameraPosition.set(cameraPosition.x + message.data.position[0] / 80,
 									  cameraPosition.y + message.data.position[1] / 80,
-									  cameraPosition.z + message.data.position[2] / 80);
+									  cameraPosition.z + message.data.position[2] / 80)
 
-			user.velocity.x += message.data.position[0] / 8;
-			user.velocity.y += message.data.position[1] / 8;
-			user.velocity.z += message.data.position[2] / 8;
+			user.velocity.x += message.data.position[0] / 8
+			user.velocity.y += message.data.position[1] / 8
+			user.velocity.z += message.data.position[2] / 8
 			 user.falling = false;
 
 		} else if (message.command == "user collision") { // could trigger interaction / bater / chat screen
@@ -67,10 +69,10 @@ export default class WorldPhysics {
 	            sys.user.falling = false;
 	            if (message.data.delta[0] > message.data.delta[1]) {
 	              cameraPosition.x = position[0];
-								user.velocity.x += position[0]*= -0.85;
+								user.velocity.x += position[0]*= -0.85
 	            } else {
 	              cameraPosition.z = position[2];
-								user.velocity.z += position[2] *= -0.85;
+								user.velocity.z += position[2] *= -0.85
 	            }
 	          }
 	          //sys.vibrate(50);

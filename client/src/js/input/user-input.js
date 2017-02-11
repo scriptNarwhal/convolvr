@@ -126,39 +126,44 @@ export default class UserInput {
 			}
 		}
 		if (isVRMode(world.mode)) {
-				this.keyboard.handleKeys(this);
-				this.gamepad.update(this, world);
+				this.keyboard.handleKeys(this)
+				this.gamepad.update(this, world)
 		}
 			if (world.mode != "stereo") {
-				this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ");
+				this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ")
 			}
 			velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*3000))
 
 			if (this.leapMotion && this.moveVector.length() > 0) {
 				if (velocity.y < 0) {
-					velocity.y *= 0.95;
+					velocity.y *= 0.95
 				}
 			}
-			velocity.y -= 1000*(delta*16000); // weak gravity
-			this.moveVector.set(0, 0, 0);
+			if (Math.abs(velocity.y) > 6000) {
+				this.device.falling = true
+			}
+			if (this.device.falling) { //if not standing on something..
+				velocity.y -= 2000 * (delta*16000) // apply gravity
+			}
+			this.moveVector.set(0, 0, 0)
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
-			this.camera.matrixWorldNeedsUpdate = true;
+			this.camera.matrixWorldNeedsUpdate = true
 			if (this.camera.position.y < bottom + 12000) {
 				if (this.keys.shift) {
 					velocity.y *= -0.70;
 				} else {
 					velocity.y *= -0.20;
 				}
-				this.device.falling = false;
-				this.camera.position.y = bottom + 12000;
+				this.device.falling = false
+				this.camera.position.y = bottom + 12000
 				if (velocity.y > 1000) {
 					//world.vibrate(50);
 				}
 			}
-			if ((velocity.x * velocity.x) + (velocity.z * velocity.z) > 2000000) {
-				 velocity.x *=  0.996
-				 velocity.z *= 0.996
+			if ((velocity.x * velocity.x) + (velocity.z * velocity.z) > 20000) {
+				 velocity.x *=  0.99
+				 velocity.z *= 0.99
 				//velocity.multiplyScalar(0.995)
 			}
 			if (!! world.user.mesh) {

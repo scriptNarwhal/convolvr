@@ -38,40 +38,47 @@ export default class ComponentTool extends Tool {
       return this.mesh;
     }
 
-    primaryAction () {
-      // place component (into entity if pointing at one)
+    primaryAction (telemetry) { // place component (into entity if pointing at one)
       let cursor = this.world.user.cursor,
-          quat = three.camera.quaternion,
+          position = telemetry.position,
           selected = cursor.entity,
           entityId = -1,
           components = [],
+          quat = three.camera.quaternion,  //[quat.x, quat.y, quat.z, quat.w],
           component = this.components.makeComponent(this.options.componentType),
-          entity = new Entity(0, [component], [], [0, 0, 0], [quat[0], quat[1], quat[2], quat[3]])
+          entity = new Entity(0, [component], [], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
       //entity.init(three.scene)
-      // create / add mesh to scene here, but don't send with ```entity```
-      if (selected) {
-        if (cursor.distance < 33000) {
+      if (selected && cursor.distance < 33000) {
           entityId = selected.id
           if (components.length == 0) {
-            components = entity.components
+            components = [component]
           }
+          selected.mesh.updateMatrixWorld()
           let selectedPos = selected.mesh.position
-
-          components.map((comp)=> {
-            // apply transformation and offset
+          // apply transformation and offset to components
+          components.map((comp, i)=> {
+            comp.position=[
+              position[0] - selectedPos.x,
+              position[1] - selectedPos.y,
+              position[2] - selectedPos.z
+            ]
+            comp.quaternion = [quat.x, quat.y, quat.z, quat.w]
           })
-        }
-        console.log(selected.id)
-        console.log("ADDING COMPONENTS TO ENTITY")
-      }
-      return {
-        entity,
-        entityId,
-        components
+          return {
+            entity,
+            entityId,
+            components
+          }
+      } else {
+        // switch back to entity tool, if the user is clicking into empty space
+        this.world.user.toolbox.useTool(0, 0)
+        this.world.user.hud.show()
+        this.world.user.toolbox.usePrimary(0)
+        return false
       }
     }
 
-    secondaryAction () {
+    secondaryAction (telemetry) {
       // cycle components
       this.current ++
       if (this.current >= this.all.length) {
