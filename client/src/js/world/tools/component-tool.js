@@ -54,7 +54,7 @@ export default class ComponentTool extends Tool {
             components = [component]
           }
           selected.mesh.updateMatrixWorld()
-          let selectedPos = selected.mesh.position
+          let selectedPos = selected.mesh.localToWorld(new THREE.Vector3())
           // apply transformation and offset to components
           components.map((comp, i)=> {
             comp.position=[
@@ -84,7 +84,7 @@ export default class ComponentTool extends Tool {
       if (this.current >= this.all.length) {
         this.current = 0
       }
-      this.options.entityType = this.all[this.current]
+      this.options.componentType = this.all[this.current]
       return false // no socket event
     }
 }

@@ -58,7 +58,7 @@ export default class Entity {
         mesh.add(staticComps[s])
       }
     }
-    if (!! this.quaternion) {
+    if (!! this.quaternion && this.components.length == 1) {
         mesh.quaternion.set(this.quaternion[0], this.quaternion[1], this.quaternion[2], this.quaternion[3])
     }
     if (!! this.position) {
