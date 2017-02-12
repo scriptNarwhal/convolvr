@@ -41,30 +41,27 @@ export default class UserInput {
 
 	init (world, camera, device) {
 		let uInput = this,
-				viewports = document.querySelectorAll("canvas.viewport")
+				viewport = document.querySelector("#viewport")
 		this.connect(world, camera, device)
 		uInput.rotationVector = {x: 0.2, y: 4.6, z: 0}
 
-		Array.prototype.map.call(viewports, (canvas, i) => {
-			if (true) {
-				canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock || canvas.webkitRequestPointerLock;
-				canvas.onclick = (event) => {
+				viewport.requestPointerLock = viewport.requestPointerLock || viewport.mozRequestPointerLock || viewport.webkitRequestPointerLock;
+				viewport.onclick = (event) => {
 					let elem = event.target;
 					if (!uInput.fullscreen) {
 						elem.requestPointerLock()
 						uInput.toggleFullscreen()
 					}
 				};
-				canvas.style.pointerEvents = ''
+				viewport.style.pointerEvents = ''
 				if ("onpointerlockchange" in document) {
-					document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false)
+					document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
 				} else if ("onmozpointerlockchange" in document) {
-					document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false)
+					document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
 				} else if ("onwebkitpointerlockchange" in document) {
-					document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(canvas)}, false)
+					document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
 				}
-			}
-		})
+
 
 		if (!world.mobile) {
 			document.addEventListener("mousemove", function (e) {
@@ -177,10 +174,12 @@ export default class UserInput {
 	}
 
 	lockChangeAlert (canvas) {
+		console.log("lock change alert")
 		var a = 0,
 				world = this.world
 		this.focus =(document.pointerLockElement===canvas||document.mozPointerLockElement===canvas||document.webkitPointerLockElement===canvas);
-		this.fullscreen = this.focus;
+		this.fullscreen = this.focus
+		console.log("focus", this.focus)
 		if (!this.fullscreen && world.user.username != "") {
 			//world.showChat();
 			world.mode = "web";

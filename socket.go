@@ -43,33 +43,40 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 			log.Println(entity.ID)
 			entityOut, _ = json.Marshal(action)
 			p.Data = string(entityOut[:])
-		} else { // structure tool
-			// implement
-		}
+		} else if action.Tool == "Structure Tool" { // structure tool
+			// implement structure tool
+		} // projectile tool doesn't need to persist
 		log.Printf(`tool action: "%s"`, action.Tool) // modify chunk where this tool was used...
 	}
-	if action.Tool == "Component Tool" || action.Tool == "Voxel Tool" {
-		if action.Tool == "Component Tool" {
+
+	if action.Tool == "Component Tool" || action.Tool == "Voxel Tool" || action.Tool == "Delete Tool" {
+		if action.Tool == "Component Tool" || action.Tool == "Delete Tool" {
 			readErr := voxelEntities.One("ID", action.EntityId, &entity)
 			if readErr == nil {
-				//pos := action.Position
-				newComps := []*Component{}
-				for _, v := range action.Components {
-					//v.Quaternion = action.Quaternion
-					newComp := *NewComponent(v.Name, v.Shape, v.Material, v.Color, v.Size, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.ComponentType)
-					newComps = append(newComps, &newComp)
+				if action.Tool == "Component Tool" {
+					newComps := []*Component{}
+					for _, v := range action.Components {
+						newComp := *NewComponent(v.Name, v.Shape, v.Material, v.Color, v.Size, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props)
+						newComps = append(newComps, &newComp)
+					}
+					entity.Components = append(entity.Components, newComps...)
+				} else {
+					// implement delete tool
 				}
-				entity.Components = append(entity.Components, newComps...)
+
 				saveErr := voxelEntities.Save(&entity)
 				if saveErr != nil {
 					log.Println(saveErr)
 				}
+
 			} else {
 				log.Println(readErr)
 			}
-		} else { // voxel tool
-			// implement
+
+		} else {
+			// implement voxel tool
 		}
+
 		log.Printf(`tool action: "%s"`, action.Tool) // modify chunk where this tool was used...
 	}
 	hub.All().Broadcast(p)

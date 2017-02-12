@@ -8,7 +8,9 @@ export default class ComponentGenerator {
   }
   init () {
     this.components["panel"] = {
-      type: "structure",
+      props: {
+        structure: true
+      },
       shape: "box",
       size: [16000, 16000, 1000],
       color: 0x404040,
@@ -18,7 +20,9 @@ export default class ComponentGenerator {
       position: [0, 0, 0]
     }
     this.components["block"] = {
-      type: "structure",
+      props: {
+        structure: true
+      },
       shape: "box",
       size: [6000, 6000, 6000],
       color: 0xff0000,
@@ -28,7 +32,9 @@ export default class ComponentGenerator {
       position: [0, 0, 0]
     }
     this.components["column"] = {
-        type: "structure",
+        props: {
+          structure: true
+        },
         shape: "box",
         size: [3000, 48000, 3000],
         material: "plastic",
@@ -38,7 +44,9 @@ export default class ComponentGenerator {
         position: [0, 0, 0]
     }
     this.components["wirebox"] = {
-      type: "structure",
+      props: {
+        structure: true
+      },
       shape: "box",
       size: [10000, 10000, 10000],
       material: "wireframe",

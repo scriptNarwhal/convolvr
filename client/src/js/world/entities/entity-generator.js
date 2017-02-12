@@ -13,7 +13,7 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [10000, 10000, 400],
           color: 0xf5f5f5,
@@ -23,7 +23,7 @@ export default class EntityGenerator {
           position: [-0, 0, 0]
         },
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [9000, 9000, 400],
           color: 0xf5f5f5,
@@ -41,7 +41,7 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [8000, 8000, 200],
           color: 0x404040,
@@ -51,7 +51,7 @@ export default class EntityGenerator {
           position: [-4625, 0, 0]
         },
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [8000, 8000, 200],
           color: 0x404040,
@@ -61,7 +61,7 @@ export default class EntityGenerator {
           position: [4625, 0, 0]
         },
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [8000, 8000, 200],
           color: 0x404040,
@@ -71,7 +71,7 @@ export default class EntityGenerator {
           position: [-10250, 0, 0]
         },
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [8000, 8000, 200],
           color: 0x404040,
@@ -89,7 +89,7 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [8000, 8000, 200],
           color: 0x404040,
@@ -99,7 +99,7 @@ export default class EntityGenerator {
           position: [-0, 10250, 0]
         },
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [8000, 8000, 200],
           color: 0x404040,
@@ -109,7 +109,7 @@ export default class EntityGenerator {
           position: [0, 4625, 0]
         },
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [8000, 8000, 200],
           color: 0x404040,
@@ -119,7 +119,7 @@ export default class EntityGenerator {
           position: [-0, -10250, 0]
         },
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [8000, 8000, 200],
           color: 0x404040,
@@ -137,7 +137,7 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [6000, 6000, 6000],
           color: 0xff0000,
@@ -155,7 +155,7 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [3000, 32000, 3000],
           material: "plastic",
@@ -164,7 +164,7 @@ export default class EntityGenerator {
           quaternion: null,
           position: [0, 0, 0]
         },{
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [6000, 2000, 6000],
           material: "plastic",
@@ -173,7 +173,7 @@ export default class EntityGenerator {
           quaternion: null,
           position: [0, -16000, 0]
         },{
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [6000, 2000, 6000],
           material: "plastic",
@@ -191,7 +191,7 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [12000, 12000, 12000],
           material: "wireframe",
@@ -201,7 +201,7 @@ export default class EntityGenerator {
           position: [0, 0, 0]
         },
         {
-          type: "structure",
+          props: { structure: true },
           shape: "box",
           size: [6000, 6000, 6000],
           material: "wireframe",

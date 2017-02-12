@@ -8,6 +8,7 @@ export default class Entity {
       this.position = position ? position : false
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
+      this.hands = []
   }
 
   init (scene) {
@@ -33,7 +34,7 @@ export default class Entity {
     while (c < ncomps) {
         comp = new Component(this.components[c], {mobile}) // use simpler shading for mobile gpus
         compMesh = comp.mesh
-        if (comp.type == 'structure') {
+        if (comp.props.structure === true) {
           materials.push(compMesh.material)
           compMesh.updateMatrix()
           faces = compMesh.geometry.faces
@@ -45,6 +46,9 @@ export default class Entity {
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
         } else {
+          if (comp.props.hand !== null) {
+            this.hands.push(comp.mesh)
+          }
           nonStructural.push(comp.mesh)
         }
         c ++
@@ -52,10 +56,11 @@ export default class Entity {
     if (s > 0) {
       mesh = new THREE.Mesh(base, new THREE.MultiMaterial(materials))
     } else {
-      mesh = staticComps[0]
+      mesh = nonStructural[0]
       s = 1
-      while (s < staticComps.length) {
-        mesh.add(staticComps[s])
+      while (s < nonStructural.length) {
+        mesh.add(nonStructural[s])
+        s ++
       }
     }
     if (!! this.quaternion && this.components.length == 1) {
@@ -83,5 +88,4 @@ export default class Entity {
 
     return this
   }
-
 }

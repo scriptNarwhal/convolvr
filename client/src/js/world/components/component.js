@@ -1,7 +1,7 @@
 export default class Component {
-  constructor (data, config = false) {
+  constructor (data, appConfig = false) {
       var mesh = null,
-          type = data.type,
+          props = data.props,
           shape = data.shape,
           size = data.size,
           quaternion = data.quaternion ? data.quaternion : false,
@@ -11,7 +11,7 @@ export default class Component {
           materialName = data.material || "",
           mat = {},
           basic = false,
-          mobile = config && config.mobile
+          mobile = appConfig && appConfig.mobile
 
           switch(materialName) {
             case "wireframe":
@@ -75,7 +75,7 @@ export default class Component {
       }
       mesh.position.set(position[0], position[1], position[2])
       this.data = data
-      this.type = type
+      this.props = props || {}
       this.mesh = mesh
   }
 }

@@ -33,7 +33,7 @@ export default class WorldPhysics {
 		  } else if (message.command == "platform collision") { // consider sending "top" or "bottom" collision type
 	      if (message.data.type == "top") {
 				  three.camera.position.set(three.camera.position.x, message.data.position[1]+85000 +vrHeight, three.camera.position.z);
-					if (Math.abs(user.velocity.y) > 8000) {
+					if (Math.abs(user.velocity.y) > 10000) {
 						user.velocity.y *= -0.56
 						user.falling = true
 					} else {
@@ -49,7 +49,7 @@ export default class WorldPhysics {
 			  user.falling = false
 
 		 } else if (message.command == "voxel collision") {
-			let cameraPosition = three.camera.position;
+			let cameraPosition = three.camera.position
 			cameraPosition.set(cameraPosition.x + message.data.position[0] / 80,
 									  cameraPosition.y + message.data.position[1] / 80,
 									  cameraPosition.z + message.data.position[2] / 80)
@@ -69,14 +69,25 @@ export default class WorldPhysics {
 	            sys.user.falling = false;
 	            if (message.data.delta[0] > message.data.delta[1]) {
 	              cameraPosition.x = position[0];
-								user.velocity.x += position[0]*= -0.85
+								user.velocity.x += position[0]*= -0.25
 	            } else {
 	              cameraPosition.z = position[2];
-								user.velocity.z += position[2] *= -0.85
+								user.velocity.z += position[2] *= -0.25
 	            }
 	          }
 	          //sys.vibrate(50);
-	        } else if (message.command == "load interior") {
+	        } else if (message.command == "floor collision") { // consider sending "top" or "bottom" collision type
+			     	three.camera.position.set(three.camera.position.x, message.data.position[1]+vrHeight, three.camera.position.z);
+						if (Math.abs(user.velocity.y) > 20000) {
+								user.velocity.y *= -0.56
+								user.velocity.x *= 0.96
+								user.velocity.z *= 0.96
+								user.falling = true
+						} else {
+								user.falling = false
+								user.velocity.y *= 0.2
+						}
+					} else if (message.command == "load interior") {
 	          world.generateFullLOD(message.data.coords);
 
 	        } else if (message.command == "enter interior") {
