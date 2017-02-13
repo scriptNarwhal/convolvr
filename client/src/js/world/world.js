@@ -6,7 +6,6 @@ import WorldPhysics  from '../workers/world-physics'
 import { render, vrRender} from './render'
 import { API_SERVER } from '../config.js'
 import { send } from '../network/socket'
-import Seed from '../seed'
 
 let world = null
 
@@ -70,7 +69,6 @@ export default class World {
 		// userInput.init(this, camera, this.user)
 		this.worldPhysics = new WorldPhysics()
 		this.worldPhysics.init(self)
-		this.seed = new Seed();
 		this.terrain = new Terrain(this);
 		this.workers = {
 			physics: this.worldPhysics

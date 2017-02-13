@@ -74,7 +74,7 @@ class Chat extends Component {
     let worldMode = three.world.mode
     if (worldMode != 'vr' && worldMode != 'stereo') {
       this.textInput.focus()
-    } 
+    }
     if (this.props.menuOpen == false) {
       this.props.toggleMenu(true)
     }
@@ -91,9 +91,56 @@ class Chat extends Component {
       })
       this.textInput.value = ""
   }
+  uploadFiles (files) {
+		console.log("uploading files")
+		let xhr = new XMLHttpRequest(),
+			  formData = new FormData(),
+			  ins = files.length,
+        thumbs = [],
+        images = /(\.jpg|\.jpeg|\.png|\.webp)$/i,
+        username = this.props.username
+
+
+		for (let x = 0; x < ins; x++) {
+      if (images.test(files[x].name)) {
+        thumbs.push(files[x]);
+      }
+		  formData.append("files[]", files[x]);
+		}
+
+		xhr.onload = function () {
+			if (xhr.status == 200) {
+				console.log("finished uploading")
+			}
+		}
+
+		xhr.open("POST", "/api/files/upload-multiple/"+username, true);
+		//xhr.setRequestHeader("x-access-token", localStorage.getItem("token"));
+		if ("upload" in new XMLHttpRequest) { // add upload progress event
+				xhr.upload.onprogress = function (event) {
+				if (event.lengthComputable) {
+					let complete = (event.loaded / event.total * 100 | 0);
+					console.log(complete)
+				}
+      }
+		}
+  }
   render() {
     return (
-        <Shell className="chat">
+        <Shell className="chat" onDrop={e=> {
+                                  e.stopPropagation()
+                                  e.preventDefault()
+                                  this.uploadFiles(e.target.files || e.dataTransfer.files)}
+                                }
+                                onDragEnter={e=>{ console.log(e); e.preventDefault() }}
+                                onDragOver={e=>{ console.log(e); e.preventDefault() }}
+                                onDragLeave={e=>{ console.log(e); e.preventDefault() }}
+                                onFileDragHover={e=> {
+                                  	e.stopPropagation()
+                                  	e.preventDefault()
+                                  	e.target.className = (e.type == "dragover" ? "hover" : "");
+                                }}
+        >
             <section style={styles.messages}>
                 {
                     this.props.messages.map((m, i) => (

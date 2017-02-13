@@ -1,6 +1,8 @@
 export default class Tool {
-    constructor (data, world) {
-
+    constructor (data, world, toolbox) {
+      this.data = data
+      this.world = world
+      this.toolbox
     }
 
     equip (hand) {

@@ -5,9 +5,8 @@ import ComponentGenerator from '../components/component-generator'
 import EntityGenerator from '../entities/entity-generator'
 
 export default class ComponentTool extends Tool {
-    constructor (data, world) {
-        this.data = data;
-        this.world = world;
+  constructor (data, world, toolbox) {
+    super(data, world, toolbox)
         this.mesh = null;
         this.name = "Component Tool";
         this.icon = this.initIcon()

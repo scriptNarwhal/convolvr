@@ -57,7 +57,7 @@ export default class HUDMenu {
           label = toolbox.tools[index].name
 
       this.label.update({ color: '#ffffff', lightColor: 0xffffff, text: label })
-      this.light.position.set(-16000+index*14000, -2000, 6000)
+      this.light.position.set(-26000+index*13000, -2000, 6000)
     }
 
     updatePosition () {

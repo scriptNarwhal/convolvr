@@ -9,11 +9,19 @@ export default class Entity {
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
       this.hands = []
+      this.activated = false
+      this.gazedOver = false
+      this.onActivated = null
+      this.onGazedOver = null
   }
 
-  update (position) {
+  update (position, quaternion = false) {
     this.position = position
     this.mesh.position.fromArray(position)
+    if (quaternion !== false) {
+      this.quaternion = quaternion
+      this.mesh.quaternion.fromArray(quaternion)
+    }
   }
 
   init (scene) {

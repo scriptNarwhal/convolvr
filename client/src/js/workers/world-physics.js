@@ -79,7 +79,7 @@ export default class WorldPhysics {
 	        } else if (message.command == "floor collision") { // consider sending "top" or "bottom" collision type
 			     	three.camera.position.set(three.camera.position.x, message.data.position[1]+vrHeight, three.camera.position.z);
 						if (Math.abs(user.velocity.y) > 20000) {
-								user.velocity.y *= -0.56
+							user.velocity.y *= 0.55
 								user.velocity.x *= 0.96
 								user.velocity.z *= 0.96
 								user.falling = true

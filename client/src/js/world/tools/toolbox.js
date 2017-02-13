@@ -13,11 +13,11 @@ export default class Toolbox {
       this.fadeTimeout = 0;
       console.log(world.user)
       this.tools = [
-        new EntityTool({}, world),
-        new ComponentTool({}, world),
-        new DeleteTool({}, world),
-        new VoxelTool({}, world),
-        new ProjectileTool({}, world)
+        new EntityTool({}, world, this),
+        new ComponentTool({}, world, this),
+        new DeleteTool({}, world, this),
+        new VoxelTool({}, world, this),
+        new ProjectileTool({}, world, this)
         //new CustomTool(),
       ];
       this.currentTools = [0, 0];

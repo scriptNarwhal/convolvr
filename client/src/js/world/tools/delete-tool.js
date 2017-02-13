@@ -2,9 +2,8 @@ import Tool from './tool'
 import EntityGenerator from '../entities/entity-generator'
 /* delete (voxel | component | entity) tool */
 export default class DeleteTool extends Tool  {
-    constructor (data, world) {
-      this.data = data
-      this.world = world
+    constructor (data, world, toolbox) {
+      super(data, world, toolbox)
       this.mesh = null
       this.name = "Delete Tool"
       this.icon = this.initIcon()

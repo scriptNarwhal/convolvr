@@ -48,12 +48,14 @@ let rayCast = (world, camera, callback) => {
 
 let cursorCallback = (obj, entity, world) => {
   let cursor = world.user.cursor
+  if (cursor.entity != false) {
+    cursor.entity.activated = false
+    cursor.entity.gazedOver = false
+  }
   if (obj.distance < 33000) {
     cursor.activate()
     cursor.setEntity(entity, obj.distance, obj.point)
     // touching / interacting range
-    // let xScale = obj.object.scale.x * 0.95
-    // obj.object.scale.set(xScale, xScale, xScale)
     //console.log("Entity", obj.distance, entity)
   }
 }

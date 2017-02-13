@@ -2,9 +2,8 @@ import Tool from './tool'
 import EntityGenerator from '../entities/entity-generator'
 
 export default class CustomTool extends Tool {
-    constructor (data, world) {
-      this.data = data
-      this.world = world
+  constructor (data, world, toolbox) {
+    super(data, world, toolbox)
       this.mesh = null
       this.name = data ? data.name : "New Custom Tool"
       this.generator = this.generator || new EntityGenerator()

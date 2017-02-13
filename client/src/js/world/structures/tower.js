@@ -69,7 +69,7 @@ class Tower extends Structure {
 					}),
 					towerGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 5000),
 					towerGeometryB = new THREE.BoxGeometry(5000, height, 50000 * zUnits),
-					shaftGeometry = new THREE.BoxGeometry(25000 * zUnits, height, 25000 * zUnits),
+					shaftGeometry = new THREE.BoxGeometry(20000 * zUnits, height, 20000 * zUnits),
 					windowGeometry = new THREE.BoxGeometry(width * 0.75, 35000, 10000),
 					windowBSP = null,
 					windowMesh = null,
@@ -130,7 +130,7 @@ class Tower extends Structure {
 				}
 
 				var elevator = new THREE.Mesh(shaftGeometry, towerMaterial);
-				elevator.position.set((width / 2) - 10000, 0, (length / 2) - 10000);
+				elevator.position.set((width/4), 0, (length/4));
 				elevator.rotateY(Math.PI / 2);
 				elevator.updateMatrix();
 				var elevatorBSP = new ThreeBSP(elevator);

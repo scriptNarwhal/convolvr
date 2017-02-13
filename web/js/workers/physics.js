@@ -63,11 +63,11 @@ self.update = function () {
 								objPos = [obj.position[0]+structure.position[0],
 													obj.position[1]+structure.position[1],
 													obj.position[2]+structure.position[2]]
-								bounds = [size * structure.width+1, size * structure.floors, size * structure.length+1]
+								bounds = [size * structure.width, size * structure.floors, size * structure.length]
 								if (structure.position != undefined) {
 									if (!structure.interiorLoaded) {
 											structure.interiorLoaded = true;
-											self.postMessage('{"command":"load interior","data":{"coords": ' + JSON.stringify(obj.cell.join(".")) + '}}');
+											self.postMessage('{"command":"load interior","data":{"coords": ' + JSON.stringify(obj.cell.join(".")) + '}}')
 									}
 								}
 								if (distance2dCompare(position, objPos, 300000)) {
@@ -82,10 +82,10 @@ self.update = function () {
 											let floor = Math.floor(((position[1] - oPos[1])) / size)-1,
 											  	offset = (position[1] - oPos[1]) % size
 											if (floor > -1 && floor < structure.floors+2) {
-												if (offset < 2000 || offset < 48000) { // floor collision
-													 position[1] = oPos[1] + (floor+1)*size
+												if (offset < 3000) { // floor collision
+													 position[1] = 3000+oPos[1] + (floor+1)*size
 													 self.postMessage('{"command": "floor collision", "data":{"floor": '+floor+
-													 ', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}');
+													 ', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}')
 												}
 												if (offset > 45000) {
 													if ((position[0] > oPos[0])) { // wall collision
@@ -98,7 +98,7 @@ self.update = function () {
 													} else {
 														position[2] = oPos[2] - bounds[2]
 													}
-													collision = true;
+													collision = true
 														self.postMessage('{"command": "structure collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
 														', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}')
 												}
@@ -128,18 +128,6 @@ self.update = function () {
 			 }
 		}
 
-		for (i = 0; i < entities.length; i ++) {
-			obj = entities[i];
-			if (!!obj) {
-				if (position[1] < obj.position[1] + 1000 && position[1] > obj.position[1]-2000 ) {
-					if (distance2dCompare(position, obj.position, 32000)) {
-						collision = true;
-						self.postMessage('{"command": "entity collision", "data":{"position":[' +obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}');
-					}
-				}
-			}
-		}
-
 	if (!collision) {
 		observer.prevPos = [observer.position[0], observer.position[1], observer.position[2]];
 	}
@@ -166,17 +154,6 @@ self.onmessage = function (event) { // Do some work.
 		user.velocity = data.velocity
 		user.vrHeight = data.vrHeight
 		//self.postMessage(JSON.stringify(self.observer));
-	} else if (message.command == "add entities") {
-		entities = entities.concat(data);
-
-	} else if (message.command == "remove entity") {
-		c = entities.length-1;
-		while (c >= 0) {
-			if (entities[c].id == data) {
-				entities = entities.splice(c, 1);
-			}
-			c--;
-		}
 	} else if (message.command == "add platforms") {
 		platforms = platforms.concat(data);
 

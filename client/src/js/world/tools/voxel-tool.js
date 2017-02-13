@@ -2,9 +2,8 @@ import Tool from './tool'
 import EntityGenerator from '../entities/entity-generator'
 /* terrain voxel tool */
 export default class VoxelTool extends Tool {
-    constructor (data, world) {
-      this.data = data;
-      this.world = world;
+  constructor (data, world, toolbox) {
+    super(data, world, toolbox)
       this.mesh = null;
       this.name = "Voxel Tool"
       this.icon = this.initIcon()

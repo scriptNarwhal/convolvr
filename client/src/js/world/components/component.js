@@ -22,6 +22,10 @@ export default class Component {
               }
               basic = true
             break
+            case "basic":
+              mat = { color: 0x303030 }
+              basic = true
+            break
             default:
             mat = {
                 color: data.color || 0xff00ff,
