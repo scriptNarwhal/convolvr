@@ -1,13 +1,14 @@
 import Tool from './tool'
-import CustomToolIcon from '../../vr-ui/icons/custom-tool-icon'
+import EntityGenerator from '../entities/entity-generator'
 
 export default class CustomTool extends Tool {
     constructor (data, world) {
-      this.data = data;
-      this.world = world;
-      this.mesh = null;
-      this.name = data ? data.name : "New Custom Tool";
-      this.icon = new CustomToolIcon();
+      this.data = data
+      this.world = world
+      this.mesh = null
+      this.name = data ? data.name : "New Custom Tool"
+      this.generator = this.generator || new EntityGenerator()
+      this.icon = this.initIcon()
       this.options = {
 
       }
@@ -27,6 +28,22 @@ export default class CustomTool extends Tool {
       }
       this.mesh = mesh;
       return this.mesh;
+    }
+
+    initIcon () {
+      let entity = null
+      this.generator = this.generator || new EntityGenerator()
+      entity = this.generator.makeEntity("icon", true)
+      entity.components.push({
+        props: {},
+        shape: "box",
+        size: [2640, 2640, 2640],
+        position: [0, 0, 0],
+        color: 0xffffff,
+        text: "",
+        quaternion: null
+      })
+      return entity
     }
 
     primaryAction () {

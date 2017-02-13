@@ -1,5 +1,5 @@
 import Tool from './tool'
-import VoxelToolIcon from '../../vr-ui/icons/voxel-tool-icon'
+import EntityGenerator from '../entities/entity-generator'
 /* terrain voxel tool */
 export default class VoxelTool extends Tool {
     constructor (data, world) {
@@ -7,7 +7,7 @@ export default class VoxelTool extends Tool {
       this.world = world;
       this.mesh = null;
       this.name = "Voxel Tool"
-      this.icon = new VoxelToolIcon();
+      this.icon = this.initIcon()
       this.options = {
 
       }
@@ -28,6 +28,22 @@ export default class VoxelTool extends Tool {
       }
       this.mesh = mesh;
       return this.mesh;
+    }
+
+    initIcon () {
+      let entity = null
+      this.generator = this.generator || new EntityGenerator()
+      entity = this.generator.makeEntity("icon", true)
+      entity.components.push({
+        props: {},
+        shape: "box",
+        size: [2640, 2640, 2640],
+        position: [0, 0, 0],
+        color: 0xff8707,
+        text: "",
+        quaternion: null
+      })
+      return entity
     }
 
     primaryAction () {

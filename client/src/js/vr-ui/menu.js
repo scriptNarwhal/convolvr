@@ -30,10 +30,11 @@ export default class HUDMenu {
       if (options.length > 0) {
         o = options.length -1;
         while (o >= 0) {
-          let icon = options[o].icon.initMesh(),
+          let icon = null,
               curvature = 0 //-Math.sin(Math.PI*((o+1)/(options.length+1)))
-          icon.position.set(-26000+o*13000, -2000, curvature*12000)
-          mesh.add(icon)
+          icon = options[o].icon
+          icon.init(mesh)
+          icon.update([-26000+o*13000, -2000, curvature*12000])
           o --;
         }
       }
@@ -56,7 +57,7 @@ export default class HUDMenu {
           label = toolbox.tools[index].name
 
       this.label.update({ color: '#ffffff', lightColor: 0xffffff, text: label })
-      this.light.position.set(-12000+index*6000, -2000, 6000)
+      this.light.position.set(-16000+index*14000, -2000, 6000)
     }
 
     updatePosition () {

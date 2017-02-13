@@ -42,7 +42,7 @@ export default class Component {
 
       switch (shape) {
           case "node":
-            mesh = new THREE.Object3D()
+            geometry = new THREE.PlaneGeometry( size[0]/10000, size[1]/10000)
           break;
           case "plane":
             geometry = new THREE.PlaneGeometry( size[0], size[1])
@@ -69,7 +69,7 @@ export default class Component {
             geometry = new THREE.TextGeometry(data.text, data.text_params)
           break;
       }
-      mesh = new THREE.Mesh(geometry, material);
+      mesh = new THREE.Mesh(geometry, material)
       if (!! quaternion) {
           mesh.quaternion.set(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
       }

@@ -11,6 +11,11 @@ export default class Entity {
       this.hands = []
   }
 
+  update (position) {
+    this.position = position
+    this.mesh.position.fromArray(position)
+  }
+
   init (scene) {
     var mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),

@@ -5,8 +5,14 @@ export default class EntityGenerator {
     this.entities = []
     this.init()
   }
-  makeEntity (type) {
-    return this.entities[type]
+  makeEntity (type, instantiate) {
+    if (!!instantiate) {
+      let ent = this.entities[type]
+      return new Entity (0, ent.components, ent.aspects, ent.position, ent.quaternion)
+    } else {
+      return this.entities[type]
+    }
+
   }
   init () {
     this.entities["panel"] = {
@@ -215,5 +221,53 @@ export default class EntityGenerator {
       position: null,
       quaternion: null
     }
+    this.entities["icon"] = {
+      id: 0,
+      components: initButtonComponents(),
+      aspects: [],
+      position: null,
+      quaternion: null
+    }
   }
+}
+
+function initButtonComponents (data) {
+  let color = data && data.color ? data.color : 0x404040,
+      components = [],
+      x = 2
+  components.push({
+      props:{
+        activates: true,
+        gazeOver: true
+      },
+      shape: "node",
+      material: "basic",
+      size: [0, 0, 0],
+      position: [0,0,0],
+      color: 0
+  })
+  while (x > 0) {
+    components.push({
+      props: {},
+      shape: "box",
+      size: [160, 10000, 4000],
+      position: [-5000+(x>1?10000:0), 0, 0],
+      color: color,
+      quaternion: null
+    })
+    x --
+  }
+  x = 2;
+  while (x > 0) {
+    components.push({
+      props: {},
+      shape: "box",
+      size: [10000, 160, 4000],
+      position: [0, -5000+(x>1?10000:0), 0],
+      color: color,
+      quaternion: null
+    })
+    x --
+  }
+  return components
 }

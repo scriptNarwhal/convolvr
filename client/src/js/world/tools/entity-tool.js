@@ -1,6 +1,5 @@
 import Tool from './tool'
 import Entity from '../entities/entity'
-import EntityToolIcon from '../../vr-ui/icons/entity-tool-icon'
 import EntityGenerator from '../entities/entity-generator'
 
 export default class EntityTool extends Tool  {
@@ -9,8 +8,8 @@ export default class EntityTool extends Tool  {
       this.world = world
       this.mesh = null
       this.name = "Entity Tool"
-      this.icon = new EntityToolIcon()
-      this.generator = new EntityGenerator()
+      this.icon = this.initIcon()
+      this.generator = this.generator || new EntityGenerator()
       this.options = {
         entityType: "panel"
       }
@@ -33,6 +32,23 @@ export default class EntityTool extends Tool  {
       }
       this.mesh = mesh
       return this.mesh
+    }
+
+    initIcon () {
+      let mesh = null,
+          entity = null
+      this.generator = this.generator || new EntityGenerator()
+      entity = this.generator.makeEntity("icon", true)
+      entity.components.push({
+        props: {},
+        shape: "box",
+        size: [2640, 2640, 2640],
+        position: [0, 0, 0],
+        color: 0x15ff15,
+        text: "",
+        quaternion: null
+      })
+      return entity
     }
 
     primaryAction () { // place entity

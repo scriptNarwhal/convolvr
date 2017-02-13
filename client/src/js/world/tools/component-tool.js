@@ -1,7 +1,6 @@
 import Tool from './tool'
 import Component from '../components/component'
 import Entity from '../entities/entity'
-import ComponentToolIcon from '../../vr-ui/icons/component-tool-icon'
 import ComponentGenerator from '../components/component-generator'
 import EntityGenerator from '../entities/entity-generator'
 
@@ -11,7 +10,7 @@ export default class ComponentTool extends Tool {
         this.world = world;
         this.mesh = null;
         this.name = "Component Tool";
-        this.icon = new ComponentToolIcon()
+        this.icon = this.initIcon()
         this.entities = new EntityGenerator()
         this.components = new ComponentGenerator()
         this.options = {
@@ -36,6 +35,21 @@ export default class ComponentTool extends Tool {
       }
       this.mesh = mesh;
       return this.mesh;
+    }
+
+    initIcon () {
+      this.entities = this.entities || new EntityGenerator()
+      let entity = this.entities.makeEntity("icon", true)
+      entity.components.push({
+        props: {},
+        shape: "box",
+        size: [2640, 2640, 2640],
+        position: [0, 0, 0],
+        color: 0x003bff,
+        text: "",
+        quaternion: null
+      })
+      return entity
     }
 
     primaryAction (telemetry) { // place component (into entity if pointing at one)
