@@ -1,4 +1,4 @@
-import Entity from '../entities/entity'
+import Entity from '../../entities/entity'
 import Track from '../structures/track'
 import Tower from '../structures/tower'
 

@@ -1,5 +1,5 @@
 import Tool from './tool'
-import EntityGenerator from '../entities/entity-generator'
+import EntityGenerator from '../../entities/entity-generator'
 /* delete (voxel | component | entity) tool */
 export default class DeleteTool extends Tool  {
     constructor (data, world, toolbox) {

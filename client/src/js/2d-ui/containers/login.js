@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Shell from '../components/shell'
+import Shell from '../shell'
 
 const styles = {
   innerLogin: {
@@ -148,7 +148,7 @@ Login.defaultProps = {
 }
 
 import { connect } from 'react-redux'
-import { login } from '../redux/actions/user-actions'
+import { login } from '../../redux/actions/user-actions'
 
 export default connect(
   state => {

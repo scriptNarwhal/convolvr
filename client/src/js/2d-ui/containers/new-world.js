@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Shell from '../components/shell'
+import Shell from '../shell'
 
 const styles = {
   innerLogin: {
@@ -231,8 +231,8 @@ NewWorld.defaultProps = {
 }
 
 import { connect } from 'react-redux'
-import { createWorld } from '../redux/actions/world-actions'
-import { uploadFile } from '../redux/actions/file-actions'
+import { createWorld } from '../../redux/actions/world-actions'
+import { uploadFile } from '../../redux/actions/file-actions'
 export default connect(
   state => {
     return {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Shell from '../components/shell'
+import Shell from '../shell'
 
 const styles = {
 

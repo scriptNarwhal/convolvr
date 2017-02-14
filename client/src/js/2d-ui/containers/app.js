@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
-import { events } from '../network/socket'
-import { fetchUsers } from '../redux/actions/user-actions'
-import Shell from '../components/shell'
-import Button from '../components/button'
-import { vrAnimate } from '../world/render'
+import { events } from '../../network/socket'
+import { fetchUsers } from '../../redux/actions/user-actions'
+import Shell from '../shell'
+import Button from '../button'
+import { vrAnimate } from '../../world/render'
 
 class App extends Component {
 
@@ -231,13 +231,13 @@ import {
   toggleVR,
   setWindowFocus,
   showChat
-} from '../redux/actions/app-actions'
+} from '../../redux/actions/app-actions'
 import {
   fetchWorlds,
   setCurrentWorld
-} from '../redux/actions/world-actions'
-import { getMessage } from '../redux/actions/message-actions'
-import { login } from '../redux/actions/user-actions'
+} from '../../redux/actions/world-actions'
+import { getMessage } from '../../redux/actions/message-actions'
+import { login } from '../../redux/actions/user-actions'
 
 export default connect(
   state => {

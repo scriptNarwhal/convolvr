@@ -1,5 +1,5 @@
 import Tool from './tool'
-import EntityGenerator from '../entities/entity-generator'
+import EntityGenerator from '../../entities/entity-generator'
 
 export default class CustomTool extends Tool {
   constructor (data, world, toolbox) {

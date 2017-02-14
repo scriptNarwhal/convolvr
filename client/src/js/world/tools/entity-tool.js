@@ -1,6 +1,6 @@
 import Tool from './tool'
-import Entity from '../entities/entity'
-import EntityGenerator from '../entities/entity-generator'
+import Entity from '../../entities/entity'
+import EntityGenerator from '../../entities/entity-generator'
 
 export default class EntityTool extends Tool  {
   constructor (data, world, toolbox) {

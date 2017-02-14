@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import Shell from '../components/shell'
+import Shell from '../shell'
 
-export default class Memory extends Component {
+export default class Data extends Component {
   render() {
     return (
-        <Shell className="memory">
+        <Shell className="data-view">
 
         </Shell>
     )

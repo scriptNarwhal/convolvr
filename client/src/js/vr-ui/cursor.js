@@ -1,4 +1,4 @@
-import Entity from '../world/entities/entity'
+import Entity from '../entities/entity'
 
 export default class Cursor {
     constructor (data, mount) {

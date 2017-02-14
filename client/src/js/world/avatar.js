@@ -1,5 +1,5 @@
-import Entity from './entities/entity'
-import Component from './components/component'
+import Entity from '../entities/entity'
+import Component from '../components/component'
 
 export default class Avatar {
     constructor (id, type, data) {

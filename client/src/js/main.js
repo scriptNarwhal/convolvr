@@ -12,14 +12,14 @@ import makeStore from './redux/makeStore'
 let store = makeStore(routerReducer)
 const history = syncHistoryWithStore(browserHistory, store)
 // 2d UI
-import App from './containers/app'
-import Memory from './containers/memory'
-import Worlds from './containers/worlds'
-import NewWorld from './containers/new-world'
-import Settings from './containers/settings'
-import Login from './containers/login'
-import Chat from './containers/chat'
-import HUD from './containers/hud'
+import App from './2d-ui/containers/app'
+import Data from './2d-ui/containers/data'
+import Worlds from './2d-ui/containers/worlds'
+import NewWorld from './2d-ui/containers/new-world'
+import Settings from './2d-ui/containers/settings'
+import Login from './2d-ui/containers/login'
+import Chat from './2d-ui/containers/chat'
+import HUD from './2d-ui/containers/hud'
 // World
 import { send, events } from './network/socket'
 import { initUser } from './user'
@@ -96,7 +96,7 @@ ReactDOM.render(
         <Route path="/world/:name" component={HUD} />
 				<Route path="/login" component={Login} />
 				<Route path="/chat" component={Chat} />
-				<Route path="/data" component={Memory} />
+				<Route path="/data" component={Data} />
 				<Route path="/worlds" component={Worlds} />
         <Route path="/worlds/new" component={NewWorld} />
 				<Route path="/settings" component={Settings} />

@@ -1,6 +1,6 @@
 /* chat container */
 import React, { Component } from 'react'
-import Shell from '../components/shell'
+import Shell from '../shell'
 
 const styles = {
     chat: {
@@ -176,11 +176,11 @@ Chat.defaultProps = {
 import { connect } from 'react-redux';
 import {
     sendMessage
-} from '../redux/actions/message-actions'
+} from '../../redux/actions/message-actions'
 import {
   toggleMenu,
   showChat
-} from '../redux/actions/app-actions'
+} from '../../redux/actions/app-actions'
 export default connect(
   (state, ownProps) => {
     return {

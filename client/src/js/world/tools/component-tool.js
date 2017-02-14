@@ -1,8 +1,8 @@
 import Tool from './tool'
-import Component from '../components/component'
-import Entity from '../entities/entity'
-import ComponentGenerator from '../components/component-generator'
-import EntityGenerator from '../entities/entity-generator'
+import Component from '../../components/component'
+import Entity from '../../entities/entity'
+import ComponentGenerator from '../../components/component-generator'
+import EntityGenerator from '../../entities/entity-generator'
 
 export default class ComponentTool extends Tool {
   constructor (data, world, toolbox) {

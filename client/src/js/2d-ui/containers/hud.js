@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Button from '../components/button';
+import Button from '../button';
 import { browserHistory } from 'react-router';
 
 class HUD extends Component {
@@ -22,7 +22,7 @@ class HUD extends Component {
                     } }
             />
             ) : ""}
-            
+
           </div>
     )
   }
@@ -36,7 +36,7 @@ import { connect } from 'react-redux';
 import {
     toggleMenu,
     toggleVR
- } from '../redux/actions/app-actions'
+ } from '../../redux/actions/app-actions'
 
 export default connect(
   (state, ownProps) => {
