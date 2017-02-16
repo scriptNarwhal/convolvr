@@ -3,8 +3,8 @@ import Shell from '../shell'
 
 const styles = {
   innerLogin: {
-    width: '55vh',
-    height: '26vh',
+    width: '66.66vh',
+    height: '66.66vh',
     minHeight: '291px',
     minWidth: '252px',
     margin: 'auto',

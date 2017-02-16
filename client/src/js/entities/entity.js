@@ -1,10 +1,9 @@
 import Component from '../components/component.js';
 
 export default class Entity {
-  constructor (id, components, aspects = [], position, quaternion) {
+  constructor (id, components, position, quaternion) {
       this.id = id
       this.components = components
-      this.aspects = aspects
       this.position = position ? position : false
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
@@ -28,7 +27,6 @@ export default class Entity {
     var mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
         mobile = three.world.mobile,
-        aspects = this.aspects,
         ncomps = this.components.length,
         nonStructural = [],
         compMesh = null,
@@ -46,6 +44,9 @@ export default class Entity {
     }
     while (c < ncomps) {
         comp = new Component(this.components[c], {mobile}) // use simpler shading for mobile gpus
+        if (comp.props.noRaycast === true) {
+          addToOctree = false
+        }
         compMesh = comp.mesh
         if (comp.props.structure === true) {
           materials.push(compMesh.material)
@@ -81,16 +82,6 @@ export default class Entity {
     }
     if (!! this.position) {
         mesh.position.set(this.position[0], this.position[1], this.position[2])
-    }
-    if (!!aspects) {
-        c = 0;
-        while (c < aspects.length) {
-            // connect entity to appropriate system
-            if (aspects[c] == "no-raycast") {
-              addToOctree = false
-            }
-            c ++
-        }
     }
     mesh.userData = { entity: this }
     if (addToOctree) {

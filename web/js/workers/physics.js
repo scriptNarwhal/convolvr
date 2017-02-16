@@ -82,8 +82,12 @@ self.update = function () {
 											let floor = Math.floor(((position[1] - oPos[1])) / size)-1,
 											  	offset = (position[1] - oPos[1]) % size
 											if (floor > -1 && floor < structure.floors+2) {
-												if (offset < 3000) { // floor collision
-													 position[1] = 3000+oPos[1] + (floor+1)*size
+												if (offset < 1500 || offset > 48500) { // floor collision
+													if (offset > 48500) {
+														position[1] = 3000+oPos[1] + (floor)*size
+													} else {
+														position[1] = 3000+oPos[1] + (floor+1)*size
+													}
 													 self.postMessage('{"command": "floor collision", "data":{"floor": '+floor+
 													 ', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}')
 												}

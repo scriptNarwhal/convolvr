@@ -78,14 +78,14 @@ export default class WorldPhysics {
 	          //sys.vibrate(50);
 	        } else if (message.command == "floor collision") { // consider sending "top" or "bottom" collision type
 			     	three.camera.position.set(three.camera.position.x, message.data.position[1]+vrHeight, three.camera.position.z);
-						if (Math.abs(user.velocity.y) > 20000) {
+						if (Math.abs(user.velocity.y) > 50000) {
 							user.velocity.y *= 0.55
 								user.velocity.x *= 0.96
 								user.velocity.z *= 0.96
 								user.falling = true
 						} else {
 								user.falling = false
-								user.velocity.y *= 0.2
+								user.velocity.y *= 0.4
 						}
 					} else if (message.command == "load interior") {
 	          world.generateFullLOD(message.data.coords);

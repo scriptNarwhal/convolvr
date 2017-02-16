@@ -2,36 +2,41 @@ import React, { Component } from 'react';
 import Button from './button';
 
 let styles = {
-  worldCard: (image) => {
+  card: (image, color) => {
     return {
       cursor: "pointer",
-      width: "auto",
-      height: "3em",
+      width: "320px",
+      height: "320px",
       display: "inline-block",
-      paddingLeft: '54px',
-      paddingRight: '26px',
-      paddingTop: "0.75em",
-      marginRight: "0.25em",
-      backgroundSize: "48px",
+      marginRight: "0.5em",
+      marginBottom: "0.5em",
+      backgroundColor: color,
+      backgroundSize: "cover",
       backgroundRepeat: "no-repeat",
       backgroundImage: `url(${image})`,
-      backgroundColor: "#252525",
-      backgroundPositionY: "0.25em",
-      backgroundPositionX: "0.25em",
+      // backgroundColor: color,
+      // backgroundPositionY: "0.25em",
+      // backgroundPositionX: "0.25em",
       borderBottom: "#141414 solid 0.25em",
       textAlign: "center"
     }
+  },
+  title: {
+    width: '100%',
+    height: '40px',
+    display: 'block',
+    backgroundColor: 'rgba(0,0,0,0.2)'
   }
 }
 
 export default class Card extends Component {
   render() {
     return (
-        <div style={styles.worldCard(this.props.image)} title={this.props.title }
+        <div style={styles.card(this.props.image, this.props.color)} title={this.props.title }
              onClick={ (evt) => { this.props.clickHandler(evt, this.props.title) } }
         >
             {(this.props.showTitle ? (
-                <span>
+                <span style={styles.title}>
                 { this.props.title }
                 </span>
             ) : "")}
@@ -43,5 +48,6 @@ export default class Card extends Component {
 Card.defaultProps = {
     title: "Menu Item",
     showTitle: false,
+    color: '#252525',
     image: "/images/circle-a.png"
 }

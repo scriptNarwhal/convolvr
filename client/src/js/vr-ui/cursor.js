@@ -11,7 +11,10 @@ export default class Cursor {
               color: 0xf0f0f0,
               size: [80, 80, 80],
               material: "wireframe",
-          }], ["no-raycast"], [0, 0, -distance], null, 0).init(mount)
+              props: {
+                noRaycast: true
+              }
+          }], [0, 0, -distance], null, 0).init(mount)
 
       this.mesh = entity.mesh
       this.entity = null
@@ -41,6 +44,7 @@ export default class Cursor {
       this.entity = e
       this.distance = dist
       this.point = point
+      this.entity.gazedOver = true
     }
     update (position, quaternion, translateZ) {
         this.position = position ? position : false;

@@ -8,7 +8,7 @@ export default class EntityGenerator {
   makeEntity (type, instantiate) {
     if (!!instantiate) {
       let ent = this.entities[type]
-      return new Entity (0, ent.components, ent.aspects, ent.position, ent.quaternion)
+      return new Entity (0, ent.components, ent.position, ent.quaternion)
     } else {
       return this.entities[type]
     }
@@ -39,7 +39,6 @@ export default class EntityGenerator {
           position: [-250, -200, 400]
         }
       ],
-      aspects: [],
       position: null,
       quaternion: null
     }
@@ -87,7 +86,6 @@ export default class EntityGenerator {
           position: [10250, 0, 0]
         },
       ],
-      aspects: [],
       position: null,
       quaternion: null
     }
@@ -135,7 +133,6 @@ export default class EntityGenerator {
           position: [0, -4625, 0]
         },
       ],
-      aspects: [],
       position: null,
       quaternion: null
     }
@@ -153,7 +150,6 @@ export default class EntityGenerator {
           position: [0, 0, 0]
         }
       ],
-      aspects: [],
       position: null,
       quaternion: null
     }
@@ -189,7 +185,6 @@ export default class EntityGenerator {
           position: [0, 16000, 0]
         }
       ],
-      aspects: [],
       position: null,
       quaternion: null
     }
@@ -217,14 +212,12 @@ export default class EntityGenerator {
           position: [0, 0, 0]
         }
       ],
-      aspects: [],
       position: null,
       quaternion: null
     }
     this.entities["icon"] = {
       id: 0,
       components: initButtonComponents(),
-      aspects: [],
       position: null,
       quaternion: null
     }

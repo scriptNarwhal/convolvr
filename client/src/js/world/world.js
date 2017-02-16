@@ -17,10 +17,10 @@ export default class World {
 				screenResX = window.devicePixelRatio * window.innerWidth,
 				renderer = null,
 				self = this,
-				three = {},
-				aa = true // make configurable
+				three = {}
 
-		renderer = new THREE.WebGLRenderer({antialias: aa})
+		this.initLocalSettings()
+		renderer = new THREE.WebGLRenderer({antialias: this.aa != 'off'})
 		this.appStore = store
 		this.socket = socket
 		this.config = false
@@ -141,7 +141,7 @@ export default class World {
 			switch (data.tool) {
 				case "Entity Tool":
 					let ent = data.entity,
-							entity = new Entity(ent.id, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
+							entity = new Entity(ent.id, ent.components, data.position, data.quaternion)
 					chunk.entities.push(entity)
 					entity.init(three.scene)
 				break;
@@ -180,7 +180,7 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				skyLight =  new THREE.PointLight(config.light.color, 0.75, 3200000),
+				skyLight =  new THREE.PointLight(config.light.color, 0.95, 5200000),
 				skyMaterial = null,
 				skybox = null
 
@@ -211,10 +211,10 @@ export default class World {
 		}
 		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyMaterial)
 		this.skyLight = skyLight
-		this.skybox.add(skyLight)
-		skyLight.position.set(0, 1000000, 500000)
+		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
+		skyLight.position.set(0, 1000000, 500000)
 		this.terrain.bufferChunks(true, 0)
 	}
 
@@ -227,7 +227,27 @@ export default class World {
 			renderer.domElement.setAttribute("class", "viewport")
 			renderer.domElement.setAttribute("id", id)
 	}
+	initLocalSettings () {
+		let cameraMode = localStorage.getItem("camera"),
+				lighting = localStorage.getItem("lighting"),
+				aa = localStorage.getItem("aa")
 
+		if (cameraMode == undefined) {
+			cameraMode = 'fps'
+			localStorage.setItem("camera", 'fps')
+		}
+		if (aa == undefined) {
+			aa = 'on'
+			localStorage.setItem("aa", aa)
+		}
+		if (lighting == undefined) {
+			lighting = 'high'
+			localStorage.setItem("lighting", 'high')
+		}
+		this.aa = aa
+		this.cameraMode = cameraMode
+		this.lighting = lighting
+	}
 	load (name, callback) {
 		this.name = name;
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
@@ -335,6 +355,7 @@ export default class World {
 					skyMat.uniforms.time.value += delta
 				}
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
+				this.skyLight.position.set(camera.position.x, camera.position.y+1000000, camera.position.z+500000)
 			}
     }
 		if (terrainMesh) {

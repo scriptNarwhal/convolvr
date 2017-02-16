@@ -5,7 +5,7 @@ import Shell from '../shell'
 
 const styles = {
   worlds: {
-    width: "45%",
+    width: "100%",
     minWidth: "320px",
     margin: "auto"
   }
@@ -25,9 +25,15 @@ class Worlds extends Component {
           {
             this.props.worlds.map((world, i) => {
               return (
-                <Card key={i} showTitle={true} clickHandler={(e, v) => {
-                  this.switchWorlds(world.name)
-                }} image="/images/circle-a.png" title={world.name}  />
+                <Card clickHandler={(e, v) => {
+                        this.switchWorlds(world.name)
+                      }}
+                      color={`#${(world.light.color).toString(16)}`}
+                      image={world.sky.photosphere != '' ? `/data/${world.sky.photosphere}` : ""}
+                      showTitle={true}
+                      title={world.name}
+                      key={i}
+                />
               )
             })
           }

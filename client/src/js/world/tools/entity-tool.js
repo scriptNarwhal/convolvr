@@ -53,7 +53,11 @@ export default class EntityTool extends Tool  {
     primaryAction () { // place entity
       let cursor = this.world.user.cursor,
           selected = cursor.entity,
+          quat = three.camera.quaternion,
           entity = this.generator.makeEntity(this.options.entityType)
+      if (entity.components.length == 1) {
+        entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
+      }
       if (selected && cursor.distance < 33000) {
           // switch to component tool
           this.world.user.toolbox.useTool(1, 0)

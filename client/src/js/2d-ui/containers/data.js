@@ -11,6 +11,6 @@ export default class Data extends Component {
   }
 }
 
-Memory.defaultProps = {
+Data.defaultProps = {
 
 }

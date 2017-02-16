@@ -12,13 +12,12 @@ type Entity struct {
 	Name       string       `storm:"index" json:"name"`
 	World      string       `json:"world"`
 	Components []*Component `storm:"inline" json:"components"`
-	Aspects    []string     `json:"aspects"`
 	Position   []float64    `json:"position"`
 	Quaternion []float64    `json:"quaternion"`
 }
 
-func NewEntity(name string, world string, components []*Component, aspects []string, pos []float64, quat []float64) *Entity {
-	return &Entity{Name: name, World: world, Components: components, Aspects: aspects, Position: pos, Quaternion: quat}
+func NewEntity(name string, world string, components []*Component, pos []float64, quat []float64) *Entity {
+	return &Entity{Name: name, World: world, Components: components, Position: pos, Quaternion: quat}
 }
 
 func getEntities(c echo.Context) error { // entity types

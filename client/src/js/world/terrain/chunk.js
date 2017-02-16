@@ -23,9 +23,10 @@ export default class Chunk {
             visible = data.visible,
             geom = new THREE.CylinderGeometry( 266000, 266000, 133000, 6, 1),
             voxelGeom = null,
-            map = three.world.textures.grid, // make this configurable
-            mobile = three.world.mobile,
-            mat = mobile ?
+            world = three.world,
+            map = world.textures.grid, // make this configurable
+            lowQuality = world.mobile || world.lighting == 'low',
+            mat = lowQuality ?
               new THREE.MeshLambertMaterial( {color: data.color, shininess: 20, map: map} )
             : new THREE.MeshPhongMaterial( {color: data.color, shininess: 20, map: map} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null
@@ -80,7 +81,7 @@ export default class Chunk {
             x = items.length;
             while (x > 0) {
                 x--;
-                structure = new Tower(items[x], this, mobile)
+                structure = new Tower(items[x], this, lowQuality)
                 // track = new Track(items[x], this);
                 	if (Math.random() < 0.2) {
                     structure.initLight();

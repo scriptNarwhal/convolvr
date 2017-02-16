@@ -73,17 +73,17 @@ func getWorldChunks(c echo.Context) error {
 		voxel.All(&foundChunks)
 		if len(foundChunks) == 0 {
 			chunkGeom := "flat"
-			if rand.Intn(10) < 6 {
+			if rand.Intn(10) < 5 {
 				chunkGeom = "space"
 			} else {
 				if rand.Intn(26) > 23 {
 					light := 0
-					if rand.Intn(6) > 3 {
+					if rand.Intn(6) > 4 {
 						if rand.Intn(5) > 4 {
 							light = 0xffffff
 						} else {
 							if rand.Intn(4) > 2 {
-								light = 0x3000ff
+								light = 0xffffff
 							} else {
 								if rand.Intn(4) > 2 {
 									light = 0x8000ff
@@ -93,7 +93,7 @@ func getWorldChunks(c echo.Context) error {
 							}
 						}
 					}
-					structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0, 0, 0}, []int{0, 0, 0, 0}, 1+rand.Intn(6), 1+rand.Intn(7), 1+rand.Intn(6), light)
+					structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0, 0, 0}, []int{0, 0, 0, 0}, 2+rand.Intn(5), 2+rand.Intn(9), 2+rand.Intn(5), light)
 					structures = append(structures, structure)
 				}
 				initErr := voxelEntities.Init(&Entity{})
@@ -109,14 +109,12 @@ func getWorldChunks(c echo.Context) error {
 					log.Println(initErr)
 				}
 			}
-			bright := 100 + rand.Intn(155)
-			color := (bright << 16) | (bright << 8) | bright
 			altitude := float32(0)
 			if worldData.Terrain.TerrainType == "voxels" ||
 				worldData.Terrain.TerrainType == "both" {
 				altitude = float32((math.Sin(float64(x)/2)*9 + math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness)
 			}
-			generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", color, structures, nil, nil)
+			generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, structures, nil, nil)
 			chunksData = append(chunksData, generatedChunk)
 			saveErr := voxel.Save(&generatedChunk)
 			if saveErr != nil {

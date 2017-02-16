@@ -3,8 +3,8 @@ import Shell from '../shell'
 
 const styles = {
   innerLogin: {
-    width: '55vh',
-    height: '80vh',
+    width: '66vh',
+    height: '66vh',
     minWidth: '360px',
     margin: 'auto',
     display: 'block',
@@ -125,7 +125,7 @@ export default class NewWorld extends Component {
     if (this.state.name != "") {
       this.props.createWorld(data)
     } else {
-      alert("World name must be entered.")
+      alert("World name must is required.")
     }
   }
   onSkyTypeChange (e) {
