@@ -4,17 +4,15 @@ import Tab from './tab'
 
 const styles = {
   sideMenu: {
-    width: '100%',
-    maxHeight: '98px',
-    height: '10vh'
+    width: '10vh',
+    maxWidth: '98px',
+    height: '10vh',
+    backgroundColor: 'rgb(19, 19, 19)'
   },
   inner: {
-    height: '9vh',
+    height: '100%',
     bottom: 0,
-    margin: 'auto',
-    maxHeight: '96px',
-    maxWidth: '60%',
-    paddingTop: '0.5vh'
+    maxWidth: '96px'
   }
 }
 

@@ -43,21 +43,6 @@ body {
 .hud .button {
   margin-right: 0;
 }
-.shell {
-  margin: auto;
-  position: fixed;
-  top: 0;
-  left: 0;
-  text-align: center;
-  width: 100vw;
-  height: 100vh;
-  min-width: 374px;
-  display: inline-block;
-  border-radius: 0.8vh;
-}
-.shell > div.inner {
-
-}
 .tabs {
   height: 10vh;
   width: 100vw;

@@ -4,21 +4,19 @@ import Button from './button';
 let styles = {
   card: (image, color) => {
     return {
-      cursor: "pointer",
-      width: "320px",
-      height: "320px",
-      display: "inline-block",
-      marginRight: "0.5em",
-      marginBottom: "0.5em",
-      backgroundColor: color,
-      backgroundSize: "cover",
-      backgroundRepeat: "no-repeat",
+      cursor: 'pointer',
+      width: '240px',
+      height: '240px',
+      display: 'inline-block',
+      marginRight: '0.5em',
+      marginBottom: '0.5em',
+      backgroundColor: 'rgb(50, 50, 50)',
+      backgroundSize: 'cover',
       backgroundImage: `url(${image})`,
-      // backgroundColor: color,
-      // backgroundPositionY: "0.25em",
-      // backgroundPositionX: "0.25em",
       borderBottom: "#141414 solid 0.25em",
-      textAlign: "center"
+      textAlign: "center",
+      borderRadius: '1.5px',
+      borderBottom: '0.25em solid rgb(20, 20, 20)'
     }
   },
   title: {

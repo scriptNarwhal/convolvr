@@ -3,7 +3,23 @@ import React, { Component } from 'react'
 import SideMenu from './side-menu'
 import { browserHistory } from 'react-router'
 
-const styles = {
+let styles = {
+  shell: (hasMenu, menuOpen, menuOnly) => {
+    return {
+      margin: 'auto',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      textAlign: 'center',
+      width: '100vw',
+      height: '100vh',
+      borderRadius: '0.8vh',
+      display: (menuOpen  ? "block" : "none"),
+      zIndex: (hasMenu ? 999999 : 1),
+      cursor: 'pointer',
+      height: (menuOnly ? '10vh' : '100%')
+    }
+  },
   inner: {
     top: '10vh',
     left: 0,
@@ -14,14 +30,10 @@ const styles = {
 class Shell extends Component {
   render() {
     let hasMenu = !!this.props.hasMenu,
-        menuOnly = !!this.props.menuOnly
+        menuOnly = !!this.props.menuOnly,
+        menuOpen = this.props.menuOpen
     return (
-        <div style={{
-            display: (this.props.menuOpen  ? "block" : "none"),
-            zIndex: (hasMenu ? 999999 : 1),
-            cursor: 'pointer',
-            height: (menuOnly ? '10vh' : '100%')
-          }}
+        <div style={styles.shell(hasMenu, menuOpen, menuOnly)}
           onClick={e=> {
             if (e.target.getAttribute('id') == 'shell') {
               this.props.toggleMenu()

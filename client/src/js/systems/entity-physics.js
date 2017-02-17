@@ -15,7 +15,7 @@ export default class EntityPhysics {
   	          position = [],
   	          velocity = []
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
-					vrHeight = 22000 * vrFrame.pose.position[1] + 3000
+					vrHeight = 22000 * vrFrame.pose.position[1]
 					sys.vrHeight = vrHeight
 			}
 	    if (message.command == "update") {
