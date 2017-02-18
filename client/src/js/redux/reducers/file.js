@@ -29,7 +29,8 @@ module.exports = function files (state = {
   list: {
     data: false,
     fetching: false,
-    error: false
+    error: false,
+    workingDir: ''
   },
   delete: {
     data: false,

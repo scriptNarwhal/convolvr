@@ -6,7 +6,6 @@ import { browserHistory } from 'react-router'
 let styles = {
   shell: (hasMenu, menuOpen, menuOnly, noBackground) => {
     let mobile = window.innerWidth <= 640
-    console.log("mobile", mobile)
     return {
       margin: 'auto',
       position: 'fixed',

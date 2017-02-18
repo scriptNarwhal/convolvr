@@ -31,20 +31,21 @@ export function listFiles (username, dir) {
     return dispatch => {
      dispatch({
          type: FILES_LIST_FETCH,
-         id: id
+         username,
+         dir
      })
      let dir = !!dir ? "/"+dir : ""
-     return axios.get(API_SERVER+"/api/files/list"+username+dir)
+     return axios.get(API_SERVER+"/api/files/list/"+username+dir)
         .then(response => {
             dispatch({
                 type: FILES_LIST_DONE,
-                data: response
+                data: response.data
             })
         }).catch(response => {
-            dispatch(listFilesFail({
+            dispatch({
                 type: FILES_LIST_FAIL,
                 error: response
-            }))
+            })
         })
    }
 }
@@ -60,7 +61,7 @@ export function uploadFile (file, username, dir) {
         .then(response => {
             dispatch({
                 type: FILE_UPLOAD_DONE,
-                data: response
+                data: response.data
             })
         }).catch(response => {
             dispatch({
