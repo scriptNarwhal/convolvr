@@ -4,26 +4,31 @@ import SideMenu from './side-menu'
 import { browserHistory } from 'react-router'
 
 let styles = {
-  shell: (hasMenu, menuOpen, menuOnly) => {
+  shell: (hasMenu, menuOpen, menuOnly, noBackground) => {
+    let mobile = window.innerWidth <= 640
+    console.log("mobile", mobile)
     return {
       margin: 'auto',
       position: 'fixed',
       top: 0,
       left: 0,
       textAlign: 'center',
-      width: '100vw',
-      height: '100vh',
+      width: (menuOnly && !mobile ? '72px' : '100%'),
+      height: mobile ? '72px' : '100vh',
       borderRadius: '0.8vh',
       display: (menuOpen  ? "block" : "none"),
       zIndex: (hasMenu ? 999999 : 1),
       cursor: 'pointer',
-      height: (menuOnly ? '10vh' : '100%')
+      height: '100vh',
+      backgroundImage: noBackground ? 'none' : 'linear-gradient(to bottom, #0c0c0c, #111111, #212121)',
+      overflowY: 'auto',
+      overflowX: 'hidden',
+      paddingRight: '20px' //scrollbars are ugly (minimap would be nicer)
     }
   },
   inner: {
-    top: '10vh',
-    left: 0,
-    position: 'relative'
+    paddingTop: '48px',
+    paddingLeft: '72px'
   }
 }
 
@@ -31,9 +36,15 @@ class Shell extends Component {
   render() {
     let hasMenu = !!this.props.hasMenu,
         menuOnly = !!this.props.menuOnly,
-        menuOpen = this.props.menuOpen
+        menuOpen = this.props.menuOpen,
+        noBackground = this.props.noBackground
     return (
-        <div style={styles.shell(hasMenu, menuOpen, menuOnly)}
+        <div style={styles.shell(hasMenu, menuOpen, menuOnly, noBackground)}
+             onDrop={this.props.onDrop}
+             onDragEnter={this.props.onDragEnter}
+             onDragOver={this.props.onDragOver}
+             onDragLeave={this.props.onDragLeave}
+            //  onFileDragHover={this.props.onFileDragHover}
           onClick={e=> {
             if (e.target.getAttribute('id') == 'shell') {
               this.props.toggleMenu()
@@ -43,9 +54,7 @@ class Shell extends Component {
           id='shell'
         >
             {hasMenu ? (
-              <div className="tabs">
-                  <SideMenu />
-              </div>
+              <SideMenu />
             ) : ''}
             {menuOnly ? '' : (
               <div style={styles.inner}>
@@ -58,7 +67,7 @@ class Shell extends Component {
 }
 
 Shell.defaultProps = {
-
+  noBackground: false
 }
 
 

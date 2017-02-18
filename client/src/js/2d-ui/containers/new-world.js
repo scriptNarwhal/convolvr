@@ -125,7 +125,7 @@ export default class NewWorld extends Component {
     if (this.state.name != "") {
       this.props.createWorld(data)
     } else {
-      alert("World name must is required.")
+      alert("World name is required.")
     }
   }
   onSkyTypeChange (e) {

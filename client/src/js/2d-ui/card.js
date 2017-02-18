@@ -13,10 +13,9 @@ let styles = {
       backgroundColor: 'rgb(50, 50, 50)',
       backgroundSize: 'cover',
       backgroundImage: `url(${image})`,
-      borderBottom: "#141414 solid 0.25em",
       textAlign: "center",
       borderRadius: '1.5px',
-      borderBottom: '0.25em solid rgb(20, 20, 20)'
+      boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)'
     }
   },
   title: {

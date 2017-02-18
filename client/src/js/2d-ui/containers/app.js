@@ -207,7 +207,7 @@ class App extends Component {
   render() {
     return (
         <div className="root">
-         <Shell className="hud-side-menu tabs"
+         <Shell noBackground={true}
                 hasMenu={true}
                 menuOnly={true}
                 menuOpen={this.props.menuOpen} ></Shell>

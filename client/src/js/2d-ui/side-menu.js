@@ -2,17 +2,25 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import Tab from './tab'
 
-const styles = {
-  sideMenu: {
-    width: '10vh',
-    maxWidth: '98px',
-    height: '10vh',
-    backgroundColor: 'rgb(19, 19, 19)'
+let styles = {
+  sideMenu: () => {
+    let mobile = window.innerWidth <= 640
+    return {
+      width: mobile ? '100vw' : '10vh',
+      maxWidth: mobile ? '100vw' : '72px',
+      height: mobile ? '72px' : '100vh',
+      backgroundColor: 'rgb(9, 9, 9)',
+      overflow: 'hidden'
+    }
   },
-  inner: {
-    height: '100%',
-    bottom: 0,
-    maxWidth: '96px'
+  inner: () => {
+    let mobile = window.innerWidth <= 640
+    return {
+      height: mobile ? '72px' : '100vh',
+      bottom: 0,
+      maxWidth: mobile ? '100vw' : '72px',
+      paddingTop: '7px'
+    }
   }
 }
 
@@ -32,8 +40,8 @@ class SideMenu extends Component {
 
   render() {
     return (
-        <div style={styles.sideMenu} >
-          <div style={styles.inner}>
+        <div style={styles.sideMenu()} >
+          <div style={styles.inner()}>
             <Tab image="/images/plus.png"
                  title="Create New World"
                  clickHandler={ ()=> { browserHistory.push("/worlds/new") } }
@@ -41,6 +49,10 @@ class SideMenu extends Component {
             <Tab image="/images/circle-a.png"
                  title="Switch Worlds"
                  clickHandler={ ()=> { browserHistory.push("/worlds") }}
+            />
+            <Tab image="/images/square-a.png"
+                 title="Manage Data"
+                 clickHandler={ ()=> { browserHistory.push("/data") }}
             />
             <Tab image="/images/chat.png"
                  title="Chat"

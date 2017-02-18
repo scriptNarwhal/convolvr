@@ -3,16 +3,12 @@ import Button from './button';
 
 const styles = {
   tab: {
-    height: '8vh',
     color: 'rgba(255,255,255,0.92)',
-    width: '7.5vh',
+    backgroundColor: '#1d1d1d',
     fontSize: '15px',
     display: 'inline-block',
-    marginTop: '0.5vh',
-    maxHeight: '72px',
-    maxWidth: '72px',
-    marginRight: '0.35vh',
-    marginLeft: '0.35vh'
+    height: '60px',
+    width: '60px'
   }
 }
 

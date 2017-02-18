@@ -2,11 +2,12 @@ package convolvr
 
 import (
 	"fmt"
+
 	log "github.com/Sirupsen/logrus"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 	"github.com/asdine/storm"
 	"github.com/ds0nt/nexus"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"github.com/spf13/viper"
 	"golang.org/x/net/websocket"
 )
@@ -40,10 +41,10 @@ func Start(configName string) {
 	componentErr := db.Init(&Component{})
 	entityErr := db.Init(&Entity{})
 	structureErr := db.Init(&Structure{})
-  // indexErr := db.ReIndex(&World{})
-  // if indexErr != nil {
-  // log.Fatal(indexErr)
-  // }
+	// indexErr := db.ReIndex(&World{})
+	// if indexErr != nil {
+	// log.Fatal(indexErr)
+	// }
 	if userErr != nil {
 		log.Fatal(userErr)
 	}
@@ -92,10 +93,11 @@ func Start(configName string) {
 
 	e.Static("/", "../web")
 	e.Static("/world/:name", "../web/index.html") // eventually make this route name configurable to the specific use case, 'world', 'venue', 'event', etc..
-	e.File("/hyperspace", "../web/index.html") // client should generate a meta-world out of (portals to) networked convolvr sites
+	e.File("/hyperspace", "../web/index.html")    // client should generate a meta-world out of (portals to) networked convolvr sites
 	e.File("/worlds", "../web/index.html")
 	e.File("/worlds/new", "../web/index.html")
 	e.File("/chat", "../web/index.html")
+	e.File("/data", "../web/index.html")
 	e.File("/login", "../web/index.html")
 	e.File("/settings", "../web/index.html")
 

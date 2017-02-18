@@ -13,16 +13,20 @@ const styles = {
     },
     text: {
         width: '70%',
-        background: 'black',
+        border: 'none',
+        background: '#202020',
         color: 'white',
         fontSize: '1em',
-        marginLeft: '0.15em'
+        marginLeft: '0.15em',
+        padding: '0.5em'
     },
     button: {
-        background: "black",
+        background: "#444444",
         color: "white",
         width: '15%',
-        fontSize: '1em'
+        border: 'none',
+        fontSize: '1em',
+        padding: '0.5em'
     },
     message : {
       display: "block",
@@ -47,7 +51,7 @@ const styles = {
       margin: "auto",
       textAlign: "left",
       position: "fixed",
-      left: '1.5vh',
+      left: '65px',
       marginLeft: '0.5em',
       bottom: '2.5em'
     },
@@ -58,7 +62,7 @@ const styles = {
       bottom: "1vh",
       width: "48vw",
       textAlign: "left",
-      left: '1.5vh',
+      left: '65px',
       marginLeft: '0.5em'
     }
 }
@@ -135,11 +139,12 @@ class Chat extends Component {
                                 onDragEnter={e=>{ console.log(e); e.preventDefault() }}
                                 onDragOver={e=>{ console.log(e); e.preventDefault() }}
                                 onDragLeave={e=>{ console.log(e); e.preventDefault() }}
-                                onFileDragHover={e=> {
-                                  	e.stopPropagation()
-                                  	e.preventDefault()
-                                  	e.target.className = (e.type == "dragover" ? "hover" : "");
-                                }}
+                                // onFileDragHover={e=> {
+                                //   	e.stopPropagation()
+                                //   	e.preventDefault()
+                                //   	e.target.className = (e.type == "dragover" ? "hover" : "");
+                                // }}
+              noBackground={true}
         >
             <section style={styles.messages}>
                 {

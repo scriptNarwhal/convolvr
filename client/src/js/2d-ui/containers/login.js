@@ -95,7 +95,7 @@ export default class Login extends Component {
   }
   render() {
     return (
-        <Shell className="login">
+        <Shell className="login" noBackground={true}>
           <div style={styles.innerLogin}>
             <div style={styles.title}>
               Sign in to Convolvr

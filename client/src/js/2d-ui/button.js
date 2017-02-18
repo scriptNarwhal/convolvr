@@ -3,26 +3,18 @@ import React, { Component } from 'react';
 let styles = {
   button: {
     display: 'inline-block',
-    width: '7.5vh',
-    height: '7.5vh',
-    maxWidth: '72px',
-    maxHeight: '72px',
-    marginRight: 0,
-    background: 'linear-gradient(to top, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.13))',
-    borderRadius: '0.4vh',
-    marginRight: '0.25em'
+    width: '60px',
+    height: '60px',
+    borderRadius: '0.4vh'
   },
   inner: {
     height: '100%',
     width: '100%',
     transition: 'all 0.2s linear',
     backgroundSize: 'contain',
-    height: '7.5vh',
-    width: '7.5vh',
-    maxWidth: '72px',
-    maxHeight: '72px',
+    width: '60px',
+    height: '60px',
     display: 'block',
-    opacity: 0.9,
     backgroundSize: '60%',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: '50%',
