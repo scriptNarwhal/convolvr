@@ -66,13 +66,15 @@ userInput.rotationVector = {x: 0, y: 9.95, z: 0}
 three.camera.position.set(-300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
 user.light.position.set(100000, 20000, 100000)
 
+world.chat = new ListView({
+  color: "#ffffff",
+  background: "#000000",
+  position: [0,0,0],
+  textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
+}, three.scene).initMesh()
+
 let initChatUI = () => {
-  world.chat = new ListView({
-    color: "#ffffff",
-    background: "#000000",
-    position: [0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 22000, -5000],
-    textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
-  }, three.scene).initMesh()
+  world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 22000, -5000])
 }
 
 const muiTheme = getMuiTheme({

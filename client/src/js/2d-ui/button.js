@@ -4,8 +4,7 @@ let styles = {
   button: {
     display: 'inline-block',
     width: '60px',
-    height: '60px',
-    borderRadius: '0.4vh'
+    height: '60px'
   },
   inner: {
     height: '100%',

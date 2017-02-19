@@ -35,8 +35,7 @@ export function listFiles (username, dir) {
          username,
          dir
      })
-     let dir = !!dir ? "/"+dir : ""
-     return axios.get(API_SERVER+"/api/files/list/"+username+dir)
+     return axios.get(`${API_SERVER}/api/files/list/${username}${dir != null && dir != '' ? '/'+dir : ''}`)
         .then(response => {
             dispatch({
                 type: FILES_LIST_DONE,
@@ -79,8 +78,7 @@ export function listDirectories (username, dir) {
          username,
          dir
      })
-     let dir = !!dir ? "/"+dir : ""
-     return axios.get(API_SERVER+"/api/directories/list/"+username+dir)
+     return axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null && dir != '' ? '/'+dir : ''}`)
         .then(response => {
             dispatch({
                 type: DIRECTORIES_LIST_DONE,

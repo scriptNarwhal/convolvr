@@ -8,7 +8,7 @@ import { vrAnimate } from '../../world/render'
 
 class App extends Component {
 
-  componentDidMount () {
+  componentWillMount () {
     this.state = {
       unread: 0
     }
@@ -18,6 +18,7 @@ class App extends Component {
           worldName = ''
     	this.props.getMessage(chatMessage.message, chatMessage.from)
       three.world.chat.write(`${chatMessage.from}: ${chatMessage.message}`)
+      three.world.chat.update()
       this.notify(chatMessage.message, chatMessage.from)
       worldName = this.props.world == "overworld" ? "Convolvr" : this.props.world
       if (this.props.focus == false) {
@@ -44,6 +45,9 @@ class App extends Component {
       }
     })
     this.props.setCurrentWorld(window.worldName)
+    setTimeout(()=>{
+      this.props.getChatHistory(0) // wait a fraction of a second for the world to load / to show in 3d too
+    }, 200)
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
     if (window.location.href.indexOf("/chat") > -1 || window.location.href.indexOf("/login") > -1) {
       this.props.toggleMenu(true);
@@ -236,7 +240,10 @@ import {
   fetchWorlds,
   setCurrentWorld
 } from '../../redux/actions/world-actions'
-import { getMessage } from '../../redux/actions/message-actions'
+import {
+  getChatHistory,
+  getMessage
+} from '../../redux/actions/message-actions'
 import { login } from '../../redux/actions/user-actions'
 
 export default connect(
@@ -261,6 +268,9 @@ export default connect(
       },
       showChat: () => {
         dispatch(showChat())
+      },
+      getChatHistory: (skip) => {
+        dispatch(getChatHistory(skip))
       },
       toggleMenu: (force) => {
           dispatch(toggleMenu(force))

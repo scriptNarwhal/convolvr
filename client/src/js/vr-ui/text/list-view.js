@@ -41,8 +41,10 @@ export default class ListView extends Text {
 
     update (data) {
       let x = null
-      for (x in data) {
-        this[x] = data[x]
+      if (data != null) {
+        for (x in data) {
+          this[x] = data[x]
+        }
       }
       this.initMesh()
       return this
@@ -50,7 +52,6 @@ export default class ListView extends Text {
 
     write (text) {
       this.textLines.push(text)
-      this.initMesh()
       return this
     }
 }

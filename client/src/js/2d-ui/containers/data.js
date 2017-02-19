@@ -4,12 +4,12 @@ import Card from '../card'
 
 class Data extends Component {
   componentWillMount () {
-    this.props.listFiles(this.props.username, "/")
-    this.props.listDirectories(this.props.username, "/")
+    this.props.listFiles(this.props.username)
+    this.props.listDirectories(this.props.username)
   }
   componentWillUpdate (nextProps, nextState) {
     if (nextProps.workingDir != this.props.workingDir) {
-      console.log("changing directory...")
+      console.log("changing directory...", nextProps.workingDir)
       this.props.listFiles(this.props.username, nextProps.workingDir)
       this.props.listDirectories(this.props.username, nextProps.workingDir)
     }

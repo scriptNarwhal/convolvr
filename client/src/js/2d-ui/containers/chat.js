@@ -95,56 +95,9 @@ class Chat extends Component {
       })
       this.textInput.value = ""
   }
-  uploadFiles (files) {
-		console.log("uploading files")
-		let xhr = new XMLHttpRequest(),
-			  formData = new FormData(),
-			  ins = files.length,
-        thumbs = [],
-        images = /(\.jpg|\.jpeg|\.png|\.webp)$/i,
-        username = this.props.username
-
-
-		for (let x = 0; x < ins; x++) {
-      if (images.test(files[x].name)) {
-        thumbs.push(files[x]);
-      }
-		  formData.append("files", files[x]);
-		}
-
-		xhr.onload = function () {
-			if (xhr.status == 200) {
-				console.log("finished uploading")
-			}
-		}
-
-		xhr.open("POST", "/api/files/upload-multiple/"+username+"/chat-uploads", true);
-		//xhr.setRequestHeader("x-access-token", localStorage.getItem("token"));
-		if ("upload" in new XMLHttpRequest) { // add upload progress event
-				xhr.upload.onprogress = function (event) {
-				if (event.lengthComputable) {
-					let complete = (event.loaded / event.total * 100 | 0);
-					console.log(complete)
-				}
-      }
-		}
-    xhr.send(formData)
-  }
   render() {
     return (
-        <Shell className="chat" onDrop={e=> {
-                                  e.stopPropagation()
-                                  e.preventDefault()
-                                  this.uploadFiles(e.target.files || e.dataTransfer.files)}
-                                }
-                                onDragEnter={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); }}
-                                onDragOver={e=>{ console.log(e);   e.preventDefault(); e.stopPropagation(); }}
-                                onDragLeave={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); }}
-                                // onFileDragHover={e=> {
-                                //   	e.stopPropagation()
-                                //   	e.preventDefault()
-                                //   	e.target.className = (e.type == "dragover" ? "hover" : "");
-                                // }}
+        <Shell className="chat"
               noBackground={true}
         >
             <section style={styles.messages}>
@@ -181,7 +134,8 @@ Chat.defaultProps = {
 }
 import { connect } from 'react-redux';
 import {
-    sendMessage
+  getChatHistory,
+  sendMessage
 } from '../../redux/actions/message-actions'
 import {
   toggleMenu,

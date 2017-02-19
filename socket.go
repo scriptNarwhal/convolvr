@@ -8,10 +8,6 @@ import (
 	"github.com/ds0nt/nexus"
 )
 
-func chatMessage(c *nexus.Client, p *nexus.Packet) {
-	log.Printf(`chat message "%s"`, p.Data)
-	hub.All().Broadcast(p)
-}
 func update(c *nexus.Client, p *nexus.Packet) {
 	// log.Printf(`broadcasting update "%s"`, p.Data)./
 	hub.All().Broadcast(p)
