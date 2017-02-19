@@ -68,7 +68,6 @@ func getWorldChunks(c echo.Context) error {
 		z, _ := strconv.Atoi(coords[2])
 		voxel := voxels.From("X_" + coords[0]).From("Y_" + coords[1]).From("Z_" + coords[2])
 		voxelEntities := voxel.From("entities")
-		voxelStructures := voxel.From("structures")
 		subVoxels := voxel.From("voxels")
 		voxel.All(&foundChunks)
 		if len(foundChunks) == 0 {
@@ -76,7 +75,7 @@ func getWorldChunks(c echo.Context) error {
 			if rand.Intn(10) < 5 {
 				chunkGeom = "space"
 			} else {
-				if rand.Intn(26) > 23 {
+				if rand.Intn(26) > 23 && worldData.Spawn.Structures {
 					light := 0
 					if rand.Intn(6) > 4 {
 						if rand.Intn(5) > 4 {
@@ -100,10 +99,6 @@ func getWorldChunks(c echo.Context) error {
 				if initErr != nil {
 					log.Println(initErr)
 				}
-				initErr = voxelStructures.Init(&Structure{})
-				if initErr != nil {
-					log.Println(initErr)
-				}
 				initErr = subVoxels.Init(&Voxel{})
 				if initErr != nil {
 					log.Println(initErr)
@@ -122,10 +117,8 @@ func getWorldChunks(c echo.Context) error {
 			}
 		} else {
 			voxelEntities.All(&entities)
-			voxelStructures.All(&structures)
 			subVoxels.All(&chunkVoxels)
 			foundChunks[0].Entities = entities
-			foundChunks[0].Structures = structures
 			foundChunks[0].Voxels = chunkVoxels
 			chunksData = append(chunksData, foundChunks[0])
 		}

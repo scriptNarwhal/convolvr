@@ -21,7 +21,7 @@ export default class Chunk {
             base = new THREE.Geometry(),
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
             visible = data.visible,
-            geom = new THREE.CylinderGeometry( 266000, 266000, 133000, 6, 1),
+            geom = new THREE.CylinderGeometry( 266000, 266000, 417832, 6, 1),
             voxelGeom = null,
             world = three.world,
             map = world.textures.grid, // make this configurable
@@ -93,7 +93,7 @@ export default class Chunk {
         altitude = data.altitude || 0
         if (!! cell) {
             mesh.position.set((cell[0]*464000) + (cell[2] % 2 == 0 ? 0 : 464000 / 2),
-                               altitude * 50000 + (cell[1]*464000) - 132000,
+                               altitude * 50000 + (cell[1]*464000) - 264000,
                                cell[2]*403680);
             data.cell = cell;
             data.position = [

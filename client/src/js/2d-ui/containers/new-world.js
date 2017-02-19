@@ -140,6 +140,12 @@ export default class NewWorld extends Component {
       terrainType: e.target.value
     })
   }
+  onToggleStructures (e) {
+    let value = e.target.value
+    this.setState({
+      structures: value == 'yes' ? true : false
+    })
+  }
   upload (e) {
     let data = new FormData(),
         username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
@@ -211,7 +217,13 @@ export default class NewWorld extends Component {
                 <span style={styles.label}>Terrain Flatness</span>
                   <input type='range' min='1' max='16' step='0.1'  onChange={e=> { this.setState({flatness: e.target.value })}}/>
               </div>
-
+              <div style={styles.option}>
+                <span style={styles.label}>Generate Structures?</span>
+                <select onChange={ e=> { this.onToggleStructures(e) }}>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
 
               <div style={styles.go}>
                 <input type="button"

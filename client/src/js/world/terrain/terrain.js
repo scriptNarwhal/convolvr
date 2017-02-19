@@ -136,7 +136,7 @@ export default class Terrain {
              response.data.map(c =>{
                  let chunk = new Chunk({visible: showVoxels, altitude: c.altitude, color: c.color,
                                         entities: c.entities, voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
-                 if (!!chunk.geometry != "space") { // if its not empty space
+               if (!!chunk.geometry != "space") { // if its not empty space
                      physicalChunks.push(chunk.data);
                      three.scene.add(chunk.mesh);
                  }
