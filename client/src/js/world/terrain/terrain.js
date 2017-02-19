@@ -134,7 +134,6 @@ export default class Terrain {
              let physicalChunks = []
              typeof response.data.map == 'function' &&
              response.data.map(c =>{
-                console.log("loading entities", c.entities)
                  let chunk = new Chunk({visible: showVoxels, altitude: c.altitude, color: c.color,
                                         entities: c.entities, voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
                  if (!!chunk.geometry != "space") { // if its not empty space
