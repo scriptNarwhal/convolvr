@@ -13,20 +13,22 @@ let styles = {
       left: 0,
       textAlign: 'center',
       width: (menuOnly && !mobile ? '72px' : '100%'),
-      height: mobile ? '72px' : '100vh',
+      height: menuOnly && mobile ? '72px' : '100vh',
       display: (menuOpen  ? "block" : "none"),
       zIndex: (hasMenu ? 999999 : 1),
       cursor: 'pointer',
-      height: '100vh',
       backgroundImage: noBackground ? 'none' : 'linear-gradient(to bottom, #0c0c0c, #111111, #212121)',
       overflowY: 'auto',
       overflowX: 'hidden',
       paddingRight: '20px' //scrollbars are ugly (minimap would be nicer)
     }
   },
-  inner: {
-    paddingTop: '48px',
-    paddingLeft: '72px'
+  inner: () => {
+    let mobile = window.innerWidth <= 640
+    return {
+      paddingTop: mobile ? '86px' : '48px',
+      paddingLeft: mobile ? '0px' : '72px'
+    }
   }
 }
 
@@ -103,7 +105,7 @@ class Shell extends Component {
               <SideMenu />
             ) : ''}
             {menuOnly ? '' : (
-              <div style={styles.inner}>
+              <div style={styles.inner()}>
                   {this.props.children}
               </div>
             )}

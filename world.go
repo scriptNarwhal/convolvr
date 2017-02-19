@@ -33,7 +33,7 @@ type Layer struct {
 	Opacity       float64 `json:"opacity"`
 	Altitude      int     `json:"altitude"`
 	Texture       string  `json:"texture"`
-	CustomTexture string  `json:"texture"`
+	CustomTexture string  `json:"customTexture"`
 }
 
 type Light struct {

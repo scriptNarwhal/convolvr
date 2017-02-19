@@ -6,8 +6,8 @@ let styles = {
   sideMenu: () => {
     let mobile = window.innerWidth <= 640
     return {
-      width: mobile ? '100vw' : '10vh',
-      maxWidth: mobile ? '100vw' : '72px',
+      width: mobile ? '100vw' : '72px',
+      //maxWidth: mobile ? '100vw' : '72px',
       height: mobile ? '72px' : '100vh',
       backgroundColor: 'rgb(9, 9, 9)',
       overflow: 'hidden'
@@ -18,7 +18,7 @@ let styles = {
     return {
       height: mobile ? '72px' : '100vh',
       bottom: 0,
-      maxWidth: mobile ? '100vw' : '72px',
+      width: mobile ? '100vw' : '72px',
       paddingTop: '7px'
     }
   }

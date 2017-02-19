@@ -31,10 +31,6 @@ import HUDMenu from './vr-ui/menu'
 import ListView from './vr-ui/text/list-view'
 import Cursor from './vr-ui/cursor'
 import Avatar from './world/avatar'
-// Material UI
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import { indigo500, indigo600, amber800, amber500 } from 'material-ui/styles/colors'
 
 let socket = events,
     token = localStorage.getItem("token"),
@@ -77,21 +73,8 @@ let initChatUI = () => {
   world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 22000, -5000])
 }
 
-const muiTheme = getMuiTheme({
-  palette: {
-    primary1Color: indigo500,
-    primary2Color: indigo600,
-    accent1Color: amber800,
-    accent2Color: amber500,
-  },
-  appBar: {
-    height: 50,
-  }
-})
-
 ReactDOM.render(
   (<Provider store={store}>
-    <MuiThemeProvider muiTheme={muiTheme}>
 		<Router history={history}>
 	  		<Route path="/" component={App} >
 				<IndexRoute component={HUD}/>
@@ -104,7 +87,6 @@ ReactDOM.render(
 				<Route path="/settings" component={Settings} />
 			</Route>
 		</Router>
-    </MuiThemeProvider>
   </Provider>),
   document.getElementsByTagName('main')[0]
 )

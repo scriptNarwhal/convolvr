@@ -37,7 +37,7 @@ export default class Cursor {
     }
     deactivate () {
       this.entity = false
-      this.mesh.scale.set(1.0, 1.0, 1.0)
+      this.mesh.scale.set(0.001, 0.001, 0.001)
     }
     setEntity (e, dist, point) {
       //console.log(e) // remove this
