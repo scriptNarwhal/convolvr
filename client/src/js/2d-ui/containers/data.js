@@ -5,34 +5,61 @@ import Card from '../card'
 class Data extends Component {
   componentWillMount () {
     this.props.listFiles(this.props.username, "/")
+    this.props.listDirectories(this.props.username, "/")
   }
-  componentWillUpdate () {
-
+  componentWillUpdate (nextProps, nextState) {
+    if (nextProps.workingDir != this.props.workingDir) {
+      console.log("changing directory...")
+      this.props.listFiles(this.props.username, nextProps.workingDir)
+      this.props.listDirectories(this.props.username, nextProps.workingDir)
+    }
   }
   isImage (file) {
     return /(.png|.jpg|.jpeg|.gif|webp)/.test(file)
   }
-  getFullPath (file) {
+  getFullPath (file, thumbnail) {
     let username = this.props.username,
         workingDir = this.props.workingDir
-    return `/data/${username}/${workingDir}${file}`
+    if (thumbnail && this.isImage(file)) {
+      return `/data/${username}/${workingDir}/thumbs/${file}.jpg`
+    } else {
+      return `/data/${username}/${workingDir}/${file}`
+    }
   }
   render() {
-    let files = this.props.files !== false ? this.props.files : []
+    let files = this.props.files !== false ? this.props.files : [],
+        dirs = this.props.dirs !== false ? this.props.dirs : []
     return (
         <Shell className="data-view">
           {
-            files.map((file, i) => {
+            dirs.map((dir, i) => {
               return (
-                <Card image={this.isImage(file) ? this.getFullPath(file) : ''}
+                <Card image={''}
                       clickHandler={ (e, title) => {
                         console.log(e, title, "clicked")
-                        newWindow = window.open(this.getFullPath(file), "_blank")
+                        this.props.changeDirectory(title)
+                      }}
+                      compact={true}
+                      showTitle={true}
+                      title={dir}
+                      key={i}
+                />
+              )
+            })
+          }
+          {
+            files.map((file, i) => {
+              return (
+                <Card image={this.isImage(file) ? this.getFullPath(file, true) : ''}
+                      clickHandler={ (e, title) => {
+                        console.log(e, title, "clicked")
+                        let newWindow = window.open(this.getFullPath(file), "_blank")
                         newWindow.focus()
                       }}
+                      compact={!this.isImage(file)}
                       showTitle={true}
                       title={file}
-
+                      key={i}
                 />
               )
             })
@@ -55,6 +82,8 @@ import {
 } from '../../redux/actions/app-actions'
 import {
   listFiles,
+  listDirectories,
+  changeDirectory,
   uploadFiles
 } from '../../redux/actions/file-actions'
 export default connect(
@@ -68,7 +97,8 @@ export default connect(
         chatOpen: state.app.chatOpen,
         vrMode: state.app.vrMode,
         files: state.files.list.data,
-        workingDir: state.files.list.workingDir,
+        dirs: state.files.listDirectories.data,
+        workingDir: state.files.listDirectories.workingDir,
         upload: state.files.uploadMultiple
     }
   },
@@ -76,6 +106,12 @@ export default connect(
     return {
       listFiles: (username, dir) => {
           dispatch(listFiles(username, dir))
+      },
+      listDirectories: (username, dir) => {
+          dispatch(listDirectories(username, dir))
+      },
+      changeDirectory: (dir) => {
+        dispatch(changeDirectory(dir))
       },
       toggleMenu: (toggle) => {
         dispatch(toggleMenu(toggle))

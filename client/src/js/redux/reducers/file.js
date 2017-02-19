@@ -22,11 +22,17 @@ import {
     DIRECTORIES_LIST_DONE,
     DIRECTORIES_MAKE_FETCH,
     DIRECTORIES_MAKE_FAIL,
-    DIRECTORIES_MAKE_DONE
+    DIRECTORIES_MAKE_DONE,
+    CHANGE_DIRECTORY
 } from '../constants/action-types';
 
 module.exports = function files (state = {
   list: {
+    data: false,
+    fetching: false,
+    error: false
+  },
+  listDirectories: {
     data: false,
     fetching: false,
     error: false,
@@ -107,6 +113,36 @@ module.exports = function files (state = {
           error: action.error
         })
       })
+    case DIRECTORIES_LIST_FETCH:
+      return Object.assign({}, state, {
+        listDirectories: Object.assign({}, state.listDirectories, {
+          fetching: true,
+          data: false,
+          error: false
+        })
+      })
+    case DIRECTORIES_LIST_DONE:
+      return Object.assign({}, state, {
+        listDirectories: Object.assign({}, state.listDirectories, {
+          fetching: false,
+          data: action.data,
+          error: false
+        })
+      })
+    case DIRECTORIES_LIST_FAIL:
+      return Object.assign({}, state, {
+        listDirectories: Object.assign({}, state.listDirectories, {
+          fetching: false,
+          data: false,
+          error: action.error
+        })
+      })
+      case CHANGE_DIRECTORY:
+        return Object.assign({}, state, {
+          listDirectories: Object.assign({}, state.listDirectories, {
+            workingDir: action.dir
+          })
+        })
     case FILE_UPLOAD_FETCH:
       return Object.assign({}, state, {
         upload: Object.assign({}, state.upload, {

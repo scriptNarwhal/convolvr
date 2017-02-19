@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import Button from './button';
 
 let styles = {
-  card: (image, color) => {
+  card: (image, color, compact) => {
     return {
       cursor: 'pointer',
       width: '240px',
-      height: '240px',
+      height: compact ? '60px' : '240px',
       display: 'inline-block',
       marginRight: '0.5em',
       marginBottom: '0.5em',
@@ -46,5 +46,6 @@ Card.defaultProps = {
     title: "Menu Item",
     showTitle: false,
     color: '#252525',
-    image: "/images/circle-a.png"
+    image: "/images/circle-a.png",
+    compact: false
 }

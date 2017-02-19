@@ -109,7 +109,7 @@ class Chat extends Component {
       if (images.test(files[x].name)) {
         thumbs.push(files[x]);
       }
-		  formData.append("files[]", files[x]);
+		  formData.append("files", files[x]);
 		}
 
 		xhr.onload = function () {
@@ -118,7 +118,7 @@ class Chat extends Component {
 			}
 		}
 
-		xhr.open("POST", "/api/files/upload-multiple/"+username, true);
+		xhr.open("POST", "/api/files/upload-multiple/"+username+"/chat-uploads", true);
 		//xhr.setRequestHeader("x-access-token", localStorage.getItem("token"));
 		if ("upload" in new XMLHttpRequest) { // add upload progress event
 				xhr.upload.onprogress = function (event) {
@@ -128,6 +128,7 @@ class Chat extends Component {
 				}
       }
 		}
+    xhr.send(formData)
   }
   render() {
     return (
@@ -136,9 +137,9 @@ class Chat extends Component {
                                   e.preventDefault()
                                   this.uploadFiles(e.target.files || e.dataTransfer.files)}
                                 }
-                                onDragEnter={e=>{ console.log(e); e.preventDefault() }}
-                                onDragOver={e=>{ console.log(e); e.preventDefault() }}
-                                onDragLeave={e=>{ console.log(e); e.preventDefault() }}
+                                onDragEnter={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); }}
+                                onDragOver={e=>{ console.log(e);   e.preventDefault(); e.stopPropagation(); }}
+                                onDragLeave={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); }}
                                 // onFileDragHover={e=> {
                                 //   	e.stopPropagation()
                                 //   	e.preventDefault()

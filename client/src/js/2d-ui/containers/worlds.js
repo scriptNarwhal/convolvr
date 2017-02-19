@@ -24,12 +24,18 @@ class Worlds extends Component {
           <div style={styles.worlds}>
           {
             this.props.worlds.map((world, i) => {
+              let thumb = ''
+              if (world.sky.photosphere != '') {
+                thumb = world.sky.photosphere.split("/")
+                thumb.splice(thumb.length-1, 0, "thumbs")
+                thumb = thumb.join("/")+'.jpg'
+              }
               return (
                 <Card clickHandler={(e, v) => {
                         this.switchWorlds(world.name)
                       }}
                       color={`#${(world.light.color).toString(16)}`}
-                      image={world.sky.photosphere != '' ? `/data/${world.sky.photosphere}` : ""}
+                      image={world.sky.photosphere != '' ? `/data/${thumb}` : ""}
                       showTitle={true}
                       title={world.name}
                       key={i}

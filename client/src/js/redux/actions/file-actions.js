@@ -23,6 +23,7 @@ import {
     DIRECTORIES_MAKE_FETCH,
     DIRECTORIES_MAKE_FAIL,
     DIRECTORIES_MAKE_DONE,
+    CHANGE_DIRECTORY
 } from '../constants/action-types';
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
@@ -70,4 +71,32 @@ export function uploadFile (file, username, dir) {
             })
         })
    }
+}
+export function listDirectories (username, dir) {
+    return dispatch => {
+     dispatch({
+         type: DIRECTORIES_LIST_FETCH,
+         username,
+         dir
+     })
+     let dir = !!dir ? "/"+dir : ""
+     return axios.get(API_SERVER+"/api/directories/list/"+username+dir)
+        .then(response => {
+            dispatch({
+                type: DIRECTORIES_LIST_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: DIRECTORIES_LIST_FAIL,
+                error: response
+            })
+        })
+   }
+}
+export function changeDirectory (dir) {
+  return {
+    type: CHANGE_DIRECTORY,
+    dir
+  }
 }
