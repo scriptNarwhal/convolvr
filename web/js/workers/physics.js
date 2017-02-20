@@ -61,7 +61,7 @@ self.update = function () {
 							while (s > -1) {
 								structure = obj.structures[s]
 								objPos = [obj.position[0]+structure.position[0],
-													obj.position[1]+structure.position[1]+180000,
+													obj.position[1]+structure.position[1]+175000,
 													obj.position[2]+structure.position[2]]
 								bounds = [size * structure.width, size * structure.floors, size * structure.length]
 								if (structure.position != undefined) {
@@ -72,36 +72,36 @@ self.update = function () {
 								}
 								if (distance2dCompare(position, objPos, 300000)) {
 									oPos = objPos //structure.position
-									if (position[0] > (oPos[0] - bounds[0]) && position[0] < (oPos[0] + bounds[0])) { 		// now actually check collisions using box method...
-										innerBox[0] = (position[0] > (oPos[0] - bounds[0] + 4000) && position[0] < (oPos[0] + bounds[0] - 4000));
+									if (position[0] > (oPos[0] - bounds[0] / 2.0) && position[0] < (oPos[0] + bounds[0])) { 		// now actually check collisions using box method...
+										innerBox[0] = (position[0] > (oPos[0]) && position[0] < (oPos[0] + bounds[0]));
 										delta[0] = Math.abs(position[0] - oPos[0]);
 
-										if (position[2] > (oPos[2] - bounds[2]) && position[2] < (oPos[2] + bounds[2])) {
-											innerBox[1] = (position[2] > (oPos[2] - bounds[2] + 4000) && position[2] < (oPos[2] + bounds[2] - 4000));
+										if (position[2] > (oPos[2] - bounds[2]/ 2.0) && position[2] < (oPos[2] + bounds[2])) {
+											innerBox[1] = (position[2] > (oPos[2]) && position[2] < (oPos[2] + bounds[2]));
 											delta[1] = Math.abs(position[2] - oPos[2]);
 											let floor = Math.floor(((position[1] - oPos[1])) / size)-1,
 											  	offset = (position[1] - oPos[1]) % size
-											if (floor > -1 && floor < structure.floors+2) {
-												if (offset < 2000+vrHeight ) { // floor collision
-													position[1] = 2000+oPos[1] + (floor+1)*size
+											if (floor > -1 && floor < structure.floors+1) {
+												if (offset < 3000+vrHeight ) { // floor collision
+													position[1] = 3000+oPos[1] + (floor+1)*size
 													 self.postMessage('{"command": "floor collision", "data":{"floor": '+floor+
 													 ', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}')
 												}
-												if (offset > 45000) {
-													if ((position[0] > oPos[0])) { // wall collision
-														position[0] = oPos[0] + bounds[0]
-													} else {
-														position[0] = oPos[0] - bounds[0]
-													}
-													if (position[2] > oPos[2]) {
-														position[2] = oPos[2] + bounds[2]
-													} else {
-														position[2] = oPos[2] - bounds[2]
-													}
-													collision = true
-														self.postMessage('{"command": "structure collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
-														', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}')
-												}
+												// if (offset > 45000) {
+												// 	if ((position[0] > oPos[0])) { // wall collision
+												// 		position[0] = oPos[0] + bounds[0]
+												// 	} else {
+												// 		position[0] = oPos[0] - bounds[0]
+												// 	}
+												// 	if (position[2] > oPos[2]) {
+												// 		position[2] = oPos[2] + bounds[2]
+												// 	} else {
+												// 		position[2] = oPos[2] - bounds[2]
+												// 	}
+												// 	collision = true
+												// 		self.postMessage('{"command": "structure collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
+												// 		', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}')
+												// }
 											}
 										}
 									}

@@ -70,7 +70,7 @@ world.chat = new ListView({
 }, three.scene).initMesh()
 
 let initChatUI = () => {
-  world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 18000, -5000])
+  world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 20000, -5000])
 }
 
 ReactDOM.render(
