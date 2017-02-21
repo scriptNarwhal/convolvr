@@ -4,6 +4,7 @@ import Entity from '../entities/entity'
 import Terrain from './terrain/terrain'
 import WorldPhysics  from '../systems/world-physics'
 import { render, vrRender} from './render'
+import PostProcessing from './post-processing'
 import { API_SERVER } from '../config.js'
 import { send } from '../network/socket'
 
@@ -17,11 +18,21 @@ export default class World {
 				screenResX = window.devicePixelRatio * window.innerWidth,
 				renderer = null,
 				self = this,
-				three = {}
+				three = {},
+				postProcessing = false
 
 		this.initLocalSettings()
-		renderer = new THREE.WebGLRenderer({antialias: this.aa != 'off'})
-		this.appStore = store
+		let rendererOptions = {antialias: this.aa != 'off' && this.enablePostProcessing != 'on'}
+		if (this.enablePostProcessing == 'on') {
+			rendererOptions.alpha = true
+			rendererOptions.clearColor = 0x000000
+		}
+		renderer = new THREE.WebGLRenderer(rendererOptions)
+		postProcessing = new PostProcessing(renderer, scene, camera)
+		if (this.enablePostProcessing == 'on') {
+			postProcessing.init()
+		}
+		this.postProcessing = postProcessing
 		this.socket = socket
 		this.config = false
 		this.windowFocus = true
@@ -90,15 +101,20 @@ export default class World {
 			gridTexture.anisotropy = renderer.getMaxAnisotropy()
 				//skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
 		})
-		window.onresize = function () {
+		function onResize () {
 			world.screenResX = window.devicePixelRatio * window.innerWidth
 			if (three.world.mode != "stereo") {
-				three.renderer.setSize(window.innerWidth, window.innerHeight)
+				three.renderer.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
+			}
+			if (world.postProcessing.enabled) {
+				world.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
 			}
 			three.camera.aspect = innerWidth / innerHeight
 			three.camera.updateProjectionMatrix()
 		}
-		window.onresize()
+		window.addEventListener('resize', onResize, true)
+		this.onWindowResize = onResize
+		onResize()
 
 		socket.on("update", packet => {
 			let data = JSON.parse(packet.data),
@@ -230,6 +246,7 @@ export default class World {
 	initLocalSettings () {
 		let cameraMode = localStorage.getItem("camera"),
 				lighting = localStorage.getItem("lighting"),
+				enablePostProcessing = localStorage.getItem("postProcessing"),
 				aa = localStorage.getItem("aa")
 
 		if (cameraMode == undefined) {
@@ -244,9 +261,14 @@ export default class World {
 			lighting = 'high'
 			localStorage.setItem("lighting", 'high')
 		}
+		if (enablePostProcessing == null) {
+			enablePostProcessing = !this.mobile ? 'on' : 'off'
+			localStorage.setItem("postProcessing", enablePostProcessing)
+		}
 		this.aa = aa
 		this.cameraMode = cameraMode
 		this.lighting = lighting
+		this.enablePostProcessing = enablePostProcessing
 	}
 	load (name, callback) {
 		this.name = name;

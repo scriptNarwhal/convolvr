@@ -169,7 +169,10 @@ class App extends Component {
                             MOUSE_KEYBOARD_CONTROLS_DISABLED: true
                           };
                           controls = new THREE.VRControls(camera)
-                          effect = new THREE.VREffect(renderer)
+                          if (!three.world.mobile) {
+                            renderer.autoClear = false
+                          }
+                          effect = new THREE.VREffect(renderer, three.world.postProcessing)
                           effect.scale = 22000
                           effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
                           three.vrEffect = effect
@@ -203,7 +206,7 @@ class App extends Component {
                       }
                       this.props.toggleVRMode()
                       three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
-                      window.onresize()
+                      three.world.onWindowResize()
                   }
                 }
             />

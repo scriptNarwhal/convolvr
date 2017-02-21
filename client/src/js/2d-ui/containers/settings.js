@@ -33,7 +33,8 @@ export default class Settings extends Component {
     this.state = {
       camera: 'fps',
       lighting: 'high',
-      aa: 'on'
+      aa: 'on',
+      postProcessing: 'on'
     }
   }
   componentWillMount () {
@@ -44,6 +45,7 @@ export default class Settings extends Component {
     this.setState({
       camera: localStorage.getItem("camera") || 'fps',
       lighting: localStorage.getItem("lighting") || 'high',
+      postProcessing: localStorage.getItem("postProcessing") || 'on',
       aa
     })
   }
@@ -54,6 +56,7 @@ export default class Settings extends Component {
     localStorage.setItem('camera', this.state.camera)
     localStorage.setItem('lighting', this.state.lighting)
     localStorage.setItem('aa', this.state.aa)
+    localStorage.setItem('postProcessing', this.state.postProcessing)
     this.reload()
   }
   render() {
@@ -86,6 +89,15 @@ export default class Settings extends Component {
             >
               <option value="on">On (recommended)</option>
               <option value="off">Off (for older GPUs)</option>
+            </select>
+          </div>
+          <div>
+            <h3 style={styles.h3}>Post Processing</h3>
+            <select onChange={e=> {this.setState({postProcessing: e.target.value})}}
+                    defaultValue={ this.state.aa }
+            >
+              <option value="on">On (Bloom HDR Effect)</option>
+              <option value="off">Off (Better Performance)</option>
             </select>
           </div>
           <input style={styles.save}
