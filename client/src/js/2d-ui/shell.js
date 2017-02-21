@@ -76,7 +76,10 @@ class Shell extends Component {
 		}
     xhr.send(formData)
     let from = this.props.username
-    this.props.sendMessage("File"+(ins > 1 ? "s" : "")+" Uploaded: "+fileNames.join(", "), from)
+    setTimeout(()=>{
+      this.props.sendMessage("File"+(ins > 1 ? "s" : "")+" Uploaded: "+fileNames.join(", "), from, fileNames)
+    }, 500)
+
   }
   render() {
     let hasMenu = !!this.props.hasMenu,
@@ -141,8 +144,8 @@ export default connect(
       toggleMenu: () => {
         dispatch(toggleMenu())
       },
-      sendMessage: (message, from) => {
-        dispatch(sendMessage(message, from))
+      sendMessage: (message, from, files) => {
+        dispatch(sendMessage(message, from, files))
       },
     }
   }

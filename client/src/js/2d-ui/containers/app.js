@@ -16,7 +16,7 @@ class App extends Component {
     events.on("chat message", message => {
       let chatMessage = JSON.parse(message.data),
           worldName = ''
-    	this.props.getMessage(chatMessage.message, chatMessage.from)
+    	this.props.getMessage(chatMessage.message, chatMessage.from, chatMessage.files)
       three.world.chat.write(`${chatMessage.from}: ${chatMessage.message}`)
       three.world.chat.update()
       this.notify(chatMessage.message, chatMessage.from)
@@ -263,8 +263,8 @@ export default connect(
       login: (user, pass, email, data) => {
             dispatch(login(user, pass, email, data))
       },
-      getMessage: (message, from) => {
-          dispatch(getMessage(message, from))
+      getMessage: (message, from, files) => {
+          dispatch(getMessage(message, from, files))
       },
       showChat: () => {
         dispatch(showChat())

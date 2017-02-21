@@ -46,14 +46,16 @@ const styles = {
 
     },
     messages: {
-      width: "85vw",
-      minWidth: "410px",
-      margin: "auto",
-      textAlign: "left",
-      position: "fixed",
+      width: '100%',
+      minWidth: '410px',
+      margin: 'auto auto auto 0.5em',
+      textAlign: 'left',
+      position: 'fixed',
       left: '65px',
-      marginLeft: '0.5em',
-      bottom: '2.5em'
+      bottom: '2.5em',
+      overflowY: 'auto',
+      height: '100%',
+      overflowX: 'hidden'
     },
     inputs: {
       minHeight: "2em",
@@ -73,6 +75,7 @@ class Chat extends Component {
     this.state = {
         text: ""
     }
+    this.messageBody = null
   }
   componentDidMount () {
     let worldMode = three.world.mode
@@ -84,29 +87,61 @@ class Chat extends Component {
     }
     if (this.props.chatOpen == false) {
       this.props.showChat()
+
     }
+    setTimeout(()=> { this.scrollToBottom() },500)
   }
-  send (message) {
+
+  scrollToBottom() {
+    const scrollHeight = this.messageBody.scrollHeight,
+          height = this.messageBody.clientHeight,
+          maxScrollTop = scrollHeight - height
+    this.messageBody.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom()
+  }
+  send (message, files = []) {
       console.log("send button")
       let from = this.props.username
-      this.props.sendMessage(message || this.state.text, from)
+      this.props.sendMessage(message || this.state.text, from, files)
       this.setState({
         text: ""
       })
       this.textInput.value = ""
+  }
+  isImage (file) {
+    return /(.png|.jpg|.jpeg|.gif|webp)/.test(file)
   }
   render() {
     return (
         <Shell className="chat"
               noBackground={true}
         >
-            <section style={styles.messages}>
+            <section style={styles.messages} ref={ r=> { this.messageBody = r} }>
                 {
                     this.props.messages.map((m, i) => (
                         <span key={i} style={styles.message} >
                           <span style={styles.innerMessage}>
                             <span style={styles.username}>{m.from}:</span>
                             <span style={styles.messageText}>{m.message}</span>
+                            { m.files != null ? <br /> : '' }
+                            {
+                              m.files != null && m.files.map((file, i) => {
+                                  return (
+                                    <a title={file} href={`/data/${m.from}/chat-uploads/${file}`} key={i} target="_blank">
+                                      {this.isImage(file) ?
+                                        <img src={`/data/${m.from}/chat-uploads/thumbs/${file}.jpg`}
+                                           style={{maxWidth: '320px'}}
+                                           title={file}
+                                           alt={file}
+                                        /> : file
+                                      }
+                                    </a>
+                                  )
+                              })
+                            }
                           </span>
                         </span>
                     ))

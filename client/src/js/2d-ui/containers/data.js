@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Shell from '../shell'
 import Card from '../card'
+import LocationBar from '../location-bar'
 
 class Data extends Component {
   componentWillMount () {
@@ -31,6 +32,9 @@ class Data extends Component {
         dirs = this.props.dirs !== false ? this.props.dirs : []
     return (
         <Shell className="data-view">
+          <LocationBar path={this.props.path}
+                       username={this.props.username}
+          />
           {
             dirs.map((dir, i) => {
               return (
@@ -99,6 +103,7 @@ export default connect(
         files: state.files.list.data,
         dirs: state.files.listDirectories.data,
         workingDir: state.files.listDirectories.workingDir,
+        path: state.files.listDirectories.workingDir.split("/"),
         upload: state.files.uploadMultiple
     }
   },

@@ -9,21 +9,23 @@ import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 import { send } from '../../network/socket.js'
 
-export function sendMessage (message, from) {
+export function sendMessage (message, from, files) {
     send('chat message', {
       message,
-      from
+      from,
+        files
     })
     return {
         type: MESSAGE_SEND,
     }
 }
 
-export function getMessage (message, from) {
+export function getMessage (message, from, files) {
     return {
         type: MESSAGE_GET,
         message,
-        from
+        from,
+        files
     }
 }
 

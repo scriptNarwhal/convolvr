@@ -82,6 +82,9 @@ ReactDOM.render(
 				<Route path="/login" component={Login} />
 				<Route path="/chat" component={Chat} />
 				<Route path="/data" component={Data} />
+        <Route path="/data/:username" component={Data} />
+        <Route path="/data/:username/:dir" component={Data} />
+        <Route path="/data/:username/:dir/:dirTwo" component={Data} />
 				<Route path="/worlds" component={Worlds} />
         <Route path="/worlds/new" component={NewWorld} />
 				<Route path="/settings" component={Settings} />

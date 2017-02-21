@@ -20,7 +20,8 @@ module.exports = function messages (state = {
                 ...state.messages,
                 {
                   message: action.message,
-                  from: action.from
+                  from: action.from,
+                  files: action.files
                 }
             ]
       })
