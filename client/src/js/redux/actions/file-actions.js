@@ -92,9 +92,52 @@ export function listDirectories (username, dir) {
         })
    }
 }
-export function changeDirectory (dir) {
+export function readText (filename, username, dir) {
+    return dispatch => {
+     dispatch({
+         type: TEXT_READ_FETCH,
+         username,
+         dir
+     })
+     return axios.get(`${API_SERVER}/api/documents/${username}${dir != null && dir != '' ? '/'+dir : ''}/${filename}`)
+        .then(response => {
+            dispatch({
+                type: TEXT_READ_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: TEXT_READ_FAIL,
+                error: response
+            })
+        })
+   }
+}
+export function writeText (text, filename, username, dir) {
+    return dispatch => {
+     dispatch({
+         type: TEXT_WRITE_FETCH,
+         username,
+         dir
+     })
+     let dir = !!dir && dir != "" ? "/"+dir : ""
+     return axios.post(`${API_SERVER}/api/documents/${username}${dir != null && dir != '' ? '/'+dir : ''}/${filename}`, {text: text})
+        .then(response => {
+            dispatch({
+                type: TEXT_WRITE_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: TEXT_WRITE_FAIL,
+                error: response.data
+            })
+        })
+   }
+}
+export function changeDirectory (path) {
   return {
     type: CHANGE_DIRECTORY,
-    dir
+    path
   }
 }

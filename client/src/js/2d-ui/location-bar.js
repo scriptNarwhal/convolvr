@@ -21,6 +21,12 @@ let styles = {
     height: '40px',
     display: 'block',
     backgroundColor: 'rgba(0,0,0,0.2)'
+  },
+  option: {
+    fontSize: "20pt",
+    display: 'inline-block',
+    float: 'left',
+    marginRight: '1em'
   }
 }
 
@@ -33,13 +39,16 @@ export default class LocationBar extends Component {
   render() {
     return (
         <div style={styles.bar()}>
+          <div style={styles.option}>
+            Home /
+          </div>
             {
               this.props.path.map((opt, i) =>{
                 return (
                   <div style={styles.option}
                        key={i}
                   >
-                    { opt }
+                    { opt } /
                   </div>
                 )
               })

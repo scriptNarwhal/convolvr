@@ -28,6 +28,7 @@ import Toolbox from './world/tools/toolbox'
 import World from './world/world'
 // 3D UI
 import HUDMenu from './vr-ui/menu'
+import VerticalMenu from './vr-ui/vertical-menu'
 import ListView from './vr-ui/text/list-view'
 import Cursor from './vr-ui/cursor'
 import Avatar from './world/avatar'

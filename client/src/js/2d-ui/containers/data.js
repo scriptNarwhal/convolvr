@@ -9,10 +9,10 @@ class Data extends Component {
     this.props.listDirectories(this.props.username)
   }
   componentWillUpdate (nextProps, nextState) {
-    if (nextProps.workingDir != this.props.workingDir) {
-      console.log("changing directory...", nextProps.workingDir)
-      this.props.listFiles(this.props.username, nextProps.workingDir)
-      this.props.listDirectories(this.props.username, nextProps.workingDir)
+    if (nextProps.workingPath.length != this.props.workingPath.length) {
+      console.log("changing directory...", nextProps.workingPath)
+      this.props.listFiles(this.props.username, nextProps.workingPath.join("/"))
+      this.props.listDirectories(this.props.username, nextProps.workingPath.join("/"))
     }
   }
   isImage (file) {
@@ -20,19 +20,24 @@ class Data extends Component {
   }
   getFullPath (file, thumbnail) {
     let username = this.props.username,
-        workingDir = this.props.workingDir
+        workingPath = this.props.workingPath.join("/")
     if (thumbnail && this.isImage(file)) {
-      return `/data/${username}/${workingDir}/thumbs/${file}.jpg`
+      return `/data/${username}/${workingPath}/thumbs/${file}.jpg`
     } else {
-      return `/data/${username}/${workingDir}/${file}`
+      return `/data/${username}/${workingPath}/${file}`
     }
+  }
+  enterDirectory (dir) {
+    let path = this.props.workingPath
+    path.push(dir)
+    this.props.changeDirectory(path)
   }
   render() {
     let files = this.props.files !== false ? this.props.files : [],
         dirs = this.props.dirs !== false ? this.props.dirs : []
     return (
         <Shell className="data-view">
-          <LocationBar path={this.props.path}
+          <LocationBar path={this.props.workingPath}
                        username={this.props.username}
           />
           {
@@ -41,7 +46,7 @@ class Data extends Component {
                 <Card image={''}
                       clickHandler={ (e, title) => {
                         console.log(e, title, "clicked")
-                        this.props.changeDirectory(title)
+                        this.enterDirectory(title)
                       }}
                       compact={true}
                       showTitle={true}
@@ -102,8 +107,7 @@ export default connect(
         vrMode: state.app.vrMode,
         files: state.files.list.data,
         dirs: state.files.listDirectories.data,
-        workingDir: state.files.listDirectories.workingDir,
-        path: state.files.listDirectories.workingDir.split("/"),
+        workingPath: state.files.listDirectories.workingPath,
         upload: state.files.uploadMultiple
     }
   },
@@ -115,8 +119,8 @@ export default connect(
       listDirectories: (username, dir) => {
           dispatch(listDirectories(username, dir))
       },
-      changeDirectory: (dir) => {
-        dispatch(changeDirectory(dir))
+      changeDirectory: (path) => {
+        dispatch(changeDirectory(path))
       },
       toggleMenu: (toggle) => {
         dispatch(toggleMenu(toggle))

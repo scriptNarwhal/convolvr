@@ -40,7 +40,8 @@ const styles = {
       padding: "0.25em"
     },
     username: {
-      paddingRight: '0.66em'
+      paddingRight: '0.66em',
+      color: '#808080'
     },
     messageText: {
 
@@ -51,10 +52,10 @@ const styles = {
       margin: 'auto auto auto 0.5em',
       textAlign: 'left',
       position: 'fixed',
-      left: '65px',
-      bottom: '2.5em',
+      left: '68px',
+      bottom: '50px',
       overflowY: 'auto',
-      height: '100%',
+      height: '93%',
       overflowX: 'hidden'
     },
     inputs: {

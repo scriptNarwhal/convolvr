@@ -36,7 +36,7 @@ module.exports = function files (state = {
     data: false,
     fetching: false,
     error: false,
-    workingDir: ''
+    workingPath: []
   },
   delete: {
     data: false,
@@ -140,7 +140,7 @@ module.exports = function files (state = {
       case CHANGE_DIRECTORY:
         return Object.assign({}, state, {
           listDirectories: Object.assign({}, state.listDirectories, {
-            workingDir: action.dir
+            workingPath: action.path
           })
         })
     case FILE_UPLOAD_FETCH:
