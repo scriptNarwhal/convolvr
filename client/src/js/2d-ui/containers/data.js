@@ -3,16 +3,34 @@ import Shell from '../shell'
 import Card from '../card'
 import LocationBar from '../location-bar'
 
+let styles = {
+  hr: {
+    visibility: 'hidden'
+  }
+}
+
 class Data extends Component {
   componentWillMount () {
-    this.props.listFiles(this.props.username)
-    this.props.listDirectories(this.props.username)
+    this.props.listFiles(this.props.username, this.props.workingPath.join("/"))
+    this.props.listDirectories(this.props.username, this.props.workingPath.join("/"))
+    this.setState({
+      update: 0
+    })
   }
   componentWillUpdate (nextProps, nextState) {
+    console.log("next props workingPath")
+    console.log(nextProps.workingPath.length)
     if (nextProps.workingPath.length != this.props.workingPath.length) {
       console.log("changing directory...", nextProps.workingPath)
       this.props.listFiles(this.props.username, nextProps.workingPath.join("/"))
       this.props.listDirectories(this.props.username, nextProps.workingPath.join("/"))
+    }
+    if ((this.props.files == false && nextProps.files != false) ||
+         this.props.dirs == false && nextProps.dirs != false) {
+      console.log("finished loading files or dirs")
+      this.setState({
+        update: this.state.update+1
+      })
     }
   }
   isImage (file) {
@@ -22,9 +40,9 @@ class Data extends Component {
     let username = this.props.username,
         workingPath = this.props.workingPath.join("/")
     if (thumbnail && this.isImage(file)) {
-      return `/data/${username}/${workingPath}/thumbs/${file}.jpg`
+      return `/data/${username}${workingPath}/thumbs/${file}.jpg`
     } else {
-      return `/data/${username}/${workingPath}/${file}`
+      return `/data/${username}${workingPath}/${file}`
     }
   }
   enterDirectory (dir) {
@@ -38,9 +56,17 @@ class Data extends Component {
     return (
         <Shell className="data-view">
           <LocationBar path={this.props.workingPath}
+                       label="Data"
                        username={this.props.username}
+                       onItemSelect={  (item, index, length) => {
+                          console.log("changing dir from location bar")
+                          let path = this.props.workingPath
+                          path.splice(index+1)
+                          this.props.changeDirectory(path)
+                       }}
           />
           {
+            !this.props.filesFetching && !this.props.dirsFetching &&
             dirs.map((dir, i) => {
               return (
                 <Card image={''}
@@ -56,7 +82,9 @@ class Data extends Component {
               )
             })
           }
+          <hr style={styles.hr} />
           {
+            !this.props.filesFetching && !this.props.dirsFetching &&
             files.map((file, i) => {
               return (
                 <Card image={this.isImage(file) ? this.getFullPath(file, true) : ''}
@@ -107,6 +135,8 @@ export default connect(
         vrMode: state.app.vrMode,
         files: state.files.list.data,
         dirs: state.files.listDirectories.data,
+        filesFetching: state.files.list.fetching,
+        dirsFetching: state.files.listDirectories.fetching,
         workingPath: state.files.listDirectories.workingPath,
         upload: state.files.uploadMultiple
     }

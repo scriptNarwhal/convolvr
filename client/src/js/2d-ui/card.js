@@ -21,7 +21,9 @@ let styles = {
   },
   title: {
     width: '100%',
-    height: '40px',
+    fontSize: '16px',
+    height: '32px',
+    paddingTop: '8px',
     display: 'block',
     backgroundColor: 'rgba(0,0,0,0.2)'
   }

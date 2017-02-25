@@ -1,6 +1,7 @@
 /* chat container */
 import React, { Component } from 'react'
 import Shell from '../shell'
+import LocationBar from '../location-bar'
 
 const styles = {
     chat: {
@@ -30,18 +31,16 @@ const styles = {
     },
     message : {
       display: "block",
-      marginRight: "50%",
-      minWidth: "410px",
       marginBottom: "0.5em"
     },
     innerMessage: {
-      background: "black",
+      background: "#101010",
       color: "white",
       padding: "0.25em"
     },
     username: {
       paddingRight: '0.66em',
-      color: '#808080'
+      color: '#f0f0f0'
     },
     messageText: {
 
@@ -56,7 +55,8 @@ const styles = {
       bottom: '50px',
       overflowY: 'auto',
       height: '93%',
-      overflowX: 'hidden'
+      overflowX: 'hidden',
+      fontSize: '12pt'
     },
     inputs: {
       minHeight: "2em",
@@ -120,6 +120,13 @@ class Chat extends Component {
         <Shell className="chat"
               noBackground={true}
         >
+          <LocationBar path={this.props.workingPath}
+                       label="Chat"
+                       username={this.props.username}
+                       onItemSelect={  (item, index, length) => {
+
+                       }}
+          />
             <section style={styles.messages} ref={ r=> { this.messageBody = r} }>
                 {
                     this.props.messages.map((m, i) => (

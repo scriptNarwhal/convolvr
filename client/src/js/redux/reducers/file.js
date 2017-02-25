@@ -36,7 +36,7 @@ module.exports = function files (state = {
     data: false,
     fetching: false,
     error: false,
-    workingPath: []
+    workingPath: [""]
   },
   delete: {
     data: false,

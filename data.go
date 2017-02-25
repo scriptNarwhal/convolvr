@@ -16,7 +16,7 @@ import (
 /* /files/list/:username/:dir */
 func listFiles(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	filepath := "../web/data/" + username + "/"
 	if dir != "" {
 		filepath = filepath + dir
@@ -40,7 +40,7 @@ func getFiles(c echo.Context) error {
 func postFiles(c echo.Context) error {
 	file, err := c.FormFile("file") // Source
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	var thumbnails []string
 	log.Printf(`post files "%s" "%s"`, username, dir)
 	if err != nil {
@@ -78,7 +78,7 @@ func postFiles(c echo.Context) error {
 func postMultipleFiles(c echo.Context) error {
 	form, err := c.MultipartForm()
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	if err != nil {
 		return err
 	}
@@ -122,8 +122,13 @@ func makeThumbnails(filepath string, thumbnails []string) {
 		if err != nil {
 			panic(err)
 		}
-		thumbImage := imaging.Thumbnail(img, 512, 512, imaging.CatmullRom)
+		thumbImage := imaging.Thumbnail(img, 256, 256, imaging.Box)
 		saveThumbErr := imaging.Save(thumbImage, filepath+"/thumbs/"+thumb+".jpg")
+		if saveThumbErr != nil {
+			panic(saveThumbErr)
+		}
+		thumbImage = imaging.Thumbnail(img, 512, 512, imaging.Box)
+		saveThumbErr = imaging.Save(thumbImage, filepath+"/thumbs/"+thumb+".512.jpg")
 		if saveThumbErr != nil {
 			panic(saveThumbErr)
 		}
@@ -133,7 +138,7 @@ func makeThumbnails(filepath string, thumbnails []string) {
 /* /directories/list/:username/:dir */
 func getDirectories(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	filepath := "../web/data/"
 	if dir != "" {
 		filepath = filepath + username + "/" + dir
@@ -153,7 +158,7 @@ func getDirectories(c echo.Context) error {
 /* /directories/:username/:dir */
 func postDirectories(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	createDataDir(username, dir)
 	return c.JSON(http.StatusOK, nil)
 }
@@ -161,7 +166,7 @@ func postDirectories(c echo.Context) error {
 /* /documents/:username/:dir/:filename */
 func getText(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	filename := c.Param("filename")
 	filepath := "../web/data/" + username + "/" + dir + "/" + filename
 	file, err := ioutil.ReadFile(filepath)
@@ -174,7 +179,7 @@ func getText(c echo.Context) error {
 /* /documents/:username/:dir/:filename */
 func postText(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	filename := c.Param("filename")
 	text := c.FormValue("text")
 	filepath := "../web/data/" + username + "/" + dir + "/" + filename

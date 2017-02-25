@@ -35,7 +35,7 @@ export function listFiles (username, dir) {
          username,
          dir
      })
-     return axios.get(`${API_SERVER}/api/files/list/${username}${dir != null && dir != '' ? '/'+dir : ''}`)
+     return axios.get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir="+dir : ''}`)
         .then(response => {
             dispatch({
                 type: FILES_LIST_DONE,
@@ -56,7 +56,7 @@ export function uploadFile (file, username, dir) {
          username,
          dir
      })
-     let dir = !!dir && dir != "" ? "/"+dir : ""
+     let dir = !!dir ? "?dir="+dir : ""
      return axios.post(API_SERVER+"/api/files/upload/"+username+dir, file)
         .then(response => {
             dispatch({
@@ -78,7 +78,7 @@ export function listDirectories (username, dir) {
          username,
          dir
      })
-     return axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null && dir != '' ? '/'+dir : ''}`)
+     return axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir="+dir : ''}`)
         .then(response => {
             dispatch({
                 type: DIRECTORIES_LIST_DONE,
@@ -99,16 +99,18 @@ export function readText (filename, username, dir) {
          username,
          dir
      })
-     return axios.get(`${API_SERVER}/api/documents/${username}${dir != null && dir != '' ? '/'+dir : ''}/${filename}`)
+     return axios.get(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`)
         .then(response => {
             dispatch({
                 type: TEXT_READ_DONE,
-                data: response.data
+                data: response.data,
+                dir
             })
         }).catch(response => {
             dispatch({
                 type: TEXT_READ_FAIL,
-                error: response
+                error: response,
+                dir
             })
         })
    }
@@ -121,7 +123,7 @@ export function writeText (text, filename, username, dir) {
          dir
      })
      let dir = !!dir && dir != "" ? "/"+dir : ""
-     return axios.post(`${API_SERVER}/api/documents/${username}${dir != null && dir != '' ? '/'+dir : ''}/${filename}`, {text: text})
+     return axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`, {text: text})
         .then(response => {
             dispatch({
                 type: TEXT_WRITE_DONE,

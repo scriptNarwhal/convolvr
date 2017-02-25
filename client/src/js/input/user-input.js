@@ -165,8 +165,8 @@ export default class UserInput {
 				}
 			}
 			if ((velocity.x * velocity.x) + (velocity.z * velocity.z) > 20000) {
-					velocity.x *=  (1 - (0.005 * delta * 1000))
-					velocity.z *= (1 - (0.005 * delta * 1000))
+					velocity.x *=  (1 - (0.01 * delta * 1000))
+					velocity.z *= (1 - (0.01 * delta * 1000))
 			}
 			if (!! world.user.mesh) {
 				world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z)

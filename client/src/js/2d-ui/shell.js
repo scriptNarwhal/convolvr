@@ -4,7 +4,7 @@ import SideMenu from './side-menu'
 import { browserHistory } from 'react-router'
 
 let styles = {
-  shell: (hasMenu, menuOpen, menuOnly, noBackground) => {
+  shell: (hasMenu, menuOpen, menuOnly, noBackground, droppingFile) => {
     let mobile = window.innerWidth <= 640
     return {
       margin: 'auto',
@@ -17,6 +17,7 @@ let styles = {
       display: (menuOpen  ? "block" : "none"),
       zIndex: (hasMenu ? 999999 : 1),
       cursor: 'pointer',
+      backgroundColor: droppingFile ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0)',
       backgroundImage: noBackground ? 'none' : 'linear-gradient(to bottom, #0c0c0c, #111111, #212121)',
       overflowY: 'auto',
       overflowX: 'hidden',
@@ -34,12 +35,18 @@ let styles = {
 
 class Shell extends Component {
   componentWillMount () {
-
+    this.setState({
+      droppingFile: false
+    })
   }
   componentWillUpdate(nextProps, nextState) {
 
   }
   uploadFiles (files) {
+    let dir = ""
+    if (this.props.reactPath.indexOf("/chat") > -1) {
+      dir = "chat-uploads"
+    }
 		console.log("uploading files")
 		let xhr = new XMLHttpRequest(),
 			  formData = new FormData(),
@@ -64,7 +71,7 @@ class Shell extends Component {
 				console.log("finished uploading")
 			}
 		}
-		xhr.open("POST", "/api/files/upload-multiple/"+username+"/chat-uploads", true);
+		xhr.open("POST", "/api/files/upload-multiple/"+username+"?dir="+dir, true);
 		//xhr.setRequestHeader("x-access-token", localStorage.getItem("token"));
 		if ("upload" in new XMLHttpRequest) { // add upload progress event
 				xhr.upload.onprogress = function (event) {
@@ -79,7 +86,12 @@ class Shell extends Component {
     setTimeout(()=>{
       this.props.sendMessage("File"+(ins > 1 ? "s" : "")+" Uploaded: "+fileNames.join(", "), from, fileNames)
     }, 500)
-
+    this.setDropBackground(false)
+  }
+  setDropBackground (mode) {
+    this.setState({
+      droppingFile: mode
+    })
   }
   render() {
     let hasMenu = !!this.props.hasMenu,
@@ -87,15 +99,15 @@ class Shell extends Component {
         menuOpen = this.props.menuOpen,
         noBackground = this.props.noBackground
     return (
-        <div style={styles.shell(hasMenu, menuOpen, menuOnly, noBackground)}
+        <div style={styles.shell(hasMenu, menuOpen, menuOnly, noBackground, this.state.droppingFile)}
              onDrop={e=> {
                         e.stopPropagation()
                         e.preventDefault()
                         this.uploadFiles(e.target.files || e.dataTransfer.files)}
                     }
-            onDragEnter={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); }}
-            onDragOver={e=>{ console.log(e);   e.preventDefault(); e.stopPropagation(); }}
-            onDragLeave={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); }}
+            onDragEnter={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); this.setDropBackground(true) }}
+            onDragOver={e=>{ console.log(e);   e.preventDefault(); e.stopPropagation();  }}
+            onDragLeave={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); this.setDropBackground(false) }}
           onClick={e=> {
             if (e.target.getAttribute('id') == 'shell') {
               this.props.toggleMenu()
@@ -136,7 +148,8 @@ export default connect(
       tracks: state.tracks,
       tools: state.tools,
       users: state.users,
-      stereoMode: state.app.vrMode
+      stereoMode: state.app.vrMode,
+      reactPath: state.routing.locationBeforeTransitions.pathname
     }
   },
   dispatch => {

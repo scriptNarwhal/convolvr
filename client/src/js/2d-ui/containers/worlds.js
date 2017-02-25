@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import Card from '../card'
 import Shell from '../shell'
+import LocationBar from '../location-bar'
 
 const styles = {
   worlds: {
@@ -21,6 +22,16 @@ class Worlds extends Component {
   render() {
     return (
         <Shell className="worlds">
+        <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
+                     label="Worlds"
+                     username={this.props.username}
+                     onItemSelect={  (item, index, length) => {
+                        console.log("changing dir from location bar")
+                        let path = this.props.workingPath
+                        path.splice(index+1)
+                        this.props.changeDirectory(path)
+                     }}
+        />
           <div style={styles.worlds}>
           {
             this.props.worlds.map((world, i) => {
@@ -37,6 +48,7 @@ class Worlds extends Component {
                       color={`#${(world.light.color).toString(16)}`}
                       image={world.sky.photosphere != '' ? `/data/${thumb}` : ""}
                       showTitle={true}
+                      compact={world.sky.photosphere == ''}
                       title={world.name}
                       key={i}
                 />

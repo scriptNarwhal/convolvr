@@ -10,6 +10,7 @@ let styles = {
       top: '0',
       position: 'fixed',
       paddingLeft: '74px',
+      marginTop: '0.2em',
       height: '48px',
       display: 'inline-block',
       marginRight: '0.5em',
@@ -26,7 +27,13 @@ let styles = {
     fontSize: "20pt",
     display: 'inline-block',
     float: 'left',
-    marginRight: '1em'
+    marginRight: '0.5em'
+  },
+  home: {
+    fontSize: "20pt",
+    display: 'inline-block',
+    float: 'left',
+    marginLeft: '1em'
   }
 }
 
@@ -39,13 +46,18 @@ export default class LocationBar extends Component {
   render() {
     return (
         <div style={styles.bar()}>
-          <div style={styles.option}>
-            Home /
+          <div onClick={ e=> { this.props.onItemSelect(this.props.label, 0) } }
+               style={styles.home}
+          >
+            <span style={{ marginRight: '0.3em' }}>
+              { this.props.label }
+            </span>
           </div>
             {
               this.props.path.map((opt, i) =>{
                 return (
                   <div style={styles.option}
+                       onClick={ e=> { this.props.onItemSelect(opt, i) } }
                        key={i}
                   >
                     { opt } /
@@ -59,5 +71,7 @@ export default class LocationBar extends Component {
 }
 
 LocationBar.defaultProps = {
-    path: []
+  path: [],
+  username: "",
+  label: ""
 }

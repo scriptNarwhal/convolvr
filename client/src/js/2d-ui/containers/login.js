@@ -3,10 +3,10 @@ import Shell from '../shell'
 
 const styles = {
   innerLogin: {
-    width: '66.66vh',
-    height: '66.66vh',
+    width: '100%',
     minHeight: '291px',
     minWidth: '252px',
+    maxWidth: '768px',
     margin: 'auto',
     display: 'block',
     position: 'relative',
@@ -18,9 +18,9 @@ const styles = {
     background: 'rgb(27, 27, 27)'
   },
   title: {
-    fontSize: "4vh",
-    paddingTop: "3.5vh",
-    paddingBottom: "5vh"
+    fontSize: '2em',
+    paddingTop: '0.5em',
+    paddingBottom: '1em'
   },
   form: {
 
