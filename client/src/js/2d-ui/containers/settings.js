@@ -67,7 +67,7 @@ export default class Settings extends Component {
           <div>
             <h3 style={styles.h3}>Camera Control Mode</h3>
             <select onChange={e=> { this.setState({camera: e.target.value})}}
-                    defaultValue={ this.state.camera }
+                    value={ this.state.camera }
             >
               <option value="fps">First Person Camera</option>
               <option value="vehicle">Flight Camera (relative rotation)</option>
@@ -76,7 +76,7 @@ export default class Settings extends Component {
           <div>
             <h3 style={styles.h3}>Lighting Quality</h3>
             <select onChange={e=> {this.setState({lighting: e.target.value})}}
-                    defaultValue={ this.state.lighting }
+                    value={ this.state.lighting }
             >
               <option value="high">High (recommended)</option>
               <option value="low">Low (mobile devices)</option>
@@ -85,7 +85,7 @@ export default class Settings extends Component {
           <div>
             <h3 style={styles.h3}>Antialiasing</h3>
             <select onChange={e=> {this.setState({aa: e.target.value})}}
-                    defaultValue={ this.state.aa }
+                    value={ this.state.aa }
             >
               <option value="on">On (recommended)</option>
               <option value="off">Off (for older GPUs)</option>
@@ -94,7 +94,7 @@ export default class Settings extends Component {
           <div>
             <h3 style={styles.h3}>Post Processing</h3>
             <select onChange={e=> {this.setState({postProcessing: e.target.value})}}
-                    defaultValue={ this.state.aa }
+                    value={ this.state.postProcessing }
             >
               <option value="on">On (Bloom HDR Effect)</option>
               <option value="off">Off (Better Performance)</option>

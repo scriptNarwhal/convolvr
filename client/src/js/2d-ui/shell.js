@@ -84,7 +84,7 @@ class Shell extends Component {
     xhr.send(formData)
     let from = this.props.username
     setTimeout(()=>{
-      this.props.sendMessage("File"+(ins > 1 ? "s" : "")+" Uploaded: "+fileNames.join(", "), from, fileNames)
+      this.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames)
     }, 500)
     this.setDropBackground(false)
   }

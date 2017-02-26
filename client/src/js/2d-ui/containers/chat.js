@@ -1,6 +1,7 @@
 /* chat container */
 import React, { Component } from 'react'
 import Shell from '../shell'
+import Card from '../card'
 import LocationBar from '../location-bar'
 
 const styles = {
@@ -15,36 +16,44 @@ const styles = {
     text: {
         width: '70%',
         border: 'none',
-        background: '#202020',
+        background: 'rgba(0,0,0,0.5)',
         color: 'white',
         fontSize: '1em',
         marginLeft: '0.15em',
         padding: '0.5em'
     },
     button: {
-        background: "#444444",
+        background: "rgb(29, 29, 29)",
         color: "white",
-        width: '15%',
+        width: '100px',
         border: 'none',
         fontSize: '1em',
-        padding: '0.5em'
+        padding: '0.5em',
+        borderTopRightRadius: '3px',
+        borderBottomRightRadius: '3px'
     },
     message : {
       display: "block",
-      marginBottom: "0.5em",
-      paddingTop: "0.15em"
+      marginTop: '0.25em',
+      marginBottom: '0.25em'
     },
     innerMessage: {
-      background: "#101010",
-      color: "white",
-      padding: "0.25em"
+      color: "white"
     },
     username: {
-      paddingRight: '0.66em',
-      color: '#f0f0f0'
+      padding: '0.25em',
+      color: '#f0f0f0',
+      background: "#101010",
+      display: 'inline-block',
+      borderTopLeftRadius: '2px',
+      borderBottomLeftRadius: '2px'
     },
     messageText: {
-
+      paddingRight: '0.5em',
+      background: "#101010",
+      padding: '0.25em',
+      borderTopRightRadius: '2px',
+      borderBottomRightRadius: '2px'
     },
     messages: {
       width: '100%',
@@ -52,19 +61,19 @@ const styles = {
       margin: 'auto auto auto 0.5em',
       textAlign: 'left',
       position: 'fixed',
-      left: '68px',
-      bottom: '50px',
+      left: '69px',
+      bottom: '58px',
       overflowY: 'auto',
       height: '93%',
       overflowX: 'hidden',
-      fontSize: '12pt'
+      fontSize: '14pt'
     },
     inputs: {
       minHeight: "2em",
-      minWidth: "480px",
+      minWidth: "320px",
       position: "fixed",
-      bottom: "1vh",
-      width: "48vw",
+      bottom: "0.4em",
+      width: "95vw",
       textAlign: "left",
       left: '65px',
       marginLeft: '0.5em'
@@ -117,6 +126,7 @@ class Chat extends Component {
     return /(.png|.jpg|.jpeg|.gif|webp)/.test(file)
   }
   render() {
+    let lastSender = ''
     return (
         <Shell className="chat"
               noBackground={true}
@@ -130,30 +140,38 @@ class Chat extends Component {
           />
             <section style={styles.messages} ref={ r=> { this.messageBody = r} }>
                 {
-                    this.props.messages.map((m, i) => (
+                    this.props.messages.map((m, i) => {
+                        let fromLabel = m.from != lastSender || (m.files != null && m.files.length > 0) ?
+                            (<span style={styles.username}>{m.from}:</span>) : ''
+                        lastSender = m.from
+                        return (
                         <span key={i} style={styles.message} >
                           <span style={styles.innerMessage}>
-                            <span style={styles.username}>{m.from}:</span>
+                            { fromLabel }
                             <span style={styles.messageText}>{m.message}</span>
-                            { m.files != null ? <br /> : '' }
+                            { m.files != null ? <br style={{marginBottom: '0.5em'}} /> : '' }
                             {
                               m.files != null && m.files.map((file, i) => {
                                   return (
-                                    <a title={file} href={`/data/${m.from}/chat-uploads/${file}`} key={i} target="_blank">
-                                      {this.isImage(file) ?
-                                        <img src={`/data/${m.from}/chat-uploads/thumbs/${file}.jpg`}
-                                           style={{maxWidth: '320px'}}
-                                           title={file}
-                                           alt={file}
-                                        /> : file
-                                      }
-                                    </a>
+                                    <Card image={`/data/${m.from}/chat-uploads/thumbs/${file}.jpg`}
+                                          clickHandler={ (e, title) => {
+                                            console.log(e, title, "clicked")
+                                            let newWindow = window.open(`/data/${m.from}/chat-uploads/${file}`, "_blank")
+                                            newWindow.focus()
+                                          }}
+                                          compact={!this.isImage(file)}
+                                          showTitle={true}
+                                          title={file}
+                                          key={i}
+                                    />
                                   )
                               })
                             }
                           </span>
                         </span>
-                    ))
+                    )
+
+                  })
                 }
             </section>
             <section style={styles.inputs}>

@@ -99,7 +99,7 @@ export function loginDone (response) {
     worldUser.name = data.name
     worldUser.email = data.email
     worldUser.id = data.id
-  if (three.world.name == "overworld" || window.location.href.indexOf("/login") > -1) {
+  if (window.location.href.indexOf("/login") > -1) {
       browserHistory.push("/chat")
   }
   return {

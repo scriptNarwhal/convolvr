@@ -10,14 +10,22 @@ class App extends Component {
 
   componentWillMount () {
     this.state = {
-      unread: 0
+      unread: 0,
+      lastSender: ''
     }
     this.props.fetchWorlds()
     events.on("chat message", message => {
       let chatMessage = JSON.parse(message.data),
-          worldName = ''
+          worldName = '',
+          from = ''
     	this.props.getMessage(chatMessage.message, chatMessage.from, chatMessage.files)
-      three.world.chat.write(`${chatMessage.from}: ${chatMessage.message}`)
+      if (this.state.lastSender != chatMessage.from || (chatMessage.files != null && chatMessage.files.length > 0)) {
+        from = `${chatMessage.from}: `
+      }
+      this.setState({
+        lastSender: chatMessage.from
+      })
+      three.world.chat.write(`${from}${chatMessage.message}`)
       three.world.chat.update()
       this.notify(chatMessage.message, chatMessage.from)
       worldName = this.props.world == "overworld" ? "Convolvr" : this.props.world

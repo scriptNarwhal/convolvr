@@ -37,12 +37,18 @@ export function getChatHistory (skip) {
      })
      return axios.get(API_SERVER+"/api/chat-history/"+skip)
         .then(response => {
-            let newMessages = []
+            let newMessages = [],
+                lastSender = ''
             response.data.map((msg) =>{
-              let newMessage = JSON.parse(msg.message)
+              let newMessage = JSON.parse(msg.message),
+                  sender = ''
               newMessages.push(newMessage)
               if (three.world.chat != false) {
-                three.world.chat.write(`${newMessage.from}: ${newMessage.message}`)
+                if (newMessage.from != lastSender || (newMessage.files!=null && newMessage.files.length > 0)) {
+                  sender = `${newMessage.from}: `
+                }
+                lastSender = newMessage.from
+                three.world.chat.write(`${sender}${newMessage.message}`)
               }
             })
             three.world.chat.update()
