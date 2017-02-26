@@ -33,7 +33,7 @@ export default class Chunk {
 
         this.structures = []
         this.entities = []
-        physics = window.three.world.worldPhysics.worker
+        physics = window.three.world.UserPhysics.worker
         if (data == null) {
             data = { }
         }

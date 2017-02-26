@@ -2,7 +2,8 @@ import axios from 'axios'
 import Avatar from './avatar'
 import Entity from '../entities/entity'
 import Terrain from './terrain/terrain'
-import WorldPhysics  from '../systems/world-physics'
+import UserPhysics  from '../systems/user-physics'
+import EntityPhysics from '../systems/entity-physics'
 import { render, vrRender} from './render'
 import PostProcessing from './post-processing'
 import { API_SERVER } from '../config.js'
@@ -78,11 +79,13 @@ export default class World {
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
 		// userInput.init(this, camera, this.user)
-		this.worldPhysics = new WorldPhysics()
-		this.worldPhysics.init(self)
+		this.UserPhysics = new UserPhysics()
+		this.EntityPhysics = new EntityPhysics()
+		this.UserPhysics.init(self)
+		this.EntityPhysics.init(self)
 		this.terrain = new Terrain(this);
 		this.workers = {
-			physics: this.worldPhysics
+			physics: this.UserPhysics
 		}
 		three = this.three = {
 			world: this,

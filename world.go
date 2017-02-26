@@ -125,14 +125,14 @@ func getWorld(c echo.Context) error { // load specific world
 				green = third
 				blue = second
 			} else {
-				red = third / 3.0
-				green = first
-				blue = second / 2.0
+				red = third / 4.0
+				green = first / 2.0
+				blue = second
 			}
 		} else if rand.Intn(10) > 5 {
 			if rand.Intn(6) > 2 {
 				red = third
-				green = second / 2.0
+				green = second / 4.0
 				blue = first
 			} else {
 				red = first
@@ -142,11 +142,11 @@ func getWorld(c echo.Context) error { // load specific world
 		} else {
 			if rand.Intn(3) > 2 {
 				red = second / 2.0
-				green = first / 6.0
+				green = first / 8.0
 				blue = first
 			} else {
 				green = second / 2.0
-				red = first / 4.0
+				red = second / 4.0
 				blue = first
 			}
 		}

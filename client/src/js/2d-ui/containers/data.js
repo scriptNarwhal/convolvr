@@ -25,8 +25,8 @@ class Data extends Component {
       this.props.listFiles(this.props.username, nextProps.workingPath.join("/"))
       this.props.listDirectories(this.props.username, nextProps.workingPath.join("/"))
     }
-    if ((this.props.files == false && nextProps.files != false) ||
-         this.props.dirs == false && nextProps.dirs != false) {
+    if ((this.props.filesFetching == false && nextProps.filesFetching != false) ||
+         this.props.dirsFetching == false && nextProps.dirsFetching != false) {
       console.log("finished loading files or dirs")
       this.setState({
         update: this.state.update+1
@@ -49,10 +49,18 @@ class Data extends Component {
     let path = this.props.workingPath
     path.push(dir)
     this.props.changeDirectory(path)
+    this.update(250)
+  }
+  update (time) {
+    setTimeout(()=>{
+      this.setState({
+        update: this.state.update+1
+      })
+    }, time)
   }
   render() {
-    let files = this.props.files !== false ? this.props.files : [],
-        dirs = this.props.dirs !== false ? this.props.dirs : []
+    let files = this.props.files !== false && this.props.filesFetching == false ? this.props.files : [],
+        dirs = this.props.dirs !== false && this.props.dirsFetching == false ? this.props.dirs : []
     return (
         <Shell className="data-view">
           <LocationBar path={this.props.workingPath}
@@ -63,6 +71,7 @@ class Data extends Component {
                           let path = this.props.workingPath
                           path.splice(index+1)
                           this.props.changeDirectory(path)
+                          this.update(250)
                        }}
           />
           {
@@ -73,6 +82,7 @@ class Data extends Component {
                       clickHandler={ (e, title) => {
                         console.log(e, title, "clicked")
                         this.enterDirectory(title)
+                        this.update(250)
                       }}
                       compact={true}
                       showTitle={true}

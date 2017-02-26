@@ -44,7 +44,7 @@ export default class Text {
         textCanvas = null,
         textCanvasSize = 1024,
         textCanvasContext = null,
-        fontSize = 36,
+        fontSize = 42,
         textLine = '',
         lines = 0,
         line = '',
@@ -78,7 +78,7 @@ export default class Text {
       ++l
     }
     text.map((line, l) => {
-      textCanvasContext.fillText(line, 20, 960-(1+(lines-l)*fontSize*1.35))
+      textCanvasContext.fillText(line, 16, 960-(1+(lines-l)*fontSize*1.35))
     })
 
     textTexture = new THREE.Texture(textCanvas)

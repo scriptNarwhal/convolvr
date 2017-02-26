@@ -31,7 +31,8 @@ const styles = {
     },
     message : {
       display: "block",
-      marginBottom: "0.5em"
+      marginBottom: "0.5em",
+      paddingTop: "0.15em"
     },
     innerMessage: {
       background: "#101010",

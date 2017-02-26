@@ -30,7 +30,7 @@ export function fetchTowers (id) {
    }
 }
 export function doneFetchTowers (structures) {
-    let physicsWorld = three.world.worldPhysics.worker;
+    let physicsWorld = three.world.UserPhysics.worker;
     structures.map(data => {
 
     })
@@ -53,7 +53,7 @@ export function updateTower (id, data) {
     }
 }
 export function deleteTower (id) {
-    let physicsWorld = three.world.worldPhysics.worker;
+    let physicsWorld = three.world.UserPhysics.worker;
     physicsWorld.postMessage(JSON.stringify({
         command: "remove structure",
         data: id

@@ -1,4 +1,4 @@
-export default class WorldPhysics {
+export default class UserPhysics {
 	constructor() {
 		this.worker = null;
 	}

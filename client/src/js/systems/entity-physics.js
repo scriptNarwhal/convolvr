@@ -13,7 +13,8 @@ export default class EntityPhysics {
   	          cam = three.camera,
   	          user = sys.user,
   	          position = [],
-  	          velocity = []
+  	          velocity = [],
+							voxel = null
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
 					vrHeight = 22000 * vrFrame.pose.position[1]
 					sys.vrHeight = vrHeight
@@ -23,8 +24,14 @@ export default class EntityPhysics {
 	                           '],"velocity":['+user.velocity.x+','+user.velocity.y+','+user.velocity.z+
 						                 '],"vrHeight":'+vrHeight+'}}')
 
-		  } else {
-	         console.log(message.data)
+			} else if (message.command == "entity-user collision") {
+				console.log("entity-user collision")
+
+			} else if (message.command == "entity-entity collision") {
+				console.log("entity-entity collision")
+
+			} else {
+	        console.log(message.data)
 	    }
 	  };
 

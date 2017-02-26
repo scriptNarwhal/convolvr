@@ -4,17 +4,17 @@ import { API_SERVER } from '../../config.js'
 
 export default class Terrain {
   constructor (world) {
-    this.world = world;
-    this.config = world.config.terrain;
-    this.seed = world.seed;
+    this.world = world
+    this.config = world.config.terrain
     this.octree = world.octree
-    this.worldPhysics = world.worldPhysics;
-    this.platforms = [];
-		this.voxels = []; // map of coord strings to platforms
-		this.lastChunkCoords = [0, 0, 0];
-		this.chunkCoords = [0, 0, 0];
-		this.cleanUpChunks = [];
-    this.reqChunks = [];
+    this.UserPhysics = world.UserPhysics
+    this.EntityPhysics = world.EntityPhysics
+    this.voxels = []
+		this.voxelList = [] // map of coord strings to voxels
+		this.lastChunkCoords = [0, 0, 0]
+		this.chunkCoords = [0, 0, 0]
+		this.cleanUpChunks = []
+    this.reqChunks = []
   }
 
   init (config) {
@@ -38,14 +38,14 @@ export default class Terrain {
   }
 
   bufferChunks (force, phase) {
-    let platforms = this.platforms,
+    let voxels = this.voxels,
+        voxelList = this.voxelList,
         config = this.config,
         plat = null,
         chunk = null,
         removePhysicsChunks = [],
         chunkPos = [],
         pCell = [0,0,0],
-        voxels = this.voxels,
         position = three.camera.position,
         platform = null,
         terrainChunk = null,
@@ -63,14 +63,14 @@ export default class Terrain {
     if (force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2]) {
       lastCoords = this.lastChunkCoords = [coords[0], coords[1], coords[2]];
       force = false; 	// remove old chunks
-      for (c in platforms) {
-          platform = platforms[c];
+      for (c in voxelList) {
+          platform = voxelList[c];
           pCell = platform.data.cell;
           if (!!!platform.cleanUp && (pCell[0] < coords[0] - removeDistance ||
                                       pCell[0] > coords[0] + removeDistance ||
                                       pCell[2] < coords[2] - removeDistance ||
                                       pCell[2] > coords[2] + removeDistance)
-            ) { 	// park platforms for removal
+            ) { 	// mark voxels for removal
               platform.cleanUp = true;
               this.cleanUpChunks.push({physics: {cell: [pCell[0], 0, pCell[2]]}, cell: pCell[0]+".0."+pCell[2]});
             }
@@ -93,7 +93,7 @@ export default class Terrain {
                   }
                 }
                 removePhysicsChunks.push(cleanUp.physics);
-                platforms.splice(platforms.indexOf(terrainChunk), 1);
+                voxelList.splice(voxels.indexOf(terrainChunk), 1);
                 delete voxels[cleanUp.cell];
                 cleanUpPlats.splice(i, 1);
             }
@@ -101,7 +101,7 @@ export default class Terrain {
           }
       })
       c = 0;
-      // load new platforms // at first just from client-side generation
+      // load new voxels // at first just from client-side generation
       while (x <= endCoords[0]) {
         while (y <= endCoords[1]) {
             if (c < 6) {
@@ -131,23 +131,27 @@ export default class Terrain {
         }
         axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`)
            .then(response => {
-             let physicalChunks = []
+             let physicsVoxels = []
              typeof response.data.map == 'function' &&
              response.data.map(c =>{
                  let chunk = new Chunk({visible: showVoxels, altitude: c.altitude, color: c.color,
                                         entities: c.entities, voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
                if (!!chunk.geometry != "space") { // if its not empty space
-                     physicalChunks.push(chunk.data);
                      three.scene.add(chunk.mesh);
                  }
-                 platforms.push(chunk);
+                 physicsVoxels.push(chunk.data);
+                 voxelList.push(chunk);
                  voxels[c.x+".0."+c.z] = chunk;
              })
-             if (physicalChunks.length > 0) {
-               this.worldPhysics.worker.postMessage(JSON.stringify({
-                     command: "add platforms",
-                     data: physicalChunks
-                 }))
+             if (physicsVoxels.length > 0) {
+               this.UserPhysics.worker.postMessage(JSON.stringify({
+                     command: "add voxels",
+                     data: physicsVoxels
+                }))
+                this.EntityPhysics.worker.postMessage(JSON.stringify({
+                    command: "add voxels",
+                    data: physicsVoxels
+                }))
              }
           }).catch(response => {
              console.log("Chunk Error", response)
@@ -155,7 +159,9 @@ export default class Terrain {
       }
 
       if (removePhysicsChunks.length > 0) {
-        this.worldPhysics.worker.postMessage('{"command":"remove platforms","data":'+JSON.stringify(removePhysicsChunks)+'}');
+        let removeChunkData = JSON.stringify(removePhysicsChunks)
+        this.UserPhysics.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
+        this.EntityPhysics.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
       }
 
       lastCoords[0] = coords[0];
