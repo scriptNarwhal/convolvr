@@ -20,7 +20,8 @@ class Data extends Component {
   componentWillUpdate (nextProps, nextState) {
     console.log("next props workingPath")
     console.log(nextProps.workingPath.length)
-    if (nextProps.workingPath.length != this.props.workingPath.length) {
+    if (nextProps.workingPath.length != this.props.workingPath.length ||
+        nextProps.username != this.props.username) {
       console.log("changing directory...", nextProps.workingPath)
       this.props.listFiles(this.props.username, nextProps.workingPath.join("/"))
       this.props.listDirectories(this.props.username, nextProps.workingPath.join("/"))
@@ -60,7 +61,8 @@ class Data extends Component {
   }
   render() {
     let files = this.props.files !== false && this.props.filesFetching == false ? this.props.files : [],
-        dirs = this.props.dirs !== false && this.props.dirsFetching == false ? this.props.dirs : []
+        dirs = this.props.dirs !== false && this.props.dirsFetching == false ? this.props.dirs : [],
+        mobile = window.innerWidth <= 640
     return (
         <Shell className="data-view">
           <LocationBar path={this.props.workingPath}
@@ -104,6 +106,7 @@ class Data extends Component {
                         newWindow.focus()
                       }}
                       compact={!this.isImage(file)}
+                      quarterSize={mobile && this.isImage(file) }
                       showTitle={true}
                       title={file}
                       key={i}

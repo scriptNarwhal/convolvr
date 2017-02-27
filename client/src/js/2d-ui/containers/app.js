@@ -57,7 +57,8 @@ class App extends Component {
       this.props.getChatHistory(0) // wait a fraction of a second for the world to load / to show in 3d too
     }, 200)
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
-    if (window.location.href.indexOf("/chat") > -1 || window.location.href.indexOf("/login") > -1) {
+    if (window.location.href.indexOf("/chat") > -1 ||
+        window.location.href.indexOf("/login") > -1) {
       this.props.toggleMenu(true);
     }
     // detect user credentials
@@ -101,7 +102,9 @@ class App extends Component {
       }
     }
   }
-
+  goBack () {
+    browserHistory.push(`/world/${this.props.world}`)
+  }
   notify (chatMessage, from) {
     function doNotification() {
       function onNotifyShow() {
@@ -227,6 +230,23 @@ class App extends Component {
                 menuOnly={true}
                 menuOpen={this.props.menuOpen} ></Shell>
          { this.renderVRButtons() }
+         <Button title="Close Menu"
+                 image="/images/x.png"
+                 style={{
+                     position: "fixed",
+                     right:0,
+                     top: 0,
+                     zIndex: 9999999,
+                     background: 'transparent',
+                     display: !this.props.menuOpen ? "none" : "inline-block"
+                 }}
+                 onClick={ (evt, title) => {
+                     this.props.toggleMenu(false)
+                     this.goBack()
+                     //browserHistory.push("/menu")
+                 } }
+                 key={2}
+         />
             {this.props.children}
             <div className="lightbox" style={{display: "none"}}></div>
             <canvas id="webcam-canvas"></canvas>

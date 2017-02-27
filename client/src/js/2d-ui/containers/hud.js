@@ -4,25 +4,22 @@ import { browserHistory } from 'react-router';
 
 class HUD extends Component {
 
-    toggleMenu () {
-        this.props.toggleMenu(true);
+    toggleMenu (force) {
+        this.props.toggleMenu(force);
     }
 
   render() {
     return (
         <div className="hud">
-            {this.props.fullscreen == false ? (
-            <Button title="Options"
+            {this.props.fullscreen == false ? (<Button title="Options"
                     image="/images/configure.png"
                     className="options-button"
                     style={{display: this.props.menuOpen ? "none" : "inline-block", backgroundColor: 'transparent'}}
                     onClick={ (evt, title) => {
-                        this.toggleMenu()
+                        this.toggleMenu(true)
                         //browserHistory.push("/menu")
                     } }
-            />
-            ) : ""}
-
+            />) : ""}
           </div>
     )
   }

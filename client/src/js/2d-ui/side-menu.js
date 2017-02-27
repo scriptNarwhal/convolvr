@@ -30,10 +30,6 @@ class SideMenu extends Component {
       this.props.toggleMenu()
   }
 
-  goBack () {
-    browserHistory.push(`/world/${this.props.world}`)
-  }
-
   toggleVRMode () {
       this.props.toggleVRMode()
   }
@@ -62,16 +58,9 @@ class SideMenu extends Component {
                  title="Sign In / Switch Accounts"
                  clickHandler={ ()=> { browserHistory.push("/login") } }
             />
-            <Tab image="/images/configure.png"
+            <Tab image="/images/configure-h.png"
                  title="Settings"
                  clickHandler={ ()=> { browserHistory.push("/settings") } }
-            />
-            <Tab image="/images/x.png"
-                  title="Close Menu"
-                  clickHandler={() => {
-                    this.toggleMenu()
-                    this.goBack()
-                  }}
             />
           </div>
         </div>

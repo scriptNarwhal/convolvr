@@ -131,13 +131,6 @@ class Chat extends Component {
         <Shell className="chat"
               noBackground={true}
         >
-          <LocationBar path={this.props.workingPath}
-                       label="Chat"
-                       username={this.props.username}
-                       onItemSelect={  (item, index, length) => {
-
-                       }}
-          />
             <section style={styles.messages} ref={ r=> { this.messageBody = r} }>
                 {
                     this.props.messages.map((m, i) => {
@@ -153,7 +146,7 @@ class Chat extends Component {
                             {
                               m.files != null && m.files.map((file, i) => {
                                   return (
-                                    <Card image={`/data/${m.from}/chat-uploads/thumbs/${file}.jpg`}
+                                    <Card image={this.isImage(file) ? `/data/${m.from}/chat-uploads/thumbs/${file}.jpg` : ''}
                                           clickHandler={ (e, title) => {
                                             console.log(e, title, "clicked")
                                             let newWindow = window.open(`/data/${m.from}/chat-uploads/${file}`, "_blank")

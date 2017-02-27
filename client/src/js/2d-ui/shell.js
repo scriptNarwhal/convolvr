@@ -1,6 +1,7 @@
 /* General shell / dashboard UI */
 import React, { Component } from 'react'
 import SideMenu from './side-menu'
+import Button from './button'
 import { browserHistory } from 'react-router'
 
 let styles = {
