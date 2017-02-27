@@ -13,7 +13,7 @@ let world = null
 
 export default class World {
 	constructor(userInput = false, socket, store) {
-		let mobile = (window.innerWidth <= 640),
+		let mobile = (window.innerWidth <= 720),
 				scene = new THREE.Scene(),
 				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 6000000 ),
 				screenResX = window.devicePixelRatio * window.innerWidth,
@@ -22,6 +22,8 @@ export default class World {
 				three = {},
 				postProcessing = false
 
+
+		this.mobile = mobile
 		this.initLocalSettings()
 		let rendererOptions = {antialias: this.aa != 'off' && this.enablePostProcessing != 'on'}
 		if (this.enablePostProcessing == 'on') {
@@ -54,7 +56,6 @@ export default class World {
 		}
 		this.camera = camera
 		this.vrFrame = !!window.VRFrameData ? new VRFrameData() : null
-		this.mobile = mobile
 		this.userInput = userInput
 		this.sendUpdatePacket = 0
 		this.capturing = false
@@ -262,7 +263,7 @@ export default class World {
 		}
 		if (lighting == undefined) {
 			lighting = 'high'
-			localStorage.setItem("lighting", 'high')
+			localStorage.setItem("lighting", !this.mobile ? 'high' : 'low')
 		}
 		if (enablePostProcessing == null) {
 			enablePostProcessing = !this.mobile ? 'on' : 'off'
