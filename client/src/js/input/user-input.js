@@ -49,8 +49,11 @@ export default class UserInput {
 				viewport.onclick = (event) => {
 					let elem = event.target;
 					if (!uInput.fullscreen) {
-						elem.requestPointerLock()
+
 						uInput.toggleFullscreen()
+						setTimeout(()=>{
+							elem.requestPointerLock()
+						},100)
 					}
 				};
 				viewport.style.pointerEvents = ''
