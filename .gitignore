@@ -20,4 +20,5 @@ world.db.lock
 !/web/data/public/thumbs
 /web/data/public/chat-uploads/*
 !/web/data/public/chat-uploads/thumbs
+# /web/data/public/chat-uploads/thumbs/*.*
 /web/data/public/thumbs/*.*
