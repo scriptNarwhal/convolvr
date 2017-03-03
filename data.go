@@ -1,41 +1,47 @@
 package convolvr
 
 import (
-	"io"
-	"os"
 	"fmt"
-  "log"
-  "io/ioutil"
-  "net/http"
-  "github.com/labstack/echo"
+	"io"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+	"regexp"
+
+	"github.com/disintegration/imaging"
+	"github.com/labstack/echo"
 )
 
 /* /files/list/:username/:dir */
 func listFiles(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.Param("dir")
-	filepath := "../web/data/"+username+"/"
-	if (dir != "") {
-		filepath = filepath+dir
+	dir := c.QueryParam("dir")
+	filepath := "../web/data/" + username + "/"
+	if dir != "" {
+		filepath = filepath + dir
 	}
 	files, _ := ioutil.ReadDir(filepath)
 	fileNames := []string{}
-  for _, f := range files {
+	for _, f := range files {
 		if f.IsDir() == false {
 			fileNames = append(fileNames, f.Name())
-		}
-  }
+		} // test
+	}
 	return c.JSON(http.StatusOK, fileNames)
 }
+
 /* /files/download/:username/:dir/:filename (redundant at the moment) */
 func getFiles(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
+
 /* /files/upload/:username/:dir */
 func postFiles(c echo.Context) error {
 	file, err := c.FormFile("file") // Source
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
+	var thumbnails []string
 	log.Printf(`post files "%s" "%s"`, username, dir)
 	if err != nil {
 		return err
@@ -48,11 +54,11 @@ func postFiles(c echo.Context) error {
 	filepath := "../web/data/"
 	if dir != "" {
 		createDataDir(username, dir)
-		filepath = filepath+username+"/"+dir
+		filepath = filepath + username + "/" + dir
 	} else {
-		filepath = filepath+username
+		filepath = filepath + username
 	}
-	dst, err := os.Create(filepath+"/"+file.Filename)
+	dst, err := os.Create(filepath + "/" + file.Filename)
 	if err != nil {
 		return err
 	}
@@ -60,31 +66,42 @@ func postFiles(c echo.Context) error {
 	if _, err = io.Copy(dst, src); err != nil { // Copy
 		return err
 	}
+	isImage, _ := regexp.MatchString("(.png|.jpg|.jpeg|.webp|.gif)", file.Filename)
+	if isImage {
+		thumbnails = append(thumbnails, file.Filename)
+		makeThumbnails(filepath, thumbnails)
+	}
 	return c.HTML(http.StatusOK, fmt.Sprintf("<p>File %s uploaded successfully</p>", file.Filename))
 }
+
 /* /files/upload-multiple/:username/:dir */
 func postMultipleFiles(c echo.Context) error {
 	form, err := c.MultipartForm()
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	if err != nil {
 		return err
 	}
 	filepath := "../web/data/"
 	if dir != "" {
 		createDataDir(username, dir)
-		filepath = filepath+username+"/"+dir
+		filepath = filepath + username + "/" + dir
 	} else {
-		filepath = filepath+username
+		filepath = filepath + username
 	}
 	files := form.File["files"]
+	var thumbnails []string
 	for _, file := range files {
 		src, err := file.Open() // Source
 		if err != nil {
 			return err
 		}
 		defer src.Close()
-		dst, err := os.Create(filepath+"/"+file.Filename) // Destination
+		isImage, _ := regexp.MatchString("(.png|.jpg|.jpeg|.webp|.gif)", file.Filename)
+		if isImage {
+			thumbnails = append(thumbnails, file.Filename)
+		}
+		dst, err := os.Create(filepath + "/" + file.Filename) // Destination
 		if err != nil {
 			return err
 		}
@@ -93,80 +110,106 @@ func postMultipleFiles(c echo.Context) error {
 			return err
 		}
 	}
+	if len(thumbnails) > 0 {
+		makeThumbnails(filepath, thumbnails)
+	}
 	return c.HTML(http.StatusOK, fmt.Sprintf("<p>Uploaded successfully %d files</p>", len(files)))
 }
+
+func makeThumbnails(filepath string, thumbnails []string) {
+	for _, thumb := range thumbnails {
+		img, err := imaging.Open(filepath + "/" + thumb)
+		if err != nil {
+			panic(err)
+		}
+		thumbImage := imaging.Thumbnail(img, 256, 256, imaging.Box)
+		saveThumbErr := imaging.Save(thumbImage, filepath+"/thumbs/"+thumb+".jpg")
+		if saveThumbErr != nil {
+			panic(saveThumbErr)
+		}
+		thumbImage = imaging.Thumbnail(img, 512, 512, imaging.Box)
+		saveThumbErr = imaging.Save(thumbImage, filepath+"/thumbs/"+thumb+".512.jpg")
+		if saveThumbErr != nil {
+			panic(saveThumbErr)
+		}
+	}
+}
+
 /* /directories/list/:username/:dir */
 func getDirectories(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	filepath := "../web/data/"
 	if dir != "" {
-		filepath = filepath+username+"/"+dir
+		filepath = filepath + username + "/" + dir
 	} else {
-		filepath = filepath+username
+		filepath = filepath + username
 	}
 	files, _ := ioutil.ReadDir(filepath)
 	fileNames := []string{}
-  for _, f := range files {
-		if (f.IsDir()) {
+	for _, f := range files {
+		if f.IsDir() {
 			fileNames = append(fileNames, f.Name())
 		}
-  }
+	}
 	return c.JSON(http.StatusOK, fileNames)
 }
+
 /* /directories/:username/:dir */
 func postDirectories(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	createDataDir(username, dir)
 	return c.JSON(http.StatusOK, nil)
 }
+
 /* /documents/:username/:dir/:filename */
 func getText(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	filename := c.Param("filename")
-	filepath := "../web/data/"+username+"/"+dir+"/"+filename
+	filepath := "../web/data/" + username + "/" + dir + "/" + filename
 	file, err := ioutil.ReadFile(filepath)
-		if err != nil {
-				log.Fatal("Cannot open file", err)
-		}
+	if err != nil {
+		log.Fatal("Cannot open file", err)
+	}
 	return c.JSON(http.StatusOK, map[string]string{"text": string(file)})
 }
+
 /* /documents/:username/:dir/:filename */
-func postText(c echo.Context) error  {
+func postText(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.Param("dir")
+	dir := c.QueryParam("dir")
 	filename := c.Param("filename")
 	text := c.FormValue("text")
-  filepath := "../web/data/"+username+"/"+dir+"/"+filename
+	filepath := "../web/data/" + username + "/" + dir + "/" + filename
 	createFileIfMissing(username, dir, filename)
-	file, err := os.OpenFile(filepath, os.O_WRONLY | os.O_CREATE | os.O_TRUNC, 0777)
-		if err != nil {
-				log.Fatal("Cannot open file", err)
-		}
-  defer file.Close()
-  fmt.Fprintf(file, text)
+	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0777)
+	if err != nil {
+		log.Fatal("Cannot open file", err)
+	}
+	defer file.Close()
+	fmt.Fprintf(file, text)
 	return c.JSON(http.StatusOK, nil)
 }
 
 func createDataDir(username string, dir string) {
-	if _, err := os.Stat("../web/data/"+username+"/"+dir); err != nil {
-			if os.IsNotExist(err) {
-					os.MkdirAll("../web/data/"+username+"/"+dir, 666)
-			}
+	if _, err := os.Stat("../web/data/" + username + "/" + dir); err != nil {
+		if os.IsNotExist(err) {
+			os.MkdirAll("../web/data/"+username+"/"+dir+"/thumbs", 666)
+		}
 	}
 }
 
 func createFileIfMissing(username string, dir string, filename string) {
-	filepath := "../web/data/"+username+"/"+dir+"/"+filename
+	filepath := "../web/data/" + username + "/" + dir + "/" + filename
 	if _, err := os.Stat(filepath); err != nil {
-			if os.IsNotExist(err) {
-				createDataDir(username, dir)
-				_, err := os.Create(filepath)
-					if err != nil {
-							log.Fatal("Cannot create file", err)
-					}
+		if os.IsNotExist(err) {
+			createDataDir(username, dir)
+			_, err := os.Create(filepath)
+			if err != nil {
+				log.Fatal("Cannot create file", err)
 			}
+		}
 	}
 }

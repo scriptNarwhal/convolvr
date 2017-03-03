@@ -1,5 +1,7 @@
-class Tower {
-	constructor (data, platform) {
+import Structure from './structure'
+
+class Tower extends Structure {
+	constructor (data, platform, mobile = false) {
 		var f = 0,
 				i = 0,
 				face = null,
@@ -12,13 +14,18 @@ class Tower {
 				width = 50000 * xUnits,
 				length = 50000 * zUnits,
 				intensity = 0,
-				towerMaterial = new THREE.MeshLambertMaterial({
+				towerMaterial = mobile ?
+				new THREE.MeshLambertMaterial({
+					color: 0xf0f0f0
+				}) :
+				new THREE.MeshPhongMaterial({
 					color: 0xf0f0f0,
-					wireframe: false
+					specular: 0xf0f0f0
 				}),
 				LODGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 50000 * zUnits);
 
 		this.data = data;
+		super(this.data)
 		this.platform = platform;
 		this.towerMaterial = towerMaterial;
 		this.width = width;
@@ -31,7 +38,7 @@ class Tower {
     this.mesh = new THREE.Mesh(LODGeometry, towerMaterial);
 		this.mesh.userData = { structure: this }
     this.platform.mesh.add(this.mesh);
-    this.mesh.position.set(data.position[0]*50000, 43000+(floors+1) * 25000, length/2.0+data.position[2]*50000);
+    this.mesh.position.set(data.position[0]*50000, 185000+(floors+1) * 25000, length/2.0+data.position[2]*50000);
 	}
 
     initFloor (y, width, length) {
@@ -62,7 +69,7 @@ class Tower {
 					}),
 					towerGeometry = new THREE.BoxGeometry(50000 * xUnits, height, 5000),
 					towerGeometryB = new THREE.BoxGeometry(5000, height, 50000 * zUnits),
-					shaftGeometry = new THREE.BoxGeometry(25000 * zUnits, height, 25000 * zUnits),
+					shaftGeometry = new THREE.BoxGeometry(20000 * zUnits, height, 20000 * zUnits),
 					windowGeometry = new THREE.BoxGeometry(width * 0.75, 35000, 10000),
 					windowBSP = null,
 					windowMesh = null,
@@ -123,7 +130,7 @@ class Tower {
 				}
 
 				var elevator = new THREE.Mesh(shaftGeometry, towerMaterial);
-				elevator.position.set((width / 2) - 10000, 0, (length / 2) - 10000);
+				elevator.position.set((width/4), 0, (length/4));
 				elevator.rotateY(Math.PI / 2);
 				elevator.updateMatrix();
 				var elevatorBSP = new ThreeBSP(elevator);
@@ -132,7 +139,7 @@ class Tower {
 				finalGeom.computeFaceNormals();
 
 				building = new THREE.Mesh(finalGeom, towerMaterial);
-    		building.position.set(this.data.position[0]*50000, 43000+(floors+1) * 25000, this.data.position[2]*50000);
+    		building.position.set(this.data.position[0]*50000, 185000+(floors+1) * 25000, this.data.position[2]*50000);
     		building.updateMatrix();
     		building.matrixAutoUpdate = false;
 				this.platform.mesh.remove(this.mesh);

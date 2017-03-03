@@ -3,22 +3,25 @@ export let render = (world, last) => {
       camera = three.camera,
       cPos = camera.position,
       delta = (Date.now() - last) / 16000 ,
-      time = Date.now()
+      time = Date.now(),
+      user = world.user != null ? world.user : false
 
   if (!! world.userInput) {
-    world.userInput.update(delta); // Update keyboard / mouse / gamepad
-    world.raycaster.setFromCamera( world.userInput.castPos, camera );
-    //rayCastArea(world, camera) // only check surrounding chunks for entities pointed at
+    world.userInput.update(delta) // Update keyboard / mouse / gamepad
   }
-  if (world.user && world.user.mesh) {
-    world.user.mesh.position.set(cPos.x, cPos.y, cPos.z);
-    world.user.mesh.quaternion.set(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
+  if (user && user.mesh) {
+    user.cursor.deactivate()
+    user.mesh.position.set(cPos.x, cPos.y, cPos.z);
+    user.mesh.quaternion.set(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
+    rayCast(world, camera, cursorCallback)
   }
   world.sendUserData()
   world.updateSkybox(delta)
     if (world.mode == "vr" || world.mode == "web") {
-      if (world.screenResX > 1900 || three.renderer == null) {
-        three.rendererAA.render(three.scene, camera)
+      if (world.postProcessing.enabled) {
+          
+        world.postProcessing.composer.render()
+
       } else {
         three.renderer.render(three.scene, camera)
       }
@@ -28,14 +31,39 @@ export let render = (world, last) => {
     requestAnimationFrame( () => { render(world, last) } )
 }
 
-let rayCast = (objects, world, camera) => {
-	let i = 0,
-      o = null,
-      intersects = world.raycaster.intersectObjects( objects || three.scene.children )
-	for ( i = 0; i < intersects.length; i++ ) {
-    o = intersects[ i ].object
-    console.log(o.userData)
-	}
+let rayCast = (world, camera, callback) => {
+	let raycaster = world.raycaster,
+      octreeObjects = [],
+      intersections = [],
+      entity = null,
+      obj = null,
+      i = 0
+  raycaster.setFromCamera(new THREE.Vector2(0, 0), camera)
+  octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
+  intersections = raycaster.intersectOctreeObjects( octreeObjects )
+  i = intersections.length -1
+  while (i > -1) {
+    obj = intersections[i]
+    entity = obj.object.userData.entity
+    if (entity != null) {
+      callback(obj, entity, world)
+    }
+    i --
+  }
+}
+
+let cursorCallback = (obj, entity, world) => {
+  let cursor = world.user.cursor
+  if (cursor.entity != false) {
+    cursor.entity.activated = false
+    cursor.entity.gazedOver = false
+  }
+  if (obj.distance < 33000) {
+    cursor.activate()
+    cursor.setEntity(entity, obj.distance, obj.point)
+    // touching / interacting range
+    //console.log("Entity", obj.distance, entity)
+  }
 }
 
 export let vrAnimate = (time, oldPos) => {
@@ -43,6 +71,7 @@ export let vrAnimate = (time, oldPos) => {
       delta = Math.min(now - time, 500) / 16000,
       t = three,
       world = t.world,
+      user = world.user,
       frame = world.vrFrame,
       camera = t.camera,
       cPos = camera.position,
@@ -59,8 +88,10 @@ export let vrAnimate = (time, oldPos) => {
     vrWorldPos = [22000 * vrPos[0], 22000 * vrPos[1], 22000 * vrPos[2]]
     camera.quaternion.fromArray(frame.pose.orientation)
     world.userInput.update(delta)
-    world.user.mesh.quaternion.fromArray(frame.pose.orientation)
-    world.user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+    user.cursor.deactivate()
+    rayCast(world, camera, cursorCallback)
+    user.mesh.quaternion.fromArray(frame.pose.orientation)
+    user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     world.updateSkybox(delta)
     world.sendUserData()

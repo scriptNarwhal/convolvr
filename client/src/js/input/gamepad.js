@@ -103,7 +103,7 @@ export default class GamePad {
 		clearTimeout(this.bumperCooldownTimeout)
 		this.bumperCooldownTimeout = setTimeout(()=>{
 			this.bumperCooldown = false
-		}, 125)
+		}, 250)
 	}
 
   buttonPressed (b) {

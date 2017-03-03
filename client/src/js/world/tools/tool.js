@@ -1,13 +1,15 @@
 export default class Tool {
-    constructor (data, world) {
-
+    constructor (data, world, toolbox) {
+      this.data = data
+      this.world = world
+      this.toolbox
     }
-    
+
     equip (hand) {
       if (this.mesh == null) {
         let toolMesh = this.initMesh(this.data)
         this.world.user.mesh.add(toolMesh)
-        toolMesh.position.set(1500-(2500*hand), -250, -1350)
+        toolMesh.position.set(1500-(2500*hand), -700, -1550)
         // add to respective hand (when implemented)
       } else {
         this.mesh.visible = true;

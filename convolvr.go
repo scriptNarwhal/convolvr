@@ -2,13 +2,12 @@ package convolvr
 
 import (
 	"fmt"
-	"encoding/json"
+
 	log "github.com/Sirupsen/logrus"
+	"github.com/asdine/storm"
+	"github.com/ds0nt/nexus"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/asdine/storm"
-  "github.com/asdine/storm/q"
-	"github.com/ds0nt/nexus"
 	"github.com/spf13/viper"
 	"golang.org/x/net/websocket"
 )
@@ -42,10 +41,12 @@ func Start(configName string) {
 	componentErr := db.Init(&Component{})
 	entityErr := db.Init(&Entity{})
 	structureErr := db.Init(&Structure{})
-  // indexErr := db.ReIndex(&World{})
-  // if indexErr != nil {
-  // log.Fatal(indexErr)
-  // }
+	chatHistory := db.From("chathistory")
+	historyErr := chatHistory.Init(&ChatMessage{})
+	// indexErr := db.ReIndex(&World{})
+	// if indexErr != nil {
+	// log.Fatal(indexErr)
+	// }
 	if userErr != nil {
 		log.Fatal(userErr)
 	}
@@ -64,9 +65,13 @@ func Start(configName string) {
 	if structureErr != nil {
 		log.Fatal(structureErr)
 	}
+	if historyErr != nil {
+		log.Fatal(historyErr)
+	}
 	api := e.Group("/api")
 	api.GET("/users", getUsers)
 	api.POST("/users", postUsers)
+	api.GET("/chat-history/:skip", getChatHistory)
 	api.GET("/worlds", getWorlds)
 	api.GET("/worlds/name/:name", getWorld)
 	api.GET("/chunks/:worldId/:chunks", getWorldChunks)
@@ -79,25 +84,23 @@ func Start(configName string) {
 	api.GET("/entities/:userId", getEntitiesByUser)
 	api.GET("/components", getComponents)
 	api.POST("/components", postComponents)
-	api.GET("/files/list/:username/:dir", listFiles)
 	api.GET("/files/list/:username", listFiles)
-	api.GET("/files/download/:username/:dir/:filename", getFiles)
-	api.POST("/files/upload/:username/:dir", postFiles)
+	api.GET("/files/list/:username", listFiles)
+	api.GET("/files/download/:username/:filename", getFiles)
 	api.POST("/files/upload/:username", postFiles)
-	api.POST("/files/upload-multiple/:username/:dir", postMultipleFiles)
 	api.POST("/files/upload-multiple/:username", postMultipleFiles)
-	api.GET("/directories/list/:username/:dir", getDirectories)
 	api.GET("/directories/list/:username", getDirectories)
-	api.POST("/directories/:username/:dir", postDirectories)
-	api.GET("/documents/:username/:dir/:filename", getText)
-	api.POST("/documents/:username/:dir/:filename", postText)
+	api.POST("/directories/:username", postDirectories)
+	api.GET("/documents/:username/:filename", getText)
+	api.POST("/documents/:username/:filename", postText)
 
 	e.Static("/", "../web")
 	e.Static("/world/:name", "../web/index.html") // eventually make this route name configurable to the specific use case, 'world', 'venue', 'event', etc..
-	e.File("/hyperspace", "../web/index.html") // client should generate a meta-world out of (portals to) networked convolvr sites
+	e.File("/hyperspace", "../web/index.html")    // client should generate a meta-world out of (portals to) networked convolvr sites
 	e.File("/worlds", "../web/index.html")
 	e.File("/worlds/new", "../web/index.html")
 	e.File("/chat", "../web/index.html")
+	e.File("/data", "../web/index.html")
 	e.File("/login", "../web/index.html")
 	e.File("/settings", "../web/index.html")
 
@@ -112,59 +115,4 @@ func Start(configName string) {
 func nexusHandler(c echo.Context) error {
 	websocket.Handler(hub.Serve).ServeHTTP(c.Response(), c.Request())
 	return nil
-}
-
-func chatMessage(c *nexus.Client, p *nexus.Packet) {
-	log.Printf(`broadcasting chat message "%s"`, p.Data)
-	hub.All().Broadcast(p)
-}
-func update(c *nexus.Client, p *nexus.Packet) {
-	// log.Printf(`broadcasting update "%s"`, p.Data)./
-	hub.All().Broadcast(p)
-}
-func toolAction(c *nexus.Client, p *nexus.Packet) {
-	var (
-		action ToolAction
-		chunkData []Chunk
-		entities []*Entity
-		entity Entity
-	)
-	if err := json.Unmarshal([]byte(p.Data), &action); err != nil {
-			 panic(err)
-	}
-	if action.Tool == "Entity Tool" || action.Tool == "Structure Tool" {
-		getChunkErr := db.Select(q.And(
-			q.Eq("X", action.Coords[0]),
-			q.Eq("Y", action.Coords[1]),
-			q.Eq("Z", action.Coords[2]),
-			q.Eq("World", action.World),
-		)).Find(&chunkData)
-		if getChunkErr != nil {
-			log.Println(getChunkErr)
-		}
-		nChunks := len(chunkData)
-		if (nChunks > 0) {
-				if action.Tool == "Entity Tool" {
-					entities = chunkData[0].Entities
-					if (len(entities) < 48) {
-						entity = *NewEntity(0, "", action.World, action.Entity.Components, action.Entity.Aspects, action.Position, action.Quaternion, action.Entity.TranslateZ)
-						entities = append(entities, &entity)
-						chunkData[0].Entities = entities
-						saveErr := db.Update(&chunkData[0])
-						if saveErr != nil {
-							log.Println(saveErr)
-						}
-					} else {
-						log.Println("Too Many Entities:")
-						log.Printf(`world: "%s"`, action.World)
-						log.Printf(`x: "%s"`, action.Coords[0])
-						log.Printf(`z: "%s"`, action.Coords[2])
-					}
-				} else { // structure tool
-					// implement adding structure
-				}
-				log.Printf(`broadcasting tool action: "%s"`, action.Tool)    // modify chunk where this tool was used...
-		}
-	}
-	hub.All().Broadcast(p)
 }

@@ -1,27 +1,41 @@
 import axios from 'axios'
 import Avatar from './avatar'
-import Entity from './entities/entity'
+import Entity from '../entities/entity'
 import Terrain from './terrain/terrain'
-import WorldPhysics  from '../workers/world-physics'
+import UserPhysics  from '../systems/user-physics'
+import EntityPhysics from '../systems/entity-physics'
 import { render, vrRender} from './render'
+import PostProcessing from './post-processing'
 import { API_SERVER } from '../config.js'
 import { send } from '../network/socket'
-import Seed from '../seed'
 
 let world = null
 
 export default class World {
 	constructor(userInput = false, socket, store) {
-		let mobile = (window.innerWidth <= 640),
+		let mobile = (window.innerWidth <= 720),
 				scene = new THREE.Scene(),
 				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 6000000 ),
 				screenResX = window.devicePixelRatio * window.innerWidth,
-				rendererAA = new THREE.WebGLRenderer({antialias: true}),
-				renderer = screenResX < 1900 ? new THREE.WebGLRenderer({antialias: false}) : null,
+				renderer = null,
 				self = this,
-				three = {}
+				three = {},
+				postProcessing = false
 
-		this.appStore = store
+
+		this.mobile = mobile
+		this.initLocalSettings()
+		let rendererOptions = {antialias: this.aa != 'off' && this.enablePostProcessing != 'on'}
+		if (this.enablePostProcessing == 'on') {
+			rendererOptions.alpha = true
+			rendererOptions.clearColor = 0x000000
+		}
+		renderer = new THREE.WebGLRenderer(rendererOptions)
+		postProcessing = new PostProcessing(renderer, scene, camera)
+		if (this.enablePostProcessing == 'on') {
+			postProcessing.init()
+		}
+		this.postProcessing = postProcessing
 		this.socket = socket
 		this.config = false
 		this.windowFocus = true
@@ -42,7 +56,6 @@ export default class World {
 		}
 		this.camera = camera
 		this.vrFrame = !!window.VRFrameData ? new VRFrameData() : null
-		this.mobile = mobile
 		this.userInput = userInput
 		this.sendUpdatePacket = 0
 		this.capturing = false
@@ -50,10 +63,7 @@ export default class World {
 		this.HMDMode = "standard" // "head-movement"
 		this.vrHeight = 0
 		this.screenResX = screenResX
-		this.initRenderer(rendererAA, "viewportAA")
-		if (!!renderer) {
-			this.initRenderer(renderer, "viewport")
-		}
+		this.initRenderer(renderer, "viewport")
 		this.octree = new THREE.Octree({
 			// when undeferred = true, objects are inserted immediately
 			// instead of being deferred until next octree.update() call
@@ -69,45 +79,46 @@ export default class World {
 		})
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
-		userInput.init(this, camera, this.user)
-		this.worldPhysics = new WorldPhysics()
-		this.worldPhysics.init(self)
-		this.seed = new Seed();
+		// userInput.init(this, camera, this.user)
+		this.UserPhysics = new UserPhysics()
+		this.EntityPhysics = new EntityPhysics()
+		this.UserPhysics.init(self)
+		this.EntityPhysics.init(self)
 		this.terrain = new Terrain(this);
 		this.workers = {
-			physics: this.worldPhysics
+			physics: this.UserPhysics
 		}
 		three = this.three = {
 			world: this,
 			scene,
 			camera,
 			renderer,
-			rendererAA,
 			vrDisplay: null
 		};
 		world = this
-		window.three = this.three;
-		window.onresize = function () {
+		window.three = this.three
+
+		this.textures = {}
+		let gridTexture = this.textures.grid = THREE.ImageUtils.loadTexture('/images/textures/gplaypattern_@2X.png', false, () => {
+			gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping
+			gridTexture.repeat.set(12, 12)
+			gridTexture.anisotropy = renderer.getMaxAnisotropy()
+				//skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
+		})
+		function onResize () {
 			world.screenResX = window.devicePixelRatio * window.innerWidth
 			if (three.world.mode != "stereo") {
-				three.renderer && three.renderer.setSize(window.innerWidth, window.innerHeight)
-				three.rendererAA.setSize(window.innerWidth, window.innerHeight)
-				let viewport = document.querySelector("#viewport"),
-						viewportAA = document.querySelector("#viewportAA")
-				if (viewport) {
-					if (world.screenResX > 1900) {
-						viewport.style.visibility = 'hidden'
-						viewportAA.style.visibility = ''
-					} else {
-						viewport.style.visibility = ''
-						viewportAA.style.visibility = 'hidden'
-					}
-				}
+				three.renderer.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
+			}
+			if (world.postProcessing.enabled) {
+				world.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
 			}
 			three.camera.aspect = innerWidth / innerHeight
 			three.camera.updateProjectionMatrix()
 		}
-		window.onresize()
+		window.addEventListener('resize', onResize, true)
+		this.onWindowResize = onResize
+		onResize()
 
 		socket.on("update", packet => {
 			let data = JSON.parse(packet.data),
@@ -144,18 +155,25 @@ export default class World {
 					user = world.user,
 					pos = data.position,
 					coords = data.coords,
-					chunk = world.terrain.pMap[coords[0]+".0."+coords[2]],
+					chunk = world.terrain.voxels[coords[0]+".0."+coords[2]],
 					quat = data.quaternion
 
 			switch (data.tool) {
 				case "Entity Tool":
 					let ent = data.entity,
-							entity = new Entity(ent.id, ent.components, ent.aspects, data.position, data.quaternion, ent.translateZ)
-				//entity.init(chunk.mesh)
+							entity = new Entity(ent.id, ent.components, data.position, data.quaternion)
+					chunk.entities.push(entity)
 					entity.init(three.scene)
 				break;
 				case "Component Tool":
-
+					chunk.entities.map(voxelEnt => { // find & re-init entity
+						if (voxelEnt.id == data.entityId) {
+							console.log("got component tool message") // concat with existing components array
+							console.log(data.entity.components)
+							voxelEnt.components = voxelEnt.components.concat(data.entity.components)
+							voxelEnt.init(three.scene)
+						}
+					})
 				break;
 				case "Voxel Tool":
 
@@ -182,34 +200,41 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				skyLight =  new THREE.PointLight(config.light.color, 0.75, 3200000),
-				skyShaderMat = null
+				skyLight =  new THREE.PointLight(config.light.color, 0.95, 5200000),
+				skyMaterial = null,
+				skybox = null
 
 		this.config = config;
 		this.terrain.init(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor);
 		three.scene.add(this.ambientLight);
-		skyShaderMat = new THREE.ShaderMaterial( {
-			side: 1,
-			fog: false,
-			uniforms: {
-				time: { type: "f", value: 1.0 },
-				red: { type: "f", value: config.sky.red },
-				green: { type: "f", value: config.sky.green },
-				blue: { type: "f", value: config.sky.blue }
-			},
-			vertexShader: document.getElementById('sky-vertex').textContent,
-			fragmentShader: document.getElementById('sky-fragment').textContent
-
-		} )
-
-		three.skyMat = skyShaderMat
-		this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyShaderMat)
+		if (config.sky.skyType == 'shader' || config.sky.skyType == 'standard') {
+			skyMaterial = new THREE.ShaderMaterial({
+				side: 1,
+				fog: false,
+				uniforms: {
+					time: { type: "f", value: 1.0 },
+					red: { type: "f", value: config.sky.red },
+					green: { type: "f", value: config.sky.green },
+					blue: { type: "f", value: config.sky.blue }
+				},
+				vertexShader: document.getElementById('sky-vertex').textContent,
+				fragmentShader: document.getElementById('sky-fragment').textContent
+			})
+		} else {
+			// load sky texture
+			skyMaterial = new THREE.MeshBasicMaterial({color:0x303030})
+			let skyTexture = THREE.ImageUtils.loadTexture('/data/'+this.config.sky.photosphere, false, function() {
+				 	skyTexture.magFilter = THREE.LinearFilter
+	 				skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
+			})
+		}
+		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyMaterial)
 		this.skyLight = skyLight
-		this.skybox.add(skyLight)
-		skyLight.position.set(0, 1000000, 1000000)
+		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
+		skyLight.position.set(0, 1000000, 500000)
 		this.terrain.bufferChunks(true, 0)
 	}
 
@@ -222,11 +247,38 @@ export default class World {
 			renderer.domElement.setAttribute("class", "viewport")
 			renderer.domElement.setAttribute("id", id)
 	}
+	initLocalSettings () {
+		let cameraMode = localStorage.getItem("camera"),
+				lighting = localStorage.getItem("lighting"),
+				enablePostProcessing = localStorage.getItem("postProcessing"),
+				aa = localStorage.getItem("aa")
 
-	load (name) {
+		if (cameraMode == undefined) {
+			cameraMode = 'fps'
+			localStorage.setItem("camera", 'fps')
+		}
+		if (aa == undefined) {
+			aa = 'on'
+			localStorage.setItem("aa", aa)
+		}
+		if (lighting == undefined) {
+			lighting = 'high'
+			localStorage.setItem("lighting", !this.mobile ? 'high' : 'low')
+		}
+		if (enablePostProcessing == null) {
+			enablePostProcessing = !this.mobile ? 'on' : 'off'
+			localStorage.setItem("postProcessing", enablePostProcessing)
+		}
+		this.aa = aa
+		this.cameraMode = cameraMode
+		this.lighting = lighting
+		this.enablePostProcessing = enablePostProcessing
+	}
+	load (name, callback) {
 		this.name = name;
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
 			 this.init(response.data)
+			 callback && callback(this)
     }).catch(response => {
         console.log("World Error", response)
     });
@@ -248,12 +300,12 @@ export default class World {
 			}
 		})
 		this.terrain.platforms = []
-		this.terrain.pMap = []
+		this.terrain.voxels = []
 		this.load(name)
 	}
 
 	generateFullLOD (coords) {
-			let platform = this.terrain.pMap[coords]
+			let platform = this.terrain.voxels[coords]
 			if (platform != null) {
 				if (platform.structures != null) {
 					platform.structures.forEach(structure =>{
@@ -320,11 +372,16 @@ export default class World {
 
 	updateSkybox (delta) {
 		let camera = three.camera,
-				terrainMesh = this.terrain.mesh
+				terrainMesh = this.terrain.mesh,
+				skyMat = null
 		if (this.skybox) {
-			if (this.skybox.material) {
-				this.skybox.material.uniforms.time.value += delta
+			skyMat = this.skybox.material
+			if (skyMat) {
+				if (skyMat.uniforms) {
+					skyMat.uniforms.time.value += delta
+				}
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
+				this.skyLight.position.set(camera.position.x, camera.position.y+1000000, camera.position.z+500000)
 			}
     }
 		if (terrainMesh) {

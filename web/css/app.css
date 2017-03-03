@@ -1,10 +1,10 @@
 /* app.css */
 @font-face {
-  font-family: RobotoThin;
-  src: url(/fonts/Roboto-Thin.ttf);
+  font-family: RobotoLight;
+  src: url(/fonts/Roboto-Light.ttf);
 }
 body {
-  font-family: RobotoThin, sans-serif;
+  font-family: RobotoLight, sans-serif;
 }
 #root {
   position: absolute;
@@ -42,27 +42,6 @@ body {
 }
 .hud .button {
   margin-right: 0;
-}
-.shell {
-  margin: auto;
-  position: fixed;
-  top: 0;
-  left: 0;
-  text-align: center;
-  width: 100vw;
-  height: 100vh;
-  min-width: 374px;
-  display: inline-block;
-  border-radius: 0.8vh;
-}
-.shell > div.inner {
-
-}
-.tabs {
-  height: 10vh;
-  width: 100vw;
-  border-top-left-radius: 0.6vh;
-  border-top-right-radius: 0.6vh;
 }
 .tab {
   height: 8vh;
@@ -154,29 +133,20 @@ body {
 @media screen and (max-width: 1024px) {
 
 }
-.shell {
-  min-width: 374px;
-}
 .shell > div.inner {
   top: 9vh;
   left:0;
 }
-.crosshair {
-    position: fixed;
-    width: 0px;
-    height: 32px;
-    top:48vh;
-    left: 50%;
-}
 
-.crosshair .inner {
-    width: 3vh;
-    height: 3vh;
-    position: relative;
-    left: -0.5vh;
-    top: -0.5vh;
-    background-image:url(/images/crosshair.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: 50% 50%;
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+    padding-top: 12px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    margin-top: 12px;
+    background-color: rgba(255,255,255,0.66);
 }

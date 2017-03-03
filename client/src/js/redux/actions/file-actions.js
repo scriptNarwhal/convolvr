@@ -23,6 +23,7 @@ import {
     DIRECTORIES_MAKE_FETCH,
     DIRECTORIES_MAKE_FAIL,
     DIRECTORIES_MAKE_DONE,
+    CHANGE_DIRECTORY
 } from '../constants/action-types';
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
@@ -31,30 +32,23 @@ export function listFiles (username, dir) {
     return dispatch => {
      dispatch({
          type: FILES_LIST_FETCH,
-         id: id
+         username,
+         dir
      })
-     let dir = !!dir ? "/"+dir : ""
-     return axios.get(API_SERVER+"/api/files/list"+username+dir)
+     return axios.get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir="+dir : ''}`)
         .then(response => {
-            dispatch(listFilesDone(response))
+            dispatch({
+                type: FILES_LIST_DONE,
+                data: response.data
+            })
         }).catch(response => {
-            dispatch(listFilesFail(response))
+            dispatch({
+                type: FILES_LIST_FAIL,
+                error: response
+            })
         })
    }
 }
-export function listFilesDone (files) {
-    return {
-        type: FILES_LIST_DONE,
-        data: files
-    }
-}
-export function listFilesFail (error) {
-    return {
-        type: FILES_LIST_FAIL,
-        error: error
-    }
-}
-
 export function uploadFile (file, username, dir) {
     return dispatch => {
      dispatch({
@@ -62,24 +56,90 @@ export function uploadFile (file, username, dir) {
          username,
          dir
      })
-     let dir = !!dir && dir != "" ? "/"+dir : ""
+     let dir = !!dir ? "?dir="+dir : ""
      return axios.post(API_SERVER+"/api/files/upload/"+username+dir, file)
         .then(response => {
-            dispatch(uploadFileDone(response))
+            dispatch({
+                type: FILE_UPLOAD_DONE,
+                data: response.data
+            })
         }).catch(response => {
-            dispatch(uploadFileFail(response))
+            dispatch({
+                type: FILE_UPLOAD_FAIL,
+                error: response
+            })
         })
    }
 }
-export function uploadFileDone (files) {
-    return {
-        type: FILE_UPLOAD_DONE,
-        data: files
-    }
+export function listDirectories (username, dir) {
+    return dispatch => {
+     dispatch({
+         type: DIRECTORIES_LIST_FETCH,
+         username,
+         dir
+     })
+     return axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir="+dir : ''}`)
+        .then(response => {
+            dispatch({
+                type: DIRECTORIES_LIST_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: DIRECTORIES_LIST_FAIL,
+                error: response
+            })
+        })
+   }
 }
-export function uploadFileFail (error) {
-    return {
-        type: FILE_UPLOAD_FAIL,
-        error: error
-    }
+export function readText (filename, username, dir) {
+    return dispatch => {
+     dispatch({
+         type: TEXT_READ_FETCH,
+         username,
+         dir
+     })
+     return axios.get(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`)
+        .then(response => {
+            dispatch({
+                type: TEXT_READ_DONE,
+                data: response.data,
+                dir
+            })
+        }).catch(response => {
+            dispatch({
+                type: TEXT_READ_FAIL,
+                error: response,
+                dir
+            })
+        })
+   }
+}
+export function writeText (text, filename, username, dir) {
+    return dispatch => {
+     dispatch({
+         type: TEXT_WRITE_FETCH,
+         username,
+         dir
+     })
+     let dir = !!dir && dir != "" ? "/"+dir : ""
+     return axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`, {text: text})
+        .then(response => {
+            dispatch({
+                type: TEXT_WRITE_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: TEXT_WRITE_FAIL,
+                error: response.data
+            })
+        })
+   }
+}
+export function changeDirectory (path) {
+  return {
+    type: CHANGE_DIRECTORY,
+    path
+  }
 }

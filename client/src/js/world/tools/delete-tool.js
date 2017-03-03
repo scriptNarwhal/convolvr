@@ -1,13 +1,13 @@
 import Tool from './tool'
-import DeleteToolIcon from '../hud/icons/delete-tool-icon'
+import EntityGenerator from '../../entities/entity-generator'
 /* delete (voxel | component | entity) tool */
 export default class DeleteTool extends Tool  {
-    constructor (data, world) {
-      this.data = data;
-      this.world = world;
-      this.mesh = null;
-      this.name = "Delete Tool";
-      this.icon = new DeleteToolIcon();
+    constructor (data, world, toolbox) {
+      super(data, world, toolbox)
+      this.mesh = null
+      this.name = "Delete Tool"
+      this.icon = this.initIcon()
+      this.generator = this.generator || new EntityGenerator()
       this.options = {
 
       }
@@ -27,6 +27,23 @@ export default class DeleteTool extends Tool  {
       }
       this.mesh = mesh;
       return this.mesh;
+    }
+
+    initIcon () {
+      let mesh = null,
+          entity = null
+      this.generator = this.generator || new EntityGenerator()
+      entity = this.generator.makeEntity("icon", true)
+      entity.components.push({
+        props: {},
+        shape: "box",
+        size: [2640, 2640, 2640],
+        position: [0, 0, 0],
+        color: 0xff0707,
+        text: "",
+        quaternion: null
+      })
+      return entity
     }
 
     primaryAction () {

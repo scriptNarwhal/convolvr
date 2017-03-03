@@ -2,9 +2,10 @@ package convolvr
 
 import (
 	"net/http"
+
 	log "github.com/Sirupsen/logrus"
-	"github.com/labstack/echo"
 	"github.com/asdine/storm/q"
+	"github.com/labstack/echo"
 )
 
 type User struct {
@@ -31,22 +32,23 @@ func getUsers(c echo.Context) error {
 
 func postUsers(c echo.Context) (err error) {
 	var (
-		user *User
-		foundUser User
+		user           *User
+		foundUser      User
 		authUsersFound []User
 	)
 	user = new(User)
 	if err := c.Bind(user); err != nil {
-    return err
-  }
+		return err
+	}
 	dbErr := db.One("Name", user.Name, &foundUser)
-  if dbErr != nil { // if user doesn't exist
-    log.Println(dbErr)
+	if dbErr != nil { // if user doesn't exist
+		log.Println(dbErr)
 		dbErr := db.Save(user)
 		if dbErr != nil {
 			log.Println(dbErr)
 			return dbErr
 		}
+		createDataDir(user.Name, "")
 		return c.JSON(http.StatusOK, &user)
 	} else {
 		lookupErr := db.Select(q.And(

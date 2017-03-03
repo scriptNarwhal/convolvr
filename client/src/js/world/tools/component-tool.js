@@ -1,21 +1,19 @@
 import Tool from './tool'
-import Component from '../components/component'
-import ComponentToolIcon from '../hud/icons/component-tool-icon'
-import ComponentGenerator from '../components/component-generator'
-import EntityGenerator from '../entities/entity-generator'
+import Component from '../../components/component'
+import Entity from '../../entities/entity'
+import ComponentGenerator from '../../components/component-generator'
+import EntityGenerator from '../../entities/entity-generator'
 
 export default class ComponentTool extends Tool {
-    constructor (data, world) {
-        this.data = data;
-        this.world = world;
+  constructor (data, world, toolbox) {
+    super(data, world, toolbox)
         this.mesh = null;
         this.name = "Component Tool";
-        this.icon = new ComponentToolIcon()
+        this.icon = this.initIcon()
         this.entities = new EntityGenerator()
         this.components = new ComponentGenerator()
         this.options = {
-          translateZ: -14000,
-          entityType: "panel"
+          componentType: "panel"
         }
         this.all = ["panel", "block", "column", "wirebox"]
         this.current = 0
@@ -38,40 +36,68 @@ export default class ComponentTool extends Tool {
       return this.mesh;
     }
 
-    primaryAction () {
-      // place component
-      // ray cast, find entity, else, make new one
-      // implement ray cast *** ... world.raycast() ?
-
-      let entity = this.entities.makeEntity(this.options.entityType)
-      entity.translateZ = this.options.translateZ
+    initIcon () {
+      this.entities = this.entities || new EntityGenerator()
+      let entity = this.entities.makeEntity("icon", true)
+      entity.components.push({
+        props: {},
+        shape: "box",
+        size: [2640, 2640, 2640],
+        position: [0, 0, 0],
+        color: 0x003bff,
+        text: "",
+        quaternion: null
+      })
       return entity
     }
 
-    secondaryAction () {
+    primaryAction (telemetry) { // place component (into entity if pointing at one)
+      let cursor = this.world.user.cursor,
+          position = telemetry.position,
+          selected = cursor.entity,
+          entityId = -1,
+          components = [],
+          quat = three.camera.quaternion,  //[quat.x, quat.y, quat.z, quat.w],
+          component = this.components.makeComponent(this.options.componentType),
+          entity = new Entity(0, [component], [], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
+      //entity.init(three.scene)
+      if (selected && cursor.distance < 33000) {
+          entityId = selected.id
+          if (components.length == 0) {
+            components = [component]
+          }
+          selected.mesh.updateMatrixWorld()
+          let selectedPos = selected.mesh.localToWorld(new THREE.Vector3())
+          // apply transformation and offset to components
+          components.map((comp, i)=> {
+            comp.position=[
+              position[0] - selectedPos.x,
+              position[1] - selectedPos.y,
+              position[2] - selectedPos.z
+            ]
+            comp.quaternion = [quat.x, quat.y, quat.z, quat.w]
+          })
+          return {
+            entity,
+            entityId,
+            components
+          }
+      } else {
+        // switch back to entity tool, if the user is clicking into empty space
+        this.world.user.toolbox.useTool(0, 0)
+        this.world.user.hud.show()
+        this.world.user.toolbox.usePrimary(0)
+        return false
+      }
+    }
+
+    secondaryAction (telemetry) {
       // cycle components
       this.current ++
       if (this.current >= this.all.length) {
         this.current = 0
       }
-      this.options.entityType = this.all[this.current]
+      this.options.componentType = this.all[this.current]
       return false // no socket event
-    }
-
-    equip (hand) {
-      if (this.mesh == null) {
-        let toolMesh = this.initMesh(this.data)
-        this.world.user.mesh.add(toolMesh)
-        toolMesh.position.set(1500-(2500*hand), -250, -1350)
-        // add to respective hand (when implemented)
-      } else {
-        this.mesh.visible = true;
-      }
-    }
-
-    unequip (hand) {
-      if (this.mesh != null) {
-        this.mesh.visible = false;
-      }
     }
 }

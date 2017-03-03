@@ -13,11 +13,11 @@ export default class Toolbox {
       this.fadeTimeout = 0;
       console.log(world.user)
       this.tools = [
-        new EntityTool({}, world),
-        new ComponentTool({}, world),
-        new DeleteTool({}, world),
-        new VoxelTool({}, world),
-        new ProjectileTool({}, world)
+        new EntityTool({}, world, this),
+        new ComponentTool({}, world, this),
+        new DeleteTool({}, world, this),
+        new VoxelTool({}, world, this),
+        new ProjectileTool({}, world, this)
         //new CustomTool(),
       ];
       this.currentTools = [0, 0];
@@ -26,10 +26,6 @@ export default class Toolbox {
     showMenu() {
       this.updateUI();
       this.world.user.hud.show();
-      clearTimeout(this.fadeTimeout);
-      this.fadeTimeout = setTimeout(()=>{
-        this.world.user.hud.hide();
-      },1000)
     }
 
     updateUI() {
@@ -66,52 +62,78 @@ export default class Toolbox {
       this.tools.push(new CustomTool(data))
     }
 
+    initActionTelemetry (camera, useCursor) {
+      let cPos = camera.position,
+          position = [cPos.x, cPos.y, cPos.z],
+          quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
+          cursor = this.world.user.cursor,
+          cursorPos = null
+      if (useCursor) {
+        if (false) { // set position from tracked controller
+            // implement
+        } else {
+          cursor.mesh.updateMatrixWorld()
+          cursorPos = cursor.mesh.localToWorld(new THREE.Vector3())
+          position = [cursorPos.x, cursorPos.y, cursorPos.z]
+        }
+      }
+
+      return {
+        position,
+        quaternion
+      }
+    }
     usePrimary (hand) {
-      //console.log("use primary tool action for hand: ", hand, this.tools[this.currentTools[hand]]); // remove this
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
-          entity = null
+          telemetry = this.initActionTelemetry(camera, true),
+        { position, quaternion } = telemetry,
+          toolAction = null
       if (tool.mesh == null) {
         tool.equip(hand)
       }
-      entity = tool.primaryAction() || null
-      this.sendToolAction(true, tool, camera, entity)
+      toolAction = tool.primaryAction(telemetry)
+      if (toolAction !== false) {
+        this.sendToolAction(true, tool, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
+      }
     }
 
     useSecondary(hand) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
-          entity = false
+          telemetry = this.initActionTelemetry(camera, true),
+        { position, quaternion } = telemetry,
+          toolAction = false
       if (tool.mesh == null) {
           tool.equip(hand)
       }
-      entity = tool.secondaryAction()
-      if (entity === false) {
-        return
+      toolAction = tool.secondaryAction(telemetry)
+      if (toolAction !== false) {
+        this.sendToolAction(false, tool, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
-      this.sendToolAction(false, tool, camera, entity)
     }
 
-    sendToolAction (primary, tool, camera, entity) {
-      let cPos = camera.position,
-          coords = [Math.floor(cPos.x/464000), 0, Math.floor(cPos.z/403680)],
-          // chunk = this.world.terrain.pMap[coords[0]+".0."+coords[2]],
-          // chunkPos = chunk != null ? chunk.mesh.position : {x: 0, y: 0, z: 0},
-          //relativePosition = [cPos.x -chunkPos.x, cPos.y -chunkPos.y, cPos.z -chunkPos.z],
-          position = [cPos.x, cPos.y, cPos.z],
-          quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w]
+    sendToolAction (primary, tool, position, quaternion, entity, entityId = -1, components = []) {
+      let camera = this.world.camera,
+          cPos = camera.position,
+          coords = [Math.floor(cPos.x / 464000), 0, Math.floor(cPos.z / 403680)],
+          toolName = tool.name
 
-      send("tool action", {
-        tool: tool.name,
+      let actionData = {
+        tool: toolName,
         world: this.world.name,
         user: this.world.user.username,
         userId: this.world.user.id,
-        coords: coords,
-        position: position, //relativePosition,
-        quaternion: quaternion,
+        position,
+        quaternion,
         options: tool.options,
-        entity: entity,
+        coords,
+        components,
+        entity,
+        entityId,
         primary
-      })
+      }
+      console.log("tool action", actionData)
+      send("tool action", actionData)
     }
 }

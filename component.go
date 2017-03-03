@@ -2,24 +2,25 @@ package convolvr
 
 import (
 	"net/http"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 )
 
 type Component struct {
-	ID         int      `storm:"id,increment" json:"id"`
-	Name       string   `json:"name"`
-	Shape      string   `json:"shape"`
-	Material   string   `json:"material"`
-	Color      int       `json:"color"`
-	Size			 []float64 `json:"size"`
-	Position   []int    `json:"position"`
-	Quaternion []int    `json:"quaternion"`
-	ComponentType    string `json:"type"`
+	ID         int                    `storm:"id,increment" json:"id"`
+	Name       string                 `json:"name"`
+	Shape      string                 `json:"shape"`
+	Material   string                 `json:"material"`
+	Color      int                    `json:"color"`
+	Size       []float64              `json:"size"`
+	Position   []float64              `json:"position"`
+	Quaternion []float64              `json:"quaternion"`
+	Props      map[string]interface{} `json:"props"`
 }
 
-func NewComponent(id int, name string, shape string, mat string, color int, size []float64, pos []int, quat []int, componentType string) *Component {
-	return &Component{id, name, shape, mat, color, size, pos, quat, componentType}
+func NewComponent(name string, shape string, mat string, color int, size []float64, pos []float64, quat []float64, props map[string]interface{}) *Component {
+	return &Component{Name: name, Shape: shape, Material: mat, Color: color, Size: size, Position: pos, Quaternion: quat, Props: props}
 }
 
 func getComponents(c echo.Context) error { // component types

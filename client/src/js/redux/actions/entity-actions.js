@@ -10,7 +10,7 @@ import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 
 export function addEntity (id, name, components) {
-    let physicsWorld = three.world.worldPhysics.worker; // until I can find a better way to access this
+    let physicsWorld = three.world.UserPhysics.worker; // until I can find a better way to access this
 
     return {
         type: ENTITY_ADD,
@@ -54,7 +54,7 @@ export function updateEntity (id,  name, components) {
     }
 }
 export function deleteEntity (id) {
-    let physicsWorld = three.world.worldPhysics.worker; // until I can find a better way to access this
+    let physicsWorld = three.world.UserPhysics.worker; // until I can find a better way to access this
     physicsWorld.postMessage(JSON.stringify({
         command: "remove entity",
         data: id

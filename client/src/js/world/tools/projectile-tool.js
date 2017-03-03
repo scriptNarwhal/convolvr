@@ -1,14 +1,14 @@
 import Tool from './tool'
-import Entity from '../entities/entity'
-import ProjectileToolIcon from '../hud/icons/projectile-tool-icon'
+import Entity from '../../entities/entity'
+import EntityGenerator from '../../entities/entity-generator'
 
 export default class ProjectileTool extends Tool  {
-    constructor (data, world) {
-      this.data = data
-      this.world = world
+  constructor (data, world, toolbox) {
+    super(data, world, toolbox)
       this.mesh = null
       this.name = "Projectile Tool"
-      this.icon = new ProjectileToolIcon()
+      this.icon = this.initIcon()
+      this.generator = this.generator || new EntityGenerator()
       this.options = {
 
       }
@@ -29,6 +29,22 @@ export default class ProjectileTool extends Tool  {
       }
       this.mesh = mesh;
       return this.mesh;
+    }
+
+    initIcon () {
+      let entity = null
+      this.generator = this.generator || new EntityGenerator()
+      entity = this.generator.makeEntity("icon", true)
+      entity.components.push({
+        props: {},
+        shape: "box",
+        size: [2640, 2640, 2640],
+        position: [0, 0, 0],
+        color: 0xffff07,
+        text: "",
+        quaternion: null
+      })
+      return entity
     }
 
     primaryAction () {
