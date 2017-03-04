@@ -55,7 +55,8 @@ class Shell extends Component {
         thumbs = [],
         images = /(\.jpg|\.jpeg|\.png|\.webp)$/i,
         username = this.props.username,
-        fileNames = []
+        fileNames = [],
+        shell = this
 
     if (username == 'Human') {
       username = 'public'
@@ -65,7 +66,7 @@ class Shell extends Component {
         thumbs.push(files[x]);
       }
 		  formData.append("files", files[x]);
-      fileNames.push(files[x].name)
+      fileNames.push(files[x].name.replace(/\s/g, '-'))
 		}
 		xhr.onload = function () {
 			if (xhr.status == 200) {
@@ -79,14 +80,16 @@ class Shell extends Component {
 				if (event.lengthComputable) {
 					let complete = (event.loaded / event.total * 100 | 0);
 					console.log(complete)
+          if (complete == 100) {
+            if (window.location.href.indexOf("/chat") > -1) {
+              shell.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames)
+            }
+          }
 				}
       }
 		}
     xhr.send(formData)
     let from = this.props.username
-    setTimeout(()=>{
-      this.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames)
-    }, 500)
     this.setDropBackground(false)
   }
   setDropBackground (mode) {

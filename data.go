@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
-
+	"strings"
 	"github.com/disintegration/imaging"
 	"github.com/labstack/echo"
 )
@@ -58,7 +58,8 @@ func postFiles(c echo.Context) error {
 	} else {
 		filepath = filepath + username
 	}
-	dst, err := os.Create(filepath + "/" + file.Filename)
+	fileName := strings.Replace(file.Filename, " ", "-", -1)
+	dst, err := os.Create(filepath + "/" + fileName)
 	if err != nil {
 		return err
 	}
@@ -66,12 +67,12 @@ func postFiles(c echo.Context) error {
 	if _, err = io.Copy(dst, src); err != nil { // Copy
 		return err
 	}
-	isImage, _ := regexp.MatchString("(.png|.jpg|.jpeg|.webp|.gif)", file.Filename)
+	isImage, _ := regexp.MatchString("(.png|.jpg|.jpeg|.webp|.gif)", fileName)
 	if isImage {
-		thumbnails = append(thumbnails, file.Filename)
+		thumbnails = append(thumbnails, fileName)
 		makeThumbnails(filepath, thumbnails)
 	}
-	return c.HTML(http.StatusOK, fmt.Sprintf("<p>File %s uploaded successfully</p>", file.Filename))
+	return c.HTML(http.StatusOK, fmt.Sprintf("<p>File %s uploaded successfully</p>", fileName))
 }
 
 /* /files/upload-multiple/:username/:dir */
@@ -96,12 +97,13 @@ func postMultipleFiles(c echo.Context) error {
 		if err != nil {
 			return err
 		}
+		fileName := strings.Replace(file.Filename, " ", "-", -1)
 		defer src.Close()
-		isImage, _ := regexp.MatchString("(.png|.jpg|.jpeg|.webp|.gif)", file.Filename)
+		isImage, _ := regexp.MatchString("(.png|.jpg|.jpeg|.webp|.gif)", fileName)
 		if isImage {
-			thumbnails = append(thumbnails, file.Filename)
+			thumbnails = append(thumbnails, fileName)
 		}
-		dst, err := os.Create(filepath + "/" + file.Filename) // Destination
+		dst, err := os.Create(filepath + "/" + fileName) // Destination
 		if err != nil {
 			return err
 		}
@@ -196,7 +198,7 @@ func postText(c echo.Context) error {
 func createDataDir(username string, dir string) {
 	if _, err := os.Stat("../web/data/" + username + "/" + dir); err != nil {
 		if os.IsNotExist(err) {
-			os.MkdirAll("../web/data/"+username+"/"+dir+"/thumbs", 666)
+			os.MkdirAll("../web/data/"+username+"/"+dir+"/thumbs", 0777)
 		}
 	}
 }

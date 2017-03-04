@@ -151,7 +151,7 @@ export default class NewWorld extends Component {
         username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
     data.append('file', e.target.files[0])
     this.setState({
-      photosphere: username+"/"+e.target.files[0].name
+      photosphere: username+"/"+e.target.files[0].name.replace(/\s/g, '-')
     })
     this.props.uploadFile(data, username, "")
   }
