@@ -82,7 +82,9 @@ class Shell extends Component {
 					console.log(complete)
           if (complete == 100) {
             if (window.location.href.indexOf("/chat") > -1) {
-              shell.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames)
+              setTimeout(()=>{
+                shell.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames)
+              }, 500)
             }
           }
 				}
