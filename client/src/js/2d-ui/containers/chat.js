@@ -13,14 +13,20 @@ const styles = {
         border: 0,
         borderBottom: "0.2em solid white"
     },
-    text: {
-        width: '70%',
+    text: (mobile) => {
+      return {
+        width: (mobile ? 47: 70) + '%',
         border: 'none',
-        background: 'rgba(0,0,0,0.5)',
+        background: 'rgba(0, 0, 0, 0.498039)',
         color: 'white',
         fontSize: '1em',
         marginLeft: '0.15em',
-        padding: '0.5em'
+        padding: '0.5em',
+        boxShadow: 'inset 0px -1px 0px 1px rgba(255, 255, 255, 0.4)',
+        borderLeftTopRadius: '3px',
+        borderTopLeftRadius: '3px',
+        borderBottomLeftRadius: '3px'
+      }
     },
     button: {
         background: "rgb(29, 29, 29)",
@@ -55,28 +61,32 @@ const styles = {
       borderTopRightRadius: '2px',
       borderBottomRightRadius: '2px'
     },
-    messages: {
-      width: '100%',
-      minWidth: '410px',
-      margin: 'auto auto auto 0.5em',
-      textAlign: 'left',
-      position: 'fixed',
-      left: '69px',
-      bottom: '58px',
-      overflowY: 'auto',
-      height: '93%',
-      overflowX: 'hidden',
-      fontSize: '14pt'
+    messages: (mobile) => {
+      return {
+        width: '100%',
+        minWidth: '410px',
+        margin: 'auto auto auto 0.5em',
+        textAlign: 'left',
+        position: 'fixed',
+        left: mobile ? 0 : '65px',
+        bottom: '58px',
+        overflowY: 'auto',
+        height: '93%',
+        overflowX: 'hidden',
+        fontSize: '14pt'
+      }
     },
-    inputs: {
-      minHeight: "2em",
-      minWidth: "320px",
-      position: "fixed",
-      bottom: "0.4em",
-      width: "95vw",
-      textAlign: "left",
-      left: '65px',
-      marginLeft: '0.5em'
+    inputs: (mobile) => {
+      return {
+        minHeight: "2em",
+        minWidth: "320px",
+        position: "fixed",
+        bottom: "0.4em",
+        width: (mobile ? 70: 70) + '%',
+        textAlign: "left",
+        left: mobile ? 0 : '65px',
+        marginLeft: '0.5em'
+      }
     }
 }
 
@@ -126,12 +136,13 @@ class Chat extends Component {
     return /(.png|.jpg|.jpeg|.gif|webp)/.test(file)
   }
   render() {
-    let lastSender = ''
+    let lastSender = '',
+        mobile = window.innerWidth <= 720
     return (
         <Shell className="chat"
               noBackground={true}
         >
-            <section style={styles.messages} ref={ r=> { this.messageBody = r} }>
+            <section style={styles.messages(mobile)} ref={ r=> { this.messageBody = r} }>
                 {
                     this.props.messages.map((m, i) => {
                         let fromLabel = m.from != lastSender || (m.files != null && m.files.length > 0) ?
@@ -168,7 +179,7 @@ class Chat extends Component {
                   })
                 }
             </section>
-            <section style={styles.inputs}>
+            <section style={styles.inputs(mobile)}>
                 <input type='text'
                        ref={(input) => { this.textInput = input; }}
                        onBlur={ (e)=> { this.setState({text: e.target.value }) }}
@@ -177,7 +188,7 @@ class Chat extends Component {
                            this.send(e.target.value)
                          }
                        }}
-                       style={styles.text} />
+                       style={styles.text(mobile)} />
                 <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button} />
             </section>
         </Shell>

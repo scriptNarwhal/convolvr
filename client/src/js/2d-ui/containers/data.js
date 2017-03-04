@@ -14,7 +14,8 @@ class Data extends Component {
     this.props.listFiles(this.props.username, this.props.workingPath.join("/"))
     this.props.listDirectories(this.props.username, this.props.workingPath.join("/"))
     this.setState({
-      update: 0
+      update: 0,
+      workingPath: []
     })
   }
   componentWillUpdate (nextProps, nextState) {
@@ -23,14 +24,18 @@ class Data extends Component {
     if (nextProps.workingPath.length != this.props.workingPath.length ||
         nextProps.username != this.props.username) {
       console.log("changing directory...", nextProps.workingPath)
-      this.props.listFiles(this.props.username, nextProps.workingPath.join("/"))
-      this.props.listDirectories(this.props.username, nextProps.workingPath.join("/"))
+      this.props.listFiles(nextProps.username, nextProps.workingPath.join("/"))
+      this.props.listDirectories(nextProps.username, nextProps.workingPath.join("/"))
     }
     if ((this.props.filesFetching == false && nextProps.filesFetching != false) ||
          this.props.dirsFetching == false && nextProps.dirsFetching != false) {
-      console.log("finished loading files or dirs")
+      let newPath = []
+      nextProps.workingPath.map(p=> {
+        newPath.push(p)
+      })
       this.setState({
-        update: this.state.update+1
+        update: this.state.update+1,
+        workingPath: newPath
       })
     }
   }
@@ -39,7 +44,7 @@ class Data extends Component {
   }
   getFullPath (file, thumbnail) {
     let username = this.props.username,
-        workingPath = this.props.workingPath.join("/")
+        workingPath = this.state.workingPath.join("/")
     if (thumbnail && this.isImage(file)) {
       return `/data/${username}${workingPath}/thumbs/${file}.jpg`
     } else {
@@ -47,10 +52,10 @@ class Data extends Component {
     }
   }
   enterDirectory (dir) {
-    let path = this.props.workingPath
+    let path = this.state.workingPath
     path.push(dir)
     this.props.changeDirectory(path)
-    this.update(250)
+    //this.update(250)
   }
   update (time) {
     setTimeout(()=>{
@@ -60,31 +65,31 @@ class Data extends Component {
     }, time)
   }
   render() {
-    let files = this.props.files !== false && this.props.filesFetching == false ? this.props.files : [],
-        dirs = this.props.dirs !== false && this.props.dirsFetching == false ? this.props.dirs : [],
+    let files = this.props.files,
+        dirs = this.props.dirs,
         mobile = window.innerWidth <= 640
     return (
         <Shell className="data-view">
-          <LocationBar path={this.props.workingPath}
+          <LocationBar path={this.state.workingPath}
                        label="Data"
                        username={this.props.username}
                        onItemSelect={  (item, index, length) => {
                           console.log("changing dir from location bar")
-                          let path = this.props.workingPath
+                          let path = this.state.workingPath
                           path.splice(index+1)
                           this.props.changeDirectory(path)
-                          this.update(250)
+                          //this.update(250)
                        }}
           />
           {
-            !this.props.filesFetching && !this.props.dirsFetching &&
+            dirs !== false && !this.props.dirsFetching &&
             dirs.map((dir, i) => {
               return (
                 <Card image={''}
                       clickHandler={ (e, title) => {
                         console.log(e, title, "clicked")
                         this.enterDirectory(title)
-                        this.update(250)
+                        //this.update(250)
                       }}
                       compact={true}
                       showTitle={true}
@@ -96,7 +101,7 @@ class Data extends Component {
           }
           <hr style={styles.hr} />
           {
-            !this.props.filesFetching && !this.props.dirsFetching &&
+            files !== false && !this.props.filesFetching &&
             files.map((file, i) => {
               return (
                 <Card image={this.isImage(file) ? this.getFullPath(file, true) : ''}
