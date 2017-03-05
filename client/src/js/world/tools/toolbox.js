@@ -93,12 +93,12 @@ export default class Toolbox {
         tool.equip(hand)
       }
       toolAction = tool.primaryAction(telemetry)
-      if (toolAction !== false) {
+      if (!!toolAction) {
         this.sendToolAction(true, tool, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
     }
 
-    useSecondary(hand) {
+    useSecondary(hand, value) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
           telemetry = this.initActionTelemetry(camera, true),
@@ -107,10 +107,14 @@ export default class Toolbox {
       if (tool.mesh == null) {
           tool.equip(hand)
       }
-      toolAction = tool.secondaryAction(telemetry)
-      if (toolAction !== false) {
+      toolAction = tool.secondaryAction(telemetry, value)
+      if (!!toolAction) {
         this.sendToolAction(false, tool, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
+    }
+
+    grip (hand) {
+      // show feedback
     }
 
     sendToolAction (primary, tool, position, quaternion, entity, entityId = -1, components = []) {

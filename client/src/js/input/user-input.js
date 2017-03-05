@@ -83,9 +83,8 @@ export default class UserInput {
 							case 2: // scroll wheel click
 								// tools.selectObject() .. might be handy
 							break;
-
 							case 3: // right click
-								this.user.toolbox.useSecondary(0) // right hand
+								this.user.toolbox.useSecondary(0, 1) // right hand // change tool option in forward direction
 							break;
 						}
 					}

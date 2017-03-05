@@ -91,11 +91,13 @@ export default class ComponentTool extends Tool {
       }
     }
 
-    secondaryAction (telemetry) {
+    secondaryAction (telemetry, value) {
       // cycle components
-      this.current ++
+      this.current += value
       if (this.current >= this.all.length) {
         this.current = 0
+      } else if (this.current < 0) {
+        this.current = this.all.length - 1
       }
       this.options.componentType = this.all[this.current]
       return false // no socket event

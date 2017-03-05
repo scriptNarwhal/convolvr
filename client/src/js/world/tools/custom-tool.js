@@ -49,7 +49,7 @@ export default class CustomTool extends Tool {
 
     }
 
-    secondaryAction () {
+    secondaryAction (telemetry, value) {
 
     }
 

@@ -94,29 +94,31 @@ self.update = function () {
       key = (x+coords[0])+'.0.'+(z+coords[2])
       if (voxels[key] != null) {
         entities = voxels[key].entities
-        i = entities.length
-        while (i >= 0) {
-          obj = entities[i];
-          if (!!obj) {
-            if (position[1] < obj.position[1] + 1000 && position[1] > obj.position[1]-2000 ) {  // compare to user
-              if (distance2dCompare(position, obj.position, 32000)) {
-                collision = true;
-                self.postMessage('{"command": "entity-user collision", "data":{"position":[' +obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}')
+        if (!!entities) {
+          i = entities.length
+          while (i >= 0) {
+            obj = entities[i];
+            if (!!obj) {
+              if (position[1] < obj.position[1] + 5000 && position[1] > obj.position[1]-5000 ) {  // compare to user
+                if (distance2dCompare(position, obj.position, 32000)) {
+                  collision = true;
+                  self.postMessage('{"command": "entity-user collision", "data":{"position":[' +obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}')
+                }
               }
-            }
-            if (!! obj.moving) { //moving) {
-              o = entities.length -1 // if moving, check collisions against all other entities (in that voxel)
-              while (o >= 0) {
-                secondPos = entities[o].position
-                if (distance3dCompare(secondPos, obj.position, 15000)) { // look up the proper radius
-                  // send back the new position and velocity for both entities
-                  self.postMessage('{"command": "entity-entity collision", "data":{"entities":[{"position":['+obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '],"velocity": [0, 0, 0] }, {"position":['+secondPos[0] + ',' + secondPos[1] + ',' + secondPos[2] + '],"velocity": [0, 0, 0] }]}}')
+              if (!! obj.moving) { //moving) {
+                o = entities.length -1 // if moving, check collisions against all other entities (in that voxel)
+                while (o >= 0) {
+                  secondPos = entities[o].position
+                  if (distance3dCompare(secondPos, obj.position, 15000)) { // look up the proper radius
+                    // send back the new position and velocity for both entities
+                    self.postMessage('{"command": "entity-entity collision", "data":{"entities":[{"position":['+obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '],"velocity": [0, 0, 0] }, {"position":['+secondPos[0] + ',' + secondPos[1] + ',' + secondPos[2] + '],"velocity": [0, 0, 0] }]}}')
 
+                  }
                 }
               }
             }
+            i --
           }
-          i --
         }
       }
       ++ z

@@ -70,11 +70,13 @@ export default class EntityTool extends Tool  {
       }
     }
 
-    secondaryAction () {
+    secondaryAction (telemetry, value) {
       // cycle entities
-      this.current ++
+      this.current += value
       if (this.current >= this.all.length) {
         this.current = 0
+      } else if (this.current < 0) {
+        this.current = this.all.length -1
       }
       this.options.entityType = this.all[this.current]
       return false // no socket event
