@@ -144,7 +144,7 @@ export default class Terrain {
                  voxels[c.x+".0."+c.z] = chunk;
              })
              if (physicsVoxels.length > 0) {
-               console.log("physics voxels", physicsVoxels)
+               //console.log("physics voxels", physicsVoxels)
                this.UserPhysics.worker.postMessage(JSON.stringify({
                      command: "add voxels",
                      data: physicsVoxels
