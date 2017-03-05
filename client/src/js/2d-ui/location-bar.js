@@ -34,6 +34,12 @@ let styles = {
     display: 'inline-block',
     float: 'left',
     marginLeft: '1em'
+  },
+  fileOption: {
+    padding: '1em',
+    height: '48px',
+    display: 'inline-block',
+    width: 'auto'
   }
 }
 
@@ -65,6 +71,18 @@ export default class LocationBar extends Component {
                 )
               })
             }
+            <Button title="Upload File"
+                    style={styles.fileOption}
+                    onClick={e=> this.props.onOptionClick(e, "upload-file")}
+            />
+            <Button title="New File"
+                    style={styles.fileOption}
+                    onClick={e=> this.props.onOptionClick(e, "new-file")}
+            />
+            <Button title="New Folder"
+                    style={styles.fileOption}
+                    onClick={e=> this.props.onOptionClick(e, "new-folder")}
+            />
         </div>
     )
   }
@@ -73,5 +91,8 @@ export default class LocationBar extends Component {
 LocationBar.defaultProps = {
   path: [],
   username: "",
-  label: ""
+  label: "",
+  onOptionClick: (e, option) => {
+
+  }
 }

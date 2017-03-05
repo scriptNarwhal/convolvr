@@ -6,7 +6,8 @@ import LocationBar from '../location-bar'
 let styles = {
   hr: {
     visibility: 'hidden'
-  }
+  },
+
 }
 
 class Data extends Component {
@@ -64,6 +65,16 @@ class Data extends Component {
       })
     }, time)
   }
+  onFileOptionClick (e, option) {
+    console.log("on file option click", e, option)
+    if (option == "upload-file") {
+
+    } else if (option == "new-file") {
+
+    } else if (option == "new-folder") {
+
+    }
+  }
   render() {
     let files = this.props.files,
         dirs = this.props.dirs,
@@ -80,6 +91,7 @@ class Data extends Component {
                           this.props.changeDirectory(path)
                           //this.update(250)
                        }}
+                       onOptionClick={ (e, option) => this.onFileOptionClick(e,option) }
           />
           {
             dirs !== false && !this.props.dirsFetching &&

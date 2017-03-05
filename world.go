@@ -9,6 +9,12 @@ import (
 	"github.com/labstack/echo"
 )
 
+type UniverseSettings struct {
+	ID             int    `storm:"id" json:"id"`
+	WelcomeMessage string `json:"welcomeMessage"`
+	DefaultWorld   string `json:"defaultWorld"`
+}
+
 type World struct {
 	ID      int    `storm:"id,increment" json:"id"`
 	Name    string `storm:"index" json:"name"`
@@ -167,4 +173,28 @@ func getWorld(c echo.Context) error { // load specific world
 		}
 	}
 	return c.JSON(http.StatusOK, &world)
+}
+
+func getUniverseSettings(c echo.Context) error {
+	var settings UniverseSettings
+	err := db.One("ID", 1, &settings)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return c.JSON(http.StatusOK, &settings)
+}
+
+func postUniverseSettings(c echo.Context) error {
+	var settings *UniverseSettings
+	settings = new(UniverseSettings)
+	if err := c.Bind(settings); err != nil {
+		return err
+	}
+	err := db.Save(settings)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return c.JSON(http.StatusOK, nil)
 }

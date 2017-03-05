@@ -40,15 +40,9 @@ let socket = events,
 	  world = null,
 	  avatar = null
 
-window.worldName = window.location.href.indexOf("/world/") > -1 ? window.location.href.split("/world/")[1] : "overworld"
-
 userInput = new UserInput()
 world = new World(userInput, socket, store)
-world.load(worldName, ()=> {
-  setTimeout(()=>{
-    initChatUI() // wait for world & terrain to load before placing this
-  }, 250)
-})
+
 user.toolbox = new Toolbox(world)
 user.hud = new HUDMenu([], user.toolbox)
 user.hud.initMesh({}, three.camera)
@@ -70,9 +64,7 @@ world.chat = new ListView({
   textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
 }, three.scene).initMesh()
 
-let initChatUI = () => {
-  world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 20000, -5000])
-}
+
 
 ReactDOM.render(
   (<Provider store={store}>

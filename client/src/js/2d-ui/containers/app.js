@@ -52,7 +52,19 @@ class App extends Component {
         }
       }
     })
-    this.props.setCurrentWorld(window.worldName)
+    this.props.fetchUniverseSettings()
+    setTimeout(()=> {
+      let world = three.world,
+          worldName = this.props.world
+      let initChatUI = () => {
+        world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 20000, -5000])
+      }
+      world.load(worldName, ()=> {
+        setTimeout(()=>{
+          initChatUI() // wait for world & terrain to load before placing this
+        }, 250)
+      })
+    }, 100)
     setTimeout(()=>{
       this.props.getChatHistory(0) // wait a fraction of a second for the world to load / to show in 3d too
     }, 200)
@@ -269,7 +281,8 @@ import {
 } from '../../redux/actions/app-actions'
 import {
   fetchWorlds,
-  setCurrentWorld
+  setCurrentWorld,
+  fetchUniverseSettings
 } from '../../redux/actions/world-actions'
 import {
   getChatHistory,
@@ -291,6 +304,9 @@ export default connect(
   },
   dispatch => {
     return {
+      fetchUniverseSettings: ()=> {
+        dispatch(fetchUniverseSettings())
+      },
       login: (user, pass, email, data) => {
             dispatch(login(user, pass, email, data))
       },

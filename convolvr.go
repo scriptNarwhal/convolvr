@@ -76,6 +76,8 @@ func Start(configName string) {
 	api.GET("/worlds/name/:name", getWorld)
 	api.GET("/chunks/:worldId/:chunks", getWorldChunks)
 	api.POST("/worlds", postWorlds)
+	api.GET("/universe-settings", getUniverseSettings)
+	api.POST("/universe-settings", postUniverseSettings)
 	api.GET("/structures", getStructures)
 	api.POST("/structures", postStructures)
 	api.GET("/structures/:userId", getStructuresByUser)
