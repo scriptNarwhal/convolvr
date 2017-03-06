@@ -22,7 +22,7 @@ import Chat from './2d-ui/containers/chat'
 import HUD from './2d-ui/containers/hud'
 // World
 import { send, events } from './network/socket'
-import { initUser } from './user'
+import User from './user'
 import UserInput from './input/user-input'
 import Toolbox from './world/tools/toolbox'
 import World from './world/world'
@@ -36,14 +36,14 @@ import Avatar from './world/avatar'
 let socket = events,
     token = localStorage.getItem("token"),
 		userInput,
-		user = initUser(),
+		user = new User(),
 	  world = null,
 	  avatar = null
 
 userInput = new UserInput()
-world = new World(userInput, socket, store)
-
-user.toolbox = new Toolbox(world)
+world = new World(user, userInput, socket, store)
+user.useAvatar(new Avatar(user.id, false, {})) // only render hands, since this is you
+user.toolbox = new Toolbox(user, world)
 user.hud = new HUDMenu([], user.toolbox)
 user.hud.initMesh({}, three.camera)
 user.hud.hide()
@@ -64,6 +64,28 @@ world.chat = new ListView({
   textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
 }, three.scene).initMesh()
 
+world.help = new ListView({
+  color: "#00ff00",
+  background: "#000000",
+  position: [-100000,0,0],
+  textLines: [
+    "*** Desktop users:",
+    "WASD,RF,Space keys: movement",
+    "Mouselook (click screen to enable)",
+    "Left Click: Primary Tool",
+    "Right Click: Next Tool Mode",
+    "Keys 1-5: switch tool",
+    "*** VR users: EnterVR icon in the corner",
+    "If you have tracked controllers:",
+    "Left stick: movement",
+    "Right trigger: Primary Tool",
+    "Right stick x-axis: change tools",
+    "Right stick y-axis: tool mode",
+    "*** Mobile (non VR) users:",
+    "One finger swipe: Change Look",
+    "Two finger swipe: movement"
+  ]
+}, three.scene).initMesh()
 
 
 ReactDOM.render(

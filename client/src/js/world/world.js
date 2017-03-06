@@ -12,7 +12,7 @@ import { send } from '../network/socket'
 let world = null
 
 export default class World {
-	constructor(userInput = false, socket, store) {
+	constructor(user, userInput = false, socket, store) {
 		let mobile = (window.innerWidth <= 720),
 				scene = new THREE.Scene(),
 				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 6000000 ),
@@ -43,17 +43,7 @@ export default class World {
 		this.mode = "web"
 		this.rPos = false
 		this.users = []
-		this.user = {
-			id: 0,
-			username: "user"+Math.floor(1000000*Math.random()),
-			toolbox: null,
-			hud: null,
-			cursor: null,
-			arms: [],
-			gravity: 1,
-			velocity: new THREE.Vector3(),
-			falling: false
-		}
+		this.user = user || {}
 		this.camera = camera
 		this.vrFrame = !!window.VRFrameData ? new VRFrameData() : null
 		this.userInput = userInput
@@ -137,7 +127,7 @@ export default class World {
 					if (user == null) {
 						user = this.users["user"+entity.id] = {
 							id: entity.id,
-							avatar: new Avatar(entity.id, "standard", {}),
+							avatar: new Avatar(entity.id, true, {}), // render whole body, not just hands
 							mesh: null
 						}
 					}
@@ -320,8 +310,8 @@ export default class World {
 				mobile = this.mobile,
 	      image = "",
 	      imageSize = [0, 0],
-	      userArms = world.user.arms,
-	      arms = []
+	      userHands = world.user.hands,
+	      hands = []
 
 		if (this.sendUpdatePacket == 12) { // send image
 	    imageSize = this.sendVideoFrame()
@@ -329,8 +319,8 @@ export default class World {
 	  this.sendUpdatePacket += 1
 	  if (this.sendUpdatePacket %((2+(1*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
 	    if (this.userInput.leapMotion) {
-	      userArms.forEach(function (arm) {
-	        arms.push({pos: [arm.position.x, arm.position.y, arm.position.z],
+	      userHands.forEach(function (arm) {
+	        hands.push({pos: [arm.position.x, arm.position.y, arm.position.z],
 	          quat: [arm.quaternion.x, arm.quaternion.y, arm.quaternion.z, arm.quaternion.w] });
 	        })
 	      }
@@ -339,8 +329,8 @@ export default class World {
 	          id: this.user.id,
 	          username: this.user.username,
 	          image: this.webcamImage,
-	          imageSize: imageSize,
-	          arms: arms,
+	          imageSize,
+	          hands,
 	          position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
 	          quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
 	        }

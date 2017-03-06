@@ -26,6 +26,7 @@ export default class Entity {
   init (scene) {
     var mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
+        three = window.three,
         mobile = three.world.mobile,
         ncomps = this.components.length,
         nonStructural = [],
@@ -60,8 +61,9 @@ export default class Entity {
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
         } else {
-          if (comp.props.hand !== null) {
+          if (comp.props.hand != null) {
             this.hands.push(comp.mesh)
+            scene.add(comp.mesh)
           }
           nonStructural.push(comp.mesh)
         }
@@ -73,8 +75,8 @@ export default class Entity {
       mesh = nonStructural[0]
       s = 1
       while (s < nonStructural.length) {
-        mesh.add(nonStructural[s])
-        s ++
+          mesh.add(nonStructural[s])
+          s ++
       }
     }
     if (!! this.quaternion && this.components.length == 1) {

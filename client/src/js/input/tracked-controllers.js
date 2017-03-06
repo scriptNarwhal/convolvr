@@ -26,11 +26,13 @@ export default class TrackedController {
         input = this.input,
         rotation = input.rotationVector,
         tools = world.user.toolbox,
-        lastButtons = null
+        lastButtons = this.buttons
 
-    //console.log("oculus touch handler ", a, b, buttons)
+    //console.log("oculus touch handler ", a, b, buttons
     if (gamepad.hand == 'left') {
-      lastButtons = this.buttons.left
+      if (gamepad.pose) {
+        tools.setHandOrientation(1, gamepad.pose.position, gamepad.pose.orientation)
+      }
       if (Math.abs(axes[0]) > 0.1) {
         input.moveVector.x = axes[0] * 16000
       }
@@ -38,8 +40,8 @@ export default class TrackedController {
         input.moveVector.z = axes[1] * 16000
       }
       buttons.map((button, i) =>{
-        if (lastButtons[i] == false && this.buttonPressed(button)) {
-          lastButtons[i] = true
+        if (lastButtons.left[i] == false && this.buttonPressed(button)) {
+          lastButtons.left[i] = true
           switch (i) {
             case 1:
               tools.usePrimary(1) // left hand
@@ -49,12 +51,14 @@ export default class TrackedController {
             break
           }
         }
-        lastButtons[i] = this.buttonPressed(button)
+        lastButtons.left[i] = this.buttonPressed(button)
       })
     } else { // use right stick to use adjust tool options // right triggers for primary tool
-      lastButtons = this.buttons.right
       let dir = Math.round(gamepad.axes[0]),
           toolOptionChange = Math.round(gamepad.axes[1])
+      if (gamepad.pose) {
+        tools.setHandOrientation(0, gamepad.pose.position, gamepad.pose.orientation)
+      }
       if (dir != 0 && this.stickCooldown == false) {
         this.coolDown()
         tools.nextTool(dir)
@@ -65,8 +69,8 @@ export default class TrackedController {
         tools.useSecondary(0, toolOptionChange)
       }
       buttons.map((button, i) =>{
-        if (lastButtons[i] == false && this.buttonPressed(button)) {
-          lastButtons[i] = true
+        if (lastButtons.right[i] == false && this.buttonPressed(button)) {
+          lastButtons.right[i] = true
           switch (i) {
             case 1:
               tools.usePrimary(0) // right hand
@@ -76,7 +80,7 @@ export default class TrackedController {
             break
           }
         }
-        lastButtons[i] = this.buttonPressed(button)
+        lastButtons.right[i] = this.buttonPressed(button)
       })
     }
   }
@@ -91,7 +95,7 @@ export default class TrackedController {
         rotation = input.rotationVector,
         tools = world.user.toolbox
     //console.log("oculus remote handler ", b, buttons)
-
+    // implement
   }
 
   buttonPressed (b) {

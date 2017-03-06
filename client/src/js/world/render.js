@@ -9,7 +9,7 @@ export let render = (world, last) => {
   if (!! world.userInput) {
     world.userInput.update(delta) // Update keyboard / mouse / gamepad
   }
-  if (user && user.mesh) {
+  if (user && user.mesh && user.cursor) {
     user.cursor.deactivate()
     user.mesh.position.set(cPos.x, cPos.y, cPos.z);
     user.mesh.quaternion.set(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
@@ -19,7 +19,7 @@ export let render = (world, last) => {
   world.updateSkybox(delta)
     if (world.mode == "vr" || world.mode == "web") {
       if (world.postProcessing.enabled) {
-          
+
         world.postProcessing.composer.render()
 
       } else {

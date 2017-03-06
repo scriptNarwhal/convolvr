@@ -8,10 +8,19 @@ import ProjectileTool from './projectile-tool'
 import CustomTool from './custom-tool'
 
 export default class Toolbox {
-    constructor (world) {
-      this.world = world;
-      this.fadeTimeout = 0;
-      console.log(world.user)
+    constructor (user, world) {
+      this.world = world
+      this.user = user
+      this.hands = []
+
+      this.user.avatar.hands.map((m,i)=>{
+        if (i < 3) {
+          console.log("hand", m)
+          this.hands.push(m)
+        }
+      })
+      console.log("hands!!!", this.hands)
+      this.fadeTimeout = 0
       this.tools = [
         new EntityTool({}, world, this),
         new ComponentTool({}, world, this),
@@ -20,27 +29,27 @@ export default class Toolbox {
         new ProjectileTool({}, world, this)
         //new CustomTool(),
       ];
-      this.currentTools = [0, 0];
+      this.currentTools = [0, 0]
     }
 
     showMenu() {
       this.updateUI();
-      this.world.user.hud.show();
+      this.user.hud.show()
     }
 
     updateUI() {
-      this.world.user.hud.update();
+      this.user.hud.update()
     }
 
     nextTool(direction, hand = 0) {
-      this.showMenu();
+      this.showMenu()
       this.currentTools[hand] += direction;
       if (this.currentTools[hand] < 0) {
         this.currentTools[hand] = this.tools.length - 1;
       } else if (this.currentTools[hand] >= this.tools.length) {
         this.currentTools[hand] = 0;
       }
-      console.log("next tool", direction, this.currentTools[hand]);
+      console.log("next tool", direction, this.currentTools[hand])
     }
 
     useTool (index, hand) {
@@ -117,6 +126,17 @@ export default class Toolbox {
       // show feedback
     }
 
+    setHandOrientation (hand, position, orientation) {
+      let userHand = this.hands[hand]
+      if (userHand) {
+        userHand.position.fromArray(position).multiplyScalar(20000).add(this.world.camera.position)
+        userHand.translateX(725+ hand*-1250)
+        userHand.quaternion.fromArray(orientation)
+
+      }
+      // also update
+    }
+
     sendToolAction (primary, tool, position, quaternion, entity, entityId = -1, components = []) {
       let camera = this.world.camera,
           cPos = camera.position,
@@ -126,8 +146,8 @@ export default class Toolbox {
       let actionData = {
         tool: toolName,
         world: this.world.name,
-        user: this.world.user.username,
-        userId: this.world.user.id,
+        user: this.user.username,
+        userId: this.user.id,
         position,
         quaternion,
         options: tool.options,
