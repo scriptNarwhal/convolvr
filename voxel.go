@@ -33,7 +33,6 @@ type Chunk struct {
 	Geometry   string      `json:"geometry"`
 	Material   string      `json:"material"`
 	Color      int         `json:"color"`
-	Structures []Structure `json:"structures"`
 	Voxels     []*Voxel    `json:"voxels"`
 	Entities   []*Entity   `json:"entities"`
 }
@@ -92,8 +91,8 @@ func getWorldChunks(c echo.Context) error {
 							}
 						}
 					}
-					structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0, 0, 0}, []int{0, 0, 0, 0}, 2+rand.Intn(5), 2+rand.Intn(9), 2+rand.Intn(5), light)
-					structures = append(structures, structure)
+					//structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0, 0, 0}, []int{0, 0, 0, 0}, 2+rand.Intn(5), 2+rand.Intn(9), 2+rand.Intn(5), light)
+					//structures = append(structures, structure)
 				}
 				initErr := voxelEntities.Init(&Entity{})
 				if initErr != nil {
@@ -109,7 +108,7 @@ func getWorldChunks(c echo.Context) error {
 				worldData.Terrain.TerrainType == "both" {
 				altitude = float32((math.Sin(float64(x)/2)*9 + math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness)
 			}
-			generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, structures, nil, nil)
+			generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, nil, nil)
 			chunksData = append(chunksData, generatedChunk)
 			saveErr := voxel.Save(&generatedChunk)
 			if saveErr != nil {

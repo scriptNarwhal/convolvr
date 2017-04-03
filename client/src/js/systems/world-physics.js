@@ -1,10 +1,7 @@
-export default class UserPhysics {
+export default class WorldPhysics {
 	constructor() {
-		this.worker = null;
-	}
-
-	init (world) {
-		let worker = new Worker('/js/workers/physics.js');
+		this.worker = null
+		let worker = new Worker('/js/workers/world.js');
 	      worker.onmessage = function (event) {
 	        let message = JSON.parse(event.data),
 	          sys = world,
@@ -104,8 +101,11 @@ export default class UserPhysics {
 	      };
 
 	    worker.postMessage('{"command":"start","data":""}');
-		  this.worker = worker;
-		  return worker;
+		  this.worker = worker
+	}
+
+	init (world) {
+		
 	}
 
 }

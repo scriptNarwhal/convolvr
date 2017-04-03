@@ -28,9 +28,7 @@ import Toolbox from './world/tools/toolbox'
 import World from './world/world'
 // 3D UI
 import HUDMenu from './vr-ui/menu'
-import VerticalMenu from './vr-ui/vertical-menu'
 import ListView from './vr-ui/text/list-view'
-import Cursor from './vr-ui/cursor'
 import Avatar from './world/avatar'
 
 let socket = events,
@@ -47,7 +45,6 @@ user.toolbox = new Toolbox(user, world)
 user.hud = new HUDMenu([], user.toolbox)
 user.hud.initMesh({}, three.camera)
 user.hud.hide()
-user.cursor = new Cursor({}, user.mesh)
 user.mesh.add(user.light)
 world.user = user
 three.scene.add(user.mesh)

@@ -5,6 +5,10 @@ export default class Tool {
       this.toolbox
     }
 
+    initMesh () {
+      
+    }
+
     equip (hand) {
       if (this.mesh == null) {
         let toolMesh = this.initMesh(this.data)

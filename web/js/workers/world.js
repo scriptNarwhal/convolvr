@@ -50,10 +50,7 @@ self.update = function () {
 									collision = true;
 									self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');
 
-							} /*else if (position[1] < yPos - 12000 && position[1]  > yPos - 68000 ) {
-									collision = true;
-									self.postMessage('{"command": "platform collision", "data":{"type":"bottom", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');
-							}*/
+							}
 						}
 
 							s = !! obj.structures ? obj.structures.length - 1 : -1;
@@ -86,21 +83,7 @@ self.update = function () {
 													 self.postMessage('{"command": "floor collision", "data":{"floor": '+floor+
 													 ', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}')
 												}
-												// if (offset > 45000) {
-												// 	if ((position[0] > oPos[0])) { // wall collision
-												// 		position[0] = oPos[0] + bounds[0]
-												// 	} else {
-												// 		position[0] = oPos[0] - bounds[0]
-												// 	}
-												// 	if (position[2] > oPos[2]) {
-												// 		position[2] = oPos[2] + bounds[2]
-												// 	} else {
-												// 		position[2] = oPos[2] - bounds[2]
-												// 	}
-												// 	collision = true
-												// 		self.postMessage('{"command": "structure collision", "data":{"inner": '+((innerBox[0] == true && innerBox[1] == true) ? 1 : 0)+
-												// 		', "delta":[' + delta[0] + ',' + delta[1] + '], "position":[' + position[0] + ',' + position[1] + ',' + position[2] + '] }}')
-												// }
+												
 											}
 										}
 									}

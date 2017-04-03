@@ -19,22 +19,30 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          props: { structure: true },
-          shape: "box",
-          size: [10000, 10000, 400],
-          color: 0xf5f5f5,
-          material: "plastic",
-          text: "",
+          props: {
+            geometry: {
+              shape: "box",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
-          position: [-0, 0, 0]
+          position: [0, 0, 0]
         },
         {
-          props: { structure: true },
-          shape: "box",
-          size: [9000, 9000, 400],
-          color: 0xf5f5f5,
-          material: "plastic",
-          text: "",
+          props: {
+            geometry: {
+              shape: "box",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [-250, -200, 400]
         }
@@ -46,42 +54,58 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          props: { structure: true },
-          shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
-          material: "plastic",
-          text: "",
+          props: {
+            geometry: {
+              shape: "hexagon",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [-4625, 0, 0]
         },
         {
-          props: { structure: true },
-          shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
-          material: "plastic",
-          text: "",
+          props: {
+            geometry: {
+              shape: "torus",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [4625, 0, 0]
         },
         {
-          props: { structure: true },
-          shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
-          material: "plastic",
-          text: "",
+          props: {
+            geometry: {
+              shape: "hexagon",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [-10250, 0, 0]
         },
         {
-          props: { structure: true },
-          shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
-          material: "plastic",
-          text: "",
+          props: {
+            geometry: {
+              shape: "cylinder",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [10250, 0, 0]
         },
@@ -93,42 +117,58 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          props: { structure: true },
-          shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
-          material: "plastic",
-          text: "",
+         props: {
+            geometry: {
+              shape: "box",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [-0, 10250, 0]
         },
         {
-          props: { structure: true },
-          shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
-          material: "plastic",
-          text: "",
+          props: {
+            geometry: {
+              shape: "hexagon",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [0, 4625, 0]
         },
         {
-          props: { structure: true },
-          shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
-          material: "plastic",
-          text: "",
+         props: {
+            geometry: {
+              shape: "box",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [-0, -10250, 0]
         },
         {
-          props: { structure: true },
-          shape: "box",
-          size: [8000, 8000, 200],
-          color: 0x404040,
-          material: "plastic",
-          text: "",
+          props: {
+            geometry: {
+              shape: "hexagon",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [0, -4625, 0]
         },
@@ -140,12 +180,16 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          props: { structure: true },
-          shape: "box",
-          size: [6000, 6000, 6000],
-          color: 0xff0000,
-          material: "plastic",
-          text: "",
+          props: {
+            geometry: {
+              shape: "box",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [0, 0, 0]
         }
@@ -157,30 +201,42 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          props: { structure: true },
-          shape: "box",
-          size: [3000, 32000, 3000],
-          material: "plastic",
-          color: 0xffffff,
-          text: "",
+         props: {
+            geometry: {
+              shape: "box",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [0, 0, 0]
         },{
-          props: { structure: true },
-          shape: "box",
-          size: [6000, 2000, 6000],
-          material: "plastic",
-          color: 0xffffff,
-          text: "",
+         props: {
+            geometry: {
+              shape: "hexagon",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [0, -16000, 0]
         },{
-          props: { structure: true },
-          shape: "box",
-          size: [6000, 2000, 6000],
-          material: "plastic",
-          color: 0xffffff,
-          text: "",
+          props: {
+            geometry: {
+              shape: "hexagon",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [0, 16000, 0]
         }
@@ -192,22 +248,30 @@ export default class EntityGenerator {
       id: 0,
       components: [
         {
-          props: { structure: true },
-          shape: "box",
-          size: [12000, 12000, 12000],
-          material: "wireframe",
-          color: 0xff00ff,
-          text: "",
+          props: {
+            geometry: {
+              shape: "hexagon",
+              size: [5000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [0, 0, 0]
         },
         {
-          props: { structure: true },
-          shape: "box",
-          size: [6000, 6000, 6000],
-          material: "wireframe",
-          color: 0xffffff,
-          text: "",
+          props: {
+            geometry: {
+              shape: "torus",
+              size: [10000, 10000, 1000]
+            },
+            material: {
+              color: 0x808080,
+              name: "plastic"
+            }
+          },
           quaternion: null,
           position: [0, 0, 0]
         }

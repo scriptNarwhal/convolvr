@@ -1,12 +1,11 @@
 import Tool from './tool'
 import EntityGenerator from '../../entities/entity-generator'
-
-export default class CustomTool extends Tool {
+/* terrain voxel tool */
+export default class SystemTool extends Tool {
   constructor (data, world, toolbox) {
     super(data, world, toolbox)
-      this.mesh = null
-      this.name = data ? data.name : "New Custom Tool"
-      this.generator = this.generator || new EntityGenerator()
+      this.mesh = null;
+      this.name = "System Tool"
       this.icon = this.initIcon()
       this.options = {
 
@@ -15,14 +14,13 @@ export default class CustomTool extends Tool {
 
     initIcon () {
       let entity = null
-      this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
         props: {},
         shape: "box",
         size: [2640, 2640, 2640],
         position: [0, 0, 0],
-        color: 0xffffff,
+        color: 0xff8707,
         text: "",
         quaternion: null
       })
@@ -30,11 +28,10 @@ export default class CustomTool extends Tool {
     }
 
     primaryAction () {
-
+      // create voxel
     }
 
-    secondaryAction (telemetry, value) {
-
+    secondaryAction () {
+      // remove voxel
     }
-
 }

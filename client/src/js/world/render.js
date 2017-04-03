@@ -19,19 +19,19 @@ export let render = (world, last) => {
   world.updateSkybox(delta)
     if (world.mode == "vr" || world.mode == "web") {
       if (world.postProcessing.enabled) {
-
         world.postProcessing.composer.render()
-
       } else {
         three.renderer.render(three.scene, camera)
       }
       world.octree.update()
     }
     last = Date.now()
-    requestAnimationFrame( () => { render(world, last) } )
+    if (world.mode != "stereo") {
+      requestAnimationFrame( () => { render(world, last) } )
+    }
 }
 
-let rayCast = (world, camera, callback) => {
+let rayCast = (world, camera, callback, cursor, hand) => {
 	let raycaster = world.raycaster,
       octreeObjects = [],
       intersections = [],
@@ -60,7 +60,7 @@ let cursorCallback = (obj, entity, world) => {
   }
   if (obj.distance < 33000) {
     cursor.activate()
-    cursor.setEntity(entity, obj.distance, obj.point)
+    //cursor.setEntity(entity, obj.distance, obj.point)
     // touching / interacting range
     //console.log("Entity", obj.distance, entity)
   }

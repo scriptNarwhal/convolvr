@@ -63,7 +63,8 @@ class Settings extends Component {
     this.setState({
       camera: localStorage.getItem("camera") || 'fps',
       lighting: localStorage.getItem("lighting") || 'high',
-      postProcessing: localStorage.getItem("postProcessing") || 'on',
+      postProcessing: localStorage.getItem("postProcessing") || 'off',
+      vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa
     })
   }
@@ -83,7 +84,8 @@ class Settings extends Component {
     localStorage.setItem('camera', this.state.camera)
     localStorage.setItem('lighting', this.state.lighting)
     localStorage.setItem('aa', this.state.aa)
-    localStorage.setItem('postProcessing', this.state.postProcessing)
+    localStorage.setItem('postProcessing', this.state.postProcessing),
+    localStorage.setItem('vrMovement', this.state.vrMovement) 
     this.reload()
   }
   updateUniverseSettings () {
@@ -110,6 +112,18 @@ class Settings extends Component {
               <option value="vehicle">Flight Camera (relative rotation)</option>
             </select>
           </div>
+          <div>
+            <div>
+            <h3 style={styles.h3}>VR Movement Mode</h3>
+            <select onChange={e=> { this.setState({vrMovement: e.target.value})}}
+                    value={ this.state.vrMovement }
+                    style={ styles.select }
+            >
+              <option value="stick">Stick Control</option>
+              <option value="teleport">Teleport Control</option>
+            </select>
+          </div>
+        </div>
           <div>
             <h3 style={styles.h3}>Lighting Quality</h3>
             <select onChange={e=> {this.setState({lighting: e.target.value})}}

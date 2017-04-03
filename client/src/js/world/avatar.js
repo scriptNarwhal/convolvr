@@ -10,6 +10,8 @@ export default class Avatar {
             components = [],
             n = 2
 
+          // add cursors back here
+
       if (wholeBody) {
         component = {
              props: { structure: true },
@@ -65,6 +67,7 @@ export default class Avatar {
         this.entity = entity
         this.mesh = entity.mesh
         this.hands = entity.hands
+        this.cursors = entity.cursors
         this.wholeBody = wholeBody
         this.data = data
     }

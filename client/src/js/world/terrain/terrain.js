@@ -7,8 +7,8 @@ export default class Terrain {
     this.world = world
     this.config = world.config.terrain
     this.octree = world.octree
-    this.UserPhysics = world.UserPhysics
-    this.EntityPhysics = world.EntityPhysics
+    this.WorldPhysics = world.systems.worldPhysics
+    this.EntityPhysics = world.systems.entityPhysics
     this.voxels = []
 		this.voxelList = [] // map of coord strings to voxels
 		this.lastChunkCoords = [0, 0, 0]
@@ -57,34 +57,34 @@ export default class Terrain {
         removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
         endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
         x = coords[0]-phase+1,
-        y = coords[2]-phase;
-        this.chunkCoords = coords;
+        y = coords[2]-phase
+        this.chunkCoords = coords
 
     if (force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2]) {
-      lastCoords = this.lastChunkCoords = [coords[0], coords[1], coords[2]];
-      force = false; 	// remove old chunks
+      lastCoords = this.lastChunkCoords = [coords[0], coords[1], coords[2]]
+      force = false 	// remove old chunks
       for (c in voxelList) {
-          platform = voxelList[c];
-          pCell = platform.data.cell;
+          platform = voxelList[c]
+          pCell = platform.data.cell
           if (!!!platform.cleanUp && (pCell[0] < coords[0] - removeDistance ||
                                       pCell[0] > coords[0] + removeDistance ||
                                       pCell[2] < coords[2] - removeDistance ||
                                       pCell[2] > coords[2] + removeDistance)
             ) { 	// mark voxels for removal
-              platform.cleanUp = true;
-              this.cleanUpChunks.push({physics: {cell: [pCell[0], 0, pCell[2]]}, cell: pCell[0]+".0."+pCell[2]});
+              platform.cleanUp = true
+              this.cleanUpChunks.push({physics: {cell: [pCell[0], 0, pCell[2]]}, cell: pCell[0]+".0."+pCell[2]})
             }
         }
       }
-      c = 0;
-      let cleanUpPlats = this.cleanUpChunks;
+      c = 0
+      let cleanUpPlats = this.cleanUpChunks
       this.cleanUpChunks.map((cleanUp, i) => {
           if (c < 4) {
               if (!!cleanUp) {
-                terrainChunk = voxels[cleanUp.cell];
+                terrainChunk = voxels[cleanUp.cell]
                 if (terrainChunk) {
                   if (terrainChunk.mesh) {
-                    three.scene.remove(terrainChunk.mesh);
+                    three.scene.remove(terrainChunk.mesh)
                   }
                   if (terrainChunk.entities) {
                     terrainChunk.entities.map(e => {
@@ -92,29 +92,29 @@ export default class Terrain {
                     })
                   }
                 }
-                removePhysicsChunks.push(cleanUp.physics);
-                voxelList.splice(voxels.indexOf(terrainChunk), 1);
-                delete voxels[cleanUp.cell];
-                cleanUpPlats.splice(i, 1);
+                removePhysicsChunks.push(cleanUp.physics)
+                voxelList.splice(voxels.indexOf(terrainChunk), 1)
+                delete voxels[cleanUp.cell]
+                cleanUpPlats.splice(i, 1)
             }
-            c ++;
+            c ++
           }
       })
-      c = 0;
+      c = 0
       // load new voxels // at first just from client-side generation
       while (x <= endCoords[0]) {
         while (y <= endCoords[1]) {
             if (c < 6) {
               if (voxels[x+".0."+y] == null) { // only if its not already loaded
                   voxels[x+".0."+y] = true
-                    c ++;
+                    c ++
                     this.reqChunks.push(x+"x0x"+y)
               }
             }
-            y += 1;
+            y += 1
         }
-        y = coords[2]-viewDistance;
-        x += 1;
+        y = coords[2]-viewDistance
+        x += 1
       }
       if (this.reqChunks.length >= 6) {
         let chunks = ""
@@ -124,7 +124,7 @@ export default class Terrain {
           }
           chunks += rc
         })
-        this.reqChunks = []; // empty array
+        this.reqChunks = [] // empty array
         let showVoxels = true
         if (!!config) {
           showVoxels = config.type == "voxels" || config.type == "both"
@@ -135,44 +135,44 @@ export default class Terrain {
              typeof response.data.map == 'function' &&
              response.data.map(c =>{
                  let chunk = new Chunk({visible: showVoxels, altitude: c.altitude, color: c.color,
-                                        entities: c.entities, voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z]);
+                                        entities: c.entities, voxels: c.voxels || [], structures: c.structures || []}, [c.x, 0, c.z])
                if (!!chunk.geometry != "space") { // if its not empty space
-                     three.scene.add(chunk.mesh);
+                     three.scene.add(chunk.mesh)
                  }
-                 physicsVoxels.push(chunk.data);
-                 voxelList.push(chunk);
-                 voxels[c.x+".0."+c.z] = chunk;
+                 physicsVoxels.push(chunk.data)
+                 voxelList.push(chunk)
+                 voxels[c.x+".0."+c.z] = chunk
              })
              if (physicsVoxels.length > 0) {
                //console.log("physics voxels", physicsVoxels)
-               this.UserPhysics.worker.postMessage(JSON.stringify({
+               this.systems.WorldPhysics.worker.postMessage(JSON.stringify({
                      command: "add voxels",
                      data: physicsVoxels
                 }))
-                this.EntityPhysics.worker.postMessage(JSON.stringify({
+                this.systems.entityPhysics.worker.postMessage(JSON.stringify({
                     command: "add voxels",
                     data: physicsVoxels
                 }))
              }
           }).catch(response => {
              console.log("Chunk Error", response)
-          });
+          })
       }
 
       if (removePhysicsChunks.length > 0) {
         let removeChunkData = JSON.stringify(removePhysicsChunks)
-        this.UserPhysics.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
+        this.WorldPhysics.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
         this.EntityPhysics.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
       }
 
-      lastCoords[0] = coords[0];
-      lastCoords[1] = coords[1];
-      lastCoords[2] = coords[2];
-      phase ++;
+      lastCoords[0] = coords[0]
+      lastCoords[1] = coords[1]
+      lastCoords[2] = coords[2]
+      phase ++
 
       if (phase > viewDistance) {
-        phase = 1;
+        phase = 1
       }
-      setTimeout(() => { this.bufferChunks(force, phase); }, 32);
+      setTimeout(() => { this.bufferChunks(force, phase) }, 32)
     }
 }

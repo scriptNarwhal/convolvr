@@ -4,7 +4,9 @@ import ComponentTool from './component-tool'
 import EntityTool from './entity-tool'
 import DeleteTool from './delete-tool'
 import VoxelTool from './voxel-tool'
-import ProjectileTool from './projectile-tool'
+import MaterialTool from './material-tool'
+import GeometryTool from './geometry-tool'
+import SystemTool from './system-tool'
 import CustomTool from './custom-tool'
 
 export default class Toolbox {
@@ -24,10 +26,11 @@ export default class Toolbox {
       this.tools = [
         new EntityTool({}, world, this),
         new ComponentTool({}, world, this),
+        new MaterialTool({}, world, this),
+        new GeometryTool({}, world, this),
+        new SystemTool({}, world, this),
         new DeleteTool({}, world, this),
-        new VoxelTool({}, world, this),
-        new ProjectileTool({}, world, this)
-        //new CustomTool(),
+        new VoxelTool({}, world, this)
       ];
       this.currentTools = [0, 0]
     }

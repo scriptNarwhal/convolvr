@@ -16,23 +16,6 @@ export default class EntityTool extends Tool  {
       this.current = 0
     }
 
-    initMesh (data = {}) {
-      let mesh = null,
-          color = 0xffffff,
-          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
-          geom = new THREE.BoxGeometry(200, 1000, 100),
-          mat = new THREE.MeshPhongMaterial({color: color, fog: false})
-
-      mesh = new THREE.Mesh(geom, mat)
-      mesh.rotation.x = Math.PI / 2.0
-      if (light) {
-        mesh.add(light)
-        light.position.set(0, 100, -100)
-      }
-      this.mesh = mesh
-      return this.mesh
-    }
-
     initIcon () {
       let mesh = null,
           entity = null

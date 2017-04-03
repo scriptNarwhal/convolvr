@@ -2,12 +2,14 @@ import axios from 'axios'
 import Avatar from './avatar'
 import Entity from '../entities/entity'
 import Terrain from './terrain/terrain'
-import UserPhysics  from '../systems/user-physics'
+import Systems from '../systems'
+import WorldPhysics  from '../systems/world-physics'
 import EntityPhysics from '../systems/entity-physics'
 import { render, vrRender} from './render'
 import PostProcessing from './post-processing'
 import { API_SERVER } from '../config.js'
 import { send } from '../network/socket'
+import SocketHandlers from '../network/handlers'
 
 let world = null
 
@@ -70,13 +72,9 @@ export default class World {
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
 		// userInput.init(this, camera, this.user)
-		this.UserPhysics = new UserPhysics()
-		this.EntityPhysics = new EntityPhysics()
-		this.UserPhysics.init(self)
-		this.EntityPhysics.init(self)
 		this.terrain = new Terrain(this);
 		this.workers = {
-			physics: this.UserPhysics
+			physics: this.WorldPhysics
 		}
 		three = this.three = {
 			world: this,
@@ -87,6 +85,10 @@ export default class World {
 		};
 		world = this
 		window.three = this.three
+		this.systems = new Systems({
+			worldPhysics: new WorldPhysics(world),
+			entityPhysics: new EntityPhysics(world)
+		})
 
 		this.textures = {}
 		let gridTexture = this.textures.grid = THREE.ImageUtils.loadTexture('/images/textures/gplaypattern_@2X.png', false, () => {
@@ -109,73 +111,8 @@ export default class World {
 		window.addEventListener('resize', onResize, true)
 		this.onWindowResize = onResize
 		onResize()
-
-		socket.on("update", packet => {
-			let data = JSON.parse(packet.data),
-				entity = null,
-				user = null,
-				pos = null,
-				quat = null,
-				mesh = null
-
-			if (!! data.entity) {
-				entity = data.entity
-				if (entity.id != this.user.id) {
-					pos = entity.position
-					quat = entity.quaternion
-					user = this.users["user"+entity.id]
-					if (user == null) {
-						user = this.users["user"+entity.id] = {
-							id: entity.id,
-							avatar: new Avatar(entity.id, true, {}), // render whole body, not just hands
-							mesh: null
-						}
-					}
-					user.mesh = user.avatar.mesh;
-					mesh = user.mesh
-					if (!! mesh) {
-						mesh.position.set(pos.x, pos.y, pos.z)
-						mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w)
-					}
-				}
-			}
-		})
-		socket.on("tool action", packet => {
-			let data = JSON.parse(packet.data),
-					user = world.user,
-					pos = data.position,
-					coords = data.coords,
-					chunk = world.terrain.voxels[coords[0]+".0."+coords[2]],
-					quat = data.quaternion
-
-			switch (data.tool) {
-				case "Entity Tool":
-					let ent = data.entity,
-							entity = new Entity(ent.id, ent.components, data.position, data.quaternion)
-					chunk.entities.push(entity)
-					entity.init(three.scene)
-				break;
-				case "Component Tool":
-					chunk.entities.map(voxelEnt => { // find & re-init entity
-						if (voxelEnt.id == data.entityId) {
-							console.log("got component tool message") // concat with existing components array
-							console.log(data.entity.components)
-							voxelEnt.components = voxelEnt.components.concat(data.entity.components)
-							voxelEnt.init(three.scene)
-						}
-					})
-				break;
-				case "Voxel Tool":
-
-				break;
-				case "Projectile Tool":
-
-				break;
-				case "Delete Tool":
-
-				break;
-			}
-		})
+		this.socketHandlers = new SocketHandlers(this)
+		
 		render(this, 0)
 
 		three.vrDisplay = null
@@ -230,7 +167,7 @@ export default class World {
 
 	initRenderer (renderer, id) {
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1
-		renderer.setClearColor(0x3b3b3b)
+		renderer.setClearColor(0x1b1b1b)
 		renderer.setPixelRatio(pixelRatio)
 		renderer.setSize(window.innerWidth, window.innerHeight)
 			document.body.appendChild( renderer.domElement )
@@ -256,7 +193,7 @@ export default class World {
 			localStorage.setItem("lighting", !this.mobile ? 'high' : 'low')
 		}
 		if (enablePostProcessing == null) {
-			enablePostProcessing = !this.mobile ? 'on' : 'off'
+			enablePostProcessing = 'off'
 			localStorage.setItem("postProcessing", enablePostProcessing)
 		}
 		this.aa = aa
@@ -310,7 +247,7 @@ export default class World {
 				mobile = this.mobile,
 	      image = "",
 	      imageSize = [0, 0],
-	      userHands = world.user.hands,
+	      userHands = world.user.toolbox.hands,
 	      hands = []
 
 		if (this.sendUpdatePacket == 12) { // send image

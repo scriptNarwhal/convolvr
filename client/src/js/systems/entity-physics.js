@@ -1,10 +1,6 @@
 export default class EntityPhysics {
 	constructor() {
-		this.worker = null;
-	}
-
-	init (world) {
-		let worker = new Worker('/js/workers/entity.js')
+		let worker = this.worker = new Worker('/js/workers/entity.js')
 	      worker.onmessage = function (event) {
 	        let message = JSON.parse(event.data),
   	          sys = world,
@@ -33,10 +29,12 @@ export default class EntityPhysics {
 			} else {
 	        console.log(message.data)
 	    }
-	  };
-
+	  }
 	   worker.postMessage('{"command":"start","data":""}')
 		 this.worker = worker
-		 return worker
+	}
+
+	init (world) {
+		
 	}
 }
