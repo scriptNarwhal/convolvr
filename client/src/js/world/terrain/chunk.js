@@ -1,6 +1,4 @@
 import Entity from '../../entities/entity'
-import Track from '../structures/track'
-import Tower from '../structures/tower'
 
 let physics = null;
 
@@ -55,7 +53,7 @@ export default class Chunk {
                                       voxel.cell[1] * gridSize,    voxel.cell[2] * gridSize)
                cellMesh.updateMatrix();
                base.merge(cellMesh.geometry, cellMesh.matrix)
-               x --;
+               x --
             }
             mesh = new THREE.Mesh(base, mat)
         } else {
@@ -76,20 +74,6 @@ export default class Chunk {
             // probably need to offset the position for the chunk..
           })
         }
-        if (!!data.structures) { // multiple structures per platform
-            items = data.structures;
-            x = items.length;
-            while (x > 0) {
-                x--;
-                structure = new Tower(items[x], this, lowQuality)
-                // track = new Track(items[x], this);
-                	if (Math.random() < 0.2) {
-                    structure.initLight();
-                  }
-                // should switch here for other structure types
-                this.structures.push(structure)
-            }
-        }
         altitude = data.altitude || 0
         if (!! cell) {
             mesh.position.set((cell[0]*464000) + (cell[2] % 2 == 0 ? 0 : 464000 / 2),
@@ -106,10 +90,10 @@ export default class Chunk {
         }
 
         if (data.size == null) {
-            data.size = { x: 132000, y: 132000, z: 132000 };
+            data.size = { x: 132000, y: 132000, z: 132000 }
         }
-        this.data = data;
-        this.mesh = mesh;
+        this.data = data
+        this.mesh = mesh
         // add to octree
         three.world.octree.add(mesh)
         three.scene.add(mesh)

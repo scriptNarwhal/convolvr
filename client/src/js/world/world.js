@@ -24,7 +24,6 @@ export default class World {
 				three = {},
 				postProcessing = false
 
-
 		this.mobile = mobile
 		this.initLocalSettings()
 		let rendererOptions = {antialias: this.aa != 'off' && this.enablePostProcessing != 'on'}
@@ -71,11 +70,7 @@ export default class World {
 		})
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
-		// userInput.init(this, camera, this.user)
-		this.terrain = new Terrain(this);
-		this.workers = {
-			physics: this.WorldPhysics
-		}
+		
 		three = this.three = {
 			world: this,
 			scene,
@@ -89,7 +84,11 @@ export default class World {
 			worldPhysics: new WorldPhysics(world),
 			entityPhysics: new EntityPhysics(world)
 		})
-
+		this.terrain = new Terrain(this);
+		this.workers = {
+			worldPhysics: this.systems.worldPhysics.worker,
+			entityPhysics: this.systems.entityPhysics.worker
+		}
 		this.textures = {}
 		let gridTexture = this.textures.grid = THREE.ImageUtils.loadTexture('/images/textures/gplaypattern_@2X.png', false, () => {
 			gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping
@@ -97,6 +96,8 @@ export default class World {
 			gridTexture.anisotropy = renderer.getMaxAnisotropy()
 				//skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
 		})
+		this.socketHandlers = new SocketHandlers(this, socket)
+
 		function onResize () {
 			world.screenResX = window.devicePixelRatio * window.innerWidth
 			if (three.world.mode != "stereo") {
@@ -110,8 +111,7 @@ export default class World {
 		}
 		window.addEventListener('resize', onResize, true)
 		this.onWindowResize = onResize
-		onResize()
-		this.socketHandlers = new SocketHandlers(this)
+		onResize()	
 		
 		render(this, 0)
 

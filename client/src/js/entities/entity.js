@@ -27,7 +27,9 @@ export default class Entity {
     var mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
         three = window.three,
-        mobile = three.world.mobile,
+        world = three.world,
+        systems = world.systems,
+        mobile = world.mobile,
         ncomps = this.components.length,
         nonStructural = [],
         compMesh = null,
@@ -40,11 +42,11 @@ export default class Entity {
         s = 0
 
     if (this.mesh != null) {
-      three.world.octree.remove(this.mesh)
+      world.octree.remove(this.mesh)
       scene.remove(this.mesh)
     }
     while (c < ncomps) {
-        comp = new Component(this.components[c], {mobile}) // use simpler shading for mobile gpus
+        comp = new Component(this.components[c], this, systems, {mobile}) // use simpler shading for mobile gpus
         if (comp.props.noRaycast === true) {
           addToOctree = false
         }
@@ -61,10 +63,6 @@ export default class Entity {
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
         } else {
-          if (comp.props.hand != null) {
-            this.hands.push(comp.mesh)
-            scene.add(comp.mesh)
-          }
           nonStructural.push(comp.mesh)
         }
         c ++
@@ -85,9 +83,11 @@ export default class Entity {
     if (!! this.position) {
         mesh.position.set(this.position[0], this.position[1], this.position[2])
     }
-    mesh.userData = { entity: this }
+    mesh.userData = { 
+      entity: this 
+    }
     if (addToOctree) {
-      three.world.octree.add(mesh)
+      world.octree.add(mesh)
     }
     scene.add(mesh)
     this.mesh = mesh

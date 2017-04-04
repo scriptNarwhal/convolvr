@@ -40,7 +40,6 @@ func Start(configName string) {
 	chunkErr := db.Init(&Chunk{})
 	componentErr := db.Init(&Component{})
 	entityErr := db.Init(&Entity{})
-	structureErr := db.Init(&Structure{})
 	chatHistory := db.From("chathistory")
 	historyErr := chatHistory.Init(&ChatMessage{})
 	// indexErr := db.ReIndex(&World{})
@@ -62,9 +61,6 @@ func Start(configName string) {
 	if entityErr != nil {
 		log.Fatal(entityErr)
 	}
-	if structureErr != nil {
-		log.Fatal(structureErr)
-	}
 	if historyErr != nil {
 		log.Fatal(historyErr)
 	}
@@ -78,9 +74,6 @@ func Start(configName string) {
 	api.POST("/worlds", postWorlds)
 	api.GET("/universe-settings", getUniverseSettings)
 	api.POST("/universe-settings", postUniverseSettings)
-	api.GET("/structures", getStructures)
-	api.POST("/structures", postStructures)
-	api.GET("/structures/:userId", getStructuresByUser)
 	api.GET("/entities", getEntities)
 	api.POST("/entities", postEntities)
 	api.GET("/entities/:userId", getEntitiesByUser)

@@ -37,8 +37,8 @@ type Chunk struct {
 	Entities   []*Entity   `json:"entities"`
 }
 
-func NewChunk(id int, x int, y int, z int, alt float32, world string, name string, geom string, mat string, color int, structures []Structure, voxels []*Voxel, entities []*Entity) *Chunk {
-	return &Chunk{id, x, y, z, alt, world, name, geom, mat, color, structures, voxels, entities}
+func NewChunk(id int, x int, y int, z int, alt float32, world string, name string, geom string, mat string, color int, voxels []*Voxel, entities []*Entity) *Chunk {
+	return &Chunk{id, x, y, z, alt, world, name, geom, mat, color, voxels, entities}
 }
 
 func getWorldChunks(c echo.Context) error {
@@ -47,8 +47,8 @@ func getWorldChunks(c echo.Context) error {
 		generatedChunk Chunk
 		chunksData     []Chunk
 		foundChunks    []Chunk
-		structures     []Structure
-		structure      Structure
+		// structures     []*Entity
+		// structure      Entity
 		entities       []*Entity
 		chunkVoxels    []*Voxel
 	)
@@ -75,22 +75,6 @@ func getWorldChunks(c echo.Context) error {
 				chunkGeom = "space"
 			} else {
 				if rand.Intn(26) > 23 && worldData.Spawn.Structures {
-					light := 0
-					if rand.Intn(6) > 4 {
-						if rand.Intn(5) > 4 {
-							light = 0xffffff
-						} else {
-							if rand.Intn(4) > 2 {
-								light = 0xffffff
-							} else {
-								if rand.Intn(4) > 2 {
-									light = 0x8000ff
-								} else {
-									light = 0x00ff00
-								}
-							}
-						}
-					}
 					//structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0, 0, 0}, []int{0, 0, 0, 0}, 2+rand.Intn(5), 2+rand.Intn(9), 2+rand.Intn(5), light)
 					//structures = append(structures, structure)
 				}

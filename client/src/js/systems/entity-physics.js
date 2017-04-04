@@ -1,19 +1,20 @@
 export default class EntityPhysics {
-	constructor() {
+	constructor(world) {
+		this.world = world
 		let worker = this.worker = new Worker('/js/workers/entity.js')
 	      worker.onmessage = function (event) {
 	        let message = JSON.parse(event.data),
-  	          sys = world,
-  						vrFrame = world.vrFrame,
+  	          vrFrame = world.vrFrame,
   						vrHeight = 0,
   	          cam = three.camera,
-  	          user = sys.user,
+  	          user = world.user,
   	          position = [],
   	          velocity = [],
 							voxel = null
+							
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
 					vrHeight = 22000 * vrFrame.pose.position[1]
-					sys.vrHeight = vrHeight
+					world.vrHeight = vrHeight
 			}
 	    if (message.command == "update") {
 	        worker.postMessage('{"command":"update","data":{"position":['+cam.position.x+', '+cam.position.y+', '+cam.position.z+
@@ -34,7 +35,7 @@ export default class EntityPhysics {
 		 this.worker = worker
 	}
 
-	init (world) {
+	init () {
 		
 	}
 }

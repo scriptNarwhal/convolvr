@@ -1,19 +1,18 @@
 export default class WorldPhysics {
-	constructor() {
+	constructor(world) {
 		this.worker = null
 		let worker = new Worker('/js/workers/world.js');
 	      worker.onmessage = function (event) {
 	        let message = JSON.parse(event.data),
-	          sys = world,
-						vrFrame = world.vrFrame,
+	          vrFrame = world.vrFrame,
 						vrHeight = 0,
 	          cam = three.camera,
-	          user = sys.user,
+	          user = world.user,
 	          position = [],
 	          velocity = [];
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
 					vrHeight = 22000 * vrFrame.pose.position[1]
-					sys.vrHeight = vrHeight
+					world.vrHeight = vrHeight
 			}
 	    if (message.command == "update") {
 	          worker.postMessage('{"command":"update","data":{"position":['+cam.position.x+
@@ -63,7 +62,7 @@ export default class WorldPhysics {
 						let cameraPosition = three.camera.position;
 	          position = message.data.position;
 	          if (message.data.inner == 0 ) {
-	            sys.user.falling = false;
+	            world.user.falling = false;
 	            if (message.data.delta[0] > message.data.delta[1]) {
 	              cameraPosition.x = position[0];
 								user.velocity.x += position[0]*= -0.25
@@ -72,7 +71,7 @@ export default class WorldPhysics {
 								user.velocity.z += position[2] *= -0.25
 	            }
 	          }
-	          //sys.vibrate(50);
+	          //world.vibrate(50);
 	        } else if (message.command == "floor collision") { // consider sending "top" or "bottom" collision type
 						three.camera.position.set(three.camera.position.x, message.data.position[1]+vrHeight, three.camera.position.z);
 						if (Math.abs(user.velocity.y) > 250000) {
@@ -89,9 +88,9 @@ export default class WorldPhysics {
 	          world.generateFullLOD(message.data.coords);
 
 	        } else if (message.command == "enter interior") {
-	          if (message.data.name != sys.venue) {
+	          if (message.data.name != world.venue) {
 	            //console.log("message.data.name", data.data.name);
-	            sys.venue = message.data.name;
+	            world.venue = message.data.name;
 	            world.enterInterior(message.data.name);
 	          }
 	        } else {
