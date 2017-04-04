@@ -8,38 +8,70 @@ export default class Avatar {
             component = null,
             componentB = null,
             components = [],
+            cursorRot = new THREE.Quaternion(),
+            cursorEuler = new THREE.Euler(),
+            cursorComponent = {
+              props: {
+                cursor: true,
+                geometry: {
+                  shape: "open-box",
+                  size: [2000, 2000, 2000]
+                },
+                material: {
+                  name: "wireframe",
+                  color: 0xffffff
+                }
+              },
+              position: [0, 0, 0],
+              quaternion: cursorRot.toArray()
+            },
             n = 2
 
           // add cursors back here
 
       if (wholeBody) {
         component = {
-             props: { structure: true },
-             shape: "cylinder",
-             color: 0xffffff,
-             material: "plastic",
-             size: [1800, 1200, 1800],
+             props: { 
+                geometry: {
+                  shape: "cylinder",
+                  size: [1800, 1200, 1800]
+                },
+                material: {
+                  color: 0xffffff,
+                  name: "plastic",
+                }
+             },
              position: [0, (n-1)*600, 0],
              quaternion: false
         }
        components.push(component)
        componentB = {
-             props: { structure: true },
-             shape: "octahedron",
-             color: 0xffffff,
-             material: "wireframe",
-             size: [2800, 2800, 2800],
+             props: { 
+                geometry: {
+                  shape: "octahedron",
+                  size: [2800, 2800, 2800],
+                },
+                material: {
+                  color: 0xffffff,
+                  name: "wireframe",
+                }
+             },
              position: [0, (n-1)*600, 0],
              quaternion: false
-         };
+         }
          components.push(componentB)
       } else {
         components.push(Object.assign({},{
-          props: { structure: true },
-          shape: "box",
-          color: 0xffffff,
-          material: "plastic",
-          size: [1, 1, 1],
+          props: {
+            geometry: {
+                shape: "box",
+                size: [1, 1, 1],
+              },
+              material: {
+                color: 0xffffff,
+                name: "plastic"
+              }
+          },
           position: [0, 0, 0],
           quaternion: false
         }))
@@ -50,19 +82,22 @@ export default class Avatar {
           components.push(Object.assign({}, {
             props: {
                 hand: n,
-                structure: false,
-                noRaycast: true
+                noRaycast: true,
+                geometry: {
+                  size: [2500, 1500, 4000],
+                  shape: "box"
+                },
+                material: {
+                  name: "plastic",
+                  color: 0xffffff,
+                }
             },
-            shape: "box",
-            size: [2500, 1500, 4000],
-            color: 0xffffff,
-            material: "plastic",
             quaternion: null,
             position: [(n-1)*1500, 0, 0]
           }))
           ++n
         }
-        entity = new Entity(id, components, null, null)
+        entity = new Entity(id, components)
         entity.init(three.scene)
         this.entity = entity
         this.mesh = entity.mesh
