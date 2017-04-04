@@ -295,21 +295,31 @@ function initButtonComponents (data) {
   components.push({
       props:{
         activates: true,
-        gazeOver: true
+        gazeOver: true,
+        geometry: {
+          shape: "node",
+          size: [0, 0, 0]
+        },
+        material: {
+          name: "basic",
+          color: 0
+        }
       },
-      shape: "node",
-      material: "basic",
-      size: [0, 0, 0],
       position: [0,0,0],
-      color: 0
   })
   while (x > 0) {
     components.push({
-      props: {},
-      shape: "box",
-      size: [160, 10000, 4000],
+      props: {
+        geometry: {
+          size: [160, 10000, 4000],
+          shape: "box"
+        },
+        material: {
+          color: color,
+          name: "basic"
+        }
+      },
       position: [-5000+(x>1?10000:0), 0, 0],
-      color: color,
       quaternion: null
     })
     x --
@@ -317,11 +327,17 @@ function initButtonComponents (data) {
   x = 2;
   while (x > 0) {
     components.push({
-      props: {},
-      shape: "box",
-      size: [10000, 160, 4000],
+      props: {
+        geometry: {
+          size: [10000, 160, 4000],
+          shape: "box"
+        },
+        material: {
+          color: color,
+          name: "basic"
+        }
+      },
       position: [0, -5000+(x>1?10000:0), 0],
-      color: color,
       quaternion: null
     })
     x --
