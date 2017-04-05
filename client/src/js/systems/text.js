@@ -7,12 +7,11 @@ export default class TextSystem {
             background = prop.background,
             textTexture = null,
             textMaterial = null,
-            textCanvas = null,
+            textCanvas = document.createElement("canvas"),
             textCanvasSize = 1024,
-            context = null,
+            context = null
 
-        textCanvas = document.createElement("canvas")
-        textCanvas.setAttribute("style","display:none")
+        textCanvas.setAttribute("style", "display:none")
         textCanvas.width = textCanvasSize
         textCanvas.height = textCanvasSize
         document.body.appendChild(textCanvas)

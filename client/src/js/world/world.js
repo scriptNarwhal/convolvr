@@ -5,6 +5,9 @@ import Terrain from './terrain/terrain'
 import Systems from '../systems'
 import WorldPhysics  from '../systems/world-physics'
 import EntityPhysics from '../systems/entity-physics'
+import GeometrySystem from '../systems/geometry'
+import MaterialSystem from '../systems/material'
+import TextSystem from '../systems/text'
 import { render, vrRender} from './render'
 import PostProcessing from './post-processing'
 import { API_SERVER } from '../config.js'
@@ -82,7 +85,10 @@ export default class World {
 		window.three = this.three
 		this.systems = new Systems({
 			worldPhysics: new WorldPhysics(world),
-			entityPhysics: new EntityPhysics(world)
+			entityPhysics: new EntityPhysics(world),
+			geometry: new GeometrySystem(world),
+			material: new MaterialSystem(world),
+			text: new TextSystem(world)
 		})
 		this.terrain = new Terrain(this);
 		this.workers = {
@@ -244,18 +250,19 @@ export default class World {
 
 	sendUserData () {
 		let camera = three.camera,
-				mobile = this.mobile,
-	      image = "",
-	      imageSize = [0, 0],
-	      userHands = world.user.toolbox.hands,
-	      hands = []
+			mobile = this.mobile,
+			image = "",
+			imageSize = [0, 0],
+			input = this.userInput,
+			userHands = !!world.user.toolbox ? world.user.toolbox.hands : [],
+			hands = []
 
 		if (this.sendUpdatePacket == 12) { // send image
 	    imageSize = this.sendVideoFrame()
 	  }
 	  this.sendUpdatePacket += 1
 	  if (this.sendUpdatePacket %((2+(1*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
-	    if (this.userInput.leapMotion) {
+	    if (input.trackedControls || input.leapMotion) {
 	      userHands.forEach(function (arm) {
 	        hands.push({pos: [arm.position.x, arm.position.y, arm.position.z],
 	          quat: [arm.quaternion.x, arm.quaternion.y, arm.quaternion.z, arm.quaternion.w] });

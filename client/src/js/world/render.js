@@ -37,6 +37,11 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
         rayCast(world, camera, cursor, hand, cursorCallback)
       }
   })
+  cursorIndex ++
+  if (cursorIndex == cursors.length) {
+      cursorIndex = 0
+  }
+  return cursorIndex
 }
 
 export let render = (world, last, cursorIndex) => {
@@ -46,7 +51,7 @@ export let render = (world, last, cursorIndex) => {
       delta = (Date.now() - last) / 16000 ,
       time = Date.now(),
       user = world.user != null ? world.user : false,
-      cursors = !!user ? user.avatar.cursors : false,
+      cursors = !!user ? user.avatar.cursors : [],
       hands = !!user ? user.avatar.hands : false
 
   if (!! world.userInput) {
@@ -55,7 +60,7 @@ export let render = (world, last, cursorIndex) => {
   if (user && user.mesh && cursors) {
     user.mesh.position.set(cPos.x, cPos.y, cPos.z);
     user.mesh.quaternion.set(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
-    handleCursors(cursors, cursorIndex, hands, camera, world)
+    cursorIndex = handleCursors(cursors, cursorIndex, hands, camera, world)
   }
   world.sendUserData()
   world.updateSkybox(delta)
@@ -68,10 +73,6 @@ export let render = (world, last, cursorIndex) => {
       world.octree.update()
     }
     last = Date.now()
-    cursorIndex ++
-    if (cursorIndex == cursors.length) {
-      cursorIndex = 0
-    }
     if (world.mode != "stereo") {
       requestAnimationFrame( () => { render(world, last, cursorIndex) } )
     }
@@ -103,7 +104,7 @@ export let vrAnimate = (time, oldPos, cursorIndex) => {
     camera.quaternion.fromArray(frame.pose.orientation)
     world.userInput.update(delta)
 
-    handleCursors(cursors, cursorIndex, hands, camera, world)
+    cursorIndex = handleCursors(cursors, cursorIndex, hands, camera, world)
     user.mesh.quaternion.fromArray(frame.pose.orientation)
     user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
@@ -111,9 +112,5 @@ export let vrAnimate = (time, oldPos, cursorIndex) => {
     world.sendUserData()
     t.vrEffect.render(t.scene, t.camera) // Render the scene.
     world.octree.update()
-    cursorIndex ++
-    if (cursorIndex == cursors.length) {
-      cursorIndex = 0
-    }
     t.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now, vrWorldPos, cursorIndex) }) // Keep looping.
 }

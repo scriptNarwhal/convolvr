@@ -4,14 +4,16 @@ export default class MaterialSystem {
     }
 
     init (component) {
-        mat = {},
-          basic = false,
-          mobile = appConfig && appConfig.mobile
+        let prop = component.props.material,
+            mat = {},
+            material = null,
+            basic = false,
+            mobile = this.world.mobile
 
-          switch (materialName) {
+          switch (prop.name) {
         case "wireframe":
           mat = {
-            color: data.color || 0x00ff00,
+            color: prop.color || 0x00ff00,
             wireframe: true,
             fog: false
           }
@@ -23,7 +25,7 @@ export default class MaterialSystem {
         break
         default:
           mat = {
-              color: data.color || 0xff00ff,
+              color: prop.color || 0xff00ff,
               fog: false
           }
           basic = false

@@ -17,6 +17,22 @@ export default class ComponentTool extends Tool {
         }
         this.all = ["panel", "block", "column", "wirebox"]
         this.current = 0
+        this.entity = new Entity(-1, [
+          {
+            props: {
+              geometry: {
+                shape: "box",
+                size: [1600, 1200, 7000]
+              },
+              material: {
+                name: "metal"
+              },
+              tool: {
+
+              }
+            }
+          }
+        ])
     }
 
     initIcon () {

@@ -6,13 +6,27 @@ export default class Component {
           position = data.position ? data.position : [0, 0, 0]
           
       this.data = data
-      this.props = props || {}
+      this.props = data.props || {}
       this.state = {}
+      this.components = data.components
       this.geometry = null
       this.material = null
+      if (props.geometry == undefined) {
+        props.geometry = {
+          shape: "node",
+          size:[1,1,1]
+        }
+      }
+      if (props.material == undefined) {
+        props.material = {
+          name: 'wireframe',
+          color: 0xffffff
+        }
+      }
       systems.registerComponent(this)
-      if (this.geometry)
+
       mesh = new THREE.Mesh(this.geometry, this.material)
+      
       if (!! quaternion) {
           mesh.quaternion.set(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
       }
@@ -62,10 +76,6 @@ export default class Component {
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
         } else {
-          if (comp.props.hand != null) {
-            entity.hands.push(comp.mesh)
-            scene.add(comp.mesh)
-          }
           nonStructural.push(comp.mesh)
         }
         c ++
