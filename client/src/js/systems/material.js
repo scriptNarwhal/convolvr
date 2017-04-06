@@ -17,11 +17,14 @@ export default class MaterialSystem {
         }
           switch (prop.name) {
         case "plastic":
-
+          mat = { color: prop.color || 0xffffff }
+        break
         case "metal":
-
+          mat = { color: prop.color || 0xffffff }
+        break
         case "glass":
-
+          mat = { color: prop.color || 0xffffff }
+        break
         case "wireframe":
           mat = {
             color: prop.color || 0x00ff00,
@@ -31,7 +34,7 @@ export default class MaterialSystem {
           basic = true
         break
         case "basic":
-          mat = { color: 0x303030 }
+          mat = { color: prop.color || 0xffffff }
           basic = true
         break
         default:

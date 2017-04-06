@@ -74,19 +74,28 @@ export default class Toolbox {
       this.tools.push(new CustomTool(data))
     }
 
-    initActionTelemetry (camera, useCursor) {
-      let cPos = camera.position,
-          position = [cPos.x, cPos.y, cPos.z],
-          quaternion = [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w],
-          cursor = this.world.user.cursor,
-          cursorPos = null
+    initActionTelemetry (camera, useCursor, hand) {
+      let input = this.world.userInput,
+          position = camera.position.toArray(),
+          quaternion = camera.quaternion.toArray(),
+          user = this.world.user,
+          cursors = user.avatar.cursors,
+          cursor = null,
+          cursorPos = null,
+          handMesh = null
+
       if (useCursor) {
-        if (false) { // set position from tracked controller
-            // implement
+        if (input.trackedControls || input.leapMotion) { // set position from tracked controller
+          cursor = cursors[hand +1]
+          handMesh = user.toolbox.hands[hand]
         } else {
-          cursor.mesh.updateMatrixWorld()
-          cursorPos = cursor.mesh.localToWorld(new THREE.Vector3())
-          position = [cursorPos.x, cursorPos.y, cursorPos.z]
+          cursor = cursors[0]
+        }
+        cursor.mesh.updateMatrixWorld()
+        cursorPos = cursor.mesh.localToWorld(new THREE.Vector3())
+        position = cursorPos.toArray()
+        if (handMesh != null) {
+          quaternion = handMesh.quaternion.toArray()
         }
       }
 
@@ -98,7 +107,7 @@ export default class Toolbox {
     usePrimary (hand) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
-          telemetry = this.initActionTelemetry(camera, true),
+          telemetry = this.initActionTelemetry(camera, true, hand),
         { position, quaternion } = telemetry,
           toolAction = null
       if (tool.mesh == null) {
@@ -113,7 +122,7 @@ export default class Toolbox {
     useSecondary(hand, value) {
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
-          telemetry = this.initActionTelemetry(camera, true),
+          telemetry = this.initActionTelemetry(camera, true, hand),
         { position, quaternion } = telemetry,
           toolAction = false
       if (tool.mesh == null) {

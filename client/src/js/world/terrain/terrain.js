@@ -41,6 +41,7 @@ export default class Terrain {
     let voxels = this.voxels,
         voxelList = this.voxelList,
         config = this.config,
+        systems = this.world.systems,
         plat = null,
         chunk = null,
         removePhysicsChunks = [],
@@ -145,11 +146,11 @@ export default class Terrain {
              })
              if (physicsVoxels.length > 0) {
                //console.log("physics voxels", physicsVoxels)
-               this.systems.worldPhysics.worker.postMessage(JSON.stringify({
+               systems.worldPhysics.worker.postMessage(JSON.stringify({
                      command: "add voxels",
                      data: physicsVoxels
                 }))
-                this.systems.entityPhysics.worker.postMessage(JSON.stringify({
+                systems.entityPhysics.worker.postMessage(JSON.stringify({
                     command: "add voxels",
                     data: physicsVoxels
                 }))
