@@ -7,7 +7,27 @@ import WorldPhysics  from '../systems/world-physics'
 import EntityPhysics from '../systems/entity-physics'
 import GeometrySystem from '../systems/geometry'
 import MaterialSystem from '../systems/material'
+import AssetSystem from '../systems/assets'
+import LightSystem from '../systems/light'
 import TextSystem from '../systems/text'
+import AudioSystem from '../systems/audio'
+import VideoSystem from '../systems/video'
+import DrawingSystem from '../systems/drawing'
+import ControlSystem from '../systems/control'
+import PropulsionSystem from '../systems/propulsion'
+import FactorySystem from '../systems/factory'
+import ParticleSystem from '../systems/particle'
+import ProjectileSystem from '../systems/projectile'
+import DestructableSystem from '../systems/destructable'
+import FloorSystem from '../systems/floor'
+import WallSystem from '../systems/wall'
+import SeatSystem from '../systems/seat'
+import DoorSystem from '../systems/door'
+import ContainerSystem from '../systems/container'
+import ToolUISystem from '../systems/tool-ui'
+import ToolSystem from '../systems/tool'
+import FileSystem from '../systems/file'
+import ChatSystem from '../systems/chat'
 import { render, vrRender} from './render'
 import PostProcessing from './post-processing'
 import { API_SERVER } from '../config.js'
@@ -20,7 +40,7 @@ export default class World {
 	constructor(user, userInput = false, socket, store) {
 		let mobile = (window.innerWidth <= 720),
 				scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 6000000 ),
+				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1500, 10000000),
 				screenResX = window.devicePixelRatio * window.innerWidth,
 				renderer = null,
 				self = this,
@@ -84,11 +104,31 @@ export default class World {
 		world = this
 		window.three = this.three
 		this.systems = new Systems({
-			worldPhysics: new WorldPhysics(world),
-			entityPhysics: new EntityPhysics(world),
+			assets: new AssetSystem(world),
 			geometry: new GeometrySystem(world),
 			material: new MaterialSystem(world),
-			text: new TextSystem(world)
+			worldPhysics: new WorldPhysics(world),
+			entityPhysics: new EntityPhysics(world),
+			light: new LightSystem(world),
+			text: new TextSystem(world),
+			audio: new AudioSystem(world),
+			video: new VideoSystem(world),
+			drawing: new DrawingSystem(world),
+			control: new ControlSystem(world),
+			propulsion: new PropulsionSystem(world),
+			factory: new FactorySystem(world),
+			particle: new ParticleSystem(world),
+			projectile: new ProjectileSystem(world),
+			destructable: new DestructableSystem(world),
+			floor: new FloorSystem(world),
+			wall: new WallSystem(world),
+			seat: new SeatSystem(world),
+			door: new DoorSystem(world),
+			container: new ContainerSystem(world),
+			toolUI: new ToolUISystem(world),
+			tool: new ToolSystem(world),
+			file: new FileSystem(world),
+			chat: new ChatSystem(world)
 		})
 		this.terrain = new Terrain(this);
 		this.workers = {
@@ -98,7 +138,7 @@ export default class World {
 		this.textures = {}
 		let gridTexture = this.textures.grid = THREE.ImageUtils.loadTexture('/images/textures/gplaypattern_@2X.png', false, () => {
 			gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping
-			gridTexture.repeat.set(12, 12)
+			gridTexture.repeat.set(16, 16)
 			gridTexture.anisotropy = renderer.getMaxAnisotropy()
 				//skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
 		})

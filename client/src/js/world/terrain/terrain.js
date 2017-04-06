@@ -145,7 +145,7 @@ export default class Terrain {
              })
              if (physicsVoxels.length > 0) {
                //console.log("physics voxels", physicsVoxels)
-               this.systems.WorldPhysics.worker.postMessage(JSON.stringify({
+               this.systems.worldPhysics.worker.postMessage(JSON.stringify({
                      command: "add voxels",
                      data: physicsVoxels
                 }))

@@ -4,13 +4,24 @@ export default class MaterialSystem {
     }
 
     init (component) {
-        let prop = component.props.material,
+        let props = component.props,
+            prop = props.material,
             mat = {},
             material = null,
             basic = false,
-            mobile = this.world.mobile
+            mobile = this.world.mobile,
+            map = undefined
 
+        if (props.assets != null) {
+          map = this.asset.load(props.assets[0])
+        }
           switch (prop.name) {
+        case "plastic":
+
+        case "metal":
+
+        case "glass":
+
         case "wireframe":
           mat = {
             color: prop.color || 0x00ff00,
@@ -30,6 +41,9 @@ export default class MaterialSystem {
           }
           basic = false
           break
+        }
+        if (map != undefined) {
+          mat.map = map
         }
         if (basic) {
           material = new THREE.MeshBasicMaterial(mat)

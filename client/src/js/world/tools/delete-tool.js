@@ -16,6 +16,7 @@ export default class DeleteTool extends Tool  {
     initIcon () {
       let mesh = null,
           entity = null
+          
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({

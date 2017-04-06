@@ -8,7 +8,7 @@ export default class Component {
       this.data = data
       this.props = data.props || {}
       this.state = {}
-      this.components = data.components
+      this.components = data.components || []
       this.geometry = null
       this.material = null
       if (props.geometry == undefined) {
@@ -33,10 +33,12 @@ export default class Component {
       mesh.position.set(position[0], position[1], position[2])
       this.mesh = mesh
       if (this.props.hand != undefined) {
-        entity.hands.push(comp.mesh)
-        scene.add(comp.mesh)
+        entity.hands.push(this.mesh)
+        window.three.scene.add(this.mesh)
       }
-      
+      if (this.props.cursor != undefined) {
+        entity.cursors.push(this)
+      }
       if (this.components.length > 0) {
         this.initSubComponents(this.components, entity, systems, appConfig)
       }

@@ -19,6 +19,7 @@ export default class EntityTool extends Tool  {
     initIcon () {
       let mesh = null,
           entity = null
+          
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
@@ -38,6 +39,7 @@ export default class EntityTool extends Tool  {
           selected = cursor.entity,
           quat = three.camera.quaternion,
           entity = this.generator.makeEntity(this.options.entityType)
+
       if (entity.components.length == 1) {
         entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
       }

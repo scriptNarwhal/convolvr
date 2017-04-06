@@ -14,6 +14,7 @@ export default class SystemTool extends Tool {
 
     initIcon () {
       let entity = null
+      this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
         props: {},

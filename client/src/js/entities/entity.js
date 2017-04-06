@@ -7,11 +7,11 @@ export default class Entity {
       this.position = position ? position : false
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
+      this.activationCallbacks = []
+      this.hoverCallbacks = []
+      this.signals = []
+      this.cursors = []
       this.hands = []
-      this.activated = false
-      this.gazedOver = false
-      this.onActivated = null
-      this.onGazedOver = null
   }
 
   update (position, quaternion = false) {
