@@ -57,8 +57,8 @@ class App extends Component {
       let world = three.world,
           worldName = this.props.world
       let initChatUI = () => {
-        world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 20000, -5000])
-        world.help.mesh.position.fromArray([-100000, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 20000, -5000])
+        world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude) - 20000, -5000])
+        world.help.mesh.position.fromArray([-100000, (world.terrain.voxels["0.0.0"].data.altitude) - 20000, -5000])
       }
       world.load(worldName, ()=> {
         setTimeout(()=>{
@@ -217,7 +217,7 @@ class App extends Component {
                           if (three.vrDisplay != null) {
                             three.vrDisplay.requestPresent([{source: renderer.domElement}]);
                             three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
-                              vrAnimate(Date.now(), [0,0,0])
+                              vrAnimate(Date.now(), [0,0,0], 0)
                             })
                           } else {
                             alert("Connect VR Display and then reload page.")

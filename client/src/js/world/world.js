@@ -16,6 +16,7 @@ import DrawingSystem from '../systems/drawing'
 import ControlSystem from '../systems/control'
 import PropulsionSystem from '../systems/propulsion'
 import FactorySystem from '../systems/factory'
+import MetaFactorySystem from '../systems/factory'
 import ParticleSystem from '../systems/particle'
 import ProjectileSystem from '../systems/projectile'
 import DestructableSystem from '../systems/destructable'
@@ -40,7 +41,7 @@ export default class World {
 	constructor(user, userInput = false, socket, store) {
 		let mobile = (window.innerWidth <= 720),
 				scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1500, 10000000),
+				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1500, 15000000),
 				screenResX = window.devicePixelRatio * window.innerWidth,
 				renderer = null,
 				self = this,
@@ -159,7 +160,7 @@ export default class World {
 		this.onWindowResize = onResize
 		onResize()	
 		
-		render(this, 0)
+		render(this, 0, 0)
 
 		three.vrDisplay = null
 		navigator.getVRDisplays().then(function(displays) {
@@ -173,7 +174,7 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				skyLight =  new THREE.PointLight(config.light.color, 0.95, 5200000),
+				skyLight =  new THREE.PointLight(config.light.color, 0.95, 12200000),
 				skyMaterial = null,
 				skybox = null
 
@@ -202,12 +203,12 @@ export default class World {
 	 				skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
 			})
 		}
-		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyMaterial)
+		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000, 4), skyMaterial)
 		this.skyLight = skyLight
 		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
-		skyLight.position.set(0, 1000000, 500000)
+		skyLight.position.set(0, 3000000, 3000000)
 		this.terrain.bufferChunks(true, 0)
 	}
 

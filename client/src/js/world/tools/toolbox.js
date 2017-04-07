@@ -115,7 +115,7 @@ export default class Toolbox {
       }
       toolAction = tool.primaryAction(telemetry)
       if (!!toolAction) {
-        this.sendToolAction(true, tool, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
+        this.sendToolAction(true, tool, position, hand, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
     }
 
@@ -130,7 +130,7 @@ export default class Toolbox {
       }
       toolAction = tool.secondaryAction(telemetry, value)
       if (!!toolAction) {
-        this.sendToolAction(false, tool, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
+        this.sendToolAction(false, tool, position, hand, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
     }
 
@@ -149,10 +149,10 @@ export default class Toolbox {
       // also update
     }
 
-    sendToolAction (primary, tool, position, quaternion, entity, entityId = -1, components = []) {
+    sendToolAction (primary, tool, hand, position, quaternion, entity, entityId = -1, components = []) {
       let camera = this.world.camera,
           cPos = camera.position,
-          coords = [Math.floor(cPos.x / 464000), 0, Math.floor(cPos.z / 403680)],
+          coords = [Math.floor(cPos.x / 928000), 0, Math.floor(cPos.z / 807360)],
           toolName = tool.name
 
       let actionData = {
@@ -160,6 +160,7 @@ export default class Toolbox {
         world: this.world.name,
         user: this.user.username,
         userId: this.user.id,
+        hand,
         position,
         quaternion,
         options: tool.options,

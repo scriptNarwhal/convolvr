@@ -90,7 +90,12 @@ func getWorldChunks(c echo.Context) error {
 			altitude := float32(0)
 			if worldData.Terrain.TerrainType == "voxels" ||
 				worldData.Terrain.TerrainType == "both" {
-				altitude = float32((math.Sin(float64(x)/2)*9 + math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness)
+				if worldData.Terrain.Turbulent {
+					altitude = float32((math.Sin(float64(x)/2)*9 + float64((x%5.0) - (z%4.0)) + math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness) * 100000.0
+				} else {
+					altitude = float32((math.Sin(float64(x)/2)*9 + math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness) * 100000.0
+				}
+				
 			}
 			generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, nil, nil)
 			chunksData = append(chunksData, generatedChunk)

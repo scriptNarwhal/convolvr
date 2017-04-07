@@ -28,7 +28,7 @@ export default class WorldPhysics {
 	          console.log(message.data);
 		  } else if (message.command == "platform collision") { // consider sending "top" or "bottom" collision type
 	      if (message.data.type == "top") {
-				  three.camera.position.set(three.camera.position.x, message.data.position[1]+235000 +vrHeight, three.camera.position.z);
+				  three.camera.position.set(three.camera.position.x, message.data.position[1]+470000 +vrHeight, three.camera.position.z);
 					if (Math.abs(user.velocity.y) > 350000) {
 						user.velocity.y *= -0.56
 						user.falling = true

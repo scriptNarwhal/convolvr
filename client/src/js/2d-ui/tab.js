@@ -4,7 +4,6 @@ import Button from './button';
 const styles = {
   tab: {
     color: 'rgba(255,255,255,0.92)',
-    backgroundColor: '#1d1d1d',
     fontSize: '15px',
     display: 'inline-block',
     height: '60px',

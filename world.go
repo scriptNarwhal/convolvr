@@ -18,6 +18,7 @@ type UniverseSettings struct {
 type World struct {
 	ID      int    `storm:"id,increment" json:"id"`
 	Name    string `storm:"index" json:"name"`
+	Gravity float64 `json:"gravity"`
 	Sky     `storm:"inline" json:"sky"`
 	Light   `storm:"inline" json:"light"`
 	Terrain `storm:"inline" json:"terrain"`
@@ -51,6 +52,7 @@ type Light struct {
 
 type Terrain struct {
 	TerrainType string  `json:"type"`
+	Turbulent   bool    `json:"turbulent"`
 	Height      int     `json:"height"`
 	Color       int     `json:"color"`
 	Flatness    float64 `json:"flatness"`
@@ -65,8 +67,8 @@ type Spawn struct {
 	Vehicles   bool `json:"vehicles"`
 }
 
-func NewWorld(id int, name string, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
-	return &World{id, name, sky, light, terrain, spawn}
+func NewWorld(id int, name string, gravity float64, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
+	return &World{id, name, gravity, sky, light, terrain, spawn}
 }
 
 func getWorlds(c echo.Context) error {
@@ -119,7 +121,7 @@ func getWorld(c echo.Context) error { // load specific world
 
 		first = 1.0 + (rand.Float64() * 0.1)
 		second = first/2 + rand.Float64()*0.25
-		third = second/5 + rand.Float64()*0.25
+		third = second/2 + rand.Float64()*0.25
 		if rand.Intn(10) > 6 {
 			first = 1.0
 			second = 0.95
@@ -131,34 +133,34 @@ func getWorld(c echo.Context) error { // load specific world
 				green = third
 				blue = second
 			} else {
-				red = third / 4.0
-				green = first / 2.0
-				blue = second
+				red = first / 2.0
+				green = third / 2.0
+				blue = first
 			}
 		} else if rand.Intn(10) > 5 {
 			if rand.Intn(6) > 2 {
 				red = third
-				green = second / 4.0
+				green = second / 2.0
 				blue = first
 			} else {
-				red = first
-				blue = second / 6.0
-				green = third / 2.0
+				red = third
+				blue = first / 1.5
+				green = second / 2.0
 			}
 		} else {
 			if rand.Intn(3) > 2 {
-				red = second / 2.0
-				green = first / 8.0
-				blue = first
+				red = first / 1.5
+				green = first / 2.0
+				blue = second
 			} else {
 				green = second / 2.0
-				red = second / 4.0
+				red = second / 2.0
 				blue = first
 			}
 		}
-		terrainRed = blue / 1.5
-		terrainGreen = green / 1.5
-		terrainBlue = red / 1.5
+		terrainRed = blue
+		terrainGreen = green
+		terrainBlue = red 
 		lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
 		ambientColor = int(4+math.Floor(red*4))<<16 | int(4+math.Floor(green*4))<<8 | int(4+math.Floor(blue*4))
 		terrainColor = int(math.Floor(terrainRed*255))<<16 | int(math.Floor(terrainGreen*255))<<8 | int(math.Floor(terrainBlue*255))
@@ -166,7 +168,7 @@ func getWorld(c echo.Context) error { // load specific world
 		light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}
 		terrain := Terrain{TerrainType: "both", Height: 20000, Color: terrainColor, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
 		spawn := Spawn{Entities: true, Structures: true, NPCS: true, Tools: true, Vehicles: true}
-		world = *NewWorld(0, name, sky, light, terrain, spawn)
+		world = *NewWorld(0, name, 1.0, sky, light, terrain, spawn)
 		saveErr := db.Save(&world)
 		if saveErr != nil {
 			log.Println(saveErr)
