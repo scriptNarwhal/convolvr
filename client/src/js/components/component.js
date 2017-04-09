@@ -26,12 +26,14 @@ export default class Component {
       systems.registerComponent(this)
 
       mesh = new THREE.Mesh(this.geometry, this.material)
-      
+      mesh.matrixAutoUpdate = false
       if (!! quaternion) {
           mesh.quaternion.set(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
       }
       mesh.position.set(position[0], position[1], position[2])
+      mesh.updateMatrix()
       this.mesh = mesh
+
       if (this.props.hand != undefined) {
         entity.hands.push(this.mesh)
         window.three.scene.add(this.mesh)

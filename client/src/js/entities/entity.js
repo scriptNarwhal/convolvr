@@ -9,7 +9,6 @@ export default class Entity {
       this.mesh = null
       this.activationCallbacks = []
       this.hoverCallbacks = []
-      this.signals = []
       this.cursors = []
       this.hands = []
   }
@@ -91,7 +90,7 @@ export default class Entity {
     }
     scene.add(mesh)
     this.mesh = mesh
-
+    mesh.matrixAutoUpdate = false
     return this
   }
 }

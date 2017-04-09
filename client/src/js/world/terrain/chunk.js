@@ -29,7 +29,6 @@ export default class Chunk {
             : new THREE.MeshPhongMaterial( {color: data.color, shininess: 20, map: map} ),
             modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null
 
-        this.structures = []
         this.entities = []
         physics = world.systems.worldPhysics.worker
         if (data == null) {
@@ -61,6 +60,7 @@ export default class Chunk {
             geom = modifier.modify( geom )
           }
           mesh = new THREE.Mesh(geom, mat)
+          mesh.matrixAutoUpdate = false
           if (visible == false) {
             mesh.visible = false
           }
@@ -88,7 +88,7 @@ export default class Chunk {
         } else {
             data.position = [0, 0, 0];
         }
-
+        mesh.updateMatrix()
         if (data.size == null) {
             data.size = { x: 132000, y: 132000, z: 132000 }
         }

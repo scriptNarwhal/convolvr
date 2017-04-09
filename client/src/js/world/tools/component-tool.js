@@ -51,16 +51,17 @@ export default class ComponentTool extends Tool {
     }
 
     primaryAction (telemetry) { // place component (into entity if pointing at one)
-      let cursor = this.world.user.cursor,
+      let cursor = telemetry.cursor,
+          cursorState = cursor.state.cursor || {},
           position = telemetry.position,
-          selected = cursor.entity,
+          selected = !!cursorState.entity ? cursorState.entity : false,
           entityId = -1,
           components = [],
           quat = three.camera.quaternion,  //[quat.x, quat.y, quat.z, quat.w],
           component = this.components.makeComponent(this.options.componentType),
-          entity = new Entity(0, [component], [], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
+          entity = new Entity(0, [component], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
       //entity.init(three.scene)
-      if (selected && cursor.distance < 33000) {
+      if (selected && cursorState.distance < 33000) {
           entityId = selected.id
           if (components.length == 0) {
             components = [component]

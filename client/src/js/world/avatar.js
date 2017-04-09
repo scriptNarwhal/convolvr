@@ -66,14 +66,17 @@ export default class Avatar {
             geometry: {
                 shape: "box",
                 size: [1, 1, 1],
-              },
-              material: {
-                color: 0xffffff,
-                name: "plastic"
-              }
+            },
+            material: {
+              color: 0xffffff,
+              name: "plastic"
+            }
           },
           position: [0, 0, 0],
-          quaternion: false
+          quaternion: false,
+          components: [
+            Object.assign({}, cursorComponent)
+          ]
         }))
       }
 
@@ -93,7 +96,10 @@ export default class Avatar {
                 }
             },
             quaternion: null,
-            position: [(n-1)*1500, 0, 0]
+            position: [(n-1)*1500, 0, 0],
+            components: [
+              Object.assign({}, cursorComponent)
+            ]
           }))
           ++n
         }

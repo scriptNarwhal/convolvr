@@ -36,7 +36,7 @@ export default class Toolbox {
     }
 
     showMenu() {
-      this.updateUI();
+      this.updateUI()
       this.user.hud.show()
     }
 
@@ -48,9 +48,9 @@ export default class Toolbox {
       this.showMenu()
       this.currentTools[hand] += direction;
       if (this.currentTools[hand] < 0) {
-        this.currentTools[hand] = this.tools.length - 1;
+        this.currentTools[hand] = this.tools.length - 1
       } else if (this.currentTools[hand] >= this.tools.length) {
-        this.currentTools[hand] = 0;
+        this.currentTools[hand] = 0
       }
       console.log("next tool", direction, this.currentTools[hand])
     }
@@ -63,7 +63,7 @@ export default class Toolbox {
     }
 
     getTools () {
-      return this.tools;
+      return this.tools
     }
 
     getCurrentTool (hand) {
@@ -101,7 +101,10 @@ export default class Toolbox {
 
       return {
         position,
-        quaternion
+        quaternion,
+        cursor,
+        handMesh,
+        hand
       }
     }
     usePrimary (hand) {

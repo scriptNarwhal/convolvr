@@ -1,40 +1,76 @@
-let rayCast = (world, camera, cursor, hand, callback) => {
+let tmpVector = new THREE.Vector3( 0, 0, 1 ),
+    tmpVector2 = new THREE.Vector2(0, 0)
+
+let rayCast = (world, camera, cursor, handMesh, callback) => {
 	let raycaster = world.raycaster,
       octreeObjects = [],
       intersections = [],
       entity = null,
       obj = null,
       i = 0
-  raycaster.setFromCamera(new THREE.Vector2(0, 0), camera)
+
+  if (handMesh != null) {
+    tmpVector.applyQuaternion(handMesh.quaternion)
+    raycaster.set(handMesh.position, tmpVector)
+  } else {
+    raycaster.setFromCamera(tmpVector2, camera)
+  }
+  
+
   octreeObjects = world.octree.search(raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction)
   intersections = raycaster.intersectOctreeObjects(octreeObjects)
   i = intersections.length -1
   while (i > -1) {
     obj = intersections[i]
     entity = obj.object.userData.entity
-    callback(obj, entity, world)
+    callback(obj, entity, cursor, handMesh, world)
     i --
   }
 }
 
-let cursorCallback = (obj, entity, world) => {
-  let cursor = world.user.cursor
-  if (cursor.entity != false) {
-    cursor.entity.activated = false
-    cursor.entity.gazedOver = false
+let cursorCallback = (obj, entity, cursor, hand, world) => {
+  let cb = 0
+  cursor.state.cursor = {
+    distance: obj.distance,
+    mesh: obj.object,
+    entity
   }
-  if (obj.distance < 33000) {
-    //cursor.setEntity(entity, obj.distance, obj.point)
-    
+  if (!!entity) {
+    callbacks = entity.hoverCallbacks
+    cb = callbacks.length
+    while (cb >= 0) {
+     callbacks[cb]()
+     cb --
+    }
+    // callbacks = entity.activationCallbacks // check if cursor / hand is activated
+    // cb = callbacks.length
+    // while (cb >= 0) {
+    //  callbacks[cb]()
+    //  cb --
+    // }
   }
 }
 
 let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
-  cursors.map((cursor, i)=>{
-      // animate cursors
+  let handMesh = null
+  cursors.map((cursor, i) => { // animate cursors & raycast scene
+      let state = cursor.state.cursor,
+          cursorMesh = cursor.mesh,
+          cursorPos = cursorMesh.position
 
+      if (!!state) {
+        if (state.distance > cursorPos.z) {
+          cursorPos.z += 1000
+        } else if (state.distance < cursorPos.z) {
+          cursorPos.z -= 1000
+        }
+      }
+      
       if (i == cursorIndex) {
-        rayCast(world, camera, cursor, hand, cursorCallback)
+        if (i > 0) {
+          handMesh = cursors[i].mesh.parent
+        }
+        rayCast(world, camera, cursor, handMesh, cursorCallback)
       }
   })
   cursorIndex ++

@@ -1,8 +1,7 @@
-import { secure } from '../config.js'
 import EventEmitter from 'events'
 export let events = new EventEmitter()
 
-let socket = new WebSocket((secure ? 'wss:' : 'ws:')+"//"+(location.host+"/connect"))
+let socket = new WebSocket((window.location.href.indexOf("https") > -1 ? 'wss:' : 'ws:')+"//"+(location.host+"/connect"))
 // Connect to our server: go server
 socket.binaryType = "arraybuffer"; // We are talking binary
 export let connected = false
