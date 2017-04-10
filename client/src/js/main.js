@@ -17,6 +17,7 @@ import Data from './2d-ui/containers/data'
 import Worlds from './2d-ui/containers/worlds'
 import NewWorld from './2d-ui/containers/new-world'
 import Settings from './2d-ui/containers/settings'
+import Network from './2d-ui/containers/network'
 import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
 import HUD from './2d-ui/containers/hud'
@@ -100,6 +101,7 @@ ReactDOM.render(
 				<Route path="/worlds" component={Worlds} />
         <Route path="/worlds/new" component={NewWorld} />
 				<Route path="/settings" component={Settings} />
+        <Route path="/network" componet={Network} />
 			</Route>
 		</Router>
   </Provider>),

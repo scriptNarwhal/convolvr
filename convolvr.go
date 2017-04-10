@@ -69,6 +69,7 @@ func Start(configName string) {
 	api.POST("/users", postUsers)
 	api.GET("/chat-history/:skip", getChatHistory)
 	api.GET("/worlds", getWorlds)
+	api.GET("/worlds/user/:userId", getUserWorlds)
 	api.GET("/worlds/name/:name", getWorld)
 	api.GET("/chunks/:worldId/:chunks", getWorldChunks)
 	api.POST("/worlds", postWorlds)
@@ -91,7 +92,7 @@ func Start(configName string) {
 
 	e.Static("/", "../web")
 	e.Static("/world/:name", "../web/index.html") // eventually make this route name configurable to the specific use case, 'world', 'venue', 'event', etc..
-	e.File("/hyperspace", "../web/index.html")    // client should generate a meta-world out of (portals to) networked convolvr sites
+	e.File("/network", "../web/index.html")    // client should generate a meta-world out of (portals to) networked convolvr sites
 	e.File("/worlds", "../web/index.html")
 	e.File("/worlds/new", "../web/index.html")
 	e.File("/chat", "../web/index.html")

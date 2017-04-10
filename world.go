@@ -4,19 +4,26 @@ import (
 	"math"
 	"math/rand"
 	"net/http"
-
+	"strconv"
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 )
 
 type UniverseSettings struct {
-	ID             int    `storm:"id" json:"id"`
-	WelcomeMessage string `json:"welcomeMessage"`
-	DefaultWorld   string `json:"defaultWorld"`
+	ID             int             `storm:"id" json:"id"`
+	WelcomeMessage string          `json:"welcomeMessage"`
+	DefaultWorld   string          `json:"defaultWorld"`
+	Network        []NetworkDomain `json:"network"`
+}
+
+type NetworkDomain struct {
+	Name  string `json:"name"`
+	Image string `json:"image`
 }
 
 type World struct {
 	ID      int    `storm:"id,increment" json:"id"`
+	UserID  int    `json:"userId"`
 	Name    string `storm:"index" json:"name"`
 	Gravity float64 `json:"gravity"`
 	Sky     `storm:"inline" json:"sky"`
@@ -67,8 +74,8 @@ type Spawn struct {
 	Vehicles   bool `json:"vehicles"`
 }
 
-func NewWorld(id int, name string, gravity float64, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
-	return &World{id, name, gravity, sky, light, terrain, spawn}
+func NewWorld(id int, userId int, name string, gravity float64, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
+	return &World{id, userId, name, gravity, sky, light, terrain, spawn}
 }
 
 func getWorlds(c echo.Context) error {
@@ -77,6 +84,17 @@ func getWorlds(c echo.Context) error {
 	if err != nil {
 		log.Println(err)
 		return err
+	}
+	return c.JSON(http.StatusOK, &worlds)
+}
+
+func getUserWorlds(c echo.Context) error {
+	var worlds []World
+	userId, _ := strconv.Atoi(c.Param("userId"))
+	err := db.Find("UserID", userId, &worlds)
+	if err != nil {
+			log.Println(err)
+			return err
 	}
 	return c.JSON(http.StatusOK, &worlds)
 }
@@ -168,7 +186,7 @@ func getWorld(c echo.Context) error { // load specific world
 		light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}
 		terrain := Terrain{TerrainType: "both", Height: 20000, Color: terrainColor, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
 		spawn := Spawn{Entities: true, Structures: true, NPCS: true, Tools: true, Vehicles: true}
-		world = *NewWorld(0, name, 1.0, sky, light, terrain, spawn)
+		world = *NewWorld(0, -1, name, 1.0, sky, light, terrain, spawn)
 		saveErr := db.Save(&world)
 		if saveErr != nil {
 			log.Println(saveErr)

@@ -29,10 +29,36 @@ export function fetchWorlds () {
         type: WORLDS_FETCH
      })
      return axios.get(API_SERVER+"/api/worlds")
-        .then(response => {
-            dispatch(doneFetchWorlds(response))
-        }).catch(response => {
-            dispatch(failedFetchWorlds(response))
+        .then(res => {
+            dispatch({
+                type: WORLDS_FETCH_DONE,
+                worlds: res.data
+            })
+        }).catch(res => {
+            dispatch({
+                type: WORLDS_FETCH_FAIL,
+                err: err
+            })
+        });
+   }
+}
+export function fetcUserhWorlds (userId) {
+    return dispatch => {
+     dispatch({
+        type: USER_WORLDS_FETCH,
+        userId
+     })
+     return axios.get(API_SERVER+"/api/worlds")
+        .then(res => {
+            dispatch({
+                type: USER_WORLDS_FETCH_DONE,
+                worlds: res.data
+            })
+        }).catch(res => {
+            dispatch({
+                type: USER_WORLDS_FETCH_FAIL,
+                err: err
+            })
         });
    }
 }
@@ -61,21 +87,6 @@ export function fetchUniverseSettings () {
             })
         });
    }
-}
-
-
-
-export function doneFetchWorlds (res) {
-    return {
-        type: WORLDS_FETCH_DONE,
-        worlds: res.data
-    }
-}
-export function failedFetchWorlds (err) {
-    return {
-        type: WORLDS_FETCH_FAIL,
-        err: err
-    }
 }
 
 export function createWorld (data) {
