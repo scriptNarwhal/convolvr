@@ -50,7 +50,7 @@ export default class EntityTool extends Tool  {
       return entity
     }
 
-    primaryAction () { // place entity
+    primaryAction (telemetry) { // place entity
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
           position = telemetry.position,

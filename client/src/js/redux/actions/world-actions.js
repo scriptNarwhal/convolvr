@@ -156,12 +156,12 @@ export function updateUniverseSettings (data, password) {
         id: 1
      })
      return axios.post(API_SERVER+"/api/universe-settings", data)
-        .then(response => {
+        .then(res => {
             dispatch({
                 type: UNIVERSE_SETTINGS_UPDATE_DONE,
                 settings: res.data
             })
-        }).catch(response => {
+        }).catch(res => {
             dispatch({
                 type: UNIVERSE_SETTINGS_UPDATE_FAIL,
                 err: res.error

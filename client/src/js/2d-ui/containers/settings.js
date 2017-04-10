@@ -41,6 +41,9 @@ const styles = {
   },
   admin: {
     marginTop: '3em'
+  },
+  table: {
+    marginLeft: '3em'
   }
 }
 
@@ -204,15 +207,11 @@ class Settings extends Component {
                        type='text'
                 />
               </div>
-              <div>
-                <h3 style={styles.h3}>Welcome Message</h3>
-                <input onBlur={e=> { this.setState({welcomeMessage: e.target.value})}}
-                       style={styles.textInput}
-                       type='text'
-                />
+              <div style={styles.table}>
+                <h3 style={styles.h3}>Manage Network</h3>
                 <table>
                   <tr>
-                    <td>Server Address</td>
+                    <td>Domain Name</td>
                     <td></td>
                     <td>
                       <input type='button'
@@ -225,7 +224,7 @@ class Settings extends Component {
                   <tr>
                     </tr>
                     {
-                      this.state.network.map(domain=>{
+                      this.state.network.map((domain, index)=>{
                         return (
                           <tr>
                             <td>

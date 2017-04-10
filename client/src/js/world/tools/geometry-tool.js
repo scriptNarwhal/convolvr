@@ -45,11 +45,11 @@ export default class GeometryTool extends Tool {
       return entity
     }
 
-    primaryAction () {
+    primaryAction (telemetry) {
       
     }
 
-    secondaryAction () {
+    secondaryAction (telemetry, value) {
     
     }
 }

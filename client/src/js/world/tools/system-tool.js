@@ -45,11 +45,11 @@ export default class SystemTool extends Tool {
       return entity
     }
 
-    primaryAction () {
+    primaryAction (telemetry) {
       // create voxel
     }
 
-    secondaryAction () {
+    secondaryAction (telemetry, value) {
       // remove voxel
     }
 }

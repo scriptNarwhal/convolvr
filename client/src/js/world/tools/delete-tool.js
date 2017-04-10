@@ -48,11 +48,11 @@ export default class DeleteTool extends Tool  {
       return entity
     }
 
-    primaryAction () {
+    primaryAction (telemetry) {
       // remove entity
     }
 
-    secondaryAction () {
+    secondaryAction (telemetry, value) {
       //
     }
 }
