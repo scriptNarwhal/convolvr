@@ -54,14 +54,14 @@ export default class ComponentTool extends Tool {
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
           position = telemetry.position,
+          quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
           entityId = -1,
           components = [],
-          quat = three.camera.quaternion,  //[quat.x, quat.y, quat.z, quat.w],
           component = this.components.makeComponent(this.options.componentType),
           entity = new Entity(0, [component], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
       //entity.init(three.scene)
-      if (selected && cursorState.distance < 33000) {
+      if (selected && cursorState.distance < 60000) {
           entityId = selected.id
           if (components.length == 0) {
             components = [component]

@@ -12,6 +12,7 @@ import LightSystem from '../systems/light'
 import TextSystem from '../systems/text'
 import AudioSystem from '../systems/audio'
 import VideoSystem from '../systems/video'
+import SignalSystem from '../systems/signal'
 import DrawingSystem from '../systems/drawing'
 import ControlSystem from '../systems/control'
 import PropulsionSystem from '../systems/propulsion'
@@ -25,7 +26,10 @@ import WallSystem from '../systems/wall'
 import SeatSystem from '../systems/seat'
 import DoorSystem from '../systems/door'
 import ContainerSystem from '../systems/container'
+import WebHookSystem from '../systems/webhook'
 import ToolUISystem from '../systems/tool-ui'
+import TabViewSystem from '../systems/tab-view'
+import TabSystem from '../systems/tab'
 import ToolSystem from '../systems/tool'
 import FileSystem from '../systems/file'
 import ChatSystem from '../systems/chat'
@@ -65,7 +69,7 @@ export default class World {
 		this.config = false
 		this.windowFocus = true
 		this.name = "convolvr"
-		this.mode = "web"
+		this.mode = "vr"
 		this.rPos = false
 		this.users = []
 		this.user = user || {}
@@ -80,9 +84,6 @@ export default class World {
 		this.screenResX = screenResX
 		this.initRenderer(renderer, "viewport")
 		this.octree = new THREE.Octree({
-			// when undeferred = true, objects are inserted immediately
-			// instead of being deferred until next octree.update() call
-			// this may decrease performance as it forces a matrix update
 			undeferred: false,
 			depthMax: Infinity,
 			// max number of objects before nodes split or merge
@@ -114,11 +115,13 @@ export default class World {
 			text: new TextSystem(world),
 			audio: new AudioSystem(world),
 			video: new VideoSystem(world),
+			signal: new SignalSystem(world),
 			drawing: new DrawingSystem(world),
 			control: new ControlSystem(world),
 			propulsion: new PropulsionSystem(world),
 			factory: new FactorySystem(world),
-			particle: new ParticleSystem(world),
+			metaFactory: new MetaFactorySystem(world),
+			particles: new ParticleSystem(world),
 			projectile: new ProjectileSystem(world),
 			destructable: new DestructableSystem(world),
 			floor: new FloorSystem(world),
@@ -126,8 +129,11 @@ export default class World {
 			seat: new SeatSystem(world),
 			door: new DoorSystem(world),
 			container: new ContainerSystem(world),
+			tab: new TabSystem(world),
+			tabView: new TabViewSystem(world),
 			toolUI: new ToolUISystem(world),
 			tool: new ToolSystem(world),
+			webhook: new WebHookSystem(world),
 			file: new FileSystem(world),
 			chat: new ChatSystem(world)
 		})
@@ -253,9 +259,9 @@ export default class World {
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
 			 this.init(response.data)
 			 callback && callback(this)
-    }).catch(response => {
-        console.log("World Error", response)
-    });
+		}).catch(response => {
+			console.log("World Error", response)
+		})
 	}
 
 	reload (name) {
@@ -279,13 +285,12 @@ export default class World {
 	}
 
 	generateFullLOD (coords) {
-			let platform = this.terrain.voxels[coords]
+			let platform = this.terrain.voxels[coords],
+				scene = three.scene
 			if (platform != null) {
-				if (platform.structures != null) {
-					platform.structures.forEach(structure =>{
-							structure.generateFullLOD()
-					})
-				}
+				platform.entities.map(entity=>{
+					entity.init(scene)
+				})
 			}
 	}
 
@@ -304,9 +309,9 @@ export default class World {
 	  this.sendUpdatePacket += 1
 	  if (this.sendUpdatePacket %((2+(1*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
 	    if (input.trackedControls || input.leapMotion) {
-	      userHands.forEach(function (arm) {
-	        hands.push({pos: [arm.position.x, arm.position.y, arm.position.z],
-	          quat: [arm.quaternion.x, arm.quaternion.y, arm.quaternion.z, arm.quaternion.w] });
+	      userHands.forEach(function (hand) {
+	        hands.push({pos: [hand.position.x, hand.position.y, hand.position.z],
+	          quat: [hand.quaternion.x, hand.quaternion.y, hand.quaternion.z, hand.quaternion.w] });
 	        })
 	      }
 	      send('update', {

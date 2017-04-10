@@ -14,6 +14,22 @@ export default class EntityTool extends Tool  {
       }
       this.all = ["panel", "panel2", "panel3", "block", "column", "wirebox"]
       this.current = 0
+      this.entity = new Entity(-1, [
+          {
+            props: {
+              geometry: {
+                shape: "box",
+                size: [1600, 1200, 7000]
+              },
+              material: {
+                name: "metal"
+              },
+              tool: {
+
+              }
+            }
+          }
+        ])
     }
 
     initIcon () {
@@ -35,15 +51,17 @@ export default class EntityTool extends Tool  {
     }
 
     primaryAction () { // place entity
-      let cursor = this.world.user.cursor,
-          selected = cursor.entity,
-          quat = three.camera.quaternion,
+      let cursor = telemetry.cursor,
+          cursorState = cursor.state.cursor || {},
+          position = telemetry.position,
+          quat = telemetry.quaternion,
+          selected = !!cursorState.entity ? cursorState.entity : false,
           entity = this.generator.makeEntity(this.options.entityType)
 
       if (entity.components.length == 1) {
         entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
       }
-      if (selected && cursor.distance < 33000) {
+      if (selected && cursorState.distance < 60000) {
           // switch to component tool
           this.world.user.toolbox.useTool(1, 0)
           this.world.user.hud.show()

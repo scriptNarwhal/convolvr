@@ -42,12 +42,12 @@ let cursorCallback = (obj, entity, cursor, hand, world) => {
      callbacks[cb]()
      cb --
     }
-    // callbacks = entity.activationCallbacks // check if cursor / hand is activated
-    // cb = callbacks.length
-    // while (cb >= 0) {
-    //  callbacks[cb]()
-    //  cb --
-    // }
+    callbacks = entity.activationCallbacks // check if cursor / hand is activated
+    cb = callbacks.length
+    while (cb >= 0) {
+      callbacks[cb]()
+      cb --
+    }
   }
 }
 

@@ -52,7 +52,8 @@ class Settings extends Component {
       aa: 'on',
       postProcessing: 'on',
       defaultWorld: 'overworld',
-      welcomeMessage: 'Welcome to Convolvr!'
+      welcomeMessage: 'Welcome to Convolvr!',
+      network: []
     }
   }
   componentWillMount () {
@@ -73,7 +74,8 @@ class Settings extends Component {
       console.log("Done Loading Universe Settings")
       this.setState({
         defaultWorld: nextProps.settings.defaultWorld,
-        welcomeMessage: nextProps.settings.welcomeMessage
+        welcomeMessage: nextProps.settings.welcomeMessage,
+        network: nextProps.settings.network
       })
     }
   }
@@ -92,9 +94,26 @@ class Settings extends Component {
     let data = {
       id: 1,
       defaultWorld: this.state.defaultWorld,
-      welcomeMessage: this.state.welcomeMessage
+      welcomeMessage: this.state.welcomeMessage,
+      network: this.state.network
     }
     this.props.updateUniverseSettings(data, this.props.user.Password)
+  }
+  addServer() {
+    let network = this.state.network
+    network.push({domain: '', image: ''})
+    this.setState({network})
+  }
+  removeServer(index) {
+    let network = this.state.network
+    network.splice(index, 1)
+    this.setState({network})
+  }
+  updateServer (index, name, image = '') {
+    let network = this.state.network
+    network[index].name = name
+    network[index].image = image
+    this.setState({network})
   }
   render() {
     let isAdmin = this.props.user.name == 'admin'
@@ -184,6 +203,59 @@ class Settings extends Component {
                        style={styles.textInput}
                        type='text'
                 />
+              </div>
+              <div>
+                <h3 style={styles.h3}>Welcome Message</h3>
+                <input onBlur={e=> { this.setState({welcomeMessage: e.target.value})}}
+                       style={styles.textInput}
+                       type='text'
+                />
+                <table>
+                  <tr>
+                    <td>Server Address</td>
+                    <td></td>
+                    <td>
+                      <input type='button'
+                             value='Add Server'
+                             onClick={e=> { this.addServer() }}
+                             style={styles.addServer}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    </tr>
+                    {
+                      this.state.network.map(domain=>{
+                        return (
+                          <tr>
+                            <td>
+                              <input type='text'
+                                     style={styles.domainName}
+                                     value={domain.name}
+                                     onBlur={e=> this.updateServer(index, e.target.value)}
+                              />     
+                            </td>
+                            <td>{
+                              domain.image != '' ? ( // make this editable later
+                                <img src={`/data/public/${domain.image}`} 
+                                     style={styles.domainImage}
+                                     title={domain.name}
+                                     alt={domain.name}
+                                />
+                              ) : ''}
+                            </td>
+                            <td>
+                              <input type='button'
+                                     value='Remove'
+                                     onClick={e=> { this.removeServer(index) }}
+                                     style={styles.addServer}
+                              />
+                            </td>
+                          </tr>
+                        )
+                      })
+                    }
+                </table>
               </div>
               <input style={styles.save}
                      type='submit'

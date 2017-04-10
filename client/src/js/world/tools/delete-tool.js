@@ -1,4 +1,5 @@
 import Tool from './tool'
+import Entity from '../../entities/entity'
 import EntityGenerator from '../../entities/entity-generator'
 /* delete (voxel | component | entity) tool */
 export default class DeleteTool extends Tool  {
@@ -11,6 +12,22 @@ export default class DeleteTool extends Tool  {
       this.options = {
 
       }
+      this.entity = new Entity(-1, [
+          {
+            props: {
+              geometry: {
+                shape: "box",
+                size: [1600, 1200, 7000]
+              },
+              material: {
+                name: "metal"
+              },
+              tool: {
+
+              }
+            }
+          }
+        ])
     }
 
     initIcon () {

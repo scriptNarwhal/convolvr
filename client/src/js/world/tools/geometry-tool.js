@@ -1,4 +1,5 @@
 import Tool from './tool'
+import Entity from '../../entities/entity'
 import EntityGenerator from '../../entities/entity-generator'
 /* terrain voxel tool */
 export default class GeometryTool extends Tool {
@@ -10,6 +11,22 @@ export default class GeometryTool extends Tool {
       this.options = {
 
       }
+      this.entity = new Entity(-1, [
+          {
+            props: {
+              geometry: {
+                shape: "box",
+                size: [1600, 1200, 7000]
+              },
+              material: {
+                name: "metal"
+              },
+              tool: {
+
+              }
+            }
+          }
+        ])
     }
 
     initIcon () {
