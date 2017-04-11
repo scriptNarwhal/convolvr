@@ -13,12 +13,17 @@ const styles = {
 }
 
 class Network extends Component {
+  componentWillMount () {
+    if (this.props.settings == null) {
+      this.props.fetchUniverseSettings()
+    }
+  }
   switchDomain (name) {
     window.location.href = name// workaround
   }
   render() {
     return (
-        <Shell className="worlds">
+        <Shell className="settings">
         <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
                      label="Network"
                      username={this.props.username}
@@ -28,7 +33,7 @@ class Network extends Component {
         />
           <div style={styles.worlds}>
           {
-            this.props.network.map((world, i) => {
+            this.props.settings != null && this.props.settings.network.map((world, i) => {
               return (
                 <Card clickHandler={(e, v) => {
                         this.switchDomain(domain.name)
@@ -51,18 +56,21 @@ Network.defaultProps = {
 }
 import { connect } from 'react-redux';
 
-import { fetchDomains } from '../../redux/actions/network-actions'
+import {
+  fetchUniverseSettings
+} from '../../redux/actions/world-actions'
 
 export default connect(
   (state, ownProps) => {
     return {
-        worlds: state.worlds.all
+        fetchingSettings: state.worlds.fetchingSettings,
+        settings: state.worlds.universeSettings,
     }
   },
   dispatch => {
     return {
-      fetchDomains: (params) => {
-          dispatch(fetchDomains(params))
+      fetchUniverseSettings: () => {
+        dispatch(fetchUniverseSettings())
       }
     }
   }

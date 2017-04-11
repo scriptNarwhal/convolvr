@@ -29,7 +29,8 @@ let rayCast = (world, camera, cursor, handMesh, callback) => {
 }
 
 let cursorCallback = (obj, entity, cursor, hand, world) => {
-  let cb = 0
+  let cb = 0,
+      callbacks = []
   cursor.state.cursor = {
     distance: obj.distance,
     mesh: obj.object,
@@ -65,10 +66,12 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
           cursorPos.z -= 1000
         }
       }
+      cursorMesh.updateMatrix()
       
       if (i == cursorIndex) {
         if (i > 0) {
           handMesh = cursors[i].mesh.parent
+          !!handMesh && handMesh.updateMatrix()
         }
         rayCast(world, camera, cursor, handMesh, cursorCallback)
       }

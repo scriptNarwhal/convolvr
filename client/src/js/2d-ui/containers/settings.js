@@ -4,7 +4,7 @@ import Shell from '../shell'
 const styles = {
   modal: {
     width: '66.66vh',
-    height: '800px',
+    height: '100%',
     minWidth: '360px',
     margin: 'auto',
     display: 'block',
@@ -71,9 +71,10 @@ class Settings extends Component {
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa
     })
+    this.props.fetchUniverseSettings()
   }
   componentWillUpdate(nextProps, nextState) {
-    if (this.props.fetchingSettings == true && nextProps.fetchingSettings == false) {
+    if (this.props.fetchingSettings == true && nextProps.fetchingSettings == false && nextProps.settings != null) {
       console.log("Done Loading Universe Settings")
       this.setState({
         defaultWorld: nextProps.settings.defaultWorld,
@@ -203,6 +204,7 @@ class Settings extends Component {
               <div>
                 <h3 style={styles.h3}>Welcome Message</h3>
                 <input onBlur={e=> { this.setState({welcomeMessage: e.target.value})}}
+                       value={ this.state.welcomeMessage }
                        style={styles.textInput}
                        type='text'
                 />
@@ -226,7 +228,7 @@ class Settings extends Component {
                     {
                       this.state.network.map((domain, index)=>{
                         return (
-                          <tr>
+                          <tr key={index}>
                             <td>
                               <input type='text'
                                      style={styles.domainName}
@@ -278,6 +280,7 @@ import {
 import {
   fetchWorlds,
   setCurrentWorld,
+  fetchUniverseSettings,
   updateUniverseSettings
 } from '../../redux/actions/world-actions'
 
@@ -300,6 +303,9 @@ export default connect(
       },
       updateUniverseSettings: (data, password) => {
           dispatch(updateUniverseSettings(data, password))
+      },
+      fetchUniverseSettings: () => {
+        dispatch(fetchUniverseSettings())
       }
     }
   }

@@ -1,3 +1,5 @@
+import Avatar from '../world/avatar'
+
 export default class SocketHandlers {
     constructor (world, socket) {
         this.world = world

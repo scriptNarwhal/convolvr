@@ -1,6 +1,6 @@
 export default class User {
   constructor (data) {
-    this.id = Math.floor(Math.random()*99999999)
+    this.id = -Math.floor(Math.random()*99999999)
     this.hands = []
     this.hud = null
     this.cursor = null
@@ -16,6 +16,7 @@ export default class User {
   useAvatar (avatar) {
     this.avatar = avatar
     this.mesh = avatar.entity.mesh
+    this.hands = avatar.hands
     console.log("use avatar", avatar, this.mesh)
   }
 }

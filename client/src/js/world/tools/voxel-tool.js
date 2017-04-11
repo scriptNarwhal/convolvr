@@ -34,12 +34,17 @@ export default class VoxelTool extends Tool {
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
-        props: {},
-        shape: "box",
-        size: [2640, 2640, 2640],
+        props: {
+          material: {
+            name: "metal",
+            color: 0xff8707
+          },
+          geometry: {
+            shape: "box",
+            size: [2640, 2640, 2640]
+          }
+        },
         position: [0, 0, 0],
-        color: 0xff8707,
-        text: "",
         quaternion: null
       })
       return entity

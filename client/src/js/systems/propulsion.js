@@ -4,7 +4,10 @@ export default class PropulsionSystem {
     }
 
     init (component) { 
-        
+        let prop = component.props.propulsion,
+            state = {}
+
+        return state
     }
 }
 

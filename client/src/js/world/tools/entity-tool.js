@@ -39,12 +39,17 @@ export default class EntityTool extends Tool  {
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
-        props: {},
-        shape: "box",
-        size: [2640, 2640, 2640],
+        props: {
+          material: {
+            name: "metal",
+            color: 0x15ff15
+          },
+          geometry: {
+            shape: "box",
+            size: [2640, 2640, 2640]
+          }
+        },
         position: [0, 0, 0],
-        color: 0x15ff15,
-        text: "",
         quaternion: null
       })
       return entity

@@ -84,7 +84,7 @@ export default class NewWorld extends Component {
       green: 1.0,
       blue: 1.0,
       intensity: 0.75,
-      gravity: true,
+      gravity: 1.0,
       terrainType: 'both',
       terrainColor: 0x404040,
       turbulentTerrain: true,
@@ -167,7 +167,7 @@ export default class NewWorld extends Component {
   onToggleGravity (e) {
     let value= e.target.value
     this.setState({
-      gravity: value == 'yes' ? true : false
+      gravity: value == 'yes' ? 1.0 : 0.0
     })
   }
   upload (e) {

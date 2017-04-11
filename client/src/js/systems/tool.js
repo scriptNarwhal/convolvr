@@ -4,7 +4,10 @@ export default class ToolSystem {
     }
     // hook into user.toolbox interfaces (primaryAction, etc.. )
     init (component) { 
-        
+        let prop = component.props.tool,
+            state = {}
+
+        return state
     }
 }
 

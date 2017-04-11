@@ -4,7 +4,10 @@ export default class TabSystem {
     }
 
     init (component) { // make component switch tabViews when activated
-        
+        let prop = component.props.tab,
+            state = {}
+
+        return state
     }
 }
 

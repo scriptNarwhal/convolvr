@@ -8,6 +8,7 @@ export default class Tool {
     initMesh () {
       this.entity.init(three.scene)
       this.mesh = this.entity.mesh
+      return this.mesh
     }
 
     equip (hand) {

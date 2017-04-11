@@ -58,7 +58,9 @@ export default class MaterialSystem {
             }
           }
         component.material = material
-        return {}
+        return {
+          
+        }
     }
 }
 

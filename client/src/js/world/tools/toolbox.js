@@ -83,7 +83,7 @@ export default class Toolbox {
           cursor = null,
           cursorPos = null,
           handMesh = null
-
+      console.log("init tool telemetry ", position)
       if (useCursor) {
         if (input.trackedControls || input.leapMotion) { // set position from tracked controller
           cursor = cursors[hand +1]
@@ -98,7 +98,7 @@ export default class Toolbox {
           quaternion = handMesh.quaternion.toArray()
         }
       }
-
+      console.log("init tool telemetry ", position)
       return {
         position,
         quaternion,

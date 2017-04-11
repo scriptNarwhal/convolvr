@@ -4,7 +4,10 @@ export default class SeatSystem {
     }
 
     init (component) { 
-        
+        let prop = component.props.seat,
+            state = {}
+
+        return state
     }
 }
 

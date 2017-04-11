@@ -4,7 +4,10 @@ export default class TabViewSystem {
     }
 
     init (component) { // make component toggle visible when tab is activated
-        
+        let prop = component.props.tabView,
+            state = {}
+
+        return state
     }
 }
 

@@ -5,6 +5,7 @@ var voxels = [], // map of string coordinates to arrays of entities
   		position: [0, 0, 0],
   		prevPos: [0, 0, 0],
   		velocity: [0, 0, 0],
+      hands: [],
   		vrHeight: 0
   	}
 
@@ -99,9 +100,9 @@ self.update = function () {
           while (i >= 0) {
             obj = entities[i];
             if (!!obj) {
-              if (position[1] < obj.position[1] + 5000 && position[1] > obj.position[1]-5000 ) {  // compare to user
+              if (position[1] < obj.position[1] + 15000 && position[1] > obj.position[1]-15000 ) {  // compare to user
                 if (distance2dCompare(position, obj.position, 32000)) {
-                  collision = true;
+                  collision = true
                   self.postMessage('{"command": "entity-user collision", "data":{"position":[' +obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}')
                 }
               }
