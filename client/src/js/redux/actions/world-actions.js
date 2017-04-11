@@ -6,6 +6,9 @@ import {
   WORLDS_FETCH,
   WORLDS_FETCH_DONE,
   WORLDS_FETCH_FAIL,
+  USER_WORLDS_FETCH,
+  USER_WORLDS_FETCH_FAIL,
+  USER_WORLDS_FETCH_DONE,
   WORLD_UPDATE_FETCH,
   WORLD_UPDATE_DONE,
   WORLD_UPDATE_FAIL,
@@ -42,7 +45,7 @@ export function fetchWorlds () {
         });
    }
 }
-export function fetcUserhWorlds (userId) {
+export function fetchUserWorlds (userId) {
     return dispatch => {
      dispatch({
         type: USER_WORLDS_FETCH,
@@ -52,7 +55,7 @@ export function fetcUserhWorlds (userId) {
         .then(res => {
             dispatch({
                 type: USER_WORLDS_FETCH_DONE,
-                worlds: res.data
+                data: res.data
             })
         }).catch(res => {
             dispatch({

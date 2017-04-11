@@ -20,6 +20,7 @@ export default class Entity {
       this.quaternion = quaternion
       this.mesh.quaternion.fromArray(quaternion)
     }
+    this.mesh.updateMatrix()
   }
 
   init (scene) {

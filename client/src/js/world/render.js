@@ -31,6 +31,7 @@ let rayCast = (world, camera, cursor, handMesh, callback) => {
 let cursorCallback = (obj, entity, cursor, hand, world) => {
   let cb = 0,
       callbacks = []
+      
   cursor.state.cursor = {
     distance: obj.distance,
     mesh: obj.object,

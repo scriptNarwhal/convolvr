@@ -15,7 +15,7 @@ import {
     LOGIN_FAIL
 } from '../constants/action-types';
 import { API_SERVER } from '../../config.js'
-
+import { fetchUserWorlds } from './world-actions'
 export function addUser () {
     return {
         type: USER_ADD
@@ -87,6 +87,7 @@ export function login (user, pass, email, data) {
          })
          .then(response => {
              dispatch(loginDone(response))
+             dispatch(fetchUserWorlds(response.data.id))
           }).catch(response => {
               dispatch(loginFailed(response))
         });

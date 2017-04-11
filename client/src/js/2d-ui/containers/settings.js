@@ -9,10 +9,9 @@ const styles = {
     margin: 'auto',
     display: 'block',
     position: 'relative',
-    top: '6vh',
+    top: '2vh',
     left: '0px',
     right: '0px',
-    bottom: '5vh',
     borderTop: '0.8vh solid rgb(43, 43, 43)',
     background: 'rgb(27, 27, 27)'
   },

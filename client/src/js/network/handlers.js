@@ -1,4 +1,5 @@
 import Avatar from '../world/avatar'
+import Entity from '../entities/entity'
 
 export default class SocketHandlers {
     constructor (world, socket) {

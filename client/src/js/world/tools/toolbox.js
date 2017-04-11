@@ -92,6 +92,7 @@ export default class Toolbox {
           cursor = cursors[0]
         }
         cursor.mesh.updateMatrixWorld()
+        !!cursor.mesh.parent && cursor.mesh.parent.updateMatrix()
         cursorPos = cursor.mesh.localToWorld(new THREE.Vector3())
         position = cursorPos.toArray()
         if (handMesh != null) {
@@ -118,7 +119,7 @@ export default class Toolbox {
       }
       toolAction = tool.primaryAction(telemetry)
       if (!!toolAction) {
-        this.sendToolAction(true, tool, position, hand, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
+        this.sendToolAction(true, tool, hand, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
     }
 
@@ -133,7 +134,7 @@ export default class Toolbox {
       }
       toolAction = tool.secondaryAction(telemetry, value)
       if (!!toolAction) {
-        this.sendToolAction(false, tool, position, hand, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
+        this.sendToolAction(false, tool, hand, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
     }
 

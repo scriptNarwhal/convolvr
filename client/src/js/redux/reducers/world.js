@@ -6,6 +6,9 @@ import {
     WORLDS_FETCH,
     WORLDS_FETCH_DONE,
     WORLDS_FETCH_FAIL,
+    USER_WORLDS_FETCH,
+    USER_WORLDS_FETCH_DONE,
+    USER_WORLDS_FETCH_FAIL,
     WORLD_UPDATE_FETCH,
     WORLD_UPDATE_DONE,
     WORLD_UPDATE_FAIL,
@@ -23,10 +26,12 @@ import {
 module.exports = function worlds (state = {
     current: window.location.href.indexOf("/world/") > -1 ? window.location.href.split("/world/")[1] : "overworld",
     all: [],
+    userWorlds: [],
     updated: false,
     created: false,
     error: false,
     fetching: false,
+    fetchingUserWorlds: false,
     fetchingSettings: false,
     universeSettings: {
       id: 1,
@@ -66,6 +71,20 @@ module.exports = function worlds (state = {
       return Object.assign({}, state, {
           all: action.worlds,
           fetching: false
+      })
+    case USER_WORLDS_FETCH:
+      return Object.assign({}, state, {
+          fetchingUserWorlds: true
+      })
+    case USER_WORLDS_FETCH_FAIL:
+      return Object.assign({}, state, {
+          fetchingUserWorlds: false,
+          error: action.err
+      })
+    case USER_WORLDS_FETCH_DONE:
+      return Object.assign({}, state, {
+          userWorlds: action.data,
+          fetchingUserWorlds: false
       })
     case WORLD_UPDATE_FETCH:
       return Object.assign({}, state, {
