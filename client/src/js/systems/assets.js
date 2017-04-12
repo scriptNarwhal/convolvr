@@ -4,7 +4,10 @@ export default class AssetSystem {
     }
 
     init (component) { 
-        
+        let prop = component.props.assets,
+            state = {}
+
+        return state
     }
 
     load (resource) {

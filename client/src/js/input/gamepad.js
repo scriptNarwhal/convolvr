@@ -18,6 +18,12 @@ export default class GamePad {
                   gamepad.buttons.length, gamepad.axes.length);
       if (connecting) {
         gamepads[gamepad.index] = gamepad;
+        if (gamepad) {
+          let id = gamepad.id
+          if (id.indexOf('Oculus Touch') > -1 || id.indexOf('Vive') > -1) { // need to lookup vive controller id
+            input.trackedControls = true
+          } 
+        }
       } else {
         delete gamepads[gamepad.index];
       }
@@ -40,7 +46,7 @@ export default class GamePad {
       gamepad = gamepads[g]
       if (gamepad) {
         id = gamepad.id
-        if (id.indexOf('Oculus Touch') > -1) { // need to lookup vive controller id
+        if (id.indexOf('Oculus Touch') > -1 || id.indexOf('Vive') > -1) { // need to lookup vive controller id
           this.trackedControllers.handleOculusTouch(gamepad)
         } else if (id.indexOf('Oculus Remote') > -1) {
           this.trackedControllers.handleOculusRemote(gamepad)

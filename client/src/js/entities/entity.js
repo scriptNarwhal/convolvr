@@ -63,7 +63,9 @@ export default class Entity {
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
         } else {
-          nonStructural.push(comp.mesh)
+          if (comp.props.hand == undefined) {
+            nonStructural.push(comp.mesh)
+          }
         }
         c ++
     }

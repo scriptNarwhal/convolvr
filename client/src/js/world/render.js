@@ -39,13 +39,13 @@ let cursorCallback = (obj, entity, cursor, hand, world) => {
   }
   if (!!entity) {
     callbacks = entity.hoverCallbacks
-    cb = callbacks.length
+    cb = callbacks.length-1
     while (cb >= 0) {
      callbacks[cb]()
      cb --
     }
     callbacks = entity.activationCallbacks // check if cursor / hand is activated
-    cb = callbacks.length
+    cb = callbacks.length-1
     while (cb >= 0) {
       callbacks[cb]()
       cb --

@@ -1,6 +1,16 @@
-# convolvr
+## convolvr
 WebVR game engine, server and virtual reality authoring tool.
-#### Installation:
+
+## Overview
+- Component Entity System Framework
+- Multiplayer telemetry, chat, action & asset persistence provided by server
+- Built in tools to build world entities from components
+- Tools to visually build components from props (geometries, materials & other systems) W.I.P.
+- Handles user input from keyboard/mouse, touch, tracked controllers
+- Supports infinite, configurable, procedural worlds 
+- Mesh based VR UI; Multiline text rendering W.I.P.
+
+## Installation
 ```
   git clone https://github.com/SpaceHexagon/convolvr.git
   cd convolvr/client

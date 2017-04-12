@@ -80,25 +80,21 @@ export default class Component {
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
         } else {
-          nonStructural.push(comp.mesh)
+          if (comp.props.hand === undefined) {
+            nonStructural.push(comp.mesh)
+          }
         }
         c ++
     }
+    
     if (s > 0) {
       mesh = new THREE.Mesh(base, new THREE.MultiMaterial(materials))
+      this.mesh.add(mesh)
     } else {
-      mesh = nonStructural[0]
-      s = 1
       while (s < nonStructural.length) {
-          mesh.add(nonStructural[s])
+          this.mesh.add(nonStructural[s])
           s ++
       }
-    }
-    if (!! this.quaternion && this.components.length == 1) {
-        mesh.quaternion.set(this.quaternion[0], this.quaternion[1], this.quaternion[2], this.quaternion[3])
-    }
-    if (!! this.position) {
-        mesh.position.set(this.position[0], this.position[1], this.position[2])
     }
     mesh.userData = { 
         component: this,

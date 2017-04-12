@@ -4,7 +4,10 @@ export default class ProjectileSystem {
     }
 
     init (component) { 
-        
+        let prop = component.props.projectile,
+            state = {}
+
+        return state
     }
 }
 

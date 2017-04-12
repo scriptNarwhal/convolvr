@@ -4,7 +4,10 @@ export default class LightSystem {
     }
 
     init (component) { 
-        
+        let prop = component.props.light,
+            state = {}
+
+        return state
     }
 }
 

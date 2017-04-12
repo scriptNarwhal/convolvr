@@ -13,7 +13,7 @@ export default class MaterialSystem {
             map = undefined
 
         if (props.assets != null) {
-          map = this.asset.load(props.assets[0])
+          //map = this.asset.load(props.assets[0])
         }
           switch (prop.name) {
         case "plastic":

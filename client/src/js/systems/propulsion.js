@@ -6,7 +6,8 @@ export default class PropulsionSystem {
     init (component) { 
         let prop = component.props.propulsion,
             state = {}
-
+        // use in conjunction with entity physics
+        
         return state
     }
 }
