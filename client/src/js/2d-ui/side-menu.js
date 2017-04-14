@@ -46,11 +46,11 @@ class SideMenu extends Component {
                  title="Switch Worlds"
                  clickHandler={ ()=> { browserHistory.push("/worlds") }}
             />
-            <Tab image="/images/voxel-white.png"
+            <Tab image="/images/square-a.png"
                  title="View Network"
                  clickHandler={ ()=> { browserHistory.push("/network") }}
             />
-            <Tab image="/images/square-a.png"
+            <Tab image="/images/voxel-white.png"
                  title="Manage Data"
                  clickHandler={ ()=> { browserHistory.push("/data") }}
             />

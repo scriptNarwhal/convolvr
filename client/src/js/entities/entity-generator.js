@@ -301,7 +301,7 @@ function initButtonComponents (data) {
           size: [0, 0, 0]
         },
         material: {
-          name: "basic",
+          name: "plastic",
           color: 0
         }
       },
@@ -316,7 +316,7 @@ function initButtonComponents (data) {
         },
         material: {
           color: color,
-          name: "basic"
+          name: "plastic"
         }
       },
       position: [-5000+(x>1?10000:0), 0, 0],
@@ -334,7 +334,7 @@ function initButtonComponents (data) {
         },
         material: {
           color: color,
-          name: "basic"
+          name: "plastic"
         }
       },
       position: [0, -5000+(x>1?10000:0), 0],

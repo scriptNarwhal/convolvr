@@ -84,7 +84,7 @@ export default class WorldPhysics {
 								user.falling = false
 								user.velocity.y = 0
 						}
-					} else if (message.command == "load interior") {
+					} else if (message.command == "load entities") {
 	          world.generateFullLOD(message.data.coords);
 
 	        } else if (message.command == "enter interior") {

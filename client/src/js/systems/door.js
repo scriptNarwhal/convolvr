@@ -4,7 +4,13 @@ export default class DoorSystem {
     }
 
     init (component) { 
-        
+        let prop = component.props.door
+        return {
+            open: false,
+            toggle: (open) => {
+
+            }
+        }
     }
 }
 

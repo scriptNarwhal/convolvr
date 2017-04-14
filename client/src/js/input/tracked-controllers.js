@@ -33,12 +33,17 @@ export default class TrackedController {
       if (gamepad.pose) {
         tools.setHandOrientation(1, gamepad.pose.position, gamepad.pose.orientation)
       }
-      if (Math.abs(axes[0]) > 0.1) {
-        input.moveVector.x = axes[0] * 16000
+      if (world.vrMovement=='stick') {
+        if (Math.abs(axes[0]) > 0.1) {
+            input.moveVector.x = axes[0] * 16000
+        }
+        if (Math.abs(axes[1]) > 0.1) {
+            input.moveVector.z = axes[1] * 16000
+        }
+      } else { // teleport mode
+
       }
-      if (Math.abs(axes[1]) > 0.1) {
-        input.moveVector.z = axes[1] * 16000
-      }
+     
       buttons.map((button, i) =>{
         if (lastButtons.left[i] == false && this.buttonPressed(button)) {
           lastButtons.left[i] = true

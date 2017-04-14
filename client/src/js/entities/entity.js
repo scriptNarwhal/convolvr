@@ -94,6 +94,7 @@ export default class Entity {
     scene.add(mesh)
     this.mesh = mesh
     mesh.matrixAutoUpdate = false
+    mesh.updateMatrix()
     return this
   }
 }

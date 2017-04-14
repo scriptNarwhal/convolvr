@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/spf13/viper"
-	"golang.org/x/net/websocket"
+	"net/http"
 )
 
 var (
@@ -103,12 +103,7 @@ func Start(configName string) {
 	hub.Handle("chat message", chatMessage)
 	hub.Handle("update", update)
 	hub.Handle("tool action", toolAction)
-	e.GET("/connect", nexusHandler)
-
+	e.Any("/connect", echo.WrapHandler(http.HandlerFunc(hub.Handler)))
 	e.Logger.Fatal(e.Start(port))
 }
 
-func nexusHandler(c echo.Context) error {
-	websocket.Handler(hub.Serve).ServeHTTP(c.Response(), c.Request())
-	return nil
-}

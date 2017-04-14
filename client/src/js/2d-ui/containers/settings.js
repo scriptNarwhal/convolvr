@@ -78,7 +78,7 @@ class Settings extends Component {
       this.setState({
         defaultWorld: nextProps.settings.defaultWorld,
         welcomeMessage: nextProps.settings.welcomeMessage,
-        network: nextProps.settings.network
+        network: nextProps.settings.network || []
       })
     }
   }

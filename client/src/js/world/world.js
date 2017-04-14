@@ -80,6 +80,7 @@ export default class World {
 		this.capturing = false
 		this.webcamImage = ""
 		this.HMDMode = "standard" // "head-movement"
+		this.vrMovement = "stick" // teleport
 		this.vrHeight = 0
 		this.screenResX = screenResX
 		this.initRenderer(renderer, "viewport")
@@ -229,6 +230,7 @@ export default class World {
 	}
 	initLocalSettings () {
 		let cameraMode = localStorage.getItem("camera"),
+			vrMovement = localStorage.getItem("vrMovement"),
 				lighting = localStorage.getItem("lighting"),
 				enablePostProcessing = localStorage.getItem("postProcessing"),
 				aa = localStorage.getItem("aa")
@@ -236,6 +238,10 @@ export default class World {
 		if (cameraMode == undefined) {
 			cameraMode = 'fps'
 			localStorage.setItem("camera", 'fps')
+		}
+		if (vrMovement == undefined) {
+			vrMovement = 'stick' // change to teleport later
+			localStorage.setItem("vrMovement", vrMovement)
 		}
 		if (aa == undefined) {
 			aa = 'on'
@@ -251,6 +257,7 @@ export default class World {
 		}
 		this.aa = aa
 		this.cameraMode = cameraMode
+		this.vrMovement = vrMovement
 		this.lighting = lighting
 		this.enablePostProcessing = enablePostProcessing
 	}

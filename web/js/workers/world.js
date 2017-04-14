@@ -42,7 +42,10 @@ self.update = function () {
 			obj = voxels[i];
 			if (!!obj) {
 					if (distance2dCompare(position, obj.position, 1500000)) { 	// do collisions on voxels & structures... just walls at first..
-
+						if (obj.loaded == undefined) {
+							obj.loaded = true
+							self.postMessage('{"command": "load entities", "data":{"coords":"'+obj.cell[0]+'.'+obj.cell[1]+'.'+obj.cell[2]+'"}}');
+						}
 						let alt = obj.altitude || 0
 						yPos = obj.position[1]
 						if (distance2dCompare(position, obj.position, 528000)) {
