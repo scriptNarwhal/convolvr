@@ -1,4 +1,9 @@
 export default class GeometrySystem {
+    constructor (world) {
+      this.world = world
+      // probably cache some geometries here
+      this.nodeGeom = new THREE.PlaneGeometry(1/10000, 1/10000)
+    }
 
     init (component) { 
         let prop = component.props.geometry,
@@ -6,7 +11,7 @@ export default class GeometrySystem {
             size = prop.size
         switch (prop.shape) {
           case "node":
-            geometry = new THREE.PlaneGeometry(size[0]/10000, size[1]/10000)
+            geometry = this.nodeGeom
           break
           case "plane":
             geometry = new THREE.PlaneGeometry(size[0], size[1])
@@ -33,8 +38,9 @@ export default class GeometrySystem {
             geometry = new THREE.CylinderGeometry(size[0], size[2], size[1], 4, 1, true)
           break
         }
-        component.geometry = geometry
-        return {}
+
+        return {
+          geometry
+        }
     }
 }
-

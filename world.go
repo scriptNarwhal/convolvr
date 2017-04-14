@@ -18,12 +18,12 @@ type UniverseSettings struct {
 
 type NetworkDomain struct {
 	Name  string `json:"name"`
-	Image string `json:"image`
+	Image string `json:"image"`
 }
 
 type World struct {
 	ID      int    `storm:"id,increment" json:"id"`
-	UserID  int    `json:"userId"`
+	UserID  int    `storm:"id" json:"userId"`
 	Name    string `storm:"index" json:"name"`
 	Gravity float64 `json:"gravity"`
 	Sky     `storm:"inline" json:"sky"`

@@ -36,7 +36,6 @@ export default class Component {
 
       if (this.props.hand != undefined) {
         entity.hands.push(this.mesh)
-        window.three.scene.add(this.mesh)
       }
       if (this.props.cursor != undefined) {
         entity.cursors.push(this)
@@ -68,7 +67,7 @@ export default class Component {
           addToOctree = false
         }
         compMesh = comp.mesh
-        if (comp.props.structure === true) {
+        if (comp.props.geometry && comp.props.geometry.merge === true) {
           materials.push(compMesh.material)
           compMesh.updateMatrix()
           faces = compMesh.geometry.faces
@@ -80,9 +79,7 @@ export default class Component {
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
         } else {
-          if (comp.props.hand === undefined) {
-            nonStructural.push(comp.mesh)
-          }
+          nonStructural.push(comp.mesh)
         }
         c ++
     }

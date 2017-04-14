@@ -51,7 +51,7 @@ export default class Entity {
           addToOctree = false
         }
         compMesh = comp.mesh
-        if (comp.props.structure === true) {
+        if (comp.props.geometry && comp.props.geometry.merge === true) {
           materials.push(compMesh.material)
           compMesh.updateMatrix()
           faces = compMesh.geometry.faces
@@ -63,9 +63,7 @@ export default class Entity {
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
         } else {
-          if (comp.props.hand == undefined) {
-            nonStructural.push(comp.mesh)
-          }
+          nonStructural.push(comp.mesh)
         }
         c ++
     }

@@ -55,20 +55,18 @@ class Settings extends Component {
       postProcessing: 'on',
       defaultWorld: 'overworld',
       welcomeMessage: 'Welcome to Convolvr!',
-      network: []
+      network: [],
+      IOTMode: false
     }
   }
   componentWillMount () {
-    let aa = localStorage.getItem("aa")
-    if (aa == null) {
-      aa = 'on'
-    }
     this.setState({
       camera: localStorage.getItem("camera") || 'fps',
       lighting: localStorage.getItem("lighting") || 'high',
       postProcessing: localStorage.getItem("postProcessing") || 'off',
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
-      aa
+      aa: localStorage.getItem("aa") || "on",
+      IOTMode: localStorage.getItem("IOTMode") || 'off'
     })
     this.props.fetchUniverseSettings()
   }
@@ -89,8 +87,9 @@ class Settings extends Component {
     localStorage.setItem('camera', this.state.camera)
     localStorage.setItem('lighting', this.state.lighting)
     localStorage.setItem('aa', this.state.aa)
-    localStorage.setItem('postProcessing', this.state.postProcessing),
+    localStorage.setItem('postProcessing', this.state.postProcessing)
     localStorage.setItem('vrMovement', this.state.vrMovement) 
+    localStorage.setItem('IOTMode', this.state.IOTMode)
     this.reload()
   }
   updateUniverseSettings () {
@@ -174,6 +173,16 @@ class Settings extends Component {
             >
               <option value="on">On (Bloom HDR Effect)</option>
               <option value="off">Off (Better Performance)</option>
+            </select>
+          </div>
+          <div>
+            <h3 style={styles.h3}>IOT Mode</h3>
+            <select onChange={e=> {this.setState({IOTMode: e.target.value})}}
+                    value={ this.state.IOTMode }
+                    style={ styles.select }
+            >
+              <option value="off">Off (Recommended)</option>
+              <option value="on">On (Only renders after world update)</option>
             </select>
           </div>
           <input style={styles.save}

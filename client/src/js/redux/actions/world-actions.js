@@ -51,7 +51,7 @@ export function fetchUserWorlds (userId) {
         type: USER_WORLDS_FETCH,
         userId
      })
-     return axios.get(API_SERVER+"/api/worlds")
+     return axios.get(API_SERVER+"/api/worlds/user/"+userId)
         .then(res => {
             dispatch({
                 type: USER_WORLDS_FETCH_DONE,

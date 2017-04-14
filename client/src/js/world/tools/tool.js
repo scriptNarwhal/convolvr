@@ -14,13 +14,14 @@ export default class Tool {
     equip (hand) {
       let input = this.world.userInput,
           hands = this.toolbox.hands
+
       if (this.mesh == null) {
         let toolMesh = this.initMesh(this.data)
         if (!input.trackedControls && !input.leapMotion) {
           this.world.user.mesh.add(toolMesh)
           toolMesh.position.set(1500-(2500*hand), -700, -1550)
         } else {
-
+          hands[hand].add(toolMesh)
         }
         // add to respective hand (when implemented)
       } else {
@@ -30,7 +31,9 @@ export default class Tool {
 
     unequip (hand) {
       if (this.mesh != null) {
-        this.mesh.visible = false;
+        if (this.mesh.parent != null) {
+          this.mesh.parent.remove(this.mesh)
+        }
       }
     }
 }

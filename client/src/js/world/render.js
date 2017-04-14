@@ -62,9 +62,9 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
 
       if (!!state) {
         if (state.distance > cursorPos.z) {
-          cursorPos.z += 1000
-        } else if (state.distance < cursorPos.z) {
           cursorPos.z -= 1000
+        } else if (state.distance < cursorPos.z) {
+          cursorPos.z += 1000
         }
       }
       cursorMesh.updateMatrix()
@@ -112,9 +112,8 @@ export let render = (world, last, cursorIndex) => {
       }
       world.octree.update()
     }
-    last = Date.now()
     if (world.mode != "stereo") {
-      requestAnimationFrame( () => { render(world, last, cursorIndex) } )
+      requestAnimationFrame( () => { render(world, time, cursorIndex) } )
     }
 }
 
@@ -139,7 +138,7 @@ export let vrAnimate = (time, oldPos, cursorIndex) => {
       camera.position.set(cPos.x - oldPos[0]*0.8, cPos.y - oldPos[1]*0.8, cPos.z -oldPos[2]*0.8)
     }
     t.vrDisplay.getFrameData(frame)
-    vrPos = frame.pose.position
+    vrPos = !!frame && frame.pose ? frame.pose.position : [0,0,0]
     vrWorldPos = [22000 * vrPos[0], 22000 * vrPos[1], 22000 * vrPos[2]]
     camera.quaternion.fromArray(frame.pose.orientation)
     world.userInput.update(delta)

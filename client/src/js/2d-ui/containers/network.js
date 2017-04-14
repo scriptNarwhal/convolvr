@@ -23,7 +23,7 @@ class Network extends Component {
   }
   render() {
     return (
-        <Shell className="settings">
+        <Shell className="worlds">
         <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
                      label="Network"
                      username={this.props.username}

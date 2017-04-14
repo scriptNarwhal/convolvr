@@ -2,6 +2,7 @@ import Entity from '../entities/entity'
 import Component from '../components/component'
 
 export default class Avatar {
+
     constructor (id, wholeBody, data) { // wholeBody == true == not just 'vr hands'
         var mesh = null, // new THREE.Object3D();
             entity = null,
@@ -111,5 +112,15 @@ export default class Avatar {
         this.cursors = entity.cursors
         this.wholeBody = wholeBody
         this.data = data
+    }
+
+    toggleTrackedHands (toggle = true) {
+      this.hands.map((hand, i) => {
+        if (toggle) {
+                
+        } else {
+          
+        }
+      })
     }
 }

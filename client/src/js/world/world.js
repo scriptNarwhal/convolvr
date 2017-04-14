@@ -25,6 +25,7 @@ import FloorSystem from '../systems/floor'
 import WallSystem from '../systems/wall'
 import SeatSystem from '../systems/seat'
 import DoorSystem from '../systems/door'
+import TerrainSystem from '../systems/terrain'
 import ContainerSystem from '../systems/container'
 import WebHookSystem from '../systems/webhook'
 import ToolUISystem from '../systems/tool-ui'
@@ -129,6 +130,7 @@ export default class World {
 			wall: new WallSystem(world),
 			seat: new SeatSystem(world),
 			door: new DoorSystem(world),
+			terrain: new TerrainSystem(world),
 			container: new ContainerSystem(world),
 			tab: new TabSystem(world),
 			tabView: new TabViewSystem(world),

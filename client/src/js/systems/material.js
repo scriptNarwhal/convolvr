@@ -1,6 +1,7 @@
 export default class MaterialSystem {
     constructor (world) {
         this.world = world
+        this.systems = world.systems
     }
 
     init (component) {
@@ -10,41 +11,49 @@ export default class MaterialSystem {
             material = null,
             basic = false,
             mobile = this.world.mobile,
-            map = undefined
+            map = undefined,
+            assets = this.systems.assets
 
         if (props.assets != null) {
           //map = this.asset.load(props.assets[0])
         }
+        if (assets.materials[] == null) {
           switch (prop.name) {
-        case "plastic":
-          mat = { color: prop.color || 0xffffff }
-        break
-        case "metal":
-          mat = { color: prop.color || 0xffffff }
-        break
-        case "glass":
-          mat = { color: prop.color || 0xffffff }
-        break
-        case "wireframe":
+          case "custom-texture":   // implement 
           mat = {
-            color: prop.color || 0x00ff00,
-            wireframe: true,
-            fog: false
+            color: prop.color,
+            // map: 
           }
-          basic = true
-        break
-        case "basic":
-          mat = { color: prop.color || 0xffffff }
-          basic = true
-        break
-        default:
-          mat = {
-              color: prop.color || 0xff00ff,
-              fog: false
-          }
-          basic = false
           break
-        }
+          case "wireframe":
+            mat = {
+              color: prop.color || 0x00ff00,
+              wireframe: true,
+              fog: false
+            }
+            basic = true
+          break
+          case "basic":
+            mat = { color: prop.color || 0xffffff }
+            basic = true
+          break
+          case "plastic":
+            mat = { color: prop.color || 0xffffff }
+          break
+          case "metal":
+            mat = { color: prop.color || 0xffffff }
+          break
+          case "glass":
+            mat = { color: prop.color || 0xffffff }
+          break
+          default:
+            mat = {
+                color: prop.color || 0xff00ff,
+                fog: false
+            }
+            basic = false
+            break
+          }
         if (map != undefined) {
           mat.map = map
         }
@@ -56,11 +65,14 @@ export default class MaterialSystem {
             } else {
               material = new THREE.MeshPhongMaterial(mat)
             }
-          }
-        component.material = material
-        return {
-          
         }
+        assets.materials[prop.name+"."+prop.color] = material // cache material for later
+      } else {
+        material = assets.materials[prop.name+"."+prop.color]
+      }      
+      return {
+          material
+      }
     }
 }
 
