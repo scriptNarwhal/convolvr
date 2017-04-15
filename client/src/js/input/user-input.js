@@ -70,8 +70,8 @@ export default class UserInput {
 		if (!world.mobile) {
 			document.addEventListener("mousemove", function (e) {
 				if (uInput.focus) {
-					uInput.rotationVector.y  -=(e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 300.0
-					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 300.0
+					uInput.rotationVector.y  -=(e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 600.0
+					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 600.0
 				}
 			});
 			setTimeout(()=> {

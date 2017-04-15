@@ -34,7 +34,7 @@ import TabSystem from '../systems/tab'
 import ToolSystem from '../systems/tool'
 import FileSystem from '../systems/file'
 import ChatSystem from '../systems/chat'
-import { render, vrRender} from './render'
+import { animate } from './render'
 import PostProcessing from './post-processing'
 import { API_SERVER } from '../config.js'
 import { send } from '../network/socket'
@@ -164,12 +164,15 @@ export default class World {
 			}
 			three.camera.aspect = innerWidth / innerHeight
 			three.camera.updateProjectionMatrix()
+			if (world.IOTMode) {
+				animate(world, Date.now(), 0)
+			}
 		}
 		window.addEventListener('resize', onResize, true)
 		this.onWindowResize = onResize
 		onResize()	
 		
-		render(this, 0, 0)
+		animate(this, 0, 0)
 
 		three.vrDisplay = null
 		navigator.getVRDisplays().then(function(displays) {
@@ -233,9 +236,10 @@ export default class World {
 	initLocalSettings () {
 		let cameraMode = localStorage.getItem("camera"),
 			vrMovement = localStorage.getItem("vrMovement"),
-				lighting = localStorage.getItem("lighting"),
-				enablePostProcessing = localStorage.getItem("postProcessing"),
-				aa = localStorage.getItem("aa")
+			IOTMode = localStorage.getItem("IOTMode"),
+			lighting = localStorage.getItem("lighting"),
+			enablePostProcessing = localStorage.getItem("postProcessing"),
+			aa = localStorage.getItem("aa")
 
 		if (cameraMode == undefined) {
 			cameraMode = 'fps'
@@ -244,6 +248,10 @@ export default class World {
 		if (vrMovement == undefined) {
 			vrMovement = 'stick' // change to teleport later
 			localStorage.setItem("vrMovement", vrMovement)
+		}
+		if (IOTMode == undefined) {
+			IOTMode = 'off'
+			localStorage.setItem("IOTMode", IOTMode)
 		}
 		if (aa == undefined) {
 			aa = 'on'
@@ -262,6 +270,7 @@ export default class World {
 		this.vrMovement = vrMovement
 		this.lighting = lighting
 		this.enablePostProcessing = enablePostProcessing
+		this.IOTMode = IOTMode == 'on'
 	}
 	load (name, callback) {
 		this.name = name;

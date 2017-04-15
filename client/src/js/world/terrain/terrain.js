@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Chunk from './chunk'
-import { API_SERVER } from '../../config.js'
+import { animate } from '../render'
+import { API_SERVER } from '../../config'
 
 export default class Terrain {
   constructor (world) {
@@ -41,7 +42,8 @@ export default class Terrain {
     let voxels = this.voxels,
         voxelList = this.voxelList,
         config = this.config,
-        systems = this.world.systems,
+        world = this.world,
+        systems = world.systems,
         plat = null,
         chunk = null,
         removePhysicsChunks = [],
@@ -154,6 +156,9 @@ export default class Terrain {
                     command: "add voxels",
                     data: physicsVoxels
                 }))
+                if (world.IOTMode) {
+                  animate(world, Date.now(), 0)
+                }
              }
           }).catch(response => {
              console.log("Chunk Error", response)

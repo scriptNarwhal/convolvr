@@ -84,9 +84,10 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
   return cursorIndex
 }
 
-export let render = (world, last, cursorIndex) => {
+export let animate = (world, last, cursorIndex) => {
   let mobile = world.mobile,
       camera = three.camera,
+      mode = world.mode,
       cPos = camera.position,
       delta = (Date.now() - last) / 16000 ,
       time = Date.now(),
@@ -104,7 +105,7 @@ export let render = (world, last, cursorIndex) => {
   }
   world.sendUserData()
   world.updateSkybox(delta)
-    if (world.mode == "vr" || world.mode == "web") {
+    if (mode == "vr" || mode == "web") {
       if (world.postProcessing.enabled) {
         world.postProcessing.composer.render()
       } else {
@@ -112,8 +113,8 @@ export let render = (world, last, cursorIndex) => {
       }
       world.octree.update()
     }
-    if (world.mode != "stereo") {
-      requestAnimationFrame( () => { render(world, time, cursorIndex) } )
+    if (mode != "stereo" && !world.IOTMode) {
+      requestAnimationFrame( () => { animate(world, time, cursorIndex) } )
     }
 }
 

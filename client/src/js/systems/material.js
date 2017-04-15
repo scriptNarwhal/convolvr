@@ -12,7 +12,7 @@ export default class MaterialSystem {
             mobile = this.world.mobile,
             map = undefined,
             assets = this.world.systems.assets,
-            materialCode = prop.name+"."+prop.color
+            materialCode = prop.name+":"+prop.color
 
         if (props.assets != null) {
           //map = this.asset.load(props.assets[0])

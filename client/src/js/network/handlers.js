@@ -1,5 +1,6 @@
 import Avatar from '../world/avatar'
 import Entity from '../entities/entity'
+import { animate } from '../world/render'
 
 export default class SocketHandlers {
     constructor (world, socket) {
@@ -71,6 +72,9 @@ export default class SocketHandlers {
 				case "Delete Tool":
 
 				break;
+			}
+			if (world.IOTMode) {
+				animate(world, Date.now(), 0)
 			}
 		})
     }
