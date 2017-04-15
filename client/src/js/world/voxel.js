@@ -1,11 +1,10 @@
-import Entity from '../../entities/entity'
+import Entity from '../entities/entity'
 
-let physics = null;
+let physics = null
 
-export default class Chunk {
+export default class Voxel {
     constructor (data, cell) {
         let x = 8,
-            voxel = null,
             structure = null,
             track = null,
             items = [],
@@ -14,7 +13,7 @@ export default class Chunk {
             narrow = gridSize * 0.87,
             mesh = null,
             bsp = null,
-			      cellMesh = null,
+			cellMesh = null,
             finalGeom = new THREE.Geometry(),
             base = new THREE.Geometry(),
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
@@ -34,36 +33,13 @@ export default class Chunk {
         if (data == null) {
             data = { }
         }
-        if (!!data.voxels && data.voxels.length > 0) { // terrain (sub)voxels
-            voxelGeom = new THREE.CylinderGeometry( 264000 / 16, 264000 / 16, 264000 / 8.5, 6, 1);
-            items = data.voxels;
-            cellMesh = new THREE.Mesh(geom, mat)
-            if (visible != null && visible === false) {
-              cellMesh.scale.set(0.01, 0.01, 0.01)
-            }
-            cellMesh.updateMatrix()
-            base.merge(cellMesh.geometry, cellMesh.matrix);
-
-            x = items.length - 1;
-            while (x >= 0 ) {
-                voxel = items[x]
-                cellMesh = new THREE.Mesh(voxelGeom, mat);
-               cellMesh.position.set((voxel.cell[0] * gridSize) + (voxel.cell[2] % 2==0 ? 0 : gridSize / 2),
-                                      voxel.cell[1] * gridSize,    voxel.cell[2] * gridSize)
-               cellMesh.updateMatrix();
-               base.merge(cellMesh.geometry, cellMesh.matrix)
-               x --
-            }
-            mesh = new THREE.Mesh(base, mat)
-        } else {
-          if (smooth) {
+        if (smooth) {
             geom = modifier.modify( geom )
-          }
-          mesh = new THREE.Mesh(geom, mat)
-          mesh.matrixAutoUpdate = false
-          if (visible == false) {
+        }
+        mesh = new THREE.Mesh(geom, mat)
+        mesh.matrixAutoUpdate = false
+        if (visible == false) {
             mesh.visible = false
-          }
         }
         this.mesh = mesh
         if (!!data.entities) {
@@ -86,7 +62,7 @@ export default class Chunk {
                 mesh.position.z
             ]
         } else {
-            data.position = [0, 0, 0];
+            data.position = [0, 0, 0]
         }
         mesh.updateMatrix()
         if (data.size == null) {

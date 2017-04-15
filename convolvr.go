@@ -2,7 +2,6 @@ package convolvr
 
 import (
 	"fmt"
-
 	log "github.com/Sirupsen/logrus"
 	"github.com/asdine/storm"
 	"github.com/ds0nt/nexus"
@@ -37,7 +36,7 @@ func Start(configName string) {
 	}
 	userErr := db.Init(&User{})
 	worldErr := db.Init(&World{})
-	chunkErr := db.Init(&Chunk{})
+	chunkErr := db.Init(&Voxel{})
 	componentErr := db.Init(&Component{})
 	entityErr := db.Init(&Entity{})
 	chatHistory := db.From("chathistory")

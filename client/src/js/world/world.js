@@ -1,7 +1,6 @@
 import axios from 'axios'
 import Avatar from './avatar'
 import Entity from '../entities/entity'
-import Terrain from './terrain/terrain'
 import Systems from '../systems'
 import WorldPhysics  from '../systems/world-physics'
 import EntityPhysics from '../systems/entity-physics'
@@ -140,7 +139,7 @@ export default class World {
 			file: new FileSystem(world),
 			chat: new ChatSystem(world)
 		})
-		this.terrain = new Terrain(this);
+		this.terrain = this.systems.terrain
 		this.workers = {
 			worldPhysics: this.systems.worldPhysics.worker,
 			entityPhysics: this.systems.entityPhysics.worker
@@ -191,7 +190,7 @@ export default class World {
 				skybox = null
 
 		this.config = config;
-		this.terrain.init(config.terrain)
+		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor);
 		three.scene.add(this.ambientLight);
 		if (config.sky.skyType == 'shader' || config.sky.skyType == 'standard') {
