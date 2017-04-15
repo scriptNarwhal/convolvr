@@ -1,7 +1,6 @@
 export default class MaterialSystem {
     constructor (world) {
         this.world = world
-        this.systems = world.systems
     }
 
     init (component) {
@@ -12,12 +11,13 @@ export default class MaterialSystem {
             basic = false,
             mobile = this.world.mobile,
             map = undefined,
-            assets = this.systems.assets
+            assets = this.world.systems.assets,
+            materialCode = prop.name+"."+prop.color
 
         if (props.assets != null) {
           //map = this.asset.load(props.assets[0])
         }
-        if (assets.materials[] == null) {
+        if (assets.materials[materialCode] == null) {
           switch (prop.name) {
           case "custom-texture":   // implement 
           mat = {
@@ -66,9 +66,9 @@ export default class MaterialSystem {
               material = new THREE.MeshPhongMaterial(mat)
             }
         }
-        assets.materials[prop.name+"."+prop.color] = material // cache material for later
+        assets.materials[materialCode] = material // cache material for later
       } else {
-        material = assets.materials[prop.name+"."+prop.color]
+        material = assets.materials[materialCode]
       }      
       return {
           material

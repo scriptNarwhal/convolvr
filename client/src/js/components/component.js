@@ -9,8 +9,7 @@ export default class Component {
       this.props = data.props || {}
       this.state = {}
       this.components = data.components || []
-      this.geometry = null
-      this.material = null
+
       if (props.geometry == undefined) {
         props.geometry = {
           shape: "node",
@@ -25,7 +24,7 @@ export default class Component {
       }
       systems.registerComponent(this)
 
-      mesh = new THREE.Mesh(this.geometry, this.material)
+      mesh = new THREE.Mesh(this.state.geometry.geometry, this.state.material.material)
       mesh.matrixAutoUpdate = false
       if (!! quaternion) {
           mesh.quaternion.set(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
