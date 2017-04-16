@@ -102,6 +102,16 @@ class App extends Component {
         unread: 0
       })
     }
+    let renderCanvas = document.querySelector("#viewport")
+    renderCanvas.onclick = (event) => {
+      let elem = event.target,
+          uInput = window.three.world.userInput
+      if (!uInput.fullscreen) {
+						elem.requestPointerLock()
+            // uInput.toggleFullscreen()
+            this.props.toggleMenu(false)
+      }
+    }
   }
   handleKeyDown (e) {
     if (e.which == 27) {

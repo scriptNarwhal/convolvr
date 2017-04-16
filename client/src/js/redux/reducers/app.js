@@ -19,9 +19,17 @@ module.exports = function app (state = {
 }, action) {
   switch (action.type) {
     case APP_TOGGLE_MENU:
+        let force = action.force,
+            open = false
+            
+        if (force != undefined) {
+            open = force
+        } else {
+           open = !state.menuOpen
+        }
         return Object.assign({}, state, {
-            menuOpen: !state.menuOpen || action.force
-        })
+            menuOpen: open
+        }) 
     case APP_TOGGLE_VR:
         three.world.mode = !state.vrMode ? "stereo" : "vr";
         return Object.assign({}, state, {

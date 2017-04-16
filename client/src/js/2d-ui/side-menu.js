@@ -26,8 +26,8 @@ let styles = {
 
 class SideMenu extends Component {
 
-  toggleMenu () {
-      this.props.toggleMenu()
+  toggleMenu (force) {
+      this.props.toggleMenu(force)
   }
 
   toggleVRMode () {
@@ -92,8 +92,8 @@ export default connect(
   },
   dispatch => {
     return {
-      toggleMenu: () => {
-        dispatch(toggleMenu())
+      toggleMenu: (force) => {
+        dispatch(toggleMenu(force))
       },
       toggleVRMode: () => {
         dispatch(toggleVR())
