@@ -4,7 +4,8 @@ export default class Component {
           props = data.props,
           quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : [0, 0, 0]
-          
+      
+      this.entity = entity
       this.data = data
       this.props = data.props || {}
       this.state = {}
@@ -22,16 +23,16 @@ export default class Component {
           color: 0xffffff
         }
       }
-      systems.registerComponent(this)
-
-      mesh = new THREE.Mesh(this.state.geometry.geometry, this.state.material.material)
-      mesh.matrixAutoUpdate = false
+      mesh = systems.registerComponent(this)
+      mesh.userData = { 
+          component: this,
+          entity
+      }
       if (!! quaternion) {
           mesh.quaternion.set(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
       }
       mesh.position.set(position[0], position[1], position[2])
       mesh.updateMatrix()
-      this.mesh = mesh
 
       if (this.props.hand != undefined) {
         entity.hands.push(this.mesh)
@@ -91,10 +92,6 @@ export default class Component {
           this.mesh.add(nonStructural[s])
           s ++
       }
-    }
-    mesh.userData = { 
-        component: this,
-        entity
     }     
   }
 }

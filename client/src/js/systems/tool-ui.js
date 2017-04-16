@@ -9,5 +9,10 @@ export default class ToolUISystem {
 
         return state
     }
+
+    switchTool (tool, hand) {
+        let toolbox = this.world.user.toolbox
+        toolbox.switchTool(tool, hand)
+    }
 }
 

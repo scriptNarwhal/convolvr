@@ -1,4 +1,7 @@
 import axios from 'axios'
+import { animate } from './render'
+import { API_SERVER } from '../config.js'
+import { send } from '../network/socket'
 import Avatar from './avatar'
 import Entity from '../entities/entity'
 import Systems from '../systems'
@@ -24,6 +27,10 @@ import FloorSystem from '../systems/floor'
 import WallSystem from '../systems/wall'
 import SeatSystem from '../systems/seat'
 import DoorSystem from '../systems/door'
+import HoverSystem from '../systems/hover'
+import ActivateSystem from '../systems/activate'
+import CursorSystem from '../systems/cursor'
+import HandSystem from '../systems/hand'
 import TerrainSystem from '../systems/terrain'
 import ContainerSystem from '../systems/container'
 import WebHookSystem from '../systems/webhook'
@@ -33,10 +40,7 @@ import TabSystem from '../systems/tab'
 import ToolSystem from '../systems/tool'
 import FileSystem from '../systems/file'
 import ChatSystem from '../systems/chat'
-import { animate } from './render'
 import PostProcessing from './post-processing'
-import { API_SERVER } from '../config.js'
-import { send } from '../network/socket'
 import SocketHandlers from '../network/handlers'
 
 let world = null
@@ -129,6 +133,10 @@ export default class World {
 			wall: new WallSystem(world),
 			seat: new SeatSystem(world),
 			door: new DoorSystem(world),
+			cursor: new CursorSystem(world),
+			hand: new HandSystem(world),
+			hover: new HoverSystem(world),
+			activate: new ActivateSystem(world),
 			terrain: new TerrainSystem(world),
 			container: new ContainerSystem(world),
 			tab: new TabSystem(world),

@@ -1,12 +1,12 @@
-export default class ChatSystem {
+export default class CursorSystem {
     constructor (world) {
         this.world = world
     }
 
-    init (component) { 
-        
+    init (component) {
+         
         return {
-            
+
         }
     }
 }

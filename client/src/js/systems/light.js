@@ -5,9 +5,20 @@ export default class LightSystem {
 
     init (component) { 
         let prop = component.props.light,
-            state = {}
+            light = null
 
-        return state
+        switch (prop.type) {
+            case "point":
+
+            break
+            case "directional":
+
+            break
+        }
+
+        return {
+            light
+        }
     }
 }
 

@@ -7,11 +7,34 @@ export default class Systems {
     }
 
     registerComponent (component) {
-        let props = component.props
-        Object.keys(props).map(prop=>{
+        let componentsByProp = component.entity.componentsByProp,
+            props = component.props,
+            state = component.state,
+            deferredSystems = [],
+            mesh = null
+
+        Object.keys(props).map(prop=> {
             if (this[prop] != null) {
-                component.state[prop] = this[prop].init(component)
+                if (prop=="text") { /* add other systems here */
+                    deferredSystems.push(prop)
+                } else {
+                    state[prop] = this[prop].init(component)
+                    if (componentsByProp[prop] == undefined) {
+                        componentsByProp[prop] = []
+                    } 
+                    componentsByProp[prop].push(component)
+                }
             }
         })
+        
+        mesh = new THREE.Mesh(state.geometry.geometry, state.material.material)
+        mesh.matrixAutoUpdate = false
+        component.mesh = mesh
+
+        deferredSystems.map(prop=>{
+            state[prop] = this[prop].init(component)
+        })
+
+        return mesh
     }
 }

@@ -28,9 +28,7 @@ export default class Toolbox {
         new ComponentTool({}, world, this),
         new MaterialTool({}, world, this),
         new GeometryTool({}, world, this),
-        new SystemTool({}, world, this),
-        new DeleteTool({}, world, this),
-        new VoxelTool({}, world, this)
+        new SystemTool({}, world, this)
       ];
       this.currentTools = [0, 0]
     }
@@ -72,6 +70,9 @@ export default class Toolbox {
 
     addTool (data) {
       this.tools.push(new CustomTool(data))
+      // use tool prop of.. component / entity that is tool that is being added
+      // implement this
+
     }
 
     initActionTelemetry (camera, useCursor, hand) {
@@ -174,7 +175,6 @@ export default class Toolbox {
         entityId,
         primary
       }
-      console.log("tool action", actionData)
       send("tool action", actionData)
     }
 }

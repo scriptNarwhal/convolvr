@@ -36,10 +36,11 @@ export default class AssetSystem {
     }
 
     init (component) { 
-        let prop = component.props.assets,
-            state = {}
+        let prop = component.props.assets
 
-        return state
+        return {
+            
+        }
     }
 
     loadImage (asset) {

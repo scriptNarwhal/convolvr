@@ -50,7 +50,7 @@ export default class GeometryTool extends Tool {
         props: {
           material: {
             name: "metal",
-            color: 0xff8707
+            color: 0xffa707
           },
           geometry: {
             shape: "box",

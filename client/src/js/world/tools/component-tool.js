@@ -88,13 +88,16 @@ export default class ComponentTool extends Tool {
           let selectedPos = selected.mesh.localToWorld(new THREE.Vector3())
           // apply transformation and offset to components
           components.map((comp, i)=> {
-            comp.position=[
-              position[0] - selectedPos.x,
-              position[1] - selectedPos.y,
-              position[2] - selectedPos.z
-            ]
-            comp.quaternion = [quat.x, quat.y, quat.z, quat.w]
+            if (!!comp) {
+              comp.position=[
+                position[0] - selectedPos.x,
+                position[1] - selectedPos.y,
+                position[2] - selectedPos.z
+              ]
+              comp.quaternion = [quat.x, quat.y, quat.z, quat.w]
+            }
           })
+
           return {
             entity,
             entityId,

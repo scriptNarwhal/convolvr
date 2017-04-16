@@ -8,17 +8,17 @@ export default class TextSystem {
             textTexture = null,
             textMaterial = null,
             textCanvas = document.createElement("canvas"),
-            textCanvasSize = 1024,
+            canvasSize = [1024, 1024],
             context = null
 
         textCanvas.setAttribute("style", "display:none")
-        textCanvas.width = textCanvasSize
-        textCanvas.height = textCanvasSize
+        textCanvas.width = canvasSize[0]
+        textCanvas.height = canvasSize[1]
         document.body.appendChild(textCanvas)
         
         context = textCanvas.getContext("2d")
         
-        this.renderText(context, text, color, background)
+        this.renderText(context, text, color, background, canvasSize)
         
         textTexture = new THREE.Texture(textCanvas)
         textTexture.anisotropy = three.renderer.getMaxAnisotropy()
@@ -29,12 +29,12 @@ export default class TextSystem {
         })
 
         component.mesh = new THREE.Mesh(component.mesh.geometry, textMaterial)
-        component.entity.textComponents.push(component)
 
         return {
             textMaterial,
             textTexture,
             textCanvas,
+            canvasSize,
             context,
             update: () => {
                 this.update(component)
@@ -51,10 +51,10 @@ export default class TextSystem {
             textTexture = null,
             textMaterial = null,
             textCanvas = null,
-            textCanvasSize = 1024,
+            canvasSize = prop.canvasSize,
             context = state.context
         
-        this.renderText(context, text, color, background)
+        this.renderText(context, text, color, background, canvasSize)
         
         textTexture = new THREE.Texture(textCanvas)
         textTexture.anisotropy = three.renderer.getMaxAnisotropy()
@@ -63,7 +63,7 @@ export default class TextSystem {
         component.mesh.material.needsUpdate = true
     }
     
-    renderText (context, text, color, background) {
+    renderText (context, text, color, background, canvasSize) {
         let fontSize = 42,
             textLine = '',
             lines = 0,
@@ -71,7 +71,7 @@ export default class TextSystem {
             l = 0
 
          context.fillStyle = background
-        context.fillRect(0, 0, textCanvasSize, textCanvasSize)
+        context.fillRect(0, 0, canvasSize[0], canvasSize[1])
         context.font = fontSize+"pt RobotoLight"
         context.textBaseline = "top"
         context.fillStyle = color
@@ -79,7 +79,7 @@ export default class TextSystem {
 
         while (l < text.length) {
             line = text[l]
-            if (line.length > 42) {
+            if (line.length > (42) * (canvasSize[0]/1024) ) {
                 let multiLines = line.match(/.{1,42}/g)
                 text.splice(l, 1, ...multiLines)
                 lines = text.length

@@ -4,12 +4,13 @@ export default class AudioSystem {
     }
 
     init (component) { 
-        let prop = component.props.audio,
-            state = {}
+        let prop = component.props.audio
         // find out what kind of node...
         // hook into three.js webaudio here
         
-        return state
+        return {
+            
+        }
     }
 }
 

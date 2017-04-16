@@ -1,10 +1,11 @@
 let tmpVector = new THREE.Vector3( 0, 0, 1 ),
     tmpVector2 = new THREE.Vector2(0, 0)
 
-let rayCast = (world, camera, cursor, handMesh, callback) => {
+let rayCast = (world, camera, cursor, hand, handMesh, callback) => {
 	let raycaster = world.raycaster,
       octreeObjects = [],
       intersections = [],
+      component = null,
       entity = null,
       obj = null,
       i = 0
@@ -23,40 +24,49 @@ let rayCast = (world, camera, cursor, handMesh, callback) => {
   while (i > -1) {
     obj = intersections[i]
     entity = obj.object.userData.entity
-    callback(obj, entity, cursor, handMesh, world)
+    component = obj.object.userData.component
+    callback(cursor, hand, world, obj, entity, component)
     i --
   }
 }
 
-let cursorCallback = (obj, entity, cursor, hand, world) => {
+let cursorCallback = (cursor, hand, world, obj, entity, component) => {
   let cb = 0,
       callbacks = [],
       cursorState = cursor.state,
-      distance = !!cursorState.cursor ? cursorState.cursor.distance: 12000
+      distance = !!cursorState.cursor ? cursorState.cursor.distance: 12000,
+      props = !!component ? component.props : false,
+      hover = !!props ? props.hover : false,
+      activate = !!props ? props.activate : false
 
   if (obj.distance > 80000) {
     obj.distance = 12000
-  } else {
-    distance = obj.distance
-  }
+  } 
+  distance = obj.distance
   
   cursorState.cursor = {
     distance,
     mesh: obj.object,
+    component,
     entity
   }
-  if (!!entity) {
-    callbacks = entity.hoverCallbacks
-    cb = callbacks.length-1
-    while (cb >= 0) {
-     callbacks[cb]()
-     cb --
+
+  if (!!entity && !!component) {
+    if (hover) {
+      callbacks = component.state.hover.callbacks
+      cb = callbacks.length-1
+      while (cb >= 0) {
+        callbacks[cb]()
+        cb --
+      }
     }
-    callbacks = entity.activationCallbacks // check if cursor / hand is activated
-    cb = callbacks.length-1
-    while (cb >= 0) {
-      callbacks[cb]()
-      cb --
+    if (activate) {
+      callbacks = component.state.activate.callbacks // check if cursor / hand is activated
+      cb = callbacks.length-1
+      while (cb >= 0) {
+        callbacks[cb]()
+        cb --
+      }
     }
   }
 }
@@ -82,7 +92,7 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
           handMesh = cursors[i].mesh.parent
           !!handMesh && handMesh.updateMatrix()
         }
-        rayCast(world, camera, cursor, handMesh, cursorCallback)
+        rayCast(world, camera, cursor, i -1, handMesh, cursorCallback)
       }
   })
   cursorIndex ++

@@ -4,10 +4,11 @@ export default class FactorySystem {
     }
 
     init (component) { 
-        let prop = component.props.factory,
-            state = {}
+        let prop = component.props.factory
 
-        return state
+        return {
+            
+        }
     }
 }
 

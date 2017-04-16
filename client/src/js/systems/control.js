@@ -4,11 +4,12 @@ export default class ControlSystem {
     }
 
     init (component) { 
-        let prop = component.props.control,
-            state = {}
+        let prop = component.props.control
         // check if it's a position or orientation control
         
-        return state
+        return {
+            
+        }
     }
 }
 
