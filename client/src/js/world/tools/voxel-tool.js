@@ -41,7 +41,7 @@ export default class VoxelTool extends Tool {
           },
           geometry: {
             shape: "box",
-            size: [2640, 2640, 2640]
+            size: [4500, 4500, 4500]
           }
         },
         position: [0, 0, 0],

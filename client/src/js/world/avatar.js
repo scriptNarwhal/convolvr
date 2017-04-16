@@ -9,6 +9,7 @@ export default class Avatar {
             component = null,
             componentB = null,
             components = [],
+            userInput = three.world.userInput,
             cursorRot = new THREE.Quaternion(),
             cursorEuler = new THREE.Euler(),
             cursorComponent = {
@@ -104,6 +105,7 @@ export default class Avatar {
           }))
           ++n
         }
+        
         entity = new Entity(id, components)
         entity.init(three.scene)
         this.entity = entity
@@ -112,14 +114,22 @@ export default class Avatar {
         this.cursors = entity.cursors
         this.wholeBody = wholeBody
         this.data = data
+        if (userInput.trackedControls == false && userInput.leapMotion == false) {
+          this.toggleTrackedHands(false)
+        }
     }
 
     toggleTrackedHands (toggle = true) {
+      console.log('toggle hands')
+      let scene = window.three.scene
       this.hands.map((hand, i) => {
-        if (toggle) {
-                
+        hand.parent.remove(hand)
+        if (toggle) { 
+            scene.add(hand)
         } else {
-          
+            this.mesh.add(hand)
+            hand.position.set(-6000+ i*12000, -4000, -6000)
+            hand.updateMatrix()
         }
       })
     }

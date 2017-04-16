@@ -15,13 +15,15 @@ export default class GamePad {
 
       console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
                   gamepad.index, gamepad.id,
-                  gamepad.buttons.length, gamepad.axes.length);
+                  gamepad.buttons.length, gamepad.axes.length)
+                  
       if (connecting) {
         gamepads[gamepad.index] = gamepad;
         if (gamepad) {
           let id = gamepad.id
           if (id.indexOf('Oculus Touch') > -1 || id.indexOf('Vive') > -1) { // need to lookup vive controller id
             input.trackedControls = true
+            input.world.user.avatar.toggleTrackedHands(true)
           } 
         }
       } else {

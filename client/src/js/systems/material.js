@@ -1,6 +1,7 @@
 export default class MaterialSystem {
     constructor (world) {
         this.world = world
+        
     }
 
     init (component) {
@@ -11,65 +12,74 @@ export default class MaterialSystem {
             basic = false,
             mobile = this.world.mobile,
             map = undefined,
+            specular = undefined,
+            reflective = undefined,
             assets = this.world.systems.assets,
+            diffuse = prop.diffuse,
+            reflection = prop.reflection,
             materialCode = prop.name+":"+prop.color
-
-        if (props.assets != null) {
-          //map = this.asset.load(props.assets[0])
-        }
+        
         if (assets.materials[materialCode] == null) {
-          switch (prop.name) {
-          case "custom-texture":   // implement 
-          mat = {
-            color: prop.color,
-            // map: 
+          if (prop.diffuse) {
+            map = assets.loadImage(prop.diffuse)
           }
-          break
-          case "wireframe":
-            mat = {
-              color: prop.color || 0x00ff00,
-              wireframe: true,
-              fog: false
-            }
-            basic = true
-          break
-          case "basic":
-            mat = { color: prop.color || 0xffffff }
-            basic = true
-          break
-          case "plastic":
-            mat = { color: prop.color || 0xffffff }
-          break
-          case "metal":
-            mat = { color: prop.color || 0xffffff }
-          break
-          case "glass":
-            mat = { color: prop.color || 0xffffff }
-          break
-          default:
-            mat = {
-                color: prop.color || 0xff00ff,
+          if (prop.specular) {
+            specular = assets.loadImage(prop.specular)
+          }
+          if (prop.reflection) {
+            reflection = assets.loadImage(prop.reflection)
+          }
+          switch (prop.name) {
+            case "wireframe":
+              mat = {
+                color: prop.color || 0x00ff00,
+                wireframe: true,
                 fog: false
-            }
-            basic = false
+              }
+              basic = true
+            break
+            case "basic": // mesh basic material
+              mat = { color: prop.color || 0xffffff }
+              basic = true
+            break
+            case "metal":
+              mat = { color: prop.color || 0xffffff }
+            break
+            case "glass":
+              mat = { color: prop.color || 0xffffff }
+            break
+            case "plastic":
+            default:
+              mat = {
+                  color: prop.color || 0xff00ff,
+                  fog: false
+              }
             break
           }
-        if (map != undefined) {
-          mat.map = map
-        }
-        if (basic) {
-          material = new THREE.MeshBasicMaterial(mat)
-        } else {
-          if (mobile) {
-            material = new THREE.MeshLambertMaterial(mat)
+          if (map != undefined) {
+            mat.map = map
+          }
+          if (specular != undefined) {
+            mat.specular = specular
+          }
+          if (reflection != undefined) {
+            reflection.mapping = THREE.SphericalReflectionMapping
+            mat.envMap = reflection
+          }
+          if (basic) {
+            material = new THREE.MeshBasicMaterial(mat)
+          } else {
+            if (mobile) {
+              material = new THREE.MeshLambertMaterial(mat)
             } else {
               material = new THREE.MeshPhongMaterial(mat)
             }
+          }
+          assets.materials[materialCode] = material // cache material for later
+        } else {
+          material = assets.materials[materialCode]
         }
-        assets.materials[materialCode] = material // cache material for later
-      } else {
-        material = assets.materials[materialCode]
-      }      
+
       return {
           material
       }

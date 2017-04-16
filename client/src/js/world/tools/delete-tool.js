@@ -17,7 +17,7 @@ export default class DeleteTool extends Tool  {
             props: {
               geometry: {
                 shape: "box",
-                size: [1600, 1200, 7000]
+                size: [2600, 2200, 8000]
               },
               material: {
                 name: "metal"
@@ -44,7 +44,7 @@ export default class DeleteTool extends Tool  {
           },
           geometry: {
             shape: "box",
-            size: [2640, 2640, 2640]
+            size: [4500, 4500, 4500]
           }
         },
         position: [0, 0, 0],

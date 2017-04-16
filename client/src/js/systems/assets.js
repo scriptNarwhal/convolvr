@@ -7,6 +7,7 @@ export default class AssetSystem {
         this.components = []
         this.geometries = {}
         this.materials = {}
+        this.textures = {}
         this.props = {
             geometry: [
                 {shape: 'node', size: [1, 1, 1]},
@@ -31,6 +32,7 @@ export default class AssetSystem {
 
             ]
         }
+        this.textureLoader = new THREE.TextureLoader()
     }
 
     init (component) { 
@@ -40,8 +42,16 @@ export default class AssetSystem {
         return state
     }
 
-    load (resource) {
+    loadImage (asset) {
+        let texture = null
 
+        if (this.textures[asset] == null) {
+            texture = this.textureLoader.load(asset.url)
+            this.textures[asset] = texture
+        } else {
+            texture = this.textures[asset]
+        }
+        return texture
     }
 }
 

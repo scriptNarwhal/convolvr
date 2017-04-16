@@ -19,12 +19,17 @@ export default class CustomTool extends Tool {
       
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
-        props: {},
-        shape: "box",
-        size: [2640, 2640, 2640],
+        props: {
+          geometry: {
+            shape: "box",
+            size: [4500, 4500, 4500]
+          },
+          material: {
+            name: 'metal',
+            color: 0x003bff
+          }
+        },
         position: [0, 0, 0],
-        color: 0xffffff,
-        text: "",
         quaternion: null
       })
       return entity

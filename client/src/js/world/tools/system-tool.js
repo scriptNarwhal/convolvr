@@ -16,7 +16,7 @@ export default class SystemTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [1600, 1200, 7000]
+                size: [1600, 4200, 6000]
               },
               material: {
                 name: "metal"
@@ -34,12 +34,17 @@ export default class SystemTool extends Tool {
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
-        props: {},
-        shape: "box",
-        size: [2640, 2640, 2640],
+        props: {
+          geometry: {
+            shape: "box",
+            size: [4500, 4500, 4500]
+          },
+          material: {
+            name: 'metal',
+            color: 0xef07ff
+          }
+        },
         position: [0, 0, 0],
-        color: 0xff8707,
-        text: "",
         quaternion: null
       })
       return entity

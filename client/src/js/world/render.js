@@ -30,10 +30,18 @@ let rayCast = (world, camera, cursor, handMesh, callback) => {
 
 let cursorCallback = (obj, entity, cursor, hand, world) => {
   let cb = 0,
-      callbacks = []
-      
-  cursor.state.cursor = {
-    distance: obj.distance,
+      callbacks = [],
+      cursorState = cursor.state,
+      distance = !!cursorState.cursor ? cursorState.cursor.distance: 12000
+
+  if (obj.distance > 80000) {
+    obj.distance = 12000
+  } else {
+    distance = obj.distance
+  }
+  
+  cursorState.cursor = {
+    distance,
     mesh: obj.object,
     entity
   }
@@ -62,9 +70,9 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
 
       if (!!state) {
         if (state.distance > cursorPos.z) {
-          cursorPos.z -= 1000
+          cursorPos.z -= 6000
         } else if (state.distance < cursorPos.z) {
-          cursorPos.z += 1000
+          cursorPos.z += 6000
         }
       }
       cursorMesh.updateMatrix()
@@ -99,8 +107,7 @@ export let animate = (world, last, cursorIndex) => {
     world.userInput.update(delta) // Update keyboard / mouse / gamepad
   }
   if (user && user.mesh && cursors) {
-    user.mesh.position.set(cPos.x, cPos.y, cPos.z);
-    user.mesh.quaternion.set(camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w);
+    user.avatar.entity.update([cPos.x, cPos.y, cPos.z], [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w])
     cursorIndex = handleCursors(cursors, cursorIndex, hands, camera, world)
   }
   world.sendUserData()
@@ -145,8 +152,10 @@ export let vrAnimate = (time, oldPos, cursorIndex) => {
     world.userInput.update(delta)
 
     cursorIndex = handleCursors(cursors, cursorIndex, hands, camera, world)
+    
     user.mesh.quaternion.fromArray(frame.pose.orientation)
     user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+    user.mesh.updateMatrix()
     camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     world.updateSkybox(delta)
     world.sendUserData()

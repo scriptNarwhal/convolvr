@@ -22,7 +22,7 @@ export default class ComponentTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [1600, 1200, 7000]
+                size: [2600, 2200, 8000]
               },
               material: {
                 name: "metal"
@@ -39,12 +39,17 @@ export default class ComponentTool extends Tool {
       this.entities = this.entities || new EntityGenerator()
       let entity = this.entities.makeEntity("icon", true)
       entity.components.push({
-        props: {},
-        shape: "box",
-        size: [2640, 2640, 2640],
+        props: {
+          geometry: {
+            shape: "box",
+            size: [4500, 4500, 4500]
+          },
+          material: {
+            name: 'metal',
+            color: 0x003bff
+          }
+        },
         position: [0, 0, 0],
-        color: 0x003bff,
-        text: "",
         quaternion: null
       })
       return entity

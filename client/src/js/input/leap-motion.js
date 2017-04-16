@@ -23,6 +23,8 @@ export default class LeapMotion {
                 user.hands[index].rotation.set(hand.pitch(), -hand.yaw(), 0);
                 user.hands[index].position.set(-50+((-window.innerWidth / 2) + position[0]), 0, -350 + position[2]);
                 user.hands[index].updateMatrix();
+                // refactor this..
+                // include logic for 'teleport hand' / left hand
               }
             });
           } else {
