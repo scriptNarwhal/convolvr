@@ -36,4 +36,27 @@ export default class Tool {
         }
       }
     }
+
+    initLabel (value) {
+      return {
+            props: {
+              geometry: {
+                shape: "box",
+                size: [8000, 3000, 2000]
+              },
+              material: {
+                name: "glass"
+              },
+              text: {
+                background: "#000000",
+                color: "#ffffff",
+                lines: [
+                  value
+                ]
+              }
+            },
+            position: [6000, 3000, 3000]
+        }
+    }
+
 }

@@ -25,9 +25,22 @@ export default class EntityTool extends Tool  {
                 name: "metal"
               },
               tool: {
-
+                panel: {
+                  title: "Entities",
+                  content: new Entity(-1, [{
+                    props: {
+                      metaFactory: { // generates factory for each item in dataSource
+                        type: "entity", // component, prop
+                        dataSource: this.world.systems.assets.entities
+                      }
+                    }
+                  }], [0,0,0], false)
+                }
               }
-            }
+            },
+            components: [
+              this.initLabel("Entity")
+            ]
           }
         ])
     }

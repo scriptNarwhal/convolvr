@@ -28,9 +28,22 @@ export default class ComponentTool extends Tool {
                 name: "metal"
               },
               tool: {
-
+                panel: {
+                  title: "Components",
+                  content: new Entity(-1, [{
+                    props: {
+                      metaFactory: { // generates factory for each item in dataSource
+                        type: "component", // entity, prop
+                        dataSource: this.world.systems.assets.components
+                      }
+                    }
+                  }], [0,0,0], false)
+                }
               }
-            }
+            },
+            components: [
+              this.initLabel("Component")
+            ]
           }
         ])
     }

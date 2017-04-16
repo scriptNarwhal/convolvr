@@ -22,9 +22,22 @@ export default class GeometryTool extends Tool {
                 name: "metal"
               },
               tool: {
-
+                panel: {
+                  title: "Geometries",
+                  content: new Entity(-1, [{
+                    props: {
+                      metaFactory: { // generates factory for each item in dataSource
+                        type: "prop", // entity, prop
+                        dataSource: this.world.systems.assets.props.geometry
+                      }
+                    }
+                  }], [0,0,0], false)
+                }
               }
-            }
+            },
+            components: [
+              this.initLabel("Geometry")
+            ]
           }
         ])
     }

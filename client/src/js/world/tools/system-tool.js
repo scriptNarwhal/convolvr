@@ -22,9 +22,22 @@ export default class SystemTool extends Tool {
                 name: "metal"
               },
               tool: {
-
+                panel: {
+                  title: "Systems",
+                  content: new Entity(-1, [{
+                    props: {
+                      metaFactory: { // generates factory for each item in dataSource
+                        type: "prop", // entity, prop
+                        dataSource: this.world.systems.assets.props.systems
+                      }
+                    }
+                  }], [0,0,0], false)
+                }
               }
-            }
+            },
+            components: [
+              this.initLabel("System")
+            ]
           }
         ])
     }

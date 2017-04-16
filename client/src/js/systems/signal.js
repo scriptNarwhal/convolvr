@@ -4,11 +4,11 @@ export default class SignalSystem {
     }
 
     init (component) { 
-        // do stuff with inputs and outputs? 
-        // check component.entity inputs / outputs
         let prop = component.props.signal,
             state = {}
-
+        // do stuff with inputs and outputs? 
+        // check component.entity inputs / outputs
+        
         return state
     }
 }

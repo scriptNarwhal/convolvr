@@ -9,5 +9,30 @@ export default class FileSystem {
 
         return state
     }
+
+    createFile () {
+
+    }
+
+    uploadFile () {
+        
+    }
+
+    createDirectory () {
+
+    }
+
+    listFiles () {
+
+    }
+
+    listDirectories () {
+
+    }
+
+    deleteFile () {
+
+    }
+
 }
 
