@@ -43,29 +43,18 @@ export default class UserInput {
 	init (world, camera, device) {
 		let uInput = this,
 			viewport = document.querySelector("#viewport")
+			
 		this.connect(world, camera, device)
 		uInput.rotationVector = {x: 0.2, y: 4.6, z: 0}
-
-				viewport.requestPointerLock = viewport.requestPointerLock || viewport.mozRequestPointerLock || viewport.webkitRequestPointerLock;
-				viewport.onclick = (event) => {
-					let elem = event.target;
-					if (!uInput.fullscreen) {
-						elem.requestPointerLock()
-						//uInput.toggleFullscreen()
-						// setTimeout(()=>{
-						// 	elem.requestPointerLock()
-						// },100)
-					}
-				};
-				viewport.style.pointerEvents = ''
-				if ("onpointerlockchange" in document) {
-					document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
-				} else if ("onmozpointerlockchange" in document) {
-					document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
-				} else if ("onwebkitpointerlockchange" in document) {
-					document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
-				}
-
+		viewport.requestPointerLock = viewport.requestPointerLock || viewport.mozRequestPointerLock || viewport.webkitRequestPointerLock;
+		viewport.style.pointerEvents = ''
+		if ("onpointerlockchange" in document) {
+			document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
+		} else if ("onmozpointerlockchange" in document) {
+			document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
+		} else if ("onwebkitpointerlockchange" in document) {
+			document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
+		}
 
 		if (!world.mobile) {
 			document.addEventListener("mousemove", function (e) {
@@ -73,7 +62,7 @@ export default class UserInput {
 					uInput.rotationVector.y  -=(e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 600.0
 					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 600.0
 				}
-			});
+			})
 			setTimeout(()=> {
 				document.addEventListener("mousedown", (e) => {
 					if (world.mode != "web") {
@@ -90,8 +79,7 @@ export default class UserInput {
 						}
 					}
 				}, false)
-			},250)
-
+			}, 250)
 		}
 		this.touchControls = new Touch(this)
 		this.keyboard = new Keyboard(this, this.world)

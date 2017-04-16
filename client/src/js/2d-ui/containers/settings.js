@@ -19,6 +19,7 @@ const styles = {
     float: 'right',
     marginRight: '2em',
     marginTop: '1em',
+    marginBottom: '1em',
     fontSize: '1.25em',
     background: '#2b2b2b',
     color: 'white',
