@@ -116,7 +116,9 @@ export default class Text { // deprecated
             context.fillStyle = '#000000'  
         }
         if (toggleCodeBlock) {
-            textState.codeBlock = !textState.codeBlock
+            if (line.split('```').length < 3) {
+                textState.codeBlock = !textState.codeBlock
+            }
         }
     }
 }
