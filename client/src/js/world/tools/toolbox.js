@@ -26,9 +26,9 @@ export default class Toolbox {
       this.tools = [
         new EntityTool({}, world, this),
         new ComponentTool({}, world, this),
-        new MaterialTool({}, world, this),
+        new SystemTool({}, world, this),
         new GeometryTool({}, world, this),
-        new SystemTool({}, world, this)
+        new MaterialTool({}, world, this)
       ];
       this.currentTools = [0, 0]
     }

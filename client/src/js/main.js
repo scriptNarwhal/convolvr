@@ -67,21 +67,23 @@ world.help = new ListView({
   background: "#000000",
   position: [-100000,0,0],
   textLines: [
-    "*** Desktop users:",
-    "WASD,RF,Space keys: movement",
-    "Mouselook (click screen to enable)",
-    "Left Click: Primary Tool",
-    "Right Click: Next Tool Mode",
-    "Keys 1-5: switch tool",
-    "*** VR users: EnterVR icon in the corner",
-    "If you have tracked controllers:",
-    "Left stick: movement",
-    "Right trigger: Primary Tool",
-    "Right stick x-axis: change tools",
-    "Right stick y-axis: tool mode",
-    "*** Mobile (non VR) users:",
-    "One finger swipe: Change Look",
-    "Two finger swipe: movement"
+    "# Desktop users:",
+    "- WASD,RF,Space keys: movement",
+    "- Mouselook (click screen to enable)",
+    "- Left Click: Primary Tool",
+    "- Right Click: Next Tool Mode",
+    "- Keys 1-5: switch tool",
+    "",
+    "# VR users: EnterVR icon in the corner",
+    "- If you have tracked controllers:",
+    "- Left stick: movement",
+    "- Right trigger: Primary Tool",
+    "- Right stick x-axis: change tools",
+    "- Right stick y-axis: tool mode",
+    "",
+    "# Mobile (non VR) users:",
+    "- One finger swipe: Change Look",
+    "- Two finger swipe: movement"
   ]
 }, three.scene).initMesh()
 

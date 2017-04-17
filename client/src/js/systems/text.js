@@ -66,6 +66,12 @@ export default class TextSystem {
     renderText (context, text, color, background, canvasSize) {
         let fontSize = 42,
             textLine = '',
+            textRenderState = {
+                codeBlock: false,
+                canvasSize,
+                fontSize,
+                color
+            },
             lines = 0,
             line = '',
             l = 0
@@ -87,8 +93,31 @@ export default class TextSystem {
             ++l
         }
         text.map((line, l) => {
+            // markdown
+            this.highlightMarkdown(l, line, lines, context, textRenderState)
             context.fillText(line, 16, 960-(1+(lines-l)*fontSize*1.35))
         })
+    }
+
+    highlightMarkdown(l, line, lines, context, textState) {
+        let xSize = textState.canvasSize[0],
+          lineHeight = textState.fontSize,
+          height = 960-(1+(lines-l)*lineHeight),
+          toggleCodeBlock = line.indexOf('```') > -1
+          
+        if (line[0] == '#') { // markdown heading
+            context.fillStyle = '#ffffff'
+        } else if (!textState.codeBlock) {
+            context.fillStyle = textState.color
+        }
+        if (textState.codeBlock || toggleCodeBlock) {
+            context.fillStyle = '#bbbbbb'
+            context.fillRect(0, height+10, xSize, lineHeight+10)
+            context.fillStyle = '#000000'  
+        }
+        if (toggleCodeBlock) {
+            textState.codeBlock = !textState.codeBlock
+        }
     }
 }
 
