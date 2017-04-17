@@ -24,14 +24,14 @@ export default class MaterialTool extends Tool {
               tool: {
                 panel: {
                   title: "Materials",
-                  content: new Entity(-1, [{
+                  content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "prop", // entity, prop
                         dataSource: this.world.systems.assets.props.material
                       }
                     }
-                  }], [0,0,0], false)
+                  }
                 }
               }
             },

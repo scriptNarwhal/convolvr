@@ -30,14 +30,14 @@ export default class ComponentTool extends Tool {
               tool: {
                 panel: {
                   title: "Components",
-                  content: new Entity(-1, [{
+                  content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "component", // entity, prop
                         dataSource: this.world.systems.assets.components
                       }
                     }
-                  }], [0,0,0], false)
+                  }
                 }
               }
             },

@@ -5,9 +5,44 @@ export default class ToolSystem {
     // hook into user.toolbox interfaces (primaryAction, etc.. )
     init (component) { 
         let prop = component.props.tool,
-            state = {}
+            contentProps = prop.panel.content ? prop.panel.content.props : false,
+            factories = null,
+            panel = null
 
-        return state
+        if (prop.panel) {
+            factories = []
+
+            if (contentProps.metaFactory) {
+
+            }
+
+            panel = new Entity(-1, [
+                {
+                    props: {
+                        geometry: {
+                            shape: "box",
+                            size: [12000, 4000, 1000]
+                        },
+                        material: {
+                            name: "glass",
+                            color: 0x000000
+                        },
+                        text: {
+                            lines: [prop.panel.title],
+                            color: "#ffffff",
+                            background: "#000000"
+                        }
+                    }
+                },
+                {
+                    components: factories
+                }
+            ], [0,0,0], false)
+        }
+
+        return {
+            panel
+        }
     }
 }
 
