@@ -20,15 +20,6 @@ export default class MaterialSystem {
             materialCode = prop.name+":"+prop.color
         
         if (assets.materials[materialCode] == null) {
-          if (prop.diffuse) {
-            map = assets.loadImage(prop.diffuse)
-          }
-          if (prop.specular) {
-            specular = assets.loadImage(prop.specular)
-          }
-          if (prop.reflection) {
-            reflection = assets.loadImage(prop.reflection)
-          }
           switch (prop.name) {
             case "wireframe":
               mat = {
@@ -55,6 +46,16 @@ export default class MaterialSystem {
                   fog: false
               }
             break
+          }
+          // set prop.foo* from prop.name.. for predefined textures
+          if (prop.diffuse) {
+            map = assets.loadImage(prop.diffuse)
+          }
+          if (prop.specular) {
+            specular = assets.loadImage(prop.specular)
+          }
+          if (prop.reflection) {
+            reflection = assets.loadImage(prop.reflection)
           }
           if (map != undefined) {
             mat.map = map

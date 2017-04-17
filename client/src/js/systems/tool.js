@@ -1,3 +1,5 @@
+import Entity from '../entities/entity'
+
 export default class ToolSystem {
     constructor (world) {
         this.world = world
