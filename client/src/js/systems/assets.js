@@ -43,16 +43,16 @@ export default class AssetSystem {
         }
     }
 
-    loadImage (asset) {
+    loadImage (asset, callback) {
         let texture = null
 
         if (this.textures[asset] == null) {
-            texture = this.textureLoader.load(asset.url)
+            texture = this.textureLoader.load(asset, (texture)=>{ callback(texture)})
             this.textures[asset] = texture
         } else {
             texture = this.textures[asset]
         }
-        return texture
+        callback(texture)
     }
 }
 

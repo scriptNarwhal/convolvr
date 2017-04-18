@@ -7,7 +7,7 @@ export default class MaterialSystem {
     init (component) {
         let props = component.props,
             prop = props.material,
-            mat = {},
+            mat = { color: prop.color || 0xffffff },
             material = null,
             basic = false,
             mobile = this.world.mobile,
@@ -18,55 +18,31 @@ export default class MaterialSystem {
             diffuse = prop.diffuse,
             reflection = prop.reflection,
             materialCode = prop.name+":"+prop.color
+            
         
         if (assets.materials[materialCode] == null) {
-          switch (prop.name) {
+          switch (prop.name) { // material presets
             case "wireframe":
-              mat = {
-                color: prop.color || 0x00ff00,
-                wireframe: true,
-                fog: false
-              }
+              mat.wireframe = true
+              mat.fog = false
               basic = true
             break
             case "basic": // mesh basic material
-              mat = { color: prop.color || 0xffffff }
               basic = true
             break
             case "metal":
-              mat = { color: prop.color || 0xffffff }
+              prop.reflection = '/images/textures/sky-reflection.jpg'
+              prop.specular = '/images/textures/gplaypattern_@2X.png'
             break
             case "glass":
-              mat = { color: prop.color || 0xffffff }
+             prop.reflection = '/images/textures/sky-reflection.jpg'
             break
             case "plastic":
+              prop.specular = '/images/textures/gplaypattern_@2X.png'
             default:
-              mat = {
-                  color: prop.color || 0xff00ff,
-                  fog: false
-              }
             break
           }
-          // set prop.foo* from prop.name.. for predefined textures
-          if (prop.diffuse) {
-            map = assets.loadImage(prop.diffuse)
-          }
-          if (prop.specular) {
-            specular = assets.loadImage(prop.specular)
-          }
-          if (prop.reflection) {
-            reflection = assets.loadImage(prop.reflection)
-          }
-          if (map != undefined) {
-            mat.map = map
-          }
-          if (specular != undefined) {
-            mat.specular = specular
-          }
-          if (reflection != undefined) {
-            reflection.mapping = THREE.SphericalReflectionMapping
-            mat.envMap = reflection
-          }
+         
           if (basic) {
             material = new THREE.MeshBasicMaterial(mat)
           } else {
@@ -76,6 +52,38 @@ export default class MaterialSystem {
               material = new THREE.MeshPhongMaterial(mat)
             }
           }
+
+          if (prop.diffuse) {
+            assets.loadImage(prop.diffuse, (texture)=>{ 
+              material.map = texture
+              material.needsUpdate = true 
+            })
+          }
+          if (prop.specular) {
+            assets.loadImage(prop.specular, (texture)=>{ 
+              material.specularMap = texture
+              material.needsUpdate = true 
+            })
+          }
+          if (prop.reflection) {
+            assets.loadImage(prop.reflection, (texture)=>{ 
+              texture.mapping = THREE.SphericalReflectionMapping
+              material.envMap = texture
+              material.needsUpdate = true 
+            })
+            
+          }
+          // if (map != undefined) {
+          //   mat.map = map
+          // }
+          // if (specular != undefined) {
+          //   mat.specular = specular
+          // }
+          // if (reflection != undefined) {
+          //   reflection.mapping = THREE.SphericalReflectionMapping
+          //   mat.envMap = reflection
+          // }
+          
           assets.materials[materialCode] = material // cache material for later
         } else {
           material = assets.materials[materialCode]
