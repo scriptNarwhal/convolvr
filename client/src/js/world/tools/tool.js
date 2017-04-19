@@ -19,7 +19,7 @@ export default class Tool {
         let toolMesh = this.initMesh(this.data)
         if (!input.trackedControls && !input.leapMotion) {
           this.world.user.mesh.add(toolMesh)
-          toolMesh.position.set(1500-(2500*hand), -700, -1550)
+          toolMesh.position.set(1500-(3000*hand), -800, -1550)
         } else {
           hands[hand].add(toolMesh)
         }

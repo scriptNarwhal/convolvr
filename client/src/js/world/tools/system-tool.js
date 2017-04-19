@@ -24,14 +24,14 @@ export default class SystemTool extends Tool {
               tool: {
                 panel: {
                   title: "Systems",
-                  content: new Entity(-1, [{
+                  content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "prop", // entity, prop
                         dataSource: this.world.systems.assets.props.systems
                       }
                     }
-                  }], [0,0,0], false)
+                  }
                 }
               }
             },

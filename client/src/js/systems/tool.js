@@ -34,12 +34,14 @@ export default class ToolSystem {
                             color: "#ffffff",
                             background: "#000000"
                         }
-                    }
+                    },
+                    position: [0, 0, 0]
                 },
                 {
-                    components: factories
+                    components: factories,
+                    position: [0, -4000, 0]
                 }
-            ], [0,0,0], false)
+            ], [0, 0, 0], false)
         }
 
         return {
