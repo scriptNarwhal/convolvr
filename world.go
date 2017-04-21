@@ -13,7 +13,7 @@ type UniverseSettings struct {
 	ID             int             `storm:"id" json:"id"`
 	WelcomeMessage string          `json:"welcomeMessage"`
 	DefaultWorld   string          `json:"defaultWorld"`
-	Network        []NetworkDomain `json:"network"`
+	Network        []NetworkDomain `storm:"inline" json:"network"`
 }
 
 type NetworkDomain struct {

@@ -55,14 +55,14 @@ userInput.rotationVector = {x: 0, y: 9.95, z: 0}
 three.camera.position.set(-300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
 user.light.position.set(200000, 200000, 200000)
 
-world.chat = new ListView({
+world.chat = new ListView({ // deprecated as of alpha 0.4.1
   color: "#ffffff",
   background: "#000000",
   position: [0,0,0],
   textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
 }, three.scene).initMesh()
 
-world.help = new ListView({
+world.help = new ListView({ // deprecated as of alpha 0.4.1
   color: "#00ff00",
   background: "#000000",
   position: [-100000,0,0],
@@ -103,7 +103,7 @@ ReactDOM.render(
 				<Route path="/worlds" component={Worlds} />
         <Route path="/worlds/new" component={NewWorld} />
 				<Route path="/settings" component={Settings} />
-        <Route path="/network" componet={Network} />
+        <Route path="/network" component={Network} />
 			</Route>
 		</Router>
   </Provider>),

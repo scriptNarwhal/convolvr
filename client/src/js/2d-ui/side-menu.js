@@ -34,37 +34,41 @@ class SideMenu extends Component {
       this.props.toggleVRMode()
   }
 
+  navigate (evt, url) {
+    browserHistory.push(url)
+  }
+
   render() {
     return (
         <div style={styles.sideMenu()} >
           <div style={styles.inner()}>
             <Tab image="/images/plus.png"
                  title="Create New World"
-                 clickHandler={ ()=> { browserHistory.push("/worlds/new") } }
+                 clickHandler={ (e)=> { this.navigate(e, "/worlds/new") } }
             />
             <Tab image="/images/circle-a.png"
                  title="Switch Worlds"
-                 clickHandler={ ()=> { browserHistory.push("/worlds") }}
+                 clickHandler={ (e)=> { this.navigate(e, "/worlds") }}
             />
             <Tab image="/images/square-a.png"
                  title="View Network"
-                 clickHandler={ ()=> { browserHistory.push("/network") }}
+                 clickHandler={ (e)=> { this.navigate(e, "/network") }}
             />
             <Tab image="/images/voxel-white.png"
                  title="Manage Data"
-                 clickHandler={ ()=> { browserHistory.push("/data") }}
+                 clickHandler={ (e)=> { this.navigate(e, "/data") }}
             />
             <Tab image="/images/chat.png"
                  title="Chat"
-                 clickHandler={ ()=> { browserHistory.push("/chat") } }
+                 clickHandler={ (e)=> { this.navigate(e, "/chat") } }
             />
             <Tab image="/images/logout.png"
                  title="Sign In / Switch Accounts"
-                 clickHandler={ ()=> { browserHistory.push("/login") } }
+                 clickHandler={ (e)=> { this.navigate(e, "/login") } }
             />
             <Tab image="/images/configure-h.png"
                  title="Settings"
-                 clickHandler={ ()=> { browserHistory.push("/settings") } }
+                 clickHandler={ (e)=> { this.navigate(e, "/settings") } }
             />
           </div>
         </div>

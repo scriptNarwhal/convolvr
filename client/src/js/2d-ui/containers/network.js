@@ -13,13 +13,17 @@ const styles = {
 }
 
 class Network extends Component {
+  constructor () {
+
+  }
   componentWillMount () {
-    if (this.props.settings == null) {
+    console.log("init network view !!!")
+    if (!!!this.props.settings) {
       this.props.fetchUniverseSettings()
     }
   }
   switchDomain (name) {
-    window.location.href = name// workaround
+    window.location.href = name // workaround
   }
   render() {
     return (
@@ -33,12 +37,14 @@ class Network extends Component {
         />
           <div style={styles.worlds}>
           {
-            this.props.settings != null && this.props.settings.network.map((world, i) => {
+            this.props.settings != undefined && this.props.settings.network != undefined &&
+              this.props.settings.network.map((domain, i) => {
               return (
                 <Card clickHandler={(e, v) => {
                         this.switchDomain(domain.name)
                       }}
                       compact={true}
+                      showTitle={true}
                       title={domain.name}
                       key={i}
                 />

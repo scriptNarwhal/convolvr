@@ -37,9 +37,13 @@ let styles = {
   },
   fileOption: {
     padding: '1em',
+    paddingBottom: 0,
     height: '48px',
     display: 'inline-block',
     width: 'auto'
+  },
+  fileOptions: {
+    display: 'none'
   }
 }
 
@@ -71,18 +75,20 @@ export default class LocationBar extends Component {
                 )
               })
             }
-            <Button title="Upload File"
-                    style={styles.fileOption}
-                    onClick={e=> this.props.onOptionClick(e, "upload-file")}
-            />
-            <Button title="New File"
-                    style={styles.fileOption}
-                    onClick={e=> this.props.onOptionClick(e, "new-file")}
-            />
-            <Button title="New Folder"
-                    style={styles.fileOption}
-                    onClick={e=> this.props.onOptionClick(e, "new-folder")}
-            />
+            <div style={styles.fileOptions}>
+              <Button title="Upload File"
+                      style={styles.fileOption}
+                      onClick={e=> this.props.onOptionClick(e, "upload-file")}
+              />
+              <Button title="New File"
+                      style={styles.fileOption}
+                      onClick={e=> this.props.onOptionClick(e, "new-file")}
+              />
+              <Button title="New Folder"
+                      style={styles.fileOption}
+                      onClick={e=> this.props.onOptionClick(e, "new-folder")}
+              />
+            </div>
         </div>
     )
   }

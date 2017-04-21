@@ -150,9 +150,6 @@ export default connect(
     return {
       menuOpen: state.app.menuOpen,
       username: state.users.loggedIn != false ? state.users.loggedIn.name : "Human",
-      platforms: state.platforms,
-      tracks: state.tracks,
-      tools: state.tools,
       users: state.users,
       stereoMode: state.app.vrMode,
       reactPath: state.routing.locationBeforeTransitions.pathname
