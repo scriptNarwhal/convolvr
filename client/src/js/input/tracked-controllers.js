@@ -24,13 +24,14 @@ export default class TrackedController {
         i = 0,
         world = this.world,
         input = this.input,
+        useTracking = input.trackedControls,
         rotation = input.rotationVector,
         tools = world.user.toolbox,
         lastButtons = this.buttons
 
     //console.log("oculus touch handler ", a, b, buttons
     if (gamepad.hand == 'left') {
-      if (gamepad.pose) {
+      if (useTracking && gamepad.pose) {
         tools.setHandOrientation(1, gamepad.pose.position, gamepad.pose.orientation)
       }
       if (world.vrMovement=='stick') {
@@ -61,7 +62,7 @@ export default class TrackedController {
     } else { // use right stick to use adjust tool options // right triggers for primary tool
       let dir = Math.round(gamepad.axes[0]),
           toolOptionChange = Math.round(gamepad.axes[1])
-      if (gamepad.pose) {
+      if (useTracking && gamepad.pose) {
         tools.setHandOrientation(0, gamepad.pose.position, gamepad.pose.orientation)
       }
       if (dir != 0 && this.stickCooldown == false) {

@@ -18,7 +18,7 @@ export default class Voxel {
             base = new THREE.Geometry(),
             smooth = (data != null && data.smooth != null) ? data.smooth : false,
             visible = data.visible,
-            geom = new THREE.CylinderGeometry( 532000, 532000, 835664, 6, 1),
+            geom = new THREE.CylinderGeometry(532000, 532000, 835664, 6, 1),
             voxelGeom = null,
             world = three.world,
             map = world.textures.grid, // make this configurable
@@ -26,7 +26,7 @@ export default class Voxel {
             mat = lowQuality ?
               new THREE.MeshLambertMaterial( {color: data.color, shininess: 20, map: map} )
             : new THREE.MeshPhongMaterial( {color: data.color, shininess: 20, map: map} ),
-            modifier = smooth ? new THREE.BufferSubdivisionModifier( 3 ) : null
+            modifier = smooth ? new THREE.BufferSubdivisionModifier(3) : null
 
         this.entities = []
         physics = world.systems.worldPhysics.worker

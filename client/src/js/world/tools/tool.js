@@ -21,11 +21,11 @@ export default class Tool {
           this.world.user.mesh.add(toolMesh)
           toolMesh.position.set(1500-(3000*hand), -800, -1550)
         } else {
-          hands[hand].add(toolMesh)
+          hands[hand].add(toolMesh) // add to respective hand 
         }
-        // add to respective hand (when implemented)
+        
       } else {
-        this.mesh.visible = true;
+        this.mesh.visible = true
       }
     }
 

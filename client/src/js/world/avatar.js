@@ -80,8 +80,6 @@ export default class Avatar {
             Object.assign({}, cursorComponent)
           ]
         }))
-      }
-
         n = 0
         while (n < 2) {
           components.push(Object.assign({}, {
@@ -105,6 +103,7 @@ export default class Avatar {
           }))
           ++n
         }
+      }
         
         entity = new Entity(id, components)
         entity.init(three.scene)
@@ -114,23 +113,27 @@ export default class Avatar {
         this.cursors = entity.cursors
         this.wholeBody = wholeBody
         this.data = data
-        if (userInput.trackedControls == false && userInput.leapMotion == false) {
+        console.log("Init Avatar: Tracked Controls", userInput.trackedControls)
+        if (!wholeBody && userInput.trackedControls == false && userInput.leapMotion == false) {
           this.toggleTrackedHands(false)
         }
     }
 
     toggleTrackedHands (toggle = true) {
-      console.log('toggle hands')
-      let scene = window.three.scene
+      console.log('toggle hands', toggle)
+      let scene = window.three.scene,
+          position = this.mesh.position
+
       this.hands.map((hand, i) => {
-        hand.parent.remove(hand)
+        //hand.parent.remove(hand)
         if (toggle) { 
             scene.add(hand)
+            hand.position.set(position.x -6000+ i*12000, position.y -4000, position.z -6000)
         } else {
             this.mesh.add(hand)
             hand.position.set(-6000+ i*12000, -4000, -6000)
-            hand.updateMatrix()
         }
+        hand.updateMatrix()
       })
     }
 }

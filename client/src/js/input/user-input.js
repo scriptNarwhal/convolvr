@@ -36,6 +36,7 @@ export default class UserInput {
 		this.leapMode = "movement"
 		this.gamepadMode = false
 		this.trackedControls = false
+		this.handsDetected = 0
 		this.gamepads = {},
 		this.initDone = false
 	}

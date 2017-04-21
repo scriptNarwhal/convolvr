@@ -10,6 +10,7 @@ export default class Component {
       this.props = data.props || {}
       this.state = {}
       this.components = data.components || []
+      this.detached = false
 
       if (props.geometry == undefined) {
         props.geometry = {
@@ -36,6 +37,7 @@ export default class Component {
 
       if (this.props.hand != undefined) {
         entity.hands.push(this.mesh)
+        this.detached = true
       }
       if (this.props.cursor != undefined) {
         entity.cursors.push(this)

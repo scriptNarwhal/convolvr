@@ -3,12 +3,13 @@ import TrackedControllers from './tracked-controllers'
 export default class GamePad {
 	constructor (input) {
     let gamepads = input.gamepads
+    
 		this.cooldownTimeout = null
 		this.cooldown = 0
 		this.bumperCooldown = 0
 		this.bumperCooldownTimeout = null
     this.trackedControllers = new TrackedControllers(input, three.world)
-
+    
     function gamepadHandler (e, connecting) {
       let gamepad = e.gamepad;
 		      input.gamepadMode = true;
@@ -23,7 +24,10 @@ export default class GamePad {
           let id = gamepad.id
           if (id.indexOf('Oculus Touch') > -1 || id.indexOf('Vive') > -1) { // need to lookup vive controller id
             input.trackedControls = true
-            input.world.user.avatar.toggleTrackedHands(true)
+            input.handsDetected ++
+            if (input.handsDetected < 2) {
+              input.world.user.avatar.toggleTrackedHands(true)
+            }
           } 
         }
       } else {

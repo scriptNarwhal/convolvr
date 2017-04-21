@@ -145,6 +145,7 @@ export default class Toolbox {
 
     setHandOrientation (hand, position, orientation) {
       let userHand = this.hands[hand]
+      console.log("SET HAND ORIENTATION ", hand, position)
       if (userHand) {
         userHand.position.fromArray(position).multiplyScalar(20000).add(this.world.camera.position)
         userHand.translateX(725+ hand*-1250)

@@ -63,7 +63,7 @@ export default class Entity {
           }
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
-        } else {
+        } else if (!comp.detached) {
           nonStructural.push(comp.mesh)
         }
         c ++
