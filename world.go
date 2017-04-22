@@ -137,9 +137,9 @@ func getWorld(c echo.Context) error { // load specific world
 	if err != nil {
 		log.Println(err)
 
-		first = 1.0 + (rand.Float64() * 0.1)
-		second = first/2 + rand.Float64()*0.25
-		third = second/2 + rand.Float64()*0.25
+		first = 0.1 + (rand.Float64() * 0.1)
+		second = first/3 + rand.Float64()*0.25
+		third = second/6 + rand.Float64()*0.25
 		if rand.Intn(10) > 6 {
 			first = 1.0
 			second = 0.95
@@ -147,12 +147,12 @@ func getWorld(c echo.Context) error { // load specific world
 		}
 		if rand.Intn(12) > 6 {
 			if rand.Intn(3) > 2 {
-				red = first * 2.0
-				green = second / 2.0
-				blue = third * 3.0
+				red = first * 1.2
+				green = third / 2.0
+				blue = second * 3.0
 			} else {
 				red = first / 2.5
-				green = second / 1.5
+				green = second
 				blue = first
 			}
 		} else if rand.Intn(10) > 5 {
@@ -161,7 +161,7 @@ func getWorld(c echo.Context) error { // load specific world
 				green = second * 1.0
 				blue = first / 2.0
 			} else {
-				red = third / 1.5
+				red = first / 1.5
 				blue = first * 1.5
 				green = second / 2.0
 			}
@@ -171,9 +171,9 @@ func getWorld(c echo.Context) error { // load specific world
 				green = first
 				blue = second / 4.0
 			} else {
-				green = second / 3.0
-				red = second / 2.0
-				blue = first * 2.0
+				green = first
+				red = first / 2.0
+				blue = second
 			}
 		}
 		terrainRed = 0.15+blue/2.0+red

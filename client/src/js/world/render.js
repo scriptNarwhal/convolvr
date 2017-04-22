@@ -79,7 +79,7 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
           cursorPos = cursorMesh.position
 
       if (!!state) {
-        if (state.distance < (-cursorPos.z)) {
+        if (state.distance-4000 < (-cursorPos.z)) {
           if (cursorPos.z < 85000) {
             cursorPos.z += 12000
           }

@@ -1,6 +1,8 @@
 import Entity from '../entities/entity'
 import Component from '../components/component'
 
+let cursorAxis = new THREE.Vector3( 1, 0, 0 )
+
 export default class Avatar {
 
     constructor (id, wholeBody, data) { // wholeBody == true == not just 'vr hands'
@@ -11,25 +13,25 @@ export default class Avatar {
             components = [],
             userInput = three.world.userInput,
             cursorRot = new THREE.Quaternion(),
-            cursorEuler = new THREE.Euler(),
-            cursorComponent = {
-              props: {
-                cursor: true,
-                geometry: {
-                  shape: "open-box",
-                  size: [2000, 2000, 2000]
-                },
-                material: {
-                  name: "wireframe",
-                  color: 0xffffff
-                }
-              },
-              position: [0, 0, 0],
-              quaternion: cursorRot.toArray()
-            },
+            cursorComponent = null,
             n = 2
-
-          // add cursors back here
+        
+        cursorRot.setFromAxisAngle(cursorAxis, Math.PI / 2 )
+        cursorComponent = {
+          props: {
+              cursor: true,
+              geometry: {
+                shape: "open-box",
+                size: [2000, 2000, 2000]
+              },
+              material: {
+                name: "wireframe",
+                color: 0xffffff
+              }
+            },
+            position: [0, 0, 0],
+            quaternion: cursorRot.toArray()
+        }
 
       if (wholeBody) {
         component = {
@@ -122,13 +124,16 @@ export default class Avatar {
     toggleTrackedHands (toggle = true) {
       console.log('toggle hands', toggle)
       let scene = window.three.scene,
-          position = this.mesh.position
+          position = this.mesh.position,
+          avatar = this
 
       this.hands.map((hand, i) => {
         //hand.parent.remove(hand)
         if (toggle) { 
+            //avatar.cursors[0].mesh.visible = false
+            //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
             scene.add(hand)
-            hand.position.set(position.x -6000+ i*12000, position.y -4000, position.z -6000)
+            hand.position.set(position.x -6000+ i*12000, position.y -6000, position.z -6000)
         } else {
             this.mesh.add(hand)
             hand.position.set(-6000+ i*12000, -4000, -6000)
