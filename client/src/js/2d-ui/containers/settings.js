@@ -39,6 +39,9 @@ const styles = {
   select: {
     padding: '0.5em'
   },
+  range: {
+    padding: '0.5em'
+  },
   admin: {
     marginTop: '3em'
   },
@@ -56,6 +59,7 @@ class Settings extends Component {
       postProcessing: 'on',
       defaultWorld: 'overworld',
       welcomeMessage: 'Welcome to Convolvr!',
+      floorHeight: 0,
       network: [],
       IOTMode: false
     }
@@ -67,6 +71,7 @@ class Settings extends Component {
       postProcessing: localStorage.getItem("postProcessing") || 'off',
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa: localStorage.getItem("aa") || "on",
+      floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
       IOTMode: localStorage.getItem("IOTMode") || 'off'
     })
     this.props.fetchUniverseSettings()
@@ -91,6 +96,7 @@ class Settings extends Component {
     localStorage.setItem('postProcessing', this.state.postProcessing)
     localStorage.setItem('vrMovement', this.state.vrMovement) 
     localStorage.setItem('IOTMode', this.state.IOTMode)
+    localStorage.setItem('floorHeight', this.state.floorHeight)
     this.reload()
   }
   updateUniverseSettings () {
@@ -136,6 +142,14 @@ class Settings extends Component {
           </div>
           <div>
             <div>
+            <h3 style={styles.h3}>Adjust Floor Height</h3>
+            <input onChange={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
+                   style={styles.range}
+                   value={this.state.floorHeight}
+                   type='range'
+                   min='-16000'
+                   max='-16000'
+            />      
             <h3 style={styles.h3}>VR Movement Mode</h3>
             <select onChange={e=> { this.setState({vrMovement: e.target.value})}}
                     value={ this.state.vrMovement }

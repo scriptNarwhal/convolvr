@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strconv"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 )
@@ -22,9 +23,9 @@ type NetworkDomain struct {
 }
 
 type World struct {
-	ID      int    `storm:"id,increment" json:"id"`
-	UserID  int    `storm:"id" json:"userId"`
-	Name    string `storm:"index" json:"name"`
+	ID      int     `storm:"id,increment" json:"id"`
+	UserID  int     `storm:"id" json:"userId"`
+	Name    string  `storm:"index" json:"name"`
 	Gravity float64 `json:"gravity"`
 	Sky     `storm:"inline" json:"sky"`
 	Light   `storm:"inline" json:"light"`
@@ -93,8 +94,8 @@ func getUserWorlds(c echo.Context) error {
 	userId, _ := strconv.Atoi(c.Param("userId"))
 	err := db.Find("UserID", userId, &worlds)
 	if err != nil {
-			log.Println(err)
-			return err
+		log.Println(err)
+		return err
 	}
 	return c.JSON(http.StatusOK, &worlds)
 }
@@ -142,8 +143,8 @@ func getWorld(c echo.Context) error { // load specific world
 		third = second/6 + rand.Float64()*0.25
 		if rand.Intn(10) > 6 {
 			first = 1.0
-			second = 0.95
-			third = 0.92
+			second = 0.92
+			third = 0.3
 		}
 		if rand.Intn(12) > 6 {
 			if rand.Intn(3) > 2 {
@@ -152,33 +153,36 @@ func getWorld(c echo.Context) error { // load specific world
 				blue = second * 3.0
 			} else {
 				red = first / 2.5
-				green = second
+				green = second / 3
 				blue = first
 			}
 		} else if rand.Intn(10) > 5 {
 			if rand.Intn(6) > 2 {
-				red = third * 3.5
+				red = third / 2.0
 				green = second * 1.0
-				blue = first / 2.0
+				blue = first
 			} else {
-				red = first / 1.5
+				red = first
 				blue = first * 1.5
 				green = second / 2.0
 			}
 		} else {
 			if rand.Intn(3) > 2 {
-				red = first / 2.5
+				red = first / 1.2
 				green = first
-				blue = second / 4.0
+				blue = second / 2.0
 			} else {
-				green = first
-				red = first / 2.0
-				blue = second
+				green = first / 5.0
+				red = first
+				blue = second / 3.0
 			}
 		}
-		terrainRed = 0.15+blue/2.0+red
-		terrainGreen = 0.15+green
-		terrainBlue = 0.15+red/2.0+blue 
+		red *= 4.0
+		green *= 4.0
+		blue *= 4.0
+		terrainRed = 0.15 + blue/2.0
+		terrainGreen = 0.15 + green/1.5
+		terrainBlue = 0.15 + red/2.0 + blue
 		lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
 		ambientColor = int(4+math.Floor(red*4))<<16 | int(4+math.Floor(green*4))<<8 | int(4+math.Floor(blue*4))
 		terrainColor = int(math.Floor(terrainRed*255))<<16 | int(math.Floor(terrainGreen*255))<<8 | int(math.Floor(terrainBlue*255))

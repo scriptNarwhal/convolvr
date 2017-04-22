@@ -116,7 +116,7 @@ class Shell extends Component {
             onDragLeave={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); this.setDropBackground(false) }}
           onClick={e=> {
             if (e.target.getAttribute('id') == 'shell') {
-              this.props.toggleMenu()
+              this.props.toggleMenu(true)
             }
           }}
           className='shell'
@@ -157,8 +157,8 @@ export default connect(
   },
   dispatch => {
     return {
-      toggleMenu: () => {
-        dispatch(toggleMenu())
+      toggleMenu: (force) => {
+        dispatch(toggleMenu(force))
       },
       sendMessage: (message, from, files) => {
         dispatch(sendMessage(message, from, files))

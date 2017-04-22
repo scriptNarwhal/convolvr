@@ -89,11 +89,11 @@ export default class Avatar {
                 hand: n,
                 noRaycast: true,
                 geometry: {
-                  size: [2500, 1500, 4000],
+                  size: [2200, 1200, 3200],
                   shape: "box"
                 },
                 material: {
-                  name: "plastic",
+                  name: "metal",
                   color: 0xffffff,
                 }
             },
@@ -130,13 +130,16 @@ export default class Avatar {
       this.hands.map((hand, i) => {
         //hand.parent.remove(hand)
         if (toggle) { 
-            //avatar.cursors[0].mesh.visible = false
             //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
             scene.add(hand)
-            hand.position.set(position.x -6000+ i*12000, position.y -6000, position.z -6000)
+            hand.position.set(position.x -6000+ i*12000, position.y -12000, position.z -6000)
         } else {
             this.mesh.add(hand)
-            hand.position.set(-6000+ i*12000, -4000, -6000)
+            if (i > 0) {
+              //hand.userData.component //.components[0].mesh.visible = false
+              console.log(hand.userData.component)
+            }
+            hand.position.set(-6000+ i*12000, -6000, -6000)
         }
         hand.updateMatrix()
       })

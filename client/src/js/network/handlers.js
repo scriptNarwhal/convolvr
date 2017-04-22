@@ -28,12 +28,8 @@ export default class SocketHandlers {
 							mesh: null
 						}
 					}
-					user.mesh = user.avatar.mesh;
-					mesh = user.mesh
-					if (!! mesh) {
-						mesh.position.set(pos.x, pos.y, pos.z)
-						mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w)
-					}
+					user.mesh = user.avatar.mesh
+					user.avatar.entity.update([pos.x, pos.y, pos.z], [quat.x, quat.z, quat.y, quat.w])
 				}
 			}
 		})
@@ -56,8 +52,8 @@ export default class SocketHandlers {
 				case "Component Tool":
 					chunk.entities.map(voxelEnt => { // find & re-init entity
 						if (voxelEnt.id == data.entityId) {
-							console.log("got component tool message") // concat with existing components array
-							console.log(data.entity.components)
+							// console.log("got component tool message") // concat with existing components array
+							// console.log(data.entity.components)
 							voxelEnt.components = voxelEnt.components.concat(data.entity.components)
 							voxelEnt.init(three.scene)
 						}
@@ -66,7 +62,13 @@ export default class SocketHandlers {
 				case "Voxel Tool":
 
 				break;
-				case "Projectile Tool":
+				case "System Tool":
+
+				break;
+				case "Geometry Tool":
+
+				break;
+				case "Material Tool":
 
 				break;
 				case "Delete Tool":

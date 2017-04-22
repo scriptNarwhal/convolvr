@@ -18,9 +18,10 @@ export default class Keyboard {
           case 16: keys.shift = true; break;
           case 32: keys.space = true; break;
           case 27: // escape key
+          world.mode = "web"
           if (world.user.username != "") {
             //world.showChat();
-            //world.mode = "desktop";
+            //;
             document.body.setAttribute("class", "desktop");
             //document.querySelector("#chatMode").click();
           }

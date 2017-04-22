@@ -79,7 +79,7 @@ export default class ComponentTool extends Tool {
           component = this.components.makeComponent(this.options.componentType),
           entity = new Entity(0, [component], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
       //entity.init(three.scene)
-      if (selected && cursorState.distance < 60000) {
+      if (selected && cursorState.distance < 80000) {
           entityId = selected.id
           if (components.length == 0) {
             components = [component]

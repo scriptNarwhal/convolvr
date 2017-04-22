@@ -86,6 +86,7 @@ export default class World {
 		this.HMDMode = "standard" // "head-movement"
 		this.vrMovement = "stick" // teleport
 		this.vrHeight = 0
+		this.floorHeight = 0
 		this.screenResX = screenResX
 		this.initRenderer(renderer, "viewport")
 		this.octree = new THREE.Octree({
@@ -246,25 +247,26 @@ export default class World {
 			IOTMode = localStorage.getItem("IOTMode"),
 			lighting = localStorage.getItem("lighting"),
 			enablePostProcessing = localStorage.getItem("postProcessing"),
-			aa = localStorage.getItem("aa")
+			aa = localStorage.getItem("aa"),
+			floorHeight = localStorage.getItem("floorHeight")
 
-		if (cameraMode == undefined) {
+		if (cameraMode == null) {
 			cameraMode = 'fps'
 			localStorage.setItem("camera", 'fps')
 		}
-		if (vrMovement == undefined) {
+		if (vrMovement == null) {
 			vrMovement = 'stick' // change to teleport later
 			localStorage.setItem("vrMovement", vrMovement)
 		}
-		if (IOTMode == undefined) {
+		if (IOTMode == null) {
 			IOTMode = 'off'
 			localStorage.setItem("IOTMode", IOTMode)
 		}
-		if (aa == undefined) {
+		if (aa == null) {
 			aa = 'on'
 			localStorage.setItem("aa", aa)
 		}
-		if (lighting == undefined) {
+		if (lighting == null) {
 			lighting = 'high'
 			localStorage.setItem("lighting", !this.mobile ? 'high' : 'low')
 		}
@@ -272,12 +274,17 @@ export default class World {
 			enablePostProcessing = 'off'
 			localStorage.setItem("postProcessing", enablePostProcessing)
 		}
+		if (floorHeight == null) {
+			floorHeight = 0
+			localStorage.setItem("floorHeight", floorHeight)
+		} 
 		this.aa = aa
 		this.cameraMode = cameraMode
 		this.vrMovement = vrMovement
 		this.lighting = lighting
 		this.enablePostProcessing = enablePostProcessing
 		this.IOTMode = IOTMode == 'on'
+		this.floorHeight = floorHeight
 	}
 	load (name, callback) {
 		this.name = name;

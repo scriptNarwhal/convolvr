@@ -72,21 +72,30 @@ let cursorCallback = (cursor, hand, world, obj, entity, component) => {
 }
 
 let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
-  let handMesh = null
+  let handMesh = null,
+      input = world.userInput
+
   cursors.map((cursor, i) => { // animate cursors & raycast scene
       let state = cursor.state.cursor,
           cursorMesh = cursor.mesh,
           cursorPos = cursorMesh.position
-
+      
+      if (cursorIndex > 0) {
+        if (cursorMesh.visible == false) {
+          if (input.trackedControls || input.leapMotion) {
+            cursorMesh.visible = true
+          }
+        }
+      }
       if (!!state) {
         if (state.distance-4000 < (-cursorPos.z)) {
           if (cursorPos.z < 85000) {
-            cursorPos.z += 12000
+            cursorPos.z += 18000
           }
         } else if (state.distance > (-cursorPos.z)) {
-          //if (cursorPos.z > 4000) {
-            cursorPos.z -= 12000
-          //}
+          if (cursorPos.z > -85000) {
+            cursorPos.z -= 18000
+          }
         }
       }
       cursorMesh.updateMatrix()
@@ -145,6 +154,7 @@ export let vrAnimate = (time, oldPos, cursorIndex) => {
       delta = Math.min(now - time, 500) / 16000,
       t = three,
       world = t.world,
+      floorHeight = world.floorHeight,
       user = world.user,
       frame = world.vrFrame,
       camera = t.camera,
@@ -162,7 +172,7 @@ export let vrAnimate = (time, oldPos, cursorIndex) => {
     }
     t.vrDisplay.getFrameData(frame)
     vrPos = !!frame && frame.pose ? frame.pose.position : [0,0,0]
-    vrWorldPos = [22000 * vrPos[0], 22000 * vrPos[1], 22000 * vrPos[2]]
+    vrWorldPos = [22000 * vrPos[0], 22000 * vrPos[1]-floorHeight, 22000 * vrPos[2]]
     camera.quaternion.fromArray(frame.pose.orientation)
     world.userInput.update(delta)
 

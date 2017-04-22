@@ -116,7 +116,6 @@ class App extends Component {
   handleKeyDown (e) {
     if (e.which == 27) {
       this.props.toggleMenu(true)
-      this.props.toggleMenu(true)
     }
     if (e.which == 13) {
       if (!this.props.menuOpen) {
@@ -331,6 +330,7 @@ export default connect(
         dispatch(getChatHistory(skip))
       },
       toggleMenu: (force) => {
+          window.three.world.mode = force ? "vr" : "web"
           dispatch(toggleMenu(force))
       },
       fetchWorlds: () => {

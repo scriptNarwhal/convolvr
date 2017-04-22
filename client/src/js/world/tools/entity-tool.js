@@ -79,7 +79,7 @@ export default class EntityTool extends Tool  {
       if (entity.components.length == 1) {
         entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
       }
-      if (selected && cursorState.distance < 60000) {
+      if (selected && cursorState.distance < 80000) {
           // switch to component tool
           this.world.user.toolbox.useTool(1, 0)
           this.world.user.hud.show()
