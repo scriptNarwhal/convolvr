@@ -52,7 +52,20 @@ class App extends Component {
         }
       }
     })
-    this.props.setCurrentWorld(window.worldName)
+    this.props.fetchUniverseSettings()
+    setTimeout(()=> {
+      let world = three.world,
+          worldName = this.props.world
+      let initChatUI = () => {
+        world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
+        world.help.mesh.position.fromArray([-80000, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
+      }
+      world.load(worldName, ()=> {
+        setTimeout(()=>{
+          initChatUI() // wait for world & terrain to load before placing this
+        }, 250)
+      })
+    }, 100)
     setTimeout(()=>{
       this.props.getChatHistory(0) // wait a fraction of a second for the world to load / to show in 3d too
     }, 200)
@@ -88,6 +101,16 @@ class App extends Component {
       this.setState({
         unread: 0
       })
+    }
+    let renderCanvas = document.querySelector("#viewport")
+    renderCanvas.onclick = (event) => {
+      let elem = event.target,
+          uInput = window.three.world.userInput
+      if (!uInput.fullscreen) {
+						elem.requestPointerLock()
+            // uInput.toggleFullscreen()
+            this.props.toggleMenu(false)
+      }
     }
   }
   handleKeyDown (e) {
@@ -204,7 +227,7 @@ class App extends Component {
                           if (three.vrDisplay != null) {
                             three.vrDisplay.requestPresent([{source: renderer.domElement}]);
                             three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
-                              vrAnimate(Date.now(), [0,0,0])
+                              vrAnimate(Date.now(), [0,0,0], 0)
                             })
                           } else {
                             alert("Connect VR Display and then reload page.")
@@ -269,7 +292,8 @@ import {
 } from '../../redux/actions/app-actions'
 import {
   fetchWorlds,
-  setCurrentWorld
+  setCurrentWorld,
+  fetchUniverseSettings
 } from '../../redux/actions/world-actions'
 import {
   getChatHistory,
@@ -291,6 +315,9 @@ export default connect(
   },
   dispatch => {
     return {
+      fetchUniverseSettings: ()=> {
+        dispatch(fetchUniverseSettings())
+      },
       login: (user, pass, email, data) => {
             dispatch(login(user, pass, email, data))
       },

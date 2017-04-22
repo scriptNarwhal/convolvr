@@ -15,53 +15,71 @@ export default class ComponentTool extends Tool {
         this.options = {
           componentType: "panel"
         }
-        this.all = ["panel", "block", "column", "wirebox"]
+        this.all = ["panel", "column", "panel2", "column2"]
         this.current = 0
-    }
-
-    initMesh (data = {}) {
-      let mesh = null,
-          color = data.color || 0xffffff,
-          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
-          geom = new THREE.BoxGeometry(200, 1000, 100),
-          mat = new THREE.MeshPhongMaterial({color: color, fog: false});
-
-      mesh = new THREE.Mesh(geom, mat);
-      mesh.rotation.x = Math.PI / 2.0
-      if (light) {
-        mesh.add(light);
-        light.position.set(0, 100, -100);
-      }
-      this.mesh = mesh;
-      return this.mesh;
+        this.entity = new Entity(-1, [
+          {
+            props: {
+              geometry: {
+                shape: "box",
+                size: [2600, 2200, 8000]
+              },
+              material: {
+                name: "metal"
+              },
+              tool: {
+                panel: {
+                  title: "Components",
+                  content: {
+                    props: {
+                      metaFactory: { // generates factory for each item in dataSource
+                        type: "component", // entity, prop
+                        dataSource: this.world.systems.assets.components
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            components: [
+              this.initLabel("Component")
+            ]
+          }
+        ])
     }
 
     initIcon () {
       this.entities = this.entities || new EntityGenerator()
       let entity = this.entities.makeEntity("icon", true)
       entity.components.push({
-        props: {},
-        shape: "box",
-        size: [2640, 2640, 2640],
+        props: {
+          geometry: {
+            shape: "box",
+            size: [4500, 4500, 4500]
+          },
+          material: {
+            name: 'metal',
+            color: 0x003bff
+          }
+        },
         position: [0, 0, 0],
-        color: 0x003bff,
-        text: "",
         quaternion: null
       })
       return entity
     }
 
     primaryAction (telemetry) { // place component (into entity if pointing at one)
-      let cursor = this.world.user.cursor,
+      let cursor = telemetry.cursor,
+          cursorState = cursor.state.cursor || {},
           position = telemetry.position,
-          selected = cursor.entity,
+          quat = telemetry.quaternion,
+          selected = !!cursorState.entity ? cursorState.entity : false,
           entityId = -1,
           components = [],
-          quat = three.camera.quaternion,  //[quat.x, quat.y, quat.z, quat.w],
           component = this.components.makeComponent(this.options.componentType),
-          entity = new Entity(0, [component], [], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
+          entity = new Entity(0, [component], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
       //entity.init(three.scene)
-      if (selected && cursor.distance < 33000) {
+      if (selected && cursorState.distance < 60000) {
           entityId = selected.id
           if (components.length == 0) {
             components = [component]
@@ -70,13 +88,16 @@ export default class ComponentTool extends Tool {
           let selectedPos = selected.mesh.localToWorld(new THREE.Vector3())
           // apply transformation and offset to components
           components.map((comp, i)=> {
-            comp.position=[
-              position[0] - selectedPos.x,
-              position[1] - selectedPos.y,
-              position[2] - selectedPos.z
-            ]
-            comp.quaternion = [quat.x, quat.y, quat.z, quat.w]
+            if (!!comp) {
+              comp.position=[
+                position[0] - selectedPos.x,
+                position[1] - selectedPos.y,
+                position[2] - selectedPos.z
+              ]
+              comp.quaternion = [quat.x, quat.y, quat.z, quat.w]
+            }
           })
+
           return {
             entity,
             entityId,
@@ -91,11 +112,13 @@ export default class ComponentTool extends Tool {
       }
     }
 
-    secondaryAction (telemetry) {
+    secondaryAction (telemetry, value) {
       // cycle components
-      this.current ++
+      this.current += value
       if (this.current >= this.all.length) {
         this.current = 0
+      } else if (this.current < 0) {
+        this.current = this.all.length - 1
       }
       this.options.componentType = this.all[this.current]
       return false // no socket event

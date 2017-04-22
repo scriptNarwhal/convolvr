@@ -17,43 +17,35 @@ import Data from './2d-ui/containers/data'
 import Worlds from './2d-ui/containers/worlds'
 import NewWorld from './2d-ui/containers/new-world'
 import Settings from './2d-ui/containers/settings'
+import Network from './2d-ui/containers/network'
 import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
 import HUD from './2d-ui/containers/hud'
 // World
 import { send, events } from './network/socket'
-import { initUser } from './user'
+import User from './user'
 import UserInput from './input/user-input'
 import Toolbox from './world/tools/toolbox'
 import World from './world/world'
 // 3D UI
 import HUDMenu from './vr-ui/menu'
-import VerticalMenu from './vr-ui/vertical-menu'
 import ListView from './vr-ui/text/list-view'
-import Cursor from './vr-ui/cursor'
 import Avatar from './world/avatar'
 
 let socket = events,
     token = localStorage.getItem("token"),
 		userInput,
-		user = initUser(),
+		user = new User(),
 	  world = null,
 	  avatar = null
 
-window.worldName = window.location.href.indexOf("/world/") > -1 ? window.location.href.split("/world/")[1] : "overworld"
-
 userInput = new UserInput()
-world = new World(userInput, socket, store)
-world.load(worldName, ()=> {
-  setTimeout(()=>{
-    initChatUI() // wait for world & terrain to load before placing this
-  }, 250)
-})
-user.toolbox = new Toolbox(world)
+world = new World(user, userInput, socket, store)
+user.useAvatar(new Avatar(user.id, false, {})) // only render hands, since this is you
+user.toolbox = new Toolbox(user, world)
 user.hud = new HUDMenu([], user.toolbox)
 user.hud.initMesh({}, three.camera)
 user.hud.hide()
-user.cursor = new Cursor({}, user.mesh)
 user.mesh.add(user.light)
 world.user = user
 three.scene.add(user.mesh)
@@ -63,16 +55,38 @@ userInput.rotationVector = {x: 0, y: 9.95, z: 0}
 three.camera.position.set(-300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
 user.light.position.set(200000, 200000, 200000)
 
-world.chat = new ListView({
+world.chat = new ListView({ // deprecated as of alpha 0.4.1
   color: "#ffffff",
   background: "#000000",
   position: [0,0,0],
   textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
 }, three.scene).initMesh()
 
-let initChatUI = () => {
-  world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude * 50000) - 20000, -5000])
-}
+world.help = new ListView({ // deprecated as of alpha 0.4.1
+  color: "#00ff00",
+  background: "#000000",
+  position: [-100000,0,0],
+  textLines: [
+    "# Desktop users:",
+    "- WASD,RF,Space keys: movement",
+    "- Mouselook (click screen to enable)",
+    "- Left Click: Primary Tool",
+    "- Right Click: Next Tool Mode",
+    "- Keys 1-5: switch tool",
+    "",
+    "# VR users: EnterVR icon in the corner",
+    "- If you have tracked controllers:",
+    "- Left stick: movement",
+    "- Right trigger: Primary Tool",
+    "- Right stick x-axis: change tools",
+    "- Right stick y-axis: tool mode",
+    "",
+    "# Mobile (non VR) users:",
+    "- One finger swipe: Change Look",
+    "- Two finger swipe: movement"
+  ]
+}, three.scene).initMesh()
+
 
 ReactDOM.render(
   (<Provider store={store}>
@@ -89,6 +103,7 @@ ReactDOM.render(
 				<Route path="/worlds" component={Worlds} />
         <Route path="/worlds/new" component={NewWorld} />
 				<Route path="/settings" component={Settings} />
+        <Route path="/network" component={Network} />
 			</Route>
 		</Router>
   </Provider>),

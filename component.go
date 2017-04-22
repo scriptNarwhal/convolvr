@@ -10,17 +10,15 @@ import (
 type Component struct {
 	ID         int                    `storm:"id,increment" json:"id"`
 	Name       string                 `json:"name"`
-	Shape      string                 `json:"shape"`
-	Material   string                 `json:"material"`
-	Color      int                    `json:"color"`
-	Size       []float64              `json:"size"`
 	Position   []float64              `json:"position"`
 	Quaternion []float64              `json:"quaternion"`
 	Props      map[string]interface{} `json:"props"`
+	State      map[string]interface{} `json:"state"`
+	Components []*Component           `json:components` 
 }
 
-func NewComponent(name string, shape string, mat string, color int, size []float64, pos []float64, quat []float64, props map[string]interface{}) *Component {
-	return &Component{Name: name, Shape: shape, Material: mat, Color: color, Size: size, Position: pos, Quaternion: quat, Props: props}
+func NewComponent(name string, pos []float64, quat []float64, props map[string]interface{}, state map[string]interface{}, components []*Component) *Component {
+	return &Component{Name: name, Position: pos, Quaternion: quat, Props: props, State: state, Components: components}
 }
 
 func getComponents(c echo.Context) error { // component types

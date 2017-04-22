@@ -14,7 +14,7 @@ import { API_SERVER } from '../../config.js'
 export function toggleMenu (force) {
     return {
         type: APP_TOGGLE_MENU,
-        force: force || false
+        force
     }
 }
 export function toggleFullscreen (force) {

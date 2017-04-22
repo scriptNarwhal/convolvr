@@ -6,21 +6,38 @@ import {
     WORLDS_FETCH,
     WORLDS_FETCH_DONE,
     WORLDS_FETCH_FAIL,
+    USER_WORLDS_FETCH,
+    USER_WORLDS_FETCH_DONE,
+    USER_WORLDS_FETCH_FAIL,
     WORLD_UPDATE_FETCH,
     WORLD_UPDATE_DONE,
     WORLD_UPDATE_FAIL,
     WORLD_DELETE_FETCH,
     WORLD_DELETE_DONE,
-    WORLD_DELETE_FAIL
-} from '../constants/action-types';
+    WORLD_DELETE_FAIL,
+    UNIVERSE_SETTINGS_FETCH,
+    UNIVERSE_SETTINGS_FETCH_DONE,
+    UNIVERSE_SETTINGS_FETCH_FAIL,
+    UNIVERSE_SETTINGS_UPDATE_FETCH,
+    UNIVERSE_SETTINGS_UPDATE_DONE,
+    UNIVERSE_SETTINGS_UPDATE_FAIL
+} from '../constants/action-types'
 
 module.exports = function worlds (state = {
-    current: "overworld",
+    current: window.location.href.indexOf("/world/") > -1 ? window.location.href.split("/world/")[1] : "overworld",
     all: [],
+    userWorlds: [],
     updated: false,
     created: false,
     error: false,
-    fetching: false
+    fetching: false,
+    fetchingUserWorlds: false,
+    fetchingSettings: false,
+    universeSettings: {
+      id: 1,
+      defaultWorld: "overworld",
+      welcomeMessage: "Welcome to Convolvr!"
+    }
 }, action) {
   switch (action.type) {
     case WORLD_SET_CURRENT:
@@ -39,7 +56,7 @@ module.exports = function worlds (state = {
     case WORLD_CREATE_FAIL:
       return Object.assign({}, state, {
           fetching: false,
-          error: action.error
+          error: action.err
       })
     case WORLDS_FETCH:
       return Object.assign({}, state, {
@@ -48,12 +65,26 @@ module.exports = function worlds (state = {
     case WORLDS_FETCH_FAIL:
       return Object.assign({}, state, {
           fetching: false,
-          error: action.error
+          error: action.err
       })
     case WORLDS_FETCH_DONE:
       return Object.assign({}, state, {
           all: action.worlds,
           fetching: false
+      })
+    case USER_WORLDS_FETCH:
+      return Object.assign({}, state, {
+          fetchingUserWorlds: true
+      })
+    case USER_WORLDS_FETCH_FAIL:
+      return Object.assign({}, state, {
+          fetchingUserWorlds: false,
+          error: action.err
+      })
+    case USER_WORLDS_FETCH_DONE:
+      return Object.assign({}, state, {
+          userWorlds: action.data,
+          fetchingUserWorlds: false
       })
     case WORLD_UPDATE_FETCH:
       return Object.assign({}, state, {
@@ -66,10 +97,36 @@ module.exports = function worlds (state = {
       })
     case WORLD_UPDATE_FAIL:
       return Object.assign({}, state, {
-          error: action.error,
+          error: action.err,
           fetching: false
       })
-
+      case UNIVERSE_SETTINGS_FETCH:
+        return Object.assign({}, state, {
+            fetchingSettings: true
+        })
+      case UNIVERSE_SETTINGS_FETCH_DONE:
+        return Object.assign({}, state, {
+            fetchingSettings: false,
+            universeSettings: action.settings
+        })
+      case UNIVERSE_SETTINGS_FETCH_FAIL:
+        return Object.assign({}, state, {
+            fetchingSettings: false
+        })
+      case UNIVERSE_SETTINGS_UPDATE_FETCH:
+        return Object.assign({}, state, {
+            fetchingSettings: true
+        })
+      case UNIVERSE_SETTINGS_UPDATE_DONE:
+        return Object.assign({}, state, {
+            universeSettings: action.settings,
+            fetchingSettings: false
+        })
+      case UNIVERSE_SETTINGS_UPDATE_FAIL:
+      return Object.assign({}, state, {
+            error: action.err,
+            fetchingSettings: false
+        })
     default:
       return state;
   }

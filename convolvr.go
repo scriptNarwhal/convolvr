@@ -2,14 +2,13 @@ package convolvr
 
 import (
 	"fmt"
-
 	log "github.com/Sirupsen/logrus"
 	"github.com/asdine/storm"
 	"github.com/ds0nt/nexus"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/spf13/viper"
-	"golang.org/x/net/websocket"
+	"net/http"
 )
 
 var (
@@ -37,10 +36,9 @@ func Start(configName string) {
 	}
 	userErr := db.Init(&User{})
 	worldErr := db.Init(&World{})
-	chunkErr := db.Init(&Chunk{})
+	chunkErr := db.Init(&Voxel{})
 	componentErr := db.Init(&Component{})
 	entityErr := db.Init(&Entity{})
-	structureErr := db.Init(&Structure{})
 	chatHistory := db.From("chathistory")
 	historyErr := chatHistory.Init(&ChatMessage{})
 	// indexErr := db.ReIndex(&World{})
@@ -62,9 +60,6 @@ func Start(configName string) {
 	if entityErr != nil {
 		log.Fatal(entityErr)
 	}
-	if structureErr != nil {
-		log.Fatal(structureErr)
-	}
 	if historyErr != nil {
 		log.Fatal(historyErr)
 	}
@@ -73,12 +68,12 @@ func Start(configName string) {
 	api.POST("/users", postUsers)
 	api.GET("/chat-history/:skip", getChatHistory)
 	api.GET("/worlds", getWorlds)
+	api.GET("/worlds/user/:userId", getUserWorlds)
 	api.GET("/worlds/name/:name", getWorld)
 	api.GET("/chunks/:worldId/:chunks", getWorldChunks)
 	api.POST("/worlds", postWorlds)
-	api.GET("/structures", getStructures)
-	api.POST("/structures", postStructures)
-	api.GET("/structures/:userId", getStructuresByUser)
+	api.GET("/universe-settings", getUniverseSettings)
+	api.POST("/universe-settings", postUniverseSettings)
 	api.GET("/entities", getEntities)
 	api.POST("/entities", postEntities)
 	api.GET("/entities/:userId", getEntitiesByUser)
@@ -96,7 +91,7 @@ func Start(configName string) {
 
 	e.Static("/", "../web")
 	e.Static("/world/:name", "../web/index.html") // eventually make this route name configurable to the specific use case, 'world', 'venue', 'event', etc..
-	e.File("/hyperspace", "../web/index.html")    // client should generate a meta-world out of (portals to) networked convolvr sites
+	e.File("/network", "../web/index.html")    // client should generate a meta-world out of (portals to) networked convolvr sites
 	e.File("/worlds", "../web/index.html")
 	e.File("/worlds/new", "../web/index.html")
 	e.File("/chat", "../web/index.html")
@@ -107,12 +102,7 @@ func Start(configName string) {
 	hub.Handle("chat message", chatMessage)
 	hub.Handle("update", update)
 	hub.Handle("tool action", toolAction)
-	e.GET("/connect", nexusHandler)
-
+	e.Any("/connect", echo.WrapHandler(http.HandlerFunc(hub.Handler)))
 	e.Logger.Fatal(e.Start(port))
 }
 
-func nexusHandler(c echo.Context) error {
-	websocket.Handler(hub.Serve).ServeHTTP(c.Response(), c.Request())
-	return nil
-}

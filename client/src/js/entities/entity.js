@@ -7,11 +7,11 @@ export default class Entity {
       this.position = position ? position : false
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
+      this.cursors = []
       this.hands = []
-      this.activated = false
-      this.gazedOver = false
-      this.onActivated = null
-      this.onGazedOver = null
+      this.componentsByProp = {
+        // define arrays here with key of prop
+      }
   }
 
   update (position, quaternion = false) {
@@ -21,12 +21,16 @@ export default class Entity {
       this.quaternion = quaternion
       this.mesh.quaternion.fromArray(quaternion)
     }
+    this.mesh.updateMatrix()
   }
 
   init (scene) {
     var mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
-        mobile = three.world.mobile,
+        three = window.three,
+        world = three.world,
+        systems = world.systems,
+        mobile = world.mobile,
         ncomps = this.components.length,
         nonStructural = [],
         compMesh = null,
@@ -39,16 +43,16 @@ export default class Entity {
         s = 0
 
     if (this.mesh != null) {
-      three.world.octree.remove(this.mesh)
+      world.octree.remove(this.mesh)
       scene.remove(this.mesh)
     }
     while (c < ncomps) {
-        comp = new Component(this.components[c], {mobile}) // use simpler shading for mobile gpus
+        comp = new Component(this.components[c], this, systems, {mobile}) // use simpler shading for mobile gpus
         if (comp.props.noRaycast === true) {
           addToOctree = false
         }
         compMesh = comp.mesh
-        if (comp.props.structure === true) {
+        if (comp.props.geometry && comp.props.geometry.merge === true) {
           materials.push(compMesh.material)
           compMesh.updateMatrix()
           faces = compMesh.geometry.faces
@@ -59,10 +63,7 @@ export default class Entity {
           }
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
-        } else {
-          if (comp.props.hand !== null) {
-            this.hands.push(comp.mesh)
-          }
+        } else if (!comp.detached) {
           nonStructural.push(comp.mesh)
         }
         c ++
@@ -73,8 +74,8 @@ export default class Entity {
       mesh = nonStructural[0]
       s = 1
       while (s < nonStructural.length) {
-        mesh.add(nonStructural[s])
-        s ++
+          mesh.add(nonStructural[s])
+          s ++
       }
     }
     if (!! this.quaternion && this.components.length == 1) {
@@ -83,13 +84,16 @@ export default class Entity {
     if (!! this.position) {
         mesh.position.set(this.position[0], this.position[1], this.position[2])
     }
-    mesh.userData = { entity: this }
+    mesh.userData = { 
+      entity: this 
+    }
     if (addToOctree) {
-      three.world.octree.add(mesh)
+      world.octree.add(mesh)
     }
     scene.add(mesh)
     this.mesh = mesh
-
+    mesh.matrixAutoUpdate = false
+    mesh.updateMatrix()
     return this
   }
 }

@@ -1,27 +1,60 @@
 import axios from 'axios'
-import Avatar from './avatar'
-import Entity from '../entities/entity'
-import Terrain from './terrain/terrain'
-import UserPhysics  from '../systems/user-physics'
-import EntityPhysics from '../systems/entity-physics'
-import { render, vrRender} from './render'
-import PostProcessing from './post-processing'
+import { animate } from './render'
 import { API_SERVER } from '../config.js'
 import { send } from '../network/socket'
+import Avatar from './avatar'
+import Entity from '../entities/entity'
+import Systems from '../systems'
+import WorldPhysics  from '../systems/world-physics'
+import EntityPhysics from '../systems/entity-physics'
+import GeometrySystem from '../systems/geometry'
+import MaterialSystem from '../systems/material'
+import AssetSystem from '../systems/assets'
+import LightSystem from '../systems/light'
+import TextSystem from '../systems/text'
+import AudioSystem from '../systems/audio'
+import VideoSystem from '../systems/video'
+import SignalSystem from '../systems/signal'
+import DrawingSystem from '../systems/drawing'
+import ControlSystem from '../systems/control'
+import PropulsionSystem from '../systems/propulsion'
+import FactorySystem from '../systems/factory'
+import MetaFactorySystem from '../systems/factory'
+import ParticleSystem from '../systems/particle'
+import ProjectileSystem from '../systems/projectile'
+import DestructableSystem from '../systems/destructable'
+import FloorSystem from '../systems/floor'
+import WallSystem from '../systems/wall'
+import SeatSystem from '../systems/seat'
+import DoorSystem from '../systems/door'
+import HoverSystem from '../systems/hover'
+import ActivateSystem from '../systems/activate'
+import CursorSystem from '../systems/cursor'
+import HandSystem from '../systems/hand'
+import TerrainSystem from '../systems/terrain'
+import ContainerSystem from '../systems/container'
+import WebHookSystem from '../systems/webhook'
+import ToolUISystem from '../systems/tool-ui'
+import TabViewSystem from '../systems/tab-view'
+import TabSystem from '../systems/tab'
+import ToolSystem from '../systems/tool'
+import FileSystem from '../systems/file'
+import ChatSystem from '../systems/chat'
+import PostProcessing from './post-processing'
+import SocketHandlers from '../network/handlers'
 
 let world = null
 
 export default class World {
-	constructor(userInput = false, socket, store) {
+	constructor(user, userInput = false, socket, store) {
 		let mobile = (window.innerWidth <= 720),
 				scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1000, 6000000 ),
+				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1500, 15000000),
 				screenResX = window.devicePixelRatio * window.innerWidth,
 				renderer = null,
 				self = this,
 				three = {},
 				postProcessing = false
-
 
 		this.mobile = mobile
 		this.initLocalSettings()
@@ -40,20 +73,10 @@ export default class World {
 		this.config = false
 		this.windowFocus = true
 		this.name = "convolvr"
-		this.mode = "web"
+		this.mode = "vr"
 		this.rPos = false
 		this.users = []
-		this.user = {
-			id: 0,
-			username: "user"+Math.floor(1000000*Math.random()),
-			toolbox: null,
-			hud: null,
-			cursor: null,
-			arms: [],
-			gravity: 1,
-			velocity: new THREE.Vector3(),
-			falling: false
-		}
+		this.user = user || {}
 		this.camera = camera
 		this.vrFrame = !!window.VRFrameData ? new VRFrameData() : null
 		this.userInput = userInput
@@ -61,13 +84,11 @@ export default class World {
 		this.capturing = false
 		this.webcamImage = ""
 		this.HMDMode = "standard" // "head-movement"
+		this.vrMovement = "stick" // teleport
 		this.vrHeight = 0
 		this.screenResX = screenResX
 		this.initRenderer(renderer, "viewport")
 		this.octree = new THREE.Octree({
-			// when undeferred = true, objects are inserted immediately
-			// instead of being deferred until next octree.update() call
-			// this may decrease performance as it forces a matrix update
 			undeferred: false,
 			depthMax: Infinity,
 			// max number of objects before nodes split or merge
@@ -79,15 +100,7 @@ export default class World {
 		})
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
-		// userInput.init(this, camera, this.user)
-		this.UserPhysics = new UserPhysics()
-		this.EntityPhysics = new EntityPhysics()
-		this.UserPhysics.init(self)
-		this.EntityPhysics.init(self)
-		this.terrain = new Terrain(this);
-		this.workers = {
-			physics: this.UserPhysics
-		}
+		
 		three = this.three = {
 			world: this,
 			scene,
@@ -97,14 +110,57 @@ export default class World {
 		};
 		world = this
 		window.three = this.three
-
+		this.systems = new Systems({
+			assets: new AssetSystem(world),
+			geometry: new GeometrySystem(world),
+			material: new MaterialSystem(world),
+			worldPhysics: new WorldPhysics(world),
+			entityPhysics: new EntityPhysics(world),
+			light: new LightSystem(world),
+			text: new TextSystem(world),
+			audio: new AudioSystem(world),
+			video: new VideoSystem(world),
+			signal: new SignalSystem(world),
+			drawing: new DrawingSystem(world),
+			control: new ControlSystem(world),
+			propulsion: new PropulsionSystem(world),
+			factory: new FactorySystem(world),
+			metaFactory: new MetaFactorySystem(world),
+			particles: new ParticleSystem(world),
+			projectile: new ProjectileSystem(world),
+			destructable: new DestructableSystem(world),
+			floor: new FloorSystem(world),
+			wall: new WallSystem(world),
+			seat: new SeatSystem(world),
+			door: new DoorSystem(world),
+			cursor: new CursorSystem(world),
+			hand: new HandSystem(world),
+			hover: new HoverSystem(world),
+			activate: new ActivateSystem(world),
+			terrain: new TerrainSystem(world),
+			container: new ContainerSystem(world),
+			tab: new TabSystem(world),
+			tabView: new TabViewSystem(world),
+			toolUI: new ToolUISystem(world),
+			tool: new ToolSystem(world),
+			webhook: new WebHookSystem(world),
+			file: new FileSystem(world),
+			chat: new ChatSystem(world)
+		})
+		this.terrain = this.systems.terrain
+		this.workers = {
+			worldPhysics: this.systems.worldPhysics.worker,
+			entityPhysics: this.systems.entityPhysics.worker
+		}
 		this.textures = {}
 		let gridTexture = this.textures.grid = THREE.ImageUtils.loadTexture('/images/textures/gplaypattern_@2X.png', false, () => {
 			gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping
-			gridTexture.repeat.set(12, 12)
+			gridTexture.repeat.set(16, 16)
 			gridTexture.anisotropy = renderer.getMaxAnisotropy()
 				//skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
 		})
+		this.socketHandlers = new SocketHandlers(this, socket)
+
 		function onResize () {
 			world.screenResX = window.devicePixelRatio * window.innerWidth
 			if (three.world.mode != "stereo") {
@@ -115,78 +171,15 @@ export default class World {
 			}
 			three.camera.aspect = innerWidth / innerHeight
 			three.camera.updateProjectionMatrix()
+			if (world.IOTMode) {
+				animate(world, Date.now(), 0)
+			}
 		}
 		window.addEventListener('resize', onResize, true)
 		this.onWindowResize = onResize
-		onResize()
-
-		socket.on("update", packet => {
-			let data = JSON.parse(packet.data),
-				entity = null,
-				user = null,
-				pos = null,
-				quat = null,
-				mesh = null
-
-			if (!! data.entity) {
-				entity = data.entity
-				if (entity.id != this.user.id) {
-					pos = entity.position
-					quat = entity.quaternion
-					user = this.users["user"+entity.id]
-					if (user == null) {
-						user = this.users["user"+entity.id] = {
-							id: entity.id,
-							avatar: new Avatar(entity.id, "standard", {}),
-							mesh: null
-						}
-					}
-					user.mesh = user.avatar.mesh;
-					mesh = user.mesh
-					if (!! mesh) {
-						mesh.position.set(pos.x, pos.y, pos.z)
-						mesh.quaternion.set(quat.x, quat.y, quat.z, quat.w)
-					}
-				}
-			}
-		})
-		socket.on("tool action", packet => {
-			let data = JSON.parse(packet.data),
-					user = world.user,
-					pos = data.position,
-					coords = data.coords,
-					chunk = world.terrain.voxels[coords[0]+".0."+coords[2]],
-					quat = data.quaternion
-
-			switch (data.tool) {
-				case "Entity Tool":
-					let ent = data.entity,
-							entity = new Entity(ent.id, ent.components, data.position, data.quaternion)
-					chunk.entities.push(entity)
-					entity.init(three.scene)
-				break;
-				case "Component Tool":
-					chunk.entities.map(voxelEnt => { // find & re-init entity
-						if (voxelEnt.id == data.entityId) {
-							console.log("got component tool message") // concat with existing components array
-							console.log(data.entity.components)
-							voxelEnt.components = voxelEnt.components.concat(data.entity.components)
-							voxelEnt.init(three.scene)
-						}
-					})
-				break;
-				case "Voxel Tool":
-
-				break;
-				case "Projectile Tool":
-
-				break;
-				case "Delete Tool":
-
-				break;
-			}
-		})
-		render(this, 0)
+		onResize()	
+		
+		animate(this, 0, 0)
 
 		three.vrDisplay = null
 		navigator.getVRDisplays().then(function(displays) {
@@ -200,12 +193,12 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				skyLight =  new THREE.PointLight(config.light.color, 0.95, 5200000),
+				skyLight =  new THREE.PointLight(config.light.color, 0.95, 12200000),
 				skyMaterial = null,
 				skybox = null
 
 		this.config = config;
-		this.terrain.init(config.terrain)
+		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor);
 		three.scene.add(this.ambientLight);
 		if (config.sky.skyType == 'shader' || config.sky.skyType == 'standard') {
@@ -229,18 +222,18 @@ export default class World {
 	 				skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
 			})
 		}
-		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(6000000, 4), skyMaterial)
+		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000, 4), skyMaterial)
 		this.skyLight = skyLight
 		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
-		skyLight.position.set(0, 1000000, 500000)
+		skyLight.position.set(0, 3000000, 3000000)
 		this.terrain.bufferChunks(true, 0)
 	}
 
 	initRenderer (renderer, id) {
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1
-		renderer.setClearColor(0x3b3b3b)
+		renderer.setClearColor(0x1b1b1b)
 		renderer.setPixelRatio(pixelRatio)
 		renderer.setSize(window.innerWidth, window.innerHeight)
 			document.body.appendChild( renderer.domElement )
@@ -249,13 +242,23 @@ export default class World {
 	}
 	initLocalSettings () {
 		let cameraMode = localStorage.getItem("camera"),
-				lighting = localStorage.getItem("lighting"),
-				enablePostProcessing = localStorage.getItem("postProcessing"),
-				aa = localStorage.getItem("aa")
+			vrMovement = localStorage.getItem("vrMovement"),
+			IOTMode = localStorage.getItem("IOTMode"),
+			lighting = localStorage.getItem("lighting"),
+			enablePostProcessing = localStorage.getItem("postProcessing"),
+			aa = localStorage.getItem("aa")
 
 		if (cameraMode == undefined) {
 			cameraMode = 'fps'
 			localStorage.setItem("camera", 'fps')
+		}
+		if (vrMovement == undefined) {
+			vrMovement = 'stick' // change to teleport later
+			localStorage.setItem("vrMovement", vrMovement)
+		}
+		if (IOTMode == undefined) {
+			IOTMode = 'off'
+			localStorage.setItem("IOTMode", IOTMode)
 		}
 		if (aa == undefined) {
 			aa = 'on'
@@ -266,22 +269,24 @@ export default class World {
 			localStorage.setItem("lighting", !this.mobile ? 'high' : 'low')
 		}
 		if (enablePostProcessing == null) {
-			enablePostProcessing = !this.mobile ? 'on' : 'off'
+			enablePostProcessing = 'off'
 			localStorage.setItem("postProcessing", enablePostProcessing)
 		}
 		this.aa = aa
 		this.cameraMode = cameraMode
+		this.vrMovement = vrMovement
 		this.lighting = lighting
 		this.enablePostProcessing = enablePostProcessing
+		this.IOTMode = IOTMode == 'on'
 	}
 	load (name, callback) {
 		this.name = name;
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
 			 this.init(response.data)
 			 callback && callback(this)
-    }).catch(response => {
-        console.log("World Error", response)
-    });
+		}).catch(response => {
+			console.log("World Error", response)
+		})
 	}
 
 	reload (name) {
@@ -305,33 +310,33 @@ export default class World {
 	}
 
 	generateFullLOD (coords) {
-			let platform = this.terrain.voxels[coords]
+			let platform = this.terrain.voxels[coords],
+				scene = three.scene
 			if (platform != null) {
-				if (platform.structures != null) {
-					platform.structures.forEach(structure =>{
-							structure.generateFullLOD()
-					})
-				}
+				platform.entities.map(entity=>{
+					entity.init(scene)
+				})
 			}
 	}
 
 	sendUserData () {
 		let camera = three.camera,
-				mobile = this.mobile,
-	      image = "",
-	      imageSize = [0, 0],
-	      userArms = world.user.arms,
-	      arms = []
+			mobile = this.mobile,
+			image = "",
+			imageSize = [0, 0],
+			input = this.userInput,
+			userHands = !!world.user.toolbox ? world.user.toolbox.hands : [],
+			hands = []
 
 		if (this.sendUpdatePacket == 12) { // send image
 	    imageSize = this.sendVideoFrame()
 	  }
 	  this.sendUpdatePacket += 1
 	  if (this.sendUpdatePacket %((2+(1*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
-	    if (this.userInput.leapMotion) {
-	      userArms.forEach(function (arm) {
-	        arms.push({pos: [arm.position.x, arm.position.y, arm.position.z],
-	          quat: [arm.quaternion.x, arm.quaternion.y, arm.quaternion.z, arm.quaternion.w] });
+	    if (input.trackedControls || input.leapMotion) {
+	      userHands.forEach(function (hand) {
+	        hands.push({pos: [hand.position.x, hand.position.y, hand.position.z],
+	          quat: [hand.quaternion.x, hand.quaternion.y, hand.quaternion.z, hand.quaternion.w] });
 	        })
 	      }
 	      send('update', {
@@ -339,8 +344,8 @@ export default class World {
 	          id: this.user.id,
 	          username: this.user.username,
 	          image: this.webcamImage,
-	          imageSize: imageSize,
-	          arms: arms,
+	          imageSize,
+	          hands,
 	          position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
 	          quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
 	        }

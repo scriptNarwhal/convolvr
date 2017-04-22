@@ -1,4 +1,5 @@
 import Tool from './tool'
+import Entity from '../../entities/entity'
 import EntityGenerator from '../../entities/entity-generator'
 /* terrain voxel tool */
 export default class VoxelTool extends Tool {
@@ -10,23 +11,22 @@ export default class VoxelTool extends Tool {
       this.options = {
 
       }
-    }
+      this.entity = new Entity(-1, [
+          {
+            props: {
+              geometry: {
+                shape: "box",
+                size: [1600, 1200, 7000]
+              },
+              material: {
+                name: "metal"
+              },
+              tool: {
 
-    initMesh (data = {}) {
-      let mesh = null,
-          color = data.color || 0xffffff,
-          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
-          geom = new THREE.BoxGeometry(200, 1000, 100),
-          mat = new THREE.MeshPhongMaterial({color: color, fog: false});
-
-      mesh = new THREE.Mesh(geom, mat);
-      mesh.rotation.x = Math.PI / 2.0
-      if (light) {
-        mesh.add(light);
-        light.position.set(0, 100, -100);
-      }
-      this.mesh = mesh;
-      return this.mesh;
+              }
+            }
+          }
+        ])
     }
 
     initIcon () {
@@ -34,22 +34,27 @@ export default class VoxelTool extends Tool {
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
-        props: {},
-        shape: "box",
-        size: [2640, 2640, 2640],
+        props: {
+          material: {
+            name: "metal",
+            color: 0xff8707
+          },
+          geometry: {
+            shape: "box",
+            size: [4500, 4500, 4500]
+          }
+        },
         position: [0, 0, 0],
-        color: 0xff8707,
-        text: "",
         quaternion: null
       })
       return entity
     }
 
-    primaryAction () {
+    primaryAction (telemetry) {
       // create voxel
     }
 
-    secondaryAction () {
+    secondaryAction (telemetry, value) {
       // remove voxel
     }
 }

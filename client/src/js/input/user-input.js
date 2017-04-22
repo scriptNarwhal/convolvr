@@ -35,63 +35,52 @@ export default class UserInput {
 		this.leapMotion = false
 		this.leapMode = "movement"
 		this.gamepadMode = false
+		this.trackedControls = false
+		this.handsDetected = 0
 		this.gamepads = {},
 		this.initDone = false
 	}
 
 	init (world, camera, device) {
 		let uInput = this,
-				viewport = document.querySelector("#viewport")
+			viewport = document.querySelector("#viewport")
+			
 		this.connect(world, camera, device)
 		uInput.rotationVector = {x: 0.2, y: 4.6, z: 0}
-
-				viewport.requestPointerLock = viewport.requestPointerLock || viewport.mozRequestPointerLock || viewport.webkitRequestPointerLock;
-				viewport.onclick = (event) => {
-					let elem = event.target;
-					if (!uInput.fullscreen) {
-
-						uInput.toggleFullscreen()
-						setTimeout(()=>{
-							elem.requestPointerLock()
-						},100)
-					}
-				};
-				viewport.style.pointerEvents = ''
-				if ("onpointerlockchange" in document) {
-					document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
-				} else if ("onmozpointerlockchange" in document) {
-					document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
-				} else if ("onwebkitpointerlockchange" in document) {
-					document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
-				}
-
+		viewport.requestPointerLock = viewport.requestPointerLock || viewport.mozRequestPointerLock || viewport.webkitRequestPointerLock;
+		viewport.style.pointerEvents = ''
+		if ("onpointerlockchange" in document) {
+			document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
+		} else if ("onmozpointerlockchange" in document) {
+			document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
+		} else if ("onwebkitpointerlockchange" in document) {
+			document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
+		}
 
 		if (!world.mobile) {
 			document.addEventListener("mousemove", function (e) {
 				if (uInput.focus) {
-					uInput.rotationVector.y  -=(e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 300.0
-					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 300.0
+					uInput.rotationVector.y  -=(e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 600.0
+					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 600.0
 				}
-			});
+			})
 			setTimeout(()=> {
 				document.addEventListener("mousedown", (e) => {
 					if (world.mode != "web") {
 						switch (e.which) {
 							case 1: // left mouse
-								this.user.toolbox.usePrimary(0) // right hand
+								this.user.toolbox.usePrimary(0, 0) // right hand
 							break;
 							case 2: // scroll wheel click
 								// tools.selectObject() .. might be handy
 							break;
-
 							case 3: // right click
-								this.user.toolbox.useSecondary(0) // right hand
+								this.user.toolbox.useSecondary(0, 1) // right hand // change tool option in forward direction
 							break;
 						}
 					}
 				}, false)
-			},250)
-
+			}, 250)
 		}
 		this.touchControls = new Touch(this)
 		this.keyboard = new Keyboard(this, this.world)
@@ -118,7 +107,8 @@ export default class UserInput {
 				terrainMesh = world.terrain.mesh,
 				terrainMode = '',
 				bottom = -600000,
-				velocity = this.device.velocity; //world.getElevation(this.camera.position);
+				velocity = this.device.velocity //world.getElevation(this.camera.position);
+
 		if (world.terrain.config) {
 			terrainMode = world.terrain.config.type
 			if (terrainMode == "plane" || terrainMode == "both") {
@@ -134,8 +124,8 @@ export default class UserInput {
 					this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ")
 				} else { // vehicle camera
 					this.tmpQuaternion.set( this.rotationVector.x, this.rotationVector.y, this.rotationVector.z, 1 ).normalize()
-					this.rotationVector = { x: 0, y: 0, z: 0}
-					this.camera.quaternion.multiply( this.tmpQuaternion )
+					this.rotationVector = {x: 0, y: 0, z: 0}
+					this.camera.quaternion.multiply(this.tmpQuaternion)
 				}
 			}
 			velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*3000))
@@ -179,27 +169,27 @@ export default class UserInput {
 	lockChangeAlert (canvas) {
 		console.log("lock change alert")
 		var a = 0,
-				world = this.world
+			world = this.world
 		this.focus =(document.pointerLockElement===canvas||document.mozPointerLockElement===canvas||document.webkitPointerLockElement===canvas);
 		this.fullscreen = this.focus
 		console.log("focus", this.focus)
 		if (!this.fullscreen && world.user.username != "") {
 			//world.showChat();
 			world.mode = "web";
-			while (a < world.user.hands.length) {
-				world.user.hands[a].visible = false;
-				a ++;
-			}
+			// while (a < world.user.hands.length) {
+			// 	world.user.hands[a].visible = false;
+			// 	a ++;
+			// }
 			document.body.setAttribute("class", "desktop");
 		} else {
 			if (world.user.username != "") {
 				if (world.mode != "stereo") {
-					world.mode = "vr";
+					world.mode = "vr"
 				}
-				while (a < world.user.hands.length) {
-					world.user.hands[a].visible = true;
-					a ++;
-				}
+				// while (a < world.user.hands.length) {
+				// 	world.user.hands[a].visible = true;
+				// 	a ++;
+				// }
 				document.body.setAttribute("class", "vr");
 			}
 		}

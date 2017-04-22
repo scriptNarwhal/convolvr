@@ -8,12 +8,8 @@ import app from './reducers/app'
 import worlds from './reducers/world'
 import entities from './reducers/entity'
 import components from './reducers/component'
-import structures from './reducers/structure'
-import tools from './reducers/tool'
 import users from './reducers/user'
-import npcs from './reducers/npc'
 import avatars from './reducers/avatar'
-import pages from './reducers/page'
 import messages from './reducers/message'
 import files from './reducers/file'
 
@@ -24,13 +20,9 @@ export default function configureStore(router, initialState = {}) {
                      app,
                      worlds,
                      components,
-                     structures,
                      users,
-                     npcs,
                      avatars,
-                     tools,
                      entities,
-                     pages,
                      messages,
                      files
         }),

@@ -27,7 +27,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 	z := strconv.Itoa(action.Coords[2])
 	voxel := db.From("World_" + action.World).From("X_" + x).From("Y_" + y).From("Z_" + z)
 	voxelEntities := voxel.From("entities")
-	if action.Tool == "Entity Tool" || action.Tool == "Structure Tool" {
+	if action.Tool == "Entity Tool" {
 		if action.Tool == "Entity Tool" {
 			entity = *NewEntity("", action.World, action.Entity.Components, action.Position, action.Quaternion)
 			saveErr := voxelEntities.Save(&entity)
@@ -39,9 +39,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 			log.Println(entity.ID)
 			entityOut, _ = json.Marshal(action)
 			p.Data = string(entityOut[:])
-		} else if action.Tool == "Structure Tool" { // structure tool
-			// implement structure tool
-		} // projectile tool doesn't need to persist
+		}
 		log.Printf(`tool action: "%s"`, action.Tool) // modify chunk where this tool was used...
 	}
 
@@ -52,7 +50,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 				if action.Tool == "Component Tool" {
 					newComps := []*Component{}
 					for _, v := range action.Components {
-						newComp := *NewComponent(v.Name, v.Shape, v.Material, v.Color, v.Size, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props)
+						newComp := *NewComponent(v.Name, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props, v.State, v.Components)
 						newComps = append(newComps, &newComp)
 					}
 					entity.Components = append(entity.Components, newComps...)

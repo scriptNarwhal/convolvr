@@ -1,4 +1,4 @@
-export default class Text {
+export default class Text { // deprecated 
     renderText (text, color, background) {
       let textTexture = null,
           textMaterial = null,
@@ -7,23 +7,23 @@ export default class Text {
           textCanvasSize = 1024,
           fontSize = 0,
           textLine = '',
-          textCanvasContext = null
+          context = null
 
   		if (!duplicate) {
         textCanvas = document.createElement("canvas")
         textCanvas.setAttribute("id", text)
         document.body.appendChild(textCanvas)
         textCanvas.setAttribute("style","display:none;")
-        textCanvasContext = textCanvas.getContext("2d")
+        context = textCanvas.getContext("2d")
         textCanvas.width = textCanvasSize
         textCanvas.height = textCanvasSize/4
         fontSize = (26+Math.round(1500 / (text.length*1.4)))
-        textCanvasContext.fillStyle = background
-        textCanvasContext.fillRect(0, 0, textCanvasSize, textCanvasSize)
-        textCanvasContext.font = fontSize+"pt RobotoLight"
-        textCanvasContext.textBaseline = "top"
-        textCanvasContext.fillStyle = color
-        textCanvasContext.fillText(text, 20, 36-fontSize/4)
+        context.fillStyle = background
+        context.fillRect(0, 0, textCanvasSize, textCanvasSize)
+        context.font = fontSize+"pt RobotoLight"
+        context.textBaseline = "top"
+        context.fillStyle = color
+        context.fillText(text, 20, 36-fontSize/4)
        } else {
          textCanvas = duplicate
        }
@@ -42,10 +42,16 @@ export default class Text {
         textMaterial = null,
         duplicate = document.getElementById(id),
         textCanvas = null,
-        textCanvasSize = 1024,
-        textCanvasContext = null,
+        textCanvasSize = [1024, 1024],
+        context = null,
         fontSize = 42,
         textLine = '',
+        textRenderState = {
+            codeBlock: false,
+            canvasSize: textCanvasSize,
+            fontSize,
+            color
+        },
         lines = 0,
         line = '',
         l = 0
@@ -54,18 +60,18 @@ export default class Text {
       textCanvas = document.createElement("canvas")
       textCanvas.setAttribute("style","display:none;")
       textCanvas.setAttribute("id", id)
-      textCanvas.width = textCanvasSize
-      textCanvas.height = textCanvasSize
+      textCanvas.width = textCanvasSize[0]
+      textCanvas.height = textCanvasSize[1]
       document.body.appendChild(textCanvas)
     } else {
       textCanvas = duplicate
     }
-    textCanvasContext = textCanvas.getContext("2d")
-    textCanvasContext.fillStyle = background
-    textCanvasContext.fillRect(0, 0, textCanvasSize, textCanvasSize)
-    textCanvasContext.font = fontSize+"pt RobotoLight"
-    textCanvasContext.textBaseline = "top"
-    textCanvasContext.fillStyle = color
+    context = textCanvas.getContext("2d")
+    context.fillStyle = background
+    context.fillRect(0, 0, textCanvasSize[0], textCanvasSize[1])
+    context.font = fontSize+"pt RobotoLight"
+    context.textBaseline = "top"
+    context.fillStyle = color
     lines = text.length
 
     while (l < text.length) {
@@ -78,7 +84,8 @@ export default class Text {
       ++l
     }
     text.map((line, l) => {
-      textCanvasContext.fillText(line, 16, 960-(1+(lines-l)*fontSize*1.35))
+      this.highlightMarkdown(l, line, lines, context, textRenderState)
+      context.fillText(line, 16, 960-(1+(lines-l)*fontSize*1.35))
     })
 
     textTexture = new THREE.Texture(textCanvas)
@@ -88,6 +95,30 @@ export default class Text {
            map: textTexture,
            side: 0
     })
-    return textMaterial;
+    return textMaterial
   }
+
+  highlightMarkdown(l, line, lines, context, textState) {
+      let xSize = textState.canvasSize[0],
+          lineHeight = textState.fontSize*1.35,
+          height = 960-(1+(lines-l)*lineHeight),
+          toggleCodeBlock = line.indexOf('```') > -1
+
+        
+        if (line[0] == '#') { // markdown heading
+            context.fillStyle = '#ffffff'
+        } else if (!textState.codeBlock) {
+            context.fillStyle = textState.color
+        }
+        if (textState.codeBlock || toggleCodeBlock) {
+            context.fillStyle = '#bbbbbb'
+            context.fillRect(0, height+10, xSize, lineHeight+10)
+            context.fillStyle = '#000000'  
+        }
+        if (toggleCodeBlock) {
+            if (line.split('```').length < 3) {
+                textState.codeBlock = !textState.codeBlock
+            }
+        }
+    }
 }

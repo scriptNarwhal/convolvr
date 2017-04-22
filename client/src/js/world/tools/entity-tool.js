@@ -14,51 +14,72 @@ export default class EntityTool extends Tool  {
       }
       this.all = ["panel", "panel2", "panel3", "block", "column", "wirebox"]
       this.current = 0
-    }
-
-    initMesh (data = {}) {
-      let mesh = null,
-          color = 0xffffff,
-          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
-          geom = new THREE.BoxGeometry(200, 1000, 100),
-          mat = new THREE.MeshPhongMaterial({color: color, fog: false})
-
-      mesh = new THREE.Mesh(geom, mat)
-      mesh.rotation.x = Math.PI / 2.0
-      if (light) {
-        mesh.add(light)
-        light.position.set(0, 100, -100)
-      }
-      this.mesh = mesh
-      return this.mesh
+      this.entity = new Entity(-1, [
+          {
+            props: {
+              geometry: {
+                shape: "box",
+                size: [1600, 1200, 7000]
+              },
+              material: {
+                name: "metal"
+              },
+              tool: {
+                panel: {
+                  title: "Entities",
+                  content: {
+                    props: {
+                      metaFactory: { // generates factory for each item in dataSource
+                        type: "entity", // component, prop
+                        dataSource: this.world.systems.assets.entities
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            components: [
+              this.initLabel("Entity")
+            ]
+          }
+        ])
     }
 
     initIcon () {
       let mesh = null,
           entity = null
+          
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
-        props: {},
-        shape: "box",
-        size: [2640, 2640, 2640],
+        props: {
+          material: {
+            name: "metal",
+            color: 0x15ff15
+          },
+          geometry: {
+            shape: "box",
+            size: [4500, 4500, 4500]
+          }
+        },
         position: [0, 0, 0],
-        color: 0x15ff15,
-        text: "",
         quaternion: null
       })
       return entity
     }
 
-    primaryAction () { // place entity
-      let cursor = this.world.user.cursor,
-          selected = cursor.entity,
-          quat = three.camera.quaternion,
+    primaryAction (telemetry) { // place entity
+      let cursor = telemetry.cursor,
+          cursorState = cursor.state.cursor || {},
+          position = telemetry.position,
+          quat = telemetry.quaternion,
+          selected = !!cursorState.entity ? cursorState.entity : false,
           entity = this.generator.makeEntity(this.options.entityType)
+
       if (entity.components.length == 1) {
         entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
       }
-      if (selected && cursor.distance < 33000) {
+      if (selected && cursorState.distance < 60000) {
           // switch to component tool
           this.world.user.toolbox.useTool(1, 0)
           this.world.user.hud.show()
@@ -70,11 +91,13 @@ export default class EntityTool extends Tool  {
       }
     }
 
-    secondaryAction () {
+    secondaryAction (telemetry, value) {
       // cycle entities
-      this.current ++
+      this.current += value
       if (this.current >= this.all.length) {
         this.current = 0
+      } else if (this.current < 0) {
+        this.current = this.all.length -1
       }
       this.options.entityType = this.all[this.current]
       return false // no socket event

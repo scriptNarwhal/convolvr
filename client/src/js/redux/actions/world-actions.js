@@ -6,12 +6,21 @@ import {
   WORLDS_FETCH,
   WORLDS_FETCH_DONE,
   WORLDS_FETCH_FAIL,
+  USER_WORLDS_FETCH,
+  USER_WORLDS_FETCH_FAIL,
+  USER_WORLDS_FETCH_DONE,
   WORLD_UPDATE_FETCH,
   WORLD_UPDATE_DONE,
   WORLD_UPDATE_FAIL,
   WORLD_DELETE_FETCH,
   WORLD_DELETE_DONE,
-  WORLD_DELETE_FAIL
+  WORLD_DELETE_FAIL,
+  UNIVERSE_SETTINGS_FETCH,
+  UNIVERSE_SETTINGS_FETCH_DONE,
+  UNIVERSE_SETTINGS_FETCH_FAIL,
+  UNIVERSE_SETTINGS_UPDATE_FETCH,
+  UNIVERSE_SETTINGS_UPDATE_DONE,
+  UNIVERSE_SETTINGS_UPDATE_FAIL
 } from '../constants/action-types'
 import axios from 'axios'
 import { browserHistory } from 'react-router'
@@ -23,24 +32,64 @@ export function fetchWorlds () {
         type: WORLDS_FETCH
      })
      return axios.get(API_SERVER+"/api/worlds")
-        .then(response => {
-            dispatch(doneFetchWorlds(response))
-        }).catch(response => {
-            dispatch(failedFetchWorlds(response))
+        .then(res => {
+            dispatch({
+                type: WORLDS_FETCH_DONE,
+                worlds: res.data
+            })
+        }).catch(res => {
+            dispatch({
+                type: WORLDS_FETCH_FAIL,
+                err: err
+            })
         });
    }
 }
-export function doneFetchWorlds (res) {
-    return {
-        type: WORLDS_FETCH_DONE,
-        worlds: res.data
-    }
+export function fetchUserWorlds (userId) {
+    return dispatch => {
+     dispatch({
+        type: USER_WORLDS_FETCH,
+        userId
+     })
+     return axios.get(API_SERVER+"/api/worlds/user/"+userId)
+        .then(res => {
+            dispatch({
+                type: USER_WORLDS_FETCH_DONE,
+                data: res.data
+            })
+        }).catch(res => {
+            dispatch({
+                type: USER_WORLDS_FETCH_FAIL,
+                err: err
+            })
+        });
+   }
 }
-export function failedFetchWorlds (err) {
-    return {
-        type: WORLDS_FETCH_FAIL,
-        err: err
-    }
+export function fetchUniverseSettings () {
+    return dispatch => {
+     dispatch({
+        type: UNIVERSE_SETTINGS_FETCH
+     })
+     return axios.get(API_SERVER+"/api/universe-settings")
+        .then(response => {
+            if (window.location.href.indexOf("/world/") == -1) {
+              dispatch({
+                type: WORLD_SET_CURRENT,
+                current: response.data.defaultWorld
+              })
+            }
+
+            dispatch({
+              type: UNIVERSE_SETTINGS_FETCH_DONE,
+              settings: response.data
+            })
+        }).catch(response => {
+            dispatch({
+              type: UNIVERSE_SETTINGS_FETCH_FAIL,
+              err: response
+            })
+        });
+   }
 }
 
 export function createWorld (data) {
@@ -83,7 +132,7 @@ export function updateWorld (id, data) {
         type: WORLD_UPDATE_FETCH,
         id: id
      })
-     return axios.post(API_SERVER+"/api/worlds/"+id)
+     return axios.post(API_SERVER+"/api/worlds/"+id, data)
         .then(response => {
             dispatch(updateWorldDone(response))
         }).catch(response => {
@@ -102,6 +151,26 @@ export function updateWorldFail (err) {
         type: WORLD_UPDATE_FAIL,
         err
     }
+}
+export function updateUniverseSettings (data, password) {
+    return dispatch => {
+     dispatch({
+        type: UNIVERSE_SETTINGS_UPDATE_FETCH,
+        id: 1
+     })
+     return axios.post(API_SERVER+"/api/universe-settings", data)
+        .then(res => {
+            dispatch({
+                type: UNIVERSE_SETTINGS_UPDATE_DONE,
+                settings: res.data
+            })
+        }).catch(res => {
+            dispatch({
+                type: UNIVERSE_SETTINGS_UPDATE_FAIL,
+                err: res.error
+            })
+        });
+   }
 }
 
 export function deleteWorld (id, data) {

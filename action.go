@@ -8,6 +8,7 @@ type ToolAction struct {
   Position    []float64   `json:"position"`
   Quaternion  []float64   `json:"quaternion"`
   Tool        string      `json:"tool"`
+  Hand        int         `json:"hand"`
   Options     interface{} `json:"options"`
   Components  []Component `storm:"inline" json:"components"`
   Entity      Entity      `json:"entity"`

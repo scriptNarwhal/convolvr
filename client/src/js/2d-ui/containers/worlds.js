@@ -34,6 +34,30 @@ class Worlds extends Component {
         />
           <div style={styles.worlds}>
           {
+            this.props.userWorlds.map((world, i) => {
+              let thumb = ''
+              if (world.sky.photosphere != '') {
+                thumb = world.sky.photosphere.split("/")
+                thumb.splice(thumb.length-1, 0, "thumbs")
+                thumb = thumb.join("/")+'.jpg'
+              }
+              return (
+                <Card clickHandler={(e, v) => {
+                        this.switchWorlds(world.name)
+                      }}
+                      color={`#${(world.light.color).toString(16)}`}
+                      image={world.sky.photosphere != '' ? `/data/${thumb}` : ""}
+                      showTitle={true}
+                      compact={world.sky.photosphere == ''}
+                      title={world.name}
+                      key={i}
+                />
+              )
+            })
+          }
+          </div>
+          <div style={styles.worlds}>
+          {
             this.props.worlds.map((world, i) => {
               let thumb = ''
               if (world.sky.photosphere != '') {
@@ -73,7 +97,8 @@ import { fetchWorlds, setCurrentWorld } from '../../redux/actions/world-actions'
 export default connect(
   (state, ownProps) => {
     return {
-        worlds: state.worlds.all
+        worlds: state.worlds.all,
+        userWorlds: state.worlds.userWorlds
     }
   },
   dispatch => {

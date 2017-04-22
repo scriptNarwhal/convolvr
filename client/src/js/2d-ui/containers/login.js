@@ -14,9 +14,7 @@ const styles = {
     top: '6vh',
     left: '0px',
     right: '0px',
-    bottom: '5vh',
-    borderTop: '0.8vh solid rgb(43, 43, 43)',
-    background: 'rgb(27, 27, 27)'
+    bottom: '5vh'
   },
   title: {
     fontSize: '2em',

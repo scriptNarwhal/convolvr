@@ -1,4 +1,5 @@
 import Tool from './tool'
+import Entity from '../../entities/entity'
 import EntityGenerator from '../../entities/entity-generator'
 /* delete (voxel | component | entity) tool */
 export default class DeleteTool extends Tool  {
@@ -11,46 +12,52 @@ export default class DeleteTool extends Tool  {
       this.options = {
 
       }
-    }
+      this.entity = new Entity(-1, [
+          {
+            props: {
+              geometry: {
+                shape: "box",
+                size: [2600, 2200, 8000]
+              },
+              material: {
+                name: "metal"
+              },
+              tool: {
 
-    initMesh (data = {}) {
-      let mesh = null,
-          color = data.color || 0xffffff,
-          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
-          geom = new THREE.BoxGeometry(200, 1000, 100),
-          mat = new THREE.MeshPhongMaterial({color: color, fog: false});
-
-      mesh = new THREE.Mesh(geom, mat);
-      if (light) {
-        mesh.add(light);
-        light.position.set(0, 100, -100);
-      }
-      this.mesh = mesh;
-      return this.mesh;
+              }
+            }
+          }
+        ])
     }
 
     initIcon () {
       let mesh = null,
           entity = null
+          
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
-        props: {},
-        shape: "box",
-        size: [2640, 2640, 2640],
+        props: {
+          material: {
+            name: "metal",
+            color: 0xff0707
+          },
+          geometry: {
+            shape: "box",
+            size: [4500, 4500, 4500]
+          }
+        },
         position: [0, 0, 0],
-        color: 0xff0707,
-        text: "",
         quaternion: null
       })
       return entity
     }
 
-    primaryAction () {
+    primaryAction (telemetry) {
       // remove entity
     }
 
-    secondaryAction () {
+    secondaryAction (telemetry, value) {
       //
     }
 }

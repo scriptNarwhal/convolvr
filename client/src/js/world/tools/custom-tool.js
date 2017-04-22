@@ -13,33 +13,23 @@ export default class CustomTool extends Tool {
       }
     }
 
-    initMesh (data = {}) {
-      let mesh = null,
-          color = data.color || 0xffffff,
-          light =  data.lightColor ? new THREE.PointLight(data.lightColor, 1.0, 200) : false,
-          geom = new THREE.BoxGeometry(200, 1000, 100),
-          mat = new THREE.MeshPhongMaterial({color: color, fog: false});
-
-      mesh = new THREE.Mesh(geom, mat);
-      if (light) {
-        mesh.add(light);
-        light.position.set(0, 100, -100);
-      }
-      this.mesh = mesh;
-      return this.mesh;
-    }
-
     initIcon () {
       let entity = null
       this.generator = this.generator || new EntityGenerator()
+      
       entity = this.generator.makeEntity("icon", true)
       entity.components.push({
-        props: {},
-        shape: "box",
-        size: [2640, 2640, 2640],
+        props: {
+          geometry: {
+            shape: "box",
+            size: [4500, 4500, 4500]
+          },
+          material: {
+            name: 'metal',
+            color: 0x003bff
+          }
+        },
         position: [0, 0, 0],
-        color: 0xffffff,
-        text: "",
         quaternion: null
       })
       return entity
@@ -49,7 +39,7 @@ export default class CustomTool extends Tool {
 
     }
 
-    secondaryAction () {
+    secondaryAction (telemetry, value) {
 
     }
 

@@ -4,7 +4,8 @@ import Shell from '../shell'
 const styles = {
   innerLogin: {
     width: '66vh',
-    height: '66vh',
+    height: 'auto',
+    paddingBottom: '2em',
     minWidth: '360px',
     margin: 'auto',
     display: 'block',
@@ -12,7 +13,6 @@ const styles = {
     top: '6vh',
     left: '0px',
     right: '0px',
-    bottom: '5vh',
     borderTop: '0.8vh solid rgb(43, 43, 43)',
     background: 'rgb(27, 27, 27)'
   },
@@ -23,12 +23,18 @@ const styles = {
   },
   form: {
     overflowY: 'auto',
-    height: '80%',
+    height: '90%',
     overflowX: 'hidden'
   },
   label: {
     marginRight: "1em",
-    color: 'rgba(255, 255, 255, 0.85)'
+    width: '33.3%',
+    display: 'inline-block',
+    color: 'rgba(255, 255, 255, 0.85)',
+    textAlign: "left"
+  },
+  setting: {
+    width: '66.6%'
   },
   input: {
     background: 'transparent',
@@ -40,7 +46,9 @@ const styles = {
     marginBottom: "1em"
   },
   option: {
-    marginBottom: "0.75em"
+    marginBottom: "0.75em",
+    width: '100%',
+    display: 'inline-block'
   },
   go: {
 
@@ -76,8 +84,10 @@ export default class NewWorld extends Component {
       green: 1.0,
       blue: 1.0,
       intensity: 0.75,
+      gravity: 1.0,
       terrainType: 'both',
       terrainColor: 0x404040,
+      turbulentTerrain: true,
       flatness: 2,
       entities: true,
       structures: true,
@@ -93,6 +103,7 @@ export default class NewWorld extends Component {
       data = {
       id: 0,
       name: this.state.name,
+      gravity: this.state.gravity,
       sky: {
         skyType: this.state.skyType,
         red: lightColor[0],
@@ -111,6 +122,7 @@ export default class NewWorld extends Component {
         type: this.state.terrainType,
         height: 20000,
         color: this.state.terrainColor,
+        turbulent: this.state.turbulentTerrain,
         flatness: parseFloat(this.state.flatness),
         decorations: ""
       },
@@ -140,10 +152,22 @@ export default class NewWorld extends Component {
       terrainType: e.target.value
     })
   }
+  onToggleTurbulentTerrain (e) {
+    let value= e.target.value
+    this.setState({
+      turbulentTerrain: value == 'yes' ? true : false
+    })
+  }
   onToggleStructures (e) {
     let value = e.target.value
     this.setState({
       structures: value == 'yes' ? true : false
+    })
+  }
+  onToggleGravity (e) {
+    let value= e.target.value
+    this.setState({
+      gravity: value == 'yes' ? 1.0 : 0.0
     })
   }
   upload (e) {
@@ -151,7 +175,7 @@ export default class NewWorld extends Component {
         username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
     data.append('file', e.target.files[0])
     this.setState({
-      photosphere: username+"/"+e.target.files[0].name
+      photosphere: username+"/"+e.target.files[0].name.replace(/\s/g, '-')
     })
     this.props.uploadFile(data, username, "")
   }
@@ -165,67 +189,104 @@ export default class NewWorld extends Component {
             <div style={styles.form}>
               <div style={styles.username}>
                 <span style={styles.label}>World Name</span>
-                <input name="convolvr-login"
-                       autoComplete="false"
-                       ref={(input) => { this.nameInput = input }}
-                       type='text'
-                       onBlur={(e)=>{ this.setState({name: e.target.value }) }}
-                       style={styles.input}
-                />
+                <span style={styles.setting}>
+                  <input name="convolvr-login"
+                         autoComplete="false"
+                         ref={(input) => { this.nameInput = input }}
+                         type='text'
+                         onBlur={(e)=>{ this.setState({name: e.target.value }) }}
+                         style={styles.input}
+                  />
+                </span>
               </div>
               <div style={styles.option}>
                 <span style={styles.label}>Skybox Type</span>
-                <select onChange={ e=> { this.onSkyTypeChange(e) }}>
-                  <option value="shader">Gradient Sky</option>
-                  <option value="photosphere">Photosphere</option>
-                </select>
+                <span style={styles.setting}>
+                  <select onChange={ e=> { this.onSkyTypeChange(e) }}>
+                    <option value="shader">Gradient Sky</option>
+                    <option value="photosphere">Photosphere</option>
+                  </select>
+                </span>
               </div>
               {
                 this.state.skyType == 'photosphere' ? (
                   <div style={styles.option}>
                     <span style={styles.label}>Skybox Photosphere</span>
-                    <input style={styles.fileUpload} type='file' onChange={ (e)=> this.upload(e) } />
+                    <span style={styles.setting}>
+                      <input style={styles.fileUpload} type='file' onChange={ (e)=> this.upload(e) } />
+                    </span>
                   </div>
                 ) : ""
               }
               <div style={styles.option}>
                 <span style={styles.label}>Light Color / Red</span>
-                    <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/>
-                </div>
-                <div style={styles.option}>
-                  <span style={styles.label}>Light Color / Green</span>
-                    <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/>
-                </div>
-                <div style={styles.option}>
-                  <span style={styles.label}>Light Color / Blue</span>
-                  <input type='range' min='0' max='1' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} />
-                </div>
+                <span style={styles.setting}>
+                  <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/>
+                </span>
+              </div>
+              <div style={styles.option}>
+                <span style={styles.label}>Light Color / Green</span>
+                <span style={styles.setting}>
+                <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/>
+                </span>
+              </div>
+              <div style={styles.option}>
+                <span style={styles.label}>Light Color / Blue</span>
+                <span style={styles.setting}>
+                <input type='range' min='0' max='1' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} />
+                </span>
+              </div>
               <div style={styles.option}>
                 <span style={styles.label}>Light Intensity</span>
-                  <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({intensity: e.target.value })}}/>
+                <span style={styles.setting}>
+                <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({intensity: e.target.value })}}/>
+                </span>
               </div>
               <div style={styles.option}>
                 <span style={styles.label}>Terrain Type</span>
+                <span style={styles.setting}>
                 <select onChange={ e=> { this.onTerrainTypeChange(e) }}>
-                  <option value="both">Voxels + Ground Plane</option>
-                  <option value="voxels">Voxels Only</option>
-                  <option value="plane">Ground Plane Only</option>
-                  <option value="empty">Empty Space</option>
+                <option value="both">Voxels + Ground Plane</option>
+                <option value="voxels">Voxels Only</option>
+                <option value="plane">Ground Plane Only</option>
+                <option value="empty">Empty Space</option>
                 </select>
+                </span>
               </div>
+              <div style={styles.option}>
+                  <span style={styles.label}>Turbulent Terrain?</span>
+                  <span style={styles.setting}>
+                    <select onChange={ e=> { this.onToggleTurbulentTerrain(e) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </span>
+                </div>
               <div style={styles.option}>
                 <span style={styles.label}>Terrain Flatness</span>
-                  <input type='range' min='1' max='16' step='0.1'  onChange={e=> { this.setState({flatness: e.target.value })}}/>
+                <span style={styles.setting}>
+                <input type='range' min='1' max='16' step='0.1'  onChange={e=> { this.setState({flatness: e.target.value })}}/>
+                </span>
               </div>
-              <div style={styles.option}>
-                <span style={styles.label}>Generate Structures?</span>
-                <select onChange={ e=> { this.onToggleStructures(e) }}>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-              </div>
-
-              <div style={styles.go}>
+                <div style={styles.option}>
+                  <span style={styles.label}>Generate Structures?</span>
+                  <span style={styles.setting}>
+                    <select onChange={ e=> { this.onToggleStructures(e) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </span>
+                </div>
+                <div style={styles.option}>
+                  <span style={styles.label}>Use Gravity?</span>
+                  <span style={styles.setting}>
+                    <select onChange={ e=> { this.onToggleGravity(e) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </span>
+                </div>
+                <div style={styles.go}>
                 <input type="button"
                         value="Create"
                         style={styles.signInButton}

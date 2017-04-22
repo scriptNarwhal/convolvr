@@ -12,17 +12,6 @@ import (
 )
 
 type Voxel struct {
-	ID       int    `storm:"id,increment" json:"id"`
-	Cell     []int  `json:"cell"`
-	Geometry string `json:"geometry"`
-	Material string `json:"material"`
-}
-
-func NewVoxel(id int, cell []int, geom string, mat string) *Voxel {
-	return &Voxel{id, cell, geom, mat}
-}
-
-type Chunk struct {
 	ID         int         `storm:"id,increment" json:"id"`
 	X          int         `storm:"index" json:"x"`
 	Y          int         `storm:"index" json:"y"`
@@ -33,23 +22,21 @@ type Chunk struct {
 	Geometry   string      `json:"geometry"`
 	Material   string      `json:"material"`
 	Color      int         `json:"color"`
-	Structures []Structure `json:"structures"`
-	Voxels     []*Voxel    `json:"voxels"`
 	Entities   []*Entity   `json:"entities"`
 }
 
-func NewChunk(id int, x int, y int, z int, alt float32, world string, name string, geom string, mat string, color int, structures []Structure, voxels []*Voxel, entities []*Entity) *Chunk {
-	return &Chunk{id, x, y, z, alt, world, name, geom, mat, color, structures, voxels, entities}
+func NewVoxel(id int, x int, y int, z int, alt float32, world string, name string, geom string, mat string, color int, entities []*Entity) *Voxel {
+	return &Voxel{id, x, y, z, alt, world, name, geom, mat, color, entities}
 }
 
 func getWorldChunks(c echo.Context) error {
 	var (
 		worldData      World
-		generatedChunk Chunk
-		chunksData     []Chunk
-		foundChunks    []Chunk
-		structures     []Structure
-		structure      Structure
+		generatedChunk Voxel
+		chunksData     []Voxel
+		foundChunks    []Voxel
+		// structures     []*Entity
+		// structure      Entity
 		entities       []*Entity
 		chunkVoxels    []*Voxel
 	)
@@ -76,30 +63,10 @@ func getWorldChunks(c echo.Context) error {
 				chunkGeom = "space"
 			} else {
 				if rand.Intn(26) > 23 && worldData.Spawn.Structures {
-					light := 0
-					if rand.Intn(6) > 4 {
-						if rand.Intn(5) > 4 {
-							light = 0xffffff
-						} else {
-							if rand.Intn(4) > 2 {
-								light = 0xffffff
-							} else {
-								if rand.Intn(4) > 2 {
-									light = 0x8000ff
-								} else {
-									light = 0x00ff00
-								}
-							}
-						}
-					}
-					structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0, 0, 0}, []int{0, 0, 0, 0}, 2+rand.Intn(5), 2+rand.Intn(9), 2+rand.Intn(5), light)
-					structures = append(structures, structure)
+					//structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0, 0, 0}, []int{0, 0, 0, 0}, 2+rand.Intn(5), 2+rand.Intn(9), 2+rand.Intn(5), light)
+					//structures = append(structures, structure)
 				}
 				initErr := voxelEntities.Init(&Entity{})
-				if initErr != nil {
-					log.Println(initErr)
-				}
-				initErr = subVoxels.Init(&Voxel{})
 				if initErr != nil {
 					log.Println(initErr)
 				}
@@ -107,9 +74,14 @@ func getWorldChunks(c echo.Context) error {
 			altitude := float32(0)
 			if worldData.Terrain.TerrainType == "voxels" ||
 				worldData.Terrain.TerrainType == "both" {
-				altitude = float32((math.Sin(float64(x)/2)*9 + math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness)
+				if worldData.Terrain.Turbulent {
+					altitude = float32((math.Sin(float64(x)/2)*9 + float64((x%2) - (z%3)) + math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness) * 200000.0
+				} else {
+					altitude = float32((math.Sin(float64(x)/2)*9 + math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness) * 200000.0
+				}
+				
 			}
-			generatedChunk = *NewChunk(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, structures, nil, nil)
+			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, nil)
 			chunksData = append(chunksData, generatedChunk)
 			saveErr := voxel.Save(&generatedChunk)
 			if saveErr != nil {
@@ -119,7 +91,6 @@ func getWorldChunks(c echo.Context) error {
 			voxelEntities.All(&entities)
 			subVoxels.All(&chunkVoxels)
 			foundChunks[0].Entities = entities
-			foundChunks[0].Voxels = chunkVoxels
 			chunksData = append(chunksData, foundChunks[0])
 		}
 	}
