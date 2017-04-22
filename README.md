@@ -15,10 +15,10 @@ WebVR game engine, server and virtual reality authoring tool.
   git clone https://github.com/SpaceHexagon/convolvr.git
   cd convolvr/client
   npm install
-  ./build.sh # or watchman src ./build.sh
+  ./build.sh
   cd ../cmd
   go build
   ./cmd # starts server on default port 3007
 
 ```
-![infinite procedural worlds](http://spacehexagon.com/app/Screenshot_138.png)
+![infinite procedural worlds](https://spacehexagon.com/app/external/Screenshot_2-crop.png)
