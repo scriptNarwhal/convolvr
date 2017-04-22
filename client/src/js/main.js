@@ -1,4 +1,10 @@
 console.log('Convolvr Client Initializing')
+if (localStorage.getItem("postProcessing") != null) {
+  if (localStorage.getItem("version0.35") == null) {
+    localStorage.setItem("version0.35", "1")
+    localStorage.setItem("postProcessing", "off")
+  }
+}
 // React
 import ReactDOM from 'react-dom'
 import React, { Component, PropTypes } from 'react'
