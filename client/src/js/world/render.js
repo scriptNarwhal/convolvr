@@ -1,4 +1,4 @@
-let tmpVector = new THREE.Vector3( 0, 0, 1 ),
+let handDirection = new THREE.Vector3(0, 0, 0),
     tmpVector2 = new THREE.Vector2(0, 0)
 
 let rayCast = (world, camera, cursor, hand, handMesh, callback) => {
@@ -11,12 +11,12 @@ let rayCast = (world, camera, cursor, hand, handMesh, callback) => {
       i = 0
 
   if (handMesh != null) {
-    tmpVector.applyQuaternion(handMesh.quaternion)
-    raycaster.set(handMesh.position, tmpVector)
+    handMesh.getWorldDirection(handDirection)
+    handDirection.multiplyScalar(-1)
+    raycaster.set(handMesh.position, handDirection)
   } else {
     raycaster.setFromCamera(tmpVector2, camera)
   }
-  
 
   octreeObjects = world.octree.search(raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction)
   intersections = raycaster.intersectOctreeObjects(octreeObjects)
@@ -39,9 +39,9 @@ let cursorCallback = (cursor, hand, world, obj, entity, component) => {
       hover = !!props ? props.hover : false,
       activate = !!props ? props.activate : false
 
-  if (obj.distance > 80000) {
-    obj.distance = 12000
-  } 
+  // if (obj.distance > 80000) {
+  //   obj.distance = 12000
+  // } 
   distance = obj.distance
   
   cursorState.cursor = {
@@ -79,19 +79,24 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
           cursorPos = cursorMesh.position
 
       if (!!state) {
-        if (state.distance > cursorPos.z) {
-          cursorPos.z -= 6000
-        } else if (state.distance < cursorPos.z) {
-          cursorPos.z += 6000
+        if (state.distance < (-cursorPos.z)) {
+          if (cursorPos.z < 85000) {
+            cursorPos.z += 12000
+          }
+        } else if (state.distance > (-cursorPos.z)) {
+          //if (cursorPos.z > 4000) {
+            cursorPos.z -= 12000
+          //}
         }
       }
       cursorMesh.updateMatrix()
-      
-      if (i == cursorIndex) {
-        if (i > 0) {
+      cursorMesh.updateMatrixWorld()
+      if (i > 0) {
           handMesh = cursors[i].mesh.parent
           !!handMesh && handMesh.updateMatrix()
-        }
+      }
+      if (i == cursorIndex) {
+        
         rayCast(world, camera, cursor, i -1, handMesh, cursorCallback)
       }
   })
@@ -107,7 +112,7 @@ export let animate = (world, last, cursorIndex) => {
       camera = three.camera,
       mode = world.mode,
       cPos = camera.position,
-      delta = (Date.now() - last) / 16000 ,
+      delta = (Date.now() - last) / 16000,
       time = Date.now(),
       user = world.user != null ? world.user : false,
       cursors = !!user ? user.avatar.cursors : [],
@@ -117,7 +122,7 @@ export let animate = (world, last, cursorIndex) => {
     world.userInput.update(delta) // Update keyboard / mouse / gamepad
   }
   if (user && user.mesh && cursors) {
-    user.avatar.entity.update([cPos.x, cPos.y, cPos.z], [camera.quaternion.x, camera.quaternion.y, camera.quaternion.z, camera.quaternion.w])
+    user.avatar.entity.update(cPos.toArray(), camera.quaternion.toArray())
     cursorIndex = handleCursors(cursors, cursorIndex, hands, camera, world)
   }
   world.sendUserData()
