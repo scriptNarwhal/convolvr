@@ -172,16 +172,15 @@ export let vrAnimate = (time, oldPos, cursorIndex) => {
     }
     t.vrDisplay.getFrameData(frame)
     vrPos = !!frame && frame.pose ? frame.pose.position : [0,0,0]
-    vrWorldPos = [22000 * vrPos[0], 22000 * vrPos[1]+floorHeight*2, 22000 * vrPos[2]]
+    vrWorldPos = [22000 * vrPos[0], 22000 * vrPos[1]+floorHeight*6, 22000 * vrPos[2]]
     camera.quaternion.fromArray(frame.pose.orientation)
     world.userInput.update(delta)
 
-    cursorIndex = handleCursors(cursors, cursorIndex, hands, camera, world)
-    
     user.mesh.quaternion.fromArray(frame.pose.orientation)
     user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     user.mesh.updateMatrix()
     camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+    cursorIndex = handleCursors(cursors, cursorIndex, hands, camera, world)
     world.updateSkybox(delta)
     world.sendUserData()
     t.vrEffect.render(t.scene, t.camera) // Render the scene.

@@ -133,11 +133,17 @@ export default class Avatar {
             //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
             scene.add(hand)
             hand.position.set(position.x -6000+ i*12000, position.y -12000, position.z -6000)
+            if (i > 0) {
+              if (!!hand.children[0]) {
+                hand.children[0].visible = true
+              }  
+            }
         } else {
             this.mesh.add(hand)
             if (i > 0) {
-              hand.children[0].visible = false //.components[0].mesh.visible = false
-              console.log(hand.userData.component)
+              if (!!hand.children[0]) {
+                hand.children[0].visible = false
+              }  
             }
             hand.position.set(-6000+ i*12000, -6000, -6000)
         }

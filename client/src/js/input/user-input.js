@@ -156,14 +156,14 @@ export default class UserInput {
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
 			this.camera.matrixWorldNeedsUpdate = true
-			if (this.camera.position.y < bottom + 12000) {
+			if (this.camera.position.y < bottom + 70000) {
 				if (this.keys.shift) {
 					velocity.y *= -0.70;
 				} else {
 					velocity.y *= -0.20;
 				}
 				this.device.falling = false
-				this.camera.position.y = bottom + 12000
+				this.camera.position.y = bottom + 70000
 				if (velocity.y > 1000) {
 					//world.vibrate(50);
 				}
