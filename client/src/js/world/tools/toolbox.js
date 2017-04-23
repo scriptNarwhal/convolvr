@@ -148,6 +148,7 @@ export default class Toolbox {
       if (userHand) {
         userHand.position.fromArray(position).multiplyScalar(20000).add(this.world.camera.position)
         userHand.translateX(725+ hand*-1250)
+        userHand.position.y += this.world.floorHeight*6
         userHand.quaternion.fromArray(orientation)
 
       }

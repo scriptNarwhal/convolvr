@@ -33,7 +33,7 @@ export default class GeometrySystem {
               geometry = new THREE.CylinderGeometry(size[0], size[0], size[1], 14, 1)
             break
             case "torus":
-              geometry = new THREE.TorusBufferGeometry(size[0], 6.3, 5, 12 )
+              geometry = new THREE.TorusGeometry(size[0], 6.3, 5, 12 )
             break
             case "hexagon":
               geometry = new THREE.CylinderGeometry(size[0], size[2], size[1], 6)

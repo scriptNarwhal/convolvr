@@ -141,16 +141,7 @@ class Settings extends Component {
             </select>
           </div>
           <div>
-            <div>
-            <h3 style={styles.h3}>Adjust Floor Height</h3>
-            <input onBlur={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
-                   style={styles.range}
-                   defaultValue={this.state.floorHeight}
-                   step={1}
-                   type='range'
-                   min='-16000'
-                   max='16000'
-            />      
+            <div>      
             <h3 style={styles.h3}>VR Movement Mode</h3>
             <select onChange={e=> { this.setState({vrMovement: e.target.value})}}
                     value={ this.state.vrMovement }
@@ -159,6 +150,18 @@ class Settings extends Component {
               <option value="stick">Stick Control</option>
               <option value="teleport">Teleport Control</option>
             </select>
+            <h3 style={styles.h3}>Adjust Floor Height</h3>
+            <input onBlur={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
+                   style={styles.range}
+                   defaultValue={this.state.floorHeight}
+                   step={1}
+                   type='range'
+                   min='-30000'
+                   max='20000'
+            />
+            <div style={{paddingLeft: '1em'}}>
+              {this.state.floorHeight} Units
+            </div>
           </div>
         </div>
           <div>

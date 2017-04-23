@@ -68,7 +68,7 @@ export default class ComponentTool extends Tool {
       return entity
     }
 
-    primaryAction (telemetry) { // place component (into entity if pointing at one)
+    primaryAction (telemetry, params = {}) { // place component (into entity if pointing at one)
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
           position = telemetry.position,
@@ -76,39 +76,43 @@ export default class ComponentTool extends Tool {
           selected = !!cursorState.entity ? cursorState.entity : false,
           entityId = -1,
           components = [],
-          component = this.components.makeComponent(this.options.componentType),
-          entity = new Entity(0, [component], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
-      //entity.init(three.scene)
-      if (selected && cursorState.distance < 80000) {
-          entityId = selected.id
-          if (components.length == 0) {
-            components = [component]
-          }
-          selected.mesh.updateMatrixWorld()
-          let selectedPos = selected.mesh.localToWorld(new THREE.Vector3())
-          // apply transformation and offset to components
-          components.map((comp, i)=> {
-            if (!!comp) {
-              comp.position=[
-                position[0] - selectedPos.x,
-                position[1] - selectedPos.y,
-                position[2] - selectedPos.z
-              ]
-              comp.quaternion = [quat.x, quat.y, quat.z, quat.w]
-            }
-          })
+          component = null,
+          entity = null
 
-          return {
-            entity,
-            entityId,
-            components
-          }
+      if (!!params.component) {
+        component = this.components.makeComponent(params.component)
       } else {
-        // switch back to entity tool, if the user is clicking into empty space
+        component = this.components.makeComponent(this.options.componentType)
+      }
+      entity = new Entity(0, [component], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
+      if (!!!selected || cursorState.distance > 80000) {
+      // switch back to entity tool, if the user is clicking into empty space
         this.world.user.toolbox.useTool(0, 0)
         this.world.user.hud.show()
-        this.world.user.toolbox.usePrimary(0)
+        this.world.user.toolbox.usePrimary(0, entity)
         return false
+      }
+      entityId = selected.id
+      if (components.length == 0) {
+        components = [component]
+      }
+      selected.mesh.updateMatrixWorld()
+      let selectedPos = selected.mesh.localToWorld(new THREE.Vector3())
+      // apply transformation and offset to components
+      components.map((comp, i)=> {
+        if (!!comp) {
+          comp.position=[
+            position[0] - selectedPos.x,
+            position[1] - selectedPos.y,
+            position[2] - selectedPos.z
+          ]
+          comp.quaternion = [quat.x, quat.y, quat.z, quat.w]
+        }
+      })
+      return {
+        entity,
+        entityId,
+        components
       }
     }
 

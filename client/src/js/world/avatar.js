@@ -128,9 +128,10 @@ export default class Avatar {
           avatar = this
 
       this.hands.map((hand, i) => {
-        //hand.parent.remove(hand)
+        //
         if (toggle) { 
             //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
+            hand.parent.remove(hand)
             scene.add(hand)
             hand.position.set(position.x -6000+ i*12000, position.y -12000, position.z -6000)
             if (i > 0) {

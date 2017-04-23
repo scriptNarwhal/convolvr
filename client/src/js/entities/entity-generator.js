@@ -21,6 +21,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true, //can be combined to save cpu
               shape: "box",
               size: [10000, 10000, 1000]
             },
@@ -35,6 +36,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true,
               shape: "box",
               size: [10000, 10000, 1000]
             },
@@ -56,6 +58,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true,
               shape: "hexagon",
               size: [10000, 10000, 1000]
             },
@@ -70,6 +73,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true,
               shape: "torus",
               size: [10000, 10000, 1000]
             },
@@ -84,6 +88,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true,
               shape: "hexagon",
               size: [10000, 10000, 1000]
             },
@@ -98,6 +103,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true,
               shape: "cylinder",
               size: [10000, 10000, 1000]
             },
@@ -119,6 +125,7 @@ export default class EntityGenerator {
         {
          props: {
             geometry: {
+              merge: true,
               shape: "box",
               size: [10000, 10000, 1000]
             },
@@ -133,6 +140,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true,
               shape: "hexagon",
               size: [10000, 10000, 1000]
             },
@@ -147,6 +155,7 @@ export default class EntityGenerator {
         {
          props: {
             geometry: {
+              merge: true,
               shape: "box",
               size: [10000, 10000, 1000]
             },
@@ -161,6 +170,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true,
               shape: "hexagon",
               size: [10000, 10000, 1000]
             },
@@ -182,6 +192,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true,
               shape: "box",
               size: [10000, 10000, 1000]
             },
@@ -203,6 +214,7 @@ export default class EntityGenerator {
         {
          props: {
             geometry: {
+              merge: true,
               shape: "box",
               size: [10000, 10000, 1000]
             },
@@ -216,6 +228,7 @@ export default class EntityGenerator {
         },{
          props: {
             geometry: {
+              merge: true,
               shape: "hexagon",
               size: [10000, 10000, 1000]
             },
@@ -229,6 +242,7 @@ export default class EntityGenerator {
         },{
           props: {
             geometry: {
+              merge: true,
               shape: "hexagon",
               size: [10000, 10000, 1000]
             },
@@ -250,6 +264,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true,
               shape: "hexagon",
               size: [5000, 10000, 1000]
             },
@@ -264,6 +279,7 @@ export default class EntityGenerator {
         {
           props: {
             geometry: {
+              merge: true,
               shape: "torus",
               size: [10000, 10000, 1000]
             },
@@ -297,6 +313,7 @@ function initButtonComponents (data) {
         activates: true,
         gazeOver: true,
         geometry: {
+          
           shape: "node",
           size: [0, 0, 0]
         },
@@ -311,6 +328,7 @@ function initButtonComponents (data) {
     components.push({
       props: {
         geometry: {
+          //merge: true,
           size: [160, 10000, 4000],
           shape: "box"
         },
@@ -329,6 +347,7 @@ function initButtonComponents (data) {
     components.push({
       props: {
         geometry: {
+          //merge: true,
           size: [10000, 160, 4000],
           shape: "box"
         },

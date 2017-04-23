@@ -25,6 +25,7 @@ export default class Component {
         }
       }
       mesh = systems.registerComponent(this)
+      this.mesh = mesh
       mesh.userData = { 
           component: this,
           entity

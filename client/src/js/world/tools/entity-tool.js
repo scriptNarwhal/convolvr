@@ -68,14 +68,20 @@ export default class EntityTool extends Tool  {
       return entity
     }
 
-    primaryAction (telemetry) { // place entity
+    primaryAction (telemetry, params = {}) { // place entity
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
           position = telemetry.position,
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
-          entity = this.generator.makeEntity(this.options.entityType)
-
+          entity = null
+      
+      if (params.entity) {
+        entity = params.entity
+      } else {
+        entity = this.generator.makeEntity(this.options.entityType)
+      }   
+      
       if (entity.components.length == 1) {
         entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
       }

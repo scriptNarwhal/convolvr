@@ -10,6 +10,7 @@ export default class ComponentGenerator {
     this.components["panel"] = {
       props: {
         geometry: {
+          merge: true,
           shape: "box",
           size: [16000, 16000, 1000]
         },
@@ -24,6 +25,7 @@ export default class ComponentGenerator {
     this.components["column"] = {
       props: {
         geometry: {
+          merge: true,
           shape: "hexagon",
           size: [8000, 40000, 8000]
         },
@@ -38,6 +40,7 @@ export default class ComponentGenerator {
     this.components["panel2"] = {
       props: {
         geometry: {
+          merge: true,
           shape: "box",
           size: [16000, 16000, 1000]
         },
@@ -52,6 +55,7 @@ export default class ComponentGenerator {
     this.components["column2"] = {
       props: {
         geometry: {
+          merge: true,
           shape: "box",
           size: [6000, 58000, 6000]
         },
