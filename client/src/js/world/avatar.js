@@ -136,7 +136,7 @@ export default class Avatar {
         } else {
             this.mesh.add(hand)
             if (i > 0) {
-              //hand.userData.component //.components[0].mesh.visible = false
+              hand.children[0].visible = false //.components[0].mesh.visible = false
               console.log(hand.userData.component)
             }
             hand.position.set(-6000+ i*12000, -6000, -6000)

@@ -88,6 +88,7 @@ export default class NewWorld extends Component {
       terrainType: 'both',
       terrainColor: 0x404040,
       turbulentTerrain: true,
+      highAltitudeGravity: false,
       flatness: 2,
       entities: true,
       structures: true,
@@ -104,6 +105,7 @@ export default class NewWorld extends Component {
       id: 0,
       name: this.state.name,
       gravity: this.state.gravity,
+      highAltitudeGravity: this.state.highAltitudeGravity,
       sky: {
         skyType: this.state.skyType,
         red: lightColor[0],
@@ -168,6 +170,12 @@ export default class NewWorld extends Component {
     let value= e.target.value
     this.setState({
       gravity: value == 'yes' ? 1.0 : 0.0
+    })
+  }
+  onToggleHighAltitudeGravity (e) {
+    let value = e.target.value
+    this.setState({
+      highAltitudeGravity: value == 'yes' ? true : false
     })
   }
   upload (e) {
@@ -281,6 +289,15 @@ export default class NewWorld extends Component {
                   <span style={styles.label}>Use Gravity?</span>
                   <span style={styles.setting}>
                     <select onChange={ e=> { this.onToggleGravity(e) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </span>
+                </div>
+                <div style={styles.option}>
+                  <span style={styles.label}>(High Altitude) Zero Gravity?</span>
+                  <span style={styles.setting}>
+                    <select onChange={ e=> { this.onToggleHighAltitudeGravity(e) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>

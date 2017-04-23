@@ -57,6 +57,8 @@ export default class World {
 				postProcessing = false
 
 		this.mobile = mobile
+		this.floorHeight = 0
+		this.highAltitudeGravity = false
 		this.initLocalSettings()
 		let rendererOptions = {antialias: this.aa != 'off' && this.enablePostProcessing != 'on'}
 		if (this.enablePostProcessing == 'on') {
@@ -86,7 +88,6 @@ export default class World {
 		this.HMDMode = "standard" // "head-movement"
 		this.vrMovement = "stick" // teleport
 		this.vrHeight = 0
-		this.floorHeight = 0
 		this.screenResX = screenResX
 		this.initRenderer(renderer, "viewport")
 		this.octree = new THREE.Octree({
@@ -194,7 +195,7 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				skyLight =  new THREE.PointLight(config.light.color, 0.95, 12200000),
+				skyLight =  new THREE.PointLight(config.light.color, 0.95, 15200000),
 				skyMaterial = null,
 				skybox = null
 
@@ -228,8 +229,10 @@ export default class World {
 		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
-		skyLight.position.set(0, 3000000, 3000000)
+		skyLight.position.set(0, 4000000, 8000000)
 		this.terrain.bufferChunks(true, 0)
+		this.gravity = config.gravity
+		this.highAltitudeGravity = config.highAltitudeGravity
 	}
 
 	initRenderer (renderer, id) {
@@ -284,7 +287,7 @@ export default class World {
 		this.lighting = lighting
 		this.enablePostProcessing = enablePostProcessing
 		this.IOTMode = IOTMode == 'on'
-		this.floorHeight = floorHeight
+		this.floorHeight = parseInt(floorHeight)
 	}
 	load (name, callback) {
 		this.name = name;
@@ -393,7 +396,7 @@ export default class World {
 					skyMat.uniforms.time.value += delta
 				}
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
-				this.skyLight.position.set(camera.position.x, camera.position.y+1000000, camera.position.z+500000)
+				this.skyLight.position.set(camera.position.x, camera.position.y+180000, camera.position.z+500000)
 			}
     }
 		if (terrainMesh) {

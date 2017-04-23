@@ -143,12 +143,13 @@ class Settings extends Component {
           <div>
             <div>
             <h3 style={styles.h3}>Adjust Floor Height</h3>
-            <input onChange={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
+            <input onBlur={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
                    style={styles.range}
-                   value={this.state.floorHeight}
+                   defaultValue={this.state.floorHeight}
+                   step={1}
                    type='range'
                    min='-16000'
-                   max='-16000'
+                   max='16000'
             />      
             <h3 style={styles.h3}>VR Movement Mode</h3>
             <select onChange={e=> { this.setState({vrMovement: e.target.value})}}

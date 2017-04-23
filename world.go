@@ -23,14 +23,15 @@ type NetworkDomain struct {
 }
 
 type World struct {
-	ID      int     `storm:"id,increment" json:"id"`
-	UserID  int     `storm:"id" json:"userId"`
-	Name    string  `storm:"index" json:"name"`
-	Gravity float64 `json:"gravity"`
-	Sky     `storm:"inline" json:"sky"`
-	Light   `storm:"inline" json:"light"`
-	Terrain `storm:"inline" json:"terrain"`
-	Spawn   `storm:"inline" json:"spawn"`
+	ID                  int     `storm:"id,increment" json:"id"`
+	UserID              int     `storm:"id" json:"userId"`
+	Name                string  `storm:"index" json:"name"`
+	Gravity             float64 `json:"gravity"`
+	HighAltitudeGravity bool    `json:"highAltitudeGravity"`
+	Sky                 `storm:"inline" json:"sky"`
+	Light               `storm:"inline" json:"light"`
+	Terrain             `storm:"inline" json:"terrain"`
+	Spawn               `storm:"inline" json:"spawn"`
 }
 
 type Sky struct {
@@ -75,8 +76,8 @@ type Spawn struct {
 	Vehicles   bool `json:"vehicles"`
 }
 
-func NewWorld(id int, userId int, name string, gravity float64, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
-	return &World{id, userId, name, gravity, sky, light, terrain, spawn}
+func NewWorld(id int, userId int, name string, gravity float64, highAltitudeGravity bool, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
+	return &World{id, userId, name, gravity, highAltitudeGravity, sky, light, terrain, spawn}
 }
 
 func getWorlds(c echo.Context) error {
@@ -143,23 +144,23 @@ func getWorld(c echo.Context) error { // load specific world
 		third = second/6 + rand.Float64()*0.25
 		if rand.Intn(10) > 6 {
 			first = 1.0
-			second = 0.92
+			second = 0.82
 			third = 0.3
 		}
 		if rand.Intn(12) > 6 {
 			if rand.Intn(3) > 2 {
-				red = first * 1.2
+				red = first * 1.5
 				green = third / 2.0
-				blue = second * 3.0
+				blue = second * 1.5
 			} else {
-				red = first / 2.5
-				green = second / 3
-				blue = first
+				red = first
+				green = first / 4.0
+				blue = third / 5.0
 			}
 		} else if rand.Intn(10) > 5 {
 			if rand.Intn(6) > 2 {
 				red = third / 2.0
-				green = second * 1.0
+				green = second * 2.0
 				blue = first
 			} else {
 				red = first
@@ -168,18 +169,18 @@ func getWorld(c echo.Context) error { // load specific world
 			}
 		} else {
 			if rand.Intn(3) > 2 {
-				red = first / 1.2
+				red = first / 3.5
 				green = first
 				blue = second / 2.0
 			} else {
-				green = first / 5.0
-				red = first
-				blue = second / 3.0
+				green = first / 3.0
+				red = second / 2.5
+				blue = first * 2.0
 			}
 		}
-		red *= 4.0
-		green *= 4.0
-		blue *= 4.0
+		red *= 4.5
+		green *= 4.5
+		blue *= 4.5
 		terrainRed = 0.15 + blue/2.0
 		terrainGreen = 0.15 + green/1.5
 		terrainBlue = 0.15 + red/2.0 + blue
@@ -190,7 +191,9 @@ func getWorld(c echo.Context) error { // load specific world
 		light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}
 		terrain := Terrain{TerrainType: "both", Height: 20000, Color: terrainColor, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
 		spawn := Spawn{Entities: true, Structures: true, NPCS: true, Tools: true, Vehicles: true}
-		world = *NewWorld(0, -1, name, 1.0, sky, light, terrain, spawn)
+		gravity := 1.0
+		highAltitudeGravity := false
+		world = *NewWorld(0, -1, name, gravity, highAltitudeGravity, sky, light, terrain, spawn)
 		saveErr := db.Save(&world)
 		if saveErr != nil {
 			log.Println(saveErr)

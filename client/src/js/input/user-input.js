@@ -138,9 +138,20 @@ export default class UserInput {
 			if (Math.abs(velocity.y) > 6000) {
 				this.device.falling = true
 			}
-			if (this.device.falling) { //if not standing on something..
-				velocity.y -= 2000 * (delta*16000) // apply gravity
+			if (world.gravity > 0) {
+				if (this.device.falling) { //if not standing on something..
+					if (world.highAltitudeGravity) {
+							velocity.y -= (2500 * (delta*16000))
+					} else {
+							if (this.camera.position.y > 2400000) {
+								velocity.y *= 0.99
+							} else {
+								velocity.y -= (2500 * (delta*16000))  // apply gravity
+						}
+					}
+				} 	
 			}
+			
 			this.moveVector.set(0, 0, 0)
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
