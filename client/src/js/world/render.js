@@ -172,7 +172,7 @@ export let vrAnimate = (time, oldPos, cursorIndex) => {
     }
     t.vrDisplay.getFrameData(frame)
     vrPos = !!frame && frame.pose ? frame.pose.position : [0,0,0]
-    vrWorldPos = [22000 * vrPos[0], 22000 * vrPos[1]-floorHeight, 22000 * vrPos[2]]
+    vrWorldPos = [22000 * vrPos[0], 22000 * vrPos[1]+floorHeight*2, 22000 * vrPos[2]]
     camera.quaternion.fromArray(frame.pose.orientation)
     world.userInput.update(delta)
 

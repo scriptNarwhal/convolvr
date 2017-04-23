@@ -36,10 +36,10 @@ export default class TrackedController {
       }
       if (world.vrMovement=='stick') {
         if (Math.abs(axes[0]) > 0.1) {
-            input.moveVector.x = axes[0] * 16000
+            input.moveVector.x = axes[0] * 22000
         }
         if (Math.abs(axes[1]) > 0.1) {
-            input.moveVector.z = axes[1] * 16000
+            input.moveVector.z = axes[1] * 22000
         }
       } else { // teleport mode
 
