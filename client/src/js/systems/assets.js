@@ -1,13 +1,13 @@
 export default class AssetSystem {
     constructor (world) {
         this.world = world
-        this.textures = []
         this.models = []
         this.entities = []
         this.components = []
         this.geometries = {}
         this.materials = {}
         this.textures = {}
+        this.audioBuffers = {}
         this.props = {
             geometry: [
                 {shape: 'node', size: [1, 1, 1]},
@@ -28,11 +28,41 @@ export default class AssetSystem {
                 {name: "wireframe", color: 0xffffff},
                 {name: "custom-texture", color: 0xffffff}
             ],
-            systems: [
-
+            systems: [ // categorize this some how
+                {name: 'vehicle'},
+                {name: 'floor'},
+                {name: 'wall'},
+                {name: 'text'},
+                {name: 'audio'},
+                {name: 'video'},
+                {name: 'signal'},
+                {name: 'drawing'},
+                {name: 'control'},
+                {name: 'propulsion'},
+                {name: 'factory'},
+                {name: 'metaFactory'},
+                {name: 'particles'},
+                {name: 'projectiles'},
+                {name: 'destructable'},
+                {name: 'door'},
+                {name: 'cursor'},
+                {name: 'hand'},
+                {name: 'hover'},
+                {name: 'activate'},
+                {name: 'terrain'},
+                {name: 'container'},
+                {name: 'tab'},
+                {name: 'tabView'},
+                {name: 'toolUI'},
+                {name: 'tool'},
+                {name: 'webhook'},
+                {name: 'webrtc'},
+                {name: 'file'},
+                {name: 'chat'}
             ]
         }
         this.textureLoader = new THREE.TextureLoader()
+        this.audioLoader = new THREE.AudioLoader()
     }
 
     init (component) { 
@@ -53,6 +83,23 @@ export default class AssetSystem {
             texture = this.textures[asset]
         }
         callback(texture)
+    }
+
+    loadSound (asset, sound, callback) {
+        let sound = null
+
+        if (this.audioBuffers[asset] == null) {
+           loader.load( asset, function( buffer ) {
+                sound.setBuffer( buffer )
+            })
+        } else {
+            sound.setBuffer(this.audioBuffers[asset])
+        }
+        callback()
+    }
+
+    loadModel (asset, callback) {
+
     }
 }
 

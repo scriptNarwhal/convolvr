@@ -40,6 +40,7 @@ import TabSystem from '../systems/tab'
 import ToolSystem from '../systems/tool'
 import FileSystem from '../systems/file'
 import ChatSystem from '../systems/chat'
+import WebRTCSystem from '../systems/webrtc'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
 
@@ -60,6 +61,7 @@ export default class World {
 		this.floorHeight = 0
 		this.highAltitudeGravity = false
 		this.initLocalSettings()
+		
 		let rendererOptions = {antialias: this.aa != 'off' && this.enablePostProcessing != 'on'}
 		if (this.enablePostProcessing == 'on') {
 			rendererOptions.alpha = true
@@ -146,6 +148,7 @@ export default class World {
 			toolUI: new ToolUISystem(world),
 			tool: new ToolSystem(world),
 			webhook: new WebHookSystem(world),
+			webrtc: new WebRTCSystem(world),
 			file: new FileSystem(world),
 			chat: new ChatSystem(world)
 		})
@@ -154,6 +157,7 @@ export default class World {
 			worldPhysics: this.systems.worldPhysics.worker,
 			entityPhysics: this.systems.entityPhysics.worker
 		}
+		camera.add(this.systems.audio.listener)
 		this.textures = {}
 		let gridTexture = this.textures.grid = THREE.ImageUtils.loadTexture('/images/textures/gplaypattern_@2X.png', false, () => {
 			gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping
