@@ -12,17 +12,17 @@ import (
 )
 
 type Voxel struct {
-	ID         int         `storm:"id,increment" json:"id"`
-	X          int         `storm:"index" json:"x"`
-	Y          int         `storm:"index" json:"y"`
-	Z          int         `storm:"index" json:"z"`
-	Altitude   float32     `json:"altitude"`
-	World      string      `storm:"id" json:"world"`
-	Name       string      `json:"name"`
-	Geometry   string      `json:"geometry"`
-	Material   string      `json:"material"`
-	Color      int         `json:"color"`
-	Entities   []*Entity   `json:"entities"`
+	ID       int       `storm:"id,increment" json:"id"`
+	X        int       `storm:"index" json:"x"`
+	Y        int       `storm:"index" json:"y"`
+	Z        int       `storm:"index" json:"z"`
+	Altitude float32   `json:"altitude"`
+	World    string    `storm:"id" json:"world"`
+	Name     string    `json:"name"`
+	Geometry string    `json:"geometry"`
+	Material string    `json:"material"`
+	Color    int       `json:"color"`
+	Entities []*Entity `json:"entities"`
 }
 
 func NewVoxel(id int, x int, y int, z int, alt float32, world string, name string, geom string, mat string, color int, entities []*Entity) *Voxel {
@@ -31,14 +31,15 @@ func NewVoxel(id int, x int, y int, z int, alt float32, world string, name strin
 
 func getWorldChunks(c echo.Context) error {
 	var (
-		worldData      World
-		generatedChunk Voxel
-		chunksData     []Voxel
-		foundChunks    []Voxel
-		// structures     []*Entity
-		// structure      Entity
-		entities       []*Entity
-		chunkVoxels    []*Voxel
+		worldData           World
+		generatedChunk      Voxel
+		chunksData          []Voxel
+		foundChunks         []Voxel
+		structures          []*Entity
+		structure           *Entity
+		structureComponents []*Component
+		entities            []*Entity
+		chunkVoxels         []*Voxel
 	)
 	chunk := c.Param("chunks")
 	world := c.Param("worldId")
@@ -58,30 +59,79 @@ func getWorldChunks(c echo.Context) error {
 		subVoxels := voxel.From("voxels")
 		voxel.All(&foundChunks)
 		if len(foundChunks) == 0 {
-			chunkGeom := "flat"
-			if rand.Intn(10) < 5 {
-				chunkGeom = "space"
-			} else {
-				if rand.Intn(26) > 23 && worldData.Spawn.Structures {
-					//structure = *NewStructure(0, "test", "box", "plastic", nil, nil, []int{0, 0, 0}, []int{0, 0, 0, 0}, 2+rand.Intn(5), 2+rand.Intn(9), 2+rand.Intn(5), light)
-					//structures = append(structures, structure)
-				}
-				initErr := voxelEntities.Init(&Entity{})
-				if initErr != nil {
-					log.Println(initErr)
-				}
-			}
 			altitude := float32(0)
 			if worldData.Terrain.TerrainType == "voxels" ||
 				worldData.Terrain.TerrainType == "both" {
 				if worldData.Terrain.Turbulent {
-					altitude = float32((math.Sin(float64(x)/2)*9 + float64((x%2) - (z%3)) + math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness) * 200000.0
+					altitude = float32((math.Sin(float64(x)/2)*9+float64((x%2)-(z%3))+math.Cos(float64(z)/2)*9)/worldData.Terrain.Flatness) * 200000.0
 				} else {
-					altitude = float32((math.Sin(float64(x)/2)*9 + math.Cos(float64(z)/2)*9) / worldData.Terrain.Flatness) * 200000.0
+					altitude = float32((math.Sin(float64(x)/2)*9+math.Cos(float64(z)/2)*9)/worldData.Terrain.Flatness) * 200000.0
 				}
-				
+
 			}
-			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, nil)
+			chunkGeom := "flat"
+			if rand.Intn(10) < 5 {
+				chunkGeom = "space"
+			} else {
+				initErr := voxelEntities.Init(&Entity{})
+				if initErr != nil {
+					log.Println(initErr)
+				}
+				if rand.Intn(26) > 20 && worldData.Spawn.Structures {
+					wallPos := []float64{}
+					floors := 2 + rand.Intn(16)
+					structureSize := 300000.0
+					for i := 0; i < floors; i++ {
+						floorPos := []float64{0.0, float64(i)*structureSize/2 - structureSize/2, 0.0}
+						floorQuat := []float64{0.0, 0.0, 0.0, 0.0}
+						floorProps := make(map[string]interface{})
+						floorGeometry := make(map[string]interface{})
+						floorMaterial := make(map[string]interface{})
+						floorProps["floor"] = map[string]int{
+							"level": i,
+						}
+						floorGeometry["size"] = []float64{structureSize, 5000, structureSize}
+						floorGeometry["shape"] = "box"
+						floorGeometry["merge"] = true
+						floorMaterial["name"] = "plastic"
+						floorMaterial["color"] = 0x404040
+						floorProps["geometry"] = floorGeometry
+						floorProps["material"] = floorMaterial
+						wallState := make(map[string]interface{})
+						structureComponents = append(structureComponents, NewComponent("", floorPos, floorQuat, floorProps, wallState, []*Component{}))
+						for w := 0; w < 4; w++ {
+							geometry := make(map[string]interface{})
+							material := make(map[string]interface{})
+							geometry["shape"] = "box"
+							geometry["merge"] = true
+							if w < 2 {
+								wallPos = []float64{0.0, -structureSize/2 + float64(i)*structureSize/2, -structureSize/2.0 + float64(w)*structureSize}
+								geometry["size"] = []float64{structureSize, structureSize / 3.2, 5000}
+							} else {
+								wallPos = []float64{-structureSize*2.5 + float64(w)*structureSize, -structureSize/2 + float64(i)*structureSize/2, 0.0}
+								geometry["size"] = []float64{5000, structureSize / 3.2, structureSize}
+							}
+							wallQuat := []float64{0.0, 0.0, 0.0, 0.0}
+							wallProps := make(map[string]interface{})
+							wallProps["wall"] = map[string]int{
+								"index": w,
+							}
+							material["name"] = "plastic"
+							material["color"] = 0x404040
+							wallProps["geometry"] = geometry
+							wallProps["material"] = material
+							wallState := make(map[string]interface{})
+							structureComponents = append(structureComponents, NewComponent("", wallPos, wallQuat, wallProps, wallState, []*Component{}))
+						}
+					}
+					structurePos := []float64{float64(x) * 928000.0, float64(altitude) - (float64(floors) * 25000), float64(z) * 807360.0}
+					structure = NewEntity("Generic Building", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0})
+					structures = append(structures, structure)
+				}
+
+			}
+
+			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, structures)
 			chunksData = append(chunksData, generatedChunk)
 			saveErr := voxel.Save(&generatedChunk)
 			if saveErr != nil {

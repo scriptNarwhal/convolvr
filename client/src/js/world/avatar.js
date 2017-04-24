@@ -116,7 +116,7 @@ export default class Avatar {
         this.wholeBody = wholeBody
         this.data = data
         console.log("Init Avatar: Tracked Controls", userInput.trackedControls)
-        if (!wholeBody && userInput.trackedControls == false && userInput.leapMotion == false) {
+        if (!!data.forceHands || (!wholeBody && userInput.trackedControls == false && userInput.leapMotion == false)) {
           this.toggleTrackedHands(false)
         }
     }

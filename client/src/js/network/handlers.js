@@ -24,7 +24,7 @@ export default class SocketHandlers {
 					if (user == null) {
 						user = world.users["user"+entity.id] = {
 							id: entity.id,
-							avatar: new Avatar(entity.id, true, {}), // render whole body, not just hands
+							avatar: new Avatar(entity.id, true, {forceHands: true}), // render whole body, not just hands
 							mesh: null
 						}
 					}

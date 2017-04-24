@@ -25,7 +25,7 @@ import ProjectileSystem from '../systems/projectile'
 import DestructableSystem from '../systems/destructable'
 import FloorSystem from '../systems/floor'
 import WallSystem from '../systems/wall'
-import SeatSystem from '../systems/seat'
+import VehicleSystem from '../systems/vehicle'
 import DoorSystem from '../systems/door'
 import HoverSystem from '../systems/hover'
 import ActivateSystem from '../systems/activate'
@@ -133,7 +133,7 @@ export default class World {
 			destructable: new DestructableSystem(world),
 			floor: new FloorSystem(world),
 			wall: new WallSystem(world),
-			seat: new SeatSystem(world),
+			vehicle: new VehicleSystem(world),
 			door: new DoorSystem(world),
 			cursor: new CursorSystem(world),
 			hand: new HandSystem(world),

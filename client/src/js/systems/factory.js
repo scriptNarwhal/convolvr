@@ -7,8 +7,14 @@ export default class FactorySystem {
         let prop = component.props.factory
 
         return {
-            
+            generate: () => {
+                this.generate() // presumably
+            }
         }
+    }
+
+    generate () {
+
     }
 }
 

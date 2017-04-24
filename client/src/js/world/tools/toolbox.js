@@ -17,11 +17,9 @@ export default class Toolbox {
 
       this.user.avatar.hands.map((m,i)=>{
         if (i < 3) {
-          console.log("hand", m)
           this.hands.push(m)
         }
       })
-      console.log("hands!!!", this.hands)
       this.fadeTimeout = 0
       this.tools = [
         new EntityTool({}, world, this),
@@ -139,7 +137,37 @@ export default class Toolbox {
       }
     }
 
-    grip (hand) {
+    grip (handIndex, value) {
+      let hand = this.hands[handIndex],
+          entity = null, //hand.children[0].userData.component.props.,
+          cursor = null,
+          pos = [0,0,0], //entity.mesh.position,
+          coords = [0,0,0],
+          voxels = this.world.terrain.voxels
+     
+      if (this.user.avatar) {
+        cursor = this.user.avatar.cursors[1+hand]
+        entity = !!cursor ? cursor.state.cursor.entity : false
+        pos = !!entity ? entity.mesh.position.toArray() : pos
+      }
+      if (!! entity) {
+        
+        if (value == -1) {
+          hand.remove(entity.mesh)
+          three.scene.add(entity.mesh)
+          entity.update([hand.position.x, hand.position.y, hand.position.z])
+          hand.userData.grabbedEntity = false
+          //coords = [Math.floor(pos.x / 928000), 0, Math.floor(pos.z / 807360)],
+        } else {
+          if (!!! hand.userData.grabbedEntity) {
+            three.scene.remove(entity.mesh)
+            hand.userData.grabbedEntity = entity
+            hand.add(entity.mesh)
+            entity.update([0,0,0])
+          }
+        }
+        
+      }
       // show feedback
     }
 

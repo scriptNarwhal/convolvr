@@ -53,9 +53,13 @@ export default class TrackedController {
               tools.usePrimary(1) // left hand
             break
             case 2:
-              tools.grip(1)
+              tools.grip(1, this.buttonValue(button))
             break
           }
+        } else if (lastButtons.left[i] == true && this.buttonReleased(button)) {
+          if (i == 2) {
+            tools.grip(1, -1)
+          } 
         }
         lastButtons.left[i] = this.buttonPressed(button)
       })
@@ -82,8 +86,12 @@ export default class TrackedController {
               tools.usePrimary(0) // right hand
             break
             case 2:
-              tools.grip(0)
+              tools.grip(0, this.buttonValue(button))
             break
+          }
+        } else if (lastButtons.right[i] == true && this.buttonReleased(button)) {
+          if (i == 2) {
+            tools.grip(0, -1)
           }
         }
         lastButtons.right[i] = this.buttonPressed(button)
@@ -106,8 +114,20 @@ export default class TrackedController {
 
   buttonPressed (b) {
     if (typeof(b) == "object") {
-      return b.pressed;
+      return b.pressed
     }
-    return b == 1.0 || b > 0.9;
+    return b == 1.0 || b > 0.8
+  }
+  buttonReleased (b) {
+    if (typeof(b) == "object") {
+      return !b.pressed
+    }
+    return b == 0.0 || b < 0.2
+  }
+  buttonValue (b) {
+    if (typeof(b) == "object") {
+      return b.pressed
+    }
+    return b
   }
 }
