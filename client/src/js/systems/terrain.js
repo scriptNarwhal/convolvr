@@ -101,7 +101,9 @@ export default class TerrainSystem {
                   }
                   if (terrainChunk.entities) {
                     terrainChunk.entities.map(e => {
-                      this.octree.remove(e.mesh)
+                      if (!!e.mesh) {
+                        this.octree.remove(e.mesh)
+                      } 
                     })
                   }
                 }

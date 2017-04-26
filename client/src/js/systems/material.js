@@ -30,6 +30,10 @@ export default class MaterialSystem {
             case "basic": // mesh basic material
               basic = true
             break
+            case "terrain":
+              prop.diffuse = '/images/textures/gplaypattern_@2X.png'
+              prop.repeat = ["wrap", 16, 16]
+            break
             case "metal":
               prop.reflection = '/images/textures/sky-reflection.jpg'
               prop.specular = '/images/textures/gplaypattern_@2X.png'
@@ -55,12 +59,21 @@ export default class MaterialSystem {
 
           if (prop.diffuse) {
             assets.loadImage(prop.diffuse, (texture)=>{ 
+              if (!!prop.repeat) {
+                if (prop.repeat[0] == "wrapping") {
+                  texture.wrapS = texture.wrapT = THREE.RepeatWrapping
+			            texture.repeat.set(prop.repeat[1], prop.repeat[2])
+                  texture.needsUpdate = true
+                }
+              }
+              texture.anisotropy = three.renderer.getMaxAnisotropy()
               material.map = texture
               material.needsUpdate = true 
             })
           }
           if (prop.specular) {
             assets.loadImage(prop.specular, (texture)=>{ 
+              texture.anisotropy = three.renderer.getMaxAnisotropy()
               material.specularMap = texture
               material.needsUpdate = true 
             })

@@ -158,13 +158,6 @@ export default class World {
 			entityPhysics: this.systems.entityPhysics.worker
 		}
 		camera.add(this.systems.audio.listener)
-		this.textures = {}
-		let gridTexture = this.textures.grid = THREE.ImageUtils.loadTexture('/images/textures/gplaypattern_@2X.png', false, () => {
-			gridTexture.wrapS = gridTexture.wrapT = THREE.RepeatWrapping
-			gridTexture.repeat.set(16, 16)
-			gridTexture.anisotropy = renderer.getMaxAnisotropy()
-				//skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
-		})
 		this.socketHandlers = new SocketHandlers(this, socket)
 
 		function onResize () {

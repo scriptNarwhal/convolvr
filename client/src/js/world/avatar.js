@@ -126,7 +126,11 @@ export default class Avatar {
       let scene = window.three.scene,
           position = this.mesh.position,
           avatar = this
-
+          
+     let cursors = this.entity.componentsByProp.cursor
+     if (cursors) {
+       cursors[0].mesh.visible = !toggle
+     } 
       this.hands.map((hand, i) => {
         //
         if (toggle) { 
@@ -134,11 +138,12 @@ export default class Avatar {
             hand.parent.remove(hand)
             scene.add(hand)
             hand.position.set(position.x -6000+ i*12000, position.y -12000, position.z -6000)
+            
             if (i > 0) {
               if (!!hand.children[0]) {
                 hand.children[0].visible = true
               }  
-            }
+            } 
         } else {
             this.mesh.add(hand)
             if (i > 0) {
