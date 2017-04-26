@@ -28,7 +28,10 @@ export default class EntityGenerator {
             material: {
               color: 0x808080,
               name: "plastic"
-            }
+            },
+            // audio: { // remove this.. merely a test
+            //   asset: "/sounds/Partition.wav[Re-Edit].ogg"
+            // }
           },
           quaternion: null,
           position: [0, 0, 0]

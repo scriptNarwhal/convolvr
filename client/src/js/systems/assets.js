@@ -86,16 +86,15 @@ export default class AssetSystem {
     }
 
     loadSound (asset, sound, callback) {
-        let sound = null
-
         if (this.audioBuffers[asset] == null) {
-           loader.load( asset, function( buffer ) {
-                sound.setBuffer( buffer )
-            })
+           this.audioLoader.load(asset, function(buffer) {
+                sound.setBuffer(buffer)
+                callback()
+           })
         } else {
             sound.setBuffer(this.audioBuffers[asset])
+            callback()
         }
-        callback()
     }
 
     loadModel (asset, callback) {

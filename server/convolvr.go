@@ -2,13 +2,14 @@ package convolvr
 
 import (
 	"fmt"
+	"net/http"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/asdine/storm"
 	"github.com/ds0nt/nexus"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/spf13/viper"
-	"net/http"
 )
 
 var (
@@ -66,6 +67,10 @@ func Start(configName string) {
 	api := e.Group("/api")
 	api.GET("/users", getUsers)
 	api.POST("/users", postUsers)
+	api.GET("/users/:userId/inventories", listAllInventories)
+	api.GET("/users/:userId/inventory/:inventoryId", getUserInventory)
+	api.POST("/users/:userId/inventory/:inventoryId", saveItemToInventory)
+	api.POST("/users/:userId/inventory/:inventoryId", removeItemFromInventory)
 	api.GET("/chat-history/:skip", getChatHistory)
 	api.GET("/worlds", getWorlds)
 	api.GET("/worlds/user/:userId", getUserWorlds)
@@ -91,7 +96,7 @@ func Start(configName string) {
 
 	e.Static("/", "../web")
 	e.Static("/world/:name", "../web/index.html") // eventually make this route name configurable to the specific use case, 'world', 'venue', 'event', etc..
-	e.File("/network", "../web/index.html")    // client should generate a meta-world out of (portals to) networked convolvr sites
+	e.File("/network", "../web/index.html")       // client should generate a meta-world out of (portals to) networked convolvr sites
 	e.File("/worlds", "../web/index.html")
 	e.File("/worlds/new", "../web/index.html")
 	e.File("/chat", "../web/index.html")
@@ -105,4 +110,3 @@ func Start(configName string) {
 	e.Any("/connect", echo.WrapHandler(http.HandlerFunc(hub.Handler)))
 	e.Logger.Fatal(e.Start(port))
 }
-

@@ -65,3 +65,38 @@ func postUsers(c echo.Context) (err error) {
 		}
 	}
 }
+
+func getUserInventory(c echo.Context) (err error) {
+	var (
+		itemsFound []*Entity
+	)
+	userId := c.Param("userId")
+	inventoryId := c.Param("inventoryId")
+	lookupErr := db.Select(q.And(
+		q.Eq("ID", inventoryId),
+		q.Eq("userId", userId),
+	)).Find(&itemsFound)
+	if lookupErr != nil {
+		log.Println(lookupErr)
+	}
+	if len(itemsFound) == 0 {
+		return c.JSON(http.StatusOK, nil)
+	} else {
+		return c.JSON(http.StatusOK, &itemsFound)
+	}
+}
+
+// TODO: implement  saving item to inventory
+func saveItemToInventory(c echo.Context) (err error) {
+	return c.JSON(http.StatusOK, nil)
+}
+
+// TODO: implement removing item from inventory
+func removeItemFromInventory(c echo.Context) (err error) {
+	return c.JSON(http.StatusOK, nil)
+}
+
+// TODO: implement listing all inventories
+func listAllInventories(c echo.Context) (err error) {
+	return c.JSON(http.StatusOK, nil)
+}
