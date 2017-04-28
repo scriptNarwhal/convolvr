@@ -60,6 +60,7 @@ class Settings extends Component {
       defaultWorld: 'overworld',
       welcomeMessage: 'Welcome to Convolvr!',
       floorHeight: 0,
+      viewDistance: 0,
       network: [],
       IOTMode: false
     }
@@ -72,7 +73,8 @@ class Settings extends Component {
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa: localStorage.getItem("aa") || "on",
       floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
-      IOTMode: localStorage.getItem("IOTMode") || 'off'
+      IOTMode: localStorage.getItem("IOTMode") || 'off',
+      viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0
     })
     this.props.fetchUniverseSettings()
   }
@@ -97,6 +99,7 @@ class Settings extends Component {
     localStorage.setItem('vrMovement', this.state.vrMovement) 
     localStorage.setItem('IOTMode', this.state.IOTMode)
     localStorage.setItem('floorHeight', this.state.floorHeight)
+    localStorage.setItem('viewDistance', this.state.viewDistance)
     this.reload()
   }
   updateUniverseSettings () {
@@ -142,14 +145,6 @@ class Settings extends Component {
           </div>
           <div>
             <div>      
-            <h3 style={styles.h3}>VR Movement Mode</h3>
-            <select onChange={e=> { this.setState({vrMovement: e.target.value})}}
-                    value={ this.state.vrMovement }
-                    style={ styles.select }
-            >
-              <option value="stick">Stick Control</option>
-              <option value="teleport">Teleport Control</option>
-            </select>
             <h3 style={styles.h3}>Adjust Floor Height</h3>
             <input onBlur={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
                    style={styles.range}
@@ -159,11 +154,25 @@ class Settings extends Component {
                    min='-30000'
                    max='20000'
             />
-            <div style={{paddingLeft: '1em'}}>
+            <span style={{paddingLeft: '1em'}}>
               {this.state.floorHeight} Units
-            </div>
+            </span>
           </div>
         </div>
+          <div>
+            <h3 style={styles.h3}>View Distance</h3>
+            <input onBlur={e=> {this.setState({viewDistance: parseInt(e.target.value)})}}
+                   style={styles.range}
+                   defaultValue={this.state.viewDistance}
+                   step={1}
+                   type='range'
+                   min='-4'
+                   max='6'
+            />
+            <span style={{paddingLeft: '1em'}}>
+              {this.state.viewDistance} 
+            </span>
+          </div>
           <div>
             <h3 style={styles.h3}>Lighting Quality</h3>
             <select onChange={e=> {this.setState({lighting: e.target.value})}}

@@ -8,7 +8,7 @@ export default class TextSystem {
             textTexture = null,
             textMaterial = null,
             textCanvas = document.createElement("canvas"),
-            canvasSize = [1024, 1024],
+            canvasSize = !!prop.label ? [512, 128] : [1024, 1024],
             context = null
 
         textCanvas.setAttribute("style", "display:none")

@@ -72,7 +72,9 @@ func getUserInventory(c echo.Context) (err error) {
 	)
 	userId := c.Param("userId")
 	inventoryId := c.Param("inventoryId")
-	lookupErr := db.Select(q.And(
+	inventories := db.From("inventories")
+	userInventory := inventories.From(userId + "." + inventoryId)
+	lookupErr := userInventory.Select(q.And(
 		q.Eq("ID", inventoryId),
 		q.Eq("userId", userId),
 	)).Find(&itemsFound)
@@ -88,15 +90,39 @@ func getUserInventory(c echo.Context) (err error) {
 
 // TODO: implement  saving item to inventory
 func saveItemToInventory(c echo.Context) (err error) {
+	var (
+		item *Entity
+	)
+	userId := c.Param("userId")
+	inventoryId := c.Param("inventoryId")
+	inventories := db.From("inventories")
+	userInventories := inventories.From(userId)
+	userInventory := userInventories.From(inventoryId)
+	item = new(Entity)
+	err = c.Bind(item)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	userInventory.Save(&item)
 	return c.JSON(http.StatusOK, nil)
 }
 
 // TODO: implement removing item from inventory
 func removeItemFromInventory(c echo.Context) (err error) {
+	// userId := c.Param("userId")
+	// inventoryId := c.Param("inventoryId")
+	// inventories := db.From("inventories")
+	// userInventories := inventories.From(userId)
+	// userInventory := userInventories.From(inventoryId)
 	return c.JSON(http.StatusOK, nil)
 }
 
 // TODO: implement listing all inventories
 func listAllInventories(c echo.Context) (err error) {
+	// userId := c.Param("userId")
+	// inventoryId := c.Param("inventoryId")
+	// inventories := db.From("inventories")
+	// userInventories := inventories.From(userId)
 	return c.JSON(http.StatusOK, nil)
 }

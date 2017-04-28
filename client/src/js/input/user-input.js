@@ -2,6 +2,7 @@ import Touch from './touch'
 import Keyboard from './keyboard'
 import GamePad from './gamepad'
 import LeapMotion from './leap-motion'
+import DeviceOrientationControls from './lib/device-orientation'
 
 let isVRMode = (mode) => {
 	return (mode == "vr" || mode == "stereo")
@@ -32,6 +33,7 @@ export default class UserInput {
 			w: false, a: false, s: false, d: false, r: false, f: false, shift: false, space: false
 		}
 		this.lastTouch = [[0,0], [0,0]]
+		this.tiltControls = null
 		this.leapMotion = false
 		this.leapMode = "movement"
 		this.gamepadMode = false
@@ -76,11 +78,15 @@ export default class UserInput {
 							break;
 							case 3: // right click
 								this.user.toolbox.useSecondary(0, 1) // right hand // change tool option in forward direction
+								// refactor this to grab entity
 							break;
 						}
 					}
 				}, false)
 			}, 250)
+		} else {
+			this.tiltControls = new DeviceOrientationControls(camera)
+			// call disconnect once mobile vr mode starts	
 		}
 		this.touchControls = new Touch(this)
 		this.keyboard = new Keyboard(this, this.world)

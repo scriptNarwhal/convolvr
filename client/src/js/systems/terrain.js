@@ -32,7 +32,7 @@ export default class TerrainSystem {
         this.config = config
         let type = this.config.type
         if (type == 'both' || type == 'plane') {
-            let geom = new THREE.PlaneGeometry(24000000, 24000000, 2, 2),
+            let geom = new THREE.PlaneGeometry(24000000+world.viewDistance*800000, 24000000+world.viewDistance*800000, 2, 2),
                 mat = this.world.mobile ?
                     new THREE.MeshLambertMaterial({color: this.config.color})
                 : new THREE.MeshPhongMaterial({color: this.config.color}),
@@ -66,7 +66,7 @@ export default class TerrainSystem {
         coords = [Math.floor(position.x/928000), 0, Math.floor(position.z/807360)],
         lastCoords = this.lastChunkCoords,
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
-        viewDistance = (this.world.mobile ? 5 : 6),
+        viewDistance = (this.world.mobile ? 5 : 6) + this.world.viewDistance,
         removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
         endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
         x = coords[0]-phase+1,

@@ -50,7 +50,7 @@ export default class World {
 	constructor(user, userInput = false, socket, store) {
 		let mobile = (window.innerWidth <= 720),
 				scene = new THREE.Scene(),
-				camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1500, 15000000),
+				camera = null,
 				screenResX = window.devicePixelRatio * window.innerWidth,
 				renderer = null,
 				self = this,
@@ -60,8 +60,10 @@ export default class World {
 		this.mobile = mobile
 		this.floorHeight = 0
 		this.highAltitudeGravity = false
+		this.viewDistance = 0 // default
 		this.initLocalSettings()
-		
+		camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1500+this.viewDistance*200, 15000000 + this.viewDistance*600000)
+
 		let rendererOptions = {antialias: this.aa != 'off' && this.enablePostProcessing != 'on'}
 		if (this.enablePostProcessing == 'on') {
 			rendererOptions.alpha = true
@@ -192,7 +194,7 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				skyLight =  new THREE.PointLight(config.light.color, 0.95, 15200000),
+				skyLight =  new THREE.PointLight(config.light.color, 0.95, 15200000+this.viewDistance*800000),
 				skyMaterial = null,
 				skybox = null
 
@@ -221,7 +223,7 @@ export default class World {
 	 				skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
 			})
 		}
-		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000, 4), skyMaterial)
+		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000+this.viewDistance*500000, 4), skyMaterial)
 		this.skyLight = skyLight
 		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
@@ -248,7 +250,8 @@ export default class World {
 			lighting = localStorage.getItem("lighting"),
 			enablePostProcessing = localStorage.getItem("postProcessing"),
 			aa = localStorage.getItem("aa"),
-			floorHeight = localStorage.getItem("floorHeight")
+			floorHeight = localStorage.getItem("floorHeight"),
+			viewDistance = localStorage.getItem("viewDistance")
 
 		if (cameraMode == null) {
 			cameraMode = 'fps'
@@ -278,7 +281,14 @@ export default class World {
 			floorHeight = 0
 			localStorage.setItem("floorHeight", floorHeight)
 		} 
+		if (viewDistance == null) {
+			viewDistance = 0
+			localStorage.setItem("viewDistance", 0)
+		} else {
+			viewDistance = parseInt(viewDistance)
+		}
 		this.aa = aa
+		this.viewDistance = viewDistance
 		this.cameraMode = cameraMode
 		this.vrMovement = vrMovement
 		this.lighting = lighting

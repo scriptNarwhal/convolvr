@@ -48,6 +48,7 @@ export default class Tool {
                 name: "glass"
               },
               text: {
+                label: true,
                 background: "#000000",
                 color: "#ffffff",
                 lines: [

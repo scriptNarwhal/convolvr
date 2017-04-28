@@ -126,7 +126,7 @@ func generateBuilding(world string, x int, z int, altitude float32) *Entity {
 			structureComponents = append(structureComponents, wall)
 		}
 	}
-	structurePos := []float64{float64(x) * 928000.0, float64(altitude) - 20000, float64(z) * 807360.0}
+	structurePos := []float64{(float64(x) * 928000.0) - (structureSize * width * 0.5), float64(altitude) - 20000, float64(z) * 807360.0}
 	structure = NewEntity("Generic Building", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0})
 	return structure
 }
@@ -141,7 +141,7 @@ func generateWall(w int, i int, width float64, structureSize float64) *Component
 		wallPos = []float64{0.0, (-structureSize / 3.2) + float64(i)*structureSize/2, structureSize/2.0 + float64(w-1)*structureSize}
 		geometry["size"] = []float64{structureSize * width, structureSize / 3.2, 5000}
 	} else if w < 4 {
-		wallPos = []float64{(float64(w+2) * width) * structureSize, (-structureSize / 3.2) + float64(i)*structureSize/2, 0.0}
+		wallPos = []float64{((float64(w-2) - 0.5) * width) * structureSize, (-structureSize / 3.2) + float64(i)*structureSize/2, 0.0}
 		geometry["size"] = []float64{5000, structureSize / 3.2, structureSize}
 	} //else {
 	//		wallPos = []float64{-structureSize*2.5 + float64(w-4)*structureSize, -structureSize/2 + float64(i)*structureSize/2, 0.0}
