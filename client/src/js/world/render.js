@@ -130,6 +130,7 @@ export let animate = (world, last, cursorIndex) => {
   if (!! world.userInput) {
     world.userInput.update(delta) // Update keyboard / mouse / gamepad
   }
+  
   if (user && user.mesh && cursors) {
     user.avatar.entity.update(cPos.toArray(), camera.quaternion.toArray())
     cursorIndex = handleCursors(cursors, cursorIndex, hands, camera, world)

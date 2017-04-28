@@ -126,12 +126,16 @@ export default class UserInput {
 				this.gamepad.update(this, world)
 		}
 			if (world.mode != "stereo") {
-				if (world.cameraMode == 'fps') { // fps camera // make configurable
-					this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ")
-				} else { // vehicle camera
-					this.tmpQuaternion.set( this.rotationVector.x, this.rotationVector.y, this.rotationVector.z, 1 ).normalize()
-					this.rotationVector = {x: 0, y: 0, z: 0}
-					this.camera.quaternion.multiply(this.tmpQuaternion)
+				if (this.tiltControls != null) {
+					this.tiltControls.update()
+				} else {
+					if (world.cameraMode == 'fps') { // fps camera // make configurable
+						this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ")
+					} else { // vehicle camera
+						this.tmpQuaternion.set( this.rotationVector.x, this.rotationVector.y, this.rotationVector.z, 1 ).normalize()
+						this.rotationVector = {x: 0, y: 0, z: 0}
+						this.camera.quaternion.multiply(this.tmpQuaternion)
+					}
 				}
 			}
 			velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*3000))

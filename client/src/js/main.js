@@ -88,8 +88,8 @@ world.help = new ListView({ // deprecated as of alpha 0.4.1
     "- Right stick y-axis: tool mode",
     "",
     "# Mobile (non VR) users:",
-    "- One finger swipe: Change Look",
-    "- Two finger swipe: movement"
+    "- Device orientation controls camera",
+    "- Swiping & dragging move you"
   ]
 }, three.scene).initMesh()
 
