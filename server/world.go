@@ -181,7 +181,7 @@ func getWorld(c echo.Context) error { // load specific world
 		terrainGreen = 0.15 + green/1.5
 		terrainBlue = 0.15 + red/2.0 + blue
 		lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
-		ambientColor = int(4+math.Floor(red*4))<<16 | int(4+math.Floor(green*4))<<8 | int(4+math.Floor(blue*4))
+		ambientColor = int(4+math.Floor(red*2))<<16 | int(2+math.Floor(green*2))<<8 | int(2+math.Floor(blue*2))
 		terrainColor = int(math.Floor(terrainRed*255))<<16 | int(math.Floor(terrainGreen*255))<<8 | int(math.Floor(terrainBlue*255))
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}
 		light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}

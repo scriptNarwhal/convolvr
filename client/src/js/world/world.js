@@ -41,6 +41,8 @@ import ToolSystem from '../systems/tool'
 import FileSystem from '../systems/file'
 import ChatSystem from '../systems/chat'
 import WebRTCSystem from '../systems/webrtc'
+import NPCSystem from '../systems/npc'
+import SpeechSystem from '../systems/speech'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
 
@@ -152,7 +154,9 @@ export default class World {
 			webhook: new WebHookSystem(world),
 			webrtc: new WebRTCSystem(world),
 			file: new FileSystem(world),
-			chat: new ChatSystem(world)
+			chat: new ChatSystem(world),
+			speech: new SpeechSystem(world),
+			npc: new NPCSystem(world)
 		})
 		this.terrain = this.systems.terrain
 		this.workers = {

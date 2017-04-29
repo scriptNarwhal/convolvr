@@ -7,5 +7,13 @@ export default class WebHookSystem {
         // specify to store or render data returned..
         // specify url, method, etc
     }
+
+    getRequest (url, callback) {
+
+    }
+
+    postRequest (url, data, callback) {
+
+    }
 }
 

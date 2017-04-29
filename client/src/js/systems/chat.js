@@ -6,8 +6,14 @@ export default class ChatSystem {
     init (component) { 
         
         return {
-            
+            sendMessage: (message) => {
+                this.sendMessage(message)
+            }    
         }
+    }
+
+    sendMessage (message) {
+        
     }
 }
 

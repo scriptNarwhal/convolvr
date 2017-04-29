@@ -15,7 +15,7 @@ export default class Systems {
 
         Object.keys(props).map(prop=> {
             if (this[prop] != null) {
-                if (prop=="text" || prop == "audio" || prop == "video") { /* add other systems here */
+                if (prop=="particle" || prop=="text" || prop == "audio" || prop == "video") { /* add other systems here */
                     deferredSystems.push(prop)
                 } else {
                     state[prop] = this[prop].init(component)

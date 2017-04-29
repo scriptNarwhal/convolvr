@@ -100,6 +100,7 @@ ReactDOM.render(
 	  		<Route path="/" component={App} >
 				<IndexRoute component={HUD}/>
         <Route path="/world/:name" component={HUD} />
+        
 				<Route path="/login" component={Login} />
 				<Route path="/chat" component={Chat} />
 				<Route path="/data" component={Data} />
