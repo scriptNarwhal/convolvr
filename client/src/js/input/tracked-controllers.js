@@ -55,6 +55,7 @@ export default class TrackedController {
             case 2:
               tools.grip(1, this.buttonValue(button))
             break
+            // find out index for stick click
           }
         } else if (lastButtons.left[i] == true && this.buttonReleased(button)) {
           if (i == 2) {
@@ -88,6 +89,7 @@ export default class TrackedController {
             case 2:
               tools.grip(0, this.buttonValue(button))
             break
+            // find out index for stick click
           }
         } else if (lastButtons.right[i] == true && this.buttonReleased(button)) {
           if (i == 2) {

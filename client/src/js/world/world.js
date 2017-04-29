@@ -194,7 +194,7 @@ export default class World {
 	init (config) {
 		console.log(config)
 		let camera = three.camera,
-				skyLight =  new THREE.PointLight(config.light.color, 0.95, 15200000+this.viewDistance*800000),
+				skyLight =  new THREE.DirectionalLight(config.light.color, 1),
 				skyMaterial = null,
 				skybox = null
 
@@ -228,7 +228,7 @@ export default class World {
 		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
-		skyLight.position.set(0, 4000000, 8000000)
+		skyLight.position.set(0, 2000000, 4000000)
 		this.terrain.bufferChunks(true, 0)
 		this.gravity = config.gravity
 		this.highAltitudeGravity = config.highAltitudeGravity
@@ -403,7 +403,7 @@ export default class World {
 					skyMat.uniforms.time.value += delta
 				}
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
-				this.skyLight.position.set(camera.position.x, camera.position.y+180000, camera.position.z+500000)
+				//this.skyLight.position.set(camera.position.x, camera.position.y+180000, camera.position.z+500000)
 			}
     }
 		if (terrainMesh) {

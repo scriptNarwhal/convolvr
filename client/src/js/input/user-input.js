@@ -242,4 +242,8 @@ export default class UserInput {
 				}
 			}
 		}
+
+	teleport (position) {
+		// implement
+	}
 }
