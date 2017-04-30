@@ -39,11 +39,11 @@ self.onmessage = function (event) { // Do some work.
       voxels[voxel.cell.join(".")] = voxel
     })
   } else if (message.command == "remove voxels") {
-    p = data.length -1;
+    p = data.length -1
 		while (p >= 0) {
-			toRemove = data[p];
+			toRemove = data[p]
 			voxels[toRemove.cell] = null
-			p --;
+			p --
 		}
   } else if (message.command == "add entity") {
     entities = voxels[data.coords.join(".")].entities
@@ -53,13 +53,13 @@ self.onmessage = function (event) { // Do some work.
   } else if (message.command == "remove entity") {
     entities = voxels[data.coords.join(".")].entities
     if (entities != null) {
-      c = entities.length-1;
+      c = entities.length-1
   		while (c >= 0) {
   			if (entities[c].id == data.entityId) {
   				voxels[data.coords.join(".")].entities.splice(c, 1)
           c = -1
         }
-  			c--;
+  			c--
   		}
     }
   } else if (message.command == "update") {
@@ -67,10 +67,10 @@ self.onmessage = function (event) { // Do some work.
 		user.velocity = data.velocity
 		user.vrHeight = data.vrHeight
   } else if (message.command == "start") {
-		self.update();
+		self.update()
 
 	} else if (message.command == "stop") {
-		self.stop();
+		self.stop()
   }
 };
 
@@ -100,10 +100,11 @@ self.update = function () {
         if (!!entities) {
           i = entities.length
           while (i >= 0) {
-            obj = entities[i];
+            obj = entities[i]
             if (!!obj) {
               // use entity radius here
-              if (distance3dCompare(secondPos, obj.position, obj.boundingRadius+10000)) { 
+              //console.log(position, obj.position, obj.boundingRadius+10000)
+              if (distance3dCompare(position, obj.position, (obj.boundingRadius||20000)+10000)) { 
                   collision = true
                   self.postMessage('{"command": "entity-user collision", "data":{"position":[' +obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}')
               }
@@ -118,6 +119,7 @@ self.update = function () {
                     self.postMessage('{"command": "entity-entity collision", "data":{"entities":[{"position":['+obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '],"velocity": [0, 0, 0] }, {"position":['+secondPos[0] + ',' + secondPos[1] + ',' + secondPos[2] + '],"velocity": [0, 0, 0] }]}}')
 
                   }
+                  o --
                 }
               }
             }
@@ -132,6 +134,6 @@ self.update = function () {
 
   self.postMessage('{"command": "update"}');
 	self.updateLoop = setTimeout(function () {
-		self.update();
-	}, 15);
+		self.update()
+	}, 15)
 }
