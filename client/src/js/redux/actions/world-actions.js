@@ -57,7 +57,7 @@ export function fetchUserWorlds (userId) {
                 type: USER_WORLDS_FETCH_DONE,
                 data: res.data
             })
-        }).catch(res => {
+        }).catch(err => {
             dispatch({
                 type: USER_WORLDS_FETCH_FAIL,
                 err: err

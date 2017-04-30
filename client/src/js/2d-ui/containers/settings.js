@@ -61,6 +61,7 @@ class Settings extends Component {
       welcomeMessage: 'Welcome to Convolvr!',
       floorHeight: 0,
       viewDistance: 0,
+      profilePicture: '',
       network: [],
       IOTMode: false
     }
@@ -127,6 +128,15 @@ class Settings extends Component {
     network[index].image = image
     this.setState({network})
   }
+  upload (e) {
+    let data = new FormData(),
+        username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
+    data.append('file', e.target.files[0])
+    this.setState({
+      profilePicture: username+"/"+e.target.files[0].name.replace(/\s/g, '-')
+    })
+    this.props.uploadFile(data, username, "")
+  }
   render() {
     let isAdmin = this.props.user.name == 'admin'
     return (
@@ -134,31 +144,13 @@ class Settings extends Component {
           <div style={styles.modal}>
           <h1>Settings</h1>
           <div>
-            <h3 style={styles.h3}>Camera Control Mode</h3>
-            <select onChange={e=> { this.setState({camera: e.target.value})}}
-                    value={ this.state.camera }
-                    style={ styles.select }
-            >
-              <option value="fps">First Person Camera</option>
-              <option value="vehicle">Flight Camera (relative rotation)</option>
-            </select>
-          </div>
-          <div>
-            <div>      
-            <h3 style={styles.h3}>Adjust Floor Height</h3>
-            <input onBlur={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
-                   style={styles.range}
-                   defaultValue={this.state.floorHeight}
-                   step={1}
-                   type='range'
-                   min='-30000'
-                   max='20000'
-            />
+            <h3 style={styles.h3}>Profile Picture</h3>
             <span style={{paddingLeft: '1em'}}>
-              {this.state.floorHeight} Units
+              <input nChange={ (e)=> this.upload(e) }
+                           style={styles.fileUpload} 
+                           type='file' 
+              />
             </span>
-          </div>
-        </div>
           <div>
             <h3 style={styles.h3}>View Distance</h3>
             <input onBlur={e=> {this.setState({viewDistance: parseInt(e.target.value)})}}
@@ -170,7 +162,21 @@ class Settings extends Component {
                    max='6'
             />
             <span style={{paddingLeft: '1em'}}>
-              {this.state.viewDistance} 
+              {(this.state.viewDistance > 0 ?'+ ':'- ')+this.state.viewDistance} Voxels 
+            </span>
+          </div>
+          <div>
+            <h3 style={styles.h3}>Floor Height (VR)</h3>
+            <input onBlur={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
+                   style={styles.range}
+                   defaultValue={this.state.floorHeight}
+                   step={1}
+                   type='range'
+                   min='-30000'
+                   max='20000'
+            />
+            <span style={{paddingLeft: '1em'}}>
+              {this.state.floorHeight} Units
             </span>
           </div>
           <div>
@@ -204,6 +210,14 @@ class Settings extends Component {
             </select>
           </div>
           <div>
+            <h3 style={styles.h3}>Camera Control Mode</h3>
+            <select onChange={e=> { this.setState({camera: e.target.value})}}
+                    value={ this.state.camera }
+                    style={ styles.select }
+            >
+              <option value="fps">First Person Camera</option>
+              <option value="vehicle">Flight Camera (relative rotation)</option>
+            </select>
             <h3 style={styles.h3}>IOT Mode</h3>
             <select onChange={e=> {this.setState({IOTMode: e.target.value})}}
                     value={ this.state.IOTMode }
@@ -301,7 +315,7 @@ class Settings extends Component {
               />
             </div>
           ): ""}
-
+          </div>
           </div>
         </Shell>
     )
@@ -313,6 +327,7 @@ import { connect } from 'react-redux';
 import {
     sendMessage
 } from '../../redux/actions/message-actions'
+import { uploadFile } from '../../redux/actions/file-actions'
 import {
   fetchWorlds,
   setCurrentWorld,
@@ -342,6 +357,9 @@ export default connect(
       },
       fetchUniverseSettings: () => {
         dispatch(fetchUniverseSettings())
+      },
+      uploadFile: (file, username, dir) => {
+        dispatch(uploadFile(file, username, dir))
       }
     }
   }

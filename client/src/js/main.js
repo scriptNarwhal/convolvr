@@ -28,7 +28,7 @@ import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
 import HUD from './2d-ui/containers/hud'
 // World
-import { send, events } from './network/socket'
+import { events } from './network/socket'
 import User from './user'
 import UserInput from './input/user-input'
 import Toolbox from './world/tools/toolbox'

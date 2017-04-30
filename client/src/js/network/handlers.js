@@ -33,6 +33,7 @@ export default class SocketHandlers {
 				}
 			}
 		})
+
 		socket.on("tool action", packet => {
 			let data = JSON.parse(packet.data),
                     world = this.world,
@@ -48,7 +49,7 @@ export default class SocketHandlers {
 							entity = new Entity(ent.id, ent.components, data.position, data.quaternion)
 					chunk.entities.push(entity)
 					entity.init(three.scene)
-				break;
+				break
 				case "Component Tool":
 					chunk.entities.map(voxelEnt => { // find & re-init entity
 						if (voxelEnt.id == data.entityId) {
@@ -61,25 +62,42 @@ export default class SocketHandlers {
 				break;
 				case "Voxel Tool":
 
-				break;
+				break
 				case "System Tool":
 
-				break;
+				break
 				case "Geometry Tool":
 
-				break;
+				break
 				case "Material Tool":
 
-				break;
+				break
 				case "Delete Tool":
 
-				break;
+				break
 			}
 			if (world.IOTMode) {
 				animate(world, Date.now(), 0)
 			}
 		})
-    }
 
-    
+		socket.on("rtc", packet => {
+			let signal = JSON.parse(packet),
+				webrtc = world.systems.webrtc,
+				peerConn = webrtc.peerConn
+
+			if (!peerConn)
+				webrtc.answerCall()
+
+			if (signal.sdp) {
+				peerConn.setRemoteDescription(new RTCSessionDescription(signal.sdp))
+
+			} else if (signal.candidate) {
+				peerConn.addIceCandidate(new RTCIceCandidate(signal.candidate))
+
+			} else if (signal.closeConnection){
+				webrtc.endCall()
+			}
+		})
+    }
 }

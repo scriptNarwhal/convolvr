@@ -9,6 +9,7 @@ export default class Entity {
       this.mesh = null
       this.cursors = []
       this.hands = []
+      this.boundingRadius = 10000 // set in init()
       this.componentsByProp = {
         // define arrays here with key of prop
       }
@@ -33,7 +34,9 @@ export default class Entity {
         mobile = world.mobile,
         ncomps = this.components.length,
         nonStructural = [],
+        dimensions = [0, 0, 0],
         compMesh = null,
+        compGeom = null,
         materials = [],
         addToOctree = true,
         comp = null,
@@ -52,6 +55,10 @@ export default class Entity {
           addToOctree = false
         }
         compMesh = comp.mesh
+        // check bounding radius
+        dimensions = [Math.max(dimensions[0], Math.abs(compMesh.position.x)),
+                      Math.max(dimensions[1], Math.abs(compMesh.position.y)), 
+                      Math.max(dimensions[2], Math.abs(compMesh.position.z))]
         if (comp.props.geometry && comp.props.geometry.merge === true) {
           materials.push(compMesh.material)
           compMesh.updateMatrix()
@@ -68,15 +75,16 @@ export default class Entity {
         }
         c ++
     }
+    this.boundingRadius = Math.sqrt((dimensions[0]*dimensions[0]) + (dimensions[1]*dimensions[1]) + (dimensions[2]*dimensions[2]))
     if (s > 0) {
       mesh = new THREE.Mesh(base, new THREE.MultiMaterial(materials))
     } else {
       mesh = nonStructural[0]
-      s = 1
-      while (s < nonStructural.length) {
-          mesh.add(nonStructural[s])
-          s ++
-      }
+    }
+    s = 1
+    while (s < nonStructural.length) {
+        mesh.add(nonStructural[s])
+        s ++
     }
     if (!! this.quaternion && this.components.length == 1) {
         mesh.quaternion.set(this.quaternion[0], this.quaternion[1], this.quaternion[2], this.quaternion[3])

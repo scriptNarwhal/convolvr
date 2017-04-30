@@ -272,7 +272,10 @@ class App extends Component {
             {this.props.children}
             <div className="lightbox" style={{display: "none"}}></div>
             <canvas id="webcam-canvas"></canvas>
-            <video id="webcam" ></video>
+            <video id='local-video' style={{display:'none'}}></video>
+            <video id='remote-video' style={{display:'none'}}></video>
+            <input type='button' value='Video Call' style={{display:'none'}} id='videoCallButton' />
+            <input type='button' value='End Call' style={{display:'none'}} id='endCallButton' />
         </div>
     )
   }
