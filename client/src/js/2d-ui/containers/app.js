@@ -199,8 +199,9 @@ class App extends Component {
 
                         if (three.vrControls == null) {
                           window.WebVRConfig = {
-                            MOUSE_KEYBOARD_CONTROLS_DISABLED: true
-                          };
+                            MOUSE_KEYBOARD_CONTROLS_DISABLED: true,
+                            TOUCH_PANNER_DISABLED: true
+                          }
                           controls = new THREE.VRControls(camera)
                           if (!three.world.mobile) {
                             renderer.autoClear = false
