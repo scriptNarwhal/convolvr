@@ -4,31 +4,31 @@
         <title>Convolvr</title>
         <meta content="utf-8" http-equiv="encoding">
         <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' type='image/png' sizes='192x192' href='/images/convolvr2.png' />
+        <link rel='icon' type='image/png' sizes='192x192' href='/static/images/convolvr2.png' />
         <meta name='theme-color' content='rgb(20, 20, 20)' />
         <meta name="msapplication-TileColor" content="#151515" />
         <meta name="application-name" content="Convolvr" />
         <meta name="description" content="WebVR game engine, server and virtual reality authoring tool." />
         <meta property="og:title" content="Convolvr" />
         <meta property="og:description" content="WebVR game engine, server and virtual reality authoring tool." />
-        <meta property="og:image" content="https://convolvr.io/images/convolvr2.png" / >
+        <meta property="og:image" content="https://convolvr.io/static/images/convolvr2.png" / >
         <meta property="og:image:width" content="192" />
         <meta property="og:image:height" content="192" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="https://convolvr.io" />
         <meta name="twitter:title" content="Convolvr" />
         <meta name="twitter:description" content="WebVR game engine, server and virtual reality authoring tool."  />
-        <meta name="twitter:image" content="https://convolvr.io/images/convolvr2.png" />
+        <meta name="twitter:image" content="https://convolvr.io/static/images/convolvr2.png" />
         <style>
 			body {
 				padding: 0;
 				margin: 0;
-        width: 100%;
-        height:100%;
-        overflow-x: hidden;
-        position: absolute;
-        font-size: 20px;
-        font-family: sans-serif;
+                width: 100%;
+                height:100%;
+                overflow-x: hidden;
+                position: absolute;
+                font-size: 20px;
+                font-family: sans-serif;
 				background: #101010;
 				color: #ffffff;
 			}
@@ -40,7 +40,7 @@
     </head>
     <body>
         <main id="root"></main>
-        <link rel='stylesheet' href='/css/app.css' />
+        <link rel='stylesheet' href='/static/css/app.css' />
         <script type="x-shader/x-vertex" id="sky-vertex">
             #ifdef GL_ES
             precision highp float;
@@ -97,26 +97,26 @@
                gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
             }
         </script>
-        <script src='/lib/notify.js'></script>
-        <script src='/lib/three.min.js'></script>
-        <script src='/lib/csg.js'></script>
-        <script src='/lib/ThreeCSG.js'></script>
-        <script src='/lib/BufferSubdivisionModifier.js'></script>
-        <script src='/lib/threeoctree.js'></script>
-        <script src='/lib/webvr-polyfill.js'></script>
-        <script src='/lib/VRControls.js'></script>
-        <!-- <script src='/lib/VREffect.js'></script> -->
-        <script src='/lib/VREffect-composer.js'></script> <!-- experimental -->
-        <script src="/lib/leap.js"></script>
-        <script src="/lib/leap-plugins.js"></script>
-        <script src="/lib/shaders/FXAAShader.js"></script>
-        <script src="/lib/shaders/CopyShader.js"></script>
-        <script src="/lib/shaders/ConvolutionShader.js"></script>
-        <script src="/lib/postprocessing/EffectComposer.js"></script>
-        <script src="/lib/postprocessing/MaskPass.js"></script>
-        <script src="/lib/postprocessing/RenderPass.js"></script>
-        <script src="/lib/postprocessing/ShaderPass.js"></script>
-        <script src="/lib/postprocessing/BloomPass.js"></script>
-        <script src='/js/app.js'></script>
+        <script src='/static/lib/notify.js'></script>
+        <script src='/static/lib/three.min.js'></script>
+        <script src='/static/lib/csg.js'></script>
+        <script src='/static/lib/ThreeCSG.js'></script>
+        <script src='/static/lib/BufferSubdivisionModifier.js'></script>
+        <script src='/static/lib/threeoctree.js'></script>
+        <script src='/static/lib/webvr-polyfill.js'></script>
+        <script src='/static/lib/VRControls.js'></script>
+        <!-- <script src='/static/lib/VREffect.js'></script> -->
+        <script src='/static/lib/VREffect-composer.js'></script> <!-- experimental -->
+        <script src="/static/lib/leap.js"></script>
+        <script src="/static/lib/leap-plugins.js"></script>
+        <script src="/static/lib/shaders/FXAAShader.js"></script>
+        <script src="/static/lib/shaders/CopyShader.js"></script>
+        <script src="/static/lib/shaders/ConvolutionShader.js"></script>
+        <script src="/static/lib/postprocessing/EffectComposer.js"></script>
+        <script src="/static/lib/postprocessing/MaskPass.js"></script>
+        <script src="/static/lib/postprocessing/RenderPass.js"></script>
+        <script src="/static/lib/postprocessing/ShaderPass.js"></script>
+        <script src="/static/lib/postprocessing/BloomPass.js"></script>
+        <script src='/static/js/app.js'></script>
     </body>
 </html>

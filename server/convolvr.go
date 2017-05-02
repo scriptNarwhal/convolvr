@@ -94,11 +94,11 @@ func Start(configName string) {
 	api.GET("/documents/:username/:filename", getText)
 	api.POST("/documents/:username/:filename", postText)
 
-	e.Static("/", "../web")
-	e.Static("/world/:name", "../web/index.html") // eventually make this route name configurable to the specific use case, 'world', 'venue', 'event', etc..
-	e.File("/network", "../web/index.html")       // client should generate a meta-world out of (portals to) networked convolvr sites
-	e.File("/worlds", "../web/index.html")
-	e.File("/worlds/new", "../web/index.html")
+	e.Static("/static", "../web")
+	e.File("/:userName/:worldName", "../web/index.html") // fairly simple, readable url structure
+	e.File("/network", "../web/index.html")              // client should generate a meta-world out of (portals to) networked convolvr (or other webvr) sites
+	e.File("/worlds", "../web/index.html")               // this one also needs its 2d ui replaced with something nicer
+	e.File("/new-world", "../web/index.html")
 	e.File("/chat", "../web/index.html")
 	e.File("/data", "../web/index.html")
 	e.File("/login", "../web/index.html")

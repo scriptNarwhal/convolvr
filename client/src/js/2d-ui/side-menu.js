@@ -44,7 +44,7 @@ class SideMenu extends Component {
           <div style={styles.inner()}>
             <Tab image="/images/plus.png"
                  title="Create New World"
-                 clickHandler={ (e)=> { this.navigate(e, "/worlds/new") } }
+                 clickHandler={ (e)=> { this.navigate(e, "/new-world") } }
             />
             <Tab image="/images/circle-a.png"
                  title="Switch Worlds"

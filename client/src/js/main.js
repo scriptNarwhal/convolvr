@@ -33,7 +33,7 @@ import User from './user'
 import UserInput from './input/user-input'
 import Toolbox from './world/tools/toolbox'
 import World from './world/world'
-// 3D UI
+// 3D UI // deprecated.. migrating these to entity-generator / systems.assets.entities
 import HUDMenu from './vr-ui/menu'
 import ListView from './vr-ui/text/list-view'
 import Avatar from './world/avatar'
@@ -73,21 +73,21 @@ world.help = new ListView({ // deprecated as of alpha 0.4.1
   background: "#000000",
   position: [-100000,0,0],
   textLines: [
-    "# Desktop users:",
-    "- WASD,RF,Space keys: movement",
+    "# Desktop users",
+    "- WASD, RF, space keys: movement",
     "- Mouselook (click screen to enable)",
-    "- Left Click: Primary Tool",
-    "- Right Click: Next Tool Mode",
+    "- Left/right click: primary tool / mode",
     "- Keys 1-5: switch tool",
+    "- Gamepads are also supported",
     "",
-    "# VR users: EnterVR icon in the corner",
+    "# VR users (mobile & desktop)",
+    "- EnterVR icon in the corner",
     "- If you have tracked controllers:",
     "- Left stick: movement",
     "- Right trigger: Primary Tool",
-    "- Right stick x-axis: change tools",
-    "- Right stick y-axis: tool mode",
+    "- Right stick x/y axis: change tool(mode)",
     "",
-    "# Mobile (non VR) users:",
+    "# Mobile (2d or with VR viewer)",
     "- Device orientation controls camera",
     "- Swiping & dragging move you"
   ]
@@ -99,16 +99,14 @@ ReactDOM.render(
 		<Router history={history}>
 	  		<Route path="/" component={App} >
 				<IndexRoute component={HUD}/>
-        <Route path="/world/:name" component={HUD} />
-        
+        <Route path="/:userName/:worldName" component={HUD} />
 				<Route path="/login" component={Login} />
 				<Route path="/chat" component={Chat} />
 				<Route path="/data" component={Data} />
-        <Route path="/data/:username" component={Data} />
         <Route path="/data/:username/:dir" component={Data} />
         <Route path="/data/:username/:dir/:dirTwo" component={Data} />
 				<Route path="/worlds" component={Worlds} />
-        <Route path="/worlds/new" component={NewWorld} />
+        <Route path="/new-world" component={NewWorld} />
 				<Route path="/settings" component={Settings} />
         <Route path="/network" component={Network} />
 			</Route>

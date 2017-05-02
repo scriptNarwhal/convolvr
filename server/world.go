@@ -25,6 +25,7 @@ type NetworkDomain struct {
 type World struct {
 	ID                  int     `storm:"id,increment" json:"id"`
 	UserID              int     `storm:"id" json:"userId"`
+	UserName            string  `storm:"id,index" json:"userName"`
 	Name                string  `storm:"index" json:"name"`
 	Gravity             float64 `json:"gravity"`
 	HighAltitudeGravity bool    `json:"highAltitudeGravity"`
@@ -76,8 +77,8 @@ type Spawn struct {
 	Vehicles   bool `json:"vehicles"`
 }
 
-func NewWorld(id int, userId int, name string, gravity float64, highAltitudeGravity bool, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
-	return &World{id, userId, name, gravity, highAltitudeGravity, sky, light, terrain, spawn}
+func NewWorld(id int, userId int, userName string, name string, gravity float64, highAltitudeGravity bool, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
+	return &World{id, userId, userName, name, gravity, highAltitudeGravity, sky, light, terrain, spawn}
 }
 
 func getWorlds(c echo.Context) error {
@@ -189,7 +190,7 @@ func getWorld(c echo.Context) error { // load specific world
 		spawn := Spawn{Entities: true, Structures: true, NPCS: true, Tools: true, Vehicles: true}
 		gravity := 1.0
 		highAltitudeGravity := false
-		world = *NewWorld(0, -1, name, gravity, highAltitudeGravity, sky, light, terrain, spawn)
+		world = *NewWorld(0, -1, "generated", name, gravity, highAltitudeGravity, sky, light, terrain, spawn)
 		saveErr := db.Save(&world)
 		if saveErr != nil {
 			log.Println(saveErr)

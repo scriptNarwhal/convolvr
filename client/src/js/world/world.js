@@ -220,7 +220,7 @@ export default class World {
 				fragmentShader: document.getElementById('sky-fragment').textContent
 			})
 		} else {
-			// load sky texture
+			// load sky texture // deprecated ..migrating to world.systems.assets
 			skyMaterial = new THREE.MeshBasicMaterial({color:0x303030})
 			let skyTexture = THREE.ImageUtils.loadTexture('/data/'+this.config.sky.photosphere, false, function() {
 				 	skyTexture.magFilter = THREE.LinearFilter
@@ -377,7 +377,7 @@ export default class World {
 	    }
 	}
 
-	sendVideoFrame () {
+	sendVideoFrame () { // probably going to remove this now that webrtc is in place
 		let imageSize = [0, 0]
 		if (this.capturing) {
 		 let v = document.getElementById('webcam'),

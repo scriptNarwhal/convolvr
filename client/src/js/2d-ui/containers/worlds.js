@@ -13,8 +13,8 @@ const styles = {
 }
 
 class Worlds extends Component {
-  switchWorlds (name) {
-    browserHistory.push("/world/"+name)
+  switchWorlds (userName, name) {
+    browserHistory.push("/"+userName+"/"+name)
     window.location.href = window.location.href // workaround..
     // this.props.setCurrentWorld(name)
     // three.world.reload(name)
@@ -43,7 +43,7 @@ class Worlds extends Component {
               }
               return (
                 <Card clickHandler={(e, v) => {
-                        this.switchWorlds(world.name)
+                        this.switchWorlds(world.userName, world.name)
                       }}
                       color={`#${(world.light.color).toString(16)}`}
                       image={world.sky.photosphere != '' ? `/data/${thumb}` : ""}
@@ -67,7 +67,7 @@ class Worlds extends Component {
               }
               return (
                 <Card clickHandler={(e, v) => {
-                        this.switchWorlds(world.name)
+                        this.switchWorlds(world.userName, world.name)
                       }}
                       color={`#${(world.light.color).toString(16)}`}
                       image={world.sky.photosphere != '' ? `/data/${thumb}` : ""}
