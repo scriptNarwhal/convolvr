@@ -101,8 +101,9 @@ export function createWorld (data) {
      return axios.post(API_SERVER+"/api/worlds", data)
         .then(response => {
             dispatch(createWorldDone(response))
-            browserHistory.push("/world/"+data.name)
+            browserHistory.push("/"+data.userName+"/"+data.name)
             window.location.href = window.location.href  /* work around */
+            // this should.. work differently
         }).catch(response => {
             dispatch(createWorldFail(response))
         });

@@ -14,7 +14,10 @@ const styles = {
 
 class Worlds extends Component {
   switchWorlds (userName, name) {
-    browserHistory.push("/"+userName+"/"+name)
+    if (userName == '') {
+      userName = 'generated'
+    }
+    browserHistory.push(userName+"/"+name)
     window.location.href = window.location.href // workaround..
     // this.props.setCurrentWorld(name)
     // three.world.reload(name)
@@ -46,7 +49,7 @@ class Worlds extends Component {
                         this.switchWorlds(world.userName, world.name)
                       }}
                       color={`#${(world.light.color).toString(16)}`}
-                      image={world.sky.photosphere != '' ? `/data/${thumb}` : ""}
+                      image={world.sky.photosphere != '' ? `/data/user/${thumb}` : ""}
                       showTitle={true}
                       compact={world.sky.photosphere == ''}
                       title={world.name}
@@ -70,7 +73,7 @@ class Worlds extends Component {
                         this.switchWorlds(world.userName, world.name)
                       }}
                       color={`#${(world.light.color).toString(16)}`}
-                      image={world.sky.photosphere != '' ? `/data/${thumb}` : ""}
+                      image={world.sky.photosphere != '' ? `/data/user/${thumb}` : ""}
                       showTitle={true}
                       compact={world.sky.photosphere == ''}
                       title={world.name}

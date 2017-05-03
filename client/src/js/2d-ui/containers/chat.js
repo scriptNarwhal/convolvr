@@ -158,10 +158,10 @@ class Chat extends Component {
                               m.files != null && m.files.map((file, i) => {
                                   let userDir = m.from != 'Human' ? m.from : 'public'
                                   return (
-                                    <Card image={this.isImage(file) ? `/data/${userDir}/chat-uploads/thumbs/${file}.jpg` : ''}
+                                    <Card image={this.isImage(file) ? `/data/user/${userDir}/chat-uploads/thumbs/${file}.jpg` : ''}
                                           clickHandler={ (e, title) => {
                                             console.log(e, title, "clicked")
-                                            let newWindow = window.open(`/data/${userDir}/chat-uploads/${file}`, "_blank")
+                                            let newWindow = window.open(`/data/user/${userDir}/chat-uploads/${file}`, "_blank")
                                             newWindow.focus()
                                           }}
                                           compact={!this.isImage(file)}
