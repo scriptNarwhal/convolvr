@@ -9,6 +9,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
 	"github.com/disintegration/imaging"
 	"github.com/labstack/echo"
 )
@@ -17,7 +18,7 @@ import (
 func listFiles(c echo.Context) error {
 	username := c.Param("username")
 	dir := c.QueryParam("dir")
-	filepath := "../web/data/" + username + "/"
+	filepath := "../web/user/" + username + "/"
 	if dir != "" {
 		filepath = filepath + dir
 	}
@@ -51,7 +52,7 @@ func postFiles(c echo.Context) error {
 		return err
 	}
 	defer src.Close() // Destination
-	filepath := "../web/data/"
+	filepath := "../web/user/"
 	if dir != "" {
 		createDataDir(username, dir)
 		filepath = filepath + username + "/" + dir
@@ -83,7 +84,7 @@ func postMultipleFiles(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	filepath := "../web/data/"
+	filepath := "../web/user/"
 	if dir != "" {
 		createDataDir(username, dir)
 		filepath = filepath + username + "/" + dir
@@ -141,7 +142,7 @@ func makeThumbnails(filepath string, thumbnails []string) {
 func getDirectories(c echo.Context) error {
 	username := c.Param("username")
 	dir := c.QueryParam("dir")
-	filepath := "../web/data/"
+	filepath := "../web/user/"
 	if dir != "" {
 		filepath = filepath + username + "/" + dir
 	} else {
@@ -170,7 +171,7 @@ func getText(c echo.Context) error {
 	username := c.Param("username")
 	dir := c.QueryParam("dir")
 	filename := c.Param("filename")
-	filepath := "../web/data/" + username + "/" + dir + "/" + filename
+	filepath := "../web/user/" + username + "/" + dir + "/" + filename
 	file, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		log.Fatal("Cannot open file", err)
@@ -184,7 +185,7 @@ func postText(c echo.Context) error {
 	dir := c.QueryParam("dir")
 	filename := c.Param("filename")
 	text := c.FormValue("text")
-	filepath := "../web/data/" + username + "/" + dir + "/" + filename
+	filepath := "../web/user/" + username + "/" + dir + "/" + filename
 	createFileIfMissing(username, dir, filename)
 	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0777)
 	if err != nil {
@@ -196,15 +197,15 @@ func postText(c echo.Context) error {
 }
 
 func createDataDir(username string, dir string) {
-	if _, err := os.Stat("../web/data/" + username + "/" + dir); err != nil {
+	if _, err := os.Stat("../web/user/" + username + "/" + dir); err != nil {
 		if os.IsNotExist(err) {
-			os.MkdirAll("../web/data/"+username+"/"+dir+"/thumbs", 0777)
+			os.MkdirAll("../web/user/"+username+"/"+dir+"/thumbs", 0777)
 		}
 	}
 }
 
 func createFileIfMissing(username string, dir string, filename string) {
-	filepath := "../web/data/" + username + "/" + dir + "/" + filename
+	filepath := "../web/user/" + username + "/" + dir + "/" + filename
 	if _, err := os.Stat(filepath); err != nil {
 		if os.IsNotExist(err) {
 			createDataDir(username, dir)

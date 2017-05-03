@@ -1,7 +1,7 @@
 export default class EntityPhysics {
 	constructor(world) {
 		this.world = world
-		let worker = this.worker = new Worker('/static/js/workers/entity.js')
+		let worker = this.worker = new Worker('/data/js/workers/entity.js')
 	      worker.onmessage = function (event) {
 	        let message = JSON.parse(event.data),
   	          vrFrame = world.vrFrame,

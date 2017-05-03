@@ -47,9 +47,9 @@ class Data extends Component {
     let username = this.props.username,
         workingPath = this.state.workingPath.join("/")
     if (thumbnail && this.isImage(file)) {
-      return `/data/${username}${workingPath}/thumbs/${file}.jpg`
+      return `/data/user/${username}${workingPath}/thumbs/${file}.jpg`
     } else {
-      return `/data/${username}${workingPath}/${file}`
+      return `/data/user/${username}${workingPath}/${file}`
     }
   }
   enterDirectory (dir) {

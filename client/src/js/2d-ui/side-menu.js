@@ -42,31 +42,31 @@ class SideMenu extends Component {
     return (
         <div style={styles.sideMenu()} >
           <div style={styles.inner()}>
-            <Tab image="/images/plus.png"
+            <Tab image="/data/images/plus.png"
                  title="Create New World"
                  clickHandler={ (e)=> { this.navigate(e, "/new-world") } }
             />
-            <Tab image="/images/circle-a.png"
+            <Tab image="/data/images/circle-a.png"
                  title="Switch Worlds"
                  clickHandler={ (e)=> { this.navigate(e, "/worlds") }}
             />
-            <Tab image="/images/square-a.png"
+            <Tab image="/data/images/square-a.png"
                  title="View Network"
                  clickHandler={ (e)=> { this.navigate(e, "/network") }}
             />
-            <Tab image="/images/voxel-white.png"
-                 title="Manage Data"
-                 clickHandler={ (e)=> { this.navigate(e, "/data") }}
+            <Tab image="/data/images/voxel-white.png"
+                 title="Manage Files"
+                 clickHandler={ (e)=> { this.navigate(e, "/files") }}
             />
-            <Tab image="/images/chat.png"
+            <Tab image="/data/images/chat.png"
                  title="Chat"
                  clickHandler={ (e)=> { this.navigate(e, "/chat") } }
             />
-            <Tab image="/images/logout.png"
+            <Tab image="/data/images/logout.png"
                  title="Sign In / Switch Accounts"
                  clickHandler={ (e)=> { this.navigate(e, "/login") } }
             />
-            <Tab image="/images/configure-h.png"
+            <Tab image="/data/images/configure-h.png"
                  title="Settings"
                  clickHandler={ (e)=> { this.navigate(e, "/settings") } }
             />

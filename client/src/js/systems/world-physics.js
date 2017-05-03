@@ -1,7 +1,7 @@
 export default class WorldPhysics {
 	constructor(world) {
 		this.worker = null
-		let worker = new Worker('/static/js/workers/world.js');
+		let worker = new Worker('/data/js/workers/world.js');
 	      worker.onmessage = function (event) {
 	        let message = JSON.parse(event.data),
 	          vrFrame = world.vrFrame,

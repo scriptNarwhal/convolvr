@@ -94,13 +94,14 @@ func Start(configName string) {
 	api.GET("/documents/:username/:filename", getText)
 	api.POST("/documents/:username/:filename", postText)
 
-	e.Static("/static", "../web")
+	e.Static("/data", "../web")
+	e.File("/", "../web/index.html")
 	e.File("/:userName/:worldName", "../web/index.html") // fairly simple, readable url structure
 	e.File("/network", "../web/index.html")              // client should generate a meta-world out of (portals to) networked convolvr (or other webvr) sites
 	e.File("/worlds", "../web/index.html")               // this one also needs its 2d ui replaced with something nicer
 	e.File("/new-world", "../web/index.html")
 	e.File("/chat", "../web/index.html")
-	e.File("/data", "../web/index.html")
+	e.File("/files", "../web/index.html")
 	e.File("/login", "../web/index.html")
 	e.File("/settings", "../web/index.html")
 
