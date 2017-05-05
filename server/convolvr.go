@@ -96,9 +96,12 @@ func Start(configName string) {
 
 	e.Static("/data", "../web")
 	e.File("/", "../web/index.html")
-	e.File("/:userName/:worldName", "../web/index.html") // fairly simple, readable url structure
-	e.File("/network", "../web/index.html")              // client should generate a meta-world out of (portals to) networked convolvr (or other webvr) sites
-	e.File("/worlds", "../web/index.html")               // this one also needs its 2d ui replaced with something nicer
+	e.File("/:userName/:worldName", "../web/index.html")            // fairly simple, readable url structure
+	e.File("/:userName/:worldName/at/:coords", "../web/index.html") // linking to individual voxels
+	e.File("/:userName/:worldName/:placeName", "../web/index.html") // linking to named places
+
+	e.File("/network", "../web/index.html") // client should generate a meta-world out of (portals to) networked convolvr (or other webvr) sites
+	e.File("/worlds", "../web/index.html")  // this one also needs its 2d ui replaced with something nicer
 	e.File("/new-world", "../web/index.html")
 	e.File("/chat", "../web/index.html")
 	e.File("/files", "../web/index.html")

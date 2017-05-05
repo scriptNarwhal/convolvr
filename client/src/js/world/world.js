@@ -206,6 +206,7 @@ export default class World {
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor);
 		three.scene.add(this.ambientLight);
+
 		if (config.sky.skyType == 'shader' || config.sky.skyType == 'standard') {
 			skyMaterial = new THREE.ShaderMaterial({
 				side: 1,
@@ -227,6 +228,15 @@ export default class World {
 	 				skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
 			})
 		}
+
+		//handle re-initialization here..
+		let coords = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false
+		if (coords) {
+			coords = coords.split(".")
+			three.camera.position.fromArray([parseInt(coords[0])*928000, parseInt(coords[1])*807360, parseInt(coords[2])*807360])
+			three.camera.updateMatrix()
+		}
+		
 		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000+this.viewDistance*500000, 4), skyMaterial)
 		this.skyLight = skyLight
 		three.scene.add(skyLight)
@@ -302,6 +312,8 @@ export default class World {
 	}
 	load (name, callback) {
 		this.name = name;
+		// fix this... needs userName now
+		
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
 			 this.init(response.data)
 			 callback && callback(this)

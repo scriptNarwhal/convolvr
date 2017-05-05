@@ -100,6 +100,8 @@ ReactDOM.render(
 	  		<Route path="/" component={App} >
 				<IndexRoute component={HUD}/>
         <Route path="/:userName/:worldName" component={HUD} />
+        <Route path="/:userName/:worldName/at/:coords" component={HUD} />
+        <Route path="/:userName/:worldName/:placeName" component={HUD} />
 				<Route path="/login" component={Login} />
 				<Route path="/chat" component={Chat} />
 				<Route path="/files" component={Data} />

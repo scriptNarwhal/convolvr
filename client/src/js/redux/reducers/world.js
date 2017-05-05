@@ -23,8 +23,31 @@ import {
     UNIVERSE_SETTINGS_UPDATE_FAIL
 } from '../constants/action-types'
 
+let detectWorldDetailsFromURL = () => {
+    let url = window.location.pathname,
+        params = url.split("/"),
+        slashes = params.length -1,
+        nonWorlds = ["login", "network", "chat", "files", "settings", "worlds", "new-world"],
+        isWorld = true,
+        userAndWorld = ["generated", "overworld"]
+
+    nonWorlds.map(nWorld => {
+        if (url.indexOf(`/${nWorld}`) == 0) {
+            isWorld = false
+        }
+    })
+    console.log("detect world details from URL ", isWorld, slashes)
+    if (isWorld) {
+        if (slashes >= 2) {
+            userAndWorld = [params[1], params[2]]
+        }
+    }
+    return userAndWorld
+}
+
 module.exports = function worlds (state = {
-    current: window.location.href.indexOf("/world/") > -1 ? window.location.href.split("/world/")[1] : "overworld",
+    current: detectWorldDetailsFromURL()[1],
+    worldUser: detectWorldDetailsFromURL()[0],
     all: [],
     userWorlds: [],
     updated: false,
