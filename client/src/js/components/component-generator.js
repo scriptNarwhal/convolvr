@@ -12,7 +12,7 @@ export default class ComponentGenerator {
         geometry: {
           merge: true,
           shape: "box",
-          size: [16000, 16000, 1000]
+          size: [22000, 22000, 1500]
         },
         material: {
           color: 0x404040,
@@ -27,7 +27,7 @@ export default class ComponentGenerator {
         geometry: {
           merge: true,
           shape: "hexagon",
-          size: [8000, 40000, 8000]
+          size: [8000, 30000, 8000]
         },
         material: {
           color: 0x404040,
@@ -42,7 +42,7 @@ export default class ComponentGenerator {
         geometry: {
           merge: true,
           shape: "box",
-          size: [16000, 16000, 1000]
+          size: [22000, 22000, 1500]
         },
         material: {
           color: 0x404040,
@@ -57,7 +57,7 @@ export default class ComponentGenerator {
         geometry: {
           merge: true,
           shape: "box",
-          size: [6000, 58000, 6000]
+          size: [8000, 72000, 8000]
         },
         material: {
           color: 0x404040,

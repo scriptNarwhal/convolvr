@@ -86,16 +86,6 @@ export default class MaterialSystem {
             })
             
           }
-          // if (map != undefined) {
-          //   mat.map = map
-          // }
-          // if (specular != undefined) {
-          //   mat.specular = specular
-          // }
-          // if (reflection != undefined) {
-          //   reflection.mapping = THREE.SphericalReflectionMapping
-          //   mat.envMap = reflection
-          // }
           
           assets.materials[materialCode] = material // cache material for later
         } else {
@@ -105,6 +95,20 @@ export default class MaterialSystem {
       return {
           material
       }
+    }
+
+    generateTexture (params) { // would be useful for tiling / random patterns
+      let assets = this.world.systems.assets,
+          textureCode = "implement:This", // serialize the parameters in some _fairly_ concise way to build this string
+          texture = null
+        
+      if (assets.proceduralTextures[textureCode] == null) {
+        // reference TextSystem for canvas code here..
+
+      } else { // use cached version if available
+        texture = assets.proceduralTextures[textureCode]
+      }
+      return texture
     }
 }
 
