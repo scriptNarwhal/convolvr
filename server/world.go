@@ -24,7 +24,7 @@ type NetworkDomain struct {
 
 type World struct {
 	ID                  int     `storm:"id,increment" json:"id"`
-	UserID              int     `storm:"id" json:"userId"`
+	UserID              int     `storm:"id,index" json:"userId"`
 	UserName            string  `storm:"id,index" json:"userName"`
 	Name                string  `storm:"index" json:"name"`
 	Gravity             float64 `json:"gravity"`
@@ -72,6 +72,8 @@ type Terrain struct {
 type Spawn struct {
 	Entities   bool `json:"entities"`
 	Structures bool `json:"structures"`
+	Roads      bool `json:"roads"`
+	Trees      bool `jsong:"trees"`
 	NPCS       bool `json:"npcs"`
 	Tools      bool `json:"tools"`
 	Vehicles   bool `json:"vehicles"`
@@ -187,7 +189,7 @@ func getWorld(c echo.Context) error { // load specific world
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}
 		light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}
 		terrain := Terrain{TerrainType: "voxels", Height: 20000, Color: terrainColor, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
-		spawn := Spawn{Entities: true, Structures: true, NPCS: true, Tools: true, Vehicles: true}
+		spawn := Spawn{Entities: true, Structures: true, Roads: true, Trees: true, NPCS: true, Tools: true, Vehicles: true}
 		gravity := 1.0
 		highAltitudeGravity := false
 		world = *NewWorld(0, -1, "generated", name, gravity, highAltitudeGravity, sky, light, terrain, spawn)

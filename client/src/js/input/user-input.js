@@ -110,15 +110,19 @@ export default class UserInput {
 			return
 		}
 		let world = this.world,
-				terrainMesh = world.terrain.mesh,
-				terrainMode = '',
-				bottom = -600000,
-				velocity = this.device.velocity //world.getElevation(this.camera.position);
+			terrain = world.terrain,
+			terrainMesh = terrain.mesh,
+			terrainConfig = terrain.config,
+			terrainMode = '',
+			bottom = -600000,
+			velocity = this.device.velocity //world.getElevation(this.camera.position);
 
-		if (world.terrain.config) {
-			terrainMode = world.terrain.config.type
+		if (terrainConfig) {
+			terrainMode = terrainConfig.type
 			if (terrainMode == "plane" || terrainMode == "both") {
 				bottom = terrainMesh.position.y + 6000 + world.vrHeight
+			} else {
+				bottom = -(5400000 / terrainConfig.flatness) + 6000 + world.vrHeight
 			}
 		}
 		if (isVRMode(world.mode)) {

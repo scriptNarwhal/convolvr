@@ -146,7 +146,7 @@ export default class World {
 		} else {
 			// load sky texture // deprecated ..migrating to world.systems.assets
 			skyMaterial = new THREE.MeshBasicMaterial({color:0x303030})
-			let skyTexture = THREE.ImageUtils.loadTexture('/data/'+this.config.sky.photosphere, false, function() {
+			let skyTexture = THREE.ImageUtils.loadTexture('/data/user/'+this.config.sky.photosphere, false, function() {
 				 	skyTexture.magFilter = THREE.LinearFilter
 	 				skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
 			})

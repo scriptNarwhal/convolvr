@@ -13,19 +13,20 @@ export default class Tool {
 
     equip (hand) {
       let input = this.world.userInput,
-          hands = this.toolbox.hands
+          hands = this.toolbox.hands,
+          toolMesh = null
 
       if (this.mesh == null) {
-        let toolMesh = this.initMesh(this.data)
-        if (!input.trackedControls && !input.leapMotion) {
+        toolMesh = this.initMesh(this.data)
+      } else {
+        toolMesh = this.mesh
+        toolMesh.visible = true
+      }
+      if (!input.trackedControls && !input.leapMotion) {
           this.world.user.mesh.add(toolMesh)
           toolMesh.position.set(1500-(3000*hand), -800, -1550)
-        } else {
-          hands[hand].add(toolMesh) // add to respective hand 
-        }
-        
       } else {
-        this.mesh.visible = true
+          hands[hand].add(toolMesh) // add to respective hand 
       }
     }
 

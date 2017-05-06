@@ -86,7 +86,7 @@ export default class NewWorld extends Component {
       blue: 1.0,
       intensity: 0.75,
       gravity: 1.0,
-      terrainType: 'both',
+      terrainType: 'voxels',
       terrainColor: 0x404040,
       turbulentTerrain: true,
       highAltitudeGravity: false,
@@ -131,6 +131,8 @@ export default class NewWorld extends Component {
           spawn: {
             entities: this.state.entities,
             structures: this.state.structures,
+            roads: this.state.roads,
+            trees: this.state.trees,
             npcs: this.state.npcs,
             tools: this.state.tools,
             vehicles: this.state.vehicles
@@ -256,9 +258,9 @@ export default class NewWorld extends Component {
                 <span style={styles.label}>Terrain Type</span>
                 <span style={styles.setting}>
                 <select onChange={ e=> { this.onTerrainTypeChange(e) }}>
+                <option value="voxels">Terrain Voxels</option>
+                <option value="plane">Ground Plane</option>
                 <option value="both">Voxels + Ground Plane</option>
-                <option value="voxels">Voxels Only</option>
-                <option value="plane">Ground Plane Only</option>
                 <option value="empty">Empty Space</option>
                 </select>
                 </span>
