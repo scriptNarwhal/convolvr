@@ -11,6 +11,7 @@ export default class AudioSystem {
 
         //Create the PositionalAudio object (passing in the listener)
         var sound = new THREE.PositionalAudio( this.listener )
+        
         assets.loadSound(prop.asset, sound, ()=>{
             component.mesh.add(sound)
             sound.setRefDistance( 5000 )
