@@ -1,8 +1,8 @@
 /* chat container */
 import React, { Component } from 'react'
-import Shell from '../shell'
-import Card from '../card'
-import LocationBar from '../location-bar'
+import Shell from '../components/shell'
+import Card from '../components/card'
+import LocationBar from '../components/location-bar'
 
 const styles = {
     chat: {

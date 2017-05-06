@@ -26,6 +26,7 @@ import DestructableSystem from '../systems/destructable'
 import FloorSystem from '../systems/floor'
 import WallSystem from '../systems/wall'
 import VehicleSystem from '../systems/vehicle'
+import PortalSystem from '../systems/portal'
 import DoorSystem from '../systems/door'
 import HoverSystem from '../systems/hover'
 import ActivateSystem from '../systems/activate'
@@ -140,6 +141,7 @@ export default class World {
 			floor: new FloorSystem(world),
 			wall: new WallSystem(world),
 			vehicle: new VehicleSystem(world),
+			portal: new PortalSystem(world),
 			door: new DoorSystem(world),
 			cursor: new CursorSystem(world),
 			hand: new HandSystem(world),
@@ -242,7 +244,7 @@ export default class World {
 		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
-		skyLight.position.set(0, 2000000, 4000000)
+		skyLight.position.set(2000000, 2000000, 4000000)
 		this.terrain.bufferChunks(true, 0)
 		this.gravity = config.gravity
 		this.highAltitudeGravity = config.highAltitudeGravity

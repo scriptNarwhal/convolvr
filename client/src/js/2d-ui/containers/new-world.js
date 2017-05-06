@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Shell from '../shell'
+import Shell from '../components/shell'
 
 const styles = {
   innerLogin: {

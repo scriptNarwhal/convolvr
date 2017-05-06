@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
-import Card from '../card'
-import Shell from '../shell'
-import LocationBar from '../location-bar'
+import Card from '../components/card'
+import Shell from '../components/shell'
+import LocationBar from '../components/location-bar'
 
 const styles = {
   worlds: {

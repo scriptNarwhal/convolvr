@@ -80,15 +80,15 @@ world.help = new ListView({ // deprecated as of alpha 0.4.1
     "- Keys 1-5: switch tool",
     "- Gamepads are also supported",
     "",
-    "# VR users (mobile & desktop)",
-    "- EnterVR icon in the corner",
+    "# Desktop VR users ",
+    "- Enter VR button in bottom right corner",
     "- If you have tracked controllers:",
-    "- Left stick: movement",
-    "- Right trigger: Primary Tool",
-    "- Right stick x/y axis: change tool(mode)",
+    " * Right / Left trigger: use tool in hand",
+    " * Right stick x/y axis: change tool(mode)",
+    " * Left stick: movement",
     "",
-    "# Mobile (2d or with VR viewer)",
-    "- Device orientation controls camera",
+    "# Mobile users (2d or with VR viewer)",
+    "- Device orientation controls the camera",
     "- Swiping & dragging move you"
   ]
 }, three.scene).initMesh()

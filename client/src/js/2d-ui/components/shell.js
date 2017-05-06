@@ -140,10 +140,10 @@ Shell.defaultProps = {
 }
 
 import { connect } from 'react-redux'
-import { toggleMenu, toggleVR } from '../redux/actions/app-actions'
+import { toggleMenu, toggleVR } from '../../redux/actions/app-actions'
 import {
     sendMessage
-} from '../redux/actions/message-actions'
+} from '../../redux/actions/message-actions'
 
 export default connect(
   state => {

@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import { events } from '../../network/socket'
 import { fetchUsers } from '../../redux/actions/user-actions'
-import Shell from '../shell'
-import Button from '../button'
+import Shell from '../components/shell'
+import Button from '../components/button'
 import { vrAnimate } from '../../world/render'
 
 class App extends Component {
@@ -162,7 +162,7 @@ class App extends Component {
                   bottom: 0
                 }}
                 key='1'
-                image="/images/x.png"
+                image="/data/images/x.png"
                 onClick={ (evt, title) => {
 
                 } }
@@ -174,7 +174,7 @@ class App extends Component {
                   top: 0
                 }}
                 key='2'
-                image="/images/x.png"
+                image="/data/images/x.png"
                 onClick={ (evt, title) => {
                     this.props.toggleVRMode();
                 } }
@@ -187,7 +187,7 @@ class App extends Component {
                       zIndex: 9999,
                       background: 'none'
                   }}
-                  image="/images/vr.png"
+                  image="/data/images/vr.png"
                   onClick={ (evt, title) => {
                     this.props.toggleVRMode()
                     let renderer = three.renderer,
@@ -254,7 +254,7 @@ class App extends Component {
                 menuOpen={this.props.menuOpen} ></Shell>
          { this.renderVRButtons() }
          <Button title="Close Menu"
-                 image="/images/x.png"
+                 image="/data/images/x.png"
                  style={{
                      position: "fixed",
                      right:0,

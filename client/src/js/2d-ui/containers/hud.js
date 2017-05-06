@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import Button from '../button';
-import { browserHistory } from 'react-router';
+import React, { Component } from 'react'
+import Button from '../components/button'
+import { browserHistory } from 'react-router'
 
 class HUD extends Component {
 
@@ -12,7 +12,7 @@ class HUD extends Component {
     return (
         <div className="hud">
             {this.props.fullscreen == false ? (<Button title="Options"
-                    image="/images/configure.png"
+                    image="/data/images/configure.png"
                     className="options-button"
                     style={{display: this.props.menuOpen ? "none" : "inline-block", backgroundColor: 'transparent'}}
                     onClick={ (evt, title) => {
