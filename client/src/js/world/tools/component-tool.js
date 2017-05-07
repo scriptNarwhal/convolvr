@@ -85,7 +85,7 @@ export default class ComponentTool extends Tool {
         component = this.components.makeComponent(this.options.componentType)
       }
       entity = new Entity(0, [component], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
-      if (!!!selected || cursorState.distance > 160000) {
+      if (!!!selected || cursorState.distance > 180000) {
       // switch back to entity tool, if the user is clicking into empty space
         this.world.user.toolbox.useTool(0, 0)
         this.world.user.hud.show()

@@ -31,7 +31,7 @@ export default class TerrainSystem {
         this.EntityPhysics = world.systems.entityPhysics
         this.config = config
         let type = this.config.type
-        if (type == 'both' || type == 'plane') {
+        if (type != 'empty') {
             let geom = new THREE.PlaneGeometry(24000000+world.viewDistance*800000, 24000000+world.viewDistance*800000, 2, 2),
                 mat = this.world.mobile ?
                     new THREE.MeshLambertMaterial({color: this.config.color})
@@ -39,12 +39,13 @@ export default class TerrainSystem {
                 mesh = new THREE.Mesh(geom, mat)
             this.mesh = mesh
             mesh.rotation.x = -Math.PI/2
-            if (type == 'plane') {
-                mesh.position.y = -64500
+            if (type == 'plane' || type == 'both') {
+                mesh.position.y = -120500
             } else {
-                mesh.position.y = -168000 - 125000 / this.config.flatness
+                mesh.position.y = -(5400000 / this.config.flatness) + 6000 //-168000 - 125000 / this.config.flatness
             }
             three.scene.add(mesh)
+            this.world.octree.add(mesh)
         }
   }
 
@@ -53,7 +54,9 @@ export default class TerrainSystem {
         voxelList = this.voxelList,
         config = this.config,
         world = this.world,
+        scene = three.scene,
         systems = world.systems,
+        octree = this.octree,
         plat = null,
         chunk = null,
         removePhysicsChunks = [],
@@ -85,8 +88,13 @@ export default class TerrainSystem {
                                       pCell[2] > coords[2] + removeDistance)
             ) { 	// mark voxels for removal
               platform.cleanUp = true
-              this.cleanUpChunks.push({physics: {cell: [pCell[0], 0, pCell[2]]}, cell: pCell[0]+".0."+pCell[2]})
-            }
+              this.cleanUpChunks.push({
+                physics: {
+                  cell: [pCell[0], 0, pCell[2]]
+                }, 
+                cell: pCell[0]+".0."+pCell[2]
+              })
+          }
         }
       }
       c = 0
@@ -102,7 +110,8 @@ export default class TerrainSystem {
                   if (terrainChunk.entities) {
                     terrainChunk.entities.map(e => {
                       if (!!e.mesh) {
-                        this.octree.remove(e.mesh)
+                        octree.remove(e.mesh)
+                        scene.remove(e.mesh)
                       } 
                     })
                   }
