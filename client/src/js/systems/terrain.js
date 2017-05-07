@@ -109,6 +109,7 @@ export default class TerrainSystem {
                   }
                   if (terrainChunk.entities) {
                     terrainChunk.entities.map(e => {
+                      console.log("terrain Chunk entities cleanup", e)
                       if (!!e.mesh) {
                         octree.remove(e.mesh)
                         scene.remove(e.mesh)

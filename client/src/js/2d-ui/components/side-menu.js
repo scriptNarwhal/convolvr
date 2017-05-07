@@ -9,7 +9,7 @@ let styles = {
       width: mobile ? '100vw' : '72px',
       //maxWidth: mobile ? '100vw' : '72px',
       height: mobile ? '72px' : '100vh',
-      backgroundColor: 'rgb(9, 9, 9)',
+      backgroundColor: 'rgb(2, 0, 3)',
       overflow: 'hidden'
     }
   },

@@ -65,6 +65,9 @@ type Terrain struct {
 	Turbulent   bool    `json:"turbulent"`
 	Height      int     `json:"height"`
 	Color       int     `json:"color"`
+	Red         float64 `json:"red"`
+	Green       float64 `json:"green"`
+	Blue        float64 `json:"blue"`
 	Flatness    float64 `json:"flatness"`
 	Decorations string  `json:"decorations"`
 }
@@ -177,18 +180,20 @@ func getWorld(c echo.Context) error { // load specific world
 				blue = first * 2.0
 			}
 		}
+
+		terrainRed = 0.05 + (green + blue)
+		terrainGreen = 0.05 + (blue + red)
+		terrainBlue = 0.05 + (red + green)
 		red *= 12.5
 		green *= 12.5
 		blue *= 12.5
-		terrainRed = 0.05 + (green + blue*2)
-		terrainGreen = 0.05 + (blue + red)
-		terrainBlue = 0.05 + (red + green)
-		lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
+		lightIntensity := (red + blue + green) / 3
+		lightColor = int(math.Floor(red+lightIntensity*127))<<16 | int(math.Floor(green+lightIntensity*127))<<8 | int(math.Floor(blue*lightIntensity*127))
 		ambientColor = int(4+math.Floor(red*2))<<16 | int(2+math.Floor(green*2))<<8 | int(2+math.Floor(blue*2))
 		terrainColor = int(math.Floor(terrainRed*255))<<16 | int(math.Floor(terrainGreen*255))<<8 | int(math.Floor(terrainBlue*255))
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}
 		light := Light{Color: int(lightColor), Intensity: 1.0, Angle: 3.14, AmbientColor: ambientColor}
-		terrain := Terrain{TerrainType: "voxels", Height: 20000, Color: terrainColor, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
+		terrain := Terrain{TerrainType: "voxels", Height: 20000, Color: terrainColor, Red: terrainRed, Green: terrainGreen, Blue: terrainBlue, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
 		spawn := Spawn{Entities: true, Structures: true, Roads: true, Trees: true, NPCS: true, Tools: true, Vehicles: true}
 		gravity := 1.0
 		highAltitudeGravity := false

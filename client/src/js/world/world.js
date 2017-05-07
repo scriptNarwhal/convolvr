@@ -138,7 +138,10 @@ export default class World {
 					time: { type: "f", value: 1.0 },
 					red: { type: "f", value: config.sky.red },
 					green: { type: "f", value: config.sky.green },
-					blue: { type: "f", value: config.sky.blue }
+					blue: { type: "f", value: config.sky.blue },
+					terrainRed: { type: "f", value: config.terrain.red },
+					terrainGreen: { type: "f", value: config.terrain.green },
+					terrainBlue: { type: "f", value: config.terrain.blue }
 				},
 				vertexShader: document.getElementById('sky-vertex').textContent,
 				fragmentShader: document.getElementById('sky-fragment').textContent
