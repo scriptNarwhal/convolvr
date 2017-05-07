@@ -111,20 +111,24 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
       if (cursorIndex == 0) {
         
         if (cursorMesh.visible == true && (input.trackedControls || input.leapMotion) && world.mode == "stereo") {
-          
-          cursorMesh.visible = false
+          //console.log("hiding cursor "+cursorIndex)
+            cursorMesh.visible = false
+
+        } else if (cursorMesh.visible == false && (!input.trackedControls && !input.leapMotion) && world.mode != "stereo") {
+            //console.log("unhiding cursor "+cursorIndex)
+            cursorMesh.visible = true
 
         }
 
       } else if (cursorIndex > 0) {
 
         if (cursorMesh.visible == false && (input.trackedControls || input.leapMotion)) {
-                
+             //console.log("unhiding cursor "+cursorIndex)
             cursorMesh.visible = true
 
-        } else if (cursorMesh.visible && !input.trackedControls && !input.leapMotion) {
-
-              cursorMesh.visible = false
+        } else if (cursorMesh.visible && (!input.trackedControls && !input.leapMotion)) {
+            //console.log("hiding cursor "+cursorIndex)
+            cursorMesh.visible = false
 
         }
 

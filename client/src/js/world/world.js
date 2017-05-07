@@ -11,16 +11,18 @@ import SocketHandlers from '../network/handlers'
 let world = null
 
 export default class World {
+	
 	constructor(user, userInput = false, socket, store) {
 		let mobile = (window.innerWidth <= 720),
-				scene = new THREE.Scene(),
-				camera = null,
-				screenResX = window.devicePixelRatio * window.innerWidth,
-				renderer = null,
-				self = this,
-				three = {},
-				postProcessing = false
+			scene = new THREE.Scene(),
+			camera = null,
+			screenResX = window.devicePixelRatio * window.innerWidth,
+			renderer = null,
+			self = this,
+			three = {},
+			postProcessing = false
 
+		//scene.scale.setScalar( 1 / 22000 ) 
 		this.mobile = mobile
 		this.floorHeight = 0
 		this.highAltitudeGravity = false
@@ -29,15 +31,23 @@ export default class World {
 		camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1500+this.viewDistance*200, 15000000 + this.viewDistance*600000)
 
 		let rendererOptions = {antialias: this.aa != 'off' && this.enablePostProcessing != 'on'}
+
 		if (this.enablePostProcessing == 'on') {
+
 			rendererOptions.alpha = true
 			rendererOptions.clearColor = 0x000000
+
 		}
+
 		renderer = new THREE.WebGLRenderer(rendererOptions)
 		postProcessing = new PostProcessing(renderer, scene, camera)
+
 		if (this.enablePostProcessing == 'on') {
+
 			postProcessing.init()
+
 		}
+
 		this.postProcessing = postProcessing
 		this.socket = socket
 		this.config = false
@@ -92,9 +102,12 @@ export default class World {
 		function onResize () {
 			world.screenResX = window.devicePixelRatio * window.innerWidth
 			if (three.world.mode != "stereo") {
+
 				three.renderer.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
+
 			}
 			if (world.postProcessing.enabled) {
+
 				world.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
 			}
 			three.camera.aspect = innerWidth / innerHeight
@@ -119,6 +132,7 @@ export default class World {
 	}
 
 	init (config) {
+
 		console.log(config)
 		let camera = three.camera,
 				skyLight =  new THREE.DirectionalLight(config.light.color, 1),
@@ -175,6 +189,7 @@ export default class World {
 	}
 
 	initRenderer (renderer, id) {
+
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1
 		renderer.setClearColor(0x1b1b1b)
 		renderer.setPixelRatio(pixelRatio)
@@ -184,6 +199,7 @@ export default class World {
 			renderer.domElement.setAttribute("id", id)
 	}
 	initLocalSettings () {
+
 		let cameraMode = localStorage.getItem("camera"),
 			vrMovement = localStorage.getItem("vrMovement"),
 			IOTMode = localStorage.getItem("IOTMode"),
@@ -269,12 +285,18 @@ export default class World {
 	}
 
 	generateFullLOD (coords) {
+
 			let platform = this.terrain.voxels[coords],
 				scene = three.scene
+
 			if (platform != null) {
+
 				platform.entities.map(entity=>{
+
 					entity.init(scene)
+
 				})
+
 			}
 	}
 
@@ -288,30 +310,38 @@ export default class World {
 			hands = []
 
 		if (this.sendUpdatePacket == 12) { // send image
-	    imageSize = this.sendVideoFrame()
-	  }
-	  this.sendUpdatePacket += 1
-	  if (this.sendUpdatePacket %((2+(1*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
-	    if (input.trackedControls || input.leapMotion) {
-	      userHands.forEach(function (hand) {
-	        hands.push({pos: [hand.position.x, hand.position.y, hand.position.z],
-	          quat: [hand.quaternion.x, hand.quaternion.y, hand.quaternion.z, hand.quaternion.w] });
-	        })
-	      }
-	      send('update', {
-	        entity: {
-	          id: this.user.id,
-	          username: this.user.username,
-	          image: this.webcamImage,
-	          imageSize,
-	          hands,
-	          position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
-	          quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
-	        }
-	      })
-	      if (this.capturing) {
-	          this.webcamImage = ""
-	      }
+
+	    	imageSize = this.sendVideoFrame()
+
+	  	}
+
+	  	this.sendUpdatePacket += 1
+
+	  	if (this.sendUpdatePacket %((2+(1*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
+
+			if (input.trackedControls || input.leapMotion) {
+
+				userHands.forEach(function (hand) {
+					hands.push({pos: [hand.position.x, hand.position.y, hand.position.z],
+					quat: [hand.quaternion.x, hand.quaternion.y, hand.quaternion.z, hand.quaternion.w] });
+				})
+			}
+
+			send('update', {
+				entity: {
+				id: this.user.id,
+				username: this.user.username,
+				image: this.webcamImage,
+				imageSize,
+				hands,
+				position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
+				quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
+				}
+			})
+
+			if (this.capturing) {
+				this.webcamImage = ""
+			}
 	    }
 	}
 
@@ -335,22 +365,31 @@ export default class World {
 	}
 
 	updateSkybox (delta) {
+
 		let camera = three.camera,
 				terrainMesh = this.terrain.mesh,
 				skyMat = null
+
 		if (this.skybox) {
+
 			skyMat = this.skybox.material
+
 			if (skyMat) {
+
 				if (skyMat.uniforms) {
+
 					skyMat.uniforms.time.value += delta
+
 				}
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
 				//this.skyLight.position.set(camera.position.x, camera.position.y+180000, camera.position.z+500000)
 			}
     }
 		if (terrainMesh) {
+
 			terrainMesh.position.x = camera.position.x
 			terrainMesh.position.z = camera.position.z
+
 		}
 	}
 
