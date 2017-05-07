@@ -37,6 +37,7 @@ export default class Entity {
         dimensions = [0, 0, 0],
         compMesh = null,
         compGeom = null,
+        compRadius = 10000,
         materials = [],
         addToOctree = true,
         comp = null,
@@ -55,10 +56,13 @@ export default class Entity {
           addToOctree = false
         }
         compMesh = comp.mesh
+        compMesh.geometry.computeBoundingSphere()
+        compRadius = compMesh.geometry.boundingSphere.radius
         // check bounding radius
-        dimensions = [Math.max(dimensions[0], Math.abs(compMesh.position.x)),
-                      Math.max(dimensions[1], Math.abs(compMesh.position.y)), 
-                      Math.max(dimensions[2], Math.abs(compMesh.position.z))]
+        dimensions = [Math.max(dimensions[0], Math.abs(compMesh.position.x)+compRadius),
+                      Math.max(dimensions[1], Math.abs(compMesh.position.y)+compRadius), 
+                      Math.max(dimensions[2], Math.abs(compMesh.position.z)+compRadius)]
+
         if (comp.props.geometry && comp.props.geometry.merge === true) {
           materials.push(compMesh.material)
           compMesh.updateMatrix()
@@ -75,7 +79,8 @@ export default class Entity {
         }
         c ++
     }
-    this.boundingRadius = Math.sqrt((dimensions[0]*dimensions[0]) + (dimensions[1]*dimensions[1]) + (dimensions[2]*dimensions[2]))
+    this.boundingRadius = Math.max(dimensions[0], dimensions[1], dimensions[2])
+    this.boundingBox = dimensions
     if (s > 0) {
       mesh = new THREE.Mesh(base, new THREE.MultiMaterial(materials))
     } else {

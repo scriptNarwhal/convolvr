@@ -3,7 +3,8 @@ import Shell from '../components/shell'
 
 const styles = {
   modal: {
-    width: '66.66vh',
+    width: '100%',
+    maxWidth: '800px',
     height: '100%',
     minWidth: '360px',
     margin: 'auto',

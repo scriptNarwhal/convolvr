@@ -78,7 +78,8 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
   cursors.map((cursor, i) => { // animate cursors & raycast scene
       let state = cursor.state.cursor,
           cursorMesh = cursor.mesh,
-          cursorPos = cursorMesh.position
+          cursorPos = cursorMesh.position,
+          cursorSpeed = (state.distance - cursorPos.z) / 10
       
       if (cursorIndex > 0) {
         if (cursorMesh.visible == false) {
@@ -88,13 +89,13 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
         }
       }
       if (!!state) {
-        if (state.distance-4000 < (-cursorPos.z)) {
-          if (cursorPos.z < 85000) {
-            cursorPos.z += 18000
+        if (state.distance-8000 < (-cursorPos.z)) { // near bound of allowed movement
+          if (cursorPos.z < 20000 + cursorSpeed) {
+            cursorPos.z += cursorSpeed
           }
-        } else if (state.distance > (-cursorPos.z)) {
-          if (cursorPos.z > -85000) {
-            cursorPos.z -= 18000
+        } else if (state.distance > (-cursorPos.z)) { // far bound of allowed movement
+          if (cursorPos.z > -1600000 - cursorSpeed) {
+            cursorPos.z -= cursorSpeed
           }
         }
       }
