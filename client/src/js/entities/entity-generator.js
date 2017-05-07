@@ -6,11 +6,16 @@ export default class EntityGenerator {
     this.init()
   }
   makeEntity (type, instantiate) {
+
     if (!!instantiate) {
+
       let ent = this.entities[type]
       return new Entity (0, ent.components, ent.position, ent.quaternion)
+    
     } else {
+
       return this.entities[type]
+
     }
 
   }
@@ -23,7 +28,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true, //can be combined to save cpu
               shape: "box",
-              size: [22000, 22000, 1000]
+              size: [42000, 42000, 1000]
             },
             material: {
               color: 0x808080,
@@ -41,7 +46,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "box",
-              size: [22000, 22000, 1500]
+              size: [42000, 42000, 1500]
             },
             material: {
               color: 0x808080,
@@ -63,7 +68,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "hexagon",
-              size: [18000, 18000, 1500]
+              size: [28000, 28000, 1500]
             },
             material: {
               color: 0x808080,
@@ -78,7 +83,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "torus",
-              size: [22000, 22000, 1500]
+              size: [42000, 42000, 15000]
             },
             material: {
               color: 0x808080,
@@ -93,7 +98,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "hexagon",
-              size: [18000, 18000, 1500]
+              size: [28000, 28000, 15000]
             },
             material: {
               color: 0x808080,
@@ -130,7 +135,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "box",
-              size: [22000, 22000, 1000]
+              size: [42000, 42000, 4000]
             },
             material: {
               color: 0x808080,
@@ -175,7 +180,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "hexagon",
-              size: [18000, 18000, 1000]
+              size: [28000, 18000, 1000]
             },
             material: {
               color: 0x808080,
@@ -197,7 +202,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "box",
-              size: [22000, 22000, 1000]
+              size: [42000, 42000, 1000]
             },
             material: {
               color: 0x808080,
