@@ -74,6 +74,7 @@ export default class EntityTool extends Tool  {
           position = telemetry.position,
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
+          user = this.world.user,
           entity = null
       
       if (params.entity) {
@@ -85,11 +86,11 @@ export default class EntityTool extends Tool  {
       if (entity.components.length == 1) {
         entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
       }
-      if (selected && cursorState.distance < 80000) {
+      if (selected && cursorState.distance < 160000) {
           // switch to component tool
-          this.world.user.toolbox.useTool(1, 0)
-          this.world.user.hud.show()
-          this.world.user.toolbox.usePrimary(0)
+          user.toolbox.useTool(1, 0)
+          user.hud.show()
+          user.toolbox.usePrimary(0)
           return false
       }
       return {

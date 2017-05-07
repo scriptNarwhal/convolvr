@@ -94,7 +94,7 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
             cursorPos.z += cursorSpeed
           }
         } else if (state.distance > (-cursorPos.z)) { // far bound of allowed movement
-          if (cursorPos.z > -1600000 - cursorSpeed) {
+          if (cursorPos.z > -100000 - cursorSpeed) {
             cursorPos.z -= cursorSpeed
           }
         }
