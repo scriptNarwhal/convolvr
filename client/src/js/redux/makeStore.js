@@ -6,6 +6,7 @@ const loggerMiddleware = createLogger()
 import { combineReducers } from 'redux'
 import app from './reducers/app'
 import worlds from './reducers/world'
+import places from './reducers/place'
 import entities from './reducers/entity'
 import components from './reducers/component'
 import users from './reducers/user'
@@ -19,6 +20,7 @@ export default function configureStore(router, initialState = {}) {
             routing: router,
                      app,
                      worlds,
+                     places,
                      components,
                      users,
                      avatars,

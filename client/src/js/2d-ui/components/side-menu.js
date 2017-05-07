@@ -50,6 +50,10 @@ class SideMenu extends Component {
                  title="Switch Worlds"
                  clickHandler={ (e)=> { this.navigate(e, "/worlds") }}
             />
+            <Tab image="/data/images/places-s.png"
+                 title="Places"
+                 clickHandler={ (e)=> { this.navigate(e, "/places") }}
+            />
             <Tab image="/data/images/square-a.png"
                  title="View Network"
                  clickHandler={ (e)=> { this.navigate(e, "/network") }}

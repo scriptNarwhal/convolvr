@@ -110,7 +110,7 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
       
       if (cursorIndex == 0) {
         
-        if (cursorMesh.visible == true && (input.trackedControls || input.leapMotion)) {
+        if (cursorMesh.visible == true && (input.trackedControls || input.leapMotion) && world.mode == "stereo") {
           
           cursorMesh.visible = false
 
@@ -122,7 +122,7 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
                 
             cursorMesh.visible = true
 
-        } else if (!input.trackedControls && !input.leapMotion) {
+        } else if (cursorMesh.visible && !input.trackedControls && !input.leapMotion) {
 
               cursorMesh.visible = false
 
@@ -132,11 +132,11 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
 
       if (!!state) {
 
-        if (state.distance-8000 < (-cursorPos.z) && (cursorPos.z < 20000 + cursorSpeed)) { // near bound of allowed movement
+        if (state.distance-8000 < (-cursorPos.z) && (cursorPos.z < 80000 - cursorSpeed)) { // near bound of allowed movement
 
             cursorPos.z += cursorSpeed
 
-        } else if (state.distance > (-cursorPos.z) && (cursorPos.z > -100000 - cursorSpeed)) { // far bound of allowed movement
+        } else if (state.distance > (-cursorPos.z) && (cursorPos.z > -80000 + cursorSpeed)) { // far bound of allowed movement
         
             cursorPos.z -= cursorSpeed
          

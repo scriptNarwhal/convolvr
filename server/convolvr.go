@@ -37,6 +37,7 @@ func Start(configName string) {
 	}
 	userErr := db.Init(&User{})
 	worldErr := db.Init(&World{})
+	placeErr := db.Init(&Place{})
 	chunkErr := db.Init(&Voxel{})
 	componentErr := db.Init(&Component{})
 	entityErr := db.Init(&Entity{})
@@ -51,6 +52,9 @@ func Start(configName string) {
 	}
 	if worldErr != nil {
 		log.Fatal(worldErr)
+	}
+	if worldErr != nil {
+		log.Fatal(placeErr)
 	}
 	if chunkErr != nil {
 		log.Fatal(chunkErr)
@@ -102,6 +106,7 @@ func Start(configName string) {
 
 	e.File("/network", "../web/index.html") // client should generate a meta-world out of (portals to) networked convolvr (or other webvr) sites
 	e.File("/worlds", "../web/index.html")  // this one also needs its 2d ui replaced with something nicer
+	e.File("/places", "../web/index.html")
 	e.File("/new-world", "../web/index.html")
 	e.File("/chat", "../web/index.html")
 	e.File("/files", "../web/index.html")

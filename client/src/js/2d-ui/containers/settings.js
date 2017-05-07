@@ -147,7 +147,7 @@ class Settings extends Component {
           <div>
             <h3 style={styles.h3}>Profile Picture</h3>
             <span style={{paddingLeft: '1em'}}>
-              <input nChange={ (e)=> this.upload(e) }
+              <input onChange={ (e)=> this.upload(e) }
                            style={styles.fileUpload} 
                            type='file' 
               />

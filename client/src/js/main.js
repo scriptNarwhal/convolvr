@@ -21,6 +21,7 @@ const history = syncHistoryWithStore(browserHistory, store)
 import App from './2d-ui/containers/app'
 import Data from './2d-ui/containers/data'
 import Worlds from './2d-ui/containers/worlds'
+import Places from './2d-ui/containers/places'
 import NewWorld from './2d-ui/containers/new-world'
 import Settings from './2d-ui/containers/settings'
 import Network from './2d-ui/containers/network'
@@ -108,6 +109,7 @@ ReactDOM.render(
         <Route path="/files/:username/:dir" component={Data} />
         <Route path="/files/:username/:dir/:dirTwo" component={Data} />
 				<Route path="/worlds" component={Worlds} />
+        <Route path="/places" component={Places} />
         <Route path="/new-world" component={NewWorld} />
 				<Route path="/settings" component={Settings} />
         <Route path="/network" component={Network} />
