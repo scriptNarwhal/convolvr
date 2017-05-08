@@ -22,7 +22,7 @@ export default class Avatar {
               cursor: true,
               geometry: {
                 shape: "open-box",
-                size: [2000, 2000, 2000]
+                size: [1500, 1500, 1500]
               },
               material: {
                 name: "wireframe",
