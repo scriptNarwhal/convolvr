@@ -1,10 +1,13 @@
 import Tool from './tool'
-import Entity from '../../entities/entity'
-import EntityGenerator from '../../entities/entity-generator'
+import Entity from '../../entity'
+import EntityGenerator from '../../entity-generator'
 
 export default class EntityTool extends Tool  {
+
   constructor (data, world, toolbox) {
+
     super(data, world, toolbox)
+
       this.mesh = null
       this.name = "Entity Tool"
       this.icon = this.initIcon()
@@ -43,14 +46,17 @@ export default class EntityTool extends Tool  {
             ]
           }
         ])
+
     }
 
     initIcon () {
+
       let mesh = null,
           entity = null
           
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
+
       entity.components.push({
         props: {
           material: {
@@ -65,48 +71,61 @@ export default class EntityTool extends Tool  {
         position: [0, 0, 0],
         quaternion: null
       })
+
       return entity
+
     }
 
-    primaryAction (telemetry, params = {}) { // place entity
+    primaryAction ( telemetry, params = {} ) { // place entity
+
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
           position = telemetry.position,
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
           user = this.world.user,
-          entity = null
-      
-      if (params.entity) {
-        entity = params.entity
-      } else {
-        entity = this.generator.makeEntity(this.options.entityType)
-      }   
-      
+          entity = params.entity ? params.entity : this.generator.makeEntity(this.options.entityType)
+    
       if (entity.components.length == 1) {
+
         entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
+
       }
-      if (selected && cursorState.distance < 160000) {
-          // switch to component tool
+
+      if (selected && cursorState.distance < 160000) { // switch to component tool
+          
           user.toolbox.useTool(1, 0)
           user.hud.show()
           user.toolbox.usePrimary(0)
           return false
+
       }
+
       return {
+
         entity
+
       }
+
     }
 
     secondaryAction (telemetry, value) {
-      // cycle entities
-      this.current += value
+      
+      this.current += value // cycle entities
+
       if (this.current >= this.all.length) {
+
         this.current = 0
+
       } else if (this.current < 0) {
+
         this.current = this.all.length -1
+        
       }
+
       this.options.entityType = this.all[this.current]
       return false // no socket event
+
     }
+
 }

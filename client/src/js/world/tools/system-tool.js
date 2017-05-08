@@ -1,6 +1,6 @@
 import Tool from './tool'
-import Entity from '../../entities/entity'
-import EntityGenerator from '../../entities/entity-generator'
+import Entity from '../../entity'
+import EntityGenerator from '../../entity-generator'
 /* terrain voxel tool */
 export default class SystemTool extends Tool {
   constructor (data, world, toolbox) {

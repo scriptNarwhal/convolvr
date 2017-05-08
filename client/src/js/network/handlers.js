@@ -1,5 +1,5 @@
 import Avatar from '../world/avatar'
-import Entity from '../entities/entity'
+import Entity from '../entity'
 import { animate } from '../world/render'
 
 export default class SocketHandlers {

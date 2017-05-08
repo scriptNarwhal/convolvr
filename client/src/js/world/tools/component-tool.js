@@ -1,12 +1,14 @@
 import Tool from './tool'
-import Component from '../../components/component'
-import Entity from '../../entities/entity'
-import ComponentGenerator from '../../components/component-generator'
-import EntityGenerator from '../../entities/entity-generator'
+import Component from '../../component'
+import Entity from '../../entity'
+import ComponentGenerator from '../../component-generator'
+import EntityGenerator from '../../entity-generator'
 
 export default class ComponentTool extends Tool {
-  constructor (data, world, toolbox) {
-    super(data, world, toolbox)
+  constructor ( data, world, toolbox ) {
+
+    super( data, world, toolbox )
+
         this.mesh = null;
         this.name = "Component Tool";
         this.icon = this.initIcon()
@@ -46,9 +48,11 @@ export default class ComponentTool extends Tool {
             ]
           }
         ])
+
     }
 
     initIcon () {
+
       this.entities = this.entities || new EntityGenerator()
       let entity = this.entities.makeEntity("icon", true)
       entity.components.push({
@@ -66,65 +70,82 @@ export default class ComponentTool extends Tool {
         quaternion: null
       })
       return entity
+
     }
 
-    primaryAction (telemetry, params = {}) { // place component (into entity if pointing at one)
+    primaryAction ( telemetry, params = {} ) { // place component (into entity if pointing at one)
+      
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
           position = telemetry.position,
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
+          componentType = !!params.component ? params.component : this.options.componentType,
           entityId = -1,
           components = [],
-          component = null,
+          component = this.components.makeComponent(componentType),
           entity = null
 
-      if (!!params.component) {
-        component = this.components.makeComponent(params.component)
-      } else {
-        component = this.components.makeComponent(this.options.componentType)
-      }
       entity = new Entity(0, [component], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
-      if (!!!selected || cursorState.distance > 180000) {
-      // switch back to entity tool, if the user is clicking into empty space
+      
+      if (!!!selected || cursorState.distance > 180000) { // switch back to entity tool, if the user is clicking into empty space
+      
         this.world.user.toolbox.useTool(0, 0)
         this.world.user.hud.show()
         this.world.user.toolbox.usePrimary(0, entity)
         return false
+
       }
+
       entityId = selected.id
+
       if (components.length == 0) {
         components = [component]
       }
+
       selected.mesh.updateMatrixWorld()
       let selectedPos = selected.mesh.localToWorld(new THREE.Vector3())
-      // apply transformation and offset to components
-      components.map((comp, i)=> {
+      
+      components.map((comp, i)=> { // apply transformation and offset to components
+
         if (!!comp) {
+
           comp.position=[
             position[0] - selectedPos.x,
             position[1] - selectedPos.y,
             position[2] - selectedPos.z
           ]
           comp.quaternion = [quat.x, quat.y, quat.z, quat.w]
+
         }
+
       })
+
       return {
         entity,
         entityId,
         components
       }
+
     }
 
-    secondaryAction (telemetry, value) {
-      // cycle components
-      this.current += value
+    secondaryAction ( telemetry, value ) {
+
+      this.current += value // cycle components
+
       if (this.current >= this.all.length) {
+
         this.current = 0
+
       } else if (this.current < 0) {
+
         this.current = this.all.length - 1
+
       }
+
       this.options.componentType = this.all[this.current]
       return false // no socket event
+
     }
+
 }

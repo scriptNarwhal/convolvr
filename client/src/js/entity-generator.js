@@ -316,6 +316,7 @@ function initButtonComponents (data) {
   let color = data && data.color ? data.color : 0x404040,
       components = [],
       x = 2
+
   components.push({
       props:{
         activates: true,

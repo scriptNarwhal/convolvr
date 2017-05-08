@@ -1,4 +1,4 @@
-import Entity from '../entities/entity'
+import Entity from '../entity'
 
 export default class FactorySystem {
     constructor (world) {

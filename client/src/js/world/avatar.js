@@ -1,5 +1,5 @@
-import Entity from '../entities/entity'
-import Component from '../components/component'
+import Entity from '../entity'
+import Component from '../component'
 
 let cursorAxis = new THREE.Vector3( 1, 0, 0 )
 
