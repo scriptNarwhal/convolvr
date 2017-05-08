@@ -12,7 +12,8 @@ let world = null
 
 export default class World {
 	
-	constructor(user, userInput = false, socket, store) {
+	constructor( user, userInput = false, socket, store ) {
+
 		let mobile = (window.innerWidth <= 720),
 			scene = new THREE.Scene(),
 			camera = null,
@@ -87,10 +88,10 @@ export default class World {
 			camera,
 			renderer,
 			vrDisplay: null
-		};
+		}
 		world = this
 		window.three = this.three
-		this.systems = new Systems(this)
+		this.systems = new Systems( this )
 		this.terrain = this.systems.terrain
 		this.workers = {
 			worldPhysics: this.systems.worldPhysics.worker,
@@ -125,26 +126,31 @@ export default class World {
 		three.vrDisplay = null
 		navigator.getVRDisplays().then(function(displays) {
 			console.log("displays", displays)
+
 		  if (displays.length > 0) {
+
 		    three.vrDisplay = displays[0]
+
 		  }
+		  
 		})
 	}
 
 	init (config) {
-
-		console.log(config)
-		let camera = three.camera,
-				skyLight =  new THREE.DirectionalLight(config.light.color, 1),
+		
+		let skyLight =  new THREE.DirectionalLight(config.light.color, 1),
+				camera = three.camera,
 				skyMaterial = null,
 				skybox = null
 
+		console.log(config)
 		this.config = config;
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
 		three.scene.add(this.ambientLight);
 
 		if (config.sky.skyType == 'shader' || config.sky.skyType == 'standard') {
+
 			skyMaterial = new THREE.ShaderMaterial({
 				side: 1,
 				fog: false,
@@ -160,6 +166,7 @@ export default class World {
 				vertexShader: document.getElementById('sky-vertex').textContent,
 				fragmentShader: document.getElementById('sky-fragment').textContent
 			})
+
 		} else {
 			// load sky texture // deprecated ..migrating to world.systems.assets
 			skyMaterial = new THREE.MeshBasicMaterial({color:0x303030})
@@ -172,9 +179,11 @@ export default class World {
 		//handle re-initialization here..
 		let coords = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false
 		if (coords) {
+
 			coords = coords.split(".")
 			three.camera.position.fromArray([parseInt(coords[0])*928000, parseInt(coords[1])*807360, parseInt(coords[2])*807360])
 			three.camera.updateMatrix()
+
 		}
 		
 		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000+this.viewDistance*500000, 4), skyMaterial)
@@ -186,6 +195,7 @@ export default class World {
 		this.terrain.bufferChunks(true, 0)
 		this.gravity = config.gravity
 		this.highAltitudeGravity = config.highAltitudeGravity
+
 	}
 
 	initRenderer (renderer, id) {
@@ -194,10 +204,11 @@ export default class World {
 		renderer.setClearColor(0x1b1b1b)
 		renderer.setPixelRatio(pixelRatio)
 		renderer.setSize(window.innerWidth, window.innerHeight)
-			document.body.appendChild( renderer.domElement )
-			renderer.domElement.setAttribute("class", "viewport")
-			renderer.domElement.setAttribute("id", id)
+		document.body.appendChild( renderer.domElement )
+		renderer.domElement.setAttribute("class", "viewport")
+		renderer.domElement.setAttribute("id", id)
 	}
+
 	initLocalSettings () {
 
 		let cameraMode = localStorage.getItem("camera"),
@@ -210,39 +221,65 @@ export default class World {
 			viewDistance = localStorage.getItem("viewDistance")
 
 		if (cameraMode == null) {
+
 			cameraMode = 'fps'
 			localStorage.setItem("camera", 'fps')
+
 		}
+
 		if (vrMovement == null) {
+
 			vrMovement = 'stick' // change to teleport later
 			localStorage.setItem("vrMovement", vrMovement)
+
 		}
+
 		if (IOTMode == null) {
+
 			IOTMode = 'off'
 			localStorage.setItem("IOTMode", IOTMode)
+
 		}
+
 		if (aa == null) {
+
 			aa = 'on'
 			localStorage.setItem("aa", aa)
+
 		}
+
 		if (lighting == null) {
+
 			lighting = 'high'
 			localStorage.setItem("lighting", !this.mobile ? 'high' : 'low')
+
 		}
+
 		if (enablePostProcessing == null) {
+
 			enablePostProcessing = 'off'
 			localStorage.setItem("postProcessing", enablePostProcessing)
+
 		}
+
 		if (floorHeight == null) {
+
 			floorHeight = 0
 			localStorage.setItem("floorHeight", floorHeight)
+
 		} 
+
 		if (viewDistance == null) {
+
 			viewDistance = 0
 			localStorage.setItem("viewDistance", 0)
+
 		} else {
+
 			viewDistance = parseInt(viewDistance)
+
 		}
+
 		this.aa = aa
 		this.viewDistance = viewDistance
 		this.cameraMode = cameraMode
@@ -251,40 +288,58 @@ export default class World {
 		this.enablePostProcessing = enablePostProcessing
 		this.IOTMode = IOTMode == 'on'
 		this.floorHeight = parseInt(floorHeight)
+
 	}
-	load (name, callback) {
+
+	load ( name, callback ) {
+
 		this.name = name;
 		// fix this... needs userName now
-		
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
 			 this.init(response.data)
 			 callback && callback(this)
 		}).catch(response => {
 			console.log("World Error", response)
 		})
+
 	}
 
-	reload (name) {
+	reload ( name ) {
+
 		if (!!this.skyLight) {
+
 			three.scene.remove(this.skyLight)
+
 		}
+
 		if (!!this.skybox) {
+
 			three.scene.remove(this.skybox)
+
 		}
+
 		if (!!this.terrain.mesh) {
+
 			three.scene.remove(this.terrain.mesh)
+
 		}
+
 		this.terrain.platforms.map(p => {
+
 			if (p.mesh) {
+
 				three.scene.remove(p.mesh)
+
 			}
+
 		})
+
 		this.terrain.platforms = []
 		this.terrain.voxels = []
 		this.load(name)
 	}
 
-	generateFullLOD (coords) {
+	generateFullLOD ( coords ) {
 
 			let platform = this.terrain.voxels[coords],
 				scene = three.scene
@@ -301,6 +356,7 @@ export default class World {
 	}
 
 	sendUserData () {
+
 		let camera = three.camera,
 			mobile = this.mobile,
 			image = "",
@@ -328,19 +384,23 @@ export default class World {
 			}
 
 			send('update', {
+
 				entity: {
-				id: this.user.id,
-				username: this.user.username,
-				image: this.webcamImage,
-				imageSize,
-				hands,
-				position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
-				quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
+					id: this.user.id,
+					username: this.user.username,
+					image: this.webcamImage,
+					imageSize,
+					hands,
+					position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
+					quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
 				}
+			
 			})
 
-			if (this.capturing) {
+			if ( this.capturing ) {
+
 				this.webcamImage = ""
+
 			}
 	    }
 	}

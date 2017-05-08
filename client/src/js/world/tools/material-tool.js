@@ -43,6 +43,7 @@ export default class MaterialTool extends Tool {
     }
 
     initIcon () {
+      
       let entity = null
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
@@ -61,6 +62,7 @@ export default class MaterialTool extends Tool {
         quaternion: null
       })
       return entity
+
     }
 
     primaryAction (telemetry) {

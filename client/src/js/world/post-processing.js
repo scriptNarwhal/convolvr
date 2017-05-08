@@ -1,5 +1,7 @@
 export default class PostProcessing {
+
   constructor (renderer, scene, camera) {
+
     this.renderer = renderer
     this.scene = scene
     this.camera = camera
@@ -14,9 +16,11 @@ export default class PostProcessing {
     this.height = window.innerHeight * (window.devicePixelRatio || 1)
     let self = this
     window.addEventListener('resize', function() { self.onResize() }, true);
+
   }
 
   init () {
+
     this.enabled = true
     this.renderer.autoClear= false
     this.effectCopy = new THREE.ShaderPass(THREE.CopyShader)
@@ -26,16 +30,23 @@ export default class PostProcessing {
     this.renderPass = new THREE.RenderPass(this.scene, this.camera)
     this.composer = new THREE.EffectComposer(this.renderer)
     this.composer.addPass(this.renderPass)
+
     if (useAA != null && useAA == 'on' ) {
+
       this.effectFXAA = new THREE.ShaderPass(THREE.FXAAShader)
       this.effectFXAA.uniforms.resolution.value = new THREE.Vector2(1 / this.width, 1 / this.height)
       this.composer.addPass(this.effectFXAA)
       this.useAA = true
+
     } else {
+
       this.useAA = false
+
     }
+
     this.composer.addPass(this.effectBloom)
     this.composer.addPass(this.effectCopy)
+
   }
 
   onResize (width, height) {
@@ -48,5 +59,7 @@ export default class PostProcessing {
       this.composer.setSize(this.width, this.height)
       this.composer.reset()
     }
+
   }
+  
 }

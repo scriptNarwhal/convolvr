@@ -4,6 +4,7 @@ import EntityGenerator from '../../entities/entity-generator'
 /* terrain voxel tool */
 export default class GeometryTool extends Tool {
   constructor (data, world, toolbox) {
+
     super(data, world, toolbox)
       this.mesh = null;
       this.name = "Geometry Tool"
@@ -40,9 +41,11 @@ export default class GeometryTool extends Tool {
             ]
           }
         ])
+
     }
 
     initIcon () {
+
       let entity = null
       this.generator = this.generator || new EntityGenerator()
       entity = this.generator.makeEntity("icon", true)
@@ -61,6 +64,7 @@ export default class GeometryTool extends Tool {
         quaternion: null
       })
       return entity
+      
     }
 
     primaryAction (telemetry) {

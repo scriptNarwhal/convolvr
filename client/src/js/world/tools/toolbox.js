@@ -11,14 +11,19 @@ import CustomTool from './custom-tool'
 
 export default class Toolbox {
     constructor (user, world) {
+
       this.world = world
       this.user = user
       this.hands = []
 
       this.user.avatar.hands.map((m,i)=>{
+
         if (i < 3) {
+
           this.hands.push(m)
+
         }
+
       })
       this.fadeTimeout = 0
       this.tools = [
@@ -29,6 +34,7 @@ export default class Toolbox {
         new MaterialTool({}, world, this)
       ];
       this.currentTools = [0, 0]
+
     }
 
     showMenu() {
@@ -41,32 +47,46 @@ export default class Toolbox {
     }
 
     nextTool(direction, hand = 0) {
+
       this.showMenu()
       this.currentTools[hand] += direction;
+
       if (this.currentTools[hand] < 0) {
+
         this.currentTools[hand] = this.tools.length - 1
+
       } else if (this.currentTools[hand] >= this.tools.length) {
+
         this.currentTools[hand] = 0
+
       }
+
       console.log("next tool", direction, this.currentTools[hand])
     }
 
     useTool (index, hand) {
+
       this.tools[this.currentTools[hand]].unequip()
       this.currentTools[hand] = index
       this.tools[index].equip(hand)
       this.showMenu()
+
     }
 
     getTools () {
+
       return this.tools
+
     }
 
     getCurrentTool (hand) {
-      return this.tools[this.currentTools[hand]];
+
+      return this.tools[this.currentTools[hand]]
+
     }
 
     addTool (data) {
+
       this.tools.push(new CustomTool(data))
       // use tool prop of.. component / entity that is tool that is being added
       // implement this
@@ -74,6 +94,7 @@ export default class Toolbox {
     }
 
     initActionTelemetry (camera, useCursor, hand) {
+
       let input = this.world.userInput,
           position = camera.position.toArray(),
           quaternion = camera.quaternion.toArray(),
@@ -84,6 +105,7 @@ export default class Toolbox {
           handMesh = null
           
       if (useCursor) {
+
         if (input.trackedControls || input.leapMotion) { // set position from tracked controller
           cursor = cursors[hand +1]
           handMesh = user.toolbox.hands[hand]
@@ -97,6 +119,7 @@ export default class Toolbox {
         if (handMesh != null) {
           quaternion = handMesh.quaternion.toArray()
         }
+
       }
 
       return {
@@ -106,8 +129,10 @@ export default class Toolbox {
         handMesh,
         hand
       }
+
     }
     usePrimary (hand) {
+
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
           telemetry = this.initActionTelemetry(camera, true, hand),
@@ -120,14 +145,17 @@ export default class Toolbox {
       if (!!toolAction) {
         this.sendToolAction(true, tool, hand, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
+
     }
 
     useSecondary(hand, value) {
+
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
           telemetry = this.initActionTelemetry(camera, true, hand),
         { position, quaternion } = telemetry,
           toolAction = false
+          
       if (tool.mesh == null) {
           tool.equip(hand)
       }
@@ -135,9 +163,11 @@ export default class Toolbox {
       if (!!toolAction) {
         this.sendToolAction(false, tool, hand, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
+
     }
 
     grip (handIndex, value) {
+
       let hand = this.hands[handIndex],
           entity = null, //hand.children[0].userData.component.props.,
           cursor = null,
@@ -146,25 +176,31 @@ export default class Toolbox {
           voxels = this.world.terrain.voxels
      
       if (this.user.avatar) {
+
         cursor = this.user.avatar.cursors[1+hand]
         entity = !!cursor ? cursor.state.cursor.entity : false
         pos = !!entity ? entity.mesh.position.toArray() : pos
+
       }
+
       if (!! entity) {
         
         if (value == -1) {
+
           hand.remove(entity.mesh)
           three.scene.add(entity.mesh)
           entity.update([hand.position.x, hand.position.y, hand.position.z])
           hand.userData.grabbedEntity = false
           //coords = [Math.floor(pos.x / 928000), 0, Math.floor(pos.z / 807360)],
         } else {
+
           if (!!! hand.userData.grabbedEntity) {
             three.scene.remove(entity.mesh)
             hand.userData.grabbedEntity = entity
             hand.add(entity.mesh)
             entity.update([0,0,0])
           }
+
         }
         
       }
@@ -172,8 +208,10 @@ export default class Toolbox {
     }
 
     setHandOrientation (hand, position, orientation) {
+
       let userHand = this.hands[hand]
       if (userHand) {
+
         userHand.position.fromArray(position).multiplyScalar(20000).add(this.world.camera.position)
         userHand.translateX(725+ hand*-1250)
         userHand.position.y += this.world.floorHeight*6
@@ -184,6 +222,7 @@ export default class Toolbox {
     }
 
     sendToolAction (primary, tool, hand, position, quaternion, entity, entityId = -1, components = []) {
+
       let camera = this.world.camera,
           cPos = camera.position,
           coords = [Math.floor(cPos.x / 928000), 0, Math.floor(cPos.z / 807360)],
@@ -204,6 +243,7 @@ export default class Toolbox {
         entityId,
         primary
       }
+
       send("tool action", actionData)
     }
 }

@@ -1,5 +1,7 @@
 export default class AssetSystem {
+
     constructor (world) {
+
         this.world = world
         this.models = []
         this.entities = []
@@ -34,41 +36,45 @@ export default class AssetSystem {
                     {name: 'wall'},
                     {name: 'door'},
                     {name: 'terrain'},
-                    {name: 'destructable'},
                     {name: 'container'}
                 ],
                 vehicles: [
                     {name: 'vehicle'},
                     {name: 'control'},
                     {name: 'propulsion'},
+                    {name: 'projectiles'},
                 ],
                 media: [
+                    {name: 'chat'},
                     {name: 'text'},
+                    {name: 'speech'},
                     {name: 'audio'},
                     {name: 'video'},
-                    {name: 'signal'},
-                    {name: 'drawing'}
+                    {name: 'webrtc'},
+                    {name: 'drawing'},
+                    {name: 'signal'}
                 ],
                 interactivity: [
+                    {name: 'destructable'},
+                    {name: 'particles'},
                     {name: 'factory'},
                     {name: 'metaFactory'},
-                    {name: 'particles'},
-                    {name: 'projectiles'},
                     {name: 'cursor'},
                     {name: 'hand'},
-                    {name: 'hover'},
                     {name: 'activate'},
-                    {name: 'tab'},
+                    {name: 'hover'},
                     {name: 'tabView'},
+                    {name: 'tab'},
                     {name: 'toolUI'},
                     {name: 'tool'},
                     {name: 'file'},
-                    {name: 'chat'},
-                    {name: 'webhook'},
-                    {name: 'webrtc'}
+                    {name: 'rest'},
+                    
                 ]
             }
+            
         }
+        
         this.textureLoader = new THREE.TextureLoader()
         this.audioLoader = new THREE.AudioLoader()
     }
@@ -82,31 +88,44 @@ export default class AssetSystem {
     }
 
     loadImage (asset, callback) {
+
         let texture = null
 
         if (this.textures[asset] == null) {
+
             texture = this.textureLoader.load(asset, (texture)=>{ callback(texture)})
             this.textures[asset] = texture
+
         } else {
+
             texture = this.textures[asset]
+
         }
+
         callback(texture)
+
     }
 
     loadSound (asset, sound, callback) {
+
         if (this.audioBuffers[asset] == null) {
+
            this.audioLoader.load(asset, function(buffer) {
                 sound.setBuffer(buffer)
                 callback()
            })
+
         } else {
+
             sound.setBuffer(this.audioBuffers[asset])
             callback()
+
         }
+
     }
 
     loadModel (asset, callback) {
 
     }
-}
 
+}

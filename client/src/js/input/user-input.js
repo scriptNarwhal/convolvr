@@ -9,7 +9,9 @@ let isVRMode = (mode) => {
 }
 
 export default class UserInput {
+
 	constructor (socket) {
+
 		this.camera = {
 			rotation: new THREE.Vector3()
 		}
@@ -41,6 +43,7 @@ export default class UserInput {
 		this.handsDetected = 0
 		this.gamepads = {},
 		this.initDone = false
+		
 	}
 
 	init (world, camera, device) {
@@ -51,23 +54,32 @@ export default class UserInput {
 		uInput.rotationVector = {x: 0.2, y: 4.6, z: 0}
 		viewport.requestPointerLock = viewport.requestPointerLock || viewport.mozRequestPointerLock || viewport.webkitRequestPointerLock;
 		viewport.style.pointerEvents = ''
+
 		if ("onpointerlockchange" in document) {
+
 			document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
+
 		} else if ("onmozpointerlockchange" in document) {
+
 			document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
+
 		} else if ("onwebkitpointerlockchange" in document) {
+			
 			document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
+
 		}
 
 		if (!world.mobile) {
 
 			document.addEventListener("mousemove", function (e) {
+
 				if (uInput.focus) {
 
 					uInput.rotationVector.y  -=(e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 600.0
 					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 600.0
 				
 				}
+
 			})
 			setTimeout(()=> {
 
