@@ -1,10 +1,15 @@
 export default class MediaSystem {
+
     constructor (world) {
+
         this.world = world
+
     }
 
     init (component) {
+
         let prop = component.props.media
+
         if (prop.playPause) {
 
         } else if (prop.title) {
@@ -20,5 +25,7 @@ export default class MediaSystem {
         return {
             
         }
+
     }
+    
 }

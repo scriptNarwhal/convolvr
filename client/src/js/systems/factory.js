@@ -69,17 +69,17 @@ export default class FactorySystem {
                 break
                 case "systems":
 
-                    // created = new Entity(-1, [Object.assign({}, data, {
-                    //     mixin: true,
-                    //     material: {
-                    //         name: "wireframe",
-                    //         color: 0xffffff
-                    //     },
-                    //     geometry: {
-                    //         shape: "sphere",
-                    //         size: [4500, 4500, 4500]
-                    //     }
-                    // })], position.toArray(), quat)
+                    created = new Entity(-1, [Object.assign({}, data, {
+                        mixin: true,
+                        material: {
+                            name: "wireframe",
+                            color: 0xffffff
+                        },
+                        geometry: {
+                            shape: "sphere",
+                            size: [4500, 4500, 4500]
+                        }
+                    })], position.toArray(), quat)
                 break
 
             }
