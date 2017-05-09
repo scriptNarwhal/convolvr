@@ -77,6 +77,7 @@ class App extends Component {
         world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
         world.help.mesh.position.fromArray([-80000, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
         three.camera.position.y = (world.terrain.voxels["0.0.0"].data.altitude) + 20000
+        three.world.user.velocity.y = -10000
       }
 
       world.load(worldName, ()=> {
@@ -135,7 +136,7 @@ class App extends Component {
     }
 
     let renderCanvas = document.querySelector("#viewport")
-    
+
     renderCanvas.onclick = (event) => {
 
       let elem = event.target,

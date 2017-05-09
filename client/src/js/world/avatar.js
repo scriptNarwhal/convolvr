@@ -6,6 +6,7 @@ let cursorAxis = new THREE.Vector3( 1, 0, 0 )
 export default class Avatar {
 
     constructor (id, wholeBody, data) { // wholeBody == true == not just 'vr hands'
+    
         var mesh = null, // new THREE.Object3D();
             entity = null,
             component = null,
