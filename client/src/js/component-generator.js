@@ -1,3 +1,5 @@
+// deprecated in favor of asset system
+
 export default class ComponentGenerator {
   constructor () {
     this.components = []

@@ -1,3 +1,5 @@
+// deprecated in favor of asset system
+
 import Entity from './entity'
 
 export default class EntityGenerator {

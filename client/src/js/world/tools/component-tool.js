@@ -10,7 +10,7 @@ export default class ComponentTool extends Tool {
     super( data, world, toolbox )
 
         this.mesh = null;
-        this.name = "Component Tool";
+        this.name = "Component Tool"
         this.icon = this.initIcon()
         this.entities = new EntityGenerator()
         this.components = new ComponentGenerator()

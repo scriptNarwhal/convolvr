@@ -16,63 +16,63 @@ export default class AssetSystem {
         this.userComponents = []
         this.props = {
             geometry: [
-                {shape: 'node', size: [1, 1, 1]},
-                {shape: 'box', size: [28000, 28000, 28000]},
-                {shape: 'plane', size: [28000, 10000, 28000]},
-                {shape: 'octahedron', size: [28000, 10000, 10000]},
-                {shape: 'sphere', size: [28000, 10000, 10000]},
-                {shape: 'cylinder', size: [28000, 28000, 10000]},
-                {shape: 'torus', size: [28000, 28000, 10000]},
-                {shape: 'hexagon', size: [28000, 28000, 10000]},
-                {shape: 'open-box', size: [28000, 28000, 10000]}
+                { shape: 'node', size: [1, 1, 1] },
+                { shape: 'box', size: [28000, 28000, 28000] },
+                { shape: 'plane', size: [28000, 10000, 28000] },
+                { shape: 'octahedron', size: [28000, 10000, 10000] },
+                { shape: 'sphere', size: [28000, 10000, 10000] },
+                { shape: 'cylinder', size: [28000, 28000, 10000] },
+                { shape: 'torus', size: [28000, 28000, 10000] },
+                { shape: 'hexagon', size: [28000, 28000, 10000] },
+                { shape: 'open-box', size: [28000, 28000, 10000] }
             ],
             material: [
-                {name: "basic", color: 0xffffff},
-                {name: "plastic", color: 0xffffff},
-                {name: "metal", color: 0xffffff},
-                {name: "glass", color: 0xffffff},
-                {name: "wireframe", color: 0xffffff},
-                {name: "custom-texture", color: 0xffffff}
+                {name: "basic", color: 0xffffff },
+                {name: "plastic", color: 0xffffff },
+                {name: "metal", color: 0xffffff },
+                {name: "glass", color: 0xffffff },
+                {name: "wireframe", color: 0xffffff },
+                {name: "custom-texture", color: 0xffffff }
             ],
             systems: {
                 structures: [ // categorize this some how
-                    {name: 'floor'},
-                    {name: 'wall'},
-                    {name: 'door'},
-                    {name: 'terrain'},
-                    {name: 'container'}
+                    { name: 'floor' },
+                    { name: 'wall' },
+                    { name: 'door' },
+                    { name: 'terrain' },
+                    { name: 'container' }
                 ],
                 vehicles: [
-                    {name: 'vehicle'},
-                    {name: 'control'},
-                    {name: 'propulsion'},
-                    {name: 'projectiles'},
+                    { name: 'vehicle' },
+                    { name: 'control' },
+                    { name: 'propulsion' },
+                    { name: 'projectiles' },
                 ],
                 media: [
-                    {name: 'chat'},
-                    {name: 'text'},
-                    {name: 'speech'},
-                    {name: 'audio'},
-                    {name: 'video'},
-                    {name: 'webrtc'},
-                    {name: 'drawing'},
-                    {name: 'signal'}
+                    { name: 'chat' },
+                    { name: 'text' },
+                    { name: 'speech' },
+                    { name: 'audio' },
+                    { name: 'video' },
+                    { name: 'webrtc' },
+                    { name: 'drawing' },
+                    { name: 'signal' }
                 ],
                 interactivity: [
-                    {name: 'destructable'},
-                    {name: 'particles'},
-                    {name: 'factory'},
-                    {name: 'metaFactory'},
-                    {name: 'cursor'},
-                    {name: 'hand'},
-                    {name: 'activate'},
-                    {name: 'hover'},
-                    {name: 'tabView'},
-                    {name: 'tab'},
-                    {name: 'toolUI'},
-                    {name: 'tool'},
-                    {name: 'file'},
-                    {name: 'rest'},  
+                    {name: 'destructable' },
+                    {name: 'particles' },
+                    {name: 'factory' },
+                    {name: 'metaFactory' },
+                    {name: 'cursor' },
+                    {name: 'hand' },
+                    {name: 'activate'} ,
+                    {name: 'hover' },
+                    {name: 'tabView' },
+                    {name: 'tab' },
+                    {name: 'toolUI' },
+                    {name: 'tool' },
+                    {name: 'file' },
+                    {name: 'rest' }  
                 ]
             }
         }

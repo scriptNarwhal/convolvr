@@ -2,7 +2,7 @@ import Component from './component.js';
 
 export default class Entity {
 
-  constructor (id, components, position, quaternion) {
+  constructor ( id, components, position, quaternion ) {
 
       this.id = id
       this.components = components
@@ -18,12 +18,12 @@ export default class Entity {
 
   }
 
-  update (position, quaternion = false) {
+  update ( position, quaternion = false ) {
 
     this.position = position
     this.mesh.position.fromArray(position)
 
-    if (quaternion !== false) {
+    if ( quaternion !== false ) {
 
       this.quaternion = quaternion
       this.mesh.quaternion.fromArray(quaternion)
@@ -34,7 +34,7 @@ export default class Entity {
 
   }
 
-  init (scene) {
+  init ( scene ) {
 
     var mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
@@ -56,14 +56,17 @@ export default class Entity {
         c = 0,
         s = 0
 
-    if (this.mesh != null) {
+    if ( this.mesh != null ) {
+
       world.octree.remove(this.mesh)
+
       scene.remove(this.mesh)
+
     }
 
-    while (c < ncomps) {
+    while ( c < ncomps ) {
 
-        comp = new Component(this.components[c], this, systems, {mobile}) // use simpler shading for mobile gpus
+        comp = new Component( this.components[c], this, systems, {mobile} ) // use simpler shading for mobile gpus
         
         if (comp.props.noRaycast === true) {
           addToOctree = false
@@ -76,14 +79,14 @@ export default class Entity {
                       Math.max(dimensions[1], Math.abs(compMesh.position.y)+compRadius), 
                       Math.max(dimensions[2], Math.abs(compMesh.position.z)+compRadius)]
 
-        if (comp.props.geometry && comp.props.geometry.merge === true) {
+        if ( comp.props.geometry && comp.props.geometry.merge === true ) {
 
           materials.push(compMesh.material)
           compMesh.updateMatrix()
           faces = compMesh.geometry.faces
           face = faces.length-1
 
-          while (face > -1) {
+          while ( face > -1 ) {
               faces[face].materialIndex = s
               face --
           }
@@ -91,7 +94,7 @@ export default class Entity {
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
 
-        } else if (!comp.detached) {
+        } else if ( !comp.detached ) {
 
           nonStructural.push(comp.mesh)
 
@@ -103,20 +106,26 @@ export default class Entity {
     this.boundingRadius = Math.max(dimensions[0], dimensions[1], dimensions[2])
     this.boundingBox = dimensions
 
-    if (s > 0) {
+    if ( s > 0 ) {
+
       mesh = new THREE.Mesh(base, new THREE.MultiMaterial(materials))
+
     } else {
+
       mesh = nonStructural[0]
+
     }
 
     s = 1
 
-    while (s < nonStructural.length) {
-        mesh.add(nonStructural[s])
+    while ( s < nonStructural.length ) {
+
+        mesh.add( nonStructural[s] )
         s ++
+
     }
 
-    if (!! this.quaternion && this.components.length == 1) {
+    if ( !! this.quaternion && this.components.length == 1 ) {
         mesh.quaternion.set(this.quaternion[0], this.quaternion[1], this.quaternion[2], this.quaternion[3])
     }
 
@@ -125,14 +134,18 @@ export default class Entity {
     }
 
     mesh.userData = { 
+
       entity: this 
+
     }
 
     if (addToOctree) {
-      world.octree.add(mesh)
+
+      world.octree.add( mesh )
+
     }
 
-    scene.add(mesh)
+    scene.add( mesh )
     this.mesh = mesh
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()

@@ -9,19 +9,24 @@ import { vrAnimate } from '../../world/render'
 class App extends Component {
 
   componentWillMount () {
+
     this.state = {
       unread: 0,
       lastSender: ''
     }
     this.props.fetchWorlds()
+
     events.on("chat message", message => {
+
       let chatMessage = JSON.parse(message.data),
           worldName = '',
           from = ''
     	this.props.getMessage(chatMessage.message, chatMessage.from, chatMessage.files)
+
       if (this.state.lastSender != chatMessage.from || (chatMessage.files != null && chatMessage.files.length > 0)) {
         from = `${chatMessage.from}: `
       }
+
       this.setState({
         lastSender: chatMessage.from
       })
@@ -29,19 +34,25 @@ class App extends Component {
       three.world.chat.update()
       this.notify(chatMessage.message, chatMessage.from)
       worldName = this.props.world == "overworld" ? "Convolvr" : this.props.world
+
       if (this.props.focus == false) {
+
         this.setState({
           unread: this.state.unread +1
         })
+
         if (this.state.unread > 0) {
             document.title = `[${this.state.unread}] ${worldName}`
         }
+
       } else {
         document.title = worldName
       }
+
       let worldMode = three.world.mode
       if (!this.props.menuOpen) {
         browserHistory.push("/chat")
+
         if (worldMode != 'vr' && worldMode != 'stereo') { // 3d ui will show the chat in vr without interrupting things
           this.props.toggleMenu()
         } else {
@@ -50,26 +61,38 @@ class App extends Component {
             this.props.toggleMenu()
           }, 3500)
         }
+
       }
+
     })
+
     this.props.fetchUniverseSettings()
+
     setTimeout(()=> {
+
       let world = three.world,
           worldName = this.props.world
-      let initChatUI = () => {
+
+      let initChatUI = () => { // rename this to something more descriptive
         world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
         world.help.mesh.position.fromArray([-80000, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
+        three.camera.position.y = (world.terrain.voxels["0.0.0"].data.altitude) + 20000
       }
+
       world.load(worldName, ()=> {
         setTimeout(()=>{
           initChatUI() // wait for world & terrain to load before placing this
         }, 250)
       })
+
     }, 100)
+
     setTimeout(()=>{
       this.props.getChatHistory(0) // wait a fraction of a second for the world to load / to show in 3d too
     }, 200)
+
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
+
     if (window.location.href.indexOf("/chat") > -1 ||
         window.location.href.indexOf("/login") > -1) {
       this.props.toggleMenu(true);
@@ -79,21 +102,29 @@ class App extends Component {
         username = '',
         password = '',
         autoSignIn = false
+
     if (rememberUser != null) {
+
       username = localStorage.getItem("username")
       password = localStorage.getItem("password")
+
       if (username != null && username != '') {
+
         autoSignIn = true
         this.props.login(username, password, "", "")
+
       }
     }
+
     if (!autoSignIn && this.props.loggedIn == false && window.location.href.indexOf("/chat") >-1) {
       browserHistory.push("/login")
     }
+
     window.onblur = () => {
       this.props.setWindowFocus(false)
       three.world.windowFocus = false
     }
+
     window.onfocus = () => {
       this.props.setWindowFocus(true)
       three.world.windowFocus = true
@@ -102,17 +133,24 @@ class App extends Component {
         unread: 0
       })
     }
+
     let renderCanvas = document.querySelector("#viewport")
+    
     renderCanvas.onclick = (event) => {
+
       let elem = event.target,
           uInput = window.three.world.userInput
+
       if (!uInput.fullscreen) {
 						elem.requestPointerLock()
             // uInput.toggleFullscreen()
             this.props.toggleMenu(false)
       }
+
     }
+
   }
+
   handleKeyDown (e) {
     if (e.which == 27) {
       this.props.toggleMenu(true)
@@ -124,9 +162,11 @@ class App extends Component {
       }
     }
   }
+
   goBack () {
     browserHistory.push(`/world/${this.props.world}`)
   }
+
   notify (chatMessage, from) {
     function doNotification() {
       function onNotifyShow() {
@@ -152,6 +192,7 @@ class App extends Component {
         Notify.requestPermission(onPermissionGranted, onPermissionDenied);
     }
   }
+
   renderVRButtons () {
     return this.props.stereoMode ?
         [<Button title="Reset Pose"
