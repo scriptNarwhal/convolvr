@@ -15,7 +15,7 @@ export default class EntityTool extends Tool  {
       this.options = {
         entityType: "panel"
       }
-      this.all = ["panel", "panel2", "panel3", "block", "column", "wirebox"]
+      this.all = [ "panel", "panel2", "panel3", "block", "column", "wirebox" ]  // deprecated, migrating toward tool option panels
       this.current = 0
       this.entity = new Entity(-1, [
           {
@@ -34,6 +34,7 @@ export default class EntityTool extends Tool  {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "entity", // component, prop
+                        // propName: "userEntities", // toggle to user's entities
                         dataSource: this.world.systems.assets.entities
                       }
                     }

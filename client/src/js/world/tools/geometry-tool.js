@@ -29,6 +29,7 @@ export default class GeometryTool extends Tool {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "prop", // entity, prop
+                        propName: "geometry",
                         dataSource: this.world.systems.assets.props.geometry
                       }
                     }

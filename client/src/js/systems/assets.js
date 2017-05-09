@@ -27,53 +27,60 @@ export default class AssetSystem {
                 { shape: 'open-box', size: [28000, 28000, 10000] }
             ],
             material: [
-                {name: "basic", color: 0xffffff },
-                {name: "plastic", color: 0xffffff },
-                {name: "metal", color: 0xffffff },
-                {name: "glass", color: 0xffffff },
-                {name: "wireframe", color: 0xffffff },
-                {name: "custom-texture", color: 0xffffff }
+                { name: "basic", color: 0xffffff },
+                { name: "plastic", color: 0xffffff },
+                { name: "metal", color: 0xffffff },
+                { name: "glass", color: 0xffffff },
+                { name: "wireframe", color: 0xffffff },
+                { name: "custom-texture", color: 0xffffff }
             ],
             systems: {
-                structures: [ // categorize this some how
-                    { name: 'floor' },
-                    { name: 'wall' },
-                    { name: 'door' },
-                    { name: 'terrain' },
-                    { name: 'container' }
-                ],
-                vehicles: [
-                    { name: 'vehicle' },
-                    { name: 'control' },
-                    { name: 'propulsion' },
-                    { name: 'projectiles' },
-                ],
-                media: [
-                    { name: 'chat' },
-                    { name: 'text' },
-                    { name: 'speech' },
-                    { name: 'audio' },
-                    { name: 'video' },
-                    { name: 'webrtc' },
-                    { name: 'drawing' },
-                    { name: 'signal' }
-                ],
-                interactivity: [
-                    {name: 'destructable' },
-                    {name: 'particles' },
-                    {name: 'factory' },
-                    {name: 'metaFactory' },
-                    {name: 'cursor' },
-                    {name: 'hand' },
-                    {name: 'activate'} ,
-                    {name: 'hover' },
-                    {name: 'tabView' },
-                    {name: 'tab' },
-                    {name: 'toolUI' },
-                    {name: 'tool' },
-                    {name: 'file' },
-                    {name: 'rest' }  
-                ]
+                structures: {
+                    floor: {},
+                    wall: {},
+                    door: {},
+                    terrain: {},
+                    container: {},
+                },
+                vehicles: {
+                    vehicle: {},
+                    control: {},
+                    propulsion: {},
+                    projectiles: {},
+                    portal: {},   
+                },
+                media: {
+                    chat: {},
+                    text: {},
+                    speech: {},
+                    audio: {},
+                    video: {},
+                    webrtc: {},
+                    drawing : {},
+                    signal: {}
+                },
+                interactivity: {
+                    destructable: {},
+                    particles: {},
+                    factory: {},
+                    metaFactory: {},
+                    input: [ 
+                        { type: 'button' },
+                        { type: 'keyboard' },
+                        { type: 'webcam' },
+                        { type: 'speech' }
+                    ],
+                    cursor: {},
+                    hand: {},
+                    activate: {},
+                    hover: {},
+                    tabView: {},
+                    tab: {},
+                    toolUI: {},
+                    tool: {},
+                    file: {},
+                    rest: {},
+                }
             }
         }
         this.textureLoader = new THREE.TextureLoader()

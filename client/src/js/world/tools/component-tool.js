@@ -17,7 +17,7 @@ export default class ComponentTool extends Tool {
         this.options = {
           componentType: "panel"
         }
-        this.all = ["panel", "column", "panel2", "column2"]
+        this.all = ["panel", "column", "panel2", "column2"] // deprecated, migrating toward tool option panels
         this.current = 0
         this.entity = new Entity(-1, [
           {

@@ -3,16 +3,20 @@ import Entity from '../../entity'
 import EntityGenerator from '../../entity-generator'
 /* terrain voxel tool */
 export default class SystemTool extends Tool {
+
   constructor (data, world, toolbox) {
 
     super(data, world, toolbox)
-      this.mesh = null;
-      this.name = "System Tool"
-      this.icon = this.initIcon()
-      this.options = {
+    this.mesh = null;
+    this.name = "System Tool"
+    this.icon = this.initIcon()
+    this.options = {
 
-      }
-      this.entity = new Entity(-1, [
+    }
+    this.all = [ "structures", "vehicles", "media", "interactivity" ]
+    this.current = 0
+    
+    this.entity = new Entity(-1, [
           {
             props: {
               geometry: {
@@ -29,6 +33,7 @@ export default class SystemTool extends Tool {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "prop", // entity, prop
+                        propName: "vehicles",
                         dataSource: this.world.systems.assets.props.systems
                       }
                     }
@@ -67,11 +72,11 @@ export default class SystemTool extends Tool {
 
     }
 
-    primaryAction (telemetry) {
-      // create voxel
+    primaryAction ( telemetry) {
+      
     }
 
-    secondaryAction (telemetry, value) {
-      // remove voxel
+    secondaryAction ( telemetry, value) {
+      
     }
 }
