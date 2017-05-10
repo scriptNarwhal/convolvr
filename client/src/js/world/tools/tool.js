@@ -1,19 +1,26 @@
 export default class Tool {
+
     constructor (data, world, toolbox) {
+
       this.data = data
       this.world = world
       this.toolbox = toolbox
+
     }
 
     initMesh () {
+
       this.entity.init(three.scene)
       this.mesh = this.entity.mesh
       return this.mesh
+
     }
 
     equip (hand) {
+
       let input = this.world.userInput,
           hands = this.toolbox.hands,
+          toolPanel = null,
           toolMesh = null
 
       if (this.mesh == null) {
@@ -22,23 +29,40 @@ export default class Tool {
         toolMesh = this.mesh
         toolMesh.visible = true
       }
+
       if (!input.trackedControls && !input.leapMotion) {
           this.world.user.mesh.add(toolMesh)
           toolMesh.position.set(1500-(3000*hand), -800, -1550)
       } else {
           hands[hand].add(toolMesh) // add to respective hand 
       }
+
+      // console.log("equip tool: tool: ", this.entity.componentsByProp.tool)
+
+      if (this.entity.componentsByProp.tool && this.entity.componentsByProp.tool[0].state.tool.panel) {
+
+        toolPanel = this.entity.componentsByProp.tool[0].state.tool.panel
+        toolPanel.init(three.scene)
+        toolPanel.update(this.world.user.avatar.mesh.position.toArray())
+        toolPanel.mesh.translateZ(-20000)
+        toolPanel.mesh.updateMatrix()
+
+      }
+
     }
 
     unequip (hand) {
+
       if (this.mesh != null) {
         if (this.mesh.parent != null) {
           this.mesh.parent.remove(this.mesh)
         }
       }
+
     }
 
     initLabel (value) {
+
       return {
             props: {
               geometry: {

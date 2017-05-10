@@ -33,7 +33,7 @@ export default class ComponentGenerator {
         },
         material: {
           color: 0x404040,
-          name: "plastic"
+          name: "metal"
         }
       },
       quaternion: null,
@@ -63,7 +63,7 @@ export default class ComponentGenerator {
         },
         material: {
           color: 0x404040,
-          name: "plastic"
+          name: "metal"
         }
       },
       quaternion: null,

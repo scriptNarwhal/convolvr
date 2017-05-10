@@ -106,7 +106,7 @@ export default class Systems {
 
             if (this[prop] != null) {
 
-                if (prop=="particle" || prop=="text" || prop == "audio" || prop == "video") { /* add other systems here */
+                if (prop=="particle" || prop=="text" || prop == "audio" || prop == "video" || prop == "metaFactory") { /* add other systems here */
                     
 					deferredSystems.push(prop)
 

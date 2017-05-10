@@ -22,29 +22,33 @@ export default class MaterialSystem {
         
         if (assets.materials[materialCode] == null) {
           switch (prop.name) { // material presets
-            case "wireframe":
-              mat.wireframe = true
-              mat.fog = false
-              basic = true
-            break
-            case "basic": // mesh basic material
-              basic = true
-            break
-            case "terrain":
-              prop.diffuse = '/data/images/textures/gplaypattern_@2X.png'
-              prop.repeat = ["wrap", 16, 16]
-            break
-            case "metal":
-              prop.reflection = '/data/images/textures/sky-reflection.jpg'
-              prop.specular = '/data/images/textures/gplaypattern_@2X.png'
-            break
-            case "glass":
-             prop.reflection = '/data/images/textures/sky-reflection.jpg'
-            break
-            case "plastic":
-              prop.specular = '/data/images/textures/gplaypattern_@2X.png'
-            default:
-            break
+              case "wireframe":
+                  mat.wireframe = true
+                  mat.fog = false
+                  basic = true
+              break
+              case "basic": // mesh basic material
+                  basic = true
+              break
+              case "terrain":
+                  prop.diffuse = '/data/images/textures/shattered_@2X.png'
+                  prop.specular = '/data/images/textures/gplaypattern_@2X.png'
+                  prop.repeat = ["wrap", 16, 16]
+              break
+              case "metal":
+                  prop.reflection = '/data/images/textures/sky-reflection.jpg'
+                  prop.specular = '/data/images/textures/gplaypattern_@2X.png'
+                  prop.diffuse = '/data/images/textures/shattered_@2X.png'
+              break
+              case "glass":
+                  prop.reflection = '/data/images/textures/sky-reflection.jpg'
+                  prop.specular = '/data/images/textures/shattered_@2X.png'
+              break
+              case "plastic":
+                  prop.diffuse = '/data/images/textures/gplaypattern_@2X.png'
+                  prop.specular = '/data/images/textures/shattered_@2X.png'
+              default:
+              break
           }
          
           if (basic) {

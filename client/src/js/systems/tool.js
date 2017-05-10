@@ -1,23 +1,22 @@
 import Entity from '../entity'
 
 export default class ToolSystem {
+
     constructor (world) {
+
         this.world = world
+
     }
     // hook into user.toolbox interfaces (primaryAction, etc.. )
     init (component) { 
+
         let prop = component.props.tool,
             contentProps = prop.panel.content ? prop.panel.content.props : false,
             factories = null,
             panel = null
 
         if (prop.panel) {
-            factories = []
-
-            if (contentProps.metaFactory) {
-
-            }
-
+           
             panel = new Entity(-1, [
                 {
                     props: {
@@ -30,7 +29,7 @@ export default class ToolSystem {
                             color: 0x000000
                         },
                         text: {
-                            lines: [prop.panel.title],
+                            lines: [ prop.panel.title ],
                             color: "#ffffff",
                             background: "#000000"
                         }
@@ -38,15 +37,28 @@ export default class ToolSystem {
                     position: [0, 0, 0]
                 },
                 {
-                    components: factories,
-                    position: [0, -4000, 0]
+                    props: {
+                        geometry: {
+                            shape: "box",
+                            size: [12000, 4000, 1000]
+                        },
+                        material: {
+                            name: "plastic",
+                            color: 0x200030
+                        },
+                    },
+                    components: [],
+                    position: [0, -4000, 0] // position & init the panel once the tool is equipped
                 }
             ], [0, 0, 0], false)
+            
         }
 
         return {
             panel
         }
+
     }
+
 }
 

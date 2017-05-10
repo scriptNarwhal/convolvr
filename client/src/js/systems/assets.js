@@ -1,6 +1,6 @@
 export default class AssetSystem {
 
-    constructor (world) {
+    constructor ( world ) {
 
         this.world = world
         this.geometries = {}
@@ -90,7 +90,7 @@ export default class AssetSystem {
 
     }
 
-    init (component) { 
+    init ( component ) { 
 
         let prop = component.props.assets
 
@@ -100,7 +100,7 @@ export default class AssetSystem {
 
     }
 
-    loadImage (asset, callback) {
+    loadImage ( asset, callback ) {
 
         let texture = null
 
@@ -115,11 +115,11 @@ export default class AssetSystem {
 
         }
 
-        callback(texture)
+        callback( texture )
 
     }
 
-    loadSound (asset, sound, callback) {
+    loadSound ( asset, sound, callback ) {
 
         if (this.audioBuffers[asset] == null) {
 
@@ -130,7 +130,7 @@ export default class AssetSystem {
 
         } else {
 
-            sound.setBuffer(this.audioBuffers[asset])
+            sound.setBuffer( this.audioBuffers[asset] )
             callback()
 
         }
@@ -143,24 +143,24 @@ export default class AssetSystem {
 
     addUserEntities (entities) {
 
-        this.userEntities = this.userEntities.concat(entities)
+        this.userEntities = this.userEntities.concat( entities )
 
     }
 
     addUserComponents (components) {
 
-        this.userComponents = this.userComponents.concat(components)
+        this.userComponents = this.userComponents.concat( components )
 
     }
 
-    _addBuiltInComponent (name, data) {
+    _addBuiltInComponent ( name, data ) {
 
         this.components.push(data)
         this.componentsByName[name] = data
 
     }
 
-    _addBuiltInEntity (name, data) {
+    _addBuiltInEntity ( name, data ) {
 
         this.entities.push(data)
         this.entitiesByName[name] = data

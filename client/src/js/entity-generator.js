@@ -52,7 +52,7 @@ export default class EntityGenerator {
             },
             material: {
               color: 0x808080,
-              name: "plastic"
+              name: "metal"
             }
           },
           quaternion: null,
@@ -74,7 +74,7 @@ export default class EntityGenerator {
             },
             material: {
               color: 0x808080,
-              name: "plastic"
+              name: "metal"
             }
           },
           quaternion: null,
@@ -104,7 +104,7 @@ export default class EntityGenerator {
             },
             material: {
               color: 0x808080,
-              name: "plastic"
+              name: "glass"
             }
           },
           quaternion: null,
@@ -119,7 +119,7 @@ export default class EntityGenerator {
             },
             material: {
               color: 0x808080,
-              name: "plastic"
+              name: "glass"
             }
           },
           quaternion: null,
@@ -156,7 +156,7 @@ export default class EntityGenerator {
             },
             material: {
               color: 0x808080,
-              name: "plastic"
+              name: "metal"
             }
           },
           quaternion: null,
@@ -186,7 +186,7 @@ export default class EntityGenerator {
             },
             material: {
               color: 0x808080,
-              name: "plastic"
+              name: "metal"
             }
           },
           quaternion: null,

@@ -27,7 +27,7 @@ export default class MetaFactorySystem {
             
             source.map((item, i) => {
 
-                this._addComponent( components, assetType, item, category, x, y, gridSize)
+                this._addComponent( component, assetType, item, category, x, y, gridSize)
 
                 x ++
 
@@ -47,7 +47,7 @@ export default class MetaFactorySystem {
             
             keys.map(key => {
 
-                this._addComponent( components, assetType, sourceCategory[key], category, x, y, gridSize)
+                this._addComponent( component, assetType, sourceCategory[key], category, x, y, gridSize)
 
                 x ++
 
@@ -64,9 +64,21 @@ export default class MetaFactorySystem {
 
     }
 
-    _addComponent ( components, assetType, factoryItem, assetCategory, x, y, gridSize) {
+    _addComponent ( component, assetType, factoryItem, assetCategory, x, y, gridSize ) {
 
-        components.push({
+        let addTo = null
+
+        if (!!component.state.tool) {
+
+            addTo = component.state.tool.panel.components[1].components
+
+        } else {
+
+            addTo = component.components
+
+        }
+
+        addTo.push({
                 props: {
                     factory: {
                         type: assetType,
@@ -74,7 +86,7 @@ export default class MetaFactorySystem {
                         propName: assetCategory
                     }
                 },
-                position:  [gridSize * x, gridSize * y, 0 ],
+                position:  [ gridSize * x, gridSize * y, 0 ],
                 quaternion: null
         })
 
