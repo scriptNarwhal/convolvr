@@ -22,7 +22,7 @@ export default class ToolSystem {
                     props: {
                         geometry: {
                             shape: "box",
-                            size: [12000, 4000, 1000]
+                            size: [22000, 4000, 1000]
                         },
                         material: {
                             name: "glass",
@@ -40,15 +40,15 @@ export default class ToolSystem {
                     props: {
                         geometry: {
                             shape: "box",
-                            size: [12000, 4000, 1000]
+                            size: [22000, 44000, 1000]
                         },
                         material: {
-                            name: "plastic",
+                            name: "metal",
                             color: 0x200030
                         },
                     },
                     components: [],
-                    position: [0, -4000, 0] // position & init the panel once the tool is equipped
+                    position: [0, -24000, 0] // position & init the panel once the tool is equipped
                 }
             ], [0, 0, 0], false)
             
