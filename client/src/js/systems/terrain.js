@@ -56,7 +56,7 @@ export default class TerrainSystem {
         world = this.world,
         scene = three.scene,
         systems = world.systems,
-        octree = this.octree,
+        octree = world.octree,
         plat = null,
         chunk = null,
         removePhysicsChunks = [],
@@ -100,30 +100,41 @@ export default class TerrainSystem {
       c = 0
       let cleanUpPlats = this.cleanUpChunks
       this.cleanUpChunks.map((cleanUp, i) => {
+
           if (c < 4) {
+
               if (!!cleanUp) {
+
                 terrainChunk = voxels[cleanUp.cell]
+
                 if (terrainChunk) {
-                  if (terrainChunk.mesh) {
-                    three.scene.remove(terrainChunk.mesh)
-                  }
+                  
                   if (terrainChunk.entities) {
                     terrainChunk.entities.map(e => {
                       console.log("terrain Chunk entities cleanup", e)
                       if (!!e.mesh) {
                         octree.remove(e.mesh)
-                        scene.remove(e.mesh)
+                        three.scene.remove(e.mesh)
                       } 
                     })
                   }
+
+                  if (terrainChunk.mesh) {
+                    three.scene.remove(terrainChunk.mesh)
+                  }
+
                 }
+                
                 removePhysicsChunks.push(cleanUp.physics)
                 voxelList.splice(voxels.indexOf(terrainChunk), 1)
                 delete voxels[cleanUp.cell]
                 cleanUpPlats.splice(i, 1)
             }
+
             c ++
+
           }
+
       })
       c = 0
       // load new voxels // at first just from client-side generation

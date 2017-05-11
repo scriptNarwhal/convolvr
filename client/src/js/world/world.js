@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { browserHistory } from 'react-router'
 import { animate } from './render'
 import { API_SERVER } from '../config.js'
 import { send } from '../network/socket'
@@ -304,11 +305,19 @@ export default class World {
 
 	}
 
-	reload ( name ) {
+	reload ( user, name, place, coords ) {
+		let world = this,
+			octree = this.octree
 
 		if (!!this.skyLight) {
 
 			three.scene.remove(this.skyLight)
+
+		}
+
+		if (!!this.ambientLight) {
+
+			three.scene.remove(this.ambientLight)
 
 		}
 
@@ -324,19 +333,34 @@ export default class World {
 
 		}
 
-		this.terrain.platforms.map(p => {
+		this.terrain.voxelList.map(p => {
+
+			p.entities.map(e => {
+				
+				if (e.mesh) {
+
+					octree.remove(e.mesh)
+					three.scene.remove(e.mesh)
+
+				}
+					
+			})
 
 			if (p.mesh) {
-
+				
 				three.scene.remove(p.mesh)
 
 			}
 
 		})
 
+		this.workers.worldPhysics.postMessage(JSON.stringify( { command: "clear", data: {}} ))
+		this.workers.entityPhysics.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		this.terrain.platforms = []
-		this.terrain.voxels = []
+		this.terrain.voxels = {}
+		this.terrain.voxelList = []
 		this.load(name)
+		browserHistory.push("/"+(user||"generated")+"/"+name+(!!place ? `/${place}` : ''))
 	}
 
 	generateFullLOD ( coords ) {
