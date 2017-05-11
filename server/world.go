@@ -150,41 +150,41 @@ func getWorld(c echo.Context) error { // load specific world
 		second = first*0.35 + rand.Float64()*0.05
 		third = second*0.14 + rand.Float64()*0.02
 
-		if rand.Intn(12) > 6 {
-			if rand.Intn(3) > 2 {
+		if rand.Intn(12) > 8 {
+			if rand.Intn(6) > 3 {
 				red = 0.0
 				green = second
 				blue = first
 			} else {
 				red = third * 2.0
-				green = second / 4.0
+				green = second / 9.0
 				blue = first * 2.0
 			}
 		} else if rand.Intn(10) > 5 {
 			if rand.Intn(6) > 3 {
 				red = first
 				green = 0
-				blue = first / 2.0
+				blue = first / 1.5
 			} else {
 				red = 0 //first * 2.0
 				blue = first
 				green = first / 1.5
 			}
 		} else {
-			if rand.Intn(3) > 2 {
+			if rand.Intn(6) > 3 {
 				red = 0
-				green = first / 1.5
-				blue = first * 1.5
-			} else {
-				green = second
-				red = second / 5.0
+				green = first / 2.5
 				blue = first * 2.0
+			} else {
+				green = first
+				red = third / 5.0
+				blue = second / 3.0
 			}
 		}
 
-		terrainRed = 0.02 + (blue + red)
-		terrainGreen = 0.01 + (blue)
-		terrainBlue = 0.1 + (green)
+		terrainRed = 0.05 + blue*1.8
+		terrainGreen = 0.05 + green*1.8
+		terrainBlue = 0.05 + red*1.8
 		if red < 0.4 {
 			red += 0.2
 		}
@@ -194,10 +194,10 @@ func getWorld(c echo.Context) error { // load specific world
 		if blue < 0.4 {
 			blue += 0.2
 		}
-		red *= 5.0
-		green *= 5.0
-		blue *= 5.0
-		lightIntensity := (red + blue + green) / 3
+		red *= 4.0
+		green *= 4.0
+		blue *= 4.0
+		lightIntensity := (red + blue + green) / 1.6
 		lightColor = int(math.Floor(lightIntensity*255))<<16 | int(math.Floor(lightIntensity*255))<<8 | int(math.Floor(lightIntensity*255))
 		ambientColor = int(255*lightIntensity/12.0)<<16 | int(255*lightIntensity/12.0)<<8 | int(255*lightIntensity/12.0)
 		terrainColor = int(math.Floor(terrainRed*255))<<16 | int(math.Floor(terrainGreen*255))<<8 | int(math.Floor(terrainBlue*255))

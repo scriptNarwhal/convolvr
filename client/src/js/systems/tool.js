@@ -12,7 +12,7 @@ export default class ToolSystem {
     init (component) { 
 
         let prop = component.props.tool,
-            contentProps = prop.panel.content ? prop.panel.content.props : false,
+            contentProps = prop.panel.content ? prop.panel.content.props : {},
             factories = null,
             panel = null
 
@@ -38,7 +38,7 @@ export default class ToolSystem {
                     position: [0, 0, 0]
                 },
                 {
-                    props: {
+                    props: Object.assign({}, contentProps, {
                         geometry: {
                             shape: "box",
                             size: [22000, 44000, 1000]
@@ -47,7 +47,7 @@ export default class ToolSystem {
                             name: "metal",
                             color: 0x200030
                         },
-                    },
+                    }),
                     components: [],
                     position: [0, -24000, 0] // position & init the panel once the tool is equipped
                 }

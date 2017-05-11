@@ -9,14 +9,18 @@ export default class FactorySystem {
     }
 
     init (component) { 
-
+        console.log("factory component init ", component)
         let prop = component.props.factory
         // render _something_ to indicate that it's a factory.. maybe 
         
         if (prop.autoGenerate !== false) {
             
-            console.log("generate!!", prop)
-            this.generate(component)
+            setTimeout(()=>{
+
+                console.log("generate!!", prop)
+                this.generate(component)
+
+            }, 1000)
 
         }
 
@@ -35,7 +39,7 @@ export default class FactorySystem {
     generate (component) {
 
         let prop = component.props.factory,
-            position = component.entity.position,
+            position = component.entity.mesh.position,
             type = prop.type,
             propName = prop.propName,
             data = prop.data,
