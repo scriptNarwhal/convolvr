@@ -56,7 +56,7 @@ export default class EntityGenerator {
             }
           },
           quaternion: null,
-          position: [-250, -200, 400]
+          position: [-250, -5000, 400]
         }
       ],
       position: null,
@@ -78,7 +78,7 @@ export default class EntityGenerator {
             }
           },
           quaternion: null,
-          position: [-4625, 0, 0]
+          position: [0, -5625, 0]
         },
         {
           props: {
@@ -123,7 +123,7 @@ export default class EntityGenerator {
             }
           },
           quaternion: null,
-          position: [10250, 0, 0]
+          position: [0, 10250, 0]
         },
       ],
       position: null,

@@ -12,6 +12,13 @@ export default class FactorySystem {
 
         let prop = component.props.factory
         // render _something_ to indicate that it's a factory.. maybe 
+        
+        if (prop.autoGenerate !== false) {
+            
+            console.log("generate!!", prop)
+            this.generate(component)
+
+        }
 
         return {
 

@@ -22,11 +22,11 @@ export default class MetaFactorySystem {
             keys = {},
             x = 0,
             y = 0
-
+        console.log("init metafactory ", prop, assetType, source)
         if (typeof source.map == 'function') { // array of geometries / materials, components, entities
             
             source.map((item, i) => {
-
+                console.log("adding item entity / component")
                 this._addComponent( component, assetType, item, category, x, y, gridSize)
 
                 x ++
@@ -46,7 +46,7 @@ export default class MetaFactorySystem {
             keys = Object.keys(sourceCategory) // structures, vehicles, media, interactivity
             
             keys.map(key => {
-
+                console.log("adding item / system")
                 this._addComponent( component, assetType, sourceCategory[key], category, x, y, gridSize)
 
                 x ++
@@ -61,6 +61,8 @@ export default class MetaFactorySystem {
             })
 
         }
+
+        component.entity.init(three.scene)
 
     }
 
@@ -84,6 +86,14 @@ export default class MetaFactorySystem {
                         type: assetType,
                         data: factoryItem,
                         propName: assetCategory
+                    },
+                    geometry: {
+                        shape: 'node',
+                        size: [1,1,1]
+                    },
+                    material: {
+                        name: 'basic',
+                        color: 0x000000
                     }
                 },
                 position:  [ gridSize * x, gridSize * y, 0 ],

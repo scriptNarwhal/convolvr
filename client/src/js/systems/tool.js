@@ -5,6 +5,7 @@ export default class ToolSystem {
     constructor (world) {
 
         this.world = world
+        this.panels = []
 
     }
     // hook into user.toolbox interfaces (primaryAction, etc.. )
@@ -51,6 +52,7 @@ export default class ToolSystem {
                     position: [0, -24000, 0] // position & init the panel once the tool is equipped
                 }
             ], [0, 0, 0], false)
+            this.panels.push(panel)
             
         }
 
