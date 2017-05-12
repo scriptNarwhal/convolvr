@@ -14,7 +14,7 @@ type Component struct {
 	Quaternion []float64              `json:"quaternion"`
 	Props      map[string]interface{} `json:"props"`
 	State      map[string]interface{} `json:"state"`
-	Components []*Component           `json:components` 
+	Components []*Component           `json:"components"`
 }
 
 func NewComponent(name string, pos []float64, quat []float64, props map[string]interface{}, state map[string]interface{}, components []*Component) *Component {

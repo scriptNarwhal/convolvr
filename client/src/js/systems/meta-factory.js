@@ -25,8 +25,7 @@ export default class MetaFactorySystem {
             y = 0
             
         if (typeof source.map == 'function') { // array of geometries / materials, components, entities
-            console.log("init metafactory (array)")
-            console.log("source", source, "assetType", assetType, "category", category)
+            
             source.map((item, i) => {
                 
                 this._addComponent( component, item, assetType, category, x, y, gridSize)
@@ -43,12 +42,9 @@ export default class MetaFactorySystem {
             })
             
         } else { // map through system categories
-            console.log("init metafactory (array)")
-            console.log("source", source, "assetType", assetType, "category", category)
-
+            
             sourceCategory = source[category]
             keys = Object.keys(sourceCategory) // structures, vehicles, media, interactivity
-            console.log("sourceCategory", source, category, sourceCategory)
             
             keys.map(key => {
                 

@@ -72,13 +72,12 @@ export default class TerrainSystem {
         scene = three.scene,
         systems = world.systems,
         octree = world.octree,
-        plat = null,
-        chunk = null,
+        voxel = null,
         removePhysicsChunks = [],
+        cleanUpVoxels = [],
         chunkPos = [],
         pCell = [0,0,0],
         position = three.camera.position,
-        platform = null,
         terrainChunk = null,
         c = 0,
         coords = [Math.floor(position.x/928000), 0, Math.floor(position.z/807360)],
@@ -98,16 +97,16 @@ export default class TerrainSystem {
 
       for (c in voxelList) {
 
-          platform = voxelList[c]
-          pCell = platform.data.cell
+          voxel = voxelList[c]
+          pCell = voxel.data.cell
 
-          if (!!!platform.cleanUp && (pCell[0] < coords[0] - removeDistance ||
+          if (!!!voxel.cleanUp && (pCell[0] < coords[0] - removeDistance ||
                                       pCell[0] > coords[0] + removeDistance ||
                                       pCell[2] < coords[2] - removeDistance ||
                                       pCell[2] > coords[2] + removeDistance)
             ) { 	// mark voxels for removal
 
-              platform.cleanUp = true
+              voxel.cleanUp = true
               this.cleanUpChunks.push({
                 physics: {
                   cell: [pCell[0], 0, pCell[2]]
@@ -122,38 +121,46 @@ export default class TerrainSystem {
       }
 
       c = 0
-      let cleanUpPlats = this.cleanUpChunks
+      cleanUpVoxels = this.cleanUpChunks
 
       this.cleanUpChunks.map((cleanUp, i) => {
 
           if (c < 4) {
 
-              if (!!cleanUp) {
+              if ( !!cleanUp ) {
 
                 terrainChunk = voxels[cleanUp.cell]
 
-                if (terrainChunk) {
+                if ( terrainChunk ) {
                   
-                  if (terrainChunk.entities) {
+                  if ( terrainChunk.entities ) {
+
                     terrainChunk.entities.map(e => {
-                      console.log("terrain Chunk entities cleanup", e)
-                      if (!!e.mesh) {
+
+                      if ( !!e.mesh ) {
+
                         octree.remove(e.mesh)
                         three.scene.remove(e.mesh)
+
                       } 
+
                     })
+
                   }
 
-                  if (terrainChunk.mesh) {
+                  if ( terrainChunk.mesh ) {
+
                     three.scene.remove(terrainChunk.mesh)
+
                   }
 
                 }
                 
                 removePhysicsChunks.push(cleanUp.physics)
-                voxelList.splice(voxels.indexOf(terrainChunk), 1)
+                voxelList.splice(voxelList.indexOf(terrainChunk), 1)
                 delete voxels[cleanUp.cell]
-                cleanUpPlats.splice(i, 1)
+                cleanUpVoxels.splice(i, 1)
+                
             }
 
             c ++

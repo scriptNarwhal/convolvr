@@ -365,12 +365,12 @@ export default class World {
 
 	generateFullLOD ( coords ) {
 
-			let platform = this.terrain.voxels[coords],
+			let voxel = this.terrain.voxels[coords],
 				scene = three.scene
 
-			if (platform != null) {
-
-				platform.entities.map(entity=>{
+			if (voxel != null && voxel.cleanUp == false) {
+				
+				voxel.entities.map(entity=>{
 
 					entity.init(scene)
 
@@ -429,25 +429,6 @@ export default class World {
 	    }
 	}
 
-	sendVideoFrame () { // probably going to remove this now that webrtc is in place
-		let imageSize = [0, 0]
-		if (this.capturing) {
-		 let v = document.getElementById('webcam'),
-				 canvas = document.getElementById('webcam-canvas'),
-				 context = canvas.getContext('2d'),
-				 cw = Math.floor(v.videoWidth),
-				 ch = Math.floor(v.videoHeight),
-
-		 imageSize = [cw, ch]
-		 canvas.width = 320
-		 canvas.height = 240
-		 context.drawImage(v, 0, 0, 320, 240);
-		 this.webcamImage = canvas.toDataURL("image/jpg", 0.6)
-	 }
-	 this.sendUpdatePacket = 0
-	 return imageSize
-	}
-
 	updateSkybox (delta) {
 
 		let camera = three.camera,
@@ -468,7 +449,8 @@ export default class World {
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
 				//this.skyLight.position.set(camera.position.x, camera.position.y+180000, camera.position.z+500000)
 			}
-    }
+    	}
+
 		if (terrainMesh) {
 
 			terrainMesh.position.x = camera.position.x
@@ -477,11 +459,25 @@ export default class World {
 		}
 	}
 
-	loadInterior (name) {
+	sendVideoFrame () { // probably going to remove this now that webrtc is in place
+
+		let imageSize = [0, 0]
+		if (this.capturing) {
+		 let v = document.getElementById('webcam'),
+				 canvas = document.getElementById('webcam-canvas'),
+				 context = canvas.getContext('2d'),
+				 cw = Math.floor(v.videoWidth),
+				 ch = Math.floor(v.videoHeight),
+
+		 imageSize = [cw, ch]
+		 canvas.width = 320
+		 canvas.height = 240
+		 context.drawImage(v, 0, 0, 320, 240);
+		 this.webcamImage = canvas.toDataURL("image/jpg", 0.6)
+	 }
+	 this.sendUpdatePacket = 0
+	 return imageSize
 
 	}
 
-	enterInterior (name) {
-
-	}
-};
+}

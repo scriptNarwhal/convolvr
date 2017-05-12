@@ -87,12 +87,6 @@ export default class WorldPhysics {
 					} else if (message.command == "load entities") {
 	          world.generateFullLOD(message.data.coords);
 
-	        } else if (message.command == "enter interior") {
-	          if (message.data.name != world.venue) {
-	            //console.log("message.data.name", data.data.name);
-	            world.venue = message.data.name;
-	            world.enterInterior(message.data.name);
-	          }
 	        } else {
 	          console.log(message.data);
 	        }

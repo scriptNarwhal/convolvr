@@ -71,7 +71,7 @@ const styles = {
   }
 }
 
-export default class NewWorld extends Component {
+class NewWorld extends Component {
   constructor () {
     super()
   }

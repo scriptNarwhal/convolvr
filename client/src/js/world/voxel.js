@@ -69,6 +69,7 @@ export default class Voxel {
         }
         this.data = data
         this.mesh = mesh
+        this.cleanUp = false
         // add to octree
         three.world.octree.add(mesh)
         three.scene.add(mesh)
