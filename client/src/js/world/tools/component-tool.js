@@ -32,6 +32,7 @@ export default class ComponentTool extends Tool {
               tool: {
                 panel: {
                   title: "Components",
+                  color: 0x003bff,
                   content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
@@ -88,7 +89,7 @@ export default class ComponentTool extends Tool {
 
       entity = new Entity(0, [component], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
       
-      if (!!!selected || cursorState.distance > 180000) { // switch back to entity tool, if the user is clicking into empty space
+      if (!!!selected || cursorState.distance > 165000) { // switch back to entity tool, if the user is clicking into empty space
       
         this.world.user.toolbox.useTool(0, 0)
         this.world.user.hud.show()

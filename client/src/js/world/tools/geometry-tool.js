@@ -3,9 +3,9 @@ import Entity from '../../entity'
 import EntityGenerator from '../../entity-generator'
 /* terrain voxel tool */
 export default class GeometryTool extends Tool {
-  constructor (data, world, toolbox) {
+  constructor ( data, world, toolbox ) {
 
-    super(data, world, toolbox)
+    super ( data, world, toolbox )
       this.mesh = null;
       this.name = "Geometry Tool"
       this.icon = this.initIcon()
@@ -17,7 +17,7 @@ export default class GeometryTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [2200, 2200, 9000]
+                size: [ 2200, 2200, 9000 ]
               },
               material: {
                 name: "metal"
@@ -25,6 +25,7 @@ export default class GeometryTool extends Tool {
               tool: {
                 panel: {
                   title: "Geometries",
+                  color: 0xffa707,
                   content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
@@ -48,8 +49,10 @@ export default class GeometryTool extends Tool {
     initIcon () {
 
       let entity = null
+
       this.generator = this.generator || new EntityGenerator()
-      entity = this.generator.makeEntity("icon", true)
+      entity = this.generator.makeEntity( "icon", true )
+
       entity.components.push({
         props: {
           material: {
@@ -64,15 +67,16 @@ export default class GeometryTool extends Tool {
         position: [0, 0, 0],
         quaternion: null
       })
+
       return entity
       
     }
 
-    primaryAction (telemetry) {
+    primaryAction ( telemetry ) {
       
     }
 
-    secondaryAction (telemetry, value) {
+    secondaryAction ( telemetry, value ) {
     
     }
 }

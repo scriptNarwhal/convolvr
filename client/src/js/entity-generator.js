@@ -85,7 +85,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "torus",
-              size: [32000, 32000, 15000]
+              size: [24000, 24000, 15000]
             },
             material: {
               color: 0x808080,
@@ -100,7 +100,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "hexagon",
-              size: [28000, 28000, 1500]
+              size: [20000, 20000, 1500]
             },
             material: {
               color: 0x808080,
@@ -152,7 +152,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "hexagon",
-              size: [18000, 28000, 1000]
+              size: [18000, 18000, 1000]
             },
             material: {
               color: 0x808080,

@@ -16,18 +16,20 @@ export default class MetaFactorySystem {
             assetType = prop.type,
             source = prop.dataSource,
             category = prop.propName,
-            gridWidth = prop.gridWidth || 4,
-            gridSize = prop.gridSize || 7000,
+            gridWidth = prop.gridWidth || 3,
+            gridSize = prop.gridSize || 20000,
+            sourceCategory = "none",
             factories = [],
             keys = {},
             x = 0,
             y = 0
             
         if (typeof source.map == 'function') { // array of geometries / materials, components, entities
-            
+            console.log("init metafactory (array)")
+            console.log("source", source, "assetType", assetType, "category", category)
             source.map((item, i) => {
                 
-                this._addComponent( component, assetType, item, category, x, y, gridSize)
+                this._addComponent( component, item, assetType, category, x, y, gridSize)
 
                 x ++
 
@@ -41,13 +43,16 @@ export default class MetaFactorySystem {
             })
             
         } else { // map through system categories
+            console.log("init metafactory (array)")
+            console.log("source", source, "assetType", assetType, "category", category)
 
             sourceCategory = source[category]
             keys = Object.keys(sourceCategory) // structures, vehicles, media, interactivity
+            console.log("sourceCategory", source, category, sourceCategory)
             
             keys.map(key => {
                 
-                this._addComponent( component, assetType, sourceCategory[key], category, x, y, gridSize)
+                this._addComponent( component, sourceCategory[key], assetType, "systems", x, y, gridSize)
 
                 x ++
 
@@ -62,11 +67,9 @@ export default class MetaFactorySystem {
 
         }
 
-        // component.entity.init(three.scene)
-
     }
 
-    _addComponent ( component, assetType, factoryItem, assetCategory, x, y, gridSize ) {
+    _addComponent ( component, factoryItem, assetType, assetCategory, x, y, gridSize ) {
 
         let addTo = null
 

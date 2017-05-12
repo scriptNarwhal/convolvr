@@ -30,6 +30,7 @@ export default class EntityTool extends Tool  {
               tool: {
                 panel: {
                   title: "Entities",
+                  color: 0x15ff15,
                   content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
@@ -56,7 +57,7 @@ export default class EntityTool extends Tool  {
           entity = null
           
       this.generator = this.generator || new EntityGenerator()
-      entity = this.generator.makeEntity("icon", true)
+      entity = this.generator.makeEntity( "icon", true )
 
       entity.components.push({
         props: {
@@ -110,7 +111,7 @@ export default class EntityTool extends Tool  {
 
     }
 
-    secondaryAction (telemetry, value) {
+    secondaryAction ( telemetry, value ) {
       
       this.current += value // cycle entities
 

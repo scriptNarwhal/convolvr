@@ -47,7 +47,6 @@ export default class FactorySystem {
             components = data.components,
             created = null
             
-
         if ( type == 'entity' ) {
  
             created = new Entity(-1, components, position.toArray(), quat)
@@ -57,40 +56,51 @@ export default class FactorySystem {
             created = new Entity(-1, [data], position.toArray(), quat)
 
         } else if ( type == 'prop' ) {
-
+            console.log("!!!!! factory init, propName: ", propName)
             switch (propName) {
 
                 case "geometry":
-                    created = new Entity(-1, [Object.assign({}, {geometry: data}, {
-                        mixin: true,
-                        material: {
-                            name: "wireframe",
-                            color: 0xffffff
-                        }
-                    })], position.toArray(), quat)
+                    created = new Entity(-1, [{ 
+                        props: Object.assign({}, {geometry: data}, {
+                                mixin: true,
+                                material: {
+                                    name: "wireframe",
+                                    color: 0xffffff
+                                }
+                            }
+                        )}
+                    ], position.toArray(), quat)
+                    console.log("*** spawning geometry mixin component", created)
                 break
                 case "material":
-                    created = new Entity(-1, [Object.assign({}, {material: data}, {
-                        mixin: true,
-                        geometry: {
-                            shape: "sphere",
-                            size: [4500, 4500, 4500]
-                        }
-                    })], position.toArray(), quat)
+                    created = new Entity(-1, [{
+                            props: Object.assign({}, {material: data}, {
+                                mixin: true,
+                                geometry: {
+                                    shape: "sphere",
+                                    size: [4500, 4500, 4500]
+                                }
+                            }
+                        )}
+                    ], position.toArray(), quat)
+                    console.log("*** spawning material mixin component", created)
                 break
                 case "systems":
-
-                    created = new Entity(-1, [Object.assign({}, data, {
-                        mixin: true,
-                        material: {
-                            name: "wireframe",
-                            color: 0xffffff
-                        },
-                        geometry: {
-                            shape: "sphere",
-                            size: [4500, 4500, 4500]
-                        }
-                    })], position.toArray(), quat)
+                    created = new Entity(-1, [{
+                        props: Object.assign({}, data, {
+                                mixin: true,
+                                material: {
+                                    name: "wireframe",
+                                    color: 0xffffff
+                                },
+                                geometry: {
+                                    shape: "sphere",
+                                    size: [4500, 4500, 4500]
+                                }
+                            }
+                        )}
+                    ], position.toArray(), quat)
+                    console.log("*** spawning system mixin component", created)
                 break
 
             }

@@ -16,7 +16,7 @@ export default class Tool {
 
     }
 
-    equip (hand) {
+    equip ( hand ) {
 
       let input = this.world.userInput,
           hands = this.toolbox.hands,
@@ -28,15 +28,21 @@ export default class Tool {
         toolMesh = this.initMesh(this.data)
 
       } else {
+
         toolMesh = this.mesh
         toolMesh.visible = true
+
       }
 
       if ( !input.trackedControls && !input.leapMotion ) {
+
           this.world.user.mesh.add(toolMesh)
           toolMesh.position.set(1500-(3000*hand), -800, -1550)
+
       } else {
+
           hands[hand].add(toolMesh) // add to respective hand 
+
       }
 
       // console.log("equip tool: tool: ", this.entity.componentsByProp.tool)
@@ -48,8 +54,13 @@ export default class Tool {
             toolPanel.init(three.scene)
 
         }
-        toolPanel.update(this.world.user.avatar.mesh.position.toArray())
-        toolPanel.mesh.translateZ(-20000)
+
+        let userPos = this.world.user.avatar.mesh.position.toArray()
+        userPos[1] += 48000
+        toolPanel.update(userPos)
+        toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
+        toolPanel.mesh.translateZ(-65000)
+        toolPanel.mesh.translateX(30000)
         toolPanel.mesh.updateMatrix()
 
       }

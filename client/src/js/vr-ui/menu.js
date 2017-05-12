@@ -1,17 +1,25 @@
 import Label from './text/label'
 
-export default class HUDMenu {
+export default class HUDMenu { // deprecated.. 
+
     constructor (options = [], toolbox = false) {
-      this.options = options;
+
+      this.options = options
+
       if (toolbox && options.length == 0) {
-        this.options = toolbox.getTools();
+
+        this.options = toolbox.getTools()
+
       }
-      this.toolbox = toolbox;
-      this.lightColor = 0xffffff;
-      this.light = null;
+
+      this.toolbox = toolbox
+      this.lightColor = 0xffffff
+      this.light = null
+
     }
 
-    initMesh (data = {}, parent) {
+    initMesh ( data = {}, parent ) {
+
       let mesh = null,
           label = null,
           options = this.options,
@@ -21,23 +29,34 @@ export default class HUDMenu {
           geom = new THREE.BoxGeometry(100000, 20000, 4000),
           mat = new THREE.MeshPhongMaterial({color: color, fog: false})
 
-      mesh = new THREE.Object3D() //THREE.Mesh(geom, mat);
+      mesh = new THREE.Object3D() 
+
       if (light) {
-        this.light = light;
-        mesh.add(light);
+
+        this.light = light
+        mesh.add(light)
         light.position.set(0, 2000, 20000)
+
       }
+
       if (options.length > 0) {
-        o = options.length -1;
+
+        o = options.length -1
+
         while (o >= 0) {
+
           let icon = null,
               curvature = 0 //-Math.sin(Math.PI*((o+1)/(options.length+1)))
+              
           icon = options[o].icon
           icon.init(mesh)
           icon.update([-26000+o*13000, -2000, curvature*12000])
-          o --;
+          o --
+
         }
+
       }
+
       this.mesh = mesh
       this.parent = parent
       three.scene.add(mesh)
@@ -48,25 +67,31 @@ export default class HUDMenu {
         lightColor: 0xffffff,
         position: [0, -15000, -5000]
       }, this.mesh)
+
       return this.mesh
+
     }
 
-    update () {
+    update ( ) {
+
       let toolbox = this.toolbox,
           index = toolbox.currentTools[0],
           label = toolbox.tools[index].name
 
       this.label.update({ color: '#ffffff', lightColor: 0xffffff, text: label })
       this.light.position.set(-26000+index*13000, -2000, 6000)
+
     }
 
-    updatePosition () {
+    updatePosition ( ) {
+
       let pPos = this.parent.position
       this.mesh.position.set( pPos.x, pPos.y, pPos.z )
       this.mesh.translateZ(-70000)
-      this.mesh.translateY(30000)
+      this.mesh.translateY(25000)
       this.mesh.rotation.y = this.parent.rotation.y
       this.update()
+
     }
 
     hide () {

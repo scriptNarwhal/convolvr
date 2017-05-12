@@ -30,7 +30,7 @@ let detectPlaceDetailsFromURL = () => {
             isPlace = false
         }
     })
-    console.log("detect place details from URL ", isPlace, slashes)
+    //console.log("detect place details from URL ", isPlace, slashes)
     if (isPlace) {
         if (slashes >= 2) {
             userAndPlace = [params[1], params[2]]

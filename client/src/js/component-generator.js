@@ -29,7 +29,7 @@ export default class ComponentGenerator {
         geometry: {
           merge: true,
           shape: "hexagon",
-          size: [12000, 30000, 12000]
+          size: [22000, 22000, 42000]
         },
         material: {
           color: 0x404040,
