@@ -9,10 +9,10 @@ export default class LightSystem {
 
         switch (prop.type) {
             case "point":
-                light = new THREE.PointLight(config.light.color, prop.intensity, prop.distance)
+                light = new THREE.PointLight(prop.color, prop.intensity, prop.distance)
             break
             case "directional":
-                light = new THREE.DirectionalLight(config.light.color, prop.intensity)
+                light = new THREE.DirectionalLight(prop.color, prop.intensity)
             break
         }
         component.mesh.add(light)

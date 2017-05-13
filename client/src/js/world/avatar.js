@@ -28,6 +28,12 @@ export default class Avatar {
               material: {
                 name: "wireframe",
                 color: 0xffffff
+              },
+              light: {
+                type: "point",
+                intensity: 0.9,
+                color: 0xffffff,
+                distance: 20000
               }
             },
             position: [0, 0, 0],

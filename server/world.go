@@ -147,58 +147,40 @@ func getWorld(c echo.Context) error { // load specific world
 		log.Println(err)
 
 		first = 0.1 + (rand.Float64() * 0.1)
-		second = first*0.35 + rand.Float64()*0.05
-		third = second*0.14 + rand.Float64()*0.02
+		second = first*0.95 - rand.Float64()*0.15
+		third = second*0.15 - rand.Float64()*0.1
 
-		if rand.Intn(12) > 8 {
-			if rand.Intn(6) > 3 {
-				red = 0.0
+		if rand.Intn(12) > 6 {
+			if rand.Intn(12) > 6 {
+				red = first
+				green = second
+				blue = third
+			} else {
+				red = third
 				green = second
 				blue = first
-			} else {
-				red = third * 2.0
-				green = second / 9.0
-				blue = first * 2.0
-			}
-		} else if rand.Intn(10) > 5 {
-			if rand.Intn(6) > 3 {
-				red = first
-				green = 0
-				blue = first / 1.5
-			} else {
-				red = 0 //first * 2.0
-				blue = first
-				green = first / 1.5
 			}
 		} else {
-			if rand.Intn(6) > 3 {
-				red = 0
-				green = first / 2.5
-				blue = first * 2.0
-			} else {
+			if rand.Intn(12) > 6 {
+				red = third
 				green = first
-				red = third / 5.0
-				blue = second / 3.0
+				blue = second
+			} else {
+				red = second //first * 2.0
+				blue = first
+				green = third
 			}
 		}
 
-		terrainRed = 0.05 + blue*1.8
-		terrainGreen = 0.05 + green*1.8
-		terrainBlue = 0.05 + red*1.8
-		if red < 0.4 {
-			red += 0.2
-		}
-		if green < 0.4 {
-			green += 0.2
-		}
-		if blue < 0.4 {
-			blue += 0.2
-		}
-		red *= 4.0
-		green *= 4.0
-		blue *= 4.0
-		lightIntensity := (red + blue + green) / 1.6
-		lightColor = int(math.Floor(lightIntensity*255))<<16 | int(math.Floor(lightIntensity*255))<<8 | int(math.Floor(lightIntensity*255))
+		terrainRed = 0.05 + red*1.5 + blue/2.0
+		terrainGreen = 0.05 + green*1.5 + blue/2.0
+		terrainBlue = 0.05 + blue*1.5 + red/2.0
+
+		red *= 12.0
+		green *= 12.0
+		blue *= 12.0
+		lightIntensity := (red + blue + green) / 3
+		lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
 		ambientColor = int(255*lightIntensity/12.0)<<16 | int(255*lightIntensity/12.0)<<8 | int(255*lightIntensity/12.0)
 		terrainColor = int(math.Floor(terrainRed*255))<<16 | int(math.Floor(terrainGreen*255))<<8 | int(math.Floor(terrainBlue*255))
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}

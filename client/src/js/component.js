@@ -1,5 +1,7 @@
 export default class Component {
+
   constructor (data, entity, systems, appConfig = false) {
+
       var mesh = null,
           props = data.props,
           quaternion = data.quaternion ? data.quaternion : false,
@@ -18,37 +20,53 @@ export default class Component {
           size:[1,1,1]
         }
       }
+      
       if (props.material == undefined) {
         props.material = {
           name: 'wireframe',
           color: 0xffffff
         }
       }
+
       mesh = systems.registerComponent(this)
       this.mesh = mesh
       mesh.userData = { 
           component: this,
           entity
       }
+
       if (!! quaternion) {
+
           mesh.quaternion.set(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
+
       }
+
       mesh.position.set(position[0], position[1], position[2])
       mesh.updateMatrix()
 
       if (this.props.hand != undefined) {
+
         entity.hands.push(this.mesh)
         this.detached = true
+
       }
+
       if (this.props.cursor != undefined) {
+
         entity.cursors.push(this)
+
       }
+
       if (this.components.length > 0) {
+
         this.initSubComponents(this.components, entity, systems, appConfig)
+
       }
+
   }
 
-  initSubComponents(components, entity, systems, appConfig) {
+  initSubComponents( components, entity, systems, appConfig ) {
+
     var mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
         three = window.three,
@@ -65,36 +83,55 @@ export default class Component {
         s = 0
 
    while (c < ncomps) {
+
         comp = new Component(this.components[c], entity, systems, {mobile}) // use simpler shading for mobile gpus
+
         if (comp.props.noRaycast === true) {
           addToOctree = false
         }
+
         compMesh = comp.mesh
+
         if (comp.props.geometry && comp.props.geometry.merge === true) {
+
           materials.push(compMesh.material)
           compMesh.updateMatrix()
           faces = compMesh.geometry.faces
           face = faces.length-1
+
           while (face > -1) {
               faces[face].materialIndex = s
               face --
           }
+
           base.merge(compMesh.geometry, compMesh.matrix)
           s ++
+
         } else {
+
           nonStructural.push(comp.mesh)
+
         }
+
         c ++
     }
     
     if (s > 0) {
+
       mesh = new THREE.Mesh(base, new THREE.MultiMaterial(materials))
       this.mesh.add(mesh)
+
     } else {
+
       while (s < nonStructural.length) {
+
           this.mesh.add(nonStructural[s])
           s ++
+
       }
+
     }     
+
   }
+
 }

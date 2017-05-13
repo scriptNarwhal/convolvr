@@ -369,7 +369,7 @@ export default class World {
 				scene = three.scene
 
 			if (voxel != null && voxel.cleanUp == false) {
-				
+
 				voxel.entities.map(entity=>{
 
 					entity.init(scene)
