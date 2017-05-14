@@ -7,8 +7,8 @@ export default class FactorySystem {
         this.world = world
 
     }
-
-    init (component) { 
+ 
+    init ( component ) { 
         console.log("factory component init ", component)
         let prop = component.props.factory
         // render _something_ to indicate that it's a factory.. maybe 
@@ -36,10 +36,11 @@ export default class FactorySystem {
 
     }
 
-    generate (component) {
+    generate ( component ) {
 
         let prop = component.props.factory,
             position = component.entity.mesh.position,
+            entityPosition = !!prop.anchorOutput ? [0, 0, 0] : position.toArray(),
             type = prop.type,
             propName = prop.propName,
             data = prop.data,
@@ -49,14 +50,14 @@ export default class FactorySystem {
             
         if ( type == 'entity' ) {
  
-            created = new Entity(-1, components, position.toArray(), quat)
+            created = new Entity(-1, components, entityPosition, quat)
 
         } else if (type == 'component') {
             
-            created = new Entity(-1, [data], position.toArray(), quat)
+            created = new Entity(-1, [data], entityPosition, quat)
 
         } else if ( type == 'prop' ) {
-            console.log("!!!!! factory init, propName: ", propName)
+            // console.log("!!!!! factory init, propName: ", propName)
             switch (propName) {
 
                 case "geometry":
@@ -69,8 +70,8 @@ export default class FactorySystem {
                                 }
                             }
                         )}
-                    ], position.toArray(), quat)
-                    console.log("*** spawning geometry mixin component", created)
+                    ], entityPosition, quat)
+                //    console.log("*** spawning geometry mixin component", created)
                 break
                 case "material":
                     created = new Entity(-1, [{
@@ -82,8 +83,8 @@ export default class FactorySystem {
                                 }
                             }
                         )}
-                    ], position.toArray(), quat)
-                    console.log("*** spawning material mixin component", created)
+                    ], entityPosition, quat)
+                    // console.log("*** spawning material mixin component", created)
                 break
                 case "systems":
                     created = new Entity(-1, [{
@@ -99,14 +100,23 @@ export default class FactorySystem {
                                 }
                             }
                         )}
-                    ], position.toArray(), quat)
-                    console.log("*** spawning system mixin component", created)
+                    ], entityPosition, quat)
+                    // console.log("*** spawning system mixin component", created)
                 break
 
             }
         }
 
-        created.init(window.three.scene)
+        if ( !!prop.anchorOutput ) {
+
+            created.init(component.mesh)
+
+        } else {
+
+            created.init(window.three.scene)
+
+        }
+
         created.mesh.translateZ(-10000)
         created.update(created.mesh.position.toArray())
 

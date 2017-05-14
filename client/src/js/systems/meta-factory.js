@@ -20,19 +20,26 @@ export default class MetaFactorySystem {
             gridSize = prop.gridSize || 20000,
             sourceCategory = "none",
             factories = [],
+            miniature = false,
             keys = {},
             x = 0,
             y = 0
             
         if (typeof source.map == 'function') { // array of geometries / materials, components, entities
-            
+
+            if ( assetType == "entity" || assetType == "component" ) {
+                
+                miniature = true
+
+            }
+
             source.map((item, i) => {
                 
                 this._addComponent( component, item, assetType, category, x, y, gridSize)
 
                 x ++
 
-                if ( x > gridWidth ) {
+                if ( x >= gridWidth ) {
 
                     x = 0
                     y += 1
@@ -48,8 +55,6 @@ export default class MetaFactorySystem {
             
             keys.map(key => {
                 
-                this._addComponent( component, sourceCategory[key], assetType, "systems", x, y, gridSize)
-
                 x ++
 
                 if ( x > gridWidth ) {
@@ -59,13 +64,16 @@ export default class MetaFactorySystem {
 
                 } 
 
+                this._addComponent( component, sourceCategory[key], assetType, "systems", x, y, gridSize, miniature )
+
+
             })
 
         }
 
     }
 
-    _addComponent ( component, factoryItem, assetType, assetCategory, x, y, gridSize ) {
+    _addComponent ( component, factoryItem, assetType, assetCategory, x, y, gridSize, miniature ) {
 
         let addTo = null
 
@@ -84,7 +92,9 @@ export default class MetaFactorySystem {
                     factory: {
                         type: assetType,
                         data: factoryItem,
-                        propName: assetCategory
+                        propName: assetCategory,
+                        anchorOutput: true,
+                        miniature
                     },
                     geometry: {
                         shape: 'node',
@@ -95,7 +105,7 @@ export default class MetaFactorySystem {
                         color: 0x000000
                     }
                 },
-                position:  [ gridSize * x, gridSize * y, 0 ],
+                position:  [ gridSize * (x-1), gridSize * y, 12000 ],
                 quaternion: null
         })
 
