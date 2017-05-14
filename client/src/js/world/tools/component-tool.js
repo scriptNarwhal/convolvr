@@ -77,6 +77,7 @@ export default class ComponentTool extends Tool {
     primaryAction ( telemetry, params = {} ) { // place component (into entity if pointing at one)
       
       let cursor = telemetry.cursor,
+          cursorSystem = three.world.systems.cursor,
           cursorState = cursor.state.cursor || {},
           position = telemetry.position,
           quat = telemetry.quaternion,
@@ -84,12 +85,12 @@ export default class ComponentTool extends Tool {
           componentType = !!params.component ? params.component : this.options.componentType,
           entityId = -1,
           components = [],
-          component = this.components.makeComponent(componentType),
+          component = this.components.makeComponent( componentType ),
           entity = null
 
-      entity = new Entity(0, [component], [0, 0, 0], [quat.x, quat.y, quat.z, quat.w])
+      entity = new Entity(0, [component], [0, 0, 0], quat)
       
-      if (!!!selected || cursorState.distance > 165000) { // switch back to entity tool, if the user is clicking into empty space
+      if ( (!!!selected || cursorState.distance > 165000 ) && cursorSystem.entityCoolDown < 0 )  { // switch back to entity tool, if the user is clicking into empty space
       
         this.world.user.toolbox.useTool(0, 0)
         this.world.user.hud.show()
@@ -100,7 +101,7 @@ export default class ComponentTool extends Tool {
 
       entityId = selected.id
 
-      if (components.length == 0) {
+      if ( components.length == 0 ) {
         components = [component]
       }
 
@@ -116,7 +117,7 @@ export default class ComponentTool extends Tool {
             position[1] - selectedPos.y,
             position[2] - selectedPos.z
           ]
-          comp.quaternion = [quat.x, quat.y, quat.z, quat.w]
+          comp.quaternion = quat
 
         }
 

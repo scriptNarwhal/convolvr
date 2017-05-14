@@ -10,6 +10,8 @@ import VideoSystem from './video'
 import SignalSystem from './signal'
 import InputSystem from './input'
 import MediaSystem from './media'
+import CameraSystem from './camera'
+import ScreenSystem from './screen'
 import DrawingSystem from './drawing'
 import ControlSystem from './control'
 import PropulsionSystem from './propulsion'
@@ -54,6 +56,8 @@ export default class Systems {
 			text: new TextSystem(world),
 			audio: new AudioSystem(world),
 			video: new VideoSystem(world),
+			camera: new CameraSystem(world),
+			screen: new ScreenSystem(world),
 			signal: new SignalSystem(world),
             input: new InputSystem(world),
             media: new MediaSystem(world),

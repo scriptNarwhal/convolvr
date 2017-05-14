@@ -130,7 +130,7 @@ let handleCursors = ( cursors, cursorIndex, hands, camera, world ) => {
 
         }
 
-      } else if (i > 0) {
+      } else if ( i > 0 ) {
 
         if ( cursorMesh.visible == false && (input.trackedControls || input.leapMotion) ) {
 
@@ -176,6 +176,7 @@ let handleCursors = ( cursors, cursorIndex, hands, camera, world ) => {
       
 
   })
+
 
   if ( cursorSystem.entityCoolDown  > -3 ) {
   

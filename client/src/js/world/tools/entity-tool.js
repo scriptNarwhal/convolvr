@@ -88,11 +88,11 @@ export default class EntityTool extends Tool  {
           user = this.world.user,
           entity = params.entity ? params.entity : this.generator.makeEntity(this.options.entityType)
     
-      if (entity.components.length == 1) {
+      // if (entity.components.length == 1) {
 
-        entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
+      //   entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
 
-      }
+      // }
 
       if (selected && cursorState.distance < 160000) { // switch to component tool
           

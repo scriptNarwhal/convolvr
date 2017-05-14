@@ -26,6 +26,7 @@ export default class Toolbox {
         }
 
       })
+
       this.fadeTimeout = 0
       this.tools = [
         new EntityTool({}, world, this),
@@ -34,7 +35,7 @@ export default class Toolbox {
         new GeometryTool({}, world, this),
         new MaterialTool({}, world, this),
         new AssetTool({}, world, this)
-      ];
+      ]
       this.currentTools = [ 0, 0 ]
 
     }
@@ -72,8 +73,8 @@ export default class Toolbox {
         hand ++
 
       }
-      this.currentTools[hand] += direction
 
+      this.currentTools[hand] += direction
       
     }
 
@@ -155,10 +156,13 @@ export default class Toolbox {
           quaternion 
         } = telemetry,
           toolAction = null
+
       if ( tool.mesh == null ) {
         tool.equip(hand)
       }
+
       toolAction = tool.primaryAction(telemetry)
+
       if ( !!toolAction ) {
         this.sendToolAction(true, tool, hand, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }

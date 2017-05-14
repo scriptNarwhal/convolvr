@@ -29,8 +29,8 @@ export default class AssetTool extends Tool {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "prop", // entity, prop
-                        propName: "asset",
-                        dataSource: this.world.systems.assets.props.asset
+                        propName: "assets",
+                        dataSource: this.world.systems.assets.props.assets
                       }
                     }
                   }
