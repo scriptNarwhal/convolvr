@@ -1,7 +1,7 @@
 let handDirection = new THREE.Vector3(0, 0, 0),
     tmpVector2 = new THREE.Vector2(0, 0)
 
-let rayCast = (world, camera, cursor, hand, handMesh, callback) => {
+let rayCast = ( world, camera, cursor, hand, handMesh, callback ) => {
 
 	let raycaster = world.raycaster,
       octreeObjects = [],
@@ -11,7 +11,7 @@ let rayCast = (world, camera, cursor, hand, handMesh, callback) => {
       obj = null,
       i = 0
 
-  if (handMesh != null) {
+  if ( handMesh != null ) {
 
       handMesh.getWorldDirection(handDirection)
       handDirection.multiplyScalar(-1)
@@ -26,7 +26,8 @@ let rayCast = (world, camera, cursor, hand, handMesh, callback) => {
   octreeObjects = world.octree.search(raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction)
   intersections = raycaster.intersectOctreeObjects(octreeObjects)
   i = intersections.length -1
-  while (i > -1) {
+
+  while ( i > -1 ) {
 
       obj = intersections[i]
       entity = obj.object.userData.entity
@@ -35,6 +36,7 @@ let rayCast = (world, camera, cursor, hand, handMesh, callback) => {
       i --
 
   }
+
 }
 
 let cursorCallback = (cursor, hand, world, obj, entity, component) => {
@@ -45,26 +47,33 @@ let cursorCallback = (cursor, hand, world, obj, entity, component) => {
       distance = !!cursorState.cursor ? cursorState.cursor.distance: 12000,
       props = !!component ? component.props : false,
       hover = !!props ? props.hover : false,
-      activate = !!props ? props.activate : false
-
-  // if (obj.distance > 100000) {
-
-  //     obj.distance = 25000
-
-  // } 
+      activate = !!props ? props.activate : false,
+      cursorSystem = world.systems.cursor,
+      newCursorState = {
+        distance,
+        mesh: obj.object,
+        component
+      }
 
   distance = obj.distance
-  
-  cursorState.cursor = {
-    distance,
-    mesh: obj.object,
-    component,
-    entity
+
+  if ( !! entity ) {
+
+    cursorSystem.entityCoolDown = 60
+
   }
 
-  if (!!entity && !!component) {
+  if ( ( cursorSystem.entityCoolDown > 0 && !!entity ) || ( cursorSystem.entityCoolDown < 0 && !!!entity ) ) { // if components are spawned in rapid succession, attach them to the current entity even if not pointing at it
 
-    if (hover) {
+    newCursorState.entity = entity
+
+  }
+
+  cursor.state.cursor = Object.assign({}, cursorState.cursor, newCursorState)
+
+  if ( !!entity && !!component ) {
+
+    if ( hover ) {
 
       callbacks = component.state.hover.callbacks
       cb = callbacks.length-1
@@ -78,7 +87,7 @@ let cursorCallback = (cursor, hand, world, obj, entity, component) => {
 
     }
 
-    if (activate) {
+    if ( activate ) {
 
       callbacks = component.state.activate.callbacks // check if cursor / hand is activated
       cb = callbacks.length-1
@@ -96,10 +105,11 @@ let cursorCallback = (cursor, hand, world, obj, entity, component) => {
 
 }
 
-let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
+let handleCursors = ( cursors, cursorIndex, hands, camera, world ) => {
 
   let handMesh = null,
-      input = world.userInput
+      input = world.userInput,
+      cursorSystem = world.systems.cursor
 
   cursors.map((cursor, i) => { // animate cursors & raycast scene
 
@@ -108,39 +118,39 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
           cursorPos = cursorMesh.position,
           cursorSpeed = (state.distance - cursorPos.z) / 10
       
-      if (i == 0) {
+      if ( i == 0 ) {
         
-        if (cursorMesh.visible == true && (input.trackedControls || input.leapMotion)) {
-          //console.log("hiding cursor "+cursorIndex)
+        if ( cursorMesh.visible == true && (input.trackedControls || input.leapMotion) ) {
+
             cursorMesh.visible = false
 
-        } else if (cursorMesh.visible == false && (!input.trackedControls && !input.leapMotion)) {
-            //console.log("unhiding cursor "+cursorIndex)
+        } else if ( cursorMesh.visible == false && (!input.trackedControls && !input.leapMotion) ) {
+
             cursorMesh.visible = true
 
         }
 
       } else if (i > 0) {
 
-        if (cursorMesh.visible == false && (input.trackedControls || input.leapMotion)) {
-             //console.log("unhiding cursor "+cursorIndex)
+        if ( cursorMesh.visible == false && (input.trackedControls || input.leapMotion) ) {
+
             cursorMesh.visible = true
 
-        } else if (cursorMesh.visible && (!input.trackedControls && !input.leapMotion)) {
-            //console.log("hiding cursor "+cursorIndex)
+        } else if ( cursorMesh.visible && (!input.trackedControls && !input.leapMotion) ) {
+
             cursorMesh.visible = false
 
         }
 
       }
 
-      if (!!state) {
+      if ( !!state ) {
 
-        if (state.distance-8000 < (-cursorPos.z) && (cursorPos.z < 80000 - cursorSpeed)) { // near bound of allowed movement
+        if ( state.distance-8000 < (-cursorPos.z) && (cursorPos.z < 80000 - cursorSpeed) ) { // near bound of allowed movement
 
             cursorPos.z += cursorSpeed
 
-        } else if (state.distance > (-cursorPos.z) && (cursorPos.z > -80000 + cursorSpeed)) { // far bound of allowed movement
+        } else if ( state.distance > (-cursorPos.z) && (cursorPos.z > -80000 + cursorSpeed) ) { // far bound of allowed movement
         
             cursorPos.z -= cursorSpeed
          
@@ -150,28 +160,42 @@ let handleCursors = (cursors, cursorIndex, hands, camera, world) => {
       cursorMesh.updateMatrix()
       cursorMesh.updateMatrixWorld()
 
-      if (i > 0) {
+      if ( i > 0 ) {
 
           handMesh = cursors[i].mesh.parent
           !!handMesh && handMesh.updateMatrix()
 
       }
-      if (i == cursorIndex) {
+
+      if ( i == cursorIndex ) {
         
         rayCast(world, camera, cursor, i -1, handMesh, cursorCallback)
 
       }
+
+      
+
   })
+
+  if ( cursorSystem.entityCoolDown  > -3 ) {
+  
+    cursorSystem.entityCoolDown -= 2
+
+  }
+
   cursorIndex ++
-  if (cursorIndex == cursors.length) {
+
+  if ( cursorIndex == cursors.length ) {
 
       cursorIndex = 0
 
   }
+
   return cursorIndex
+
 }
 
-export let animate = (world, last, cursorIndex) => {
+export let animate = ( world, last, cursorIndex ) => {
 
   let mobile = world.mobile,
       camera = three.camera,
@@ -222,7 +246,7 @@ export let animate = (world, last, cursorIndex) => {
     }
 }
 
-export let vrAnimate = (time, oldPos, cursorIndex) => {
+export let vrAnimate = ( time, oldPos, cursorIndex ) => {
 
   let now = Date.now(),
       delta = Math.min(now - time, 500) / 16000,

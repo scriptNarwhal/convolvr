@@ -14,52 +14,52 @@ export default class Component {
       this.components = data.components || []
       this.detached = false
 
-      if (props.geometry == undefined) {
+      if ( props.geometry == undefined ) {
         props.geometry = {
           shape: "node",
-          size:[1,1,1]
+          size: [1,1,1]
         }
       }
-      
-      if (props.material == undefined) {
+
+      if ( props.material == undefined ) {
         props.material = {
           name: 'wireframe',
           color: 0xffffff
         }
       }
 
-      mesh = systems.registerComponent(this)
+      mesh = systems.registerComponent( this )
       this.mesh = mesh
       mesh.userData = { 
           component: this,
           entity
       }
 
-      if (!! quaternion) {
+      if ( !! quaternion) {
 
-          mesh.quaternion.set(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
+          mesh.quaternion.set( quaternion[0], quaternion[1], quaternion[2], quaternion[3] )
 
       }
 
-      mesh.position.set(position[0], position[1], position[2])
+      mesh.position.set( position[0], position[1], position[2] )
       mesh.updateMatrix()
 
-      if (this.props.hand != undefined) {
+      if ( this.props.hand != undefined ) {
 
         entity.hands.push(this.mesh)
         this.detached = true
 
       }
 
-      if (this.props.cursor != undefined) {
+      if ( this.props.cursor != undefined ) {
 
         entity.cursors.push(this)
 
       }
 
-      if (this.components.length > 0) {
+      if ( this.components.length > 0 ) {
 
-        this.initSubComponents(this.components, entity, systems, appConfig)
+        this.initSubComponents( this.components, entity, systems, appConfig )
 
       }
 
@@ -82,29 +82,29 @@ export default class Component {
         c = 0,
         s = 0
 
-   while (c < ncomps) {
+   while ( c < ncomps ) {
 
-        comp = new Component(this.components[c], entity, systems, {mobile}) // use simpler shading for mobile gpus
+        comp = new Component( this.components[c], entity, systems, {mobile} ) // use simpler shading for mobile gpus
 
-        if (comp.props.noRaycast === true) {
+        if ( comp.props.noRaycast === true ) {
           addToOctree = false
         }
 
         compMesh = comp.mesh
 
-        if (comp.props.geometry && comp.props.geometry.merge === true) {
+        if ( comp.props.geometry && comp.props.geometry.merge === true ) {
 
           materials.push(compMesh.material)
           compMesh.updateMatrix()
           faces = compMesh.geometry.faces
           face = faces.length-1
 
-          while (face > -1) {
+          while ( face > -1 ) {
               faces[face].materialIndex = s
               face --
           }
 
-          base.merge(compMesh.geometry, compMesh.matrix)
+          base.merge( compMesh.geometry, compMesh.matrix )
           s ++
 
         } else {
@@ -116,14 +116,14 @@ export default class Component {
         c ++
     }
     
-    if (s > 0) {
+    if ( s > 0 ) {
 
       mesh = new THREE.Mesh(base, new THREE.MultiMaterial(materials))
       this.mesh.add(mesh)
 
     } else {
 
-      while (s < nonStructural.length) {
+      while ( s < nonStructural.length ) {
 
           this.mesh.add(nonStructural[s])
           s ++

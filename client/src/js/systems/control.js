@@ -7,6 +7,15 @@ export default class ControlSystem {
         let prop = component.props.control
         // check if it's a position or orientation control
         
+        if ( control.type == "position" ) {
+
+
+
+        } else if ( control.type == "orientation" ) {
+
+
+        }
+
         return {
             
         }

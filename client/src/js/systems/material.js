@@ -1,5 +1,5 @@
 export default class MaterialSystem {
-    constructor (world) {
+    constructor ( world ) {
         this.world = world
         
     }
@@ -101,7 +101,7 @@ export default class MaterialSystem {
       }
     }
 
-    generateTexture (params) { // would be useful for tiling / random patterns
+    generateTexture ( params ) { // would be useful for tiling / random patterns
       let assets = this.world.systems.assets,
           textureCode = "implement:This", // serialize the parameters in some _fairly_ concise way to build this string
           texture = null

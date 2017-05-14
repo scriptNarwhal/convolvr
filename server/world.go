@@ -179,7 +179,7 @@ func getWorld(c echo.Context) error { // load specific world
 		red *= 12.0
 		green *= 12.0
 		blue *= 12.0
-		lightIntensity := (red + blue + green) / 3
+		lightIntensity := 2.0
 		lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
 		ambientColor = int(255*lightIntensity/12.0)<<16 | int(255*lightIntensity/12.0)<<8 | int(255*lightIntensity/12.0)
 		terrainColor = int(math.Floor(terrainRed*255))<<16 | int(math.Floor(terrainGreen*255))<<8 | int(math.Floor(terrainBlue*255))

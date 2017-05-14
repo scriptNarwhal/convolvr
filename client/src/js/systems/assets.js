@@ -35,6 +35,11 @@ export default class AssetSystem {
                 { name: "custom-texture", color: 0xffffff }
             ],
             systems: {
+                assets: [ 
+                    { path: "/data/images/textures/sky-reflection.jpg" }, 
+                    { path: "/data/images/textures/gplaypattern_@2X.png" }, 
+                    { path: "/data/images/textures/shattered_@2X.png" } 
+                ],
                 structures: {
                     floor: {},
                     wall: {},
@@ -137,19 +142,25 @@ export default class AssetSystem {
 
     }
 
-    loadModel (asset, callback) {
+    loadModel ( asset, callback ) {
 
     }
 
-    addUserEntities (entities) {
+    addUserEntities ( entities ) {
 
         this.userEntities = this.userEntities.concat( entities )
 
     }
 
-    addUserComponents (components) {
+    addUserComponents ( components ) {
 
         this.userComponents = this.userComponents.concat( components )
+
+    }
+
+    addUserAssets ( assets ) {
+
+        this.systems.asset = this.systems.asset.concat( assets )
 
     }
 

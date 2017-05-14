@@ -5,22 +5,23 @@ import EntityTool from './entity-tool'
 import DeleteTool from './delete-tool'
 import VoxelTool from './voxel-tool'
 import MaterialTool from './material-tool'
+import AssetTool from './asset-tool'
 import GeometryTool from './geometry-tool'
 import SystemTool from './system-tool'
 import CustomTool from './custom-tool'
 
 export default class Toolbox {
-    constructor (user, world) {
+    constructor ( user, world ) {
 
       this.world = world
       this.user = user
       this.hands = []
 
-      this.user.avatar.hands.map((m,i)=>{
+      this.user.avatar.hands.map(( m, i )=>{
 
-        if (i < 3) {
+        if ( i < 3 ) {
 
-          this.hands.push(m)
+          this.hands.push( m )
 
         }
 
@@ -31,40 +32,52 @@ export default class Toolbox {
         new ComponentTool({}, world, this),
         new SystemTool({}, world, this),
         new GeometryTool({}, world, this),
-        new MaterialTool({}, world, this)
+        new MaterialTool({}, world, this),
+        new AssetTool({}, world, this)
       ];
-      this.currentTools = [0, 0]
+      this.currentTools = [ 0, 0 ]
 
     }
 
     showMenu() {
+
       this.updateUI()
       this.user.hud.show()
+
     }
 
     updateUI() {
+
       this.user.hud.update()
+
     }
 
-    nextTool(direction, hand = 0) {
+    nextTool( direction ) {
 
+      let hand = 0
       this.showMenu()
-      this.currentTools[hand] += direction;
 
-      if (this.currentTools[hand] < 0) {
+      while ( hand < 2) {
 
-        this.currentTools[hand] = this.tools.length - 1
+        if (this.currentTools[hand] < 0) {
 
-      } else if (this.currentTools[hand] >= this.tools.length) {
+          this.currentTools[hand] = this.tools.length - 1
 
-        this.currentTools[hand] = 0
+        } else if (this.currentTools[hand] >= this.tools.length) {
+
+          this.currentTools[hand] = 0
+
+        }
+
+        hand ++
 
       }
+      this.currentTools[hand] += direction
 
-      console.log("next tool", direction, this.currentTools[hand])
+      
     }
 
-    useTool (index, hand) {
+    useTool ( index, hand ) {
 
       this.tools[this.currentTools[hand]].unequip()
       this.currentTools[hand] = index
@@ -79,13 +92,13 @@ export default class Toolbox {
 
     }
 
-    getCurrentTool (hand) {
+    getCurrentTool ( hand ) {
 
       return this.tools[this.currentTools[hand]]
 
     }
 
-    addTool (data) {
+    addTool ( data ) {
 
       this.tools.push(new CustomTool(data))
       // use tool prop of.. component / entity that is tool that is being added
@@ -93,7 +106,7 @@ export default class Toolbox {
 
     }
 
-    initActionTelemetry (camera, useCursor, hand) {
+    initActionTelemetry ( camera, useCursor, hand ) {
 
       let input = this.world.userInput,
           position = camera.position.toArray(),
@@ -104,7 +117,7 @@ export default class Toolbox {
           cursorPos = null,
           handMesh = null
           
-      if (useCursor) {
+      if ( useCursor ) {
 
         if (input.trackedControls || input.leapMotion) { // set position from tracked controller
           cursor = cursors[hand +1]
@@ -131,24 +144,28 @@ export default class Toolbox {
       }
 
     }
-    usePrimary (hand) {
+    
+    usePrimary ( hand ) {
 
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
           telemetry = this.initActionTelemetry(camera, true, hand),
-        { position, quaternion } = telemetry,
+        { 
+          position, 
+          quaternion 
+        } = telemetry,
           toolAction = null
-      if (tool.mesh == null) {
+      if ( tool.mesh == null ) {
         tool.equip(hand)
       }
       toolAction = tool.primaryAction(telemetry)
-      if (!!toolAction) {
+      if ( !!toolAction ) {
         this.sendToolAction(true, tool, hand, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
       }
 
     }
 
-    useSecondary(hand, value) {
+    useSecondary( hand, value ) {
 
       let tool = this.tools[this.currentTools[hand]],
           camera = this.world.camera,
@@ -156,17 +173,23 @@ export default class Toolbox {
         { position, quaternion } = telemetry,
           toolAction = false
           
-      if (tool.mesh == null) {
+      if ( tool.mesh == null ) {
+
           tool.equip(hand)
+
       }
+
       toolAction = tool.secondaryAction(telemetry, value)
+      
       if (!!toolAction) {
+
         this.sendToolAction(false, tool, hand, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
+
       }
 
     }
 
-    grip (handIndex, value) {
+    grip ( handIndex, value ) {
 
       let hand = this.hands[handIndex],
           entity = null, //hand.children[0].userData.component.props.,
@@ -175,7 +198,7 @@ export default class Toolbox {
           coords = [0,0,0],
           voxels = this.world.terrain.voxels
      
-      if (this.user.avatar) {
+      if ( this.user.avatar ) {
 
         cursor = this.user.avatar.cursors[1+hand]
         entity = !!cursor ? cursor.state.cursor.entity : false
@@ -183,9 +206,9 @@ export default class Toolbox {
 
       }
 
-      if (!! entity) {
+      if ( !! entity ) {
         
-        if (value == -1) {
+        if ( value == -1 ) {
 
           hand.remove(entity.mesh)
           three.scene.add(entity.mesh)
@@ -195,10 +218,12 @@ export default class Toolbox {
         } else {
 
           if (!!! hand.userData.grabbedEntity) {
+
             three.scene.remove(entity.mesh)
             hand.userData.grabbedEntity = entity
             hand.add(entity.mesh)
-            entity.update([0,0,0])
+            entity.update( [0, 0, 0] )
+
           }
 
         }
@@ -207,10 +232,11 @@ export default class Toolbox {
       // show feedback
     }
 
-    setHandOrientation (hand, position, orientation) {
+    setHandOrientation ( hand, position, orientation ) {
 
       let userHand = this.hands[hand]
-      if (userHand) {
+
+      if ( userHand ) {
 
         userHand.position.fromArray(position).multiplyScalar(20000).add(this.world.camera.position)
         userHand.translateX(725+ hand*-1250)
@@ -221,7 +247,7 @@ export default class Toolbox {
       // also update
     }
 
-    sendToolAction (primary, tool, hand, position, quaternion, entity, entityId = -1, components = []) {
+    sendToolAction ( primary, tool, hand, position, quaternion, entity, entityId = -1, components = [] ) {
 
       let camera = this.world.camera,
           cPos = camera.position,

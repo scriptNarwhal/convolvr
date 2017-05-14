@@ -96,6 +96,7 @@
                     color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
                 } else if (vUv.y < 0.5 && vUv.y > 0.49) {
                    glow = mix(0.9 * depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.49)*80.0);
+                   luminance += 0.2;
                    color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
                 } else {
                     glow = -0.3+(depth) - vUv.y;
