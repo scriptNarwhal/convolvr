@@ -1,6 +1,6 @@
 export default class Component {
 
-  constructor (data, entity, systems, appConfig = false) {
+  constructor ( data, entity, systems, appConfig = false ) {
 
       var mesh = null,
           props = data.props,
@@ -46,14 +46,14 @@ export default class Component {
 
       if ( this.props.hand != undefined ) {
 
-        entity.hands.push(this.mesh)
+        entity.hands.push( this.mesh )
         this.detached = true
 
       }
 
       if ( this.props.cursor != undefined ) {
 
-        entity.cursors.push(this)
+        entity.cursors.push( this )
 
       }
 
@@ -94,7 +94,7 @@ export default class Component {
 
         if ( comp.props.geometry && comp.props.geometry.merge === true ) {
 
-          materials.push(compMesh.material)
+          materials.push( compMesh.material )
           compMesh.updateMatrix()
           faces = compMesh.geometry.faces
           face = faces.length-1
@@ -118,8 +118,8 @@ export default class Component {
     
     if ( s > 0 ) {
 
-      mesh = new THREE.Mesh(base, new THREE.MultiMaterial(materials))
-      this.mesh.add(mesh)
+      mesh = new THREE.Mesh( base, new THREE.MultiMaterial(materials) )
+      this.mesh.add( mesh )
 
     } else {
 

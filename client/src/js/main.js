@@ -29,11 +29,11 @@ import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
 import HUD from './2d-ui/containers/hud'
 // World
+import Convolvr from './world/world'
 import { events } from './network/socket'
-import User from './user'
 import UserInput from './input/user-input'
 import Toolbox from './world/tools/toolbox'
-import World from './world/world'
+import User from './user'
 // 3D UI // deprecated.. migrating these to entity-generator / systems.assets.entities
 import HUDMenu from './vr-ui/menu'
 import ListView from './vr-ui/text/list-view'
@@ -47,10 +47,10 @@ let socket = events,
 	  avatar = null
 
 userInput = new UserInput()
-world = new World(user, userInput, socket, store)
+world = new Convolvr(user, userInput, socket, store)
 user.useAvatar(new Avatar(user.id, false, {})) // only render hands, since this is you
 user.toolbox = new Toolbox(user, world)
-user.hud = new HUDMenu([], user.toolbox)
+user.hud = new HUDMenu([], user.toolbox) 
 user.hud.initMesh({}, three.camera)
 user.hud.hide()
 user.mesh.add(user.light)

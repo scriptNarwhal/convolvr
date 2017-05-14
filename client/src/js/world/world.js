@@ -11,7 +11,7 @@ import SocketHandlers from '../network/handlers'
 
 let world = null
 
-export default class World {
+export default class Convolvr {
 	
 	constructor( user, userInput = false, socket, store ) {
 
@@ -102,21 +102,27 @@ export default class World {
 		this.socketHandlers = new SocketHandlers(this, socket)
 
 		function onResize () {
+
 			world.screenResX = window.devicePixelRatio * window.innerWidth
+			
 			if (three.world.mode != "stereo") {
 
 				three.renderer.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
 
 			}
+
 			if (world.postProcessing.enabled) {
 
 				world.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
 			}
+
 			three.camera.aspect = innerWidth / innerHeight
 			three.camera.updateProjectionMatrix()
+
 			if (world.IOTMode) {
 				animate(world, Date.now(), 0)
 			}
+
 		}
 		window.addEventListener('resize', onResize, true)
 		this.onWindowResize = onResize
@@ -187,7 +193,7 @@ export default class World {
 
 		}
 		
-		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000+this.viewDistance*500000, 4), skyMaterial)
+		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000+this.viewDistance*600000, 4), skyMaterial)
 		this.skyLight = skyLight
 		three.scene.add(skyLight)
 		three.scene.add(this.skybox)

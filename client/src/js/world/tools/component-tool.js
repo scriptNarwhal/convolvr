@@ -55,7 +55,8 @@ export default class ComponentTool extends Tool {
     initIcon () {
 
       this.entities = this.entities || new EntityGenerator()
-      let entity = this.entities.makeEntity("icon", true)
+      let entity = this.entities.makeEntity( "icon", true )
+
       entity.components.push({
         props: {
           geometry: {
@@ -70,6 +71,7 @@ export default class ComponentTool extends Tool {
         position: [0, 0, 0],
         quaternion: null
       })
+
       return entity
 
     }
@@ -88,13 +90,13 @@ export default class ComponentTool extends Tool {
           component = this.components.makeComponent( componentType ),
           entity = null
 
-      entity = new Entity(0, [component], [0, 0, 0], quat)
+      entity = new Entity( 0, [component], [0, 0, 0], quat )
       
       if ( (!!!selected || cursorState.distance > 165000 ) && cursorSystem.entityCoolDown < 0 )  { // switch back to entity tool, if the user is clicking into empty space
       
-        this.world.user.toolbox.useTool(0, 0)
+        this.world.user.toolbox.useTool( 0, 0 )
         this.world.user.hud.show()
-        this.world.user.toolbox.usePrimary(0, entity)
+        this.world.user.toolbox.usePrimary( 0, entity )
         return false
 
       }
@@ -105,18 +107,23 @@ export default class ComponentTool extends Tool {
         components = [component]
       }
 
-      selected.mesh.updateMatrixWorld()
-      let selectedPos = selected.mesh.localToWorld(new THREE.Vector3())
+      !!selected && !!selected.mesh && selected.mesh.updateMatrixWorld()
+      let selectedPos = !!selected && !!selected.mesh ? selected.mesh.localToWorld(new THREE.Vector3()) : false
       
-      components.map((comp, i)=> { // apply transformation and offset to components
+      components.map(( comp, i ) => { // apply transformation and offset to components
 
-        if (!!comp) {
+        if ( !!comp ) {
 
-          comp.position=[
-            position[0] - selectedPos.x,
-            position[1] - selectedPos.y,
-            position[2] - selectedPos.z
-          ]
+          if ( selectedPos ) {
+
+            comp.position = [
+              position[0] - selectedPos.x,
+              position[1] - selectedPos.y,
+              position[2] - selectedPos.z
+            ]
+
+          }
+          
           comp.quaternion = quat
 
         }
