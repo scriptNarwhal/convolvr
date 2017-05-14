@@ -82,6 +82,7 @@ export default class EntityTool extends Tool  {
 
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
+          cursorSystem = this.world.systems.cursor,
           position = telemetry.position,
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
@@ -94,7 +95,7 @@ export default class EntityTool extends Tool  {
 
       // }
 
-      if (selected && cursorState.distance < 164000) { // switch to component tool
+      if ((selected && cursorState.distance < 164000) || cursorSystem.entityCoolDown > 30 ) { // switch to component tool
           
           user.toolbox.useTool(1, 0)
           user.hud.show()

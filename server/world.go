@@ -166,8 +166,8 @@ func getWorld(c echo.Context) error { // load specific world
 				green = first / 2.0
 				blue = second * 2.0
 			} else {
-				red = second //first * 2.0
-				blue = first
+				red = second / 2.0 //first * 2.0
+				blue = first * 1.5
 				green = third
 			}
 		}

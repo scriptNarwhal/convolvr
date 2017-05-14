@@ -12,7 +12,7 @@ export default class CursorSystem {
     init ( component ) {
          
         return {
-
+            distance: 18000
         }
     }
 
@@ -163,7 +163,7 @@ export default class CursorSystem {
 
         if ( !! entity ) {
 
-            cursorSystem.entityCoolDown = 60
+            cursorSystem.entityCoolDown = 45
 
         }
 

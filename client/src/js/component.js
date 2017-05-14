@@ -35,7 +35,7 @@ export default class Component {
           entity
       }
 
-      if ( !! quaternion) {
+      if ( !! quaternion ) {
 
           mesh.quaternion.set( quaternion[0], quaternion[1], quaternion[2], quaternion[3] )
 
