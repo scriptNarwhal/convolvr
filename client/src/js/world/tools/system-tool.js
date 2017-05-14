@@ -29,7 +29,7 @@ export default class SystemTool extends Tool {
               tool: {
                 panel: {
                   title: "Systems",
-                  color: 0xef07ff,
+                  color: 0xffff07,
                   content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
@@ -63,7 +63,7 @@ export default class SystemTool extends Tool {
           },
           material: {
             name: 'metal',
-            color: 0xef07ff
+            color: 0xffff07
           }
         },
         position: [0, 0, 0],

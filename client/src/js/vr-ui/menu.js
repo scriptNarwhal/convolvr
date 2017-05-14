@@ -31,7 +31,7 @@ export default class HUDMenu { // deprecated..
 
       mesh = new THREE.Object3D() 
 
-      if (light) {
+      if ( light ) {
 
         this.light = light
         mesh.add(light)
@@ -39,18 +39,18 @@ export default class HUDMenu { // deprecated..
 
       }
 
-      if (options.length > 0) {
+      if ( options.length > 0 ) {
 
         o = options.length -1
 
-        while (o >= 0) {
+        while ( o >= 0 ) {
 
           let icon = null,
               curvature = 0 //-Math.sin(Math.PI*((o+1)/(options.length+1)))
               
           icon = options[o].icon
           icon.init(mesh)
-          icon.update([-26000+o*13000, -2000, curvature*12000])
+          icon.update([-48000+o*13000, -2000, curvature*12000])
           o --
 
         }
@@ -65,7 +65,7 @@ export default class HUDMenu { // deprecated..
         text: "Hello World",
         color: 0x00ff00,
         lightColor: 0xffffff,
-        position: [0, -15000, -5000]
+        position: [-16000, -12000, -2500]
       }, this.mesh)
 
       return this.mesh
@@ -79,7 +79,7 @@ export default class HUDMenu { // deprecated..
           label = toolbox.tools[index].name
 
       this.label.update({ color: '#ffffff', lightColor: 0xffffff, text: label })
-      this.light.position.set(-26000+index*13000, -2000, 6000)
+      this.light.position.set(-48000+index*13000, -2000, 6000)
 
     }
 

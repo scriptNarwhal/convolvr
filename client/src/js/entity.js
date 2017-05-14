@@ -87,8 +87,10 @@ export default class Entity {
           face = faces.length-1
 
           while ( face > -1 ) {
+
               faces[face].materialIndex = s
               face --
+              
           }
 
           base.merge(compMesh.geometry, compMesh.matrix)
@@ -139,7 +141,7 @@ export default class Entity {
 
     }
 
-    if (addToOctree) {
+    if ( addToOctree ) {
 
       world.octree.add( mesh )
 

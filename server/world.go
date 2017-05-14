@@ -147,7 +147,7 @@ func getWorld(c echo.Context) error { // load specific world
 		log.Println(err)
 
 		first = 0.1 + (rand.Float64() * 0.1)
-		second = first*0.95 - rand.Float64()*0.15
+		second = first*0.95 - rand.Float64()*0.05
 		third = second*0.15 - rand.Float64()*0.1
 
 		if rand.Intn(12) > 6 {
@@ -162,9 +162,9 @@ func getWorld(c echo.Context) error { // load specific world
 			}
 		} else {
 			if rand.Intn(12) > 6 {
-				red = third
-				green = first
-				blue = second
+				red = third / 2.0
+				green = first / 2.0
+				blue = second * 2.0
 			} else {
 				red = second //first * 2.0
 				blue = first

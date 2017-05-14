@@ -31,10 +31,10 @@ export default class Toolbox {
       this.tools = [
         new EntityTool({}, world, this),
         new ComponentTool({}, world, this),
-        new SystemTool({}, world, this),
         new GeometryTool({}, world, this),
+        new AssetTool({}, world, this),
         new MaterialTool({}, world, this),
-        new AssetTool({}, world, this)
+        new SystemTool({}, world, this)
       ]
       this.currentTools = [ 0, 0 ]
 
@@ -60,11 +60,11 @@ export default class Toolbox {
 
       while ( hand < 2) {
 
-        if (this.currentTools[hand] < 0) {
+        if ( this.currentTools[hand] < 0 ) {
 
           this.currentTools[hand] = this.tools.length - 1
 
-        } else if (this.currentTools[hand] >= this.tools.length) {
+        } else if ( this.currentTools[hand] >= this.tools.length ) {
 
           this.currentTools[hand] = 0
 
@@ -101,7 +101,7 @@ export default class Toolbox {
 
     addTool ( data ) {
 
-      this.tools.push(new CustomTool(data))
+      this.tools.push( new CustomTool(data) )
       // use tool prop of.. component / entity that is tool that is being added
       // implement this
 
@@ -120,18 +120,26 @@ export default class Toolbox {
           
       if ( useCursor ) {
 
-        if (input.trackedControls || input.leapMotion) { // set position from tracked controller
+        if ( input.trackedControls || input.leapMotion ) { // set position from tracked controller
+
           cursor = cursors[hand +1]
           handMesh = user.toolbox.hands[hand]
+
         } else {
+
           cursor = cursors[0]
+
         }
+
         cursor.mesh.updateMatrixWorld()
         !!cursor.mesh.parent && cursor.mesh.parent.updateMatrix()
-        cursorPos = cursor.mesh.localToWorld(new THREE.Vector3())
+        cursorPos = cursor.mesh.localToWorld( new THREE.Vector3() )
         position = cursorPos.toArray()
-        if (handMesh != null) {
+
+        if ( handMesh != null ) {
+
           quaternion = handMesh.quaternion.toArray()
+
         }
 
       }
@@ -158,13 +166,17 @@ export default class Toolbox {
           toolAction = null
 
       if ( tool.mesh == null ) {
+
         tool.equip(hand)
+        
       }
 
       toolAction = tool.primaryAction(telemetry)
 
       if ( !!toolAction ) {
+
         this.sendToolAction(true, tool, hand, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
+
       }
 
     }

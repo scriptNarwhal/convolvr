@@ -24,7 +24,7 @@ export default class AssetTool extends Tool {
               tool: {
                 panel: {
                   title: "Assets",
-                  color: 0xff0707,
+                  color: 0x07ffff,
                   content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
@@ -53,7 +53,7 @@ export default class AssetTool extends Tool {
         props: {
           material: {
             name: "metal",
-            color: 0xff0707
+            color: 0x07ffff
           },
           geometry: {
             shape: "box",

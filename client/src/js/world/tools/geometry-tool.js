@@ -25,7 +25,7 @@ export default class GeometryTool extends Tool {
               tool: {
                 panel: {
                   title: "Geometries",
-                  color: 0xffa707,
+                  color: 0x07ff07,
                   content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
@@ -57,7 +57,7 @@ export default class GeometryTool extends Tool {
         props: {
           material: {
             name: "metal",
-            color: 0xffa707
+            color: 0x07ff07
           },
           geometry: {
             shape: "box",

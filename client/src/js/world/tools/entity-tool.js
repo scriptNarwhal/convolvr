@@ -63,7 +63,7 @@ export default class EntityTool extends Tool  {
         props: {
           material: {
             name: "metal",
-            color: 0x15ff15
+            color: 0xff0707
           },
           geometry: {
             shape: "box",
@@ -94,7 +94,7 @@ export default class EntityTool extends Tool  {
 
       // }
 
-      if (selected && cursorState.distance < 160000) { // switch to component tool
+      if (selected && cursorState.distance < 164000) { // switch to component tool
           
           user.toolbox.useTool(1, 0)
           user.hud.show()
