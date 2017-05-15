@@ -205,7 +205,7 @@ export default class Convolvr {
 
 	}
 
-	initRenderer (renderer, id) {
+	initRenderer ( renderer, id ) {
 
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1
 		renderer.setClearColor(0x1b1b1b)
@@ -227,56 +227,56 @@ export default class Convolvr {
 			floorHeight = localStorage.getItem("floorHeight"),
 			viewDistance = localStorage.getItem("viewDistance")
 
-		if (cameraMode == null) {
+		if ( cameraMode == null ) {
 
 			cameraMode = 'fps'
 			localStorage.setItem("camera", 'fps')
 
 		}
 
-		if (vrMovement == null) {
+		if ( vrMovement == null ) {
 
 			vrMovement = 'stick' // change to teleport later
 			localStorage.setItem("vrMovement", vrMovement)
 
 		}
 
-		if (IOTMode == null) {
+		if ( IOTMode == null ) {
 
 			IOTMode = 'off'
 			localStorage.setItem("IOTMode", IOTMode)
 
 		}
 
-		if (aa == null) {
+		if ( aa == null ) {
 
 			aa = 'on'
 			localStorage.setItem("aa", aa)
 
 		}
 
-		if (lighting == null) {
+		if ( lighting == null ) {
 
 			lighting = 'high'
 			localStorage.setItem("lighting", !this.mobile ? 'high' : 'low')
 
 		}
 
-		if (enablePostProcessing == null) {
+		if ( enablePostProcessing == null ) {
 
 			enablePostProcessing = 'off'
 			localStorage.setItem("postProcessing", enablePostProcessing)
 
 		}
 
-		if (floorHeight == null) {
+		if ( floorHeight == null ) {
 
 			floorHeight = 0
 			localStorage.setItem("floorHeight", floorHeight)
 
 		} 
 
-		if (viewDistance == null) {
+		if ( viewDistance == null ) {
 
 			viewDistance = 0
 			localStorage.setItem("viewDistance", 0)
@@ -315,25 +315,25 @@ export default class Convolvr {
 		let world = this,
 			octree = this.octree
 
-		if (!!this.skyLight) {
+		if ( !!this.skyLight ) {
 
 			three.scene.remove(this.skyLight)
 
 		}
 
-		if (!!this.ambientLight) {
+		if ( !!this.ambientLight ) {
 
 			three.scene.remove(this.ambientLight)
 
 		}
 
-		if (!!this.skybox) {
+		if ( !!this.skybox ) {
 
 			three.scene.remove(this.skybox)
 
 		}
 
-		if (!!this.terrain.mesh) {
+		if ( !!this.terrain.mesh ) {
 
 			three.scene.remove(this.terrain.mesh)
 

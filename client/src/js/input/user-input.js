@@ -69,7 +69,7 @@ export default class UserInput {
 
 		}
 
-		if (!world.mobile) {
+		if (!world.mobile || world.IOTMode) {
 
 			document.addEventListener("mousemove", function (e) {
 
