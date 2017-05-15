@@ -34,12 +34,12 @@ export default class AssetSystem {
                 { name: "wireframe", color: 0xffffff },
                 { name: "custom-texture", color: 0xffffff }
             ],
-            systems: {
-                assets: [ 
+            assets: [ 
                     { path: "/data/images/textures/sky-reflection.jpg" }, 
                     { path: "/data/images/textures/gplaypattern_@2X.png" }, 
                     { path: "/data/images/textures/shattered_@2X.png" } 
-                ],
+            ],
+            systems: {
                 structures: {
                     floor: {},
                     wall: {},
@@ -80,6 +80,7 @@ export default class AssetSystem {
                     activate: {},
                     hover: {},
                     tabView: {},
+                    miniature: {},
                     tab: {},
                     toolUI: {},
                     tool: {},

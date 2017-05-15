@@ -36,6 +36,7 @@ import ToolUISystem from './tool-ui'
 import TabViewSystem from './tab-view'
 import TabSystem from './tab'
 import ToolSystem from './tool'
+import MiniatureSystem from './miniature'
 import FileSystem from './file'
 import ChatSystem from './chat'
 import WebRTCSystem from './webrtc'
@@ -84,6 +85,7 @@ export default class Systems {
 			tabView: new TabViewSystem(world),
 			toolUI: new ToolUISystem(world),
 			tool: new ToolSystem(world),
+			miniature: new MiniatureSystem(world),
 			rest: new RESTSystem(world),
 			webrtc: new WebRTCSystem(world),
 			file: new FileSystem(world),
@@ -110,7 +112,8 @@ export default class Systems {
 
             if (this[prop] != null) {
 
-                if (prop == "light" || prop=="particle" || prop=="text" || prop == "audio" || prop == "video" || prop == "metaFactory") { /* add other systems here */
+                if (prop == "light" || prop=="particle"      || prop =="text"         || prop == "audio" || 
+					prop == "video" || prop == "metaFactory" || prop == "miniature" ) { /* add other systems here */
                     
 					deferredSystems.push(prop)
 
@@ -118,8 +121,10 @@ export default class Systems {
 
                     state[prop] = this[prop].init(component)
 
-                    if (componentsByProp[prop] == undefined) {
+                    if ( componentsByProp[prop] == undefined ) {
+
                         componentsByProp[prop] = []
+
                     } 
 
                     componentsByProp[prop].push(component)
@@ -130,12 +135,12 @@ export default class Systems {
 
         })
         
-        mesh = new THREE.Mesh(state.geometry.geometry, state.material.material)
+        mesh = new THREE.Mesh( state.geometry.geometry, state.material.material )
         mesh.matrixAutoUpdate = false
         component.mesh = mesh
 
-        deferredSystems.map(prop=>{
-            state[prop] = this[prop].init(component)
+        deferredSystems.map(prop => {
+            state[prop] = this[prop].init( component )
         })
 
         return mesh

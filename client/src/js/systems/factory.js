@@ -41,6 +41,7 @@ export default class FactorySystem {
         let prop = component.props.factory,
             position = component.entity.mesh.position,
             entityPosition = !!prop.anchorOutput ? [0, 0, 0] : position.toArray(),
+            miniature = !!prop.miniature,
             type = prop.type,
             propName = prop.propName,
             data = prop.data,
@@ -50,10 +51,12 @@ export default class FactorySystem {
             
         if ( type == 'entity' ) {
  
+            components[0].props.miniature = { }
             created = new Entity(-1, components, entityPosition, quat)
 
         } else if (type == 'component') {
-            
+
+            data.props.miniature = { }
             created = new Entity(-1, [data], entityPosition, quat)
 
         } else if ( type == 'prop' ) {
@@ -64,6 +67,7 @@ export default class FactorySystem {
                     created = new Entity(-1, [{ 
                         props: Object.assign({}, {geometry: data}, {
                                 mixin: true,
+                                miniature: {},
                                 material: {
                                     name: "wireframe",
                                     color: 0xffffff
@@ -85,6 +89,26 @@ export default class FactorySystem {
                         )}
                     ], entityPosition, quat)
                     // console.log("*** spawning material mixin component", created)
+                break
+                case "assets":
+                    created = new Entity(-1, [{
+                            props: Object.assign({}, {material: data}, {
+                                mixin: true,
+                                assets: {
+                                   images: [data] 
+                                },
+                                material: {
+                                    name: "wireframe",
+                                    color: 0xffffff,
+                                    diffuse: data
+                                },
+                                geometry: {
+                                    shape: "sphere",
+                                    size: [4500, 4500, 4500]
+                                }
+                            }
+                        )}
+                    ], entityPosition, quat)
                 break
                 case "systems":
                     created = new Entity(-1, [{

@@ -20,18 +20,11 @@ export default class MetaFactorySystem {
             gridSize = prop.gridSize || 20000,
             sourceCategory = "none",
             factories = [],
-            miniature = false,
             keys = {},
             x = 0,
             y = 0
             
-        if (typeof source.map == 'function') { // array of geometries / materials, components, entities
-
-            if ( assetType == "entity" || assetType == "component" ) {
-                
-                miniature = true
-
-            }
+        if ( typeof source.map == 'function') { // array of geometries / materials, components, entities
 
             source.map((item, i) => {
                 
@@ -64,7 +57,7 @@ export default class MetaFactorySystem {
 
                 } 
 
-                this._addComponent( component, sourceCategory[key], assetType, "systems", x, y, gridSize, miniature )
+                this._addComponent( component, sourceCategory[key], assetType, "systems", x, y, gridSize)
 
 
             })
@@ -73,7 +66,7 @@ export default class MetaFactorySystem {
 
     }
 
-    _addComponent ( component, factoryItem, assetType, assetCategory, x, y, gridSize, miniature ) {
+    _addComponent ( component, factoryItem, assetType, assetCategory, x, y, gridSize ) {
 
         let addTo = null
 
@@ -93,8 +86,7 @@ export default class MetaFactorySystem {
                         type: assetType,
                         data: factoryItem,
                         propName: assetCategory,
-                        anchorOutput: true,
-                        miniature
+                        anchorOutput: true
                     },
                     geometry: {
                         shape: 'node',
@@ -105,7 +97,7 @@ export default class MetaFactorySystem {
                         color: 0x000000
                     }
                 },
-                position:  [ gridSize * (x-1), gridSize * y, 12000 ],
+                position:  [ gridSize * (x-1), gridSize * y, 16000 ],
                 quaternion: null
         })
 
