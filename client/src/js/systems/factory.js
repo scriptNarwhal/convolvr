@@ -11,13 +11,11 @@ export default class FactorySystem {
     init ( component ) { 
         console.log("factory component init ", component)
         let prop = component.props.factory
-        // render _something_ to indicate that it's a factory.. maybe 
         
         if (prop.autoGenerate !== false) {
             
             setTimeout(()=>{
 
-                console.log("generate!!", prop)
                 this.generate(component)
 
             }, 1000)
@@ -60,7 +58,7 @@ export default class FactorySystem {
             created = new Entity(-1, [data], entityPosition, quat)
 
         } else if ( type == 'prop' ) {
-            // console.log("!!!!! factory init, propName: ", propName)
+
             switch (propName) {
 
                 case "geometry":
@@ -75,7 +73,6 @@ export default class FactorySystem {
                             }
                         )}
                     ], entityPosition, quat)
-                //    console.log("*** spawning geometry mixin component", created)
                 break
                 case "material":
                     created = new Entity(-1, [{
@@ -88,7 +85,6 @@ export default class FactorySystem {
                             }
                         )}
                     ], entityPosition, quat)
-                    // console.log("*** spawning material mixin component", created)
                 break
                 case "assets":
                     created = new Entity(-1, [{
@@ -125,7 +121,6 @@ export default class FactorySystem {
                             }
                         )}
                     ], entityPosition, quat)
-                    // console.log("*** spawning system mixin component", created)
                 break
 
             }

@@ -11,10 +11,15 @@ import SignalSystem from './signal'
 import InputSystem from './input'
 import MediaSystem from './media'
 import CameraSystem from './camera'
-import ScreenSystem from './screen'
+import CPUSystem from './cpu'
+import GPUSystem from './gpu'
+import MemorySystem from './memory'
+import NetworkInterfaceSystem from './network-interface'
+import DisplaySystem from './display'
 import DrawingSystem from './drawing'
 import ControlSystem from './control'
 import PropulsionSystem from './propulsion'
+import PowerSupplySystem from './power-supply'
 import FactorySystem from './factory'
 import MetaFactorySystem from './meta-factory'
 import ParticleSystem from './particle'
@@ -43,6 +48,7 @@ import WebRTCSystem from './webrtc'
 import NPCSystem from './npc'
 import SpeechSystem from './speech'
 
+
 export default class Systems {
 
     constructor ( world )  {
@@ -58,13 +64,18 @@ export default class Systems {
 			audio: new AudioSystem(world),
 			video: new VideoSystem(world),
 			camera: new CameraSystem(world),
-			screen: new ScreenSystem(world),
+			display: new DisplaySystem(world),
 			signal: new SignalSystem(world),
             input: new InputSystem(world),
+			cpu: new CPUSystem(world),
+			gpu: new GPUSystem(world),
+			memory: new MemorySystem(world),
+			networkInterface: new NetworkInterfaceSystem(world),
             media: new MediaSystem(world),
 			drawing: new DrawingSystem(world),
 			control: new ControlSystem(world),
 			propulsion: new PropulsionSystem(world),
+			powerSupply: new PowerSupplySystem(world),
 			factory: new FactorySystem(world),
 			metaFactory: new MetaFactorySystem(world),
 			particles: new ParticleSystem(world),
@@ -108,7 +119,7 @@ export default class Systems {
             deferredSystems = [],
             mesh = null
 
-        Object.keys(props).map(prop=> {
+        Object.keys(props).map(prop => {
 
             if (this[prop] != null) {
 

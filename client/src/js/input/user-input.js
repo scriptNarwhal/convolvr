@@ -47,6 +47,7 @@ export default class UserInput {
 	}
 
 	init (world, camera, device) {
+
 		let uInput = this,
 			viewport = document.querySelector("#viewport")
 			
@@ -149,11 +150,17 @@ export default class UserInput {
 		if (terrainConfig) {
 
 			terrainMode = terrainConfig.type
+
 			if (terrainMode == "plane" || terrainMode == "both") {
+
 				bottom = terrainMesh.position.y + 6000 + world.vrHeight
+
 			} else {
+
 				bottom = -(5400000 / terrainConfig.flatness) + 6000 + world.vrHeight
+
 			}
+
 		}
 		if (isVRMode(world.mode)) {
 
@@ -193,11 +200,13 @@ export default class UserInput {
 
 				}
 			}
+
 			if (Math.abs(velocity.y) > 6000) {
 
 				this.device.falling = true
 
 			}
+
 			if (world.gravity > 0) {
 
 				if (this.device.falling) { //if not standing on something..
@@ -225,9 +234,9 @@ export default class UserInput {
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
 			this.camera.matrixWorldNeedsUpdate = true
 
-			if (this.camera.position.y < bottom + 70000) {
+			if ( this.camera.position.y < bottom + 70000 ) {
 
-				if (this.keys.shift) {
+				if ( this.keys.shift ) {
 
 					velocity.y *= -0.70
 
@@ -244,20 +253,20 @@ export default class UserInput {
 					//world.vibrate(50);
 				}
 			}
-			if ((velocity.x * velocity.x) + (velocity.z * velocity.z) > 20000) {
+			if ( (velocity.x * velocity.x) + (velocity.z * velocity.z) > 20000 ) {
 
 					velocity.x *=  (1 - (0.01 * delta * 1000))
 					velocity.z *= (1 - (0.01 * delta * 1000))
 
 			}
-			if (!! world.user.mesh) {
+			if ( !!world.user.mesh ) {
 
 				world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z)
 
 			}
 	}
 
-	lockChangeAlert (canvas) {
+	lockChangeAlert ( canvas ) {
 
 		var a = 0,
 			world = this.world
@@ -290,7 +299,7 @@ export default class UserInput {
 
 	}
 
-	toggleFullscreen (elem) {
+	toggleFullscreen ( elem ) {
 
 		if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {
 				
@@ -337,7 +346,7 @@ export default class UserInput {
 			}
 		}
 
-	teleport (position) {
+	teleport ( position ) {
 		// implement
 	}
 }

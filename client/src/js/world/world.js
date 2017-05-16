@@ -13,7 +13,7 @@ let world = null
 
 export default class Convolvr {
 	
-	constructor( user, userInput = false, socket, store ) {
+	constructor( user, userInput = false, socket, store, loadedCallback ) {
 
 		let mobile = (window.innerWidth <= 720),
 			scene = new THREE.Scene(),
@@ -141,6 +141,9 @@ export default class Convolvr {
 		  }
 		  
 		})
+
+		loadedCallback( this )
+
 	}
 
 	init (config) {

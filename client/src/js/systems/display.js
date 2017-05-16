@@ -1,4 +1,4 @@
-export default class ScreenSystem {
+export default class DisplaySystem {
     constructor (world) {
         this.world = world
     }

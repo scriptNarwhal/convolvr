@@ -2,7 +2,9 @@ import {send} from '../network/socket'
 //WebRTC boilerplate stuff based off of https://github.com/dimircea/WebRTC
 
 export default class WebRTCSystem {
+
     constructor (world) {
+
         this.world = world
         let localVideoStream = null,
             peerConn = null,
@@ -33,21 +35,26 @@ export default class WebRTCSystem {
         } else {
             console.log("Sorry, your browser does not support WebRTC!")
         }
+        
     }
+
     prepareCall() {
         this.peerConn = new RTCPeerConnection(peerConnCfg)
         this.peerConn.onicecandidate = this.onIceCandidateHandler
         this.peerConn.onaddstream = this.onAddStreamHandler
     }
+    
     onIceCandidateHandler (evt) {
         if (!evt || !evt.candidate) return
         send("rtc", {"candidate": evt.candidate })
     }
+
     onAddStreamHandler (evt) {
         this.videoCallButton.setAttribute("disabled", true)
         this.endCallButton.removeAttribute("disabled")
         this.remoteVideo.src = URL.createObjectURL(evt.stream)
     }
+
     createAndSendOffer() {
         let connection = this.peerConn
         connection.createOffer(
@@ -60,6 +67,7 @@ export default class WebRTCSystem {
             }
         )
     }
+
     createAndSendAnswer () {
         let connection = this.peerConn
         connection.createAnswer(
@@ -72,6 +80,7 @@ export default class WebRTCSystem {
             }
         )
     }
+
     initiateCall () {
         let connection = this.peerConn,
             localStream = this.localVideoStream,
@@ -87,6 +96,7 @@ export default class WebRTCSystem {
             webrtc.createAndSendOffer()
         }, function(error) { console.log(error)})
     }
+
     answerCall () {
         let connection = this.peerConn,
             localStream = this.localVideoStream,
@@ -102,6 +112,7 @@ export default class WebRTCSystem {
             webrtc.createAndSendAnswer()
         }, error => { console.log(error) })
     }
+
     endCall () {
         peerConn.close()
         this.localVideoStream.getTracks().forEach(track => {
@@ -112,9 +123,11 @@ export default class WebRTCSystem {
         this.videoCallButton.removeAttribute("disabled")
         this.endCallButton.setAttribute("disabled", true)
     }
+
     getVideo (params) {
 
     }
+
     init (component) { 
         
         return {

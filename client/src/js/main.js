@@ -44,56 +44,67 @@ let socket = events,
 		userInput,
 		user = new User(),
 	  world = null,
-	  avatar = null
+	  avatar = null,
+    menu2 = null
 
 userInput = new UserInput()
-world = new Convolvr(user, userInput, socket, store)
-user.useAvatar(new Avatar(user.id, false, {})) // only render hands, since this is you
-user.toolbox = new Toolbox(user, world)
-user.hud = new HUDMenu([], user.toolbox) 
-user.hud.initMesh({}, three.camera)
-user.hud.hide()
-user.mesh.add(user.light)
-world.user = user
-three.scene.add(user.mesh)
-userInput.init(world, world.camera, user)
 
-userInput.rotationVector = {x: 0, y: 9.95, z: 0}
-three.camera.position.set(-300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
-user.light.position.set(200000, 200000, 200000)
+world = new Convolvr(user, userInput, socket, store, (loadedWorld) => {
 
-world.chat = new ListView({ // deprecated as of alpha 0.4.1
-  color: "#ffffff",
-  background: "#000000",
-  position: [0,0,0],
-  textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
-}, three.scene).initMesh()
+  let toolMenu = null
 
-world.help = new ListView({ // deprecated as of alpha 0.4.1
-  color: "#00ff00",
-  background: "#000000",
-  position: [-100000,0,0],
-  textLines: [
-    "# Desktop users",
-    "- WASD, RF, space keys: movement",
-    "- Mouselook (click screen to enable)",
-    "- Left/right click: primary tool / mode",
-    "- Keys 1-5: switch tool",
-    "- Gamepads are also supported",
-    "",
-    "# Desktop VR users ",
-    "- Enter VR button in bottom right corner",
-    "- If you have tracked controllers:",
-    " * Right / Left trigger: use tool in hand",
-    " * Right stick x/y axis: change tool(mode)",
-    " * Left stick: movement",
-    "",
-    "# Mobile users (2d or with VR viewer)",
-    "- Device orientation controls the camera",
-    "- Swiping & dragging move you"
-  ]
-}, three.scene).initMesh()
+  user.useAvatar(new Avatar(user.id, false, {})) // only render hands, since this is you
+  user.toolbox = new Toolbox(user, loadedWorld)
 
+  // replace HUDMenu with entity based version in asset system
+  user.hud = new HUDMenu([], user.toolbox) // v2 toolMenu will already know about user.toolbox
+  user.hud.initMesh({}, three.camera)
+
+  user.hud.hide()
+  user.mesh.add(user.light)
+  loadedWorld.user = user
+  three.scene.add(user.mesh)
+  userInput.init(loadedWorld, loadedWorld.camera, user)
+
+  userInput.rotationVector = {x: 0, y: 9.95, z: 0}
+  three.camera.position.set(-300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
+  user.light.position.set(200000, 200000, 200000)
+
+  // replace ListView with entity based version in asset system
+  loadedWorld.chat = new ListView({ // deprecated
+    color: "#ffffff",
+    background: "#000000",
+    position: [0,0,0],
+    textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
+  }, three.scene).initMesh()
+
+  // replace ListView with entity based version in asset system
+  loadedWorld.help = new ListView({ // deprecated
+    color: "#00ff00",
+    background: "#000000",
+    position: [-100000,0,0],
+    textLines: [
+      "# Desktop users",
+      "- WASD, RF, space keys: movement",
+      "- Mouselook (click screen to enable)",
+      "- Left/right click: primary tool / mode",
+      "- Keys 1-5: switch tool",
+      "- Gamepads are also supported",
+      "",
+      "# Desktop VR users ",
+      "- Enter VR button in bottom right corner",
+      "- If you have tracked controllers:",
+      " * Right / Left trigger: use tool in hand",
+      " * Right stick x/y axis: change tool(mode)",
+      " * Left stick: movement",
+      "",
+      "# Mobile users (2d or with VR viewer)",
+      "- Device orientation controls the camera",
+      "- Swiping & dragging move you"
+    ]
+  }, three.scene).initMesh()
+
+})
 
 ReactDOM.render(
   (<Provider store={store}>

@@ -161,7 +161,7 @@ export default class CursorSystem {
 
         distance = obj.distance
 
-        if ( !! entity ) {
+        if ( !! entity && distance < 165000 ) {
 
             cursorSystem.entityCoolDown = 45
 
@@ -202,7 +202,7 @@ export default class CursorSystem {
                 callbacks = component.state.activate.callbacks // check if cursor / hand is activated
                 cb = callbacks.length-1
 
-                while (cb >= 0) {
+                while ( cb >= 0 ) {
 
                     callbacks[cb]()
                     cb --
