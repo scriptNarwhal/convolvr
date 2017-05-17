@@ -60,12 +60,6 @@ export default class EntityTool extends Tool  {
           selected = !!cursorState.entity ? cursorState.entity : false,
           user = this.world.user,
           entity = params.entity ? params.entity : assetSystem.makeEntity(this.options.entityType)
-    
-      // if (entity.components.length == 1) {
-
-      //   entity.components[0].quaternion = [quat.x, quat.y, quat.z, quat.w]
-
-      // }
 
       if ((selected && cursorState.distance < 164000) || cursorSystem.entityCoolDown > 30 ) { // switch to component tool
           

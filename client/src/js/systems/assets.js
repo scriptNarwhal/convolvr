@@ -91,6 +91,7 @@ export default class AssetSystem {
                 }
             }
         }
+        
         this.textureLoader = new THREE.TextureLoader()
         this.audioLoader = new THREE.AudioLoader()
         this._initBuiltInEntities()
@@ -108,18 +109,20 @@ export default class AssetSystem {
 
     }
 
-    loadImage ( asset, callback ) {
+    loadImage ( asset, config, callback ) {
 
-        let texture = null
+        let texture = null,
+            configCode = !!config.repeat ? `:repeat:${config.repeat.join('.')}` : '',
+            textureCode = `${asset}:${configCode}`
 
-        if (this.textures[asset] == null) {
+        if ( this.textures[textureCode] == null ) {
 
             texture = this.textureLoader.load(asset, (texture)=>{ callback(texture)})
-            this.textures[asset] = texture
+            this.textures[textureCode] = texture
 
         } else {
 
-            texture = this.textures[asset]
+            texture = this.textures[textureCode]
 
         }
 

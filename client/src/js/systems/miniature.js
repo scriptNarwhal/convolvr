@@ -14,7 +14,9 @@ export default class MiniatureSystem {
             
             setTimeout(()=>{
                 
-                component.entity.mesh.scale.set(0.25, 0.25, 0.25)
+                let mesh = component.entity.mesh
+                mesh.scale.set(0.25, 0.25, 0.25)
+                mesh.updateMatrix()
                 
             }, 500)
 
