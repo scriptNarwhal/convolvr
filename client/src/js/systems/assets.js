@@ -165,6 +165,21 @@ export default class AssetSystem {
 
     }
 
+    makeEntity ( name, init ) {
+
+        if (!!init) {
+
+            let ent = this.entitiesByName[type]
+            return new Entity ( ent.id, ent.components, ent.position, ent.quaternion)
+        
+        } else {
+
+            return this.entities[type]
+
+        }
+
+    }
+
     _addBuiltInComponent ( name, data ) {
 
         this.components.push(data)
@@ -184,13 +199,13 @@ export default class AssetSystem {
         this._addBuiltInComponent("panel", {
             props: {
                 geometry: {
-                merge: true,
-                shape: "box",
-                size: [42000, 42000, 1500]
+                    merge: true,
+                    shape: "box",
+                    size: [42000, 42000, 1500]
                 },
                 material: {
-                color: 0x404040,
-                name: "plastic"
+                    color: 0x404040,
+                    name: "plastic"
                 }
             },
             quaternion: null,
@@ -200,13 +215,13 @@ export default class AssetSystem {
         this._addBuiltInComponent("column", {
             props: {
                 geometry: {
-                merge: true,
-                shape: "hexagon",
-                size: [12000, 30000, 12000]
+                    merge: true,
+                    shape: "hexagon",
+                    size: [12000, 30000, 12000]
                 },
                 material: {
-                color: 0x404040,
-                name: "plastic"
+                    color: 0x404040,
+                    name: "plastic"
                 }
             },
             quaternion: null,
@@ -216,13 +231,13 @@ export default class AssetSystem {
         this._addBuiltInComponent("panel2", {
             props: {
                 geometry: {
-                merge: true,
-                shape: "box",
-                size: [22000, 22000, 1500]
+                    merge: true,
+                    shape: "box",
+                    size: [22000, 22000, 1500]
                 },
                 material: {
-                color: 0x404040,
-                name: "plastic"
+                    color: 0x404040,
+                    name: "plastic"
                 }
             },
             quaternion: null,
@@ -232,13 +247,13 @@ export default class AssetSystem {
         this._addBuiltInComponent("column2", {
             props: {
                 geometry: {
-                merge: true,
-                shape: "box",
-                size: [8000, 72000, 8000]
+                    merge: true,
+                    shape: "box",
+                    size: [8000, 72000, 8000]
                 },
                 material: {
-                color: 0x404040,
-                name: "plastic"
+                    color: 0x404040,
+                    name: "plastic"
                 }
             },
             quaternion: null,
@@ -250,6 +265,129 @@ export default class AssetSystem {
     _initBuiltInEntities ( ) {
 
         // let's add some useful ones here... then delete the rest
+        let toolColors = [ 0x15ff15, 0x003bff, 0x07ff07, 0x07ffff, 0xa007ff, 0xffff07 ],
+            toolMenuIcons = [],
+            assetSystem = this
+
+        toolColors.map( ( color, i) => {
+
+            let iconCube = {
+                    props: Object.assign({}, assetSystem._initIconProps( color ), {
+                        toolUI: {
+                            toolIndex: i
+                        }
+                    }),
+                    position: [0, 0, 0],
+                    quaternion: null
+                }
+                
+            toolMenuIcons.push({
+                components: assetSystem._initButtonComponents().concat([iconCube]),
+                position: [ -26000 + i *13000, 0, 0 ],
+                quaternion: null
+            })
+
+        })
+
+        this._addBuiltInEntity( "tool-menu", {
+            id: -2,
+            components: [
+                {
+                    props: {
+                        geometry: {
+                            shape: "box",
+                            size: [24000, 6000, 2000]
+                        },
+                        material: {
+                            color: 0x808080,
+                            name: "plastic"
+                        },
+                        text: {
+                            color: "#ffffff",
+                            background: "#000000",
+                            lines: ["Entity Tool"]
+                        },
+                        toolUI: {
+                            currentToolLabel: true
+                        }
+                    },
+                    components: [],
+                    position: [ -13000, -6000, 0 ],
+                    quaternion: null
+                },
+                {
+                    props: {
+                        geometry: {
+                            shape: "box",
+                            size: [70000, 16000, 1000]
+                        },
+                            material: {
+                            color: 0x808080,
+                            name: "plastic"
+                        },
+                        toolUI: {
+                            menu: true
+                        }
+                    },
+                    components: toolMenuIcons,
+                    quaternion: null,
+                    position: [0, 0, 0]
+                }
+            ]
+        })
+
+        this._addBuiltInEntity( "help-screen", {
+            id: -3,
+            components: [
+                {
+                    props: {
+                        geometry: {
+                            shape: "box",
+                            size: [70000, 16000, 1000]
+                        },
+                            material: {
+                            color: 0x808080,
+                            name: "plastic"
+                        },
+                        text: {
+                            lines: [],
+                            color: "#ffffff",
+                            background: "#000000"
+                        }
+                    },
+                    quaternion: null,
+                    position: [0, 0, 0]
+                }
+            ]
+        })
+
+        this._addBuiltInEntity( "chat-screen", {
+            id: -4,
+            components: [
+                {
+                    props: {
+                        geometry: {
+                            shape: "box",
+                            size: [72000, 72000, 1000]
+                        },
+                            material: {
+                            color: 0x808080,
+                            name: "plastic"
+                        },
+                        text: {
+                            lines: [ 
+                                "Welcome To Convolvr", 
+                                "github.com/SpaceHexagon/convolvr" 
+                            ],
+                            color: "#ffffff",
+                            background: "#000000"
+                        }
+                    },
+                    quaternion: null,
+                    position: [0, 0, 0]
+                }
+            ]
+        })
 
 
         
@@ -259,13 +397,13 @@ export default class AssetSystem {
                 {
                 props: {
                     geometry: {
-                    merge: true, //can be combined to save cpu
-                    shape: "box",
-                    size: [42000, 42000, 1000]
+                        merge: true, //can be combined to save cpu
+                        shape: "box",
+                        size: [42000, 42000, 1000]
                     },
                     material: {
-                    color: 0x808080,
-                    name: "plastic"
+                         color: 0x808080,
+                        name: "plastic"
                     },
                     // audio: { // remove this.. merely a test
                     //   asset: "/sounds/Partition.wav[Re-Edit].ogg"
@@ -276,13 +414,13 @@ export default class AssetSystem {
                 }, {
                 props: {
                     geometry: {
-                    merge: true,
-                    shape: "box",
-                    size: [42000, 42000, 1500]
+                        merge: true,
+                        shape: "box",
+                        size: [42000, 42000, 1500]
                     },
                     material: {
-                    color: 0x808080,
-                    name: "plastic"
+                        color: 0x808080,
+                        name: "plastic"
                     }
                 },
                 quaternion: null,
@@ -299,13 +437,13 @@ export default class AssetSystem {
                 {
                     props: {
                         geometry: {
-                        merge: true,
-                        shape: "hexagon",
-                        size: [28000, 28000, 1500]
+                            merge: true,
+                            shape: "hexagon",
+                            size: [28000, 28000, 1500]
                         },
                         material: {
-                        color: 0x808080,
-                        name: "plastic"
+                            color: 0x808080,
+                            name: "plastic"
                         }
                     },
                     quaternion: null,
@@ -314,13 +452,13 @@ export default class AssetSystem {
                 {
                     props: {
                         geometry: {
-                        merge: true,
-                        shape: "torus",
-                        size: [32000, 32000, 15000]
+                            merge: true,
+                            shape: "torus",
+                            size: [32000, 32000, 15000]
                         },
                         material: {
-                        color: 0x808080,
-                        name: "plastic"
+                            color: 0x808080,
+                            name: "plastic"
                         }
                     },
                     quaternion: null,
@@ -329,13 +467,13 @@ export default class AssetSystem {
                 {
                     props: {
                         geometry: {
-                        merge: true,
-                        shape: "hexagon",
-                        size: [28000, 28000, 1500]
+                            merge: true,
+                            shape: "hexagon",
+                            size: [28000, 28000, 1500]
                         },
                         material: {
-                        color: 0x808080,
-                        name: "plastic"
+                            color: 0x808080,
+                            name: "plastic"
                         }
                     },
                     quaternion: null,
@@ -344,13 +482,13 @@ export default class AssetSystem {
                 {
                     props: {
                         geometry: {
-                        merge: true,
-                        shape: "cylinder",
-                        size: [12000, 18000, 1500]
+                            merge: true,
+                            shape: "cylinder",
+                            size: [12000, 18000, 1500]
                         },
                         material: {
-                        color: 0x808080,
-                        name: "plastic"
+                            color: 0x808080,
+                            name: "plastic"
                         }
                     },
                     quaternion: null,
@@ -368,12 +506,12 @@ export default class AssetSystem {
                     props: {
                         geometry: {
                         merge: true,
-                        shape: "box",
-                        size: [42000, 42000, 4000]
+                            shape: "box",
+                            size: [42000, 42000, 4000]
                         },
                         material: {
-                        color: 0x808080,
-                        name: "plastic"
+                            color: 0x808080,
+                            name: "plastic"
                         }
                     },
                     quaternion: null,
@@ -383,12 +521,12 @@ export default class AssetSystem {
                     props: {
                         geometry: {
                         merge: true,
-                        shape: "hexagon",
-                        size: [18000, 28000, 1000]
+                            shape: "hexagon",
+                            size: [18000, 28000, 1000]
                         },
                         material: {
-                        color: 0x808080,
-                        name: "plastic"
+                            color: 0x808080,
+                            name: "plastic"
                         }
                     },
                     quaternion: null,
@@ -398,12 +536,12 @@ export default class AssetSystem {
                     props: {
                         geometry: {
                         merge: true,
-                        shape: "box",
-                        size: [10000, 22000, 1000]
+                            shape: "box",
+                            size: [10000, 22000, 1000]
                         },
                         material: {
-                        color: 0x808080,
-                        name: "plastic"
+                            color: 0x808080,
+                            name: "plastic"
                         }
                     },
                     quaternion: null,
@@ -413,12 +551,12 @@ export default class AssetSystem {
                     props: {
                         geometry: {
                         merge: true,
-                        shape: "hexagon",
-                        size: [28000, 18000, 1000]
+                            shape: "hexagon",
+                            size: [28000, 18000, 1000]
                         },
                         material: {
-                        color: 0x808080,
-                        name: "plastic"
+                            color: 0x808080,
+                            name: "plastic"
                         }
                     },
                     quaternion: null,
@@ -436,12 +574,12 @@ export default class AssetSystem {
                 props: {
                     geometry: {
                     merge: true,
-                    shape: "box",
-                    size: [42000, 42000, 1000]
+                        shape: "box",
+                        size: [42000, 42000, 1000]
                     },
                     material: {
-                    color: 0x808080,
-                    name: "plastic"
+                        color: 0x808080,
+                     name: "plastic"
                     }
                 },
                 quaternion: null,
@@ -459,12 +597,12 @@ export default class AssetSystem {
                 props: {
                     geometry: {
                     merge: true,
-                    shape: "box",
-                    size: [10000, 22000, 1000]
+                        shape: "box",
+                        size: [10000, 22000, 1000]
                     },
                     material: {
-                    color: 0x808080,
-                    name: "plastic"
+                        color: 0x808080,
+                        name: "plastic"
                     }
                 },
                 quaternion: null,
@@ -472,13 +610,13 @@ export default class AssetSystem {
                 },{
                 props: {
                     geometry: {
-                    merge: true,
-                    shape: "hexagon",
-                    size: [16000, 18000, 1000]
+                        merge: true,
+                        shape: "hexagon",
+                        size: [16000, 18000, 1000]
                     },
                     material: {
-                    color: 0x808080,
-                    name: "plastic"
+                        color: 0x808080,
+                        name: "plastic"
                     }
                 },
                 quaternion: null,
@@ -486,13 +624,13 @@ export default class AssetSystem {
                 },{
                 props: {
                     geometry: {
-                    merge: true,
-                    shape: "hexagon",
-                    size: [18000, 18000, 1000]
+                        merge: true,
+                        shape: "hexagon",
+                        size: [18000, 18000, 1000]
                     },
                     material: {
-                    color: 0x808080,
-                    name: "plastic"
+                        color: 0x808080,
+                        name: "plastic"
                     }
                 },
                 quaternion: null,
@@ -509,13 +647,13 @@ export default class AssetSystem {
                 {
                     props: {
                         geometry: {
-                        merge: true,
-                        shape: "hexagon",
-                        size: [16000, 16000, 1000]
+                            merge: true,
+                            shape: "hexagon",
+                            size: [16000, 16000, 1000]
                         },
                         material: {
-                        color: 0x808080,
-                        name: "plastic"
+                            color: 0x808080,
+                            name: "plastic"
                         }
                     },
                     quaternion: null,
@@ -558,7 +696,7 @@ export default class AssetSystem {
             x = 2
       
         components.push({
-            props:{
+            props: {
                 activates: true,
                 gazeOver: true,
                 geometry: {
@@ -566,9 +704,9 @@ export default class AssetSystem {
                 shape: "node",
                 size: [0, 0, 0]
                 },
-                material: {
-                name: "plastic",
-                color: 0
+                    material: {
+                    name: "plastic",
+                    color: 0
                 }
             },
             position: [0,0,0],
@@ -580,12 +718,12 @@ export default class AssetSystem {
             props: {
                 geometry: {
                 //merge: true,
-                size: [160, 10000, 4000],
-                shape: "box"
+                    size: [160, 10000, 4000],
+                    shape: "box"
                 },
                 material: {
-                color: color,
-                name: "plastic"
+                    color: color,
+                    name: "plastic"
                 }
             },
             position: [-5000+(x>1?10000:0), 0, 0],
@@ -600,25 +738,39 @@ export default class AssetSystem {
         while (x > 0) {
 
             components.push({
-            props: {
-                geometry: {
-                //merge: true,
-                size: [10000, 160, 4000],
-                shape: "box"
+                props: {
+                    geometry: {
+                     //merge: true,
+                        size: [10000, 160, 4000],
+                        shape: "box"
+                    },
+                    material: {
+                        color: color,
+                        name: "plastic"
+                    }
                 },
-                material: {
-                color: color,
-                name: "plastic"
-                }
-            },
-            position: [0, -5000+(x>1?10000:0), 0],
-            quaternion: null
+                position: [0, -5000+(x>1?10000:0), 0],
+                quaternion: null
             })
             x --
 
         }
 
         return components
+    }
+
+    _initIconProps ( color ) {
+
+        return {
+            material: {
+                name: "metal",
+                color
+            },
+            geometry: {
+                shape: "box",
+                size: [4500, 4500, 4500]
+            }
+        }
     }
 
 }

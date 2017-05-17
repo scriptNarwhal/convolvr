@@ -45,50 +45,42 @@ let socket = events,
 		user = new User(),
 	  world = null,
 	  avatar = null,
-    menu2 = null
+    toolMenu = null,
+    helpScreen = null,
+    chatScreen = null
 
 userInput = new UserInput()
 
-world = new Convolvr(user, userInput, socket, store, (loadedWorld) => {
+world = new Convolvr( user, userInput, socket, store, ( loadedWorld ) => {
 
-  let toolMenu = null
-
-  user.useAvatar(new Avatar(user.id, false, {})) // only render hands, since this is you
-  user.toolbox = new Toolbox(user, loadedWorld)
+  toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
+  user.useAvatar(new Avatar( user.id, false, {} )) // only render hands, since this is you
+  user.toolbox = new Toolbox( user, loadedWorld )
 
   // replace HUDMenu with entity based version in asset system
-  user.hud = new HUDMenu([], user.toolbox) // v2 toolMenu will already know about user.toolbox
-  user.hud.initMesh({}, three.camera)
-
+  user.hud = new HUDMenu( [], user.toolbox ) // v2 toolMenu will already know about user.toolbox
+  user.hud.initMesh( {}, three.camera )
   user.hud.hide()
-  user.mesh.add(user.light)
+
+  user.mesh.add( user.light )
   loadedWorld.user = user
-  three.scene.add(user.mesh)
-  userInput.init(loadedWorld, loadedWorld.camera, user)
+  three.scene.add( user.mesh )
+  userInput.init( loadedWorld, loadedWorld.camera, user )
+  userInput.rotationVector = { x: 0, y: 9.95, z: 0 }
+  three.camera.position.set( -300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
+  user.light.position.set( 200000, 200000, 200000 )
 
-  userInput.rotationVector = {x: 0, y: 9.95, z: 0}
-  three.camera.position.set(-300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
-  user.light.position.set(200000, 200000, 200000)
+  chatScreen = world.systems.assets.makeEntity( "chat-screen", true )
+  chatScreen.update( [ 125000, 50000, 0 ] )
+  loadedWorld.chat = chatScreen
 
-  // replace ListView with entity based version in asset system
-  loadedWorld.chat = new ListView({ // deprecated
-    color: "#ffffff",
-    background: "#000000",
-    position: [0,0,0],
-    textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
-  }, three.scene).initMesh()
-
-  // replace ListView with entity based version in asset system
-  loadedWorld.help = new ListView({ // deprecated
-    color: "#00ff00",
-    background: "#000000",
-    position: [-100000,0,0],
-    textLines: [
+  helpScreen = world.systems.assets.makeEntity( "help-screen", true )
+  helpScreen.components[0].props.text.lines = [
       "# Desktop users",
       "- WASD, RF, space keys: movement",
       "- Mouselook (click screen to enable)",
       "- Left/right click: primary tool / mode",
-      "- Keys 1-5: switch tool",
+      "- Keys 1-6: switch tool",
       "- Gamepads are also supported",
       "",
       "# Desktop VR users ",
@@ -102,7 +94,9 @@ world = new Convolvr(user, userInput, socket, store, (loadedWorld) => {
       "- Device orientation controls the camera",
       "- Swiping & dragging move you"
     ]
-  }, three.scene).initMesh()
+  helpScreen.components[0].state.text.update()
+  helpScreen.update( [ 100000, 50000, 0 ] )
+  loadedWorld.help = helpScreen
 
 })
 

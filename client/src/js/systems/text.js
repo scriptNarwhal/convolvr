@@ -1,6 +1,7 @@
 export default class TextSystem {
 
-    init (component) {
+    init ( component ) {
+
         let prop = component.props.text,
             text = prop.lines,
             color = prop.color,
@@ -40,9 +41,11 @@ export default class TextSystem {
                 this.update(component)
             }
         }
+
     }
 
     update (component) {
+
         let prop = component.props.text,
             state = component.state.text,
             text = prop.lines,
@@ -61,9 +64,11 @@ export default class TextSystem {
         textTexture.needsUpdate = true   
         component.state.text.textTexture = textTexture
         component.mesh.material.needsUpdate = true
+
     }
     
     renderText (context, text, color, background, canvasSize) {
+
         let fontSize = 42,
             textLine = '',
             textRenderState = {
@@ -92,14 +97,16 @@ export default class TextSystem {
             }
             ++l
         }
-        text.map((line, l) => {
+        text.map(( line, l ) => {
             // markdown
             this.highlightMarkdown(l, line, lines, context, textRenderState)
             context.fillText(line, 16, 960-(1+(lines-l)*fontSize*1.35))
         })
+
     }
 
-    highlightMarkdown(l, line, lines, context, textState) {
+    highlightMarkdown( l, line, lines, context, textState ) {
+
         let xSize = textState.canvasSize[0],
           lineHeight = textState.fontSize,
           height = 960-(1+(lines-l)*lineHeight),
@@ -121,5 +128,6 @@ export default class TextSystem {
             }
         }
     }
+    
 }
 
