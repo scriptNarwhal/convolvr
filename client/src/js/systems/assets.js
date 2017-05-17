@@ -176,7 +176,7 @@ export default class AssetSystem {
         
         } else {
 
-            return this.entities[name]
+            return this.entitiesByName[name]
 
         }
 
