@@ -1,7 +1,11 @@
 import Text from './text'
 
+// deprecated
+
 export default class ListView extends Text {
+
     constructor (data, mount) {
+
         this.mount = mount
         this.mesh = null
         this.id = data.id || "listview"+Date.now()
@@ -11,9 +15,11 @@ export default class ListView extends Text {
         this.textLines = data.textLines
         this.position = data.position || [0, 0, 0]
         this.quat = !!data.quaternion ? data.quaternion : false
+
     }
 
     initMesh () {
+
       let mesh = null,
           color = this.color,
           background = this.background,
@@ -37,9 +43,11 @@ export default class ListView extends Text {
         this.mesh.material.needsUpdate = true
       }
       return this
+
     }
 
     update (data) {
+
       let x = null
       if (data != null) {
         for (x in data) {
@@ -48,10 +56,14 @@ export default class ListView extends Text {
       }
       this.initMesh()
       return this
+
     }
 
     write (text) {
+      
       this.textLines.push(text)
       return this
+      
     }
+
 }

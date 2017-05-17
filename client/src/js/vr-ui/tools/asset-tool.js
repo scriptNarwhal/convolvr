@@ -1,13 +1,11 @@
 import Tool from './tool'
 import Entity from '../../entity'
-import EntityGenerator from '../../entity-generator'
-/* terrain voxel tool */
-export default class MaterialTool extends Tool {
+
+export default class AssetTool extends Tool {
   constructor (data, world, toolbox) {
     super(data, world, toolbox)
       this.mesh = null;
-      this.name = "Material Tool"
-      this.icon = this.initIcon()
+      this.name = "Asset Tool"
       this.options = {
 
       }
@@ -23,14 +21,14 @@ export default class MaterialTool extends Tool {
               },
               tool: {
                 panel: {
-                  title: "Materials",
-                  color: 0xa007ff,
+                  title: "Assets",
+                  color: 0x07ffff,
                   content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "prop", // entity, prop
-                        propName: "material",
-                        dataSource: this.world.systems.assets.props.material
+                        propName: "assets",
+                        dataSource: this.world.systems.assets.props.assets
                       }
                     }
                   }
@@ -38,33 +36,10 @@ export default class MaterialTool extends Tool {
               }
             },
             components: [
-              this.initLabel("Material")
+              this.initLabel("Asset Tool")
             ]
           }
         ])
-    }
-
-    initIcon () {
-      
-      let entity = null
-      this.generator = this.generator || new EntityGenerator()
-      entity = this.generator.makeEntity("icon", true)
-      entity.components.push({
-        props: {
-          material: {
-            name: "metal",
-            color: 0xa007ff
-          },
-          geometry: {
-            shape: "box",
-            size: [4500, 4500, 4500]
-          }
-        },
-        position: [0, 0, 0],
-        quaternion: null
-      })
-      return entity
-
     }
 
     primaryAction (telemetry) {

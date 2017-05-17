@@ -1,3 +1,5 @@
+import Entity from '../entity'
+
 export default class AssetSystem {
 
     constructor ( world ) {
@@ -169,12 +171,12 @@ export default class AssetSystem {
 
         if (!!init) {
 
-            let ent = this.entitiesByName[type]
+            let ent = this.entitiesByName[name]
             return new Entity ( ent.id, ent.components, ent.position, ent.quaternion)
         
         } else {
 
-            return this.entities[type]
+            return this.entities[name]
 
         }
 
@@ -269,7 +271,7 @@ export default class AssetSystem {
             toolMenuIcons = [],
             assetSystem = this
 
-        toolColors.map( ( color, i) => {
+        toolColors.map( ( color, i ) => {
 
             let iconCube = {
                     props: Object.assign({}, assetSystem._initIconProps( color ), {
@@ -280,7 +282,7 @@ export default class AssetSystem {
                     position: [0, 0, 0],
                     quaternion: null
                 }
-                
+
             toolMenuIcons.push({
                 components: assetSystem._initButtonComponents().concat([iconCube]),
                 position: [ -26000 + i *13000, 0, 0 ],

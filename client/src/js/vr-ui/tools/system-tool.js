@@ -1,7 +1,6 @@
 import Tool from './tool'
 import Entity from '../../entity'
-import EntityGenerator from '../../entity-generator'
-/* terrain voxel tool */
+
 export default class SystemTool extends Tool {
 
   constructor (data, world, toolbox) {
@@ -9,7 +8,6 @@ export default class SystemTool extends Tool {
     super(data, world, toolbox)
     this.mesh = null;
     this.name = "System Tool"
-    this.icon = this.initIcon()
     this.options = {
 
     }
@@ -48,29 +46,6 @@ export default class SystemTool extends Tool {
           }
         ])
         
-    }
-
-    initIcon () {
-
-      let entity = null
-      this.generator = this.generator || new EntityGenerator()
-      entity = this.generator.makeEntity("icon", true)
-      entity.components.push({
-        props: {
-          geometry: {
-            shape: "box",
-            size: [4500, 4500, 4500]
-          },
-          material: {
-            name: 'metal',
-            color: 0xffff07
-          }
-        },
-        position: [0, 0, 0],
-        quaternion: null
-      })
-      return entity
-
     }
 
     primaryAction ( telemetry) {

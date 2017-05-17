@@ -1,6 +1,5 @@
 import Tool from './tool'
 import Entity from '../../entity'
-import EntityGenerator from '../../entity-generator'
 
 export default class EntityTool extends Tool  {
 
@@ -10,8 +9,6 @@ export default class EntityTool extends Tool  {
 
       this.mesh = null
       this.name = "Entity Tool"
-      this.icon = this.initIcon()
-      this.generator = this.generator || new EntityGenerator()
       this.options = {
         entityType: "panel"
       }
@@ -51,43 +48,18 @@ export default class EntityTool extends Tool  {
 
     }
 
-    initIcon () {
-
-      let mesh = null,
-          entity = null
-          
-      this.generator = this.generator || new EntityGenerator()
-      entity = this.generator.makeEntity( "icon", true )
-
-      entity.components.push({
-        props: {
-          material: {
-            name: "metal",
-            color: 0xff0707
-          },
-          geometry: {
-            shape: "box",
-            size: [4500, 4500, 4500]
-          }
-        },
-        position: [0, 0, 0],
-        quaternion: null
-      })
-
-      return entity
-
-    }
-
     primaryAction ( telemetry, params = {} ) { // place entity
 
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
-          cursorSystem = this.world.systems.cursor,
+          systems = this.world.systems,
+          cursorSystem = systems.cursor,
+          assetSystem = systems.assets,
           position = telemetry.position,
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
           user = this.world.user,
-          entity = params.entity ? params.entity : this.generator.makeEntity(this.options.entityType)
+          entity = params.entity ? params.entity : assetSystem.makeEntity(this.options.entityType)
     
       // if (entity.components.length == 1) {
 

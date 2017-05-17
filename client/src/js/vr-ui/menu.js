@@ -48,9 +48,9 @@ export default class HUDMenu { // deprecated..
           let icon = null,
               curvature = 0 //-Math.sin(Math.PI*((o+1)/(options.length+1)))
               
-          icon = options[o].icon
-          icon.init(mesh)
-          icon.update([-48000+o*13000, -2000, curvature*12000])
+          // icon = options[o].icon
+          // icon.init(mesh)
+          // icon.update([-48000+o*13000, -2000, curvature*12000])
           o --
 
         }

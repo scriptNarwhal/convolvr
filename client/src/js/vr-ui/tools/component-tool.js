@@ -2,7 +2,6 @@ import Tool from './tool'
 import Component from '../../component'
 import Entity from '../../entity'
 import ComponentGenerator from '../../component-generator'
-import EntityGenerator from '../../entity-generator'
 
 export default class ComponentTool extends Tool {
   constructor ( data, world, toolbox ) {
@@ -11,8 +10,6 @@ export default class ComponentTool extends Tool {
 
         this.mesh = null;
         this.name = "Component Tool"
-        this.icon = this.initIcon()
-        this.entities = new EntityGenerator()
         this.components = new ComponentGenerator()
         this.options = {
           componentType: "panel"
@@ -49,30 +46,6 @@ export default class ComponentTool extends Tool {
             ]
           }
         ])
-
-    }
-
-    initIcon () {
-
-      this.entities = this.entities || new EntityGenerator()
-      let entity = this.entities.makeEntity( "icon", true )
-
-      entity.components.push({
-        props: {
-          geometry: {
-            shape: "box",
-            size: [4500, 4500, 4500]
-          },
-          material: {
-            name: 'metal',
-            color: 0x003bff
-          }
-        },
-        position: [0, 0, 0],
-        quaternion: null
-      })
-
-      return entity
 
     }
 

@@ -17,7 +17,7 @@ import { createStore } from 'redux'
 import makeStore from './redux/makeStore'
 let store = makeStore(routerReducer)
 const history = syncHistoryWithStore(browserHistory, store)
-// 2d UI
+// 2D UI
 import App from './2d-ui/containers/app'
 import Data from './2d-ui/containers/data'
 import Worlds from './2d-ui/containers/worlds'
@@ -32,18 +32,17 @@ import HUD from './2d-ui/containers/hud'
 import Convolvr from './world/world'
 import { events } from './network/socket'
 import UserInput from './input/user-input'
-import Toolbox from './world/tools/toolbox'
 import User from './user'
-// 3D UI // deprecated.. migrating these to entity-generator / systems.assets.entities
-import HUDMenu from './vr-ui/menu'
-import ListView from './vr-ui/text/list-view'
+// 3D UI // 
 import Avatar from './world/avatar'
+import Toolbox from './vr-ui/tools/toolbox'
+import HUDMenu from './vr-ui/menu' //deprecated.. migrating these to entity-generator / systems.assets.entities
 
 let socket = events,
     token = localStorage.getItem("token"),
 		userInput,
 		user = new User(),
-	  world = null,
+	  loadingWorld = null,
 	  avatar = null,
     toolMenu = null,
     helpScreen = null,
@@ -51,28 +50,27 @@ let socket = events,
 
 userInput = new UserInput()
 
-world = new Convolvr( user, userInput, socket, store, ( loadedWorld ) => {
+loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
   user.useAvatar(new Avatar( user.id, false, {} )) // only render hands, since this is you
-  user.toolbox = new Toolbox( user, loadedWorld )
+  user.toolbox = new Toolbox( user, world )
 
   // replace HUDMenu with entity based version in asset system
   user.hud = new HUDMenu( [], user.toolbox ) // v2 toolMenu will already know about user.toolbox
   user.hud.initMesh( {}, three.camera )
   user.hud.hide()
 
-  user.mesh.add( user.light )
-  loadedWorld.user = user
+  world.user = user
   three.scene.add( user.mesh )
-  userInput.init( loadedWorld, loadedWorld.camera, user )
+  userInput.init( world, world.camera, user )
   userInput.rotationVector = { x: 0, y: 9.95, z: 0 }
   three.camera.position.set( -300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
-  user.light.position.set( 200000, 200000, 200000 )
 
   chatScreen = world.systems.assets.makeEntity( "chat-screen", true )
+  chatScreen.init( three.scene )
   chatScreen.update( [ 125000, 50000, 0 ] )
-  loadedWorld.chat = chatScreen
+  world.chat = chatScreen
 
   helpScreen = world.systems.assets.makeEntity( "help-screen", true )
   helpScreen.components[0].props.text.lines = [
@@ -94,9 +92,11 @@ world = new Convolvr( user, userInput, socket, store, ( loadedWorld ) => {
       "- Device orientation controls the camera",
       "- Swiping & dragging move you"
     ]
-  helpScreen.components[0].state.text.update()
+  helpScreen.init(three.scene)
+  console.log("help SCREEN", helpScreen)
+  //helpScreen.components[0].state.text.update()
   helpScreen.update( [ 100000, 50000, 0 ] )
-  loadedWorld.help = helpScreen
+  world.help = helpScreen
 
 })
 

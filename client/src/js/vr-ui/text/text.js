@@ -1,5 +1,9 @@
-export default class Text { // deprecated 
+// deprecated
+
+export default class Text {
+
     renderText (text, color, background) {
+
       let textTexture = null,
           textMaterial = null,
           duplicate = document.getElementById(text),
@@ -10,6 +14,7 @@ export default class Text { // deprecated
           context = null
 
   		if (!duplicate) {
+
         textCanvas = document.createElement("canvas")
         textCanvas.setAttribute("id", text)
         document.body.appendChild(textCanvas)
@@ -24,9 +29,13 @@ export default class Text { // deprecated
         context.textBaseline = "top"
         context.fillStyle = color
         context.fillText(text, 20, 36-fontSize/4)
+
        } else {
+
          textCanvas = duplicate
+
        }
+       
       textTexture = new THREE.Texture(textCanvas)
       textTexture.anisotropy = three.renderer.getMaxAnisotropy()
       textTexture.needsUpdate = true
@@ -35,9 +44,11 @@ export default class Text { // deprecated
              side: 0
       })
       return textMaterial;
+
     }
 
   renderTextLines (id, text = [], color, background) {
+
     let textTexture = null,
         textMaterial = null,
         duplicate = document.getElementById(id),
@@ -96,9 +107,11 @@ export default class Text { // deprecated
            side: 0
     })
     return textMaterial
+
   }
 
   highlightMarkdown(l, line, lines, context, textState) {
+
       let xSize = textState.canvasSize[0],
           lineHeight = textState.fontSize*1.35,
           height = 960-(1+(lines-l)*lineHeight),
@@ -121,4 +134,5 @@ export default class Text { // deprecated
             }
         }
     }
+
 }
