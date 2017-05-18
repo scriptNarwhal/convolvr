@@ -59,10 +59,7 @@ export default class EntityTool extends Tool  {
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
           user = this.world.user,
-          entity = params.entity ? params.entity : assetSystem.makeEntity(this.options.entityType)
-
-      console.log("Entity Tool")
-      console.log(JSON.stringify(entity.components))
+          entity = params.entity ? params.entity : assetSystem.makeEntity(this.options.entityType)  // console.log("Entity Tool"); console.log(JSON.stringify(entity.components))
 
       if ((selected && cursorState.distance < 164000) || cursorSystem.entityCoolDown > 30 ) { // switch to component tool
           

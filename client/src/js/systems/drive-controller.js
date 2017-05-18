@@ -8,8 +8,10 @@ export default class IOControllerSystem {
 
     init (component) {
         
-        let prop = component.props.driveController
-       
+        let prop = component.props.driveController,
+            fs = this.world.systems.file
+
+        // use file system.. take into account user, world, cell, entityId for storage directory
 
         return {
 

@@ -178,12 +178,8 @@ export default class CursorSystem {
             newCursorState.distance = obj.distance
 
         }
-        
-        if ( !! newCursorState.entity ) {
 
-            console.log(JSON.stringify(newCursorState.entity.components))
-
-        }
+        // if ( !! newCursorState.entity ) { console.log(JSON.stringify(newCursorState.entity.components)) }
 
         cursor.state.cursor = Object.assign( {}, cursorState.cursor, newCursorState )
 

@@ -54,7 +54,7 @@ export default class AssetSystem {
                     { path: "/data/images/textures/gplaypattern_@2X.png" }, 
                     { path: "/data/images/textures/shattered_@2X.png" } 
             ],
-            systems: {
+            systems: { // load these from ../assets/props eventually
                 structures: {
                     floor: {},
                     wall: {},
@@ -62,12 +62,37 @@ export default class AssetSystem {
                     terrain: {},
                     container: {},
                 },
+                tools: {
+                    toolUI: [
+                        { menu: 1 },
+                        { currentToolLabel: "Custom Tool" },
+                        { toolIndex: 0 },
+                        { toolIndex: 1 },
+                        { toolIndex: 2 },
+                        { toolIndex: 3 },
+                        { toolIndex: 4 },
+                        { toolIndex: 5 }
+                    ],
+                    tool: [
+                        // tool templates
+                    ],
+                    
+                },
                 vehicles: {
                     vehicle: {},
                     control: {},
-                    propulsion: {},
-                    projectiles: {},
-                    portal: {},   
+                    propulsion: [
+                        { thrust: 2000 },
+                        { thrust: 8000 }
+                    ],
+                    projectile: [
+                        { type: 'instant' },
+                        { type: 'slow', thrust: 12000 }
+                    ],
+                    portal: [
+                        { type: 'start' },
+                        { type: 'end' }
+                    ]   
                 },
                 media: {
                     chat: {},
@@ -77,7 +102,8 @@ export default class AssetSystem {
                     video: {},
                     webrtc: {},
                     drawing : {},
-                    signal: {}
+                    file: {},
+                    rest: {},
                 },
                 interactivity: {
                     destructable: {},
@@ -90,17 +116,14 @@ export default class AssetSystem {
                         { type: 'webcam' },
                         { type: 'speech' }
                     ],
+                    signal: {},
                     cursor: {},
                     hand: {},
                     activate: {},
                     hover: {},
-                    tabView: {},
                     miniature: {},
+                    tabView: {},
                     tab: {},
-                    toolUI: {},
-                    tool: {},
-                    file: {},
-                    rest: {},
                 }
             }
         }
@@ -185,7 +208,7 @@ export default class AssetSystem {
 
     makeEntity ( name, init ) {
 
-        let ent = Object.assign({}, this.entitiesByName[name])
+        let ent = this.entitiesByName[name] //Object.assign({}, this.entitiesByName[name])
 
         if (!!init) {
 
