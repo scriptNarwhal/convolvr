@@ -61,6 +61,9 @@ export default class EntityTool extends Tool  {
           user = this.world.user,
           entity = params.entity ? params.entity : assetSystem.makeEntity(this.options.entityType)
 
+      console.log("Entity Tool")
+      console.log(JSON.stringify(entity.components))
+
       if ((selected && cursorState.distance < 164000) || cursorSystem.entityCoolDown > 30 ) { // switch to component tool
           
           user.toolbox.useTool(1, 0)

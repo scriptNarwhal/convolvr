@@ -185,15 +185,16 @@ export default class AssetSystem {
 
     makeEntity ( name, init ) {
 
+        let ent = Object.assign({}, this.entitiesByName[name])
+
         if (!!init) {
 
-            let ent = this.entitiesByName[name]
+            
             return new Entity ( ent.id, ent.components, ent.position, ent.quaternion)
         
         } else {
 
-            return this.entitiesByName[name]
-
+            return ent
         }
 
     }

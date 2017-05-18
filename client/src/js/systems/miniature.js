@@ -1,12 +1,12 @@
 export default class MiniatureSystem {
 
-    constructor (world) {
+    constructor ( world ) {
 
         this.world = world
     }
 
 
-    init (component) { 
+    init ( component ) { 
 
         let prop = component.props.miniature
 
@@ -14,35 +14,45 @@ export default class MiniatureSystem {
             
             setTimeout(()=>{
                 
-                let mesh = component.entity.mesh
-                mesh.scale.set(0.25, 0.25, 0.25)
-                mesh.updateMatrix()
+                this.miniaturize(component)
                 
             }, 500)
-
+            
         }
+
+        component.props.miniature = undefined // destroy this, since it gives the other components cancer ☠️
 
         return {
             fullSize: false,
-            toggle: () => {
+            miniaturize: ( component ) => {
 
-                let state = component.state.miniature
-
-                state.fullSize = !state.fullSize
-
-                if ( state.fullSize ) {
-
-                    component.entity.mesh.scale.set(1, 1, 1)
-
-                } else {
-
-                    component.entity.mesh.scale.set(0.25, 0.25, 0.25)
-
-                }
+                this.miniaturize( component )
 
             }
         }
         
+    }
+
+    miniaturize ( component, revert ) {
+
+            if ( !!! component.entity || !!! component.entity.mesh ) {
+
+                return
+
+            } 
+
+            if ( !! revert ) {
+
+                component.entity.mesh.scale.set( 1, 1, 1 )
+
+            } else {
+
+                component.entity.mesh.scale.set( 0.25, 0.25, 0.25 )
+
+            }
+
+            component.entity.mesh.updateMatrix()
+
     }
 
 }
