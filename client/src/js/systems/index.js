@@ -14,8 +14,9 @@ import CameraSystem from './camera'
 import CPUSystem from './cpu'
 import GPUSystem from './gpu'
 import MemorySystem from './memory'
-import InterruptControllerSystem from './interrupt-controller'
+import IOControllerSystem from './io-controller'
 import NetworkInterfaceSystem from './network-interface'
+import DriveControllerSystem from './drive-controller'
 import DisplaySystem from './display'
 import DrawingSystem from './drawing'
 import ControlSystem from './control'
@@ -71,8 +72,9 @@ export default class Systems {
 			cpu: new CPUSystem(world),
 			gpu: new GPUSystem(world),
 			memory: new MemorySystem(world),
-			interruptController: new InterruptControllerSystem(world),
+			ioController: new IOControllerSystem(world),
 			networkInterface: new NetworkInterfaceSystem(world),
+			driveController: new DriveControllerSystem(world),
             media: new MediaSystem(world),
 			drawing: new DrawingSystem(world),
 			control: new ControlSystem(world),

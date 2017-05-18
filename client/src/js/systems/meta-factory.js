@@ -18,6 +18,7 @@ export default class MetaFactorySystem {
             category = prop.propName,
             gridWidth = prop.gridWidth || 3,
             gridSize = prop.gridSize || 20000,
+            vOffset = prop.vOffset || -12000,
             sourceCategory = "none",
             factories = [],
             keys = {},
@@ -28,7 +29,7 @@ export default class MetaFactorySystem {
 
             source.map((item, i) => {
                 
-                this._addComponent( component, item, assetType, category, x, y, gridSize)
+                this._addComponent( component, item, assetType, category, x, y, gridSize, vOffset)
 
                 x ++
 
@@ -57,7 +58,7 @@ export default class MetaFactorySystem {
 
                 } 
 
-                this._addComponent( component, sourceCategory[key], assetType, "systems", x, y, gridSize)
+                this._addComponent( component, sourceCategory[key], assetType, "systems", x, y, gridSize, vOffset)
 
 
             })
@@ -66,7 +67,7 @@ export default class MetaFactorySystem {
 
     }
 
-    _addComponent ( component, factoryItem, assetType, assetCategory, x, y, gridSize ) {
+    _addComponent ( component, factoryItem, assetType, assetCategory, x, y, gridSize, vOffset ) {
 
         let addTo = null
 
@@ -97,7 +98,7 @@ export default class MetaFactorySystem {
                         color: 0x000000
                     }
                 },
-                position:  [ gridSize * (x-1), gridSize * y, 16000 ],
+                position:  [ gridSize * (x-1), vOffset + gridSize * y, 16000 ],
                 quaternion: null
         })
 

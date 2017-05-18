@@ -1,5 +1,18 @@
 import Entity from '../entity'
 
+import helpScreen from '../assets/entities/help-screen'
+import chatScreen from '../assets/entities/chat-screen'
+import panel1 from '../assets/entities/panel-1'
+import panel2 from '../assets/entities/panel-2'
+import panel3 from '../assets/entities/panel-3'
+import block from '../assets/entities/block'
+import column1 from '../assets/entities/column-1'
+import wirebox from '../assets/entities/wirebox'
+import panel1Comp from '../assets/components/panel-1'
+import column1Comp from '../assets/components/column-1'
+import panel2Comp from '../assets/components/panel-2'
+import column2Comp from '../assets/components/column-2'
+
 export default class AssetSystem {
 
     constructor ( world ) {
@@ -201,69 +214,10 @@ export default class AssetSystem {
 
     _initBuiltInComponents ( ) {
 
-        this._addBuiltInComponent("panel", {
-            props: {
-                geometry: {
-                    merge: true,
-                    shape: "box",
-                    size: [42000, 42000, 1500]
-                },
-                material: {
-                    color: 0x404040,
-                    name: "plastic"
-                }
-            },
-            quaternion: null,
-            position: [0, 0, 0]
-        })
-
-        this._addBuiltInComponent("column", {
-            props: {
-                geometry: {
-                    merge: true,
-                    shape: "hexagon",
-                    size: [12000, 30000, 12000]
-                },
-                material: {
-                    color: 0x404040,
-                    name: "plastic"
-                }
-            },
-            quaternion: null,
-            position: [0, 0, 0]
-        })
-
-        this._addBuiltInComponent("panel2", {
-            props: {
-                geometry: {
-                    merge: true,
-                    shape: "box",
-                    size: [22000, 22000, 1500]
-                },
-                material: {
-                    color: 0x404040,
-                    name: "plastic"
-                }
-            },
-            quaternion: null,
-            position: [0, 0, 0]
-        })
-
-        this._addBuiltInComponent("column2", {
-            props: {
-                geometry: {
-                    merge: true,
-                    shape: "box",
-                    size: [8000, 72000, 8000]
-                },
-                material: {
-                    color: 0x404040,
-                    name: "plastic"
-                }
-            },
-            quaternion: null,
-            position: [0, 0, 0]
-        })
+        this._addBuiltInComponent("panel", panel1Comp)
+        this._addBuiltInComponent("column", column1Comp)
+        this._addBuiltInComponent("panel2", panel2Comp)
+        this._addBuiltInComponent("column2", column2Comp)
 
     }
 
@@ -280,6 +234,12 @@ export default class AssetSystem {
                     props: Object.assign({}, assetSystem._initIconProps( color ), {
                         toolUI: {
                             toolIndex: i
+                        },
+                        hover: {
+
+                        },
+                        activate: {
+
                         }
                     }),
                     position: [0, 0, 0],
@@ -310,7 +270,7 @@ export default class AssetSystem {
                         text: {
                             color: "#ffffff",
                             background: "#000000",
-                            lines: ["Entity Tool"]
+                            lines: [ "Entity Tool" ]
                         },
                         toolUI: {
                             currentToolLabel: true
@@ -341,349 +301,14 @@ export default class AssetSystem {
             ]
         })
 
-        this._addBuiltInEntity( "help-screen", {
-            id: -3,
-            components: [
-                {
-                    props: {
-                        geometry: {
-                            shape: "box",
-                            size: [70000, 16000, 1000]
-                        },
-                            material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        },
-                        text: {
-                            lines: [],
-                            color: "#ffffff",
-                            background: "#000000"
-                        }
-                    },
-                    quaternion: null,
-                    position: [0, 0, 0]
-                }
-            ]
-        })
-
-        this._addBuiltInEntity( "chat-screen", {
-            id: -4,
-            components: [
-                {
-                    props: {
-                        geometry: {
-                            shape: "box",
-                            size: [72000, 72000, 1000]
-                        },
-                            material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        },
-                        text: {
-                            lines: [ 
-                                "Welcome To Convolvr", 
-                                "github.com/SpaceHexagon/convolvr" 
-                            ],
-                            color: "#ffffff",
-                            background: "#000000"
-                        }
-                    },
-                    quaternion: null,
-                    position: [0, 0, 0]
-                }
-            ]
-        })
-
-
-        
-        this._addBuiltInEntity( "panel", {
-            id: 0,
-            components: [
-                {
-                props: {
-                    geometry: {
-                        merge: true, //can be combined to save cpu
-                        shape: "box",
-                        size: [42000, 42000, 1000]
-                    },
-                    material: {
-                         color: 0x808080,
-                        name: "plastic"
-                    },
-                    // audio: { // remove this.. merely a test
-                    //   asset: "/sounds/Partition.wav[Re-Edit].ogg"
-                    // }
-                },
-                quaternion: null,
-                position: [0, 0, 0]
-                }, {
-                props: {
-                    geometry: {
-                        merge: true,
-                        shape: "box",
-                        size: [42000, 42000, 1500]
-                    },
-                    material: {
-                        color: 0x808080,
-                        name: "plastic"
-                    }
-                },
-                quaternion: null,
-                position: [-250, -200, 400]
-                }
-            ],
-            position: null,
-            quaternion: null
-        } )
-        
-        this._addBuiltInEntity( "panel2", {
-            id: 0,
-            components: [
-                {
-                    props: {
-                        geometry: {
-                            merge: true,
-                            shape: "hexagon",
-                            size: [28000, 28000, 1500]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [-4625, 0, 0]
-                },
-                {
-                    props: {
-                        geometry: {
-                            merge: true,
-                            shape: "torus",
-                            size: [32000, 32000, 15000]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [4625, 0, 0]
-                },
-                {
-                    props: {
-                        geometry: {
-                            merge: true,
-                            shape: "hexagon",
-                            size: [28000, 28000, 1500]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [-10250, 0, 0]
-                },
-                {
-                    props: {
-                        geometry: {
-                            merge: true,
-                            shape: "cylinder",
-                            size: [12000, 18000, 1500]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [10250, 0, 0]
-                },
-            ],
-            position: null,
-            quaternion: null
-        } )
-        
-        this._addBuiltInEntity( "panel3", {
-            id: 0,
-            components: [
-                {
-                    props: {
-                        geometry: {
-                        merge: true,
-                            shape: "box",
-                            size: [42000, 42000, 4000]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [-0, 10250, 0]
-                },
-                {
-                    props: {
-                        geometry: {
-                        merge: true,
-                            shape: "hexagon",
-                            size: [18000, 28000, 1000]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [0, 4625, 0]
-                },
-                {
-                    props: {
-                        geometry: {
-                        merge: true,
-                            shape: "box",
-                            size: [10000, 22000, 1000]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [-0, -10250, 0]
-                },
-                {
-                    props: {
-                        geometry: {
-                        merge: true,
-                            shape: "hexagon",
-                            size: [28000, 18000, 1000]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [0, -4625, 0]
-                },
-            ],
-            position: null,
-            quaternion: null
-        } )
-
-        this._addBuiltInEntity( "block",  {
-            id: 0,
-            components: [
-                {
-                props: {
-                    geometry: {
-                    merge: true,
-                        shape: "box",
-                        size: [42000, 42000, 1000]
-                    },
-                    material: {
-                        color: 0x808080,
-                     name: "plastic"
-                    }
-                },
-                quaternion: null,
-                position: [0, 0, 0]
-                }
-            ],
-            position: null,
-            quaternion: null
-        } )
-
-        this._addBuiltInEntity( "column", {
-            id: 0,
-            components: [
-                {
-                props: {
-                    geometry: {
-                    merge: true,
-                        shape: "box",
-                        size: [10000, 22000, 1000]
-                    },
-                    material: {
-                        color: 0x808080,
-                        name: "plastic"
-                    }
-                },
-                quaternion: null,
-                position: [0, 0, 0]
-                },{
-                props: {
-                    geometry: {
-                        merge: true,
-                        shape: "hexagon",
-                        size: [16000, 18000, 1000]
-                    },
-                    material: {
-                        color: 0x808080,
-                        name: "plastic"
-                    }
-                },
-                quaternion: null,
-                position: [0, -16000, 0]
-                },{
-                props: {
-                    geometry: {
-                        merge: true,
-                        shape: "hexagon",
-                        size: [18000, 18000, 1000]
-                    },
-                    material: {
-                        color: 0x808080,
-                        name: "plastic"
-                    }
-                },
-                quaternion: null,
-                position: [0, 16000, 0]
-                }
-            ],
-            position: null,
-            quaternion: null
-        } )
-
-        this._addBuiltInEntity( "wirebox", {
-            id: 0,
-            components: [
-                {
-                    props: {
-                        geometry: {
-                            merge: true,
-                            shape: "hexagon",
-                            size: [16000, 16000, 1000]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [0, 0, 0]
-                },
-                {
-                    props: {
-                        geometry: {
-                        merge: true,
-                        shape: "torus",
-                        size: [16000, 16000, 1000]
-                        },
-                        material: {
-                        color: 0x808080,
-                        name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [0, 0, 0]
-                }
-            ],
-            position: null,
-            quaternion: null
-        } )
-
+        this._addBuiltInEntity( "help-screen", helpScreen )
+        this._addBuiltInEntity( "chat-screen", chatScreen )
+        this._addBuiltInEntity( "panel", panel1 )
+        this._addBuiltInEntity( "panel2", panel2 )
+        this._addBuiltInEntity( "panel3", panel3 )
+        this._addBuiltInEntity( "block",  block )
+        this._addBuiltInEntity( "column", column1 )
+        this._addBuiltInEntity( "wirebox", wirebox )
         this._addBuiltInEntity( "icon", {
                 id: 0,
                 components: this._initButtonComponents(),
@@ -691,7 +316,7 @@ export default class AssetSystem {
                 quaternion: null
             }
         )
-    
+
     }
 
     _initButtonComponents ( data ) {

@@ -1,4 +1,4 @@
-export default class InterruptControllerSystem {
+export default class IOControllerSystem {
 
     constructor (world) {
         this.world = world
@@ -6,7 +6,7 @@ export default class InterruptControllerSystem {
 
     init (component) {
         
-        let prop = component.props.input
+        let prop = component.props.ioController
         
         // detect input, network, storage devices in adjacent components
         

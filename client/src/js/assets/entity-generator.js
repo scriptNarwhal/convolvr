@@ -152,7 +152,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "hexagon",
-              size: [18000, 18000, 1000]
+              size: [ 18000, 18000, 1000 ]
             },
             material: {
               color: 0x808080,
@@ -167,7 +167,7 @@ export default class EntityGenerator {
             geometry: {
               merge: true,
               shape: "box",
-              size: [10000, 22000, 1000]
+              size: [ 10000, 22000, 1000 ]
             },
             material: {
               color: 0x808080,
@@ -175,14 +175,14 @@ export default class EntityGenerator {
             }
           },
           quaternion: null,
-          position: [-0, -10250, 0]
+          position: [ -0, -10250, 0 ]
         },
         {
           props: {
             geometry: {
               merge: true,
               shape: "hexagon",
-              size: [28000, 18000, 1000]
+              size: [ 28000, 18000, 1000 ]
             },
             material: {
               color: 0x808080,
@@ -190,7 +190,7 @@ export default class EntityGenerator {
             }
           },
           quaternion: null,
-          position: [0, -4625, 0]
+          position: [ 0, -4625, 0 ]
         },
       ],
       position: null,
@@ -215,7 +215,7 @@ export default class EntityGenerator {
           position: [0, 0, 0]
         }
       ],
-      position: null,
+      position: [0, 0, 0],
       quaternion: null
     }
     this.entities["column"] = {
@@ -265,7 +265,7 @@ export default class EntityGenerator {
           position: [0, 16000, 0]
         }
       ],
-      position: null,
+      position: [0, 0, 0],
       quaternion: null
     }
     this.entities["wirebox"] = {
@@ -284,7 +284,7 @@ export default class EntityGenerator {
             }
           },
           quaternion: null,
-          position: [0, 0, 0]
+          position: [ 0, 0, 0 ]
         },
         {
           props: {
@@ -302,7 +302,7 @@ export default class EntityGenerator {
           position: [0, 0, 0]
         }
       ],
-      position: null,
+      position: [ 0, 0, 0 ],
       quaternion: null
     }
     this.entities["icon"] = {

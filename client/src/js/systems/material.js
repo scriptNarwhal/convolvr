@@ -35,7 +35,7 @@ export default class MaterialSystem {
               case "terrain":
                   prop.diffuse = '/data/images/textures/shattered_@2X.png'
                   prop.specular = '/data/images/textures/gplaypattern_@2X.png'
-                  prop.repeat = ["wrapping", 16, 16]
+                  prop.repeat = ["wrapping", 12, 12]
               break
               case "metal":
                   prop.reflection = '/data/images/textures/sky-reflection.jpg'

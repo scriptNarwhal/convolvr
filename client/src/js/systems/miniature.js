@@ -10,7 +10,7 @@ export default class MiniatureSystem {
 
         let prop = component.props.miniature
 
-        if ( prop.fullSize !== true ) {
+        if ( !!!prop.fullSize ) {
             
             setTimeout(()=>{
                 
