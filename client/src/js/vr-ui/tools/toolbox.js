@@ -17,7 +17,7 @@ export default class Toolbox {
       this.user = user
       this.hands = []
 
-      this.user.avatar.hands.map(( m, i )=>{
+      this.user.avatar.componentsByProp.hand.map(( m, i )=>{
 
         if ( i < 3 ) {
 
@@ -113,7 +113,7 @@ export default class Toolbox {
           position = camera.position.toArray(),
           quaternion = camera.quaternion.toArray(),
           user = this.world.user,
-          cursors = user.avatar.cursors,
+          cursors = user.avatar.componentsByProp.cursor,
           cursor = null,
           cursorPos = null,
           handMesh = null
@@ -123,7 +123,7 @@ export default class Toolbox {
         if ( input.trackedControls || input.leapMotion ) { // set position from tracked controller
 
           cursor = cursors[hand +1]
-          handMesh = user.toolbox.hands[hand]
+          handMesh = this.hands[hand].mesh
 
         } else {
 
@@ -250,7 +250,7 @@ export default class Toolbox {
 
     setHandOrientation ( hand, position, orientation ) {
 
-      let userHand = this.hands[hand]
+      let userHand = !!this.hands[hand] ? this.hands[hand].mesh : false
 
       if ( userHand ) {
 

@@ -3,7 +3,7 @@ import { browserHistory } from 'react-router'
 import { animate } from './render'
 import { API_SERVER } from '../config.js'
 import { send } from '../network/socket'
-import Avatar from './avatar'
+import Avatar from '../assets/avatars/avatar'
 import Entity from '../entity'
 import Systems from '../systems'
 import PostProcessing from './post-processing'
@@ -410,9 +410,12 @@ export default class Convolvr {
 
 			if (input.trackedControls || input.leapMotion) {
 
-				userHands.forEach(function (hand) {
-					hands.push({pos: [hand.position.x, hand.position.y, hand.position.z],
-					quat: [hand.quaternion.x, hand.quaternion.y, hand.quaternion.z, hand.quaternion.w] });
+				userHands.forEach( handComponent => {
+
+					let hand = handComponent.mesh
+
+					hands.push( {pos: hand.position.toArray(), quat: hand.quaternion.toArray() } )
+
 				})
 			}
 

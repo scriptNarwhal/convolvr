@@ -91,7 +91,8 @@ export default class AssetSystem {
                     ],
                     portal: [
                         { type: 'start' },
-                        { type: 'end' }
+                        { type: 'end' },
+                        { type: 'world', worldName: ""}
                     ]   
                 },
                 media: {

@@ -7,7 +7,7 @@ export let animate = ( world, last, cursorIndex ) => {
       delta = (Date.now() - last) / 16000,
       time = Date.now(),
       user = world.user != null ? world.user : false,
-      cursors = !!user ? user.avatar.cursors : [],
+      cursors = !!user && !!user.avatar ? user.avatar.componentsByProp.cursor : [],
       hands = !!user ? user.avatar.hands : false
 
   if (!! world.userInput) {
@@ -16,9 +16,9 @@ export let animate = ( world, last, cursorIndex ) => {
 
   }
   
-  if (user && user.mesh && cursors) {
+  if (user && user.avatar && cursors) {
     
-    user.avatar.entity.update( cPos.toArray(), camera.quaternion.toArray() )
+    user.avatar.update( cPos.toArray(), camera.quaternion.toArray() )
     cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
     
   }
@@ -62,9 +62,9 @@ export let vrAnimate = ( time, oldPos, cursorIndex ) => {
       cPos = camera.position,
       vrPos = [],
       vrWorldPos = [],
-      cursors = !!user ? user.avatar.cursors : false,
+      cursors = !!user ? user.avatar.componentsByProp.cursor : false,
       cursor = !!cursors ? cursors[cursorIndex] : false,
-      hands = !!user ? user.avatar.hands : false
+      hands = !!user && !!user.avatar ? user.avatar.componentsByProp.hand : false
 
     if (world.HMDMode != "flymode") {  // room scale + gamepad movement
 

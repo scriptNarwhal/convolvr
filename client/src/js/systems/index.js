@@ -127,7 +127,7 @@ export default class Systems {
 
             if (this[prop] != null) {
 
-                if (prop == "light" || prop=="particle"      || prop =="text"         || prop == "audio" || 
+                if (prop == "hand" || prop == "light" || prop=="particle" || prop =="text" || prop == "audio" || 
 					prop == "video" || prop == "metaFactory" || prop == "miniature" ) { /* add other systems here */
                     
 					deferredSystems.push(prop)
@@ -136,15 +136,15 @@ export default class Systems {
 
                     state[prop] = this[prop].init(component)
 
-                    if ( componentsByProp[prop] == undefined ) {
+                }
 
-                        componentsByProp[prop] = []
+				if ( componentsByProp[prop] == undefined ) {
 
-                    } 
-
-                    componentsByProp[prop].push(component)
+                    componentsByProp[prop] = []
 
                 }
+
+				componentsByProp[prop].push(component)
 
             }
 

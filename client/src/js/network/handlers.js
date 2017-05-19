@@ -1,4 +1,4 @@
-import Avatar from '../world/avatar'
+import Avatar from '../assets/avatars/avatar'
 import Entity from '../entity'
 import { animate } from '../world/render'
 
@@ -29,7 +29,7 @@ export default class SocketHandlers {
 						}
 					}
 					user.mesh = user.avatar.mesh
-					user.avatar.entity.update([pos.x, pos.y, pos.z], [quat.x, quat.z, quat.y, quat.w])
+					user.avatar.update( [ pos.x, pos.y, pos.z ], [ quat.x, quat.z, quat.y, quat.w ] )
 				}
 			}
 		})
@@ -60,6 +60,9 @@ export default class SocketHandlers {
 						}
 					})
 				break;
+				case "Custom Tool":
+
+				break
 				case "Voxel Tool":
 
 				break
@@ -73,6 +76,9 @@ export default class SocketHandlers {
 
 				break
 				case "Delete Tool":
+
+				break
+				case "Geotag Tool":
 
 				break
 			}

@@ -160,7 +160,8 @@ export default class CursorSystem {
             }
 
         distance = obj.distance
-
+        // console.log("cursor callback")
+        // console.log(obj)
         if ( !! entity && distance < 165000 ) {
 
             cursorSystem.entityCoolDown = 45

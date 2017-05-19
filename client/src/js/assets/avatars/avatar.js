@@ -1,11 +1,10 @@
-import Entity from '../entity'
-import Component from '../component'
+import Entity from '../../entity'
+import Component from '../../component'
+// default avatar
 
 let cursorAxis = new THREE.Vector3( 1, 0, 0 )
 
-export default class Avatar {
-
-    constructor (id, wholeBody, data) { // wholeBody == true == not just 'vr hands'
+let Avatar = (id, wholeBody, data) => { // wholeBody == true == not just 'vr hands'
     
         var mesh = null, // new THREE.Object3D();
             entity = null,
@@ -17,7 +16,7 @@ export default class Avatar {
             cursorComponent = null,
             n = 2
         
-        cursorRot.setFromAxisAngle(cursorAxis, Math.PI / 2 )
+        cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
         cursorComponent = {
           props: {
               cursor: true,
@@ -40,7 +39,7 @@ export default class Avatar {
             quaternion: cursorRot.toArray()
         }
 
-      if (wholeBody) {
+      if ( wholeBody ) {
         component = {
              props: { 
                 geometry: {
@@ -70,9 +69,9 @@ export default class Avatar {
              position: [0, (n-1)*600, 0],
              quaternion: false
          }
-         components.push(componentB)
+         components.push( componentB )
       } else {
-        components.push(Object.assign({},{
+        components.push(Object.assign({}, {
           props: {
             geometry: {
                 shape: "box",
@@ -86,14 +85,15 @@ export default class Avatar {
           position: [0, 0, 0],
           quaternion: false,
           components: [
-            Object.assign({}, cursorComponent)
+            Object.assign( {}, cursorComponent )
           ]
         }))
         n = 0
-        while (n < 2) {
+        while ( n < 2 ) {
           components.push(Object.assign({}, {
             props: {
                 hand: n,
+                userHand: true,
                 noRaycast: true,
                 geometry: {
                   size: [2200, 1200, 3200],
@@ -107,60 +107,17 @@ export default class Avatar {
             quaternion: null,
             position: [(n-1)*1500, 0, 0],
             components: [
-              Object.assign({}, cursorComponent)
+              Object.assign( {}, cursorComponent )
             ]
           }))
           ++n
         }
       }
         
-        entity = new Entity(id, components)
-        entity.init(three.scene)
-        this.entity = entity
-        this.mesh = entity.mesh
-        this.hands = entity.hands
-        this.cursors = entity.cursors
-        this.wholeBody = wholeBody
-        this.data = data
-        console.log("Init Avatar: Tracked Controls", userInput.trackedControls)
-        if (!!data.forceHands || (!wholeBody && userInput.trackedControls == false && userInput.leapMotion == false)) {
-          this.toggleTrackedHands(false)
-        }
-    }
-
-    toggleTrackedHands (toggle = true) {
-      console.log('toggle hands', toggle)
-      let scene = window.three.scene,
-          position = this.mesh.position,
-          avatar = this
-          
-     let cursors = this.entity.componentsByProp.cursor
-     if (cursors) {
-       cursors[0].mesh.visible = !toggle
-     } 
-      this.hands.map((hand, i) => {
-        //
-        if (toggle) { 
-            //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
-            hand.parent.remove(hand)
-            scene.add(hand)
-            hand.position.set(position.x -6000+ i*12000, position.y -12000, position.z -6000)
-            
-            if (i > 0) {
-              if (!!hand.children[0]) {
-                hand.children[0].visible = true
-              }  
-            } 
-        } else {
-            this.mesh.add(hand)
-            if (i > 0) {
-              if (!!hand.children[0]) {
-                hand.children[0].visible = false
-              }  
-            }
-            hand.position.set(-6000+ i*12000, -6000, -6000)
-        }
-        hand.updateMatrix()
-      })
-    }
+    entity = new Entity( id, components )
+    entity.init( three.scene )
+  
+    return entity
 }
+
+export default Avatar

@@ -46,14 +46,7 @@ export default class Component {
 
       if ( this.props.hand != undefined ) {
 
-        entity.hands.push( this.mesh )
         this.detached = true
-
-      }
-
-      if ( this.props.cursor != undefined ) {
-
-        entity.cursors.push( this )
 
       }
 

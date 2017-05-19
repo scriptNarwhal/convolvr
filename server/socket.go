@@ -12,6 +12,7 @@ func update(c *nexus.Client, p *nexus.Packet) {
 	// log.Printf(`broadcasting update "%s"`, p.Data)./
 	hub.All().Broadcast(p)
 }
+
 func toolAction(c *nexus.Client, p *nexus.Packet) {
 	var (
 		action ToolAction

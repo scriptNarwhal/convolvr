@@ -34,7 +34,7 @@ import { events } from './network/socket'
 import UserInput from './input/user-input'
 import User from './user'
 // 3D UI // 
-import Avatar from './world/avatar'
+import Avatar from './assets/avatars/avatar' // default avatar
 import Toolbox from './vr-ui/tools/toolbox'
 import HUDMenu from './vr-ui/menu' //deprecated.. migrating these to entity-generator / systems.assets.entities
 
@@ -53,7 +53,7 @@ userInput = new UserInput()
 loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
-  user.useAvatar(new Avatar( user.id, false, {} )) // only render hands, since this is you
+  user.useAvatar( new Avatar( user.id, false, {} ) ) // only render hands, since this is you
   user.toolbox = new Toolbox( user, world )
 
   // replace HUDMenu with entity based version in asset system

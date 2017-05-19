@@ -15,8 +15,8 @@ export default class User {
   }
   useAvatar (avatar) {
     this.avatar = avatar
-    this.mesh = avatar.entity.mesh
-    this.hands = avatar.hands
+    this.mesh = avatar.mesh
+    this.hands = avatar.componentsByProp.hand
     console.log("use avatar", avatar, this.mesh)
   }
 }

@@ -1,7 +1,7 @@
 import TrackedControllers from './tracked-controllers'
 
 export default class GamePad {
-	constructor (input) {
+	constructor ( input ) {
     let gamepads = input.gamepads
     
 		this.cooldownTimeout = null
@@ -10,7 +10,8 @@ export default class GamePad {
 		this.bumperCooldownTimeout = null
     this.trackedControllers = new TrackedControllers(input, three.world)
     
-    function gamepadHandler (e, connecting) {
+    function gamepadHandler ( e, connecting ) {
+
       let gamepad = e.gamepad;
 		      input.gamepadMode = true;
 
@@ -18,53 +19,96 @@ export default class GamePad {
                   gamepad.index, gamepad.id,
                   gamepad.buttons.length, gamepad.axes.length)
                   
-      if (connecting) {
-        gamepads[gamepad.index] = gamepad;
+      if ( connecting ) {
+
+        gamepads[gamepad.index] = gamepad
+
         if (gamepad) {
+
           let id = gamepad.id
-          if (id.indexOf('Oculus Touch') > -1 || id.indexOf('Vive') > -1) { // need to lookup vive controller id
+
+          if (id.indexOf('Oculus Touch') > -1 || id.indexOf('OpenVR Gamepad') > -1) {
+            
             input.trackedControls = true
             input.handsDetected ++
+
             if (input.handsDetected < 2) {
-              input.world.user.avatar.toggleTrackedHands(true)
+
+              setTimeout(()=>{
+
+                input.world.user.avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands(true)
+
+              }, 500 )
+            
             }
-          } 
+          
+          }
+
         }
+
       } else {
-        delete gamepads[gamepad.index];
+
+        delete gamepads[gamepad.index]
+
       }
+
     }
 
-    window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false);
-    window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false);
+    window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false)
+    window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false)
+
   }
 
-  update (input, world) {
+  update ( input, world ) {
+
     let g = 0,
         id = "",
         gamepad = null,
         gamepads = navigator.getGamepads()
 
-    if (!gamepads) {
+    if ( !gamepads ) {
       return
     }
-    while (g < gamepads.length) {
+
+    while ( g < gamepads.length ) {
+
       gamepad = gamepads[g]
-      if (gamepad) {
+
+      if ( gamepad ) {
+
         id = gamepad.id
-        if (id.indexOf('Oculus Touch') > -1 || id.indexOf('Vive') > -1) { // need to lookup vive controller id
-          this.trackedControllers.handleOculusTouch(gamepad)
-        } else if (id.indexOf('Oculus Remote') > -1) {
-          this.trackedControllers.handleOculusRemote(gamepad)
+        if ( id.indexOf('Oculus Touch') > -1 || id.indexOf('OpenVR Gamepad') > -1 ) { // test with vive then remove second half of this if statement
+
+          this.trackedControllers.handleOculusTouch( gamepad )
+
+        } else if ( id.indexOf('OpenVR Gamepad') > -1 ) {
+
+          this.trackedControllers.handleOpenVRGamepad(gamepad)
+        
+        } else if ( id.indexOf('Oculus Remote') > -1 ) {
+
+          this.trackedControllers.handleOculusRemote( gamepad )
+
+        } else if ( id.indexOf('Daydream Controller') > -1 ) {
+
+          this.trackedControllers.handleDaydreamController( gamepad )
+
         } else {
-          this.handleXboxGamepad(input, world, gamepad)
+
+          this.handleXboxGamepad( input, world, gamepad )
+
         }
+
       }
-      g ++;
+
+      g ++
+
     }
+
   }
 
-  handleXboxGamepad (input, world, gamepad) {
+  handleXboxGamepad ( input, world, gamepad ) {
+
     let a = gamepad.axes.length,
         buttons = gamepad.buttons,
         b = buttons.length,
@@ -72,9 +116,9 @@ export default class GamePad {
 				rotation = input.rotationVector,
 				tools = world.user.toolbox
 
-    if (b > 8) {
+    if ( b > 8 ) {
       // face buttons: 0 1 2 3
-      if (this.bumperCooldown == false) {
+      if ( this.bumperCooldown == false ) {
         if (this.buttonPressed(buttons[4])) { // top triggers: 4 5
             tools.nextTool(-1, 0) // previous tool, right hand
         }
@@ -82,7 +126,8 @@ export default class GamePad {
           tools.nextTool(1, 0) // next tool, right hand
         }
       }
-      if (this.cooldown == false) {
+
+      if ( this.cooldown == false ) {
         if (this.buttonPressed(buttons[6])) { // bottom triggers: 6 7
             tools.usePrimary(0) // right hand
             this.triggerCooldown()
@@ -93,12 +138,14 @@ export default class GamePad {
         }
       }
     }
-    if (b >= 16) {
+
+    if ( b >= 16 ) {
       // select / start: 8 9
       // stick click(s): 10 11
       // dpad buttons: 12 13 14 15
     }
-    if (a >= 4) { // standard dual analogue controller
+
+    if ( a >= 4 ) { // standard dual analogue controller
         if (Math.abs(gamepad.axes[0]) > 0.1) {
           input.moveVector.x = gamepad.axes[0] * 16000
         }
@@ -112,6 +159,7 @@ export default class GamePad {
           rotation.x += -gamepad.axes[3] / 20.0
         }
     }
+
   }
 
 	triggerCooldown () {
@@ -136,4 +184,5 @@ export default class GamePad {
     }
     return b == 1.0 || b > 0.9;
   }
+
 }

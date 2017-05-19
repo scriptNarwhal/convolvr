@@ -19,7 +19,7 @@ export default class Tool {
     equip ( hand ) {
 
       let input = this.world.userInput,
-          hands = this.toolbox.hands,
+          hands = this.world.user.avatar.componentsByProp.hand, //this.toolbox.hands,
           toolPanel = this.entity.componentsByProp.tool ? this.entity.componentsByProp.tool[0].state.tool.panel : false,
           toolMesh = null
 
@@ -41,7 +41,7 @@ export default class Tool {
 
       } else {
 
-          hands[hand].add(toolMesh) // add to respective hand 
+          hands[hand].mesh.add(toolMesh) // add to respective hand 
 
       }
 
