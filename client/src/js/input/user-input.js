@@ -133,7 +133,8 @@ export default class UserInput {
 	}
 
 	update ( delta ) {
-		if (!this.initDone) {
+
+		if ( !this.initDone ) {
 
 			return
 
@@ -147,28 +148,28 @@ export default class UserInput {
 			bottom = -600000,
 			velocity = this.device.velocity //world.getElevation(this.camera.position);
 
-		if (terrainConfig) {
+		if ( terrainConfig ) {
 
 			terrainMode = terrainConfig.type
 
 			if (terrainMode == "plane" || terrainMode == "both") {
 
-				bottom = terrainMesh.position.y + 6000 + world.vrHeight
+				bottom = terrainMesh.position.y + 28000 + world.vrHeight
 
 			} else {
 
-				bottom = -(5400000 / terrainConfig.flatness) + 6000 + world.vrHeight
+				bottom = -(5400000 / terrainConfig.flatness) + 28000 + world.vrHeight
 
 			}
 
 		}
-		if (isVRMode(world.mode)) {
+		if ( isVRMode(world.mode) ) {
 
 				this.keyboard.handleKeys(this)
 				this.gamepad.update(this, world)
 
 		}
-			if (world.mode != "stereo") {
+			if ( world.mode != "stereo" ) {
 
 				if (this.tiltControls != null) {
 
@@ -176,7 +177,7 @@ export default class UserInput {
 
 				} else {
 
-					if (world.cameraMode == 'fps') { // fps camera // make configurable
+					if ( world.cameraMode == 'fps' ) { // fps camera // make configurable
 
 						this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ")
 
@@ -207,7 +208,7 @@ export default class UserInput {
 
 			}
 
-			if (world.gravity > 0) {
+			if ( world.gravity > 0 ) {
 
 				if (this.device.falling) { //if not standing on something..
 

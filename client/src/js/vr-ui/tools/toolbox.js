@@ -254,13 +254,13 @@ export default class Toolbox {
 
       if ( userHand ) {
 
-        userHand.position.fromArray(position).multiplyScalar(20000).add(this.world.camera.position)
+        userHand.position.fromArray(position).multiplyScalar(22000).add(this.world.camera.position)
         userHand.translateX(725+ hand*-1250)
-        userHand.position.y += this.world.floorHeight*6
+        userHand.position.y += -22000+this.world.floorHeight*6
         userHand.quaternion.fromArray(orientation)
 
       }
-      // also update
+
     }
 
     sendToolAction ( primary, tool, hand, position, quaternion, entity, entityId = -1, components = [] ) {

@@ -35,14 +35,19 @@ export default class TerrainSystem {
         this.WorldPhysics = world.systems.worldPhysics
         this.EntityPhysics = world.systems.entityPhysics
         this.config = config
-        let type = this.config.type
+        let type = this.config.type,
+            red = this.config.red,
+            green = this.config.green,
+            blue = this.config.blue,
+            terrainColor = new THREE.Color(`rgb( ${red}, ${green}, ${blue})`)
 
         if (type != 'empty') {
 
             let geom = new THREE.PlaneGeometry(24000000+world.viewDistance*800000, 24000000+world.viewDistance*800000, 2, 2),
-                mat = this.world.mobile ? new THREE.MeshLambertMaterial({color: this.config.color}) : new THREE.MeshPhongMaterial({color: this.config.color}),
+                mat = this.world.mobile ? new THREE.MeshLambertMaterial({color: terrainColor }) : new THREE.MeshPhongMaterial({color: this.config.color}),
                 mesh = new THREE.Mesh(geom, mat)
 
+            this.config.color = terrainColor.getHex() // temporary hack..
             this.mesh = mesh
             mesh.rotation.x = -Math.PI/2
 
@@ -87,7 +92,7 @@ export default class TerrainSystem {
         removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
         endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
         x = coords[0]-phase+1,
-        y = coords[2]-phase
+        y = coords[2]-phase+1
         this.chunkCoords = coords
 
     if ( force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {

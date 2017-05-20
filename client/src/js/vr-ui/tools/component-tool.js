@@ -63,11 +63,11 @@ export default class ComponentTool extends Tool {
           component = this.components.makeComponent( componentType ),
           entity = null
 
-      entity = new Entity( 0, [component], [0, 0, 0], quat )
+      entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat )
       
-      if ( (!!!selected || cursorState.distance > 165000 ) && cursorSystem.entityCoolDown < 0 )  { // switch back to entity tool, if the user is clicking into empty space
+      if ( (!!!selected || cursorState.distance > 200000 ) && cursorSystem.entityCoolDown < 0 )  { // switch back to entity tool, if the user is clicking into empty space
       
-        this.world.user.toolbox.useTool( 0, 0 )
+        this.world.user.toolbox.useTool( 0, telemetry.hand )
         this.world.user.hud.show()
         this.world.user.toolbox.usePrimary( 0, entity )
         return false

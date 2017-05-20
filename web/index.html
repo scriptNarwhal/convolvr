@@ -94,25 +94,30 @@
                 float luminance = 0.0;
                 luminance += 0.4 + depth / 1.25;
 
-                if (vUv.y >= 0.5) {
+                if ((vUv.y >= 0.5)) {
 
-                    glow = -0.3+(depth) - vUv.y;
+                    glow = -0.2+(depth) - vUv.y;
                     glow =+ 0.7 * depth * depth;
                     color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
 
-                } else if (vUv.y < 0.5 && vUv.y > 0.45) {
+                } else if (vUv.y < 0.5 && vUv.y > 0.48) {
 
-                   glow = mix(0.9 * depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.45)*20.0);
-                   luminance += 0.2;
-                   color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
+                   glow = -0.3+(depth) - vUv.y;
+                   color = vec4((terrainRed+red)/2.0, (terrainGreen+green)/2.0, (terrainBlue+blue/2.0), 1.0);
 
                 } else {
-                    luminance += 0.2;
+
+                    depth = (1.0 - (abs(0.5 - 0.48) * 2.5));
                     glow = -0.3+(depth) - vUv.y;
+                    color = vec4((terrainRed+red)/2.0, (terrainGreen+green)/2.0, (terrainBlue+blue/2.0), 1.0);
 
                 }
+               
+               gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
 
-                if (vUv.y < 0.5) {
+            }
+        </script>
+        <!--if (vUv.y < 0.5) {
 
                     color = vec4(luminance*terrainRed, luminance*terrainGreen, luminance*terrainBlue, 1.0);
                     
@@ -120,12 +125,7 @@
 
                     color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
                     
-                }
-               
-               gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
-
-            }
-        </script>
+                }-->
         <script src='/data/lib/notify.js'></script>
         <script src='/data/lib/three.min.js'></script>
         <script src='/data/lib/csg.js'></script>
