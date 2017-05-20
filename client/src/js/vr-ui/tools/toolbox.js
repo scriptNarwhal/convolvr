@@ -43,7 +43,7 @@ export default class Toolbox {
     showMenu() {
       console.log(" showMenu() ", this.user.hud)
       console.log(this.user.hud.componentsByProp)
-      this.user.hud.componentsByProp.toolUI[0].state.updatePosition()
+      this.user.hud.componentsByProp.toolUI[0].state.toolUI.updatePosition()
 
     }
 

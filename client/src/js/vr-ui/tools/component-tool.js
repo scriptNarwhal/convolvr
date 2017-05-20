@@ -52,6 +52,7 @@ export default class ComponentTool extends Tool {
     primaryAction ( telemetry, params = {} ) { // place component (into entity if pointing at one)
       
       let cursor = telemetry.cursor,
+          user = this.world.user,
           cursorSystem = three.world.systems.cursor,
           cursorState = cursor.state.cursor || {},
           position = telemetry.position,
@@ -67,9 +68,9 @@ export default class ComponentTool extends Tool {
       
       if ( (!!!selected || cursorState.distance > 200000 ) && cursorSystem.entityCoolDown < 0 )  { // switch back to entity tool, if the user is clicking into empty space
       
-        this.world.user.toolbox.useTool( 0, telemetry.hand )
-        this.world.user.hud.show()
-        this.world.user.toolbox.usePrimary( 0, entity )
+        user.toolbox.useTool( 0, telemetry.hand )
+        user.hud.componentsByProp.toolUI[0].state.toolUI.show()
+        user.toolbox.usePrimary( 0, entity )
         return false
 
       }

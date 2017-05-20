@@ -11,7 +11,10 @@ export default class Entity {
       this.mesh = null
       this.boundingRadius = 10000 // set in init()
       this.componentsByProp = {
-        // define arrays here with key of prop
+        // arrays are defined here with key of prop
+      }
+      this.stateByProp = {
+        // thinking about this..
       }
 
   }
