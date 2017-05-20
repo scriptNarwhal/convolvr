@@ -53,13 +53,18 @@ userInput = new UserInput()
 loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
+  console.log("tool menu", toolMenu)
+  toolMenu.init( three.scene )
+console.log("tool menu", toolMenu)
+
   user.useAvatar( new Avatar( user.id, false, {} ) ) // only render hands, since this is you
   user.toolbox = new Toolbox( user, world )
 
   // replace HUDMenu with entity based version in asset system
-  user.hud = new HUDMenu( [], user.toolbox ) // v2 toolMenu will already know about user.toolbox
-  user.hud.initMesh( {}, three.camera )
-  user.hud.hide()
+  //user.hud = new HUDMenu( [], user.toolbox ) // v2 toolMenu will already know about user.toolbox
+  //user.hud.initMesh( {}, three.camera )
+  user.hud = toolMenu
+  //toolMenu.componentsByProp.toolUI[0].state.hide()
 
   world.user = user
   three.scene.add( user.mesh )

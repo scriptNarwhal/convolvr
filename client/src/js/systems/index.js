@@ -113,6 +113,10 @@ export default class Systems {
             this[system] = systems[system]
         })
 
+		this.deffered = {
+			hand: true, light: true, particle: true, text: true, audio: true, video: true, metaFactory: true, miniature: true
+		}
+
     }
 
     registerComponent ( component ) {
@@ -127,8 +131,7 @@ export default class Systems {
 
             if (this[prop] != null) {
 
-                if (prop == "hand" || prop == "light" || prop=="particle" || prop =="text" || prop == "audio" || 
-					prop == "video" || prop == "metaFactory" || prop == "miniature" ) { /* add other systems here */
+                if ( !!this.deffered[prop] ) { /* add other systems here */
                     
 					deferredSystems.push(prop)
 
@@ -138,7 +141,7 @@ export default class Systems {
 
                 }
 
-				if ( componentsByProp[prop] == undefined ) {
+				if ( !!!componentsByProp[prop] ) {
 
                     componentsByProp[prop] = []
 
@@ -149,7 +152,7 @@ export default class Systems {
             }
 
         })
-        
+    
         mesh = new THREE.Mesh( state.geometry.geometry, state.material.material )
         mesh.matrixAutoUpdate = false
         component.mesh = mesh

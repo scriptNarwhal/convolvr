@@ -41,17 +41,12 @@ export default class Toolbox {
     }
 
     showMenu() {
-
-      this.updateUI()
-      this.user.hud.show()
-
-    }
-
-    updateUI() {
-
-      this.user.hud.update()
+      console.log(" showMenu() ", this.user.hud)
+      console.log(this.user.hud.componentsByProp)
+      this.user.hud.componentsByProp.toolUI[0].state.updatePosition()
 
     }
+
 
     nextTool( direction ) {
 

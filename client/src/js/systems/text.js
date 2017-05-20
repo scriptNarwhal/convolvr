@@ -44,7 +44,7 @@ export default class TextSystem {
 
     }
 
-    update (component) {
+    update ( component ) {
 
         let prop = component.props.text,
             state = component.state.text,
@@ -53,7 +53,7 @@ export default class TextSystem {
             background = prop.background,
             textTexture = null,
             textMaterial = null,
-            textCanvas = null,
+            textCanvas = state.textCanvas,
             canvasSize = prop.canvasSize,
             context = state.context
         

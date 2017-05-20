@@ -64,7 +64,7 @@ export default class Component {
         base = new THREE.Geometry(),
         three = window.three,
         mobile = !!appConfig ? appConfig.mobile : three.world.mobile,
-        ncomps = this.components.length,
+        ncomps = components.length,
         nonStructural = [],
         compMesh = null,
         materials = [],
@@ -77,7 +77,7 @@ export default class Component {
 
    while ( c < ncomps ) {
 
-        comp = new Component( this.components[c], entity, systems, {mobile} ) // use simpler shading for mobile gpus
+        comp = new Component( components[c], entity, systems, {mobile} ) // use simpler shading for mobile gpus
 
         if ( comp.props.noRaycast === true ) {
           addToOctree = false

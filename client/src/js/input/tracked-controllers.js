@@ -187,21 +187,30 @@ export default class TrackedController {
   
 
   buttonPressed (b) {
+
     if (typeof(b) == "object") {
       return b.pressed
     }
     return b == 1.0 || b > 0.8
+
   }
+
   buttonReleased (b) {
+
     if (typeof(b) == "object") {
       return !b.pressed
     }
     return b == 0.0 || b < 0.2
+
   }
+
   buttonValue (b) {
+
     if (typeof(b) == "object") {
       return b.pressed
     }
     return b
+    
   }
+
 }

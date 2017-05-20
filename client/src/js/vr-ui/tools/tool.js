@@ -67,7 +67,7 @@ export default class Tool {
 
     }
 
-    unequip (hand) {
+    unequip ( hand ) {
 
       if (this.mesh != null) {
         
@@ -81,7 +81,7 @@ export default class Tool {
 
     }
 
-    initLabel (value) {
+    initLabel ( value ) {
 
       return {
             props: {

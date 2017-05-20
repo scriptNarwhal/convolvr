@@ -105,13 +105,13 @@ export default class Convolvr {
 
 			world.screenResX = window.devicePixelRatio * window.innerWidth
 			
-			if (three.world.mode != "stereo") {
+			if ( three.world.mode != "stereo" ) {
 
 				three.renderer.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
 
 			}
 
-			if (world.postProcessing.enabled) {
+			if ( world.postProcessing.enabled ) {
 
 				world.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
 			}
@@ -119,8 +119,8 @@ export default class Convolvr {
 			three.camera.aspect = innerWidth / innerHeight
 			three.camera.updateProjectionMatrix()
 
-			if (world.IOTMode) {
-				animate(world, Date.now(), 0)
+			if ( world.IOTMode ) {
+				animate( world, Date.now(), 0 )
 			}
 
 		}
@@ -131,9 +131,8 @@ export default class Convolvr {
 		animate(this, 0, 0)
 
 		three.vrDisplay = null
-		navigator.getVRDisplays().then(function(displays) {
-			console.log("displays", displays)
-
+		navigator.getVRDisplays().then(function(displays) { console.log("displays", displays)
+			
 		  if (displays.length > 0) {
 
 		    three.vrDisplay = displays[0]
@@ -159,7 +158,7 @@ export default class Convolvr {
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
 		three.scene.add(this.ambientLight);
 
-		if (config.sky.skyType == 'shader' || config.sky.skyType == 'standard') {
+		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
 
 			skyMaterial = new THREE.ShaderMaterial({
 				side: 1,
@@ -188,7 +187,7 @@ export default class Convolvr {
 
 		//handle re-initialization here..
 		let coords = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false
-		if (coords) {
+		if ( coords ) {
 
 			coords = coords.split(".")
 			three.camera.position.fromArray([parseInt(coords[0])*928000, parseInt(coords[1])*807360, parseInt(coords[2])*807360])
@@ -315,6 +314,7 @@ export default class Convolvr {
 	}
 
 	reload ( user, name, place, coords ) {
+
 		let world = this,
 			octree = this.octree
 
@@ -370,6 +370,7 @@ export default class Convolvr {
 		this.terrain.voxelList = []
 		this.load(name)
 		browserHistory.push("/"+(user||"generated")+"/"+name+(!!place ? `/${place}` : ''))
+		
 	}
 
 	generateFullLOD ( coords ) {

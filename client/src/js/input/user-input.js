@@ -202,7 +202,7 @@ export default class UserInput {
 				}
 			}
 
-			if (Math.abs(velocity.y) > 6000) {
+			if ( Math.abs(velocity.y) > 6000 ) {
 
 				this.device.falling = true
 

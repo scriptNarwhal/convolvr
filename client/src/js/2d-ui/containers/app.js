@@ -74,8 +74,9 @@ class App extends Component {
           worldName = this.props.world
 
       let initChatUI = () => { // rename this to something more descriptive
-        world.chat.mesh.position.fromArray([0, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
-        world.help.mesh.position.fromArray([-80000, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
+        let world = window.three.world
+        world.chat.update([0, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
+        world.help.update([-80000, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
         three.camera.position.y = (world.terrain.voxels["0.0.0"].data.altitude) + 20000
         three.world.user.velocity.y = -10000
       }
@@ -83,7 +84,7 @@ class App extends Component {
       world.load(worldName, ()=> {
         setTimeout(()=>{
           initChatUI() // wait for world & terrain to load before placing this
-        }, 250)
+        }, 1200)
       })
 
     }, 100)

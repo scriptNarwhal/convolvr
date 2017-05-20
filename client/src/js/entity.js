@@ -9,8 +9,6 @@ export default class Entity {
       this.position = position ? position : false
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
-      this.cursors = []
-      this.hands = []
       this.boundingRadius = 10000 // set in init()
       this.componentsByProp = {
         // define arrays here with key of prop

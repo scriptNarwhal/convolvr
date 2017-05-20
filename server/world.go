@@ -152,12 +152,12 @@ func getWorld(c echo.Context) error { // load specific world
 
 		if rand.Intn(12) > 6 {
 			if rand.Intn(12) > 6 {
-				red = first
-				green = second / 2.0
-				blue = third / 2.0
+				red = first / 2.0
+				green = first
+				blue = third / 3.0
 			} else {
-				red = third / 1.5
-				green = second / 1.5
+				red = second / 2.5
+				green = third / 4.5
 				blue = first
 			}
 		} else {
@@ -168,7 +168,7 @@ func getWorld(c echo.Context) error { // load specific world
 			} else {
 				red = third / 3.0
 				green = first
-				blue = third / 2.0
+				blue = third
 			}
 		}
 
@@ -179,13 +179,13 @@ func getWorld(c echo.Context) error { // load specific world
 		lightColor = 127 + int(math.Floor(192+red*63))<<16 | 192 + int(math.Floor(green*63))<<8 | 192 + int(math.Floor(blue*63))
 		ambientColor = int(255*red/13.0)<<16 | int(255*green/13.0)<<8 | int(255*blue/13.0)
 
-		red *= 2.5
-		green *= 2.5
-		blue *= 2.5
+		red *= 3.5
+		green *= 3.5
+		blue *= 3.5
 
 		terrainColor = int(math.Floor(terrainRed*254))<<16 | int(math.Floor(terrainGreen*254))<<8 | int(math.Floor(terrainBlue*254))
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}
-		light := Light{Color: lightColor, Intensity: 1.2, Angle: 1.07, AmbientColor: ambientColor}
+		light := Light{Color: lightColor, Intensity: 1.5, Angle: 1.07, AmbientColor: ambientColor}
 		terrain := Terrain{TerrainType: "voxels", Height: 20000, Color: terrainColor, Red: terrainRed, Green: terrainGreen, Blue: terrainBlue, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
 		spawn := Spawn{Entities: true, Structures: true, Roads: true, Trees: true, NPCS: true, Tools: true, Vehicles: true}
 		gravity := 1.0

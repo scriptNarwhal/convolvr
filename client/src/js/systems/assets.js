@@ -1,5 +1,6 @@
 import Entity from '../entity'
 
+import toolMenu from '../assets/entities/tool-menu'
 import helpScreen from '../assets/entities/help-screen'
 import chatScreen from '../assets/entities/chat-screen'
 import panel1 from '../assets/entities/panel-1'
@@ -208,17 +209,28 @@ export default class AssetSystem {
     }
 
     makeEntity ( name, init ) {
+        
+        let toMake = this.entitiesByName[name],
+            ent = null //Object.assign({}, this.entitiesByName[name])
 
-        let ent = this.entitiesByName[name] //Object.assign({}, this.entitiesByName[name])
+        if ( typeof toMake == 'function' ) {
 
-        if (!!init) {
+            ent =  toMake( this )
 
-            
-            return new Entity ( ent.id, ent.components, ent.position, ent.quaternion)
+        } else {
+
+            ent = toMake
+
+        }
+
+        if ( !!init ) {
+
+            return new Entity( ent.id, ent.components, ent.position, ent.quaternion)
         
         } else {
 
             return ent
+        
         }
 
     }
@@ -249,82 +261,9 @@ export default class AssetSystem {
     _initBuiltInEntities ( ) {
 
         // let's add some useful ones here... then delete the rest
-        let toolColors = [ 0x15ff15, 0x003bff, 0x07ff07, 0x07ffff, 0xa007ff, 0xffff07 ],
-            toolMenuIcons = [],
-            assetSystem = this
+        // ..or just throw them all in modules
 
-        toolColors.map( ( color, i ) => {
-
-            let iconCube = {
-                    props: Object.assign({}, assetSystem._initIconProps( color ), {
-                        toolUI: {
-                            toolIndex: i
-                        },
-                        hover: {
-
-                        },
-                        activate: {
-
-                        }
-                    }),
-                    position: [0, 0, 0],
-                    quaternion: null
-                }
-
-            toolMenuIcons.push({
-                components: assetSystem._initButtonComponents().concat([iconCube]),
-                position: [ -26000 + i *13000, 0, 0 ],
-                quaternion: null
-            })
-
-        })
-
-        this._addBuiltInEntity( "tool-menu", {
-            id: -2,
-            components: [
-                {
-                    props: {
-                        geometry: {
-                            shape: "box",
-                            size: [24000, 6000, 2000]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        },
-                        text: {
-                            color: "#ffffff",
-                            background: "#000000",
-                            lines: [ "Entity Tool" ]
-                        },
-                        toolUI: {
-                            currentToolLabel: true
-                        }
-                    },
-                    components: [],
-                    position: [ -13000, -6000, 0 ],
-                    quaternion: null
-                },
-                {
-                    props: {
-                        geometry: {
-                            shape: "box",
-                            size: [70000, 16000, 1000]
-                        },
-                            material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        },
-                        toolUI: {
-                            menu: true
-                        }
-                    },
-                    components: toolMenuIcons,
-                    quaternion: null,
-                    position: [0, 0, 0]
-                }
-            ]
-        })
+        this._addBuiltInEntity( "tool-menu", toolMenu )
 
         this._addBuiltInEntity( "help-screen", helpScreen )
         this._addBuiltInEntity( "chat-screen", chatScreen )
@@ -334,23 +273,18 @@ export default class AssetSystem {
         this._addBuiltInEntity( "block",  block )
         this._addBuiltInEntity( "column", column1 )
         this._addBuiltInEntity( "wirebox", wirebox )
-        this._addBuiltInEntity( "icon", {
-                id: 0,
-                components: this._initButtonComponents(),
-                position: null,
-                quaternion: null
-            }
-        )
+        this._addBuiltInEntity( "icon", this._initButton() )
 
     }
 
-    _initButtonComponents ( data ) {
+    _initButton ( data ) {
 
         let color = data && data.color ? data.color : 0x404040,
             components = [],
+            button = null,
             x = 2
       
-        components.push({
+        button = {
             props: {
                 activates: true,
                 gazeOver: true,
@@ -365,11 +299,13 @@ export default class AssetSystem {
                 }
             },
             position: [0,0,0],
-        })
+            quaternion: null,
+            components: []
+        }
     
         while (x > 0) {
 
-            components.push({
+            button.components.push({
             props: {
                 geometry: {
                 //merge: true,
@@ -392,7 +328,7 @@ export default class AssetSystem {
 
         while (x > 0) {
 
-            components.push({
+            button.components.push({
                 props: {
                     geometry: {
                      //merge: true,
@@ -411,7 +347,7 @@ export default class AssetSystem {
 
         }
 
-        return components
+        return button
     }
 
     _initIconProps ( color ) {

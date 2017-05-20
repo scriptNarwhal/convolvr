@@ -91,8 +91,8 @@ export default class TerrainSystem {
         viewDistance = (this.world.mobile ? 5 : 6) + this.world.viewDistance,
         removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
         endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
-        x = coords[0]-phase+1,
-        y = coords[2]-phase+1
+        x = coords[0]-phase,
+        y = coords[2]-phase
         this.chunkCoords = coords
 
     if ( force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
