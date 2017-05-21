@@ -174,7 +174,7 @@ func getWorld(c echo.Context) error { // load specific world
 		// debugging skybox / terrain colors
 		terrainRed = 0.15 + red/2.0 + blue/2.0
 		terrainGreen = 0.15 + (green*red*blue)/3.0
-		terrainBlue = 0.15 + blue/2.0 + red/2.0
+		terrainBlue = 0.25 + blue/2.0 + red/2.0
 
 		terrainColor = int(math.Floor(terrainRed*254))<<16 | int(math.Floor(terrainGreen*254))<<8 | int(math.Floor(terrainBlue*254))
 
@@ -188,7 +188,7 @@ func getWorld(c echo.Context) error { // load specific world
 
 		lightColor = (127+int(math.Floor(192+red*63)))<<16 | (192+int(math.Floor(green*63)))<<8 | (192 + int(math.Floor(blue*63)))
 		//lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
-		ambientColor = int(255*red/12.0)<<16 | int(255*green/12.0)<<8 | int(255*blue/12.0)
+		ambientColor = int(255*red/10.0)<<16 | int(255*green/10.0)<<8 | int(255*blue/10.0)
 
 		red *= 2.5
 		green *= 2.5

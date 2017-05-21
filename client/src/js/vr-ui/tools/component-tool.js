@@ -12,9 +12,9 @@ export default class ComponentTool extends Tool {
         this.name = "Component Tool"
         this.components = new ComponentGenerator()
         this.options = {
-          componentType: "panel"
+          componentType: "column"
         }
-        this.all = [ "panel", "column", "panel2", "column2" ] // deprecated, migrating toward tool option panels // actually, these will turn into categories
+        this.all = [ "column", "panel", "panel2", "column2" ] // deprecated, migrating toward tool option panels // actually, these will turn into categories
         this.current = 0
         this.entity = new Entity(-1, [
           {
