@@ -19,7 +19,7 @@ export default class EntityTool extends Tool  {
             props: {
               geometry: {
                 shape: "box",
-                size: [1600, 1200, 7000]
+                size: [ 1600, 1200, 7000 ]
               },
               material: {
                 name: "metal"
@@ -61,7 +61,7 @@ export default class EntityTool extends Tool  {
           user = this.world.user,
           entity = params.entity ? params.entity : assetSystem.makeEntity(this.options.entityType)  // console.log("Entity Tool"); console.log(JSON.stringify(entity.components))
 
-      if ((selected && cursorState.distance < 164000) || cursorSystem.entityCoolDown > 30 ) { // switch to component tool
+      if ((selected && cursorState.distance < 164000) || cursorSystem.entityCoolDown > 10 ) { // switch to component tool
           
           user.toolbox.useTool(1, telemetry.hand)
           user.hud.componentsByProp.toolUI[0].state.toolUI.show()
