@@ -152,23 +152,23 @@ func getWorld(c echo.Context) error { // load specific world
 
 		if rand.Intn(12) > 6 {
 			if rand.Intn(12) > 6 {
-				red = first
-				green = second / 12.5
-				blue = third / 12.0
+				red = first / 2.0
+				green = third / 15.0
+				blue = third / 15.0
 			} else {
-				red = second / 6.5
-				green = third / 2.0
-				blue = first
+				red = 0.3
+				green = 0.1
+				blue = 0.9
 			}
 		} else {
 			if rand.Intn(12) > 6 {
-				red = third / 6.0
-				green = first / 4.4
+				red = 0.0
+				green = second / 1.6
 				blue = first
 			} else {
-				red = third / 3.0
+				red = third / 7.0
 				green = first
-				blue = second
+				blue = second / 1.4
 			}
 		}
 		// debugging skybox / terrain colors
@@ -190,9 +190,9 @@ func getWorld(c echo.Context) error { // load specific world
 		//lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
 		ambientColor = int(255*red/12.0)<<16 | int(255*green/12.0)<<8 | int(255*blue/12.0)
 
-		red *= 4.5
-		green *= 4.5
-		blue *= 4.5
+		red *= 2.5
+		green *= 2.5
+		blue *= 2.5
 
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}
 		light := Light{Color: lightColor, Intensity: 1.4, Angle: 1.07, AmbientColor: ambientColor}

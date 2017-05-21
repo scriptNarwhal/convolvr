@@ -103,11 +103,11 @@
                 } else if (vUv.y < 0.5 && vUv.y > 0.48) {
 
                    glow = mix(0.8 * depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.48)*20.0);
-                   color = vec4(terrainRed/2.0 + red/3.0, terrainGreen/2.0 + green/3.0, terrainBlue/2.0 + blue/3.0, 1.0);
+                   color = vec4(terrainRed/3.0 + red/4.0, terrainGreen/3.0 + green/4.0, terrainBlue/3.0 + blue/4.0, 1.0);
 
                 } else {
                     glow = -0.3+(depth) - vUv.y;
-                    color = vec4(terrainRed/2.0 + red/3.0, terrainGreen/2.0 + green/3.0, terrainBlue/2.0 + blue/3.0, 1.0);
+                    color = vec4(terrainRed/3.0 + red/4.0, terrainGreen/3.0 + green/4.0, terrainBlue/3.0 + blue/4.0, 1.0);
 
                 }
                
