@@ -116,8 +116,8 @@ export default class Toolbox {
 
         if ( input.trackedControls || input.leapMotion ) { // set position from tracked controller
 
-          cursor = cursors[hand +1]
-          handMesh = this.hands[hand].mesh
+          cursor = cursors[ hand +1 ]
+          handMesh = this.hands[ hand ].mesh
 
         } else {
 
@@ -157,7 +157,7 @@ export default class Toolbox {
           position, 
           quaternion 
         } = telemetry,
-          toolAction = null
+          action = null
 
       if ( tool.mesh == null ) {
 
@@ -165,11 +165,11 @@ export default class Toolbox {
         
       }
 
-      toolAction = tool.primaryAction(telemetry)
+      action = tool.primaryAction(telemetry)
 
-      if ( !!toolAction ) {
+      if ( !!action ) {
 
-        this.sendToolAction(true, tool, hand, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
+        this.sendToolAction(true, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.coords)
 
       }
 
@@ -181,7 +181,7 @@ export default class Toolbox {
           camera = this.world.camera,
           telemetry = this.initActionTelemetry(camera, true, hand),
         { position, quaternion } = telemetry,
-          toolAction = false
+          action = false
           
       if ( tool.mesh == null ) {
 
@@ -189,11 +189,11 @@ export default class Toolbox {
 
       }
 
-      toolAction = tool.secondaryAction(telemetry, value)
+      action = tool.secondaryAction(telemetry, value)
       
-      if (!!toolAction) {
+      if (!!action) {
 
-        this.sendToolAction(false, tool, hand, position, quaternion, toolAction.entity, toolAction.entityId, toolAction.components)
+        this.sendToolAction(false, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.coords)
 
       }
 
@@ -257,12 +257,17 @@ export default class Toolbox {
 
     }
 
-    sendToolAction ( primary, tool, hand, position, quaternion, entity, entityId = -1, components = [] ) {
+    sendToolAction ( primary, tool, hand, position, quaternion, entity, entityId = -1, components = [], coords ) {
 
       let camera = this.world.camera,
           cPos = camera.position,
-          coords = [Math.floor(cPos.x / 928000), 0, Math.floor(cPos.z / 807360)],
           toolName = tool.name
+
+     if ( !!!coords ) {
+
+        coords = [ Math.floor(cPos.x / 928000), 0, Math.floor(cPos.z / 807360) ]
+
+     }
 
       let actionData = {
         tool: toolName,

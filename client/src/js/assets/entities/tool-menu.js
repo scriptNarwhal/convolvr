@@ -52,7 +52,7 @@ let toolMenu = ( assetSystem ) => {
                             type: "point",
                             intensity: 0.9,
                             color: 0xffffff,
-                            distance: 45000
+                            distance: 120000
                         }
                     },
                     // components: [],

@@ -13,7 +13,8 @@ export default class Entity {
       this.componentsByProp = {
         // arrays are defined here with key of prop
       }
-
+      
+      this.voxel = this.position ? [ Math.floor(this.position[0] / 928000), 0, Math.floor(this.position[2] / 807360) ] : [ 0, 0, 0 ] // vertical axis disabled for now
       this.compsByFaceIndex = []
       this.lastFace = 0
 

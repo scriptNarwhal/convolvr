@@ -3,10 +3,14 @@ import Entity from '../entity'
 import { animate } from '../world/render'
 
 export default class SocketHandlers {
-    constructor (world, socket) {
+
+    constructor ( world, socket ) {
+
         this.world = world
         this.socket = socket
+
         socket.on("update", packet => {
+
 			let data = JSON.parse(packet.data),
                 world = this.world,
 				entity = null,
@@ -16,8 +20,11 @@ export default class SocketHandlers {
 				mesh = null
 
 			if (!! data.entity) {
+
 				entity = data.entity
+
 				if (entity.id != world.user.id) {
+
 					pos = entity.position
 					quat = entity.quaternion
 					user = world.users["user"+entity.id]
@@ -30,11 +37,15 @@ export default class SocketHandlers {
 					}
 					user.mesh = user.avatar.mesh
 					user.avatar.update( [ pos.x, pos.y, pos.z ], [ quat.x, quat.z, quat.y, quat.w ] )
+
 				}
+
 			}
+
 		})
 
 		socket.on("tool action", packet => {
+
 			let data = JSON.parse(packet.data),
                     world = this.world,
                     user = world.user,
@@ -52,12 +63,13 @@ export default class SocketHandlers {
 				break
 				case "Component Tool":
 					chunk.entities.map(voxelEnt => { // find & re-init entity
+
 						if (voxelEnt.id == data.entityId) {
-							// console.log("got component tool message") // concat with existing components array
-							// console.log(data.entity.components)
+							// console.log("got component tool message", data.entity.components); // concat with existing components array
 							voxelEnt.components = voxelEnt.components.concat(data.entity.components)
 							voxelEnt.init(three.scene)
 						}
+
 					})
 				break;
 				case "Custom Tool":
@@ -67,29 +79,56 @@ export default class SocketHandlers {
 
 				break
 				case "System Tool":
+					chunk.entities.map(voxelEnt => { // find & re-init entity
 
+						if (voxelEnt.id == data.entityId) {
+							console.log("got component tool message", data.entity.components) // concat with existing components array
+							//voxelEnt.components = voxelEnt.components.concat(data.entity.components)
+							//voxelEnt.init(three.scene)
+						}
+
+					})
 				break
 				case "Geometry Tool":
+					chunk.entities.map(voxelEnt => { // find & re-init entity
 
+						if (voxelEnt.id == data.entityId) {
+							console.log("got component tool message", data.entity.components) // concat with existing components array
+							//voxelEnt.components = voxelEnt.components.concat(data.entity.components)
+							//voxelEnt.init(three.scene)
+						}
+
+					})
 				break
 				case "Material Tool":
+					chunk.entities.map(voxelEnt => { // find & re-init entity
 
+						if (voxelEnt.id == data.entityId) {
+							console.log("got component tool message", data.entity.components) // concat with existing components array
+							//voxelEnt.components = voxelEnt.components.concat(data.entity.components)
+							//voxelEnt.init(three.scene)
+						}
+						
+					})
 				break
 				case "Delete Tool":
 
 				break
 				case "Geotag Tool":
+					// mostly going to use rest api for this..
 
 				break
 			}
 			if (world.IOTMode) {
 				animate(world, Date.now(), 0)
 			}
+
 		})
 
 		socket.on("rtc", packet => {
+
 			let signal = JSON.parse(packet),
-				webrtc = world.systems.webrtc,
+				webrtc = this.world.systems.webrtc,
 				peerConn = webrtc.peerConn
 
 			if (!peerConn)
@@ -104,6 +143,9 @@ export default class SocketHandlers {
 			} else if (signal.closeConnection){
 				webrtc.endCall()
 			}
+
 		})
+
     }
+
 }

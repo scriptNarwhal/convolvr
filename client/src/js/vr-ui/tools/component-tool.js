@@ -14,7 +14,7 @@ export default class ComponentTool extends Tool {
         this.options = {
           componentType: "panel"
         }
-        this.all = ["panel", "column", "panel2", "column2"] // deprecated, migrating toward tool option panels
+        this.all = [ "panel", "column", "panel2", "column2" ] // deprecated, migrating toward tool option panels // actually, these will turn into categories
         this.current = 0
         this.entity = new Entity(-1, [
           {
@@ -62,16 +62,26 @@ export default class ComponentTool extends Tool {
           entityId = -1,
           components = [],
           component = this.components.makeComponent( componentType ),
-          entity = null
+          entity = null,
+          tooManyComponents = !!selected && selected.components.length >= 48,
+          coords = [0,0,0] 
+
+      //console.log("Selected ", tooManyComponents, selected, selected.components)
 
       entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat )
       
-      if ( (!!!selected || cursorState.distance > 200000 ) && cursorSystem.entityCoolDown < 0 )  { // switch back to entity tool, if the user is clicking into empty space
+      if ( (!!!selected || cursorState.distance > 200000 || (tooManyComponents)) && cursorSystem.entityCoolDown < 0 )  { // switch back to entity tool, if the user is clicking into empty space
       
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByProp.toolUI[0].state.toolUI.show()
-        user.toolbox.usePrimary( 0, entity )
+        user.toolbox.usePrimary( 0, entity  )
         return false
+
+      }
+
+      if ( tooManyComponents && cursorSystem.entityCoolDown > 0 ) {
+
+        return false // stop spamming lol..
 
       }
 
@@ -79,6 +89,16 @@ export default class ComponentTool extends Tool {
 
       if ( components.length == 0 ) {
         components = [component]
+      }
+
+      if ( !!!selected ) {
+        
+        return false 
+
+      } else {
+
+        coords = selected.voxel
+
       }
 
       !!selected && !!selected.mesh && selected.mesh.updateMatrixWorld()
@@ -105,6 +125,7 @@ export default class ComponentTool extends Tool {
       })
 
       return {
+        coords,
         entity,
         entityId,
         components
