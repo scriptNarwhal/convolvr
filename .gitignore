@@ -31,3 +31,5 @@ world.db.lock
 !/web/user/public/chat-uploads/thumbs
 /web/user/public/chat-uploads/thumbs/*.*
 /web/user/public/thumbs/*.*
+.vscode
+/.vscode
