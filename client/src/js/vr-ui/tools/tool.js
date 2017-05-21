@@ -59,8 +59,8 @@ export default class Tool {
         userPos[1] += 46000
         toolPanel.update(userPos)
         toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
-        toolPanel.mesh.translateZ(-65000)
-        toolPanel.mesh.translateX(30000)
+        toolPanel.mesh.translateZ(-72000)
+        toolPanel.mesh.translateX(35000)
         toolPanel.mesh.updateMatrix()
 
       }

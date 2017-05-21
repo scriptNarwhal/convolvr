@@ -30,6 +30,8 @@ export default class AssetSystem {
         this.componentsByName = {}
         this.userEntities = []
         this.userComponents = []
+        this.places = []
+        this.worlds = []
         this.props = {
             geometry: [
                 { shape: 'node', size: [1, 1, 1] },
@@ -274,6 +276,18 @@ export default class AssetSystem {
         this._addBuiltInEntity( "column", column1 )
         this._addBuiltInEntity( "wirebox", wirebox )
         this._addBuiltInEntity( "icon", this._initButton() )
+
+    }
+
+    _loadPlaces ( places ) {
+        // implement.. call this from redux action
+        this.places = places
+        
+    }
+
+    _loadWorlds ( worlds ) { 
+        // implement call this from redux action
+        this.worlds = worlds
 
     }
 

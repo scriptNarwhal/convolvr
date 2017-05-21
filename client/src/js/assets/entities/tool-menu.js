@@ -1,6 +1,6 @@
 let toolMenu = ( assetSystem ) => {
 
-    let toolColors = [ 0x15ff15, 0x003bff, 0x07ff07, 0x07ffff, 0xa007ff, 0xffff07 ],
+    let toolColors = [ 0xff0707, 0x003bff, 0x07ff07, 0x07ffff, 0xa007ff, 0xffff07 ],
     toolMenuIcons = [],
     toolMenu = null
 
@@ -11,12 +11,8 @@ let toolMenu = ( assetSystem ) => {
                         toolUI: {
                             toolIndex: i
                         },
-                        hover: {
-
-                        },
-                        activate: {
-
-                        }
+                        hover: {},
+                        activate: {}
                     }),
                     position: [0, 0, 0],
                     quaternion: null
@@ -51,17 +47,23 @@ let toolMenu = ( assetSystem ) => {
                         },
                         toolUI: {
                             currentToolLabel: true
+                        },
+                        light: {
+                            type: "point",
+                            intensity: 0.9,
+                            color: 0xffffff,
+                            distance: 45000
                         }
                     },
                     // components: [],
-                    position: [ -13000, -6000, 0 ],
+                    position: [ -13000, -12000, 0 ],
                     quaternion: null
                 },
                 {
                     props: {
                         geometry: {
-                            shape: "box",
-                            size: [70000, 16000, 1000]
+                            shape: "node",
+                            size: [1, 1, 1]
                         },
                             material: {
                             color: 0x808080,

@@ -12,6 +12,8 @@ export default class Component {
       this.props = data.props || {}
       this.state = {}
       this.components = data.components || []
+      this.compsByFaceIndex = []
+      this.lastFace = 0
       this.detached = false
 
       if ( props.geometry == undefined ) {
@@ -69,9 +71,10 @@ export default class Component {
         compMesh = null,
         materials = [],
         addToOctree = true,
-        comp = null,
-        face = 0,
+        toFace = 0,
         faces = null,
+        face = 0,
+        comp = null,
         c = 0,
         s = 0
 
@@ -85,16 +88,30 @@ export default class Component {
 
         compMesh = comp.mesh
 
+        if ( comp.props.geometry ) {
+
+          faces = compMesh.geometry.faces
+          face = faces.length-1
+          toFace = this.lastFace + face
+          this.compsByFaceIndex.push({
+            component: comp,
+            from: this.lastFace,
+            to: toFace
+          })  
+          this.lastFace = toFace
+
+        }
+
         if ( comp.props.geometry && comp.props.geometry.merge === true ) {
 
           materials.push( compMesh.material )
           compMesh.updateMatrix()
-          faces = compMesh.geometry.faces
-          face = faces.length-1
 
           while ( face > -1 ) {
+
               faces[face].materialIndex = s
               face --
+
           }
 
           base.merge( compMesh.geometry, compMesh.matrix )
@@ -116,14 +133,34 @@ export default class Component {
 
     } else {
 
-      while ( s < nonStructural.length ) {
+      while ( s < nonStructural.length ) { // these might thow things off /wrt face index / ray casting
 
           this.mesh.add(nonStructural[s])
           s ++
 
       }
 
-    }     
+    }
+
+    this.mesh.userData.compsByFaceIndex = this.compsByFaceIndex     
+
+  }
+
+  getComponentByFace ( face ) {
+    
+    let component = false
+
+    this.compsByFaceIndex.forEach((comp) => {
+
+      if ( face >= comp.from && face <= comp.to ) {
+
+        component = comp.component
+
+      } 
+
+    })
+
+    return component
 
   }
 

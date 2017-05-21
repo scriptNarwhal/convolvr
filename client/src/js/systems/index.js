@@ -114,7 +114,8 @@ export default class Systems {
         })
 
 		this.deffered = {
-			hand: true, light: true, particle: true, text: true, audio: true, video: true, metaFactory: true, miniature: true
+			hand: true, light: true, particle: true, text: true, audio: true, video: true, metaFactory: true, miniature: true,
+			toolUI: true
 		}
 
     }
@@ -122,6 +123,8 @@ export default class Systems {
     registerComponent ( component ) {
 
         let componentsByProp = component.entity.componentsByProp,
+			entity = component.entity,
+			stateByProp = entity.stateByProp,
             props = component.props,
             state = component.state,
             deferredSystems = [],
@@ -158,9 +161,14 @@ export default class Systems {
         component.mesh = mesh
 
         deferredSystems.map(prop => {
+
             state[prop] = this[prop].init( component )
+
         })
 
         return mesh
     }
+	
 }
+
+

@@ -53,7 +53,7 @@ export default class MaterialSystem {
               break
           }
          
-          if (basic) {
+          if ( basic ) {
 
             material = new THREE.MeshBasicMaterial(mat)
 

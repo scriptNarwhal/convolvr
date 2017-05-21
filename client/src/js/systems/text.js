@@ -63,6 +63,7 @@ export default class TextSystem {
         textTexture.anisotropy = three.renderer.getMaxAnisotropy()
         textTexture.needsUpdate = true   
         component.state.text.textTexture = textTexture
+        component.mesh.material.map = textTexture
         component.mesh.material.needsUpdate = true
 
     }

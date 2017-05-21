@@ -46,7 +46,15 @@ export default class CursorSystem {
 
             obj = intersections[i]
             entity = obj.object.userData.entity
+            
             component = obj.object.userData.component
+
+            if (!! entity && !!! component ) {
+
+                component = entity.getComponentByFace( obj.face )
+
+            }
+
             callback( cursor, hand, world, obj, entity, component )
             i --
 
@@ -152,6 +160,7 @@ export default class CursorSystem {
             props = !!component ? component.props : false,
             hover = !!props ? props.hover : false,
             activate = !!props ? props.activate : false,
+            comp = false,
             cursorSystem = world.systems.cursor,
             newCursorState = {
                 distance,

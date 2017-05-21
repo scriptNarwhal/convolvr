@@ -27,7 +27,7 @@ export default class EntityTool extends Tool  {
               tool: {
                 panel: {
                   title: "Entities",
-                  color: 0x15ff15,
+                  color: 0xff0707,
                   content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
@@ -64,7 +64,7 @@ export default class EntityTool extends Tool  {
       if ((selected && cursorState.distance < 164000) || cursorSystem.entityCoolDown > 30 ) { // switch to component tool
           
           user.toolbox.useTool(1, telemetry.hand)
-          user.hud.show()
+          user.hud.componentsByProp.toolUI[0].state.toolUI.show()
           user.toolbox.usePrimary(0)
           return false
 

@@ -13,9 +13,9 @@ export default class Entity {
       this.componentsByProp = {
         // arrays are defined here with key of prop
       }
-      this.stateByProp = {
-        // thinking about this..
-      }
+
+      this.compsByFaceIndex = []
+      this.lastFace = 0
 
   }
 
@@ -54,6 +54,7 @@ export default class Entity {
         comp = null,
         face = 0,
         faces = null,
+        toFace = 0,
         c = 0,
         s = 0
 
@@ -80,12 +81,24 @@ export default class Entity {
                       Math.max(dimensions[1], Math.abs(compMesh.position.y)+compRadius), 
                       Math.max(dimensions[2], Math.abs(compMesh.position.z)+compRadius)]
 
+        if ( comp.props.geometry ) {
+
+          faces = compMesh.geometry.faces
+          face = faces.length-1
+          toFace = this.lastFace + face
+          this.compsByFaceIndex.push({
+            component: comp,
+            from: this.lastFace,
+            to: toFace
+          })  
+          this.lastFace = toFace
+
+        }
+
         if ( comp.props.geometry && comp.props.geometry.merge === true ) {
 
           materials.push(compMesh.material)
           compMesh.updateMatrix()
-          faces = compMesh.geometry.faces
-          face = faces.length-1
 
           while ( face > -1 ) {
 
@@ -138,7 +151,8 @@ export default class Entity {
 
     mesh.userData = { 
 
-      entity: this 
+      entity: this,
+      compsByFaceIndex: this.compsByFaceIndex
 
     }
 
@@ -153,6 +167,24 @@ export default class Entity {
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()
     return this
+
+  }
+
+  getComponentByFace ( face ) {
+    
+    let component = false
+
+    this.compsByFaceIndex.forEach((comp) => {
+
+      if ( face >= comp.from && face <= comp.to ) {
+
+        component = comp.component
+
+      } 
+
+    })
+
+    return component
 
   }
 
