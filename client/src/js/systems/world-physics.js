@@ -1,7 +1,7 @@
 export default class WorldPhysics {
 	constructor(world) {
 		this.worker = null
-		let worker = new Worker('/js/workers/world.js');
+		let worker = new Worker('/data/js/workers/world.js');
 	      worker.onmessage = function (event) {
 	        let message = JSON.parse(event.data),
 	          vrFrame = world.vrFrame,
@@ -87,12 +87,6 @@ export default class WorldPhysics {
 					} else if (message.command == "load entities") {
 	          world.generateFullLOD(message.data.coords);
 
-	        } else if (message.command == "enter interior") {
-	          if (message.data.name != world.venue) {
-	            //console.log("message.data.name", data.data.name);
-	            world.venue = message.data.name;
-	            world.enterInterior(message.data.name);
-	          }
 	        } else {
 	          console.log(message.data);
 	        }

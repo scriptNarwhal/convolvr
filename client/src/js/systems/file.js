@@ -4,10 +4,11 @@ export default class FileSystem {
     }
 
     init (component) { 
-        let prop = component.props.file,
-            state = {}
+        let prop = component.props.file
 
-        return state
+        return {
+            
+        }
     }
 
     createFile () {

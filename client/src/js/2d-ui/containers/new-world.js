@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import Shell from '../shell'
+import Shell from '../components/shell'
 
 const styles = {
   innerLogin: {
-    width: '66vh',
+    width: '100%',
+    maxWidth: '800px',
     height: 'auto',
     paddingBottom: '2em',
     minWidth: '360px',
@@ -70,13 +71,14 @@ const styles = {
   }
 }
 
-export default class NewWorld extends Component {
+class NewWorld extends Component {
   constructor () {
     super()
   }
   componentWillMount() {
     this.state = {
       name: "",
+      userName: "generated",
       skyType: "shader",
       layers: [],
       photosphere: '',
@@ -85,9 +87,10 @@ export default class NewWorld extends Component {
       blue: 1.0,
       intensity: 0.75,
       gravity: 1.0,
-      terrainType: 'both',
+      terrainType: 'voxels',
       terrainColor: 0x404040,
       turbulentTerrain: true,
+      highAltitudeGravity: false,
       flatness: 2,
       entities: true,
       structures: true,
@@ -98,42 +101,46 @@ export default class NewWorld extends Component {
   }
 
   createWorld() {
-    let
-      lightColor = [parseFloat(this.state.red), parseFloat(this.state.green), parseFloat(this.state.blue)],
-      data = {
-      id: 0,
-      name: this.state.name,
-      gravity: this.state.gravity,
-      sky: {
-        skyType: this.state.skyType,
-        red: lightColor[0],
-        green: lightColor[1],
-        blue: lightColor[2],
-        layers: this.state.layers,
-        photosphere: this.state.photosphere
-      },
-      light: {
-        color: 0x1000000 + (Math.floor(lightColor[0] * 255) << 16) + (Math.floor(lightColor[1] * 255) << 8) + Math.floor(lightColor[2] * 255),
-        intensity: parseFloat(this.state.intensity),
-        angle: 2.0,
-        ambientColor: 0x000000
-      },
-      terrain: {
-        type: this.state.terrainType,
-        height: 20000,
-        color: this.state.terrainColor,
-        turbulent: this.state.turbulentTerrain,
-        flatness: parseFloat(this.state.flatness),
-        decorations: ""
-      },
-      spawn: {
-        entities: this.state.entities,
-        structures: this.state.structures,
-        npcs: this.state.npcs,
-        tools: this.state.tools,
-        vehicles: this.state.vehicles
+    let lightColor = [parseFloat(this.state.red), parseFloat(this.state.green), parseFloat(this.state.blue)],
+        data = {
+          id: 0,
+          name: this.state.name,
+          gravity: this.state.gravity,
+          highAltitudeGravity: this.state.highAltitudeGravity,
+          sky: {
+            skyType: this.state.skyType,
+            red: lightColor[0],
+            green: lightColor[1],
+            blue: lightColor[2],
+            layers: this.state.layers,
+            photosphere: this.state.photosphere
+          },
+          light: {
+            color: 0x1000000 + (Math.floor(lightColor[0] * 255) << 16) + (Math.floor(lightColor[1] * 255) << 8) + Math.floor(lightColor[2] * 255),
+            intensity: parseFloat(this.state.intensity),
+            angle: 2.0,
+            ambientColor: 0x000000
+          },
+          terrain: {
+            type: this.state.terrainType,
+            height: 20000,
+            color: this.state.terrainColor,
+            turbulent: this.state.turbulentTerrain,
+            flatness: parseFloat(this.state.flatness),
+            decorations: ""
+          },
+          spawn: {
+            entities: this.state.entities,
+            structures: this.state.structures,
+            roads: this.state.roads,
+            trees: this.state.trees,
+            npcs: this.state.npcs,
+            tools: this.state.tools,
+            vehicles: this.state.vehicles
+          }
       }
-    }
+
+    data.userName = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'generated' // mark as public / not tied to user if no userName
     if (this.state.name != "") {
       this.props.createWorld(data)
     } else {
@@ -168,6 +175,12 @@ export default class NewWorld extends Component {
     let value= e.target.value
     this.setState({
       gravity: value == 'yes' ? 1.0 : 0.0
+    })
+  }
+  onToggleHighAltitudeGravity (e) {
+    let value = e.target.value
+    this.setState({
+      highAltitudeGravity: value == 'yes' ? true : false
     })
   }
   upload (e) {
@@ -246,9 +259,9 @@ export default class NewWorld extends Component {
                 <span style={styles.label}>Terrain Type</span>
                 <span style={styles.setting}>
                 <select onChange={ e=> { this.onTerrainTypeChange(e) }}>
+                <option value="voxels">Terrain Voxels</option>
+                <option value="plane">Ground Plane</option>
                 <option value="both">Voxels + Ground Plane</option>
-                <option value="voxels">Voxels Only</option>
-                <option value="plane">Ground Plane Only</option>
                 <option value="empty">Empty Space</option>
                 </select>
                 </span>
@@ -281,6 +294,15 @@ export default class NewWorld extends Component {
                   <span style={styles.label}>Use Gravity?</span>
                   <span style={styles.setting}>
                     <select onChange={ e=> { this.onToggleGravity(e) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </span>
+                </div>
+                <div style={styles.option}>
+                  <span style={styles.label}>(High Altitude) Zero Gravity?</span>
+                  <span style={styles.setting}>
+                    <select onChange={ e=> { this.onToggleHighAltitudeGravity(e) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>

@@ -12,6 +12,7 @@ import {
 import { API_SERVER } from '../../config.js'
 
 export function toggleMenu (force) {
+    window.three.world.mode = force ? "web" : "vr"
     return {
         type: APP_TOGGLE_MENU,
         force

@@ -5,6 +5,8 @@ export default class FloorSystem {
 
     init (component) { 
         
+        return {
+            
+        }
     }
 }
-

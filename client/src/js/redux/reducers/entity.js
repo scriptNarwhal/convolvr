@@ -8,8 +8,8 @@ import {
 } from '../constants/action-types';
 
 module.exports = function entities (state = {
-    instances: [],
-    types: [],
+    all: [],
+    userEntities: [],
     current: null
 }, action) {
   switch (action.type) {
@@ -17,11 +17,7 @@ module.exports = function entities (state = {
         return Object.assign({}, state, {
             instances: [
                 ...state.instances,
-                {
-                    id: action.id,
-                    name: action.name,
-                    components: action.components
-                }
+                action.data
             ]
         })
     case DELETE_ENTITY:
@@ -30,19 +26,14 @@ module.exports = function entities (state = {
 
     case ENTITIES_FETCH_DONE:
         return Object.assign({}, state, {
-            types: action.data.types,
-            instances: action.data.instances
+            all: action.data,
         })
     case ENTITIES_FETCH_FAILED:
 
     case UPDATE_ENTITY:
-        return state.map((entity, index) => {
+        return state.all.map((entity, index) => {
           if (entity.id == action.id) {
-            return Object.assign({}, entity, {
-              id: action.id,
-              name: action.name,
-              components: action.components
-            })
+            return Object.assign({}, entity, action.data)
           }
           return entity;
         })

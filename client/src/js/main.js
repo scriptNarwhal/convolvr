@@ -17,10 +17,11 @@ import { createStore } from 'redux'
 import makeStore from './redux/makeStore'
 let store = makeStore(routerReducer)
 const history = syncHistoryWithStore(browserHistory, store)
-// 2d UI
+// 2D UI
 import App from './2d-ui/containers/app'
 import Data from './2d-ui/containers/data'
 import Worlds from './2d-ui/containers/worlds'
+import Places from './2d-ui/containers/places'
 import NewWorld from './2d-ui/containers/new-world'
 import Settings from './2d-ui/containers/settings'
 import Network from './2d-ui/containers/network'
@@ -28,86 +29,98 @@ import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
 import HUD from './2d-ui/containers/hud'
 // World
-import { send, events } from './network/socket'
-import User from './user'
+import Convolvr from './world/world'
+import { events } from './network/socket'
 import UserInput from './input/user-input'
-import Toolbox from './world/tools/toolbox'
-import World from './world/world'
-// 3D UI
-import HUDMenu from './vr-ui/menu'
-import ListView from './vr-ui/text/list-view'
-import Avatar from './world/avatar'
+import User from './user'
+// 3D UI // 
+import Avatar from './assets/avatars/avatar' // default avatar
+import Toolbox from './vr-ui/tools/toolbox'
+import HUDMenu from './vr-ui/menu' //deprecated.. migrating these to entity-generator / systems.assets.entities
 
 let socket = events,
     token = localStorage.getItem("token"),
 		userInput,
 		user = new User(),
-	  world = null,
-	  avatar = null
+	  loadingWorld = null,
+	  avatar = null,
+    toolMenu = null,
+    helpScreen = null,
+    chatScreen = null
 
 userInput = new UserInput()
-world = new World(user, userInput, socket, store)
-user.useAvatar(new Avatar(user.id, false, {})) // only render hands, since this is you
-user.toolbox = new Toolbox(user, world)
-user.hud = new HUDMenu([], user.toolbox)
-user.hud.initMesh({}, three.camera)
-user.hud.hide()
-user.mesh.add(user.light)
-world.user = user
-three.scene.add(user.mesh)
-userInput.init(world, world.camera, user)
 
-userInput.rotationVector = {x: 0, y: 9.95, z: 0}
-three.camera.position.set(-300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
-user.light.position.set(200000, 200000, 200000)
+loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
-world.chat = new ListView({ // deprecated as of alpha 0.4.1
-  color: "#ffffff",
-  background: "#000000",
-  position: [0,0,0],
-  textLines: ["Welcome To Convolvr", "github.com/SpaceHexagon/convolvr"]
-}, three.scene).initMesh()
+  toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
+  console.log("tool menu", toolMenu)
+  toolMenu.init( three.scene )
+console.log("tool menu", toolMenu)
 
-world.help = new ListView({ // deprecated as of alpha 0.4.1
-  color: "#00ff00",
-  background: "#000000",
-  position: [-100000,0,0],
-  textLines: [
-    "# Desktop users:",
-    "- WASD,RF,Space keys: movement",
-    "- Mouselook (click screen to enable)",
-    "- Left Click: Primary Tool",
-    "- Right Click: Next Tool Mode",
-    "- Keys 1-5: switch tool",
-    "",
-    "# VR users: EnterVR icon in the corner",
-    "- If you have tracked controllers:",
-    "- Left stick: movement",
-    "- Right trigger: Primary Tool",
-    "- Right stick x-axis: change tools",
-    "- Right stick y-axis: tool mode",
-    "",
-    "# Mobile (non VR) users:",
-    "- One finger swipe: Change Look",
-    "- Two finger swipe: movement"
-  ]
-}, three.scene).initMesh()
+  user.useAvatar( new Avatar( user.id, false, {} ) ) // only render hands, since this is you
+  user.toolbox = new Toolbox( user, world )
 
+  // replace HUDMenu with entity based version in asset system
+  //user.hud = new HUDMenu( [], user.toolbox ) // v2 toolMenu will already know about user.toolbox
+  //user.hud.initMesh( {}, three.camera )
+  user.hud = toolMenu
+  //toolMenu.componentsByProp.toolUI[0].state.hide()
+
+  world.user = user
+  three.scene.add( user.mesh )
+  userInput.init( world, world.camera, user )
+  userInput.rotationVector = { x: 0, y: 9.95, z: 0 }
+  three.camera.position.set( -300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
+
+  chatScreen = world.systems.assets.makeEntity( "chat-screen", true )
+  chatScreen.init( three.scene )
+  chatScreen.update( [ 125000, 50000, 0 ] )
+  world.chat = chatScreen
+
+  helpScreen = world.systems.assets.makeEntity( "help-screen", true )
+  helpScreen.components[0].props.text.lines = [
+      "# Desktop users",
+      "- WASD, RF, space keys: movement",
+      "- Mouselook (click screen to enable)",
+      "- Left/right click: primary tool / mode",
+      "- Keys 1-6: switch tool",
+      "- Gamepads are also supported",
+      "",
+      "# Desktop VR users ",
+      "- Enter VR button in bottom right corner",
+      "- If you have tracked controllers:",
+      " * Right / Left trigger: use tool in hand",
+      " * Right stick x/y axis: change tool(mode)",
+      " * Left stick: movement",
+      "",
+      "# Mobile users (2d or with VR viewer)",
+      "- Device orientation controls the camera",
+      "- Swiping & dragging move you"
+    ]
+  helpScreen.init(three.scene)
+  console.log("help SCREEN", helpScreen)
+  //helpScreen.components[0].state.text.update()
+  helpScreen.update( [ 100000, 50000, 0 ] )
+  world.help = helpScreen
+
+})
 
 ReactDOM.render(
   (<Provider store={store}>
 		<Router history={history}>
 	  		<Route path="/" component={App} >
 				<IndexRoute component={HUD}/>
-        <Route path="/world/:name" component={HUD} />
+        <Route path="/:userName/:worldName" component={HUD} />
+        <Route path="/:userName/:worldName/at/:coords" component={HUD} />
+        <Route path="/:userName/:worldName/:placeName" component={HUD} />
 				<Route path="/login" component={Login} />
 				<Route path="/chat" component={Chat} />
-				<Route path="/data" component={Data} />
-        <Route path="/data/:username" component={Data} />
-        <Route path="/data/:username/:dir" component={Data} />
-        <Route path="/data/:username/:dir/:dirTwo" component={Data} />
+				<Route path="/files" component={Data} />
+        <Route path="/files/:username/:dir" component={Data} />
+        <Route path="/files/:username/:dir/:dirTwo" component={Data} />
 				<Route path="/worlds" component={Worlds} />
-        <Route path="/worlds/new" component={NewWorld} />
+        <Route path="/places" component={Places} />
+        <Route path="/new-world" component={NewWorld} />
 				<Route path="/settings" component={Settings} />
         <Route path="/network" component={Network} />
 			</Route>

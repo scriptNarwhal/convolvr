@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import Shell from '../shell'
-import Card from '../card'
-import LocationBar from '../location-bar'
+import Shell from '../components/shell'
+import Card from '../components/card'
+import LocationBar from '../components/location-bar'
 
 let styles = {
   hr: {
@@ -47,9 +47,9 @@ class Data extends Component {
     let username = this.props.username,
         workingPath = this.state.workingPath.join("/")
     if (thumbnail && this.isImage(file)) {
-      return `/data/${username}${workingPath}/thumbs/${file}.jpg`
+      return `/data/user/${username}${workingPath}/thumbs/${file}.jpg`
     } else {
-      return `/data/${username}${workingPath}/${file}`
+      return `/data/user/${username}${workingPath}/${file}`
     }
   }
   enterDirectory (dir) {

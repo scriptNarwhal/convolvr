@@ -6,7 +6,7 @@ export default class DestructableSystem {
     init (component) { 
         // break apart sub components
         return {
-            
+            explodeProgress: 0
         }
     }
 }

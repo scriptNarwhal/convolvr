@@ -4,31 +4,32 @@
         <title>Convolvr</title>
         <meta content="utf-8" http-equiv="encoding">
         <meta name='viewport' content='width=device-width, initial-scale=1' />
-        <link rel='icon' type='image/png' sizes='192x192' href='/images/convolvr2.png' />
+        <link rel='icon' type='image/png' sizes='192x192' href='/data/images/convolvr2.png' />
         <meta name='theme-color' content='rgb(20, 20, 20)' />
         <meta name="msapplication-TileColor" content="#151515" />
         <meta name="application-name" content="Convolvr" />
         <meta name="description" content="WebVR game engine, server and virtual reality authoring tool." />
+        <!-- TODO: make metatags configurable -->
         <meta property="og:title" content="Convolvr" />
         <meta property="og:description" content="WebVR game engine, server and virtual reality authoring tool." />
-        <meta property="og:image" content="https://convolvr.io/images/convolvr2.png" / >
+        <meta property="og:image" content="https://convolvr.io/data/images/convolvr2.png" / >
         <meta property="og:image:width" content="192" />
         <meta property="og:image:height" content="192" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="https://convolvr.io" />
         <meta name="twitter:title" content="Convolvr" />
         <meta name="twitter:description" content="WebVR game engine, server and virtual reality authoring tool."  />
-        <meta name="twitter:image" content="https://convolvr.io/images/convolvr2.png" />
+        <meta name="twitter:image" content="https://convolvr.io/data/images/convolvr2.png" />
         <style>
 			body {
 				padding: 0;
 				margin: 0;
-        width: 100%;
-        height:100%;
-        overflow-x: hidden;
-        position: absolute;
-        font-size: 20px;
-        font-family: sans-serif;
+                width: 100%;
+                height:100%;
+                overflow-x: hidden;
+                position: absolute;
+                font-size: 20px;
+                font-family: sans-serif;
 				background: #101010;
 				color: #ffffff;
 			}
@@ -40,15 +41,17 @@
     </head>
     <body>
         <main id="root"></main>
-        <link rel='stylesheet' href='/css/app.css' />
+        <link rel='stylesheet' href='/data/css/app.css' />
         <script type="x-shader/x-vertex" id="sky-vertex">
             #ifdef GL_ES
             precision highp float;
             #endif
             varying vec2 vUv;
             void main () {
+
                 vUv = uv;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+
             }
         </script>
         <script type="x-shader/x-fragment" id="sky-fragment">
@@ -60,6 +63,11 @@
             uniform float red;
             uniform float green;
             uniform float blue;
+            uniform float terrainRed;
+            uniform float terrainGreen;
+            uniform float terrainBlue;
+            vec4 color;
+
             //3.141592654
             float hash( float n ) {
                 return fract(sin(n)*43758.5453);
@@ -78,47 +86,55 @@
             }
 
             void main( void ) {
+
                 float depth = (1.0 - (abs(0.5 - vUv.y) * 2.5));
                 float intense = vUv.y*2.0*abs(0.25 - (vUv.x / 2.0));
                 float radial = abs(0.25 - (vUv.x / 2.0));
                 float glow = 0.0;
+                float luminance = 0.0;
+                luminance += 0.4 + depth / 1.25;
 
                 if ((vUv.y >= 0.5)) {
+
                     glow = -0.2+(depth) - vUv.y;
                     glow =+ 0.7 * depth * depth;
+                    color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
+
                 } else if (vUv.y < 0.5 && vUv.y > 0.48) {
+
                    glow = mix(0.8 * depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.48)*20.0);
+                   color = vec4(terrainRed/3.0 + red/4.0, terrainGreen/3.0 + green/4.0, terrainBlue/3.0 + blue/4.0, 1.0);
+
                 } else {
                     glow = -0.3+(depth) - vUv.y;
+                    color = vec4(terrainRed/3.0 + red/4.0, terrainGreen/3.0 + green/4.0, terrainBlue/3.0 + blue/4.0, 1.0);
+
                 }
-               float luminance = 0.0;
-               luminance += 0.4 + depth / 1.25;
-               vec4 color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
+               
                gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
+
             }
         </script>
-        <script src='/lib/notify.js'></script>
-        <script src='/lib/three.min.js'></script>
-        <script src='/lib/csg.js'></script>
-        <script src='/lib/ThreeCSG.js'></script>
-        <script src='/lib/BufferSubdivisionModifier.js'></script>
-        <script src='/lib/threeoctree.js'></script>
-        <script src='/lib/webvr-polyfill.js'></script>
-        <script src='/lib/VRControls.js'></script>
-        <!-- <script src='/lib/VREffect.js'></script> -->
-        <script src='/lib/VREffect-composer.js'></script> <!-- experimental -->
-        <script src="/lib/leap.js"></script>
-        <script src="/lib/leap-plugins.js"></script>
-        <script src="/lib/shaders/FXAAShader.js"></script>
-        <script src="/lib/shaders/CopyShader.js"></script>
-        <script src="/lib/shaders/ConvolutionShader.js"></script>
-        <script src="/lib/postprocessing/EffectComposer.js"></script>
-        <script src="/lib/postprocessing/MaskPass.js"></script>
-        <script src="/lib/postprocessing/RenderPass.js"></script>
-        <script src="/lib/postprocessing/ShaderPass.js"></script>
-        <script src="/lib/postprocessing/BloomPass.js"></script>
-        <script src='/js/app.js'></script>
-
-
+        <script src='/data/lib/notify.js'></script>
+        <script src='/data/lib/three.min.js'></script>
+        <script src='/data/lib/csg.js'></script>
+        <script src='/data/lib/ThreeCSG.js'></script>
+        <script src='/data/lib/BufferSubdivisionModifier.js'></script>
+        <script src='/data/lib/threeoctree.js'></script>
+        <script src='/data/lib/webvr-polyfill.min.js'></script>
+        <script src='/data/lib/VRControls.js'></script>
+        <!-- <script src='/data/lib/VREffect.js'></script> -->
+        <script src='/data/lib/VREffect-composer.js'></script> <!-- experimental -->
+        <script src="/data/lib/leap.js"></script>
+        <script src="/data/lib/leap-plugins.js"></script>
+        <script src="/data/lib/shaders/FXAAShader.js"></script>
+        <script src="/data/lib/shaders/CopyShader.js"></script>
+        <script src="/data/lib/shaders/ConvolutionShader.js"></script>
+        <script src="/data/lib/postprocessing/EffectComposer.js"></script>
+        <script src="/data/lib/postprocessing/MaskPass.js"></script>
+        <script src="/data/lib/postprocessing/RenderPass.js"></script>
+        <script src="/data/lib/postprocessing/ShaderPass.js"></script>
+        <script src="/data/lib/postprocessing/BloomPass.js"></script>
+        <script src='/data/js/app.js'></script>
     </body>
 </html>

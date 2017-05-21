@@ -8,8 +8,8 @@ import {
 } from '../constants/action-types';
 
 module.exports = function components (state = {
-    instances: [],
-    types: [],
+    all: [],
+    userComponents: [],
     current: null,
     fetching: false
 }, action) {
@@ -17,10 +17,7 @@ module.exports = function components (state = {
     case COMPONENT_ADD:
       return [
         ...state,
-        {
-          name: action.name,
-          data: action.data
-        }
+        action.data
       ]
     case DELETE_COMPONENT:
 
@@ -30,7 +27,7 @@ module.exports = function components (state = {
         })
     case COMPONENTS_FETCH_DONE:
         return Object.assign({}, state, {
-                instances: action.data,
+                all: action.data,
                 fetching: false
         })
     case COMPONENTS_FETCH_FAILED:

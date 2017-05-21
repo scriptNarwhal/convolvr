@@ -57,7 +57,7 @@ export function fetchUserWorlds (userId) {
                 type: USER_WORLDS_FETCH_DONE,
                 data: res.data
             })
-        }).catch(res => {
+        }).catch(err => {
             dispatch({
                 type: USER_WORLDS_FETCH_FAIL,
                 err: err
@@ -75,7 +75,8 @@ export function fetchUniverseSettings () {
             if (window.location.href.indexOf("/world/") == -1) {
               dispatch({
                 type: WORLD_SET_CURRENT,
-                current: response.data.defaultWorld
+                current: response.data.defaultWorld,
+                userName: "world" 
               })
             }
 
@@ -101,7 +102,8 @@ export function createWorld (data) {
      return axios.post(API_SERVER+"/api/worlds", data)
         .then(response => {
             dispatch(createWorldDone(response))
-            browserHistory.push("/world/"+data.name)
+            //three.world.reload( data.userName, data.name, false, false ) // until this works perfectly, refresh the page
+            browserHistory.push("/"+data.userName+"/"+data.name)
             window.location.href = window.location.href  /* work around */
         }).catch(response => {
             dispatch(createWorldFail(response))
@@ -120,10 +122,11 @@ export function createWorldFail (err) {
         err
     }
 }
-export function setCurrentWorld (world) {
+export function setCurrentWorld (userName, world) {
   return {
     type: WORLD_SET_CURRENT,
-    current: world
+    current: world,
+    userName
   }
 }
 export function updateWorld (id, data) {

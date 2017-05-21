@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
-import Card from '../card'
-import Shell from '../shell'
-import LocationBar from '../location-bar'
+import Card from '../components/card'
+import Shell from '../components/shell'
+import LocationBar from '../components/location-bar'
 
 const styles = {
   worlds: {
@@ -13,12 +13,20 @@ const styles = {
 }
 
 class Worlds extends Component {
-  switchWorlds (name) {
-    browserHistory.push("/world/"+name)
-    window.location.href = window.location.href // workaround..
-    // this.props.setCurrentWorld(name)
-    // three.world.reload(name)
+
+  switchWorlds ( userName, name ) {
+
+    if (userName == '') {
+
+      userName = 'generated'
+
+    }
+    //browserHistory.push(userName+"/"+name)
+    //window.location.href = window.location.href // workaround..
+    this.props.setCurrentWorld( userName, name )
+    three.world.reload( userName, name, false, false )
   }
+
   render() {
     return (
         <Shell className="worlds">
@@ -43,10 +51,10 @@ class Worlds extends Component {
               }
               return (
                 <Card clickHandler={(e, v) => {
-                        this.switchWorlds(world.name)
+                        this.switchWorlds(world.userName, world.name)
                       }}
                       color={`#${(world.light.color).toString(16)}`}
-                      image={world.sky.photosphere != '' ? `/data/${thumb}` : ""}
+                      image={world.sky.photosphere != '' ? `/data/user/${thumb}` : ""}
                       showTitle={true}
                       compact={world.sky.photosphere == ''}
                       title={world.name}
@@ -67,10 +75,10 @@ class Worlds extends Component {
               }
               return (
                 <Card clickHandler={(e, v) => {
-                        this.switchWorlds(world.name)
+                        this.switchWorlds(world.userName, world.name)
                       }}
                       color={`#${(world.light.color).toString(16)}`}
-                      image={world.sky.photosphere != '' ? `/data/${thumb}` : ""}
+                      image={world.sky.photosphere != '' ? `/data/user/${thumb}` : ""}
                       showTitle={true}
                       compact={world.sky.photosphere == ''}
                       title={world.name}

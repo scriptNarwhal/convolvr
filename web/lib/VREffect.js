@@ -312,9 +312,10 @@ THREE.VREffect = function ( renderer, onError ) {
 			camera.matrixWorld.decompose( cameraL.position, cameraL.quaternion, cameraL.scale );
 			camera.matrixWorld.decompose( cameraR.position, cameraR.quaternion, cameraR.scale );
 
-			var scale = this.scale;
-			cameraL.translateOnAxis( eyeTranslationL, scale );
-			cameraR.translateOnAxis( eyeTranslationR, scale );
+			// cameraL.translateOnAxis( eyeTranslationL, cameraL.scale.x );
+			// cameraR.translateOnAxis( eyeTranslationR, cameraR.scale.x );
+			cameraL.translateOnAxis( eyeTranslationL, this.scale );
+			cameraR.translateOnAxis( eyeTranslationR, this.scale );
 
 			if ( vrDisplay.getFrameData ) {
 

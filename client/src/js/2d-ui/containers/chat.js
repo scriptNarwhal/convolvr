@@ -1,8 +1,8 @@
 /* chat container */
 import React, { Component } from 'react'
-import Shell from '../shell'
-import Card from '../card'
-import LocationBar from '../location-bar'
+import Shell from '../components/shell'
+import Card from '../components/card'
+import LocationBar from '../components/location-bar'
 
 const styles = {
     chat: {
@@ -90,6 +90,9 @@ const styles = {
     }
 }
 
+let linkRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm,
+    imageRegex = /(\.png|\.jpg|\.jpeg|\.gif|\.svg|\.webp)/
+
 class Chat extends Component {
   constructor() {
     super()
@@ -99,31 +102,48 @@ class Chat extends Component {
     this.messageBody = null
   }
   componentDidMount () {
+
     let worldMode = three.world.mode
+
     if (worldMode != 'vr' && worldMode != 'stereo') {
+
       this.textInput.focus()
+
     }
+
     if (this.props.menuOpen == false) {
+
       this.props.toggleMenu(true)
+
     }
+
     if (this.props.chatOpen == false) {
+
       this.props.showChat()
 
     }
+
     setTimeout(()=> { this.scrollToBottom() },500)
+
   }
 
   scrollToBottom() {
+
     const scrollHeight = this.messageBody.scrollHeight,
           height = this.messageBody.clientHeight,
           maxScrollTop = scrollHeight - height
     this.messageBody.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0
+
   }
 
   componentDidUpdate() {
+
     this.scrollToBottom()
+
   }
+
   send (message, files = []) {
+
       console.log("send button")
       let from = this.props.username
       this.props.sendMessage(message || this.state.text, from, files)
@@ -131,13 +151,58 @@ class Chat extends Component {
         text: ""
       })
       this.textInput.value = ""
+
   }
+
   isImage (file) {
-    return /(.png|.jpg|.jpeg|.gif|webp)/.test(file)
+
+    return imageRegex.test(file)
+
   }
+
+  renderMessage ( message ) {
+
+    if (linkRegex.test(message)) {
+
+      if (imageRegex.test(message)) {
+
+        return (
+
+            <Card image={message}
+                  clickHandler={ (e, title) => {
+                   let newWindow = window.open(message, "_blank")
+                    newWindow.focus()
+                  }}
+                  compact={false}
+                  showTitle={true}
+                  title={ message.substring(0, 30) }
+            />
+
+        )
+
+      } else {
+
+        return (
+
+          <a href={message} target="_blank">{message}</a>
+
+        )
+
+      }
+
+    } else {
+
+      return message
+
+    }
+
+  }
+
   render() {
+
     let lastSender = '',
         mobile = window.innerWidth <= 720
+
     return (
         <Shell className="chat"
               noBackground={true}
@@ -152,16 +217,16 @@ class Chat extends Component {
                         <span key={i} style={styles.message} >
                           <span style={styles.innerMessage}>
                             { fromLabel }
-                            <span style={styles.messageText}>{m.message}</span>
+                            <span style={styles.messageText}>{this.renderMessage(m.message)}</span>
                             { m.files != null ? <br style={{marginBottom: '0.5em'}} /> : '' }
                             {
                               m.files != null && m.files.map((file, i) => {
                                   let userDir = m.from != 'Human' ? m.from : 'public'
                                   return (
-                                    <Card image={this.isImage(file) ? `/data/${userDir}/chat-uploads/thumbs/${file}.jpg` : ''}
+                                    <Card image={this.isImage(file) ? `/data/user/${userDir}/chat-uploads/thumbs/${file}.jpg` : ''}
                                           clickHandler={ (e, title) => {
                                             console.log(e, title, "clicked")
-                                            let newWindow = window.open(`/data/${userDir}/chat-uploads/${file}`, "_blank")
+                                            let newWindow = window.open(`/data/user/${userDir}/chat-uploads/${file}`, "_blank")
                                             newWindow.focus()
                                           }}
                                           compact={!this.isImage(file)}
@@ -193,12 +258,15 @@ class Chat extends Component {
             </section>
         </Shell>
     )
+
   }
+
 }
 
 Chat.defaultProps = {
 
 }
+
 import { connect } from 'react-redux';
 import {
   getChatHistory,
@@ -208,11 +276,12 @@ import {
   toggleMenu,
   showChat
 } from '../../redux/actions/app-actions'
+
 export default connect(
   (state, ownProps) => {
     return {
         loggedIn: state.users.loggedIn,
-        username: state.users.loggedIn != false ? state.users.loggedIn.name : "Human",
+        username: !!state.users.loggedIn ? state.users.loggedIn.name : "Human",
         messages: state.messages.messages,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,

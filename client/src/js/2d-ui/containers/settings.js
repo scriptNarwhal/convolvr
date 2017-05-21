@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import Shell from '../shell'
+import Shell from '../components/shell'
 
 const styles = {
   modal: {
-    width: '66.66vh',
+    width: '100%',
+    maxWidth: '800px',
     height: '100%',
     minWidth: '360px',
     margin: 'auto',
@@ -39,6 +40,9 @@ const styles = {
   select: {
     padding: '0.5em'
   },
+  range: {
+    padding: '0.5em'
+  },
   admin: {
     marginTop: '3em'
   },
@@ -56,6 +60,9 @@ class Settings extends Component {
       postProcessing: 'on',
       defaultWorld: 'overworld',
       welcomeMessage: 'Welcome to Convolvr!',
+      floorHeight: 0,
+      viewDistance: 0,
+      profilePicture: '',
       network: [],
       IOTMode: false
     }
@@ -67,7 +74,9 @@ class Settings extends Component {
       postProcessing: localStorage.getItem("postProcessing") || 'off',
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa: localStorage.getItem("aa") || "on",
-      IOTMode: localStorage.getItem("IOTMode") || 'off'
+      floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
+      IOTMode: localStorage.getItem("IOTMode") || 'off',
+      viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0
     })
     this.props.fetchUniverseSettings()
   }
@@ -91,6 +100,8 @@ class Settings extends Component {
     localStorage.setItem('postProcessing', this.state.postProcessing)
     localStorage.setItem('vrMovement', this.state.vrMovement) 
     localStorage.setItem('IOTMode', this.state.IOTMode)
+    localStorage.setItem('floorHeight', this.state.floorHeight)
+    localStorage.setItem('viewDistance', this.state.viewDistance)
     this.reload()
   }
   updateUniverseSettings () {
@@ -118,6 +129,15 @@ class Settings extends Component {
     network[index].image = image
     this.setState({network})
   }
+  upload (e) {
+    let data = new FormData(),
+        username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
+    data.append('file', e.target.files[0])
+    this.setState({
+      profilePicture: username+"/"+e.target.files[0].name.replace(/\s/g, '-')
+    })
+    this.props.uploadFile(data, username, "")
+  }
   render() {
     let isAdmin = this.props.user.name == 'admin'
     return (
@@ -125,27 +145,41 @@ class Settings extends Component {
           <div style={styles.modal}>
           <h1>Settings</h1>
           <div>
-            <h3 style={styles.h3}>Camera Control Mode</h3>
-            <select onChange={e=> { this.setState({camera: e.target.value})}}
-                    value={ this.state.camera }
-                    style={ styles.select }
-            >
-              <option value="fps">First Person Camera</option>
-              <option value="vehicle">Flight Camera (relative rotation)</option>
-            </select>
+            <h3 style={styles.h3}>Profile Picture</h3>
+            <span style={{paddingLeft: '1em'}}>
+              <input onChange={ (e)=> this.upload(e) }
+                           style={styles.fileUpload} 
+                           type='file' 
+              />
+            </span>
+          <div>
+            <h3 style={styles.h3}>View Distance</h3>
+            <input onBlur={e=> {this.setState({viewDistance: parseInt(e.target.value)})}}
+                   style={styles.range}
+                   defaultValue={this.state.viewDistance}
+                   step={1}
+                   type='range'
+                   min='-4'
+                   max='6'
+            />
+            <span style={{paddingLeft: '1em'}}>
+              {(this.state.viewDistance > 0 ?'+ ':'- ')+this.state.viewDistance} Voxels 
+            </span>
           </div>
           <div>
-            <div>
-            <h3 style={styles.h3}>VR Movement Mode</h3>
-            <select onChange={e=> { this.setState({vrMovement: e.target.value})}}
-                    value={ this.state.vrMovement }
-                    style={ styles.select }
-            >
-              <option value="stick">Stick Control</option>
-              <option value="teleport">Teleport Control</option>
-            </select>
+            <h3 style={styles.h3}>Floor Height (VR)</h3>
+            <input onBlur={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
+                   style={styles.range}
+                   defaultValue={this.state.floorHeight}
+                   step={1}
+                   type='range'
+                   min='-30000'
+                   max='20000'
+            />
+            <span style={{paddingLeft: '1em'}}>
+              {this.state.floorHeight} Units
+            </span>
           </div>
-        </div>
           <div>
             <h3 style={styles.h3}>Lighting Quality</h3>
             <select onChange={e=> {this.setState({lighting: e.target.value})}}
@@ -177,6 +211,14 @@ class Settings extends Component {
             </select>
           </div>
           <div>
+            <h3 style={styles.h3}>Camera Control Mode</h3>
+            <select onChange={e=> { this.setState({camera: e.target.value})}}
+                    value={ this.state.camera }
+                    style={ styles.select }
+            >
+              <option value="fps">First Person Camera</option>
+              <option value="vehicle">Flight Camera (relative rotation)</option>
+            </select>
             <h3 style={styles.h3}>IOT Mode</h3>
             <select onChange={e=> {this.setState({IOTMode: e.target.value})}}
                     value={ this.state.IOTMode }
@@ -274,7 +316,7 @@ class Settings extends Component {
               />
             </div>
           ): ""}
-
+          </div>
           </div>
         </Shell>
     )
@@ -286,6 +328,7 @@ import { connect } from 'react-redux';
 import {
     sendMessage
 } from '../../redux/actions/message-actions'
+import { uploadFile } from '../../redux/actions/file-actions'
 import {
   fetchWorlds,
   setCurrentWorld,
@@ -315,6 +358,9 @@ export default connect(
       },
       fetchUniverseSettings: () => {
         dispatch(fetchUniverseSettings())
+      },
+      uploadFile: (file, username, dir) => {
+        dispatch(uploadFile(file, username, dir))
       }
     }
   }
