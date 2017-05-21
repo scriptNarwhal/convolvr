@@ -102,14 +102,12 @@
 
                 } else if (vUv.y < 0.5 && vUv.y > 0.48) {
 
-                   glow = -0.3+(depth) - vUv.y;
-                   color = vec4((terrainRed+red)/2.0, (terrainGreen+green)/2.0, (terrainBlue+blue/2.0), 1.0);
+                   glow = mix(0.8 * depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.48)*20.0);
+                   color = vec4(terrainRed/2.0 + red/3.0, terrainGreen/2.0 + green/3.0, terrainBlue/2.0 + blue/3.0, 1.0);
 
                 } else {
-
-                    depth = (1.0 - (abs(0.5 - 0.48) * 2.5));
                     glow = -0.3+(depth) - vUv.y;
-                    color = vec4((terrainRed+red)/2.0, (terrainGreen+green)/2.0, (terrainBlue+blue/2.0), 1.0);
+                    color = vec4(terrainRed/2.0 + red/3.0, terrainGreen/2.0 + green/3.0, terrainBlue/2.0 + blue/3.0, 1.0);
 
                 }
                
@@ -117,15 +115,6 @@
 
             }
         </script>
-        <!--if (vUv.y < 0.5) {
-
-                    color = vec4(luminance*terrainRed, luminance*terrainGreen, luminance*terrainBlue, 1.0);
-                    
-                } else {
-
-                    color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
-                    
-                }-->
         <script src='/data/lib/notify.js'></script>
         <script src='/data/lib/three.min.js'></script>
         <script src='/data/lib/csg.js'></script>

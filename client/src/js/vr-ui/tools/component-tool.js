@@ -64,14 +64,16 @@ export default class ComponentTool extends Tool {
           component = this.components.makeComponent( componentType ),
           entity = null,
           tooManyComponents = !!selected && selected.components.length >= 48,
-          coords = [0,0,0] 
+          coords = [ 0, 0, 0 ] 
 
       //console.log("Selected ", tooManyComponents, selected, selected.components)
 
       entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat )
       
-      if ( (!!!selected || cursorState.distance > 200000 || (tooManyComponents)) && cursorSystem.entityCoolDown < 0 )  { // switch back to entity tool, if the user is clicking into empty space
-      
+      if ( ( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents ) )
+           && cursorSystem.entityCoolDown < 0 
+         )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
+       
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByProp.toolUI[0].state.toolUI.show()
         user.toolbox.usePrimary( 0, entity  )
@@ -81,7 +83,7 @@ export default class ComponentTool extends Tool {
 
       if ( tooManyComponents && cursorSystem.entityCoolDown > 0 ) {
 
-        return false // stop spamming lol..
+        return false // stop spamming lol.. // console.log("too many components; waiting for entity cooldown; aborting")
 
       }
 

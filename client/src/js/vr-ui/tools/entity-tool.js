@@ -59,20 +59,31 @@ export default class EntityTool extends Tool  {
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
           user = this.world.user,
-          entity = params.entity ? params.entity : assetSystem.makeEntity(this.options.entityType)  // console.log("Entity Tool"); console.log(JSON.stringify(entity.components))
+          entity = params.entity ? params.entity : assetSystem.makeEntity(this.options.entityType), // console.log("Entity Tool"); console.log(JSON.stringify(entity.components))
+          tooManyComponents = !!selected && selected.components.length >= 48
 
-      if ((selected && cursorState.distance < 164000) || cursorSystem.entityCoolDown > 10 ) { // switch to component tool
-          
-          user.toolbox.useTool(1, telemetry.hand)
-          user.hud.componentsByProp.toolUI[0].state.toolUI.show()
-          user.toolbox.usePrimary(0)
-          return false
+      if ( ! tooManyComponents ) {
+
+        if ((selected && cursorState.distance < 200000) || cursorSystem.entityCoolDown > 10 ) { // switch to component tool
+            
+            user.toolbox.useTool(1, telemetry.hand)
+            user.hud.componentsByProp.toolUI[0].state.toolUI.show()
+            user.toolbox.usePrimary(0)
+            return false
+
+        }
 
       }
+      
+      if ( cursorSystem.entityCoolDown < 0 ) {
 
-      return {
+        return {
+          entity
+        }
 
-        entity
+      } else {
+
+        return false
 
       }
 

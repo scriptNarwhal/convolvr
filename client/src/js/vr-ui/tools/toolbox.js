@@ -201,7 +201,7 @@ export default class Toolbox {
 
     grip ( handIndex, value ) {
 
-      let hand = this.hands[handIndex],
+      let hand = this.hands[handIndex].mesh,
           entity = null, //hand.children[0].userData.component.props.,
           cursor = null,
           pos = [0,0,0], //entity.mesh.position,
@@ -210,7 +210,7 @@ export default class Toolbox {
      
       if ( this.user.avatar ) {
 
-        cursor = this.user.avatar.cursors[1+hand]
+        cursor = this.user.avatar.componentsByProp.cursor[1+hand]
         entity = !!cursor ? cursor.state.cursor.entity : false
         pos = !!entity ? entity.mesh.position.toArray() : pos
 
@@ -224,6 +224,7 @@ export default class Toolbox {
           three.scene.add(entity.mesh)
           entity.update([hand.position.x, hand.position.y, hand.position.z])
           hand.userData.grabbedEntity = false
+          // probably use haptic system for state ^^^
           //coords = [Math.floor(pos.x / 928000), 0, Math.floor(pos.z / 807360)],
         } else {
 
