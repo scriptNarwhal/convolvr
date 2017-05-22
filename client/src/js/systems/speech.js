@@ -1,19 +1,27 @@
 export default class SpeechSystem {
+
     constructor (world) {
-        this.world = world
+        
         let synth = window.speechSynthesis,
             voices = synth.getVoices()
+
+        this.world = world
         this.synth = synth
         this.voices = voices
         // for(i = 0; i < voices.length ; i++) {
         //     voices[i].name + ' (' + voices[i].lang + ')'
     }
 
-    init (component) {
+    init ( component ) {
+        
         let prop = component.props.speech
-        if (prop.readText !== false) {
-            if (component.props.text) { // speak text
-            this.speak(component.props.text.lines.join(". "), false, 0)
+
+        if ( prop.readText !== false ) {
+
+            if ( component.props.text ) { // speak text
+
+                this.speak(component.props.text.lines.join(". "), false, 0)
+
             }
         }
         return {
@@ -21,23 +29,33 @@ export default class SpeechSystem {
                 this.speak(text, voice, voiceIndex)
             }
         }
+
     }
 
     speak (text, voiceName, voiceIndex) {
+
         let utterThis = new SpeechSynthesisUtterance(text),
             i = 0
 
-        if (voiceName) {
-            for(i = 0; i < this.voices.length; i++) {
-                if(this.voices[i].name === voiceName) {
-                utterThis.voice = this.voices[i]
+        if ( voiceName ) {
+
+            for ( i = 0; i < this.voices.length; i++ ) {
+
+                if ( this.voices[i].name === voiceName ) {
+
+                    utterThis.voice = this.voices[i]
+
                 }
+
             }
+
         } else {
-            utterThis.voice = this.voices[voiceIndex]
+
+            utterThis.voice = this.voices[ voiceIndex ]
+
         }
         
-        synth.speak(utterThis)
+        synth.speak( utterThis )
     }
 }
 

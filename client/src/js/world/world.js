@@ -22,7 +22,8 @@ export default class Convolvr {
 			renderer = null,
 			self = this,
 			three = {},
-			postProcessing = false
+			postProcessing = false,
+			usePostProcessing = false
 
 		//scene.scale.setScalar( 1 / 22000 ) 
 		this.mobile = mobile
@@ -30,11 +31,12 @@ export default class Convolvr {
 		this.highAltitudeGravity = false
 		this.viewDistance = 0 // default
 		this.initLocalSettings()
-		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + this.viewDistance*600000 )
+		usePostProcessing = this.enablePostProcessing == 'on'
+		camera = new THREE.PerspectiveCamera( 78, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + this.viewDistance*600000 )
 
-		let rendererOptions = {antialias: this.aa != 'off' && this.enablePostProcessing != 'on'}
+		let rendererOptions = {antialias: this.aa != 'off' && !usePostProcessing}
 
-		if (this.enablePostProcessing == 'on') {
+		if ( usePostProcessing ) {
 
 			rendererOptions.alpha = true
 			rendererOptions.clearColor = 0x000000
@@ -44,7 +46,7 @@ export default class Convolvr {
 		renderer = new THREE.WebGLRenderer(rendererOptions)
 		postProcessing = new PostProcessing(renderer, scene, camera)
 
-		if (this.enablePostProcessing == 'on') {
+		if ( usePostProcessing ) {
 
 			postProcessing.init()
 

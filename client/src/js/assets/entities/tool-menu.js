@@ -14,15 +14,15 @@ let toolMenu = ( assetSystem ) => {
                         hover: {},
                         activate: {}
                     }),
+                    components: [],
                     position: [0, 0, 0],
                     quaternion: null
                 },
-            button = assetSystem._initButton()
+            button = assetSystem._initButton( iconCube )
 
             toolMenuIcons.push( Object.assign({}, button, {
                 position: [ -26000 + i *13000, 0, 0 ],
-                quaternion: null,
-                components: button.components.concat( [ iconCube ] )
+                quaternion: null
             }))
 
         })

@@ -93,9 +93,10 @@ export default class AssetSystem {
                         { type: 'slow', thrust: 12000 }
                     ],
                     portal: [
-                        { type: 'start' },
-                        { type: 'end' },
-                        { type: 'world', worldName: ""}
+                        { coords: [0, 0, 0] },
+                        { worldName: "" },
+                        { place: "" },
+                        { domain: "" }
                     ]   
                 },
                 media: {
@@ -266,7 +267,6 @@ export default class AssetSystem {
         // ..or just throw them all in modules
 
         this._addBuiltInEntity( "tool-menu", toolMenu )
-
         this._addBuiltInEntity( "help-screen", helpScreen )
         this._addBuiltInEntity( "chat-screen", chatScreen )
         this._addBuiltInEntity( "panel", panel1 )
@@ -291,62 +291,47 @@ export default class AssetSystem {
 
     }
 
-    _initButton ( data ) {
+    _initButton ( component, data ) {
 
-        let color = data && data.color ? data.color : 0x404040,
+        let color = data && data.color ? data.color : 0x252525,
             components = [],
             button = null,
             x = 2
-      
-        button = {
-            props: {
-                activates: true,
-                gazeOver: true,
-                geometry: {
-                
-                shape: "node",
-                size: [0, 0, 0]
+        
+        if ( !!component ) { 
+
+            button = component
+
+        } else {
+
+            button = {
+                props: {
+                    activates: true,
+                    gazeOver: true,
+                    geometry: {
+                        merge: true,
+                        shape: "node",
+                        size: [ 1, 1, 1 ]
+                    },
+                        material: {
+                        name: "plastic",
+                        color: 0
+                    }
                 },
-                    material: {
-                    name: "plastic",
-                    color: 0
-                }
-            },
-            position: [0,0,0],
-            quaternion: null,
-            components: []
+                position: [ 0, 0, 0 ],
+                quaternion: null,
+                components: []
+            }
+
         }
     
-        while (x > 0) {
-
-            button.components.push({
-            props: {
-                geometry: {
-                //merge: true,
-                    size: [160, 10000, 4000],
-                    shape: "box"
-                },
-                material: {
-                    color: color,
-                    name: "plastic"
-                }
-            },
-            position: [-5000+(x>1?10000:0), 0, 0],
-            quaternion: null
-            })
-            x --
-
-        }
-
-        x = 2;
-
-        while (x > 0) {
+        while ( x > 0 ) {
 
             button.components.push({
                 props: {
                     geometry: {
-                     //merge: true,
-                        size: [10000, 160, 4000],
+                        merge: true,
+                        size: [ 320, 10000, 4000 ],
                         shape: "box"
                     },
                     material: {
@@ -354,7 +339,30 @@ export default class AssetSystem {
                         name: "plastic"
                     }
                 },
-                position: [0, -5000+(x>1?10000:0), 0],
+                position: [ -5000+( x > 1 ? 10000 : 0), 0, 0 ],
+                quaternion: null
+            })
+            x --
+
+        }
+
+        x = 2
+
+        while ( x > 0 ) {
+
+            button.components.push({
+                props: {
+                    geometry: {
+                        merge: true,
+                        size: [ 10000, 320, 4000 ],
+                        shape: "box"
+                    },
+                    material: {
+                        color: color,
+                        name: "plastic"
+                    }
+                },
+                position: [ 0, -5000+( x > 1 ? 10000 : 0), 0 ],
                 quaternion: null
             })
             x --
@@ -373,7 +381,7 @@ export default class AssetSystem {
             },
             geometry: {
                 shape: "box",
-                size: [4500, 4500, 4500]
+                size: [ 4500, 4500, 4500 ]
             }
         }
     }
