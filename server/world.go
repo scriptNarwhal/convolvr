@@ -148,7 +148,7 @@ func getWorld(c echo.Context) error { // load specific world
 
 		first = 0.9 + (rand.Float64() * 0.1)
 		second = first*0.95 - rand.Float64()*0.05
-		third = second*0.15 - rand.Float64()*0.1
+		third = second*0.2 - rand.Float64()*0.1
 
 		if rand.Intn(12) > 6 {
 			if rand.Intn(12) > 6 {
@@ -156,9 +156,9 @@ func getWorld(c echo.Context) error { // load specific world
 				green = third / 15.0
 				blue = third / 15.0
 			} else {
-				red = 0.3
+				red = 0.24
 				green = 0.1
-				blue = 0.9
+				blue = 1.0
 			}
 		} else {
 			if rand.Intn(12) > 6 {
@@ -171,31 +171,22 @@ func getWorld(c echo.Context) error { // load specific world
 				blue = second / 1.4
 			}
 		}
-		// debugging skybox / terrain colors
-		terrainRed = 0.15 + red/2.0 + blue/2.0
-		terrainGreen = 0.15 + (green*red*blue)/3.0
-		terrainBlue = 0.25 + blue/2.0 + red/2.0
+
+		terrainRed = 0.05 + red
+		terrainGreen = 0.05 + green - red - blue
+		terrainBlue = 0.05 + blue*1.5
 
 		terrainColor = int(math.Floor(terrainRed*254))<<16 | int(math.Floor(terrainGreen*254))<<8 | int(math.Floor(terrainBlue*254))
-
-		red *= 3.0
-		green *= 3.0
-		blue *= 3.0
-
-		terrainRed = 0.15 + red*2.0 + blue
-		terrainGreen = 0.15 + (green*red*blue)/3.0
-		terrainBlue = 0.15 + blue*2.0 + red
-
-		lightColor = (127+int(math.Floor(192+red*63)))<<16 | (192+int(math.Floor(green*63)))<<8 | (192 + int(math.Floor(blue*63)))
 		//lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
-		ambientColor = int(255*red/10.0)<<16 | int(255*green/10.0)<<8 | int(255*blue/10.0)
+		ambientColor = int(255*red/12.0)<<16 | int(255*green/12.0)<<8 | int(255*blue/12.0)
+		lightColor = (127+int(math.Floor(red*127)))<<16 | (127+int(math.Floor(green*127)))<<8 | (127 + int(math.Floor(blue*127)))
 
-		red *= 2.5
-		green *= 2.5
-		blue *= 2.5
+		red *= 3.5
+		green *= 3.5
+		blue *= 3.5
 
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}
-		light := Light{Color: lightColor, Intensity: 1.4, Angle: 1.07, AmbientColor: ambientColor}
+		light := Light{Color: lightColor, Intensity: 1.0, Angle: 1.07, AmbientColor: ambientColor}
 		terrain := Terrain{TerrainType: "voxels", Height: 20000, Color: terrainColor, Red: terrainRed, Green: terrainGreen, Blue: terrainBlue, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
 		spawn := Spawn{Entities: true, Structures: true, Roads: true, Trees: true, NPCS: true, Tools: true, Vehicles: true}
 		gravity := 1.0

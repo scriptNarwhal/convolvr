@@ -22,7 +22,7 @@ let toolMenu = ( assetSystem ) => {
             toolMenuIcons.push( Object.assign({}, button, {
                 position: [ -26000 + i *13000, 0, 0 ],
                 quaternion: null,
-                components: button.components.concat( [iconCube] )
+                components: button.components.concat( [ iconCube ] )
             }))
 
         })
@@ -34,7 +34,7 @@ let toolMenu = ( assetSystem ) => {
                     props: {
                         geometry: {
                             shape: "box",
-                            size: [24000, 6000, 2000]
+                            size: [ 24000, 6000, 2000 ]
                         },
                         material: {
                             color: 0x808080,
@@ -56,14 +56,14 @@ let toolMenu = ( assetSystem ) => {
                         }
                     },
                     // components: [],
-                    position: [ -13000, -12000, 0 ],
+                    position: [ -13000, -24000, 0 ],
                     quaternion: null
                 },
                 {
                     props: {
                         geometry: {
                             shape: "node",
-                            size: [1, 1, 1]
+                            size: [ 1, 1, 1 ]
                         },
                             material: {
                             color: 0x808080,
@@ -75,10 +75,10 @@ let toolMenu = ( assetSystem ) => {
                     },
                     components: toolMenuIcons,
                     quaternion: null,
-                    position: [0, 0, 0]
+                    position: [ 0, 0, 0 ]
                 }
             ],
-            position: [0, 0, 0],
+            position: [ 0, 0, 0 ],
             quaternion: null
         }
 

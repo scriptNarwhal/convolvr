@@ -30,7 +30,7 @@ export default class Convolvr {
 		this.highAltitudeGravity = false
 		this.viewDistance = 0 // default
 		this.initLocalSettings()
-		camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1500+this.viewDistance*200, 15000000 + this.viewDistance*600000)
+		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + this.viewDistance*600000 )
 
 		let rendererOptions = {antialias: this.aa != 'off' && this.enablePostProcessing != 'on'}
 
