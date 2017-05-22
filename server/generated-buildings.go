@@ -7,7 +7,7 @@ func generateBuilding(world string, x int, z int, altitude float32) *Entity {
 		structure           *Entity
 		structureComponents []*Component
 	)
-	floors := 2 + rand.Intn(10)
+	floors := 2 + rand.Intn(8)
 	width := 1.0 + float64(rand.Intn(2))
 	structureSize := 300000.0
 	for i := 0; i < floors; i++ {

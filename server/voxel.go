@@ -46,7 +46,9 @@ func getWorldChunks(c echo.Context) error {
 		log.Println(worldErr)
 	}
 	voxels := db.From("World_" + world)
+
 	for _, v := range chunks {
+
 		coords := strings.Split(v, "x")
 		x, _ := strconv.Atoi(coords[0])
 		y, _ := strconv.Atoi(coords[1])
@@ -55,7 +57,9 @@ func getWorldChunks(c echo.Context) error {
 		voxelEntities := voxel.From("entities")
 		subVoxels := voxel.From("voxels")
 		voxel.All(&foundChunks)
+
 		if len(foundChunks) == 0 {
+
 			altitude := float32(0)
 			if worldData.Terrain.TerrainType == "voxels" ||
 				worldData.Terrain.TerrainType == "both" {
@@ -66,31 +70,41 @@ func getWorldChunks(c echo.Context) error {
 				}
 
 			}
+
 			chunkGeom := "flat"
-			if rand.Intn(10) < 5 {
-				chunkGeom = "space"
-			} else {
-				initErr := voxelEntities.Init(&Entity{})
-				if initErr != nil {
-					log.Println(initErr)
-				}
-				if rand.Intn(26) > 20 && worldData.Spawn.Structures {
-					entities = append(entities, generateBuilding(world, x, z, altitude))
-				}
+			initErr := voxelEntities.Init(&Entity{})
+			if initErr != nil {
+				log.Println(initErr)
+			}
+			if rand.Intn(26) > 20 && worldData.Spawn.Structures {
+				entities = append(entities, generateBuilding(world, x, z, altitude))
 			}
 
-			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, entities)
-			chunksData = append(chunksData, generatedChunk)
+			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, nil)
 			saveErr := voxel.Save(&generatedChunk)
+			generatedChunk.Entities = entities
+			chunksData = append(chunksData, generatedChunk)
+
 			if saveErr != nil {
 				log.Println(saveErr)
 			}
+
+			for _, g := range entities {
+
+				saveEntitiesError := voxelEntities.Save(g)
+				if saveEntitiesError != nil {
+					log.Println(saveEntitiesError)
+				}
+
+			}
+
 		} else {
 			voxelEntities.All(&entities)
 			subVoxels.All(&chunkVoxels)
 			foundChunks[0].Entities = entities
 			chunksData = append(chunksData, foundChunks[0])
 		}
+
 	}
 	return c.JSON(http.StatusOK, &chunksData)
 }
