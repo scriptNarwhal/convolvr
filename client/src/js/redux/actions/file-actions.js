@@ -24,7 +24,8 @@ import {
     DIRECTORIES_MAKE_FAIL,
     DIRECTORIES_MAKE_DONE,
     CHANGE_DIRECTORY
-} from '../constants/action-types';
+} from '../constants/action-types'
+
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 
@@ -49,6 +50,7 @@ export function listFiles (username, dir) {
         })
    }
 }
+
 export function uploadFile (file, username, dir) {
     return dispatch => {
      dispatch({
@@ -71,6 +73,7 @@ export function uploadFile (file, username, dir) {
         })
    }
 }
+
 export function listDirectories (username, dir) {
     return dispatch => {
      dispatch({
@@ -92,6 +95,53 @@ export function listDirectories (username, dir) {
         })
    }
 }
+
+export function createFile (username, dir) {
+    return dispatch => {
+     dispatch({
+         type: FILE_CREATE_FETCH,
+         username,
+         dir
+     })
+     let dir = !!dir && dir != "" ? "/"+dir : ""
+     return axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+dir : ''}`, {})
+        .then(response => {
+            dispatch({
+                type: FILE_CREATE_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: FILE_CREATE_FAIL,
+                error: response.data
+            })
+        })
+   }
+}
+
+export function createDirectory (username, dir) {
+    return dispatch => {
+     dispatch({
+         type: DIRECTORY_CREATE_FETCH,
+         username,
+         dir
+     })
+     let dir = !!dir && dir != "" ? "/"+dir : ""
+     return axios.post(`${API_SERVER}/api/directories/${username}/${dir != null ? "?dir="+dir : ''}`, {})
+        .then(response => {
+            dispatch({
+                type: DIRECTORY_CREATE_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: DIRECTORY_CREATE_FAIL,
+                error: response.data
+            })
+        })
+   }
+}
+
 export function readText (filename, username, dir) {
     return dispatch => {
      dispatch({
@@ -115,6 +165,7 @@ export function readText (filename, username, dir) {
         })
    }
 }
+
 export function writeText (text, filename, username, dir) {
     return dispatch => {
      dispatch({
@@ -137,6 +188,7 @@ export function writeText (text, filename, username, dir) {
         })
    }
 }
+
 export function changeDirectory (path) {
   return {
     type: CHANGE_DIRECTORY,

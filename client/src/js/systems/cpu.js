@@ -7,6 +7,8 @@ export default class CPUSystem { //
 
         let stack = []
 
+        // detect memory, ioController, gpu,  if available
+
         return {
             operate: ( component ) => { // called continually, with a maximum number of operations per second
                 
@@ -34,6 +36,7 @@ export default class CPUSystem { //
 
         let stack = state.stack
         // implement
+        // .. this should use an IOController prop in an adjacent component
 
     }
 

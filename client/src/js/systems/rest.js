@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export default class RESTSystem {
 
     constructor (world) {
@@ -10,24 +12,46 @@ export default class RESTSystem {
 
         let prop = component.props.rest // specify url, method, etc
         
+        if ( prop.get ) {
+
+            this.getRequest( component, prop.get.url)
+
+        }
+
+        if ( prop.post ) {
+
+            this.postRequest( component, prop.post.url, prop.post.data )
+
+        }
+
+        // add init logic... // other systems can call these methods too*
+
         return {
 
             getResponse: false,
             postResponse: false,
             getRequest: (url) => {
 
-                this.getRequest(url, (response) => {
+                this.getRequest(component, url, (response) => {
 
                     component.state.rest.getResponse = response
+
+                }, (error) => {
+
+                    component.state.rest.getError = error
 
                 })
 
             },
             postRequest: (url, data) => {
 
-                this.postRequest(url, data, (response) => {
+                this.postRequest(component, url, data, (response) => {
 
                     component.state.rest.postResponse = response
+
+                }, (error) => {
+
+                    component.state.rest.postError = error
 
                 })
 
@@ -37,11 +61,33 @@ export default class RESTSystem {
 
     }
 
-    getRequest (url, callback) {
+    getRequest ( component, url, callback, onError ) {
+
+        axios.get(url)
+
+        .then( res => {
+
+            callback ( res, component )
+
+        }).catch( err => {
+
+            onError ( err )
+
+        });
 
     }
 
-    postRequest (url, data, callback) {
+    postRequest ( component, url, data, callback, onError ) {
+
+        axios.post(url, data).then( res => {
+
+           callback( res, component )
+
+        }).catch( err => {
+
+           onError( err, component )
+
+        });
 
     }
 }
