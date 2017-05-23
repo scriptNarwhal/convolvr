@@ -50,7 +50,10 @@ export default class AssetSystem {
                 { name: "metal", color: 0xffffff },
                 { name: "glass", color: 0xffffff },
                 { name: "wireframe", color: 0xffffff },
-                { name: "custom-texture", color: 0xffffff }
+                { name: "custom-texture", color: 0xffffff },
+                { mixin: true, color: 0xff0707 },
+                { mixin: true, color: 0x07ff07 },
+                { mixin: true, color: 0x0707ff }
             ],
             assets: [ 
                     { path: "/data/images/textures/sky-reflection.jpg" }, 
@@ -93,6 +96,8 @@ export default class AssetSystem {
                         { type: 'slow', thrust: 12000 }
                     ],
                     portal: [
+                        { newPlace: true },
+                        { newWorld: true },
                         { coords: [0, 0, 0] },
                         { worldName: "" },
                         { place: "" },
@@ -132,6 +137,9 @@ export default class AssetSystem {
                 }
             }
         }
+
+        this.files = [] // user's files; separate from entity file systems
+        this.directories = [] // user's directories
         
         this.textureLoader = new THREE.TextureLoader()
         this.audioLoader = new THREE.AudioLoader()
@@ -191,6 +199,22 @@ export default class AssetSystem {
 
     loadModel ( asset, callback ) {
 
+        // implement
+        // check format from file extension
+        // use appropriate loader..
+        // fire callback
+    }
+
+    setWorlds ( worlds ) {
+
+        this.world = worlds
+
+    }
+
+    setPlaces ( places ) {
+
+        this.places = places
+
     }
 
     addUserEntities ( entities ) {
@@ -208,6 +232,18 @@ export default class AssetSystem {
     addUserAssets ( assets ) {
 
         this.systems.asset = this.systems.asset.concat( assets )
+
+    }
+
+    setUserFiles ( files ) {
+
+        this.files = files
+
+    }
+
+    setUserDirectories ( directories ) {
+
+        this.directories = directories
 
     }
 

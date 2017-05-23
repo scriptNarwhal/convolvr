@@ -3,11 +3,14 @@ import {send} from '../../network/socket'
 import ComponentTool from './component-tool'
 import EntityTool from './entity-tool'
 import DeleteTool from './delete-tool'
-import VoxelTool from './voxel-tool'
 import MaterialTool from './material-tool'
 import AssetTool from './asset-tool'
 import GeometryTool from './geometry-tool'
 import SystemTool from './system-tool'
+import PlaceTool from './place-tool'
+import WorldTool from './world-tool'
+import FileTool from './file-tool'
+import DirectoryTool from './directory-tool'
 import CustomTool from './custom-tool'
 
 export default class Toolbox {
@@ -32,15 +35,19 @@ export default class Toolbox {
         new EntityTool({}, world, this),
         new ComponentTool({}, world, this),
         new GeometryTool({}, world, this),
-        new AssetTool({}, world, this),
         new MaterialTool({}, world, this),
-        new SystemTool({}, world, this)
+        new SystemTool({}, world, this),
+        new WorldTool({}, world, this),
+        new PlaceTool({}, world, this),
+        new AssetTool({}, world, this),
+        new FileTool({}, world, this),
+        new DirectoryTool({}, world, this),
       ]
       this.currentTools = [ 0, 0 ]
 
     }
 
-    showMenu() { console.log(" showMenu() ", this.user.hud)
+    showMenu() {
       
       this.user.hud.componentsByProp.toolUI[0].state.toolUI.updatePosition()
 

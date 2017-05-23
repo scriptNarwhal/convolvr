@@ -1,13 +1,19 @@
 export default class ProjectileSystem {
-    constructor (world) {
+
+    constructor ( world ) {
+
         this.world = world
+
     }
 
-    init (component) { 
-        let prop = component.props.projectile,
-            state = {}
+    init ( component ) { 
 
-        return state
+        let prop = component.props.projectile
+
+        return {
+            
+        }
+
     }
 }
 

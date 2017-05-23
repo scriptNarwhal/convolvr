@@ -25,7 +25,7 @@ export default class MetaFactorySystem {
             x = 0,
             y = 0
             
-        if ( typeof source.map == 'function') { // array of geometries / materials, components, entities
+        if ( typeof source.map == 'function') { // array of geometries / materials, components, entities, worlds, places, files, (directories could use source[category])
 
             source.map((item, i) => {
                 

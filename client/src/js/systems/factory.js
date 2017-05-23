@@ -2,21 +2,21 @@ import Entity from '../entity'
 
 export default class FactorySystem {
 
-    constructor (world) {
+    constructor ( world ) {
 
         this.world = world
 
     }
- 
-    init ( component ) { 
-        console.log("factory component init ", component)
+  
+    init ( component ) { console.log("factory component init ", component) 
+        
         let prop = component.props.factory
         
-        if (prop.autoGenerate !== false) {
+        if ( prop.autoGenerate !== false ) {
             
             setTimeout(()=>{
 
-                this.generate(component)
+                this.generate( component )
 
             }, 1000)
 
@@ -26,7 +26,7 @@ export default class FactorySystem {
 
             generate: () => {
 
-                this.generate(component)
+                this.generate( component )
 
             }
 
@@ -38,7 +38,7 @@ export default class FactorySystem {
 
         let prop = component.props.factory,
             position = component.entity.mesh.position,
-            entityPosition = !!prop.anchorOutput ? [0, 0, 0] : position.toArray(),
+            entityPos = !!prop.anchorOutput ? [0, 0, 0] : position.toArray(),
             miniature = !!prop.miniature,
             type = prop.type,
             propName = prop.propName,
@@ -49,81 +49,47 @@ export default class FactorySystem {
             
         if ( type == 'entity' ) {
  
-            components[0].props.miniature = { }
-            created = new Entity(-1, components, entityPosition, quat)
+            created = this._generateEntity( components, entityPos, quat )
 
         } else if (type == 'component') {
 
-            data.props.miniature = { }
-            created = new Entity(-1, [data], entityPosition, quat)
+            created = this._generateComponent( data, entityPos, quat )
 
         } else if ( type == 'prop' ) {
 
             switch (propName) {
 
                 case "geometry":
-                    created = new Entity(-1, [{ 
-                        props: Object.assign({}, {geometry: data}, {
-                                mixin: true,
-                                miniature: {},
-                                material: {
-                                    name: "wireframe",
-                                    color: 0xffffff
-                                }
-                            }
-                        )}
-                    ], entityPosition, quat)
+                    created = this._generateGeometry( data, entityPos, quat )
                 break
                 case "material":
-                    created = new Entity(-1, [{
-                            props: Object.assign({}, {material: data}, {
-                                mixin: true,
-                                geometry: {
-                                    shape: "sphere",
-                                    size: [4500, 4500, 4500]
-                                }
-                            }
-                        )}
-                    ], entityPosition, quat)
+                    created = this._generateMaterial( data, entityPos, quat )
                 break
                 case "assets":
-                    created = new Entity(-1, [{
-                            props: Object.assign({}, {material: data}, {
-                                mixin: true,
-                                assets: {
-                                   images: [data] 
-                                },
-                                material: {
-                                    name: "wireframe",
-                                    color: 0xffffff,
-                                    diffuse: data
-                                },
-                                geometry: {
-                                    shape: "sphere",
-                                    size: [4500, 4500, 4500]
-                                }
-                            }
-                        )}
-                    ], entityPosition, quat)
+                    created = this._generateAsset( data, entityPos, quat )
                 break
                 case "systems":
-                    created = new Entity(-1, [{
-                        props: Object.assign({}, data, {
-                                mixin: true,
-                                material: {
-                                    name: "wireframe",
-                                    color: 0xffffff
-                                },
-                                geometry: {
-                                    shape: "sphere",
-                                    size: [4500, 4500, 4500]
-                                }
-                            }
-                        )}
-                    ], entityPosition, quat)
+                    created = this._generateSystem( data, entityPos, quat )
                 break
 
             }
+
+        } else if ( type == "world" ) {
+
+            created = this._generateWorld( data, entityPos, quat )
+
+        } else if ( type == "place" ) {
+
+            created = this._generatePlace( data, entityPos, quat )
+
+        } else if ( type == "file" ) {
+
+            created = this._generateFile( data, entityPos, quat )
+
+        } else if ( type == "directory" ) {
+
+            created = this._generateDirectory( data, entityPos, quat )
+
         }
 
         if ( !!prop.anchorOutput ) {
@@ -140,5 +106,199 @@ export default class FactorySystem {
         created.update(created.mesh.position.toArray())
 
     }
+
+    _generateEntity ( components, position, quaternion ) { 
+
+        components[0].props.miniature = { }
+        return  new Entity( -1, components, position, quaternion )
+
+    }
+
+    _generateComponent ( data, position, quaternion ) {
+
+        component.props.miniature = { }
+        return new Entity( -1, [ data ], position, quaternion )
+    }
+
+    _generateGeometry ( data, position, quaternion ) {
+
+        return new Entity(-1, [{ 
+                props: Object.assign({}, {geometry: data}, {
+                    mixin: true,
+                    miniature: {},
+                    material: {
+                        name: "wireframe",
+                        color: 0xffffff
+                    }
+                }
+            )}
+        ], position, quaternion)
+
+    }
+
+    _generateSystem ( data, position, quaternion ) {
+
+        return new Entity(-1, [{
+            props: Object.assign({}, data, {
+                    mixin: true,
+                    material: {
+                        name: "wireframe",
+                        color: 0xffffff
+                    },
+                    geometry: {
+                        shape: "sphere",
+                        size: [4500, 4500, 4500]
+                    }
+                }
+            )}
+        ], position, quaternion)
+
+    }
+
+    _generateMaterial ( data, position, quaternion ) {
+
+        return new Entity(-1, [{
+                props: Object.assign({}, {material: data}, {
+                    mixin: true,
+                    geometry: {
+                        shape: "sphere",
+                        size: [4500, 4500, 4500]
+                    }
+                }
+            )}
+        ], position, quaternion)
+
+    }
+
+    _generateAsset ( data, position, quaternion ) {
+
+        return new Entity(-1, [{
+                props: Object.assign({}, {material: data}, {
+                    mixin: true,
+                    assets: {
+                        images: [data] 
+                    },
+                    material: {
+                        name: "wireframe",
+                        color: 0xffffff,
+                        diffuse: data
+                    },
+                    geometry: {
+                        shape: "sphere",
+                        size: [4500, 4500, 4500]
+                    }
+                }
+            )}
+        ], position, quaternion)
+
+    }
+
+    _generateWorld ( data, position, quaternion ) {
+
+        return new Entity(-1, [{
+            props: Object.assign({}, data, {
+                    mixin: true,
+                    portal: {
+                        username: data.username,
+                        world: data.name
+                    }, 
+                    material: {
+                        name: "metal",
+                        color: 0x00ffff // get actual world color here..
+                    },
+                    geometry: {
+                        shape: "sphere",
+                        size: [4500, 4500, 4500]
+                    }
+                }
+            )}
+        ], position, quaternion)
+
+    }
+
+    _generatePlace ( data, position, quaternion ) {
+
+         return new Entity(-1, [{
+            props: Object.assign({}, data, {
+                    mixin: true,
+                    portal: {
+                        username: data.username,
+                        world: data.world,
+                        place: data.name
+                    }, 
+                    material: {
+                        name: "metal",
+                        color: 0xff8000 
+                    },
+                    geometry: {
+                        shape: "sphere",
+                        size: [4500, 4500, 4500]
+                    }
+                }
+            )}
+        ], position, quaternion)
+
+    }
+
+    _generateFile ( data, position, quaternion ) {
+
+        return new Entity(-1, [{
+            props: Object.assign({}, data, {
+                    mixin: true,
+                    text: {
+                        color: 0xffffff,
+                        background: 0x000000,
+                        lines: [
+                            data
+                        ]
+                    },
+                    file: {
+                        filename: data
+                        // implement
+                    },
+                    material: {
+                        name: "metal",
+                        color: 0x0080ff 
+                    },
+                    geometry: {
+                        shape: "sphere",
+                        size: [4500, 4500, 4500]
+                    }
+                }
+            )}
+        ], position, quaternion)
+
+    }
+
+    _generateDirectory ( data, position, quaternion ) {
+
+        return new Entity(-1, [{
+            props: Object.assign({}, data, {
+                    mixin: true,
+                    text: {
+                        color: 0xffffff,
+                        background: 0x000000,
+                        lines: [
+                            data
+                        ]
+                    },
+                    file: {
+                        workingDir: data
+                        // implement
+                    },
+                    material: {
+                        name: "wireframe",
+                        color: 0x000000 
+                    },
+                    geometry: {
+                        shape: "sphere",
+                        size: [4500, 4500, 4500]
+                    }
+                }
+            )}
+        ], position, quaternion)
+
+    }
+
 }
 

@@ -5,6 +5,7 @@ export default class ParticleSystem {
     }
 
     init (component) { 
+
         let prop = component.props.particle, 
             ps = new THREE.GPUParticleSystem( {
                     maxParticles: 10000
@@ -24,6 +25,7 @@ export default class ParticleSystem {
 
         component.mesh.add(ps)
         this.particleSystems.push({component, ps})
+        
         return {
             system: ps,
             options,
@@ -38,6 +40,7 @@ export default class ParticleSystem {
                 component.state.particle.options = Object.assign({}, component.state.particle.options, newOptions)
             }
         }
+
     }
 }
 
