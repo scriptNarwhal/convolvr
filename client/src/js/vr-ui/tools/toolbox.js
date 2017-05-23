@@ -79,12 +79,18 @@ export default class Toolbox {
       
     }
 
-    useTool ( index, hand ) {
+    useTool ( index, hand, noHUDUpdate) {
 
       this.tools[this.currentTools[hand]].unequip()
       this.currentTools[hand] = index
       this.tools[index].equip(hand)
-      this.showMenu()
+
+      if ( !!!noHUDUpdate ) {
+        
+        this.showMenu()
+        this.user.hud.componentsByProp.toolUI[0].state.toolUI.switchTool( index, hand )
+        
+      }
 
     }
 
@@ -165,6 +171,8 @@ export default class Toolbox {
           quaternion 
         } = telemetry,
           action = null
+
+      // check telemetry here to see if activate callbacks should fire instead of tool action
 
       if ( tool.mesh == null ) {
 

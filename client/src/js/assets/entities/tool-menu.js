@@ -15,7 +15,7 @@ let toolMenu = ( assetSystem ) => {
                         activate: {}
                     }),
                     components: [],
-                    position: [0, 0, 0],
+                    position: [ 0, 0, 0 ],
                     quaternion: null
                 },
             button = assetSystem._initButton( iconCube )
@@ -34,29 +34,36 @@ let toolMenu = ( assetSystem ) => {
                     props: {
                         geometry: {
                             shape: "box",
-                            size: [ 24000, 6000, 2000 ]
+                            size: [ 10000, 10000, 4000 ]
                         },
                         material: {
-                            color: 0x808080,
+                            color: 0xffffff,
                             name: "plastic"
                         },
-                        text: {
-                            color: "#ffffff",
-                            background: "#000000",
-                            lines: [ "Entity Tool" ]
-                        },
                         toolUI: {
-                            currentToolLabel: true
-                        },
-                        light: {
-                            type: "point",
-                            intensity: 0.9,
-                            color: 0xffffff,
-                            distance: 120000
+                            currentTool: true
                         }
                     },
-                    // components: [],
-                    position: [ -13000, -24000, 0 ],
+                    components: [
+                        {
+                            props: {
+                                geometry: {
+                                    shape: "node",
+                                    size: [ 1, 1, 1 ]
+                                },
+                                light: {
+                                    type: "point",
+                                    intensity: 0.9,
+                                    color: 0xffffff,
+                                    distance: 120000
+                                }
+                            },
+                            position: [ 0, -2000, 6000 ],
+                            quaternion: null
+                            
+                        }
+                    ],
+                    position: [ 0, 0, 0 ],
                     quaternion: null
                 },
                 {
@@ -75,7 +82,7 @@ let toolMenu = ( assetSystem ) => {
                     },
                     components: toolMenuIcons,
                     quaternion: null,
-                    position: [ 0, 0, 0 ]
+                    position: [ 0, 0, 8000 ]
                 }
             ],
             position: [ 0, 0, 0 ],

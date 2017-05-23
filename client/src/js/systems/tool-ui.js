@@ -37,17 +37,10 @@ export default class ToolUISystem {
 
             } )
 
-        } else if ( prop.currentToolLabel != undefined ) {
+        } else if ( prop.currentTool != undefined ) {
 
-            // if ( props.text ) {
-
-            //    props.text.lines = [ tools[ currentTools[ !!prop.toolHand * 1 ] ] ] 
-
-            // }
-
+          
         }
-
-       
 
         return {
             switchTool: ( tool, hand ) => {
@@ -72,16 +65,21 @@ export default class ToolUISystem {
             currentTools = toolbox.currentTools,
             tools = toolbox.tools,
             props = component.props,
-            state = component.state
+            state = component.state,
+            entity = component.entity,
+            toolUIs = entity.componentsByProp.toolUI
+        
+        toolUIs.forEach( ui =>{
 
-        toolbox.switchTool( tool, hand, component )
+            if ( ui.props.toolUI.currentTool ) {
 
-        if ( props.text ) {
+                ui.mesh.position.set( -8000 + 8000 * currentTools[hand], 0, 0 )
 
-            props.text.lines = [ tools[ currentTools[ !!prop.toolHand * 1 ] ] ] 
-            state.text.update()
+            }
 
-        }
+        })
+
+        toolbox.useTool( tool, hand, component, true )
 
     }
 
@@ -97,7 +95,7 @@ export default class ToolUISystem {
       mesh.updateMatrix()
       mesh.translateZ( -70000 )
       mesh.translateX( -20000 )
-      mesh.translateY(  45000 )
+      mesh.translateY(  40000 )
       mesh.updateMatrix()
 
     }

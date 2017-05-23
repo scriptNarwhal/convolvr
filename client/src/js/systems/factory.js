@@ -109,14 +109,19 @@ export default class FactorySystem {
 
     _generateEntity ( components, position, quaternion ) { 
 
-        components[0].props.miniature = { }
+        if ( !! components && components.length > 0 ) { // debugging this..
+            
+            components[0].props.miniature = { }
+        
+        }
+
         return  new Entity( -1, components, position, quaternion )
 
     }
 
     _generateComponent ( data, position, quaternion ) {
 
-        component.props.miniature = { }
+        data.props.miniature = { }
         return new Entity( -1, [ data ], position, quaternion )
     }
 

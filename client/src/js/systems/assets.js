@@ -417,7 +417,7 @@ export default class AssetSystem {
             },
             geometry: {
                 shape: "box",
-                size: [ 4500, 4500, 4500 ]
+                size: [ 6000, 6000, 6000 ]
             }
         }
     }

@@ -56,7 +56,7 @@ export default class Tool {
         }
 
         let userPos = this.world.user.avatar.mesh.position.toArray()
-        userPos[1] += 46000
+        userPos[1] += 42000
         toolPanel.update(userPos)
         toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
         toolPanel.mesh.translateZ(-72000)
@@ -80,6 +80,7 @@ export default class Tool {
       }
 
     }
+
 
     initLabel ( value ) {
 
