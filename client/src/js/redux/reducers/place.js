@@ -23,7 +23,7 @@ let detectPlaceDetailsFromURL = () => {
         slashes = params.length -1,
         nonPlaces = ["login", "network", "chat", "files", "settings", "places", "new-place"],
         isPlace = true,
-        userAndPlace = ["generated", "overplace"]
+        userAndPlace = ["space", "overworld"]
 
     nonPlaces.map(nPlace => {
         if (url.indexOf(`/${nPlace}`) == 0) {

@@ -371,7 +371,7 @@ export default class Convolvr {
 		this.terrain.voxels = {}
 		this.terrain.voxelList = []
 		this.load(name)
-		browserHistory.push("/"+(user||"generated")+"/"+name+(!!place ? `/${place}` : ''))
+		browserHistory.push("/"+(user||"space")+"/"+name+(!!place ? `/${place}` : ''))
 		
 	}
 

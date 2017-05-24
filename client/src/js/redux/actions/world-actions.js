@@ -72,7 +72,8 @@ export function fetchUniverseSettings () {
      })
      return axios.get(API_SERVER+"/api/universe-settings")
         .then(response => {
-            if (window.location.href.indexOf("/world/") == -1) {
+            if ( window.location.pathname == "/" ) {
+                console.log("got universe settings.. setting current world")
               dispatch({
                 type: WORLD_SET_CURRENT,
                 current: response.data.defaultWorld,

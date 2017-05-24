@@ -15,7 +15,7 @@ const styles = {
 class Places extends Component {
   setCurrentPlace (userName, world, name) {
     if (userName == '') {
-      userName = 'generated'
+      userName = 'space'
     }
     browserHistory.push(userName+"/"+world+"/"+name)
     window.location.href = window.location.href // workaround..

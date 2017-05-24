@@ -78,7 +78,7 @@ class NewWorld extends Component {
   componentWillMount() {
     this.state = {
       name: "",
-      userName: "generated",
+      userName: "space",
       skyType: "shader",
       layers: [],
       photosphere: '',
@@ -140,7 +140,7 @@ class NewWorld extends Component {
           }
       }
 
-    data.userName = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'generated' // mark as public / not tied to user if no userName
+    data.userName = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'space' // mark as public / not tied to user if no userName
     if (this.state.name != "") {
       this.props.createWorld(data)
     } else {

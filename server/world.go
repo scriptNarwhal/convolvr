@@ -191,7 +191,7 @@ func getWorld(c echo.Context) error { // load specific world
 		spawn := Spawn{Entities: true, Structures: true, Roads: true, Trees: true, NPCS: true, Tools: true, Vehicles: true}
 		gravity := 1.0
 		highAltitudeGravity := false
-		world = *NewWorld(0, -1, "generated", name, gravity, highAltitudeGravity, sky, light, terrain, spawn)
+		world = *NewWorld(0, -1, "space", name, gravity, highAltitudeGravity, sky, light, terrain, spawn)
 		saveErr := db.Save(&world)
 		if saveErr != nil {
 			log.Println(saveErr)

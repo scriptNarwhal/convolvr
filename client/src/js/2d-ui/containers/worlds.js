@@ -18,7 +18,7 @@ class Worlds extends Component {
 
     if (userName == '') {
 
-      userName = 'generated'
+      userName = 'space'
 
     }
     //browserHistory.push(userName+"/"+name)
