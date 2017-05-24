@@ -46,12 +46,11 @@ export default class CursorSystem {
 
             obj = intersections[i]
             entity = obj.object.userData.entity
-            
-            component = obj.object.userData.component
+            component = obj.object.userData.component; // console.log("got component from mesh", component)
 
-            if (!! entity && !!! component ) {
-
-                component = entity.getComponentByFace( obj.face )
+            if (!! entity && !!! component ) { // console.log("didn't get component from mesh.. trying by face", obj.faceIndex)
+                
+                component = entity.getComponentByFace( obj.faceIndex ); // !!component && console.log(component.props.geometry.size)
 
             }
 
@@ -117,7 +116,7 @@ export default class CursorSystem {
             cursorMesh.updateMatrix()
             cursorMesh.updateMatrixWorld()
 
-            if ( i > 0 ) {
+            if ( i > 0 ) { // possibly refactor this to stop hands from lagging behind at high speed*
 
                 handMesh = cursors[i].mesh.parent
                 !!handMesh && handMesh.updateMatrix()
@@ -165,6 +164,7 @@ export default class CursorSystem {
             newCursorState = {
                 distance,
                 mesh: obj.object,
+                faceIndex: obj.faceIndex,
                 component
             }
 

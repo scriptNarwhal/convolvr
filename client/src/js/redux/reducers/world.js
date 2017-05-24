@@ -27,7 +27,7 @@ let detectWorldDetailsFromURL = () => {
     let url = window.location.pathname,
         params = url.split("/"),
         slashes = params.length -1,
-        nonWorlds = ["login", "network", "chat", "files", "settings", "worlds", "space", "new-world"],
+        nonWorlds = ["login", "network", "chat", "files", "settings", "worlds", "new-world"],
         isWorld = true,
         userAndWorld = ["space", "overworld"]
 
