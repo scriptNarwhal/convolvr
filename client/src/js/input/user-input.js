@@ -5,7 +5,7 @@ import LeapMotion from './leap-motion'
 import DeviceOrientationControls from './lib/device-orientation'
 
 let isVRMode = (mode) => {
-	return (mode == "vr" || mode == "stereo")
+	return (mode == "3d" || mode == "stereo")
 }
 
 export default class UserInput {
@@ -230,7 +230,7 @@ export default class UserInput {
 				} 	
 			}
 			
-			this.moveVector.set(0, 0, 0)
+			this.moveVector.set( 0, 0, 0 )
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
 			this.camera.matrixWorldNeedsUpdate = true
@@ -269,14 +269,14 @@ export default class UserInput {
 
 	lockChangeAlert ( canvas ) {
 
-		var a = 0,
-			world = this.world
+		var world = this.world,
+			a = 0
 
-		this.focus =(document.pointerLockElement===canvas||document.mozPointerLockElement===canvas||document.webkitPointerLockElement===canvas);
+		this.focus = (document.pointerLockElement===canvas||document.mozPointerLockElement===canvas||document.webkitPointerLockElement===canvas);
 		this.fullscreen = this.focus
 		console.log("focus", this.focus)
 
-		if (!this.fullscreen && world.user.username != "") {
+		if ( !this.fullscreen && world.user.username != "" ) {
 
 			//world.showChat();
 			world.mode = "web"
@@ -288,11 +288,11 @@ export default class UserInput {
 
 				if (world.mode != "stereo") {
 
-					world.mode = "vr"
+					world.mode = "3d"
 
 				}
 	
-				document.body.setAttribute("class", "vr")
+				document.body.setAttribute("class", "3d")
 
 			}
 

@@ -57,7 +57,7 @@ export default class Convolvr {
 		this.config = false
 		this.windowFocus = true
 		this.name = "convolvr"
-		this.mode = "vr"
+		this.mode = "3d" // web, stereo ( IOTmode should be set this way )
 		this.rPos = false
 		this.users = []
 		this.user = user || {}

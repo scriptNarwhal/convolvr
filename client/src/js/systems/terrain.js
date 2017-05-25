@@ -39,9 +39,9 @@ export default class TerrainSystem {
             red = this.config.red,
             green = this.config.green,
             blue = this.config.blue,
-            terrainColor = new THREE.Color(`rgb( ${red}, ${green}, ${blue})`)
+            terrainColor = new THREE.Color(`rgb( ${Math.floor(255*red)}, ${Math.floor(255*green)}, ${Math.floor(255*blue)})`)
 
-        if (type != 'empty') {
+        if ( type != 'empty' ) {
 
             let geom = new THREE.PlaneGeometry(24000000+world.viewDistance*800000, 24000000+world.viewDistance*800000, 2, 2),
                 mat = this.world.mobile ? new THREE.MeshLambertMaterial({color: terrainColor }) : new THREE.MeshPhongMaterial({color: this.config.color}),

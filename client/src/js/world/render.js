@@ -26,7 +26,7 @@ export let animate = ( world, last, cursorIndex ) => {
   world.sendUserData()
   world.updateSkybox( delta )
 
-    if ( mode == "vr" || mode == "web" ) {
+    if ( mode == "3d" || mode == "web" ) {
 
       if (world.postProcessing.enabled) {
 
@@ -66,7 +66,7 @@ export let vrAnimate = ( time, oldPos, cursorIndex ) => {
       cursor = !!cursors ? cursors[cursorIndex] : false,
       hands = !!user && !!user.avatar ? user.avatar.componentsByProp.hand : false
 
-    if (world.HMDMode != "flymode") {  // room scale + gamepad movement
+    if ( world.HMDMode != "flymode" ) {  // room scale + gamepad movement
 
       camera.position.set(cPos.x - oldPos[0], cPos.y - oldPos[1], cPos.z -oldPos[2])
 

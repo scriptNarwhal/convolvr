@@ -1,5 +1,5 @@
 let isVRMode = (mode) => {
-  return (mode == "vr" || mode == "stereo");
+  return (mode == "3d" || mode == "stereo");
 }
 
 export default class Keyboard {

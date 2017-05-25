@@ -381,7 +381,7 @@ export default connect(
         dispatch(getChatHistory(skip))
       },
       toggleMenu: (force) => {
-          window.three.world.mode = force ? "vr" : "web"
+          //window.three.world.mode = force ? "3d" : "web"
           dispatch(toggleMenu(force))
       },
       fetchWorlds: () => {

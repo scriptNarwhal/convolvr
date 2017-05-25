@@ -1,10 +1,14 @@
 export default class AudioSystem {
+
     constructor (world) {
+
         this.world = world
         this.listener = new THREE.AudioListener()
+
     }
 
     init (component) { 
+
         let prop = component.props.audio,
             assets = this.world.systems.assets
         // find out what kind of node...
@@ -29,6 +33,8 @@ export default class AudioSystem {
                sound.stop()
             }
         }
+
     }
+    
 }
 

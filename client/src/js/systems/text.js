@@ -21,19 +21,22 @@ export default class TextSystem {
         
         this._renderText(context, text, color, background, canvasSize)
         
-        textTexture = new THREE.Texture(textCanvas)
+        textTexture = new THREE.Texture( textCanvas )
         textTexture.anisotropy = three.renderer.getMaxAnisotropy()
-        textTexture.needsUpdate = true
         textMaterial = new THREE.MeshBasicMaterial({
             map: textTexture,
             side: 0
         })
-        textMaterial.needsUpdate = true
+        let matTest = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+        textMaterial.map.needsUpdate = true
+        //textMaterial.needsUpdate = true
 
-        component.mesh = new THREE.Mesh(component.mesh.geometry, textMaterial)
+        //component.mesh = new THREE.Mesh(component.mesh.geometry, matTest ) // textMaterial)
+        component.mesh.material = textMaterial
 
         return {
             textMaterial,
+            textMesh: component.mesh,
             textTexture,
             textCanvas,
             canvasSize,
@@ -71,20 +74,28 @@ export default class TextSystem {
             text = prop.lines,
             color = prop.color,
             background = prop.background,
-            textTexture = null,
+            textTexture = state.textTexture,
             textMaterial = null,
             textCanvas = state.textCanvas,
             canvasSize = state.canvasSize,
             context = state.context
         
-        this._renderText(context, text, color, background, canvasSize)
+        this._renderText( context, text, color, background, canvasSize )
         
-        textTexture = new THREE.Texture(textCanvas)
-        textTexture.anisotropy = three.renderer.getMaxAnisotropy()
-        textTexture.needsUpdate = true   
-        component.state.text.textTexture = textTexture
-        component.mesh.material.map = textTexture
-        component.mesh.material.needsUpdate = true
+        // textTexture = new THREE.Texture( textCanvas )
+        // textTexture.anisotropy = three.renderer.getMaxAnisotropy()
+         textTexture.needsUpdate = true   
+        // state.textTexture = textTexture
+
+        // state.textMesh.material.map = textTexture
+        // state.textMesh.material.needsUpdate = true
+
+        // textMaterial = new THREE.MeshBasicMaterial({
+        //     map: textTexture,
+        //     side: 0
+        // })
+        // textMaterial.needsUpdate = true
+        // component.mesh = new THREE.Mesh( component.mesh.geometry, textMaterial )
 
     }
     

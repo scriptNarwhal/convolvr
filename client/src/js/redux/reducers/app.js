@@ -31,7 +31,7 @@ module.exports = function app (state = {
             menuOpen: open
         }) 
     case APP_TOGGLE_VR:
-        three.world.mode = !state.vrMode ? "stereo" : "vr";
+        three.world.mode = !state.vrMode ? "stereo" : "3d";
         return Object.assign({}, state, {
             vrMode: !state.vrMode
         })
