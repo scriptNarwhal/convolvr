@@ -29,6 +29,10 @@ export default class MetaFactorySystem {
 
             source.map((item, i) => {
                 
+                if ( assetType == 'entity' && typeof item == 'function' ) {
+                    return
+                }
+
                 this._addComponent( component, item, assetType, category, x, y, gridSize, vOffset)
 
                 x ++

@@ -69,11 +69,11 @@ export default class ToolUISystem {
             entity = component.entity,
             toolUIs = entity.componentsByProp.toolUI
         
-        toolUIs.forEach( ui =>{
+        toolUIs.forEach( ui => {
 
             if ( ui.props.toolUI.currentTool ) {
 
-                ui.mesh.position.set( -8000 + 8000 * currentTools[hand], 0, 0 )
+                ui.mesh.position.set( -8000 + 8000 * currentTools[ hand ], 0, 0 )
 
             }
 
@@ -94,8 +94,8 @@ export default class ToolUISystem {
       mesh.rotation.y = three.camera.rotation.y
       mesh.updateMatrix()
       mesh.translateZ( -70000 )
-      mesh.translateX( -20000 )
-      mesh.translateY(  40000 )
+      mesh.translateX(  5000 )
+      mesh.translateY(  28000 )
       mesh.updateMatrix()
 
     }

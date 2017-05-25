@@ -29,7 +29,7 @@ let detectWorldDetailsFromURL = () => {
         slashes = params.length -1,
         nonWorlds = ["login", "network", "chat", "files", "settings", "worlds", "new-world"],
         isWorld = true,
-        userAndWorld = ["space", "overworld"]
+        userAndWorld = [ "space", "overworld" ]
 
     nonWorlds.map(nWorld => {
         if (url.indexOf(`/${nWorld}`) == 0) {

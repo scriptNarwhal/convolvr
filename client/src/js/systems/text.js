@@ -19,7 +19,7 @@ export default class TextSystem {
         
         context = textCanvas.getContext("2d")
         
-        this.renderText(context, text, color, background, canvasSize)
+        this._renderText(context, text, color, background, canvasSize)
         
         textTexture = new THREE.Texture(textCanvas)
         textTexture.anisotropy = three.renderer.getMaxAnisotropy()
@@ -28,6 +28,7 @@ export default class TextSystem {
             map: textTexture,
             side: 0
         })
+        textMaterial.needsUpdate = true
 
         component.mesh = new THREE.Mesh(component.mesh.geometry, textMaterial)
 
@@ -37,14 +38,33 @@ export default class TextSystem {
             textCanvas,
             canvasSize,
             context,
-            update: () => {
-                this.update(component)
+            update: ( textProp ) => {
+
+                if ( !!textProp ) {
+
+                    component.props.text = Object.assign( {}, component.props.text, textProp )
+
+                }
+
+                this._update( component )
+
+            },
+            write: ( text ) => {
+
+                this._write( component, text )
+
             }
         }
 
     }
 
-    update ( component ) {
+    _write ( component, text ) {
+
+        component.props.text.lines.push( text )
+
+    }
+
+    _update ( component ) {
 
         let prop = component.props.text,
             state = component.state.text,
@@ -54,10 +74,10 @@ export default class TextSystem {
             textTexture = null,
             textMaterial = null,
             textCanvas = state.textCanvas,
-            canvasSize = prop.canvasSize,
+            canvasSize = state.canvasSize,
             context = state.context
         
-        this.renderText(context, text, color, background, canvasSize)
+        this._renderText(context, text, color, background, canvasSize)
         
         textTexture = new THREE.Texture(textCanvas)
         textTexture.anisotropy = three.renderer.getMaxAnisotropy()
@@ -68,7 +88,7 @@ export default class TextSystem {
 
     }
     
-    renderText (context, text, color, background, canvasSize) {
+    _renderText ( context, text, color, background, canvasSize ) {
 
         let fontSize = 42,
             textLine = '',
@@ -82,52 +102,63 @@ export default class TextSystem {
             line = '',
             l = 0
 
-         context.fillStyle = background
+        context.fillStyle = background
         context.fillRect(0, 0, canvasSize[0], canvasSize[1])
         context.font = fontSize+"pt RobotoLight"
         context.textBaseline = "top"
         context.fillStyle = color
         lines = text.length
 
-        while (l < text.length) {
+        while ( l < text.length ) {
+
             line = text[l]
-            if (line.length > (42) * (canvasSize[0]/1024) ) {
+
+            if ( line.length > (42) * (canvasSize[0]/1024) ) {
+
                 let multiLines = line.match(/.{1,42}/g)
                 text.splice(l, 1, ...multiLines)
                 lines = text.length
+
             }
+
             ++l
+
         }
-        text.map(( line, l ) => {
-            // markdown
-            this.highlightMarkdown(l, line, lines, context, textRenderState)
-            context.fillText(line, 16, 960-(1+(lines-l)*fontSize*1.35))
+
+        text.map(( line, l ) => { 
+            
+            this._highlightMarkdown( l, line, lines, context, textRenderState ) // markdown
+            context.fillText( line, 16, 960-(1+(lines-l)*fontSize*1.35) )
+
         })
 
     }
 
-    highlightMarkdown( l, line, lines, context, textState ) {
+    _highlightMarkdown( l, line, lines, context, textState ) {
 
         let xSize = textState.canvasSize[0],
           lineHeight = textState.fontSize,
           height = 960-(1+(lines-l)*lineHeight),
           toggleCodeBlock = line.indexOf('```') > -1
           
-        if (line[0] == '#') { // markdown heading
+        if ( line[0] == '#' ) { // markdown heading
             context.fillStyle = '#ffffff'
         } else if (!textState.codeBlock) {
             context.fillStyle = textState.color
         }
-        if (textState.codeBlock || toggleCodeBlock) {
+
+        if ( textState.codeBlock || toggleCodeBlock ) {
             context.fillStyle = '#bbbbbb'
             context.fillRect(0, height+10, xSize, lineHeight+10)
             context.fillStyle = '#000000'  
         }
-        if (toggleCodeBlock) {
+
+        if ( toggleCodeBlock ) {
             if (line.split('```').length < 3) {
                 textState.codeBlock = !textState.codeBlock
             }
         }
+
     }
     
 }

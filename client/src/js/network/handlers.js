@@ -47,12 +47,12 @@ export default class SocketHandlers {
 		socket.on("tool action", packet => {
 
 			let data = JSON.parse(packet.data),
-                    world = this.world,
-                    user = world.user,
-					pos = data.position,
-					coords = data.coords,
-					chunk = world.terrain.voxels[coords[0]+".0."+coords[2]],
-					quat = data.quaternion
+                world = this.world,
+                user = world.user,
+				pos = data.position,
+				coords = data.coords,
+				chunk = world.terrain.voxels[coords[0]+".0."+coords[2]],
+				quat = data.quaternion
 
 			switch (data.tool) {
 				case "Entity Tool":
@@ -64,7 +64,7 @@ export default class SocketHandlers {
 				case "Component Tool":
 					chunk.entities.map(voxelEnt => { // find & re-init entity
 
-						if (voxelEnt.id == data.entityId) {
+						if ( voxelEnt.id == data.entityId ) {
 							// console.log("got component tool message", data.entity.components); // concat with existing components array
 							voxelEnt.components = voxelEnt.components.concat(data.entity.components)
 							voxelEnt.init(three.scene)
@@ -81,7 +81,7 @@ export default class SocketHandlers {
 				case "System Tool":
 					chunk.entities.map(voxelEnt => { // find & re-init entity
 
-						if (voxelEnt.id == data.entityId) {
+						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
 							//voxelEnt.components = voxelEnt.components.concat(data.entity.components)
 							//voxelEnt.init(three.scene)
@@ -92,7 +92,7 @@ export default class SocketHandlers {
 				case "Geometry Tool":
 					chunk.entities.map(voxelEnt => { // find & re-init entity
 
-						if (voxelEnt.id == data.entityId) {
+						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
 							//voxelEnt.components = voxelEnt.components.concat(data.entity.components)
 							//voxelEnt.init(three.scene)
@@ -103,7 +103,7 @@ export default class SocketHandlers {
 				case "Material Tool":
 					chunk.entities.map(voxelEnt => { // find & re-init entity
 
-						if (voxelEnt.id == data.entityId) {
+						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
 							//voxelEnt.components = voxelEnt.components.concat(data.entity.components)
 							//voxelEnt.init(three.scene)
@@ -119,8 +119,11 @@ export default class SocketHandlers {
 
 				break
 			}
-			if (world.IOTMode) {
-				animate(world, Date.now(), 0)
+
+			if ( world.IOTMode ) {
+
+				animate( world, Date.now(), 0 )
+				
 			}
 
 		})

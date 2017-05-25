@@ -200,7 +200,7 @@ export default class CursorSystem {
                 callbacks = component.state.hover.callbacks
                 cb = callbacks.length-1
 
-                while (cb >= 0) {
+                while ( cb >= 0 ) {
 
                     callbacks[cb]()
                     cb --

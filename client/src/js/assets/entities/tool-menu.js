@@ -1,8 +1,8 @@
 let toolMenu = ( assetSystem ) => {
 
     let toolColors = [ 
-        0xff0707, 0x003bff, 0x07ff07, 0x07ffff, 0xa007ff, 0xffff07,
-        0x880303, 0x001588, 0x07ff07, 0x038888, 0xa00388, 0x888803
+        0xff0707, 0x003bff, 0x07ff07, 0x07ffff, 0xa007ff, 
+        0xffff07, 0xff0707, 0x003bff, 0x07ff07, 0x07ffff
     ],
     toolMenuIcons = [],
     toolMenu = null
@@ -21,10 +21,11 @@ let toolMenu = ( assetSystem ) => {
                     position: [ 0, 0, 0 ],
                     quaternion: null
                 },
-            button = assetSystem._initButton( iconCube )
+            button = assetSystem._initButton( iconCube ),
+            row = Math.floor( i / 5 ) * 12000
 
             toolMenuIcons.push( Object.assign({}, button, {
-                position: [ -26000 + i *13000, 0, 0 ],
+                position: [ -26000 + (i % 5) *12000, row, 0 ],
                 quaternion: null
             }))
 

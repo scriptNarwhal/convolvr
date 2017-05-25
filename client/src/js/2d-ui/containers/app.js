@@ -19,6 +19,7 @@ class App extends Component {
     events.on("chat message", message => {
 
       let chatMessage = JSON.parse(message.data),
+          chatUI = three.world.chat,
           worldName = '',
           from = ''
     	this.props.getMessage(chatMessage.message, chatMessage.from, chatMessage.files)
@@ -30,8 +31,10 @@ class App extends Component {
       this.setState({
         lastSender: chatMessage.from
       })
-      three.world.chat.write(`${from}${chatMessage.message}`)
-      three.world.chat.update()
+
+      chatUI.componentsByProp.text[0].state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
+      chatUI.componentsByProp.text[0].state.text.update()
+
       this.notify(chatMessage.message, chatMessage.from)
       worldName = this.props.world == "overworld" ? "Convolvr" : this.props.world
 
@@ -144,9 +147,10 @@ class App extends Component {
           uInput = window.three.world.userInput
 
       if (!uInput.fullscreen) {
+
 						elem.requestPointerLock()
-            // uInput.toggleFullscreen()
             this.props.toggleMenu(false)
+
       }
 
     }

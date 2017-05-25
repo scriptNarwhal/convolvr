@@ -18,7 +18,7 @@ export default class ToolSystem {
             factories = null,
             panel = null
 
-        if (prop.panel) {
+        if ( prop.panel ) {
            
             panel = new Entity(-1, [
                 {
@@ -75,7 +75,103 @@ export default class ToolSystem {
         }
 
         return {
-            panel
+            panel,
+            equip: ( hand ) => {
+            
+                this._equip( component, hand )
+            
+            },
+            unequip: ( hand ) => {
+            
+                this._unequip( component, hand )
+            
+            },
+            initLabel: ( value ) => {
+
+                this._initLabel( component, value )
+            
+            }
+        }
+
+    }
+
+    _equip ( component, hand ) {
+
+        let input = this.world.userInput,
+            hands = this.world.user.avatar.componentsByProp.hand, //this.toolbox.hands,
+            toolPanel = component.entity.componentsByProp.tool ? component.entity.componentsByProp.tool[0].state.tool.panel : false,
+            toolMesh = component.entity.mesh
+      
+
+      if ( !input.trackedControls && !input.leapMotion ) {
+
+          this.world.user.mesh.add( toolMesh )
+          toolMesh.position.set(1500-(3000*hand), -800, -1550)
+
+      } else {
+
+          hands[hand].mesh.add( toolMesh ) // add to respective hand 
+
+      }
+
+      if ( toolPanel ) {
+        
+        if ( toolPanel.mesh == null ) {
+            
+            toolPanel.init( three.scene )
+
+        }
+
+        let userPos = this.world.user.avatar.mesh.position.toArray()
+        userPos[1] += 42000
+        toolPanel.update(userPos)
+        toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
+        toolPanel.mesh.translateZ(-72000)
+        toolPanel.mesh.translateX(35000)
+        toolPanel.mesh.updateMatrix()
+
+      }
+
+    }
+
+    _unequip ( component, hand ) {
+
+        let compMesh = component.mesh
+
+        if (compMesh != null) {
+        
+            if (compMesh.parent != null) {
+            
+                compMesh.parent.remove( compMesh )
+
+            }
+
+        }
+
+
+    }
+
+    _initLabel ( component, value ) {
+
+        return {
+            props: {
+              geometry: {
+                shape: "box",
+                size: [ 8000, 3000, 2000 ]
+              },
+              material: {
+                name: "glass"
+              },
+              text: {
+                label: true,
+                background: "#000000",
+                color: "#ffffff",
+                lines: [
+                  value
+                ]
+              }
+            },
+            position: [ 6000, 3000, 3000 ]
         }
 
     }

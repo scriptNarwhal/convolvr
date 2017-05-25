@@ -1,6 +1,6 @@
 export default class Tool {
 
-    constructor (data, world, toolbox) {
+    constructor ( data, world, toolbox ) {
 
       this.data = data
       this.world = world
@@ -23,7 +23,7 @@ export default class Tool {
           toolPanel = this.entity.componentsByProp.tool ? this.entity.componentsByProp.tool[0].state.tool.panel : false,
           toolMesh = null
 
-      if (this.mesh == null) {
+      if ( this.mesh == null ) {
 
         toolMesh = this.initMesh(this.data)
 
@@ -45,8 +45,6 @@ export default class Tool {
 
       }
 
-      // console.log("equip tool: tool: ", this.entity.componentsByProp.tool)
-
       if ( toolPanel ) {
         
         if ( toolPanel.mesh == null ) {
@@ -56,11 +54,11 @@ export default class Tool {
         }
 
         let userPos = this.world.user.avatar.mesh.position.toArray()
-        userPos[1] += 42000
+        userPos[1] += 40000
         toolPanel.update(userPos)
-        toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
-        toolPanel.mesh.translateZ(-72000)
-        toolPanel.mesh.translateX(35000)
+        toolPanel.mesh.rotation.y = three.camera.rotation.y + Math.PI / 6
+        toolPanel.mesh.translateZ( -76000 )
+        toolPanel.mesh.translateX( -34000 )
         toolPanel.mesh.updateMatrix()
 
       }
@@ -81,14 +79,13 @@ export default class Tool {
 
     }
 
-
     initLabel ( value ) {
 
       return {
             props: {
               geometry: {
                 shape: "box",
-                size: [8000, 3000, 2000]
+                size: [ 8000, 3000, 2000 ]
               },
               material: {
                 name: "glass"
@@ -102,8 +99,9 @@ export default class Tool {
                 ]
               }
             },
-            position: [6000, 3000, 3000]
+            position: [ 6000, 3000, 3000 ]
         }
+        
     }
 
 }
