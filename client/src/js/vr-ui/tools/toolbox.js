@@ -182,8 +182,8 @@ export default class Toolbox {
 
           console.log("*** usePrimary entity mesh, face ", !!cursorState.mesh ? cursorState.mesh.userData : "-", cursorState.face, cursorState.component )
 
-          // cursor system has found the component
-          // handle
+          // cursor system has found the component ( provided all has gone according to plan.. )
+          // handle action by checking component props
           
           return
 
