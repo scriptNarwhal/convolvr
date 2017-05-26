@@ -14,6 +14,7 @@ export default class SocketHandlers {
 			let data = JSON.parse(packet.data),
                 world = this.world,
 				entity = null,
+				avatar = null,
 				user = null,
 				pos = null,
 				quat = null,
@@ -28,14 +29,19 @@ export default class SocketHandlers {
 					pos = entity.position
 					quat = entity.quaternion
 					user = world.users["user"+entity.id]
+					
 					if (user == null) {
+
+						avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id } )
+						avatar.init( window.three.scene )
 						user = world.users["user"+entity.id] = {
 							id: entity.id,
-							avatar: new Avatar(entity.id, true, {forceHands: true}), // render whole body, not just hands
-							mesh: null
+							avatar, // render whole body, not just hands
+							mesh: avatar.mesh
 						}
+
 					}
-					user.mesh = user.avatar.mesh
+					
 					user.avatar.update( [ pos.x, pos.y, pos.z ], [ quat.x, quat.z, quat.y, quat.w ] )
 
 				}

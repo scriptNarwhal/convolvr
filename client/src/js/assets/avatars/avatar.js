@@ -6,6 +6,8 @@ let cursorAxis = new THREE.Vector3( 1, 0, 0 )
 
 let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr hands'
     
+  console.log("init avatar, assetSystem ", assetSystem )
+
         var mesh = null, // new THREE.Object3D();
             entity = null,
             component = null,
