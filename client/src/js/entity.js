@@ -25,7 +25,7 @@ export default class Entity {
     this.position = position
     this.mesh.position.fromArray(position)
 
-    if ( quaternion !== false ) {
+    if ( !!quaternion ) {
 
       this.quaternion = quaternion
       this.mesh.quaternion.fromArray(quaternion)
@@ -71,7 +71,7 @@ export default class Entity {
 
         comp = new Component( this.components[c], this, systems, {mobile} ) // use simpler shading for mobile gpus
         
-        if (comp.props.noRaycast === true) {
+        if ( comp.props.noRaycast === true ) {
           addToOctree = false
         }
 

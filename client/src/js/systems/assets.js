@@ -1,5 +1,6 @@
 import Entity from '../entity'
 
+import avatar from '../assets/avatars/avatar'
 import toolMenu from '../assets/entities/tool-menu'
 import helpScreen from '../assets/entities/help-screen'
 import chatScreen from '../assets/entities/chat-screen'
@@ -25,6 +26,7 @@ export default class AssetSystem {
         this.audioBuffers = {}
         this.models = {}
         this.entities = []
+        this.autoDecrementEntity = -1 // entities loaded from network / db have positive ids
         this.components = []
         this.entitiesByName = {}
         this.componentsByName = {}
@@ -247,14 +249,14 @@ export default class AssetSystem {
 
     }
 
-    makeEntity ( name, init ) {
+    makeEntity ( name, init, config ) {
         
         let toMake = this.entitiesByName[name],
             ent = null //Object.assign({}, this.entitiesByName[name])
 
         if ( typeof toMake == 'function' ) {
 
-            ent =  toMake( this )
+            ent =  toMake( this, config )
 
         } else {
 
@@ -271,6 +273,13 @@ export default class AssetSystem {
             return ent
         
         }
+
+    }
+
+    autoEntityID ( ) {
+
+        this.autoDecrementEntity --
+        return this.autoDecrementEntity
 
     }
 
@@ -299,9 +308,7 @@ export default class AssetSystem {
 
     _initBuiltInEntities ( ) {
 
-        // let's add some useful ones here... then delete the rest
-        // ..or just throw them all in modules
-
+        this._addBuiltInEntity( "default-avatar", avatar )
         this._addBuiltInEntity( "tool-menu", toolMenu )
         this._addBuiltInEntity( "help-screen", helpScreen )
         this._addBuiltInEntity( "chat-screen", chatScreen )

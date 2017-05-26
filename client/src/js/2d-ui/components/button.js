@@ -7,10 +7,7 @@ let styles = {
     height: '60px'
   },
   inner: {
-    height: '100%',
-    width: '100%',
     transition: 'all 0.2s linear',
-    backgroundSize: 'contain',
     width: '60px',
     height: '60px',
     display: 'block',

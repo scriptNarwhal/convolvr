@@ -13,7 +13,7 @@ let helpScreen = {
                 },
                 text: {
                     lines: [],
-                    color: "#ffffff",
+                    color: "#00ff00",
                     background: "#000000"
                 }
             },

@@ -81,21 +81,7 @@ export default class TextSystem {
             context = state.context
         
         this._renderText( context, text, color, background, canvasSize )
-        
-        // textTexture = new THREE.Texture( textCanvas )
-        // textTexture.anisotropy = three.renderer.getMaxAnisotropy()
-         textTexture.needsUpdate = true   
-        // state.textTexture = textTexture
-
-        // state.textMesh.material.map = textTexture
-        // state.textMesh.material.needsUpdate = true
-
-        // textMaterial = new THREE.MeshBasicMaterial({
-        //     map: textTexture,
-        //     side: 0
-        // })
-        // textMaterial.needsUpdate = true
-        // component.mesh = new THREE.Mesh( component.mesh.geometry, textMaterial )
+        textTexture.needsUpdate = true   
 
     }
     

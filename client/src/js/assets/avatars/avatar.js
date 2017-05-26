@@ -4,7 +4,7 @@ import Component from '../../component'
 
 let cursorAxis = new THREE.Vector3( 1, 0, 0 )
 
-let Avatar = (id, wholeBody, data) => { // wholeBody == true == not just 'vr hands'
+let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr hands'
     
         var mesh = null, // new THREE.Object3D();
             entity = null,
@@ -14,15 +14,20 @@ let Avatar = (id, wholeBody, data) => { // wholeBody == true == not just 'vr han
             userInput = three.world.userInput,
             cursorRot = new THREE.Quaternion(),
             cursorComponent = null,
+            wholeBody = !!config ? config.wholeBody : false,
+            id = !!config && !!config.id ? config.id : assetSystem.autoEntityID(),
+            userData = { id },
             n = 2
         
+        console.log("init avatar ", id)
+
         cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
         cursorComponent = {
           props: {
               cursor: true,
               geometry: {
                 shape: "open-box",
-                size: [1500, 1500, 1500]
+                size: [ 1500, 1500, 1500 ]
               },
               material: {
                 name: "wireframe",
@@ -35,23 +40,25 @@ let Avatar = (id, wholeBody, data) => { // wholeBody == true == not just 'vr han
                 distance: 20000
               }
             },
-            position: [0, 0, 0],
+            position: [ 0, 0, 0 ],
             quaternion: cursorRot.toArray()
         }
 
       if ( wholeBody ) {
+
         component = {
              props: { 
                 geometry: {
                   shape: "cylinder",
-                  size: [1800, 1200, 1800]
+                  size: [ 1800, 1200, 1800 ]
                 },
                 material: {
                   color: 0xffffff,
                   name: "plastic",
-                }
+                },
+                user: userData
              },
-             position: [0, (n-1)*600, 0],
+             position: [ 0, (n-1)*600, 0 ],
              quaternion: false
         }
        components.push(component)
@@ -59,41 +66,45 @@ let Avatar = (id, wholeBody, data) => { // wholeBody == true == not just 'vr han
              props: { 
                 geometry: {
                   shape: "octahedron",
-                  size: [2800, 2800, 2800],
+                  size: [ 2800, 2800, 2800 ],
                 },
                 material: {
                   color: 0xffffff,
                   name: "wireframe",
                 }
              },
-             position: [0, (n-1)*600, 0],
+             position: [ 0, (n-1)*600, 0 ],
              quaternion: false
          }
          components.push( componentB )
+
       } else {
+
         components.push(Object.assign({}, {
           props: {
             geometry: {
                 shape: "box",
-                size: [1, 1, 1],
+                size: [ 1, 1, 1 ],
             },
             material: {
               color: 0xffffff,
               name: "plastic"
-            }
+            },
+            user: userData
           },
-          position: [0, 0, 0],
+          position: [ 0, 0, 0 ],
           quaternion: false,
           components: [
             Object.assign( {}, cursorComponent )
           ]
         }))
         n = 0
+
         while ( n < 2 ) {
+
           components.push(Object.assign({}, {
             props: {
                 hand: n,
-                userHand: true,
                 noRaycast: true,
                 geometry: {
                   size: [2200, 1200, 3200],
@@ -111,13 +122,15 @@ let Avatar = (id, wholeBody, data) => { // wholeBody == true == not just 'vr han
             ]
           }))
           ++n
+
         }
+
       }
         
     entity = new Entity( id, components )
-    entity.init( three.scene )
   
     return entity
+
 }
 
-export default Avatar
+export default avatar

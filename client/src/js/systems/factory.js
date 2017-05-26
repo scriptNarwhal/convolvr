@@ -8,7 +8,7 @@ export default class FactorySystem {
 
     }
   
-    init ( component ) { console.log("factory component init ", component) 
+    init ( component ) { //console.log("factory component init ", component) 
         
         let prop = component.props.factory
         

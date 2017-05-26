@@ -53,28 +53,23 @@ userInput = new UserInput()
 loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
-  console.log("tool menu", toolMenu)
-  toolMenu.init( three.scene )
-console.log("tool menu", toolMenu)
+  toolMenu.position = [ 2500, 50000, 0 ]
+  toolMenu.init( three.scene ) // toolMenu.componentsByProp.toolUI[0].state.hide()
+  user.hud = toolMenu
 
-  user.useAvatar( new Avatar( user.id, false, {} ) ) // only render hands, since this is you
+  avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) // entity id can be passed into config object
+  avatar.init( three.scene )
+  user.useAvatar( avatar )
   user.toolbox = new Toolbox( user, world )
 
-  // replace HUDMenu with entity based version in asset system
-  //user.hud = new HUDMenu( [], user.toolbox ) // v2 toolMenu will already know about user.toolbox
-  //user.hud.initMesh( {}, three.camera )
-  user.hud = toolMenu
-  //toolMenu.componentsByProp.toolUI[0].state.hide()
-
   world.user = user
-  three.scene.add( user.mesh )
   userInput.init( world, world.camera, user )
   userInput.rotationVector = { x: 0, y: 9.95, z: 0 }
   three.camera.position.set( -300000+Math.random()*150000, 55000, -300000+Math.random()*150000)
 
   chatScreen = world.systems.assets.makeEntity( "chat-screen", true )
   chatScreen.init( three.scene )
-  chatScreen.update( [ 125000, 50000, 0 ] )
+  chatScreen.update( [ 0, 50000, 0 ] )
   world.chat = chatScreen
 
   helpScreen = world.systems.assets.makeEntity( "help-screen", true )
@@ -98,9 +93,7 @@ console.log("tool menu", toolMenu)
       "- Swiping & dragging move you"
     ]
   helpScreen.init(three.scene)
-  console.log("help SCREEN", helpScreen)
-  //helpScreen.components[0].state.text.update()
-  helpScreen.update( [ 100000, 50000, 0 ] )
+  helpScreen.update( [ -80000, 50000, 0 ] )
   world.help = helpScreen
 
 })

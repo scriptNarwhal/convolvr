@@ -71,23 +71,32 @@ class App extends Component {
 
     this.props.fetchUniverseSettings()
 
-    setTimeout(()=> {
+    setTimeout( ()=> {
 
       let world = three.world,
           worldName = this.props.world
 
-      let initChatUI = () => { // rename this to something more descriptive
-        let world = window.three.world
-        world.chat.update([0, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
-        world.help.update([-80000, (world.terrain.voxels["0.0.0"].data.altitude) - 52000, -5000])
+      let init3DUI = () => {
+
+        let world = window.three.world,
+            altitude = (world.terrain.voxels["0.0.0"].data.altitude) - 52000
+
+        world.chat.update( [ 0, altitude, -5000 ] )
+        world.help.update( [ -80000, altitude, -5000 ] )
+        world.user.hud.update( [ 2500, altitude + 52000, 0 ], null )
         three.camera.position.y = (world.terrain.voxels["0.0.0"].data.altitude) + 20000
         three.world.user.velocity.y = -10000
+
       }
 
-      world.load(worldName, ()=> {
-        setTimeout(()=>{
-          initChatUI() // wait for world & terrain to load before placing this
+      world.load( worldName, () => {
+
+        setTimeout( () => {
+
+          init3DUI() // wait for world & terrain to load before positioning these
+
         }, 1200)
+
       })
 
     }, 100)
@@ -158,6 +167,7 @@ class App extends Component {
   }
 
   handleKeyDown (e) {
+
     if (e.which == 27) {
       this.props.toggleMenu(true)
     }
@@ -167,13 +177,17 @@ class App extends Component {
         browserHistory.push("/chat")
       }
     }
+
   }
 
   goBack () {
+
     browserHistory.push(`/world/${this.props.world}`)
+
   }
 
   notify (chatMessage, from) {
+
     function doNotification() {
       function onNotifyShow() {
           console.log('notification was shown!');
@@ -197,9 +211,11 @@ class App extends Component {
     } else if (Notify.isSupported()) {
         Notify.requestPermission(onPermissionGranted, onPermissionDenied);
     }
+
   }
 
   renderVRButtons () {
+
     return this.props.stereoMode ?
         [<Button title="Reset Pose"
                 id="reset-pose"
@@ -279,11 +295,7 @@ class App extends Component {
                           } else {
                             alert("Connect VR Display and then reload page.")
                           }
-                          //  setTimeout(() => {
-                          //    document.querySelector('#reset-pose').addEventListener('click', function() {
-                          //      three.vrDisplay.resetPose();
-                          //    });
-                          //  }, 500)
+                         
                       }
                       this.props.toggleVRMode()
                       three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
@@ -291,8 +303,11 @@ class App extends Component {
                   }
                 }
             />
+
   }
+
   render() {
+
     return (
         <div className="root">
          <Shell noBackground={true}
@@ -327,6 +342,7 @@ class App extends Component {
         </div>
     )
   }
+
 }
 
 App.defaultProps = {

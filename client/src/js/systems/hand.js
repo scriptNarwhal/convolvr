@@ -8,7 +8,7 @@ export default class HandSystem {
          
         let userInput = this.world.userInput
 
-        if ( !!!component.props.userHand || !!component.props.userHand && userInput.trackedControls == false && userInput.leapMotion == false) {
+        if ( component.props.hand == undefined || component.props.hand != undefined && userInput.trackedControls == false && userInput.leapMotion == false) {
 
             setTimeout(()=>{
 

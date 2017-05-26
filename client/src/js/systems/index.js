@@ -44,6 +44,7 @@ import TabViewSystem from './tab-view'
 import TabSystem from './tab'
 import ToolSystem from './tool'
 import MiniatureSystem from './miniature'
+import UserSystem from './user'
 import FileSystem from './file'
 import ChatSystem from './chat'
 import WebRTCSystem from './webrtc'
@@ -103,6 +104,7 @@ export default class Systems {
 			miniature: new MiniatureSystem(world),
 			rest: new RESTSystem(world),
 			webrtc: new WebRTCSystem(world),
+			user: new UserSystem(world),
 			file: new FileSystem(world),
 			chat: new ChatSystem(world),
 			speech: new SpeechSystem(world),
