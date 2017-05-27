@@ -336,7 +336,7 @@ export default class AssetSystem {
 
     _initButton ( component, data ) {
 
-        let color = data && data.color ? data.color : 0x252525,
+        let color = data && data.color ? data.color : 0x151515,
             components = [],
             button = null,
             x = 2
@@ -368,60 +368,44 @@ export default class AssetSystem {
 
         }
     
-        while ( x > 0 ) {
-
-            button.components.push({
+       
+        button.components.push({ // back plate, behind icon
                 props: {
                     geometry: {
                         merge: true,
-                        size: [ 320, 10000, 4000 ],
+                        size: [ 9000, 9000, 2000 ],
                         shape: "box"
                     },
                     material: {
                         color: color,
-                        name: "plastic"
+                        name: "metal"
                     }
                 },
-                position: [ -5000+( x > 1 ? 10000 : 0), 0, 0 ],
+                position: [ 0, 0, -4000 ],
                 quaternion: null
             })
-            x --
-
-        }
-
-        x = 2
-
-        while ( x > 0 ) {
-
-            button.components.push({
-                props: {
-                    geometry: {
-                        merge: true,
-                        size: [ 10000, 320, 4000 ],
-                        shape: "box"
-                    },
-                    material: {
-                        color: color,
-                        name: "plastic"
-                    }
-                },
-                position: [ 0, -5000+( x > 1 ? 10000 : 0), 0 ],
-                quaternion: null
-            })
-            x --
-
-        }
 
         return button
     }
 
-    _initIconProps ( color ) {
+    _initIconProps ( color, texture ) {
+
+        let material = {
+            name: "metal",
+            config: {
+                emissive: 0.75
+            },
+            color
+        }
+
+        if ( !!texture ) {
+
+            material.diffuse = texture
+
+        }
 
         return {
-            material: {
-                name: "metal",
-                color
-            },
+            material,
             geometry: {
                 shape: "box",
                 size: [ 6000, 6000, 6000 ]

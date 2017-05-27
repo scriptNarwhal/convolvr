@@ -4,14 +4,14 @@ import Entity from '../entity'
 
 export default class ToolSystem {
 
-    constructor (world) {
+    constructor ( world ) {
 
         this.world = world
         this.panels = []
 
     }
 
-    init (component) { 
+    init ( component ) { 
 
         let prop = component.props.tool,
             contentProps = prop.panel.content ? prop.panel.content.props : {},
@@ -20,7 +20,7 @@ export default class ToolSystem {
 
         if ( prop.panel ) {
            
-            panel = new Entity(-1, [
+            panel = new Entity(-1, [ // move panels to asset system perhaps.. or define below*
                 {
                     props: { // colored top bar
                         geometry: {
@@ -42,7 +42,7 @@ export default class ToolSystem {
                                         name: "metal",
                                         color: 0x000000
                                     },
-                                    text: {
+                                    text: { // throw this in child component?
                                         lines: [ prop.panel.title ],
                                         color: "#ffffff",
                                         background: "#000000"

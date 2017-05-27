@@ -73,8 +73,8 @@ export default class ToolUISystem {
 
             if ( ui.props.toolUI.currentTool ) {
 
-                ui.mesh.position.set( -8000 + 8000 * currentTools[ hand ], 0, 0 )
-
+                ui.mesh.position.set( -12000 + 8000 * currentTools[ hand ], 0, -4000 )
+                //ui.mesh.updateMatrix()
             }
 
         })

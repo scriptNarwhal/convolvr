@@ -18,12 +18,13 @@ export default class MaterialSystem {
             diffuse = !!prop.diffuse ? prop.diffuse.replace(path, '') : "",
             specular = !!prop.specular ? prop.specular.replace(path, '') : "",
             reflection = !!prop.reflection ? prop.reflection.replace(path, '') : "",
-            materialCode = `${prop.name}:${prop.color}:${diffuse}:${specular}:${reflection}`
-            
-        
+            materialCode = `${prop.name}:${prop.color}:${diffuse}:${specular}:${reflection}`,
+            shading = !!prop.shading ? prop.shading : 'default'
+
         if ( assets.materials[materialCode] == null ) {
 
           switch ( prop.name ) { // material presets
+
               case "wireframe":
                   mat.wireframe = true
                   mat.fog = false
@@ -41,21 +42,35 @@ export default class MaterialSystem {
                   prop.reflection = '/data/images/textures/sky-reflection.jpg'
                   prop.specular = '/data/images/textures/gplaypattern_@2X.png'
                   prop.diffuse = '/data/images/textures/shattered_@2X.png'
+                  //shading = 'physical'
               break
               case "glass":
                   prop.reflection = '/data/images/textures/sky-reflection.jpg'
                   prop.specular = '/data/images/textures/shattered_@2X.png'
+                  //shading = 'physical'
+
               break
               case "plastic":
                   prop.diffuse = '/data/images/textures/gplaypattern_@2X.png'
                   prop.specular = '/data/images/textures/shattered_@2X.png'
               default:
               break
+
+          }
+
+          if ( !! prop.config ) { // raw, three.js material properties, to override things
+
+            mat = Object.assign({}, mat, prop.config)
+
           }
          
           if ( basic ) {
 
             material = new THREE.MeshBasicMaterial(mat)
+
+          } else if ( shading == 'physical' ) { // breaks when specular map hasn't loaded yet
+
+            material = new THREE.MeshPhysicalMaterial(mat)
 
           } else {
 
@@ -71,9 +86,9 @@ export default class MaterialSystem {
 
           if ( prop.diffuse ) {
 
-            assets.loadImage(prop.diffuse, textureConfig, (texture) => { 
+            assets.loadImage( prop.diffuse, textureConfig, (texture) => { 
 
-              if (!!prop.repeat) {
+              if ( !!prop.repeat ) {
 
                 this._setTextureRepeat( texture, prop.repeat )
 
@@ -89,7 +104,7 @@ export default class MaterialSystem {
 
           if ( prop.specular ) {
 
-            assets.loadImage(prop.specular, textureConfig, (texture)=>{ 
+            assets.loadImage( prop.specular, textureConfig, (texture)=>{ 
               texture.anisotropy = three.renderer.getMaxAnisotropy()
               material.specularMap = texture
               material.needsUpdate = true 
@@ -99,7 +114,7 @@ export default class MaterialSystem {
 
           if ( prop.reflection ) {
 
-            assets.loadImage(prop.reflection, textureConfig, (texture)=>{ 
+            assets.loadImage( prop.reflection, textureConfig, (texture)=>{ 
               texture.mapping = THREE.SphericalReflectionMapping
               material.envMap = texture
               material.needsUpdate = true 
