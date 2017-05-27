@@ -388,13 +388,13 @@ export default class AssetSystem {
         return button
     }
 
-    _initIconProps ( color, texture ) {
+    initIconProps ( color, texture ) {
 
         let material = {
-            name: "metal",
-            config: {
-                emissive: 0.75
-            },
+            name: "basic",
+            // config: {
+            //     emissive: 0.75
+            // },
             color
         }
 

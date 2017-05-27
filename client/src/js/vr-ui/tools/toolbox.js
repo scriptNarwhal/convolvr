@@ -32,11 +32,11 @@ export default class Toolbox {
 
       this.fadeTimeout = 0
       this.tools = [
-        new EntityTool({}, world, this),
         new ComponentTool({}, world, this),
+        new EntityTool({}, world, this),
+        new SystemTool({}, world, this),
         new GeometryTool({}, world, this),
         new MaterialTool({}, world, this),
-        new SystemTool({}, world, this),
         new WorldTool({}, world, this),
         new PlaceTool({}, world, this),
         new AssetTool({}, world, this),

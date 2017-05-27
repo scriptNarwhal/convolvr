@@ -58,32 +58,11 @@ export default class Keyboard {
     document.addEventListener( "keypress" , (e) => {
 
       let tools = world.user.toolbox;
-      switch ( e.which ) {
 
-        case 49: 
-          tools.useTool(0, 0);
-          tools.useTool(0, 1); 
-        break; // 0: entity tool
-        case 50: 
-          tools.useTool(1, 0); 
-          tools.useTool(1, 1);
-        break; // 1: component tool
-        case 51: 
-          tools.useTool(2, 0); 
-          tools.useTool(2, 1);
-        break; // 2: geometry tool
-        case 52: 
-          tools.useTool(3, 0); 
-          tools.useTool(3, 1); 
-        break; // 3: asset tool
-        case 53: 
-          tools.useTool(4, 0); 
-          tools.useTool(4, 1); 
-        break; // 4: material tool
-        case 54: 
-          tools.useTool(5, 0); 
-          tools.useTool(5, 1);
-        break; // 5: system tool
+      if ( e.which >= 49 && e.which < 59 ) {
+
+        tools.useTool( e.which - 49, 0)
+        tools.useTool( e.which - 49, 1) // both hands switch.. you can manually pick up a tool in one hand, none the less
 
       }
 

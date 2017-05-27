@@ -74,21 +74,21 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   helpScreen = world.systems.assets.makeEntity( "help-screen", true )
   helpScreen.components[0].props.text.lines = [
-      "# Desktop users",
-      "- WASD, RF, space keys: movement",
+      "#💻 Desktop users",
+      "- ⌨️ WASD, RF, space keys: movement",
       "- Mouselook (click screen to enable)",
       "- Left/right click: primary tool / mode",
-      "- Keys 1-6: switch tool",
-      "- Gamepads are also supported",
+      "- Keys 0-9: switch tool",
+      "- 🎮 Gamepads are also supported",
       "",
-      "# Desktop VR users ",
+      "#👓 Desktop VR users ",
       "- Enter VR button in bottom right corner",
-      "- If you have tracked controllers:",
+      "- 🔦 If you have tracked controllers:",
       " * Right / Left trigger: use tool in hand",
       " * Right stick x/y axis: change tool(mode)",
       " * Left stick: movement",
       "",
-      "# Mobile users (2d or with VR viewer)",
+      "#📱 Mobile users (2d or with VR viewer)",
       "- Device orientation controls the camera",
       "- Swiping & dragging move you"
     ]

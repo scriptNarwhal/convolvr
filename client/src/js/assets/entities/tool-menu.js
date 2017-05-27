@@ -1,8 +1,20 @@
 let toolMenu = ( assetSystem ) => {
 
     let toolColors = [ 
-        0xff0707, 0x003bff, 0x07ff07, 0x07ffff, 0xa007ff, 
-        0xffff07, 0xff0707, 0x003bff, 0x07ff07, 0x07ffff
+        0x0707ff, 0x07ff00, 0xff0707, 0xff8007, 0x07ffff, 
+        // 0xffff07, 0xff0707, 0x003bff, 0x07ff07, 0x07ffff
+    ],
+    iconTextures = [
+        '/data/images/textures/icons/components.png',
+        '/data/images/textures/icons/entities.png',
+        '/data/images/textures/icons/systems.png',
+        '/data/images/textures/icons/geometries.png',
+        '/data/images/textures/icons/materials.png',
+        // '/data/images/textures/icons/worlds.png',
+        // '/data/images/textures/icons/places.png',
+        // '/data/images/textures/icons/assets.png',
+        // '/data/images/textures/icons/files.png',
+        // '/data/images/textures/icons/directories.png',
     ],
     toolMenuIcons = [],
     toolMenu = null
@@ -10,7 +22,7 @@ let toolMenu = ( assetSystem ) => {
         toolColors.map( ( color, i ) => {
 
             let iconCube = {
-                    props: Object.assign({}, assetSystem._initIconProps( color ), {
+                    props: Object.assign({}, assetSystem.initIconProps( color, iconTextures[i] ), {
                         toolUI: {
                             toolIndex: i
                         },

@@ -66,7 +66,7 @@ export default class EntityTool extends Tool  {
 
         if ((selected && cursorState.distance < 200000) || cursorSystem.entityCoolDown > 10 ) { // switch to component tool
             
-            user.toolbox.useTool(1, telemetry.hand)
+            user.toolbox.useTool( 0, telemetry.hand )
             user.hud.componentsByProp.toolUI[0].state.toolUI.show()
             user.toolbox.usePrimary(0)
             return false
