@@ -84,19 +84,19 @@ export default class MaterialSystem {
 
                   }
 
-                if ( prop.roughnessMap && !!! prop.map ) { console.log("**** roughnessMap but no map")
+                if ( prop.roughnessMap && !!! prop.map ) { //console.log("**** roughnessMap but no map")
                   
                   assets.loadImage( prop.roughnessMap, textureConfig, roughnessCallback )
 
-                } else if ( prop.map && prop.roughnessMap ) { console.log("**** roughnessMap AND map")
+                } else if ( prop.map && prop.roughnessMap ) { //console.log("**** roughnessMap AND map")
                   
                   assets.loadImage( prop.map, textureConfig, mapAndRoughnessCallback )
 
-                } else if ( !!! prop.roughnessMap && prop.map ) { console.log("**** NO roughnessMap. map, however")
+                } else if ( !!! prop.roughnessMap && prop.map ) { //console.log("**** NO roughnessMap. map, however")
                   
                   assets.loadImage( prop.map, textureConfig, mapCallback )
 
-                } else { console.log("**** No metalness. No map.")
+                } else { //console.log("**** No metalness. No map.")
                   
                   material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
 
@@ -139,7 +139,7 @@ export default class MaterialSystem {
 
             })
 
-            assets.materials[materialCode] = material // cache material for later
+            assets.materials[ materialCode ] = material // cache material for later
 
           }        
 
@@ -193,9 +193,9 @@ export default class MaterialSystem {
               break
               case "terrain":
                 if (shading != 'physical') {
-
+                  
                   mat.specular = 0xffffff
-                  mat.shininess = 4.0
+                  mat.shininess = 2.0
 
                 }
               break
@@ -226,7 +226,11 @@ export default class MaterialSystem {
               case "plastic":
                 if (shading == 'physical') {
 
-                  mat.specular = 0xffffff
+                  mat.metalness = 0.5
+
+                } else {
+
+                  mat.specular = 0x202020
                   mat.shininess = 4.0
 
                 }
@@ -251,13 +255,13 @@ export default class MaterialSystem {
             break
             case "terrain":
                 prop.map = '/data/images/textures/shattered_@2X.png'
-                prop.roughnessMap = '/data/images/textures/gplaypattern_@2X.png'
+                prop.specularMap = '/data/images/textures/gplaypattern_@2X.png'
                 prop.envMap = 'none'
                 prop.repeat = [ 'wrapping', 10, 10 ]
             break
             case "metal":
                 //prop.envMap = '/data/images/textures/sky-reflection.jpg'
-                prop.repeat = [ 'wrapping', 3, 3 ]
+                prop.repeat = [ 'wrapping', 2, 2 ]
                 prop.roughnessMap = '/data/images/textures/gplaypattern_@2X.png'
                 prop.map = '/data/images/textures/shattered_@2X.png'
             break
@@ -269,7 +273,7 @@ export default class MaterialSystem {
             case "plastic":
                 prop.repeat = [ 'wrapping', 2, 2 ]
                 prop.map = '/data/images/textures/gplaypattern_@2X.png'
-                prop.specularMap = '/data/images/textures/gplaypattern_@2X.png'
+                //prop.specularMap = '/data/images/textures/gplaypattern_@2X.png'
                 prop.roughnessMap = '/data/images/textures/shattered_@2X.png'
             default:
             break

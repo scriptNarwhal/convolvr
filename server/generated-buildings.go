@@ -23,7 +23,7 @@ func generateBuilding(world string, x int, z int, altitude float32) *Entity {
 		floorGeometry["size"] = []float64{structureSize * width, 5000, structureSize}
 		floorGeometry["shape"] = "box"
 		floorGeometry["merge"] = true
-		floorMaterial["name"] = "plastic"
+		floorMaterial["name"] = "terrain"
 		floorMaterial["color"] = 0x404040
 		floorProps["geometry"] = floorGeometry
 		floorProps["material"] = floorMaterial
@@ -56,9 +56,9 @@ func generateWall(w int, i int, floors int, width float64, structureSize float64
 		wallPos = []float64{0.0, wallHeight, structureSize/2.0 + float64(w-1)*structureSize}
 		geometry["size"] = []float64{structureSize * width, structureSize / 3.8, 5000}
 	} else if w < 4 {
-		wallHeight = structureSize * float64(floors-1)
-		wallPos = []float64{((float64(w-2) - 0.5) * width) * structureSize, 0, 0.0}
-		geometry["size"] = []float64{5000, wallHeight, structureSize}
+		wallHeight = structureSize * float64(floors)
+		wallPos = []float64{((float64(w-2) - 0.5) * width) * structureSize, wallHeight/4.0 - structureSize/2.0, 0.0}
+		geometry["size"] = []float64{5000, wallHeight / 2.0, structureSize}
 	}
 
 	//else {
@@ -70,7 +70,7 @@ func generateWall(w int, i int, floors int, width float64, structureSize float64
 	wallProps["wall"] = map[string]int{
 		"index": w,
 	}
-	material["name"] = "plastic"
+	material["name"] = "metal"
 	material["color"] = 0x404040
 	wallProps["geometry"] = geometry
 	wallProps["material"] = material

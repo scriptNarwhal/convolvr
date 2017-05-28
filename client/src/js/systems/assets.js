@@ -47,7 +47,8 @@ export default class AssetSystem {
                 { shape: 'cylinder', size: [28000, 28000, 10000] },
                 { shape: 'torus', size: [28000, 28000, 10000] },
                 { shape: 'hexagon', size: [28000, 28000, 10000] },
-                { shape: 'open-box', size: [28000, 28000, 10000] }
+                { shape: 'open-box', size: [28000, 28000, 10000] },
+                { shape: 'frustum', size: [8000, 8000, 8000] }
             ],
             material: [
                 { name: "basic", color: 0xffffff },

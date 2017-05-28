@@ -95,7 +95,7 @@ class App extends Component {
 
           init3DUI() // wait for world & terrain to load before positioning these
 
-        }, 1500)
+        }, 1200)
 
       })
 
