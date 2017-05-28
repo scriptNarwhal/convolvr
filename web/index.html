@@ -9,7 +9,9 @@
         <meta name="msapplication-TileColor" content="#151515" />
         <meta name="application-name" content="Convolvr" />
         <meta name="description" content="WebVR game engine, server and virtual reality authoring tool." />
-        <!-- TODO: make metatags configurable -->
+        <!-- TODO: make metatags configurable 
+                   ..and dynamic per world / place
+        -->
         <meta property="og:title" content="Convolvr" />
         <meta property="og:description" content="WebVR game engine, server and virtual reality authoring tool." />
         <meta property="og:image" content="https://convolvr.io/data/images/convolvr2.png" / >
@@ -94,20 +96,26 @@
                 float luminance = 0.0;
                 luminance += 0.4 + depth / 1.25;
 
-                if ((vUv.y >= 0.5)) {
+                if ( vUv.y >= 0.5 ) {
 
                     glow = -0.2+(depth) - vUv.y;
                     glow =+ 0.7 * depth * depth;
                     color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
 
-                } else if (vUv.y < 0.5 && vUv.y > 0.48) {
+                } else if ( vUv.y < 0.5 && vUv.y > 0.48 ) {
 
-                   glow = mix(0.8 * depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.48)*20.0);
-                   color = vec4(terrainRed/3.0 + red/4.0, terrainGreen/3.0 + green/4.0, terrainBlue/3.0 + blue/4.0, 1.0);
+                   glow = mix( 0.8 * depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.48)*20.0 );
+                   color = vec4( luminance*red, luminance*green, luminance*blue, 1.0 );
+
+                //} else if ( vUv.y > 0.5 && vUv.y < 0.52 ) {
+                //    
+                //    glow = mix( depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.48)*20.0);
+                //   color = vec4(terrainRed / 2.0, terrainGreen / 2.0, terrainBlue / 2.0, 1.0);
 
                 } else {
-                    glow = -0.3+(depth) - vUv.y;
-                    color = vec4(terrainRed/3.0 + red/4.0, terrainGreen/3.0 + green/4.0, terrainBlue/3.0 + blue/4.0, 1.0);
+
+                    glow = mix( 1.2 * depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y) );
+                    color = vec4(terrainRed, terrainGreen, terrainGreen, 1.0);
 
                 }
                

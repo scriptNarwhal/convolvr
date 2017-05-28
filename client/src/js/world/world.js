@@ -147,18 +147,24 @@ export default class Convolvr {
 
 	}
 
-	init (config) {
+	init ( config ) {
 		
 		let skyLight =  new THREE.DirectionalLight(config.light.color, 1),
-				camera = three.camera,
-				skyMaterial = null,
-				skybox = null
+			camera = three.camera,
+			skyMaterial = null,
+			skybox = null
 
 		console.log(config)
 		this.config = config;
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
 		three.scene.add(this.ambientLight);
+
+		if ( !!config && !!config.sky.photosphere ) {
+
+			this.systems.assets.envMaps.default = '/data/user/'+config.sky.photosphere
+
+		}
 
 		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
 

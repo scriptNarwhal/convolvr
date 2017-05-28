@@ -71,10 +71,10 @@ let toolMenu = ( assetSystem ) => {
                                     type: "point",
                                     intensity: 0.9,
                                     color: 0xffffff,
-                                    distance: 120000
+                                    distance: 12000
                                 }
                             },
-                            position: [ 0, -2000, 6000 ],
+                            position: [ 0, -2000, -8000 ],
                             quaternion: null
                             
                         }

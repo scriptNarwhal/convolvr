@@ -23,6 +23,9 @@ export default class AssetSystem {
         this.geometries = {}
         this.materials = {}
         this.textures = {}
+        this.envMaps = {
+            default: '/data/images/textures/sky-reflection.jpg'
+        }
         this.audioBuffers = {}
         this.models = {}
         this.entities = []
@@ -391,10 +394,7 @@ export default class AssetSystem {
     initIconProps ( color, texture ) {
 
         let material = {
-            name: "basic",
-            // config: {
-            //     emissive: 0.75
-            // },
+            name: "metal",
             color
         }
 

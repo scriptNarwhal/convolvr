@@ -44,7 +44,7 @@ export default class TerrainSystem {
         if ( type != 'empty' ) {
 
             let geom = new THREE.PlaneGeometry(24000000+world.viewDistance*800000, 24000000+world.viewDistance*800000, 2, 2),
-                mat = this.world.mobile ? new THREE.MeshLambertMaterial({color: terrainColor }) : new THREE.MeshPhongMaterial({color: this.config.color}),
+                mat = this.world.mobile ? new THREE.MeshLambertMaterial({color: terrainColor.getHex() }) : new THREE.MeshPhongMaterial({color: terrainColor.getHex()}),
                 mesh = new THREE.Mesh(geom, mat)
 
             this.config.color = terrainColor.getHex() // temporary hack..
@@ -85,7 +85,7 @@ export default class TerrainSystem {
         position = three.camera.position,
         terrainChunk = null,
         c = 0,
-        coords = [Math.floor(position.x/928000), 0, Math.floor(position.z/807360)],
+        coords = [ Math.floor(position.x/928000), 0, Math.floor(position.z/807360) ],
         lastCoords = this.lastChunkCoords,
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
         viewDistance = (this.world.mobile ? 5 : 6) + this.world.viewDistance,

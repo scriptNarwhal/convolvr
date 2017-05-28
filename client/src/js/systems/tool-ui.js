@@ -39,6 +39,7 @@ export default class ToolUISystem {
 
         } else if ( prop.currentTool != undefined ) {
 
+            // some kind of init needed here? 
           
         }
 
