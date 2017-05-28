@@ -76,7 +76,7 @@ export default class AssetSystem {
                 tools: {
                     toolUI: [
                         { menu: 1 },
-                        { currentToolLabel: "Custom Tool" },
+                        { currentTool: true }, // indicator
                         { toolIndex: 0 },
                         { toolIndex: 1 },
                         { toolIndex: 2 },
@@ -400,7 +400,7 @@ export default class AssetSystem {
 
         if ( !!texture ) {
 
-            material.diffuse = texture
+            material.map = texture
 
         }
 

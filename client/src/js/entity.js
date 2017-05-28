@@ -71,7 +71,7 @@ export default class Entity {
 
         comp = new Component( this.components[c], this, systems, {mobile} ) // use simpler shading for mobile gpus
         
-        if ( comp.props.noRaycast === true ) {
+        if ( comp.props.noRaycast === true ) { // this should be checked in a system
           addToOctree = false
         }
 

@@ -11,7 +11,8 @@ export default class DriveControllerSystem {
         let prop = component.props.driveController,
             fs = this.world.systems.file
 
-        // use file system.. take into account user, world, cell, entityId for storage directory
+        // use file system (or remote storage if the server if configured for it)
+        // .. take into account user, world, cell, entityId for storage directory
 
         return {
 

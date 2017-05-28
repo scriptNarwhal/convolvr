@@ -186,7 +186,7 @@ export default class FactorySystem {
                     material: {
                         name: "wireframe",
                         color: 0xffffff,
-                        diffuse: data
+                        map: data
                     },
                     geometry: {
                         shape: "sphere",

@@ -162,7 +162,13 @@ export default class Convolvr {
 
 		if ( !!config && !!config.sky.photosphere ) {
 
+			console.log("init world: photosphere: ", config.sky.photosphere)
+
 			this.systems.assets.envMaps.default = '/data/user/'+config.sky.photosphere
+
+		} else {
+
+			this.systems.assets.envMaps.default = '/data/images/textures/sky-reflection.jpg'
 
 		}
 
@@ -453,8 +459,8 @@ export default class Convolvr {
 	updateSkybox (delta) {
 
 		let camera = three.camera,
-				terrainMesh = this.terrain.mesh,
-				skyMat = null
+			terrainMesh = this.terrain.mesh,
+			skyMat = null
 
 		if (this.skybox) {
 
