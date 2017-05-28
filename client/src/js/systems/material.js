@@ -261,9 +261,9 @@ export default class MaterialSystem {
             break
             case "metal":
                 //prop.envMap = '/data/images/textures/sky-reflection.jpg'
-                prop.repeat = [ 'wrapping', 3, 3 ]
+                prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
                 prop.roughnessMap = '/data/images/textures/gplaypattern_@2X.png'
-                prop.map = '/data/images/textures/shattered_@2X.png'
+                prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
             break
             case "glass":
                 //prop.reflection = '/data/images/textures/sky-reflection.jpg'
