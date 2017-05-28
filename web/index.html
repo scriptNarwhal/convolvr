@@ -77,7 +77,7 @@
             float noise( vec3 x ) {
                 // The noise function returns a value in the range -1.0f -> 1.0f
                 vec3 p = floor(x);
-                vec3 f = fract(x);
+                vec3 f = fract(x); 
                 f       = f*f*(3.0-2.0*f);
                 float n = p.x + p.y*57.0 + 113.0*p.z;
 
@@ -102,20 +102,22 @@
                     glow =+ 0.7 * depth * depth;
                     color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
 
-                } else if ( vUv.y < 0.5 && vUv.y > 0.48 ) {
+                } else if ( vUv.y < 0.5 && vUv.y > 0.49 ) {
 
-                   glow = mix( 0.8 * depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.48)*20.0 );
-                   color = vec4( luminance*red, luminance*green, luminance*blue, 1.0 );
+                    glow = -0.2+(depth) - vUv.y;
+                    glow =+ 0.7 * depth * depth;
+                    glow = mix( glow, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.49)*20.0 );
+                    color = vec4( luminance*red, luminance*green, luminance*blue, 1.0 );
 
-                //} else if ( vUv.y > 0.5 && vUv.y < 0.52 ) {
+                //} else if ( vUv.y > 0.5 && vUv.y < 0.51 ) {
                 //    
-                //    glow = mix( depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.48)*20.0);
+                //    glow = mix( depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.49)*50.0);
                 //   color = vec4(terrainRed / 2.0, terrainGreen / 2.0, terrainBlue / 2.0, 1.0);
 
                 } else {
 
-                    glow = mix( 1.2 * depth * depth, -0.3+(depth) - vUv.y, 1.0 - (vUv.y) );
-                    color = vec4(terrainRed, terrainGreen, terrainGreen, 1.0);
+                    glow = 0.25;
+                    color = vec4(terrainRed+red/5.5, terrainGreen+green/5.5, terrainBlue+blue/5.5, 1.0);
 
                 }
                

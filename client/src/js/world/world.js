@@ -209,7 +209,7 @@ export default class Convolvr {
 
 		}
 		
-		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000+this.viewDistance*600000, 4), skyMaterial)
+		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000+(this.viewDistance*1.4)*600000, 4), skyMaterial)
 		this.skyLight = skyLight
 		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
