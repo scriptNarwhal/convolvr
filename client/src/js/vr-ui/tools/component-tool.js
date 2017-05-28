@@ -74,7 +74,7 @@ export default class ComponentTool extends Tool {
            && cursorSystem.entityCoolDown < 0 
          )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
        
-        user.toolbox.useTool( 1, telemetry.hand )
+        user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByProp.toolUI[0].state.toolUI.show()
         user.toolbox.usePrimary( 0, entity  )
         return false

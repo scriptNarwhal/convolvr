@@ -23,7 +23,7 @@ export default class GeometryTool extends Tool {
               tool: {
                 panel: {
                   title: "Geometries",
-                  color: 0x07ff07,
+                  color: 0xff8007,
                   content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource

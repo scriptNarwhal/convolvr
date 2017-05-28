@@ -27,7 +27,7 @@ export default class SystemTool extends Tool {
               tool: {
                 panel: {
                   title: "Systems",
-                  color: 0xffff07,
+                  color: 0xff0707,
                   content: {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource

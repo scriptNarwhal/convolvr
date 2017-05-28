@@ -95,8 +95,8 @@ export default class ToolUISystem {
       mesh.rotation.y = three.camera.rotation.y
       mesh.updateMatrix()
       mesh.translateZ( -70000 )
-      mesh.translateX(  5000 )
-      mesh.translateY(  28000 )
+      mesh.translateX(  2500 )
+      mesh.translateY(  34000 )
       mesh.updateMatrix()
 
     }

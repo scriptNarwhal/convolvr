@@ -1,12 +1,12 @@
 let toolMenu = ( assetSystem ) => {
 
     let toolColors = [ 
-        0x0707ff, 0x07ff00, 0xff0707, 0xff8007, 0x07ffff, 
+        0x07ff00, 0x0707ff, 0xff0707, 0xff8007, 0x07ffff, 
         // 0xffff07, 0xff0707, 0x003bff, 0x07ff07, 0x07ffff
     ],
     iconTextures = [
-        '/data/images/textures/icons/components.png',
         '/data/images/textures/icons/entities.png',
+        '/data/images/textures/icons/components.png',
         '/data/images/textures/icons/systems.png',
         '/data/images/textures/icons/geometries.png',
         '/data/images/textures/icons/materials.png',
