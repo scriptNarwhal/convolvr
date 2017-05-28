@@ -18,9 +18,9 @@ export default class MaterialSystem {
             material = null,
             basic = false,
             textureConfig = { },
-            diffuse = !!prop.diffuse ? prop.diffuse.replace(path, '') : "",
-            specular = !!prop.specular ? prop.specular.replace(path, '') : "",
-            reflection = !!prop.reflection ? prop.reflection.replace(path, '') : "",
+            diffuse = !!prop.map ? prop.map.replace(path, '') : "",
+            specular = !!prop.specularMap ? prop.specularMap.replace(path, '') : "",
+            reflection = !!prop.envMap ? prop.envMap.replace(path, '') : "",
             materialCode = `${prop.name}:${prop.color}:${diffuse}:${specular}:${reflection}`,
             shading = !!prop.shading ? prop.shading : 'default',
             renderer = three.renderer
@@ -41,18 +41,18 @@ export default class MaterialSystem {
 
           basic = this._initMaterialProp( prop )
 
-          let envMapUrl = !!prop.envMap ? prop.envMap : assets.envMaps.default
+          let envMapUrl = !! prop.envMap ? prop.envMap : assets.envMaps.default
 
-          if ( envMapUrl && prop.roughnessMap || shading == 'physical' ) {
+          if ( envMapUrl && envMapUrl != "none" && prop.roughnessMap || shading == 'physical' ) {
 
             shading = 'physical'
 
-            assets.loadImage( envMapUrl, textureConfig, ( envMap ) => { console.log("loaded envMap ", envMap )
+            assets.loadImage( envMapUrl, textureConfig, ( envMap ) => { 
 
               envMap.mapping = THREE.SphericalReflectionMapping
               mat.envMap = envMap
 
-              assets.loadImage( prop.roughnessMap, textureConfig, ( roughnessMap ) => { console.log("loaded roughnessMap", roughnessMap)
+              assets.loadImage( prop.roughnessMap, textureConfig, ( roughnessMap ) => {
 
                 !!prop.repeat && this._setTextureRepeat( roughnessMap, prop.repeat )
                 roughnessMap.anisotropy = renderer.getMaxAnisotropy()
@@ -122,7 +122,7 @@ export default class MaterialSystem {
 
             }
 
-            !!prop.diffuse && assets.loadImage( prop.diffuse, textureConfig, (texture) => { 
+            !!prop.map && assets.loadImage( prop.map, textureConfig, (texture) => { 
 
               if ( !!prop.repeat ) {
 
@@ -189,8 +189,12 @@ export default class MaterialSystem {
                   
               break
               case "terrain":
-                mat.specular = 0xffffff
-                mat.shininess = 1.0
+                if (shading == 'physical') {
+
+                  mat.specular = 0xffffff
+                  mat.shininess = 1.0
+
+                }
               break
               case "metal":
                 if ( shading == 'physical' ) {
@@ -206,8 +210,12 @@ export default class MaterialSystem {
                  mat.shininess = 9.5
               break
               case "plastic":
-                 mat.specular = 0xffffff
-                 mat.shininess = 9.0
+                if (shading == 'physical') {
+
+                  mat.specular = 0xffffff
+                  mat.shininess = 9.0
+
+                }
               default:
               break
 
@@ -230,7 +238,8 @@ export default class MaterialSystem {
             case "terrain":
                 prop.map = '/data/images/textures/shattered_@2X.png'
                 prop.roughnessMap = '/data/images/textures/gplaypattern_@2X.png'
-                prop.repeat = ["wrapping", 12, 12]
+                prop.envMap = 'none'
+                prop.repeat = [ 'wrapping', 10, 10 ]
             break
             case "metal":
                 //prop.envMap = '/data/images/textures/sky-reflection.jpg'

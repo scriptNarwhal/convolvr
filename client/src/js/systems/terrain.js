@@ -45,7 +45,7 @@ export default class TerrainSystem {
 
             let geom = new THREE.PlaneGeometry(24000000+world.viewDistance*800000, 24000000+world.viewDistance*800000, 2, 2),
                 mat = this.world.mobile ? new THREE.MeshLambertMaterial({color: terrainColor.getHex() }) : new THREE.MeshPhongMaterial({color: terrainColor.getHex()}),
-                mesh = new THREE.Mesh(geom, mat)
+                mesh = new THREE.Mesh( geom, mat )
 
             this.config.color = terrainColor.getHex() // temporary hack..
             this.mesh = mesh
