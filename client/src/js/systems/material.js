@@ -23,6 +23,7 @@ export default class MaterialSystem {
             reflection = !!prop.envMap ? prop.envMap.replace(path, '') : "",
             materialCode = `${prop.name}:${prop.color}:${diffuse}:${specular}:${reflection}`,
             shading = !!prop.shading ? prop.shading : 'default',
+            simpleShading = this.world.lighting != 'high',
             renderer = three.renderer
 
         if ( assets.materials[materialCode] == null ) {
@@ -39,7 +40,7 @@ export default class MaterialSystem {
 
           }
 
-          basic = this._initMaterialProp( prop, mobile )
+          basic = this._initMaterialProp( prop, simpleShading )
 
           let envMapUrl = !! prop.envMap ? prop.envMap : assets.envMaps.default
 
@@ -241,7 +242,7 @@ export default class MaterialSystem {
 
     }
 
-    _initMaterialProp ( prop, mobile ) {
+    _initMaterialProp ( prop, simpleShading ) {
 
       let basic = false
 
@@ -262,7 +263,7 @@ export default class MaterialSystem {
             case "metal":
                 //prop.envMap = '/data/images/textures/sky-reflection.jpg'
                 prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
-                if ( !mobile ) {
+                if ( !simpleShading ) {
 
                   prop.roughnessMap = '/data/images/textures/gplaypattern_@2X.png'
                   prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
@@ -271,7 +272,7 @@ export default class MaterialSystem {
             break
             case "glass":
               prop.specularMap = '/data/images/textures/gplaypattern_@2X.png'
-              if ( !mobile ) {
+              if ( !simpleShading ) {
 
                   prop.roughnessMap = '/data/images/textures/shattered_@2X.png'
 
@@ -287,7 +288,7 @@ export default class MaterialSystem {
 
           }
 
-          if ( mobile ) {
+          if ( simpleShading ) {
 
              prop.envMap = 'none'
 
