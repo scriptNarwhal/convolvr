@@ -64,9 +64,12 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 
 						newComps := []*Component{}
 						for _, v := range action.Components {
+							if len(v.Position) > 0 {
 
-							newComp := *NewComponent(v.Name, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props, v.State, v.Components)
-							newComps = append(newComps, &newComp)
+								newComp := *NewComponent(v.Name, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props, v.State, v.Components)
+								newComps = append(newComps, &newComp)
+
+							}
 
 						}
 

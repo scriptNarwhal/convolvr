@@ -95,11 +95,11 @@ export default class GamePad {
 
         } else if ( id.toLowerCase().indexOf('xbox') > -1 ) {
 
-          this.handleXboxGamepad( input, world, gamepad )
+          this._handleXboxGamepad( input, world, gamepad )
 
         } else if ( id.indexOf('Gamepad') > -1 ) { 
 
-          this.handleMobileVRGamepad( input, world, gamepad )
+          this._handleMobileGamepad( input, world, gamepad )
 
         }
 
@@ -111,16 +111,65 @@ export default class GamePad {
 
   }
 
-  handleMobileVRGamepad ( input, world, gamepad ) {
+  _handleMobileGamepad ( input, world, gamepad ) {
 
+    let a = gamepad.axes.length,
+        buttons = gamepad.buttons,
+        b = buttons.length,
+        i = 0,
+				rotation = input.rotationVector,
+				tools = world.user.toolbox
     // implement..
     // 17 buttons
     // 4 axis
 
+    if ( this.bumperCooldown == false ) {
+        if (this.buttonPressed(buttons[0])) { // top triggers: 4 5
+            tools.nextTool(-1, 0) // previous tool, right hand
+        }
+        if (this.buttonPressed(buttons[1])) {
+          tools.nextTool(1, 0) // next tool, right hand
+        }
+      }
+
+      if ( this.cooldown == false ) {
+        if (this.buttonPressed(buttons[2])) { // bottom triggers: 6 7
+            tools.usePrimary(0) // right hand
+            this.triggerCooldown()
+        }
+        if (this.buttonPressed(buttons[3])) {
+            tools.useSecondary(0) // right hand
+            this.triggerCooldown()
+        }
+      }
+    
+     if ( gamepad.axes[0] == 0 && gamepad.axes[2] == 0 && gamepad.axes[3] == 0) { // some cheap gamepads have fake axis
+
+      if ( Math.abs(gamepad.axes[1]) > 0.1 ) { // create settings for stick configuration
+          input.moveVector.z = gamepad.axes[0] * 20000
+      }
+
+     } else {
+
+        if (Math.abs(gamepad.axes[0]) > 0.1) {
+          input.moveVector.x = gamepad.axes[0] * 20000
+        }
+        if (Math.abs(gamepad.axes[1]) > 0.1) {
+          input.moveVector.z = gamepad.axes[1] * 20000
+        }
+        if (Math.abs(gamepad.axes[2]) > 0.10) { // 10 percent deadzone
+          rotation.y += -gamepad.axes[2] / 20.0
+        }
+        if (Math.abs(gamepad.axes[3]) > 0.10) {
+          rotation.x += -gamepad.axes[3] / 20.0
+        }
+
+     }
+     
 
   }
 
-  handleXboxGamepad ( input, world, gamepad ) {
+  _handleXboxGamepad ( input, world, gamepad ) {
 
     let a = gamepad.axes.length,
         buttons = gamepad.buttons,
@@ -161,10 +210,10 @@ export default class GamePad {
     if ( a >= 4 ) { // standard dual analogue controller
 
         if (Math.abs(gamepad.axes[0]) > 0.1) {
-          input.moveVector.x = gamepad.axes[0] * 16000
+          input.moveVector.x = gamepad.axes[0] * 20000
         }
         if (Math.abs(gamepad.axes[1]) > 0.1) {
-          input.moveVector.z = gamepad.axes[1] * 16000
+          input.moveVector.z = gamepad.axes[1] * 20000
         }
         if (Math.abs(gamepad.axes[2]) > 0.10) { // 10 percent deadzone
           rotation.y += -gamepad.axes[2] / 20.0
@@ -172,7 +221,7 @@ export default class GamePad {
         if (Math.abs(gamepad.axes[3]) > 0.10) {
           rotation.x += -gamepad.axes[3] / 20.0
         }
-        
+
     }
 
   }
