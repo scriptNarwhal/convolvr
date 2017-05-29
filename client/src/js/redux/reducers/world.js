@@ -23,7 +23,7 @@ import {
     UNIVERSE_SETTINGS_UPDATE_FAIL
 } from '../constants/action-types'
 
-let detectWorldDetailsFromURL = () => {
+export let detectWorldDetailsFromURL = () => {
     let url = window.location.pathname,
         params = url.split("/"),
         slashes = params.length -1,
@@ -45,7 +45,7 @@ let detectWorldDetailsFromURL = () => {
     return userAndWorld
 }
 
-module.exports = function worlds (state = {
+function worlds (state = {
     current: detectWorldDetailsFromURL()[1],
     worldUser: detectWorldDetailsFromURL()[0],
     all: [],
@@ -153,4 +153,6 @@ module.exports = function worlds (state = {
     default:
       return state;
   }
-};
+}
+
+export default worlds

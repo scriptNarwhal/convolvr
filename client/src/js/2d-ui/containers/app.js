@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import { events } from '../../network/socket'
-import { fetchUsers } from '../../redux/actions/user-actions'
 import Shell from '../components/shell'
 import Button from '../components/button'
 import { vrAnimate } from '../../world/render'
+import { detectWorldDetailsFromURL } from '../../redux/reducers/world'
 
 class App extends Component {
 
@@ -159,6 +159,31 @@ class App extends Component {
 
 						elem.requestPointerLock()
             this.props.toggleMenu(false)
+
+      }
+
+    }
+
+  }
+
+  componentWillUpdate ( nextProps, nextState ) {
+
+    console.log("will update app.js ", nextProps.url)
+
+    let newWorld = ["space", "overworld"]
+
+    if ( nextProps.url.pathname != this.props.url.pathname ) {
+
+      newWorld = detectWorldDetailsFromURL()
+      console.log("detected world details from url (app.js willUpdate) ", newWorld)
+
+      if ( newWorld[0] != nextProps.worldUser || newWorld[1] != nextProps.world ) {
+        
+        if (newWorld[1] != nextProps.world || newWorld[0] != nextProps.worldUser ) {
+
+          three.world.reload ( newWorld[0], newWorld[1], "", [0,0,0], true ) // load new world (that's been switched to via browser history)
+
+        }
 
       }
 
@@ -365,18 +390,23 @@ import {
   getChatHistory,
   getMessage
 } from '../../redux/actions/message-actions'
-import { login } from '../../redux/actions/user-actions'
+import { 
+  fetchUsers,
+  login 
+} from '../../redux/actions/user-actions'
 
 export default connect(
   state => {
     return {
       loggedIn: state.users.loggedIn,
+      url: state.routing.locationBeforeTransitions,
       tools: state.tools,
       users: state.users,
       menuOpen: state.app.menuOpen,
       stereoMode: state.app.vrMode,
       focus: state.app.windowFocus,
-      world: state.worlds.current
+      world: state.worlds.current,
+      worldUser: state.worlds.currentWorldUser
     }
   },
   dispatch => {

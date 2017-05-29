@@ -151,8 +151,9 @@ export default class Convolvr {
 		
 		let skyLight =  new THREE.DirectionalLight(config.light.color, 1),
 			camera = three.camera,
-			skyMaterial = null,
-			skybox = null
+			skyMaterial = new THREE.MeshBasicMaterial( {color: 0x303030} ),
+			skyTexture = null,
+			skybox = this.skybox
 
 		console.log(config)
 		this.config = config;
@@ -169,6 +170,16 @@ export default class Convolvr {
 		} else {
 
 			this.systems.assets.envMaps.default = '/data/images/textures/sky-reflection.jpg'
+
+		}
+
+		if ( !!! skybox ) {
+
+			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000+(this.viewDistance*1.4)*600000, 4), skyMaterial)
+		
+		} else {
+
+			skybox.material = skyMaterial
 
 		}
 
@@ -190,13 +201,15 @@ export default class Convolvr {
 				fragmentShader: document.getElementById('sky-fragment').textContent
 			})
 
+			skybox.material = skyMaterial
+
 		} else {
-			// load sky texture // deprecated ..migrating to world.systems.assets
-			skyMaterial = new THREE.MeshBasicMaterial({color:0x303030})
-			let skyTexture = THREE.ImageUtils.loadTexture('/data/user/'+this.config.sky.photosphere, false, function() {
-				 	skyTexture.magFilter = THREE.LinearFilter
-	 				skybox.material = new THREE.MeshBasicMaterial({map: skyTexture, side:1, fog: false})
-			})
+			// load sky texture 
+			this.systems.assets.loadImage( '/data/user/'+this.config.sky.photosphere, {}, ( texture )=>{
+				texture.magFilter = THREE.LinearFilter
+	 			skybox.material = new THREE.MeshBasicMaterial({map: texture, side:1, fog: false})
+			}) 
+
 		}
 
 		//handle re-initialization here..
@@ -209,7 +222,10 @@ export default class Convolvr {
 
 		}
 		
-		skybox = this.skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000+(this.viewDistance*1.4)*600000, 4), skyMaterial)
+
+
+		
+
 		this.skyLight = skyLight
 		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
@@ -327,7 +343,7 @@ export default class Convolvr {
 
 	}
 
-	reload ( user, name, place, coords ) {
+	reload ( user, name, place, coords, noRedirect ) {
 
 		let world = this,
 			octree = this.octree
@@ -344,11 +360,11 @@ export default class Convolvr {
 
 		}
 
-		if ( !!this.skybox ) {
+		// if ( !!this.skybox ) {
 
-			three.scene.remove(this.skybox)
+		// 	three.scene.remove(this.skybox)
 
-		}
+		// }
 
 		if ( !!this.terrain.mesh ) {
 
@@ -383,7 +399,12 @@ export default class Convolvr {
 		this.terrain.voxels = {}
 		this.terrain.voxelList = []
 		this.load(name)
-		browserHistory.push("/"+(user||"space")+"/"+name+(!!place ? `/${place}` : ''))
+
+		if ( !!! noRedirect ) {
+
+			browserHistory.push("/"+(user||"space")+"/"+name+(!!place ? `/${place}` : ''))
+
+		}
 		
 	}
 
