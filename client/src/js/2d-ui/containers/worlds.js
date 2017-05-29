@@ -27,7 +27,72 @@ class Worlds extends Component {
     three.world.reload( userName, name, false, false )
   }
 
+  _renderWorlds ( worlds ) {
+
+    return worlds.map((world, i) => {
+
+        let thumb = ''
+
+        if (world.sky.photosphere != '') {
+
+          thumb = world.sky.photosphere.split("/")
+          thumb.splice(thumb.length-1, 0, "thumbs")
+          thumb = thumb.join("/")+'.jpg'
+
+        }
+
+        return (
+          <Card clickHandler={(e, v) => {
+                  this.switchWorlds(world.userName, world.name)
+                }}
+                color={`#${(world.light.color).toString(16)}`}
+                image={world.sky.photosphere != '' ? `/data/user/${thumb}` : ""}
+                showTitle={true}
+                compact={world.sky.photosphere == ''}
+                title={world.name}
+                key={i}
+          />
+        )
+
+    })
+
+  }
+
   render() {
+
+    let worlds = [], // this.props.worlds
+        worldsWithSkyboxes = [],
+        userWorlds = [], // this.props.userWorlds
+        userWorldsWithSkyboxes = []
+
+        !!this.props.worlds && this.props.worlds.map( (world) => {
+
+          if ( !!world.sky.photosphere ) {
+
+            worldsWithSkyboxes.push( world )
+
+          } else {
+
+            worlds.push( world )            
+
+          }
+
+        })
+
+        !!this.props.userWorlds && this.props.userWorlds.map( (world) => {
+          
+          if ( !!world.sky.photosphere ) {
+
+            userWorldsWithSkyboxes.push( world )
+
+          } else {
+
+            userWorlds.push( world )            
+
+          }
+
+        })
+
     return (
         <Shell className="worlds">
         <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
@@ -41,53 +106,18 @@ class Worlds extends Component {
                      }}
         />
           <div style={styles.worlds}>
-          {
-            this.props.userWorlds.map((world, i) => {
-              let thumb = ''
-              if (world.sky.photosphere != '') {
-                thumb = world.sky.photosphere.split("/")
-                thumb.splice(thumb.length-1, 0, "thumbs")
-                thumb = thumb.join("/")+'.jpg'
-              }
-              return (
-                <Card clickHandler={(e, v) => {
-                        this.switchWorlds(world.userName, world.name)
-                      }}
-                      color={`#${(world.light.color).toString(16)}`}
-                      image={world.sky.photosphere != '' ? `/data/user/${thumb}` : ""}
-                      showTitle={true}
-                      compact={world.sky.photosphere == ''}
-                      title={world.name}
-                      key={i}
-                />
-              )
-            })
-          }
+            { this._renderWorlds( userWorldsWithSkyboxes ) }
           </div>
           <div style={styles.worlds}>
-          {
-            this.props.worlds.map((world, i) => {
-              let thumb = ''
-              if (world.sky.photosphere != '') {
-                thumb = world.sky.photosphere.split("/")
-                thumb.splice(thumb.length-1, 0, "thumbs")
-                thumb = thumb.join("/")+'.jpg'
-              }
-              return (
-                <Card clickHandler={(e, v) => {
-                        this.switchWorlds(world.userName, world.name)
-                      }}
-                      color={`#${(world.light.color).toString(16)}`}
-                      image={world.sky.photosphere != '' ? `/data/user/${thumb}` : ""}
-                      showTitle={true}
-                      compact={world.sky.photosphere == ''}
-                      title={world.name}
-                      key={i}
-                />
-              )
-            })
-          }
+            { this._renderWorlds( userWorlds ) }
           </div>
+          <div style={styles.worlds}>
+            { this._renderWorlds( worldsWithSkyboxes ) }
+          </div>
+          <div style={styles.worlds}>
+            { this._renderWorlds( worlds ) }
+          </div>
+
         </Shell>
     )
   }

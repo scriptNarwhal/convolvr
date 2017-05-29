@@ -168,14 +168,12 @@ class App extends Component {
 
   componentWillUpdate ( nextProps, nextState ) {
 
-    console.log("will update app.js ", nextProps.url)
-
     let newWorld = ["space", "overworld"]
 
     if ( nextProps.url.pathname != this.props.url.pathname ) {
 
-      newWorld = detectWorldDetailsFromURL()
-      console.log("detected world details from url (app.js willUpdate) ", newWorld)
+      newWorld = detectWorldDetailsFromURL() // console.log("detected world details from url (app.js willUpdate) ", newWorld)
+      
 
       if ( newWorld[0] != nextProps.worldUser || newWorld[1] != nextProps.world ) {
         
