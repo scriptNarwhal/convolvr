@@ -212,6 +212,24 @@ export default class Convolvr {
 
 		}
 
+		if ( !!this.skyLight ) {
+
+			three.scene.remove(this.skyLight)
+
+		}
+
+		if ( !!this.ambientLight ) {
+
+			three.scene.remove(this.ambientLight)
+
+		}
+
+		if ( !!this.terrain.mesh ) {
+
+			three.scene.remove(this.terrain.mesh)
+
+		}
+
 		//handle re-initialization here..
 		let coords = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false
 		if ( coords ) {
@@ -348,29 +366,12 @@ export default class Convolvr {
 		let world = this,
 			octree = this.octree
 
-		if ( !!this.skyLight ) {
-
-			three.scene.remove(this.skyLight)
-
-		}
-
-		if ( !!this.ambientLight ) {
-
-			three.scene.remove(this.ambientLight)
-
-		}
-
 		// if ( !!this.skybox ) {
 
 		// 	three.scene.remove(this.skybox)
 
 		// }
 
-		if ( !!this.terrain.mesh ) {
-
-			three.scene.remove(this.terrain.mesh)
-
-		}
 
 		this.terrain.voxelList.map(p => {
 
