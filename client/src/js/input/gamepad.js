@@ -93,9 +93,13 @@ export default class GamePad {
 
           this.trackedControllers.handleDaydreamController( gamepad )
 
-        } else {
+        } else if ( id.toLowerCase().indexOf('xbox') > -1 ) {
 
           this.handleXboxGamepad( input, world, gamepad )
+
+        } else if ( id.indexOf('Gamepad') > -1 ) { 
+
+          this.handleMobileVRGamepad( input, world, gamepad )
 
         }
 
@@ -104,6 +108,15 @@ export default class GamePad {
       g ++
 
     }
+
+  }
+
+  handleMobileVRGamepad ( input, world, gamepad ) {
+
+    // implement..
+    // 17 buttons
+    // 4 axis
+
 
   }
 
@@ -146,6 +159,7 @@ export default class GamePad {
     }
 
     if ( a >= 4 ) { // standard dual analogue controller
+
         if (Math.abs(gamepad.axes[0]) > 0.1) {
           input.moveVector.x = gamepad.axes[0] * 16000
         }
@@ -158,24 +172,29 @@ export default class GamePad {
         if (Math.abs(gamepad.axes[3]) > 0.10) {
           rotation.x += -gamepad.axes[3] / 20.0
         }
+        
     }
 
   }
 
 	triggerCooldown () {
+
 		this.cooldown = true
 		clearTimeout(this.cooldownTimeout)
 		this.cooldownTimeout = setTimeout(()=>{
 			this.cooldown = false
-		}, 333)
+		}, 250)
+
 	}
 
 	bumperCoolDown () {
+
 		this.bumperCooldown = true
 		clearTimeout(this.bumperCooldownTimeout)
 		this.bumperCooldownTimeout = setTimeout(()=>{
 			this.bumperCooldown = false
 		}, 250)
+
 	}
 
   buttonPressed (b) {

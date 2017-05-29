@@ -39,7 +39,7 @@ export default class MaterialSystem {
 
           }
 
-          basic = this._initMaterialProp( prop )
+          basic = this._initMaterialProp( prop, mobile )
 
           let envMapUrl = !! prop.envMap ? prop.envMap : assets.envMaps.default
 
@@ -241,7 +241,7 @@ export default class MaterialSystem {
 
     }
 
-    _initMaterialProp ( prop ) {
+    _initMaterialProp ( prop, mobile ) {
 
       let basic = false
 
@@ -262,21 +262,34 @@ export default class MaterialSystem {
             case "metal":
                 //prop.envMap = '/data/images/textures/sky-reflection.jpg'
                 prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
-                prop.roughnessMap = '/data/images/textures/gplaypattern_@2X.png'
-                prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
+                if ( !mobile ) {
+
+                  prop.roughnessMap = '/data/images/textures/gplaypattern_@2X.png'
+                  prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
+
+                }
             break
             case "glass":
-                //prop.reflection = '/data/images/textures/sky-reflection.jpg'
-                prop.roughnessMap = '/data/images/textures/shattered_@2X.png'
-                //shading = 'physical'
+              prop.specularMap = '/data/images/textures/gplaypattern_@2X.png'
+              if ( !mobile ) {
+
+                  prop.roughnessMap = '/data/images/textures/shattered_@2X.png'
+
+              }
             break
             case "plastic":
                 prop.repeat = [ 'wrapping', 2, 2 ]
                 prop.map = '/data/images/textures/gplaypattern_@2X.png'
-                //prop.specularMap = '/data/images/textures/gplaypattern_@2X.png'
+
                 prop.roughnessMap = '/data/images/textures/shattered_@2X.png'
             default:
             break
+
+          }
+
+          if ( mobile ) {
+
+             prop.envMap = 'none'
 
           }
 
