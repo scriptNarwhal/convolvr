@@ -24,6 +24,7 @@ import {
 } from '../constants/action-types'
 
 export let detectWorldDetailsFromURL = () => {
+
     let url = window.location.pathname,
         params = url.split("/"),
         slashes = params.length -1,
@@ -39,10 +40,11 @@ export let detectWorldDetailsFromURL = () => {
     console.log("detect world details from URL ", isWorld, slashes)
     if (isWorld) {
         if (slashes >= 2) {
-            userAndWorld = [params[1], params[2]]
+            userAndWorld = [params[1], params[2], isWorld]
         }
     }
     return userAndWorld
+
 }
 
 function worlds (state = {
