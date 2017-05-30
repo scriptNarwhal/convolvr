@@ -58,8 +58,9 @@ export default class TerrainSystem {
             this.mesh = mesh
 
           } else {
-
+            
             this.mesh.material = mat
+            mesh = this.mesh
 
           }
 

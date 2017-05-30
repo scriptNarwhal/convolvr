@@ -293,9 +293,9 @@ class NewWorld extends Component {
                   </span>
               </div>
               <div style={styles.option}>
-                <span style={styles.label}>Max Terrain Height</span>
+                <span style={styles.label}>Terrain Flatness</span>
                 <span style={styles.setting}>
-                <input type='range' min='16' max='1' step='0.1'  onChange={e=> { this.setState({flatness: e.target.value })}}/>
+                <input type='range' min='1' max='16' step='0.1'  onChange={e=> { this.setState({flatness: e.target.value })}}/>
                 </span>
               </div>
                 <div style={styles.option}>
