@@ -84,7 +84,13 @@ class App extends Component {
         world.chat.update( [ 0, altitude, -5000 ] )
         world.help.update( [ -80000, altitude, -5000 ] )
         world.user.hud.update( [ 2500, altitude + 52000, 0 ], null )
-        three.camera.position.y = (world.terrain.voxels["0.0.0"].data.altitude) + 20000
+
+        if (three.camera.position.y < altitude) {
+
+          three.camera.position.y = (world.terrain.voxels["0.0.0"].data.altitude) + 20000
+
+        }
+
         three.world.user.velocity.y = -10000
 
       }

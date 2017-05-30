@@ -158,7 +158,7 @@ export default class UserInput {
 
 			} else {
 
-				bottom = -(5400000 / terrainConfig.flatness) + 28000 + world.vrHeight
+				bottom = -(6000000 / terrainConfig.flatness) + 28000 + world.vrHeight
 
 			}
 

@@ -64,8 +64,8 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   world.user = user
   userInput.init( world, world.camera, user )
-  userInput.rotationVector = { x: 0, y: 9.6, z: 0 }
-  three.camera.position.set( -190000+Math.random()*100000, 55000, -190000+Math.random()*100000)
+  userInput.rotationVector = { x: 0, y: 4.5, z: 0 }
+  three.camera.position.set( -220000+Math.random()*60000, 100000, -220000+Math.random()*60000 )
 
   chatScreen = world.systems.assets.makeEntity( "chat-screen", true )
   chatScreen.init( three.scene )

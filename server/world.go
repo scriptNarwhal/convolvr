@@ -63,6 +63,7 @@ type Light struct {
 type Terrain struct {
 	TerrainType string  `json:"type"`
 	Turbulent   bool    `json:"turbulent"`
+	FlatAreas   bool    `json:"flatAreas"`
 	Height      int     `json:"height"`
 	Color       int     `json:"color"`
 	Red         float64 `json:"red"`
@@ -162,36 +163,36 @@ func getWorld(c echo.Context) error { // load specific world
 			}
 		} else {
 			if rand.Intn(12) > 6 {
-				red = first / 2.0
-				green = third / 15.0
-				blue = third / 15.0
+				red = first / 1.1
+				green = first / 1.5
+				blue = first
 			} else {
 				red = first
-				green = first / 1.2
+				green = first / 1.6
 				blue = third / 4.0
 			}
 		}
 
-		terrainRed = 0.15 + red*1.2
-		terrainGreen = green - red/4.0 - blue/4.0
-		terrainBlue = 0.15 + blue*1.2
+		terrainRed = 0.05 + red*0.4 + blue*0.8
+		terrainGreen = green*1.2 - red/4.0 - blue/4.0
+		terrainBlue = 0.05 + blue*0.4 + red*0.8
 
 		terrainColor = int(math.Floor(terrainRed*254))<<16 | int(math.Floor(terrainGreen*254))<<8 | int(math.Floor(terrainBlue*254))
 		lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
 		ambientColor = int(255*red/12.0)<<16 | int(255*green/12.0)<<8 | int(255*blue/12.0)
 		//lightColor = (red*255)<<16 | (green*255)<<8 | (255 + int(blue*127))
 
-		terrainRed += red
-		terrainGreen += green
-		terrainBlue += blue
-
 		red *= 2.5
 		green *= 2.5
 		blue *= 2.5
 
+		terrainRed += red
+		terrainGreen += green
+		terrainBlue += blue
+
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}
 		light := Light{Color: lightColor, Intensity: 1.0, Angle: 1.07, AmbientColor: ambientColor}
-		terrain := Terrain{TerrainType: "voxels", Height: 20000, Color: terrainColor, Red: terrainRed, Green: terrainGreen, Blue: terrainBlue, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
+		terrain := Terrain{TerrainType: "both", Height: 20000, Color: terrainColor, Red: terrainRed, Green: terrainGreen, Blue: terrainBlue, FlatAreas: true, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
 		spawn := Spawn{Entities: true, Structures: true, Roads: true, Trees: true, NPCS: true, Tools: true, Vehicles: true}
 		gravity := 1.0
 		highAltitudeGravity := false

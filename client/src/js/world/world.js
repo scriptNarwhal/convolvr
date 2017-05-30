@@ -205,7 +205,7 @@ export default class Convolvr {
 
 		} else {
 			// load sky texture 
-			this.systems.assets.loadImage( '/data/user/'+this.config.sky.photosphere, {}, ( texture )=>{
+			this.systems.assets.loadImage( '/data/user/'+this.config.sky.photosphere, {}, ( texture ) => {
 				texture.magFilter = THREE.LinearFilter
 	 			skybox.material = new THREE.MeshBasicMaterial({map: texture, side:1, fog: false})
 			}) 
@@ -224,12 +224,6 @@ export default class Convolvr {
 
 		}
 
-		if ( !!this.terrain.mesh ) {
-
-			three.scene.remove(this.terrain.mesh)
-
-		}
-
 		//handle re-initialization here..
 		let coords = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false
 		if ( coords ) {
@@ -239,10 +233,6 @@ export default class Convolvr {
 			three.camera.updateMatrix()
 
 		}
-		
-
-
-		
 
 		this.skyLight = skyLight
 		three.scene.add(skyLight)

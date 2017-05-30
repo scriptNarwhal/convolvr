@@ -61,12 +61,22 @@ func getWorldChunks(c echo.Context) error {
 		if len(foundChunks) == 0 {
 
 			altitude := float32(0)
-			if worldData.Terrain.TerrainType == "voxels" ||
-				worldData.Terrain.TerrainType == "both" {
-				if worldData.Terrain.Turbulent {
-					altitude = float32((math.Sin(float64(x)/2)*9+float64((x%2)-(z%3))+math.Cos(float64(z)/2)*9)/worldData.Terrain.Flatness) * 200000.0
-				} else {
-					altitude = float32((math.Sin(float64(x)/2)*9+math.Cos(float64(z)/2)*9)/worldData.Terrain.Flatness) * 200000.0
+			flatArea := worldData.Terrain.FlatAreas == true && math.Sin(2+float64(x)/9.0)+math.Cos(2+float64(z)/9.0) > 0.66
+
+			if worldData.Terrain.TerrainType == "voxels" || worldData.Terrain.TerrainType == "both" {
+
+				if flatArea == false {
+
+					if worldData.Terrain.Turbulent {
+
+						altitude = float32((math.Sin(float64(x)/2)*9+float64((x%2)-(z%3))+math.Cos(float64(z)/2)*9)/worldData.Terrain.Flatness) * 200000.0
+
+					} else {
+
+						altitude = float32((math.Sin(float64(x)/2)*9+math.Cos(float64(z)/2)*9)/worldData.Terrain.Flatness) * 200000.0
+
+					}
+
 				}
 
 			}
@@ -76,7 +86,7 @@ func getWorldChunks(c echo.Context) error {
 			if initErr != nil {
 				log.Println(initErr)
 			}
-			if rand.Intn(26) > 20 && worldData.Spawn.Structures {
+			if rand.Intn(26) > 21 && worldData.Spawn.Structures {
 				entities = append(entities, generateBuilding(world, x, z, altitude))
 			}
 

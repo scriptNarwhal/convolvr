@@ -5,7 +5,7 @@ import { API_SERVER } from '../config'
 
 export default class TerrainSystem {
 
-    constructor (world) {
+    constructor ( world ) {
 
         this.world = world
         this.config = world.config.terrain
@@ -32,26 +32,40 @@ export default class TerrainSystem {
     initTerrain ( config ) {
 
         let world = this.world
+
         this.WorldPhysics = world.systems.worldPhysics
         this.EntityPhysics = world.systems.entityPhysics
         this.config = config
+
         let type = this.config.type,
             red = this.config.red,
             green = this.config.green,
             blue = this.config.blue,
-            terrainColor = new THREE.Color(`rgb( ${Math.floor(255*red)}, ${Math.floor(255*green)}, ${Math.floor(255*blue)})`)
+            geom = null,
+            mesh = null,
+            mat = null
 
         if ( type != 'empty' ) {
 
-            let geom = new THREE.PlaneGeometry(24000000+world.viewDistance*800000, 24000000+world.viewDistance*800000*1.4, 2, 2),
-                mat = this.world.mobile ? new THREE.MeshLambertMaterial({color: terrainColor.getHex() }) : new THREE.MeshPhongMaterial({color: terrainColor.getHex()}),
-                mesh = new THREE.Mesh( geom, mat )
+          mat = this.world.mobile ? new THREE.MeshLambertMaterial({color: config.color }) : new THREE.MeshPhongMaterial({color: config.color})
+         
+           if ( !!!this.mesh ) {
 
-            this.config.color = terrainColor.getHex() // temporary hack..
+            geom = new THREE.PlaneGeometry( 24000000+world.viewDistance*800000, 24000000+world.viewDistance*800000*2.0, 2, 2 ),
+            mesh = new THREE.Mesh( geom, mat )
+            three.scene.add(mesh)
+            this.world.octree.add(mesh)
             this.mesh = mesh
-            mesh.rotation.x = -Math.PI/2
 
-            if (type == 'plane' || type == 'both') {
+          } else {
+
+            this.mesh.material = mat
+
+          }
+
+           mesh.rotation.x = -Math.PI/2
+
+            if (type == 'plane' ) {
 
                 mesh.position.y = -120500
 
@@ -60,9 +74,6 @@ export default class TerrainSystem {
                 mesh.position.y = -(5400000 / this.config.flatness) + 6000 //-168000 - 125000 / this.config.flatness
             
             }
-
-            three.scene.add(mesh)
-            this.world.octree.add(mesh)
 
         }
 

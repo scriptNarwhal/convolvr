@@ -9,20 +9,20 @@ export default class EntityPhysics {
 	  worker.onmessage = function (event) {
 
 	  let message = JSON.parse(event.data),
-  	    vrFrame = world.vrFrame,
-  			vrHeight = 0,
-  	    cam = three.camera,
-  	    user = world.user,
-  	    position = [],
-  	    velocity = [],
-				voxel = null
+  	      vrFrame = world.vrFrame,
+  		  vrHeight = 0,
+  	      cam = three.camera,
+  	      user = world.user,
+  	      position = [],
+  	      velocity = [],
+		  voxel = null
 							
-			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
+		if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
 
-					vrHeight = 22000 * vrFrame.pose.position[1]
-					world.vrHeight = vrHeight
+			vrHeight = 22000 * vrFrame.pose.position[1]
+			world.vrHeight = vrHeight
 
-			}
+		}
 
 	    if (message.command == "update") {
 	        worker.postMessage('{"command":"update","data":{"position":['+cam.position.x+', '+cam.position.y+', '+cam.position.z+

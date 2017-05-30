@@ -87,11 +87,12 @@ class NewWorld extends Component {
       blue: 1.0,
       intensity: 0.75,
       gravity: 1.0,
-      terrainType: 'voxels',
+      terrainType: 'both',
       terrainColor: 0x404040,
       turbulentTerrain: true,
       highAltitudeGravity: false,
       flatness: 2,
+      flatAreas: true,
       entities: true,
       structures: true,
       npcs: true,
@@ -127,6 +128,7 @@ class NewWorld extends Component {
             color: this.state.terrainColor,
             turbulent: this.state.turbulentTerrain,
             flatness: parseFloat(this.state.flatness),
+            flatAreas: this.state.flatAreas,
             decorations: ""
           },
           spawn: {
@@ -163,6 +165,12 @@ class NewWorld extends Component {
     let value= e.target.value
     this.setState({
       turbulentTerrain: value == 'yes' ? true : false
+    })
+  }
+  onToggleFlatAreas ( e ) {
+    let value = e.target.value
+    this.setState({
+      flatAreas: value == 'yes' ? true : false
     })
   }
   onToggleStructures (e) {
@@ -259,12 +267,21 @@ class NewWorld extends Component {
                 <span style={styles.label}>Terrain Type</span>
                 <span style={styles.setting}>
                 <select onChange={ e=> { this.onTerrainTypeChange(e) }}>
+                <option value="both">Voxels + Plane</option>
                 <option value="voxels">Terrain Voxels</option>
                 <option value="plane">Ground Plane</option>
-                <option value="both">Voxels + Ground Plane</option>
                 <option value="empty">Empty Space</option>
                 </select>
                 </span>
+              </div>
+              <div style={styles.option}>
+                  <span style={styles.label}>Flat Areas?</span>
+                  <span style={styles.setting}>
+                    <select onChange={ e=> { this.onToggleFlatAreas(e) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </span>
               </div>
               <div style={styles.option}>
                   <span style={styles.label}>Turbulent Terrain?</span>
@@ -274,11 +291,11 @@ class NewWorld extends Component {
                       <option value="no">No</option>
                     </select>
                   </span>
-                </div>
+              </div>
               <div style={styles.option}>
-                <span style={styles.label}>Terrain Flatness</span>
+                <span style={styles.label}>Max Terrain Height</span>
                 <span style={styles.setting}>
-                <input type='range' min='1' max='16' step='0.1'  onChange={e=> { this.setState({flatness: e.target.value })}}/>
+                <input type='range' min='16' max='1' step='0.1'  onChange={e=> { this.setState({flatness: e.target.value })}}/>
                 </span>
               </div>
                 <div style={styles.option}>
