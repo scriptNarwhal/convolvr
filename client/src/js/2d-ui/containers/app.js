@@ -22,6 +22,7 @@ class App extends Component {
           chatUI = three.world.chat,
           worldName = '',
           from = ''
+
     	this.props.getMessage(chatMessage.message, chatMessage.from, chatMessage.files)
 
       if (this.state.lastSender != chatMessage.from || (chatMessage.files != null && chatMessage.files.length > 0)) {
@@ -52,17 +53,25 @@ class App extends Component {
         document.title = worldName
       }
 
-      let worldMode = three.world.mode
+      let worldMode = three.world.mode,
+          worldUser = this.props.worldUser
+
       if (!this.props.menuOpen) {
+        
         browserHistory.push("/chat")
 
         if (worldMode != 'vr' && worldMode != 'stereo') { // 3d ui will show the chat in vr without interrupting things
-          this.props.toggleMenu()
+        
+            this.props.toggleMenu()
+        
         } else {
           setTimeout(()=>{
-            browserHistory.push(`/world/${this.props.world}`)
+
+            browserHistory.push(`/${worldUser}/${worldName}`)
             this.props.toggleMenu()
+          
           }, 3500)
+        
         }
 
       }
@@ -74,8 +83,9 @@ class App extends Component {
     setTimeout( ()=> {
 
       let world = three.world,
-          worldName = this.props.world
-
+          worldName = this.props.world,
+          worldUser = this.props.worldUser
+      console.log("world & worldUser ", world, worldUser )
       let init3DUI = () => {
 
         let world = window.three.world,
@@ -95,7 +105,7 @@ class App extends Component {
 
       }
 
-      world.load( worldName, () => {
+      world.load( worldUser, worldName, () => {
 
         setTimeout( () => {
 

@@ -234,6 +234,8 @@ export default class Convolvr {
 
 		}
 
+		document.title = config.name == 'overworld' && config.userName == 'space' ? `Convolvr` : config.name // make "Convolvr" default configurable via admin settings
+
 		this.skyLight = skyLight
 		three.scene.add(skyLight)
 		three.scene.add(this.skybox)
@@ -338,10 +340,11 @@ export default class Convolvr {
 
 	}
 
-	load ( name, callback ) {
+	load ( userName, name, callback ) {
 
-		this.name = name;
-		// fix this... needs userName now
+		console.log("load world", userName, name)
+		this.name = name; // fix this... needs userName now
+	
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
 			 this.init(response.data)
 			 callback && callback(this)
@@ -355,13 +358,6 @@ export default class Convolvr {
 
 		let world = this,
 			octree = this.octree
-
-		// if ( !!this.skybox ) {
-
-		// 	three.scene.remove(this.skybox)
-
-		// }
-
 
 		this.terrain.voxelList.map(p => {
 
@@ -389,7 +385,7 @@ export default class Convolvr {
 		this.terrain.platforms = []
 		this.terrain.voxels = {}
 		this.terrain.voxelList = []
-		this.load(name)
+		this.load( user, name )
 
 		if ( !!! noRedirect ) {
 

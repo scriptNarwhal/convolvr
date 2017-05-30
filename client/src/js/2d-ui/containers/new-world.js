@@ -86,6 +86,8 @@ class NewWorld extends Component {
       green: 1.0,
       blue: 1.0,
       intensity: 0.75,
+      lightPitch: 2.5,
+      lightYaw: 0.25,
       gravity: 1.0,
       terrainType: 'both',
       terrainColor: 0x404040,
@@ -119,7 +121,8 @@ class NewWorld extends Component {
           light: {
             color: 0x1000000 + (Math.floor(lightColor[0] * 255) << 16) + (Math.floor(lightColor[1] * 255) << 8) + Math.floor(lightColor[2] * 255),
             intensity: parseFloat(this.state.intensity),
-            angle: 2.0,
+            pitch: this.state.lightPitch,
+            yaw: this.state.lightYaw,
             ambientColor: 0x000000
           },
           terrain: {
@@ -240,27 +243,39 @@ class NewWorld extends Component {
                 ) : ""
               }
               <div style={styles.option}>
-                <span style={styles.label}>Light Color / Red</span>
+                <span style={styles.label}>Light Color: Red </span>
                 <span style={styles.setting}>
-                  <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/>
+                 <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/> { this.state.red }
                 </span>
               </div>
               <div style={styles.option}>
-                <span style={styles.label}>Light Color / Green</span>
+                <span style={styles.label}>Light Color: Green</span>
                 <span style={styles.setting}>
-                <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/>
+                   <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/> { this.state.green }
                 </span>
               </div>
               <div style={styles.option}>
-                <span style={styles.label}>Light Color / Blue</span>
+                <span style={styles.label}>Light Color: Blue</span>
                 <span style={styles.setting}>
-                <input type='range' min='0' max='1' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} />
+                   <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} /> { this.state.blue }
                 </span>
               </div>
               <div style={styles.option}>
                 <span style={styles.label}>Light Intensity</span>
                 <span style={styles.setting}>
-                <input type='range' min='0' max='1' step='0.001'  onChange={e=> { this.setState({intensity: e.target.value })}}/>
+                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({intensity: e.target.value })}}/> { this.state.intensity }
+                </span>
+              </div>
+              <div style={styles.option}>
+                <span style={styles.label}>Light Direction</span>
+                <span style={styles.setting}>
+                  Pitch <input type='range' min='0' max='3.14' step='0.001'  onChange={e=> { this.setState({lightPitch: e.target.value })}}/> { this.state.lightPitch }
+                </span>
+              </div>
+              <div style={styles.option}>
+                <span style={styles.label}></span>
+                <span style={styles.setting}>
+                Yaw <input type='range' min='0' max='3.14' step='0.001'  onChange={e=> { this.setState({lightYaw: e.target.value })}}/> { this.state.lightYaw }
                 </span>
               </div>
               <div style={styles.option}>
