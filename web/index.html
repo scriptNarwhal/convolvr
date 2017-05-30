@@ -104,10 +104,11 @@
 
                 } else if ( vUv.y < 0.5 && vUv.y > 0.49 ) {
 
-                    glow = -0.2+(depth) - vUv.y;
-                    glow =+ 0.7 * depth * depth;
-                    glow = mix( glow, -0.3+(depth) - vUv.y, 1.0 - (vUv.y-0.49)*20.0 );
-                    color = vec4( luminance*red, luminance*green, luminance*blue, 1.0 );
+                    glow = -0.5+(depth) - vUv.y;
+                    glow =+ 0.6 * depth * depth;
+                    float p = 1.0 - (vUv.y-0.49)*50.0;
+                    glow = mix( glow, 0.01, p );
+                    color = vec4( luminance*mix( red, terrainRed, p), luminance*mix( green, terrainGreen, p), luminance*mix(blue, terrainBlue, p), 1.0 );
 
                 } else {
 

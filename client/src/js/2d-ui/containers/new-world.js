@@ -86,8 +86,8 @@ class NewWorld extends Component {
       green: 1.0,
       blue: 1.0,
       intensity: 0.75,
-      lightPitch: 2.5,
-      lightYaw: 0.25,
+      lightPitch: 1.63,
+      lightYaw: 0.4,
       gravity: 1.0,
       terrainType: 'both',
       terrainColor: 0x404040,
@@ -121,8 +121,8 @@ class NewWorld extends Component {
           light: {
             color: 0x1000000 + (Math.floor(lightColor[0] * 255) << 16) + (Math.floor(lightColor[1] * 255) << 8) + Math.floor(lightColor[2] * 255),
             intensity: parseFloat(this.state.intensity),
-            pitch: this.state.lightPitch,
-            yaw: this.state.lightYaw,
+            pitch: parseFloat(this.state.lightPitch),
+            yaw: parseFloat(this.state.lightYaw),
             ambientColor: 0x000000
           },
           terrain: {
@@ -275,7 +275,7 @@ class NewWorld extends Component {
               <div style={styles.option}>
                 <span style={styles.label}></span>
                 <span style={styles.setting}>
-                Yaw <input type='range' min='0' max='3.14' step='0.001'  onChange={e=> { this.setState({lightYaw: e.target.value })}}/> { this.state.lightYaw }
+                Yaw <input type='range' min='0' max='6.28' step='0.001'  onChange={e=> { this.setState({lightYaw: e.target.value })}}/> { this.state.lightYaw }
                 </span>
               </div>
               <div style={styles.option}>

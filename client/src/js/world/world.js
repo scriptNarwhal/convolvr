@@ -238,9 +238,11 @@ export default class Convolvr {
 
 		this.skyLight = skyLight
 		three.scene.add(skyLight)
+		skyLight.position.set( Math.sin(config.light.yaw)*3000000, Math.sin(config.light.pitch)*3000000, Math.cos(config.light.yaw)*3000000)
+		skyLight.lookAt(new THREE.Vector3(0,0,0))
 		three.scene.add(this.skybox)
 		this.skybox.position.set(camera.position.x, 0, camera.position.z)
-		skyLight.position.set(2000000, 2000000, 4000000)
+
 		this.terrain.bufferChunks(true, 0)
 		this.gravity = config.gravity
 		this.highAltitudeGravity = config.highAltitudeGravity
