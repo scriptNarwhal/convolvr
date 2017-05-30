@@ -39,6 +39,7 @@ self.update = function ( ) {
 		yPos = 0,
 		size = 50000,
 		obj = null,
+		ent = null,
 		structure = null,
 		bounds = [0, 0],
 		voxel = null,
@@ -52,7 +53,7 @@ self.update = function ( ) {
 
 			obj = voxels[i];
 
-			if (!!obj  && distance2dCompare(position, obj.position, 2500000)) { 	// do collisions on voxels & structures... just walls at first..
+			if ( !!obj  && distance2dCompare(position, obj.position, 2500000) ) { 	// do collisions on voxels & structures... just walls at first..
 					
 				if (obj.loaded == undefined) {
 				
@@ -61,32 +62,38 @@ self.update = function ( ) {
 						
 				}
 
-				if (distance2dCompare(position, obj.position, 900000)) {
+				if ( distance2dCompare(position, obj.position, 900000) ) {
 					
 					let alt = obj.altitude || 0
 						yPos = obj.position[1]
 				
-				if (distance2dCompare(position, obj.position, 528000)) {
+				if ( distance2dCompare(position, obj.position, 528000) ) {
 					
-					if (position[1] > yPos - 160000 + vrHeight  && position[1] < yPos + 470000 + vrHeight) {
+					if (position[1] > yPos - 160000 + vrHeight  && position[1] < yPos + 470000 + vrHeight ) {
 
 						collision = true;
 						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');
 				
 					}
 
-					if (!!obj.entities && obj.entities.length > 0) {
+					if ( !!obj.entities && obj.entities.length > 0 ) {
 
-						obj.entities.map( entity=> {
+						e = obj.entities.length - 1
 
-							if ( distance3dCompare(position, entity.position, (entity.boundingRadius||20000)+10000) ) { 
+						while ( e >= 0 ) {
+
+							ent = obj.entities[ e ]
+
+							if ( distance3dCompare(position, ent.position, (ent.boundingRadius||20000)+10000) ) { 
 
 								collision = true
-								self.postMessage('{"command": "entity-user collision", "data":{"position":[' +obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}')
+								self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: ent.position }} ) )
 
 							}
 
-						})
+							e --
+
+						}
 
 					}
 						

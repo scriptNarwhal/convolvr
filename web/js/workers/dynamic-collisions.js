@@ -143,12 +143,6 @@ self.update = function () {
             obj = entities[i]
 
             if (!!obj) {
-              // use entity radius here
-              //console.log(position, obj.position, obj.boundingRadius+10000)
-              if (distance3dCompare(position, obj.position, (obj.boundingRadius||20000)+10000)) { 
-                  collision = true
-                  self.postMessage('{"command": "entity-user collision", "data":{"position":[' +obj.position[0] + ',' + obj.position[1] + ',' + obj.position[2] + '] }}')
-              }
             
               if (!! obj.moving) { //moving) {
                 
