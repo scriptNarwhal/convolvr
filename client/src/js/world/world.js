@@ -97,8 +97,8 @@ export default class Convolvr {
 		this.systems = new Systems( this )
 		this.terrain = this.systems.terrain
 		this.workers = {
-			worldPhysics: this.systems.worldPhysics.worker,
-			entityPhysics: this.systems.entityPhysics.worker
+			staticCollisions: this.systems.staticCollisions.worker,
+			dynamicCollisions: this.systems.dynamicCollisions.worker
 		}
 		camera.add(this.systems.audio.listener)
 		this.socketHandlers = new SocketHandlers(this, socket)
@@ -384,8 +384,8 @@ export default class Convolvr {
 
 		})
 
-		this.workers.worldPhysics.postMessage(JSON.stringify( { command: "clear", data: {}} ))
-		this.workers.entityPhysics.postMessage(JSON.stringify( { command: "clear", data: {}} ))
+		this.workers.staticCollisions.postMessage(JSON.stringify( { command: "clear", data: {}} ))
+		this.workers.dynamicCollisions.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		this.terrain.platforms = []
 		this.terrain.voxels = {}
 		this.terrain.voxelList = []

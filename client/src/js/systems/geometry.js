@@ -60,7 +60,7 @@ export default class GeometrySystem {
 
         } else {
 
-          geometry = assets.geometries[geometryCode]
+          geometry = assets.geometries[geometryCode] // used cached copy
 
         }
 

@@ -34,7 +34,7 @@ export default class Voxel {
         mat = world.systems.material.init(component).material
 
         this.entities = []
-        physics = world.systems.worldPhysics.worker
+        physics = world.systems.staticCollisions.worker
 
         if (data == null) {
             data = { }

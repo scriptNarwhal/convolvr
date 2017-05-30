@@ -10,8 +10,8 @@ export default class TerrainSystem {
         this.world = world
         this.config = world.config.terrain
         this.octree = world.octree
-        this.WorldPhysics = null
-        this.EntityPhysics = null
+        this.StaticCollisions = null
+        this.DynamicCollisions = null
         this.voxels = []
         this.voxelList = [] // map of coord strings to voxels
         this.lastChunkCoords = [0, 0, 0]
@@ -33,8 +33,8 @@ export default class TerrainSystem {
 
         let world = this.world
 
-        this.WorldPhysics = world.systems.worldPhysics
-        this.EntityPhysics = world.systems.entityPhysics
+        this.StaticCollisions = world.systems.staticCollisions
+        this.DynamicCollisions = world.systems.dynamicCollisions
         this.config = config
 
         let type = this.config.type,
@@ -249,11 +249,11 @@ export default class TerrainSystem {
 
              if (physicsVoxels.length > 0) { //console.log("physics voxels", physicsVoxels)
                
-               systems.worldPhysics.worker.postMessage(JSON.stringify({
+               systems.staticCollisions.worker.postMessage(JSON.stringify({
                      command: "add voxels",
                      data: physicsVoxels
                 }))
-                systems.entityPhysics.worker.postMessage(JSON.stringify({
+                systems.dynamicCollisions.worker.postMessage(JSON.stringify({
                     command: "add voxels",
                     data: physicsVoxels
                 }))
@@ -271,8 +271,8 @@ export default class TerrainSystem {
 
       if (removePhysicsChunks.length > 0) {
         let removeChunkData = JSON.stringify(removePhysicsChunks)
-        this.WorldPhysics.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
-        this.EntityPhysics.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
+        this.StaticCollisions.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
+        this.DynamicCollisions.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
       }
 
       lastCoords[0] = coords[0]

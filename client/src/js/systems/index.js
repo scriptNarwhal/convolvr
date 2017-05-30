@@ -1,5 +1,5 @@
-import WorldPhysics  from './world-physics'
-import EntityPhysics from './entity-physics'
+import StaticCollisions  from './static-collisions'
+import DynamicCollisions from './dynamic-collisions'
 import GeometrySystem from './geometry'
 import MaterialSystem from './material'
 import AssetSystem from './assets'
@@ -60,8 +60,8 @@ export default class Systems {
 			assets: new AssetSystem(world),
 			geometry: new GeometrySystem(world),
 			material: new MaterialSystem(world),
-			worldPhysics: new WorldPhysics(world),
-			entityPhysics: new EntityPhysics(world),
+			staticCollisions: new StaticCollisions(world),
+			dynamicCollisions: new DynamicCollisions(world),
 			light: new LightSystem(world),
 			text: new TextSystem(world),
 			audio: new AudioSystem(world),
