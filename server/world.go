@@ -4,7 +4,6 @@ import (
 	"math"
 	"math/rand"
 	"net/http"
-	"strconv"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
@@ -99,14 +98,15 @@ func getWorlds(c echo.Context) error {
 }
 
 func getUserWorlds(c echo.Context) error {
-	var worlds []World
-	userId, _ := strconv.Atoi(c.Param("userId"))
-	err := db.Find("UserID", userId, &worlds)
-	if err != nil {
-		log.Println(err)
-		return err
-	}
-	return c.JSON(http.StatusOK, &worlds)
+	// var worlds []World
+	// userId, _ := strconv.Atoi(c.Param("userId"))
+	// err := db.Find("UserID", userId, &worlds)
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return err
+	// }
+	//return c.JSON(http.StatusOK, &worlds)
+	return c.JSON(http.StatusOK, nil)
 }
 
 func postWorlds(c echo.Context) error {

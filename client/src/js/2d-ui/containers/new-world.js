@@ -86,8 +86,8 @@ class NewWorld extends Component {
       green: 1.0,
       blue: 1.0,
       intensity: 0.75,
-      lightPitch: 1.63,
-      lightYaw: 0.4,
+      lightPitch: 1.64,
+      lightYaw: 1.0,
       gravity: 1.0,
       terrainType: 'both',
       terrainColor: 0x404040,
@@ -263,19 +263,19 @@ class NewWorld extends Component {
               <div style={styles.option}>
                 <span style={styles.label}>Light Intensity</span>
                 <span style={styles.setting}>
-                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({intensity: e.target.value })}}/> { this.state.intensity }
+                  <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({intensity: e.target.value })}}/> { this.state.intensity }
                 </span>
               </div>
               <div style={styles.option}>
                 <span style={styles.label}>Light Direction</span>
                 <span style={styles.setting}>
-                  Pitch <input type='range' min='0' max='3.14' step='0.001'  onChange={e=> { this.setState({lightPitch: e.target.value })}}/> { this.state.lightPitch }
+                  Pitch <input type='range' min='0' max='3.14' step='0.001' onChange={e=> { this.setState({lightPitch: e.target.value })}}/> { this.state.lightPitch }
                 </span>
               </div>
               <div style={styles.option}>
                 <span style={styles.label}></span>
                 <span style={styles.setting}>
-                Yaw <input type='range' min='0' max='6.28' step='0.001'  onChange={e=> { this.setState({lightYaw: e.target.value })}}/> { this.state.lightYaw }
+                Yaw <input type='range' min='0' max='6.28' step='0.001' onChange={e=> { this.setState({lightYaw: e.target.value })}}/> { this.state.lightYaw }
                 </span>
               </div>
               <div style={styles.option}>

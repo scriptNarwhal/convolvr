@@ -45,8 +45,9 @@ let socket = events,
 	  loadingWorld = null,
 	  avatar = null,
     toolMenu = null,
-    helpScreen = null,
-    chatScreen = null
+    helpScreen = null, // built in ui entities
+    chatScreen = null,
+    httpClient = null
 
 userInput = new UserInput()
 
@@ -96,7 +97,24 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
   helpScreen.update( [ -80000, 50000, 0 ] )
   world.help = helpScreen
 
+  setTimeout(()=>{
+
+    httpClient = world.systems.assets.makeEntity( "help-screen", true ) // simple example of displaying GET response from server
+    httpClient.components[0].props.rest = {
+      get: {
+        url: "http://localhost:3007/api/chunks/"+world.name+"/0x0x0"
+      }
+    }
+    httpClient.components[0].props.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0"] // really just clearing the default text until something loads
+    httpClient.components[0].props.text.color = "#f0f0f0"
+    httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
+    httpClient.update( [ -80000, 0, 0 ] )
+
+  }, 1000)
+
 })
+
+
 
 ReactDOM.render(
   (<Provider store={store}>

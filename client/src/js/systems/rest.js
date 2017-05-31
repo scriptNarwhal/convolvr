@@ -10,11 +10,41 @@ export default class RESTSystem {
 
     init (component) { 
 
-        let prop = component.props.rest // specify url, method, etc
-        
+        let prop = component.props.rest, // specify url, method, etc
+            rest = this
+
+        let getCallback = (response, component) => {
+
+                component.state.rest.getResponse = response
+
+                if ( !!component.props.text ) {
+
+                    component.props.text.lines = JSON.stringify(response.data).match(/(.|[\r\n]){1,42}/g)
+                    component.state.text.update()
+
+                }
+
+            },
+            getError =  ( error, component ) => {
+
+                component.state.rest.getError = error
+
+            },
+            postCallback = (response, component) => {
+
+                component.state.rest.postResponse = response
+
+            },
+            postError =  ( error, component ) => {
+
+                component.state.rest.postError = error
+
+            }
+
+
         if ( prop.get ) {
 
-            this.getRequest( component, prop.get.url)
+            this.getRequest( component, prop.get.url, getCallback, getError )
 
         }
 
@@ -30,30 +60,14 @@ export default class RESTSystem {
 
             getResponse: false,
             postResponse: false,
-            getRequest: (url) => {
+            getRequest: ( url ) => {
 
-                this.getRequest(component, url, (response) => {
-
-                    component.state.rest.getResponse = response
-
-                }, (error) => {
-
-                    component.state.rest.getError = error
-
-                })
+                rest.getRequest( component, url, getCallback, getError )
 
             },
-            postRequest: (url, data) => {
+            postRequest: ( url, data ) => {
 
-                this.postRequest(component, url, data, (response) => {
-
-                    component.state.rest.postResponse = response
-
-                }, (error) => {
-
-                    component.state.rest.postError = error
-
-                })
+                rest.postRequest( component, url, data, postCallback, postError )
 
             }
 
@@ -63,15 +77,15 @@ export default class RESTSystem {
 
     getRequest ( component, url, callback, onError ) {
 
-        axios.get(url)
+        console.log("getRequest", callback, onError )
 
-        .then( res => {
+        axios.get(url).then( res => {
 
             callback ( res, component )
 
         }).catch( err => {
-
-            onError ( err )
+          
+           onError ( err, component )
 
         });
 
