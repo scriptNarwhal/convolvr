@@ -88,7 +88,7 @@ export default class Component {
 
         compMesh = comp.mesh
 
-        if ( comp.props.geometry ) {
+        if ( comp.props.geometry ) { // this keeps happening.. arrays are geometrically filling up too quickly
 
           faces = compMesh.geometry.faces
           face = faces.length-1

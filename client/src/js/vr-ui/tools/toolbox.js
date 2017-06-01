@@ -180,8 +180,11 @@ export default class Toolbox {
 
         if ( cursorEntity.componentsByProp.activate ) { console.log("usePrimary cursor entity components activate ",  cursorEntity.componentsByProp.activate)
 
-          console.log("*** usePrimary entity mesh, face ", !!cursorState.mesh ? cursorState.mesh.userData : "-", cursorState.face, cursorState.component )
-
+          
+          !!cursorState.component && console.log("*** usePrimary entity mesh, face ", !!cursorState.mesh ? cursorState.mesh.userData : "-", cursorState.face, cursorState.component )
+          !!cursorState.component && cursorState.component.state.activate.callbacks.map( (callback) => {
+              callback()
+          })
           // cursor system has found the component ( provided all has gone according to plan.. )
           // handle action by checking component props
           

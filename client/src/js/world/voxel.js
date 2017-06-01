@@ -22,7 +22,8 @@ export default class Voxel {
             props: {
                 geometry: {
                     shape: "hexagon",
-                    size: [ 537000, 537000, 835664 ]
+                    size: [ 537000, 537000, 835664 ],
+                    faceNormals: false
                 },
                 material: {
                     name: "terrain",

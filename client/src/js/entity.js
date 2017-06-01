@@ -93,11 +93,11 @@ export default class Entity {
             to: toFace
           })  
           this.lastFace = toFace
-
+          
         }
 
         if ( comp.props.geometry && comp.props.geometry.merge === true ) {
-
+          
           materials.push(compMesh.material)
           compMesh.updateMatrix()
 
@@ -143,11 +143,15 @@ export default class Entity {
     }
 
     if ( !! this.quaternion && this.components.length == 1 ) {
+
         mesh.quaternion.set(this.quaternion[0], this.quaternion[1], this.quaternion[2], this.quaternion[3])
+
     }
 
     if (!! this.position) {
+
         mesh.position.set(this.position[0], this.position[1], this.position[2])
+
     }
 
     mesh.userData = { 

@@ -19,6 +19,7 @@ export default class CursorSystem {
     rayCast ( world, camera, cursor, hand, handMesh, callback ) { // public method; will use from other systems
 
         let raycaster = world.raycaster,
+            eventsToChildren = false,
             octreeObjects = [],
             intersections = [],
             component = null,
@@ -46,12 +47,22 @@ export default class CursorSystem {
 
             obj = intersections[i]
             entity = obj.object.userData.entity
-            component = obj.object.userData.component; // console.log("got component from mesh", component)
+            component = obj.object.userData.component; // console.log("raycasting component: ", obj.faceIndex, obj.object.userData, obj.object )
 
-            if (!! entity && !!! component ) { // console.log("didn't get component from mesh.. trying by face", obj.faceIndex)
+            if ( !! component ) {
+
+                if ( component.props.captureEvents ) {
+
+                    eventsToChildren = true
+
+                }
+
+            }
+
+            if ( (!! entity && !!! component) || eventsToChildren ) { // console.log("didn't get component from mesh.. trying by face", obj.faceIndex)
                 
                 component = entity.getComponentByFace( obj.faceIndex ); // !!component && console.log(component.props.geometry.size)
-
+                //console.log(" ...raycasting.. component: ", obj.faceIndex, !!component && component.props ? component.props.geometry.size : false, !!component ? component.props : false )
             }
 
             callback( cursor, hand, world, obj, entity, component )
@@ -191,7 +202,7 @@ export default class CursorSystem {
 
         // if ( !! newCursorState.entity ) { console.log(JSON.stringify(newCursorState.entity.components)) }
 
-        cursor.state.cursor = Object.assign( {}, cursorState.cursor, newCursorState )
+        cursor.state.cursor = Object.assign( {}, cursorState.cursor, { faceIndex: -1 }, newCursorState )
 
         if ( !!entity && !!component ) {
 
@@ -209,19 +220,19 @@ export default class CursorSystem {
 
             }
 
-            if ( activate ) {
+            // if ( activate ) { .. handling ```activate``` in the toolbox helper for now
 
-                callbacks = component.state.activate.callbacks // check if cursor / hand is activated
-                cb = callbacks.length-1
+            //     callbacks = component.state.activate.callbacks // check if cursor / hand is activated
+            //     cb = callbacks.length-1
 
-                while ( cb >= 0 ) {
+            //     while ( cb >= 0 ) {
 
-                    callbacks[cb]()
-                    cb --
+            //         callbacks[cb]()
+            //         cb --
 
-                }
+            //     }
 
-            }
+            // }
 
         }
 

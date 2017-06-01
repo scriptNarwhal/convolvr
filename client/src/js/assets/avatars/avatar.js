@@ -110,7 +110,8 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
                 noRaycast: true,
                 geometry: {
                   size: [2200, 1200, 3200],
-                  shape: "box"
+                  shape: "box",
+                  faceNormals: false
                 },
                 material: {
                   name: "metal",

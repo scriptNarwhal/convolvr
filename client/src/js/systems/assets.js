@@ -409,6 +409,7 @@ export default class AssetSystem {
             material,
             geometry: {
                 shape: "box",
+                faceNormals: false,
                 size: [ 6000, 6000, 6000 ]
             }
         }

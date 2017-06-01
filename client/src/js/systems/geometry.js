@@ -11,7 +11,8 @@ export default class GeometrySystem {
             geometry = null,
             size = prop.size,
             assets = this.world.systems.assets,
-            geometryCode = prop.shape+':'+size.join(':')
+            geometryCode = prop.shape+':'+size.join(':'),
+            faceNormals = false 
         
         if ( assets.geometries[ geometryCode ] == null ) {
 
@@ -21,27 +22,33 @@ export default class GeometrySystem {
             break
             case "plane":
               geometry = new THREE.PlaneGeometry( size[0], size[1] )
+              faceNormals = true
             break
             case "box":
               geometry = new THREE.BoxGeometry( size[0], size[1], size[2] )
+              faceNormals = true
             break
             case "octahedron":
               geometry = new THREE.OctahedronGeometry( size[0], 0 )
             break
             case "sphere":
               geometry = new THREE.OctahedronGeometry( size[0], 3 )
+              faceNormals = true
             break
             case "cylinder":
               geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 14, 1 )
+              faceNormals = true
             break
             case "cone":
               geometry = new THREE.ConeGeometry( size[0], size[1], size[2] )
+              faceNormals = true
             break
             case "torus":
               geometry = new THREE.TorusGeometry( size[0], 6.3, 5, 12 )
             break
             case "hexagon":
               geometry = new THREE.CylinderGeometry( size[0], size[1], size[2], 6 )
+              faceNormals = true
             break
             case "open-box":
               geometry = new THREE.CylinderGeometry( size[0], size[2], size[1], 4, 1, true )
@@ -56,6 +63,12 @@ export default class GeometrySystem {
 
           }
 
+          if ( faceNormals && (prop.faceNormals === true || prop.faceNormals === undefined )) {
+
+            geometry.computeVertexNormals()
+
+          }
+          
           assets.geometries[geometryCode] = geometry
 
         } else {

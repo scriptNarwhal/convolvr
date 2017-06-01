@@ -43,63 +43,66 @@ let toolMenu = ( assetSystem ) => {
 
         })
 
+        let currentIndicator = {
+                props: {
+                    geometry: {
+                        shape: "box",
+                        size: [ 10000, 10000, 4000 ]
+                    },
+                    material: {
+                        color: 0xffffff,
+                        name: "plastic"
+                    },
+                    toolUI: {
+                        currentTool: true
+                    }
+                },
+                components: [
+                    {
+                        props: {
+                            geometry: {
+                                shape: "node",
+                                size: [ 1, 1, 1 ]
+                            },
+                            light: {
+                                type: "point",
+                                intensity: 0.9,
+                                color: 0xffffff,
+                                distance: 12000
+                            }
+                        },
+                        position: [ 0, -2000, -8000 ],
+                        quaternion: null
+                        
+                    }
+                ],
+                position: [ 0, 0, 0 ],
+                quaternion: null
+        }
+
         return {
             id: -2,
             components: [
-                {
-                    props: {
-                        geometry: {
-                            shape: "box",
-                            size: [ 10000, 10000, 4000 ]
-                        },
-                        material: {
-                            color: 0xffffff,
-                            name: "plastic"
-                        },
-                        toolUI: {
-                            currentTool: true
-                        }
-                    },
-                    components: [
-                        {
-                            props: {
-                                geometry: {
-                                    shape: "node",
-                                    size: [ 1, 1, 1 ]
-                                },
-                                light: {
-                                    type: "point",
-                                    intensity: 0.9,
-                                    color: 0xffffff,
-                                    distance: 12000
-                                }
-                            },
-                            position: [ 0, -2000, -8000 ],
-                            quaternion: null
-                            
-                        }
-                    ],
-                    position: [ 0, 0, 0 ],
-                    quaternion: null
-                },
-                {
-                    props: {
-                        geometry: {
-                            shape: "node",
-                            size: [ 1, 1, 1 ]
-                        },
-                            material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        },
-                        toolUI: {
-                            menu: true
-                        }
-                    },
-                    components: toolMenuIcons,
-                    quaternion: null,
-                    position: [ 0, 0, 8000 ]
-                }
+                currentIndicator, ...toolMenuIcons
+                // {
+                //     props: {
+                //         geometry: {
+                //             shape: "box",
+                //             size: [ 64000, 12000, 4000 ]
+                //         },
+                //         material: {
+                //             color: 0x808080,
+                //             name: "plastic"
+                //         },
+                //         toolUI: {
+                //             menu: true
+                //         },
+                //         captureEvents: true // pass them to child components
+                //     },
+                //     components: [currentIndicator, ...toolMenuIcons],
+                //     quaternion: null,
+                //     position: [ 0, 0, 8000 ]
+                // }
             ],
             position: [ 0, 0, 0 ],
             quaternion: null
