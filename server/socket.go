@@ -51,47 +51,42 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 		log.Printf(`tool action: "%s"`, action.Tool) // modify chunk where this tool was used...
 	}
 
-	if action.Tool == "Component Tool" || action.Tool == "Voxel Tool" || action.Tool == "Delete Tool" {
+	if action.Tool == "Component Tool" || action.Tool == "Delete Tool" {
 
-		if action.Tool == "Component Tool" || action.Tool == "Delete Tool" {
+		readErr := voxelEntities.One("ID", action.EntityId, &entity)
 
-			readErr := voxelEntities.One("ID", action.EntityId, &entity)
-			if readErr == nil {
+		if readErr == nil {
 
-				if action.Tool == "Component Tool" {
+			if action.Tool == "Component Tool" {
 
-					if len(entity.Components) < 48 {
+				if len(entity.Components) < 48 {
 
-						newComps := []*Component{}
-						for _, v := range action.Components {
-							if len(v.Position) > 0 {
+					newComps := []*Component{}
+					for _, v := range action.Components {
+						if len(v.Position) > 0 {
 
-								newComp := *NewComponent(v.Name, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props, v.State, v.Components)
-								newComps = append(newComps, &newComp)
-
-							}
+							newComp := *NewComponent(v.Name, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props, v.State, v.Components)
+							newComps = append(newComps, &newComp)
 
 						}
 
-						entity.Components = append(entity.Components, newComps...)
 					}
 
-				} else {
-					// implement delete tool
-				}
-
-				saveErr := voxelEntities.Save(&entity)
-
-				if saveErr != nil {
-					log.Println(saveErr)
+					entity.Components = append(entity.Components, newComps...)
 				}
 
 			} else {
-				log.Println(readErr)
+				// implement delete tool
+			}
+
+			saveErr := voxelEntities.Save(&entity)
+
+			if saveErr != nil {
+				log.Println(saveErr)
 			}
 
 		} else {
-			// implement voxel tool
+			log.Println(readErr)
 		}
 
 		log.Printf(`tool action: "%s"`, action.Tool) // modify chunk where this tool was used...

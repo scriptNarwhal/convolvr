@@ -25,7 +25,8 @@ export default class ToolSystem {
                     props: { // colored top bar
                         geometry: {
                             shape: "box",
-                            size: [60000, 10000, 2000]
+                            size: [60000, 10000, 2000],
+                            faceNormals: false
                         },
                         material: {
                             name: "metal",

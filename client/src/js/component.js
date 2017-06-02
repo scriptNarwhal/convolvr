@@ -18,8 +18,8 @@ export default class Component {
 
       if ( props.geometry == undefined ) {
         props.geometry = {
-          shape: "node",
-          size: [1,1,1]
+          shape: "box",
+          size: [ 8000, 8000, 8000 ]
         }
       }
 
@@ -62,8 +62,7 @@ export default class Component {
 
   initSubComponents( components, entity, systems, appConfig ) {
 
-    var mesh = new THREE.Object3D(),
-        base = new THREE.Geometry(),
+    var base = new THREE.Geometry(),
         three = window.three,
         mobile = !!appConfig ? appConfig.mobile : three.world.mobile,
         ncomps = components.length,
@@ -75,9 +74,12 @@ export default class Component {
         faces = null,
         face = 0,
         comp = null,
+        combined = null,
         c = 0,
         s = 0
 
+    this.lastFace = 0
+        
    while ( c < ncomps ) {
 
         comp = new Component( components[c], entity, systems, {mobile} ) // use simpler shading for mobile gpus
@@ -128,14 +130,19 @@ export default class Component {
     
     if ( s > 0 ) {
 
-      mesh = new THREE.Mesh( base, new THREE.MultiMaterial(materials) )
-      this.mesh.add( mesh )
+      combined = new THREE.Mesh( base, new THREE.MultiMaterial( materials ) )
+      combined.userData = {
+        compsByFaceIndex: this.compsByFaceIndex,
+        component: this,
+        entity
+      }
+      this.mesh.add( combined )
 
     } else {
 
       while ( s < nonStructural.length ) { // these might thow things off /wrt face index / ray casting
 
-          this.mesh.add(nonStructural[s])
+          this.mesh.add( nonStructural[s] )
           s ++
 
       }
@@ -150,7 +157,7 @@ export default class Component {
     
     let component = false
 
-    this.compsByFaceIndex.forEach((comp) => {
+    this.compsByFaceIndex.forEach(( comp ) => {
 
       if ( face >= comp.from && face <= comp.to ) {
 

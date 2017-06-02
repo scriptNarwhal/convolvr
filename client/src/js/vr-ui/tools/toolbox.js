@@ -88,7 +88,7 @@ export default class Toolbox {
       if ( !!!noHUDUpdate ) {
         
         this.showMenu()
-        this.user.hud.componentsByProp.toolUI[0].state.toolUI.switchTool( index, hand )
+        this.user.hud.componentsByProp.toolUI[ 0 ].state.toolUI.switchTool( index, hand )
         
       }
 
@@ -102,13 +102,13 @@ export default class Toolbox {
 
     getCurrentTool ( hand ) {
 
-      return this.tools[this.currentTools[hand]]
+      return this.tools[ this.currentTools[ hand ] ]
 
     }
 
     addTool ( data ) {
 
-      this.tools.push( new CustomTool(data) )
+      this.tools.push( new CustomTool( data ) )
       // use tool prop of.. component / entity that is tool that is being added
       // implement this
 
@@ -180,15 +180,12 @@ export default class Toolbox {
 
         if ( cursorEntity.componentsByProp.activate ) { console.log("usePrimary cursor entity components activate ",  cursorEntity.componentsByProp.activate)
 
-          
           !!cursorState.component && console.log("*** usePrimary entity mesh, face ", !!cursorState.mesh ? cursorState.mesh.userData : "-", cursorState.face, cursorState.component )
           !!cursorState.component && cursorState.component.state.activate.callbacks.map( (callback) => {
-              callback()
+              callback() // action is handled by checking component props ( besides .activate )
           })
-          // cursor system has found the component ( provided all has gone according to plan.. )
-          // handle action by checking component props
           
-          return
+          return // cursor system has found the component ( provided all has gone according to plan.. )
 
         }
 

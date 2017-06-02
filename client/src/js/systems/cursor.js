@@ -47,22 +47,28 @@ export default class CursorSystem {
 
             obj = intersections[i]
             entity = obj.object.userData.entity
-            component = obj.object.userData.component; // console.log("raycasting component: ", obj.faceIndex, obj.object.userData, obj.object )
+            component = null
+            
+            if ( !!entity ) {
 
-            if ( !! component ) {
+                if ( entity.components.length <= 1 ) { //console.log("raycasting component: ", obj.faceIndex )
 
-                if ( component.props.captureEvents ) {
+                    component = obj.object.userData.component
+
+                }
+
+                if ( !! component && component.props.captureEvents ) {
 
                     eventsToChildren = true
 
                 }
 
-            }
+                if ( !!! component || eventsToChildren ) { // console.log("didn't get component from mesh.. trying by face", obj.faceIndex)
+                    
+                    component = entity.getComponentByFace( obj.faceIndex );  //!!component && console.log(component.props.geometry.size)
+                    //console.log(" ...raycasting.. component: ", obj.faceIndex, !!component && component.props ? component.props.geometry.size : false, !!component ? component.props : false )
+                }
 
-            if ( (!! entity && !!! component) || eventsToChildren ) { // console.log("didn't get component from mesh.. trying by face", obj.faceIndex)
-                
-                component = entity.getComponentByFace( obj.faceIndex ); // !!component && console.log(component.props.geometry.size)
-                //console.log(" ...raycasting.. component: ", obj.faceIndex, !!component && component.props ? component.props.geometry.size : false, !!component ? component.props : false )
             }
 
             callback( cursor, hand, world, obj, entity, component )
@@ -184,12 +190,12 @@ export default class CursorSystem {
         // console.log(obj)
         if ( !! entity && distance < 180000 ) {
 
-            cursorSystem.entityCoolDown = 45
+            cursorSystem.entityCoolDown = 100
 
-        }
+        } // cursorSystem.entityCoolDown > 0 &&
 
-        if ( ( cursorSystem.entityCoolDown > 0 && !!entity ) || ( cursorSystem.entityCoolDown < 0 && !!!entity ) ) { // if components are spawned in rapid succession, attach them to the current entity even if not pointing at it
-
+        if ( ( !!entity ) || ( cursorSystem.entityCoolDown < 0 && !!!entity ) ) { // if components are spawned in rapid succession, attach them to the current entity even if not pointing at it
+            
             newCursorState.entity = entity
 
         }

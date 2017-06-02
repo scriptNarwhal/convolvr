@@ -80,7 +80,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
       "- Mouselook (click screen to enable)",
       "- Left/right click: primary tool / mode",
       "- Keys 0-9: switch tool",
-      "- 🎮 Gamepads are also supported",
+      "- 🎮 Gamepads are supported",
       "",
       "#👓 Desktop VR users ",
       "- Enter VR button in bottom right corner",

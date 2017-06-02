@@ -52,6 +52,10 @@ export default class Convolvr {
 
 		}
 
+	// 	 THREE.ShaderChunk["envmap_fragment"] = THREE.ShaderChunk["envmap_fragment"]
+    // .split("reflectVec = reflect( cameraToVertex, worldNormal )")
+    // .join("reflectVec = transformDirection( reflect( cameraToVertex, worldNormal ), viewMatrix )");
+
 		this.postProcessing = postProcessing
 		this.socket = socket
 		this.config = false
@@ -175,7 +179,7 @@ export default class Convolvr {
 
 		if ( !!! skybox ) {
 
-			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry(12000000+(this.viewDistance*1.4)*600000, 4), skyMaterial)
+			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 12000000+(this.viewDistance*1.4)*600000, 4), skyMaterial )
 		
 		} else {
 

@@ -59,6 +59,8 @@ export default class Entity {
         c = 0,
         s = 0
 
+    this.lastFace = 0
+
     if ( this.mesh != null ) {
 
       world.octree.remove(this.mesh)
@@ -103,33 +105,33 @@ export default class Entity {
 
           while ( face > -1 ) {
 
-              faces[face].materialIndex = s
+              faces[ face ].materialIndex = s
               face --
               
           }
 
-          base.merge(compMesh.geometry, compMesh.matrix)
+          base.merge( compMesh.geometry, compMesh.matrix )
           s ++
 
         } else if ( !comp.detached ) {
 
-          nonStructural.push(comp.mesh)
+          nonStructural.push( comp.mesh )
 
         }
 
         c ++
     }
 
-    this.boundingRadius = Math.max(dimensions[0], dimensions[1], dimensions[2])
+    this.boundingRadius = Math.max( dimensions[0], dimensions[1], dimensions[2] )
     this.boundingBox = dimensions
 
     if ( s > 0 ) {
 
-      mesh = new THREE.Mesh(base, new THREE.MultiMaterial(materials))
+      mesh = new THREE.Mesh(base, new THREE.MultiMaterial( materials ))
 
     } else {
 
-      mesh = nonStructural[0]
+      mesh = nonStructural[0] // maybe nest inside of Object3D ?
 
     }
 
@@ -137,7 +139,7 @@ export default class Entity {
 
     while ( s < nonStructural.length ) {
 
-        mesh.add( nonStructural[s] )
+        mesh.add( nonStructural[ s ] )
         s ++
 
     }
