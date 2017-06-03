@@ -321,8 +321,8 @@ function initButtonComponents (data) {
 
   components.push({
       props:{
-        activates: true,
-        gazeOver: true,
+        activate: true,
+        hover: true,
         geometry: {
           
           shape: "node",

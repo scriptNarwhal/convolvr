@@ -27,12 +27,14 @@ export default class ToolUISystem {
 
             hover && state.hover.callbacks.push( () => {
 
+                state.hover.cursorHovering = true
                 component.mesh.material.wireframe = true
 
             } )
 
             lookAway && state.lookAway.callbacks.push( () => {
 
+                state.hover.cursorHovering = false
                 component.mesh.material.wireframe = false
 
             } )
@@ -96,7 +98,7 @@ export default class ToolUISystem {
       mesh.updateMatrix()
       mesh.translateZ( -70000 )
       mesh.translateX(  2500 )
-      mesh.translateY(  34000 )
+      mesh.translateY(  32000 )
       mesh.updateMatrix()
 
     }

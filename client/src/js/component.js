@@ -159,15 +159,16 @@ export default class Component {
 
   }
 
-  getClosestComponent( position ) {
-
-    this.mesh.updateMatrixWorld()
+  getClosestComponent( position, recursive = false ) {
  
     let compPos = this.compPos, 
+        entMesh = this.mesh,
+        worldCompPos = null,
         distance = 200000,
         newDist = 0,
         closest = null;
 
+    parentMesh.updateMatrixWorld()
     this.allComponents.map( component => {
 
       if ( !! component.merged ) {
@@ -179,7 +180,7 @@ export default class Component {
       compPos.setFromMatrixPosition( component.mesh.matrixWorld ) // get world position
       newDist = compPos.distanceTo( position )
 
-      if ( newDist < distance ) {  console.log("comparing component distance ", newDist, distance)
+      if ( newDist < distance ) { 
 
         distance = newDist
         closest = component
@@ -193,15 +194,22 @@ export default class Component {
       distance = 200000
       newDist = 0
       this.combinedComponents.map( component => {
+        console.log("From Component: ")
+        compPos.fromArray( component.data.position ); console.log("compPos", compPos)
+        worldCompPos = parentMesh.localToWorld( compPos ); console.log("worldCompPos", worldCompPos )
+        newDist = worldCompPos.distanceTo( position ); console.log("newDist", newDist)
+        
+        if ( newDist < distance ) {  
 
-        //compPos.fromArray( component.position )
-        // apply world transformation
-        // implement
+          distance = newDist
+          closest = component
+
+        }
 
       })
 
     }
-
+    !!closest && console.log(closest.props.geometry.size, closest, closest.entity)
     return closest
 
   }

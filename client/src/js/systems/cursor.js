@@ -39,6 +39,7 @@ export default class CursorSystem {
 
         }
 
+        raycaster.ray.far = 80000
         octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
         intersections = raycaster.intersectOctreeObjects( octreeObjects )
         i = intersections.length -1
@@ -49,15 +50,15 @@ export default class CursorSystem {
             entity = obj.object.userData.entity
             component = null
             
-            if ( !!entity ) {
+            if ( !!entity && obj.distance < 90000 ) {
 
-                if ( entity.components.length <= 1 ) { //console.log("raycasting component: ", obj.faceIndex )
+                if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
 
-                    component = obj.object.userData.component
+                    component = entity.allComponents[0] //obj.object.userData.component
 
                 } else { 
 
-                    component = entity.getClosestComponent( obj.point ); console.log("more than one component", component)
+                    component = entity.getClosestComponent( obj.point ); //console.log("closest", component ? Object.keys(component.props).join("-") : "")
 
                 }
 
@@ -167,6 +168,7 @@ export default class CursorSystem {
             distance = !!cursorState.cursor ? cursorState.cursor.distance: 12000,
             props = !!component ? component.props : false,
             hover = !!props ? props.hover : false,
+            lookAway = !!props ? props.lookAway : false,
             activate = !!props ? props.activate : false,
             comp = false,
             cursorSystem = world.systems.cursor,
@@ -199,7 +201,19 @@ export default class CursorSystem {
 
         }
 
-        // if ( !! newCursorState.entity ) { console.log(JSON.stringify(newCursorState.entity.components)) }
+        if ( !!cursor.state.component && !!!component && lookAway) {
+         
+            callbacks = cursor.state.component.state.lookAway.callbacks
+            cb = callbacks.length-1
+
+            while ( cb >= 0 ) {
+
+                callbacks[cb]()
+                cb --
+
+            }
+
+        }
 
         cursor.state.cursor = Object.assign( {}, cursorState.cursor, { faceIndex: -1 }, newCursorState )
 
@@ -230,8 +244,6 @@ export default class CursorSystem {
             //         cb --
 
             //     }
-
-            // }
 
         }
 

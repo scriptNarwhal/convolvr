@@ -27,7 +27,8 @@ let toolMenu = (assetSystem) => {
                     toolIndex: i
                 },
                 hover: {},
-                activate: {}
+                activate: {},
+                lookAway: {}
             }),
             components: [],
             position: [ 0, 0, 0 ],
@@ -37,7 +38,7 @@ let toolMenu = (assetSystem) => {
             row = Math.floor( i / 5 ) * 12000
 
         toolMenuIcons.push(Object.assign({}, button, {
-            position: [ -26000 + (i % 5) * 12000, row, 0 ],
+            position: [ -22500 + (i % 5) * 12000, row, 10000 ],
             quaternion: null
         }))
 
@@ -83,7 +84,8 @@ let toolMenu = (assetSystem) => {
     return {
         id: -2,
         components: [
-            currentIndicator, ...toolMenuIcons
+            currentIndicator,
+            ...toolMenuIcons
             // {
             //     props: {
             //         geometry: {

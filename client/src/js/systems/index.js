@@ -33,6 +33,7 @@ import VehicleSystem from './vehicle'
 import PortalSystem from './portal'
 import DoorSystem from './door'
 import HoverSystem from './hover'
+import LookAwaySystem from './look-away'
 import ActivateSystem from './activate'
 import CursorSystem from './cursor'
 import HandSystem from './hand'
@@ -94,6 +95,7 @@ export default class Systems {
 			cursor: new CursorSystem(world),
 			hand: new HandSystem(world),
 			hover: new HoverSystem(world),
+			lookAway: new LookAwaySystem(world),
 			activate: new ActivateSystem(world),
 			terrain: new TerrainSystem(world),
 			container: new ContainerSystem(world),

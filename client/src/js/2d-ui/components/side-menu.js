@@ -2,27 +2,37 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import Tab from './tab'
 
+let isMobile = () => {
+    return  window.innerWidth <= 720
+  }
+
 let styles = {
-  sideMenu: () => {
-    let mobile = window.innerWidth <= 640
-    return {
-      width: mobile ? '100vw' : '72px',
-      //maxWidth: mobile ? '100vw' : '72px',
-      height: mobile ? '72px' : '100vh',
-      backgroundColor: 'rgb(2, 0, 3)',
-      overflow: 'hidden'
-    }
-  },
-  inner: () => {
-    let mobile = window.innerWidth <= 640
-    return {
-      height: mobile ? '72px' : '100vh',
-      bottom: 0,
-      width: mobile ? '100vw' : '72px',
-      paddingTop: '7px'
+    sideMenu: () => {
+      let mobile = isMobile()
+      return {
+        width: mobile ? '100vw' : '72px',
+        //maxWidth: mobile ? '100vw' : '72px',
+        height: mobile ? '72px' : '100vh',
+        backgroundColor: 'rgb(2, 0, 3)',
+        overflow: 'hidden'
+      }
+    },
+    inner: () => {
+      let mobile = isMobile()
+      return {
+        height: mobile ? '72px' : '100vh',
+        bottom: 0,
+        width: mobile ? '100vw' : '72px',
+        paddingTop: '7px'
+      }
+    },
+    mobileHidden: () => {
+      let mobile = isMobile()
+      return {
+        display: mobile ? 'none' : 'inline-block'
+      }
     }
   }
-}
 
 class SideMenu extends Component {
 
@@ -50,13 +60,15 @@ class SideMenu extends Component {
                  title="Switch Worlds"
                  clickHandler={ (e)=> { this.navigate(e, "/worlds") }}
             />
-            <Tab image="/data/images/places-s.png"
+            <Tab clickHandler={ (e)=> { this.navigate(e, "/places") }}
+                 image="/data/images/places-s.png"
+                 style={ styles.mobileHidden() }
                  title="Places"
-                 clickHandler={ (e)=> { this.navigate(e, "/places") }}
             />
-            <Tab image="/data/images/square-a.png"
+            <Tab clickHandler={ (e)=> { this.navigate(e, "/network") }}
+                 image="/data/images/square-a.png"
+                 style={ styles.mobileHidden() }
                  title="View Network"
-                 clickHandler={ (e)=> { this.navigate(e, "/network") }}
             />
             <Tab image="/data/images/voxel-white.png"
                  title="Manage Files"

@@ -14,7 +14,7 @@ const styles = {
 export default class Tab extends Component {
   render() {
     return (
-        <div style={styles.tab} title={this.props.title }
+        <div style={ Object.assign({}, styles.tab, this.props.style) } title={ this.props.title }
              onClick={ (evt) => { this.props.clickHandler(evt, this.props.title) } }
         >
             {(this.props.showTitle ? (

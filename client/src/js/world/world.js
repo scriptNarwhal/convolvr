@@ -88,7 +88,8 @@ export default class Convolvr {
 		})
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
-		
+		this.raycaster.near = 4000
+
 		three = this.three = {
 			world: this,
 			scene,

@@ -353,10 +353,11 @@ export default class AssetSystem {
 
             button = {
                 props: {
-                    activates: true,
-                    gazeOver: true,
+                    // activate: true,
+                    // hover: true,
+                    // lookAway,
                     geometry: {
-                        merge: true,
+                        merge: false,
                         shape: "node",
                         size: [ 1, 1, 1 ]
                     },
@@ -373,21 +374,21 @@ export default class AssetSystem {
         }
     
        
-        button.components.push({ // back plate, behind icon
-                props: {
-                    geometry: {
-                        merge: true,
-                        size: [ 9000, 9000, 2000 ],
-                        shape: "box"
-                    },
-                    material: {
-                        color: color,
-                        name: "metal"
-                    }
-                },
-                position: [ 0, 0, -4000 ],
-                quaternion: null
-            })
+        // button.components.push({ // back plate, behind icon
+        //         props: {
+        //             geometry: {
+        //                 merge: false,
+        //                 size: [ 9000, 9000, 2000 ],
+        //                 shape: "box"
+        //             },
+        //             material: {
+        //                 color: color,
+        //                 name: "metal"
+        //             }
+        //         },
+        //         position: [ 0, 0, -4000 ],
+        //         quaternion: null
+        //     })
 
         return button
     }
@@ -410,7 +411,7 @@ export default class AssetSystem {
             geometry: {
                 shape: "box",
                 faceNormals: false,
-                size: [ 6000, 6000, 6000 ]
+                size: [ 7000, 7000, 7000 ]
             }
         }
     }

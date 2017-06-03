@@ -74,7 +74,7 @@ export default class Entity {
 
     while ( c < ncomps ) {
 
-        comp = new Component( this.components[c], this, systems, {mobile} ) // use simpler shading for mobile gpus
+        comp = new Component( this.components[ c ], this, systems, {mobile} ) // use simpler shading for mobile gpus
         
         if ( comp.props.noRaycast === true ) { // this should be checked in a system
           addToOctree = false
@@ -175,15 +175,17 @@ export default class Entity {
 
   }
 
-  getClosestComponent( position ) {
-
-    this.mesh.updateMatrixWorld()
+  getClosestComponent( position, recursive = true ) {
  
     let compPos = this.compPos, 
+        entMesh = this.mesh,
+        worldCompPos = null,
         distance = 200000,
         newDist = 0,
-        closest = null;
+        closest = null,
+        closestSubComp = null;
 
+    entMesh.updateMatrixWorld()
     this.allComponents.map( component => {
 
       if ( !! component.merged ) {
@@ -195,7 +197,7 @@ export default class Entity {
       compPos.setFromMatrixPosition( component.mesh.matrixWorld ) // get world position
       newDist = compPos.distanceTo( position )
 
-      if ( newDist < distance ) {  console.log("comparing component distance ", newDist, distance)
+      if ( newDist < distance ) { 
 
         distance = newDist
         closest = component
@@ -210,11 +212,25 @@ export default class Entity {
       newDist = 0
       this.combinedComponents.map( component => {
 
-        //compPos.fromArray( component.position )
-        // apply world transformation
-        // implement
+        compPos.fromArray( component.data.position )
+        worldCompPos = entMesh.localToWorld( compPos )
+        newDist = worldCompPos.distanceTo( position ) //console.log("compPos", compPos, "worldCompPos", worldCompPos, "newDist", newDist)
+        
+        if ( newDist < distance ) {  
+
+          distance = newDist
+          closest = component
+
+        }
 
       })
+
+    }
+
+    if ( !!closest && recursive && closest.components.length > 1 ) {
+
+      closestSubComp = component.getClosestComponent( position )
+      component = !!closestSubComp ? closestSubComp : component
 
     }
 
