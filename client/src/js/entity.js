@@ -15,20 +15,23 @@ export default class Entity {
       }
       
       this.voxel = this.position ? [ Math.floor(this.position[0] / 928000), 0, Math.floor(this.position[2] / 807360) ] : [ 0, 0, 0 ] // vertical axis disabled for now
-      this.compsByFaceIndex = []
+      this.compsByFaceIndex = [] // possibly deprecated
+      this.allComponents = []
+      this.combinedComponents = []
       this.lastFace = 0
+      this.compPos = new THREE.Vector3()
 
   }
 
   update ( position, quaternion = false ) {
 
     this.position = position
-    this.mesh.position.fromArray(position)
+    this.mesh.position.fromArray( position )
 
     if ( !!quaternion ) {
 
       this.quaternion = quaternion
-      this.mesh.quaternion.fromArray(quaternion)
+      this.mesh.quaternion.fromArray( quaternion )
       
     }
 
@@ -98,8 +101,9 @@ export default class Entity {
           
         }
 
-        if ( comp.props.geometry && comp.props.geometry.merge === true ) {
+        if ( comp.merged ) {
           
+          this.combinedComponents.push( comp )
           materials.push(compMesh.material)
           compMesh.updateMatrix()
 
@@ -116,10 +120,12 @@ export default class Entity {
         } else if ( !comp.detached ) {
 
           nonStructural.push( comp.mesh )
-
+          
         }
 
+        this.allComponents.push( comp )
         c ++
+
     }
 
     this.boundingRadius = Math.max( dimensions[0], dimensions[1], dimensions[2] )
@@ -150,11 +156,7 @@ export default class Entity {
 
     }
 
-    if (!! this.position) {
-
-        mesh.position.set(this.position[0], this.position[1], this.position[2])
-
-    }
+    !! this.position && mesh.position.set(this.position[0], this.position[1], this.position[2])
 
     mesh.userData = { 
 
@@ -163,17 +165,60 @@ export default class Entity {
 
     }
 
-    if ( addToOctree ) {
-
-      world.octree.add( mesh )
-
-    }
+    addToOctree && world.octree.add( mesh )
 
     scene.add( mesh )
     this.mesh = mesh
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()
     return this
+
+  }
+
+  getClosestComponent( position ) {
+
+    this.mesh.updateMatrixWorld()
+ 
+    let compPos = this.compPos, 
+        distance = 200000,
+        newDist = 0,
+        closest = null;
+
+    this.allComponents.map( component => {
+
+      if ( !! component.merged ) {
+
+        return false
+
+      }
+
+      compPos.setFromMatrixPosition( component.mesh.matrixWorld ) // get world position
+      newDist = compPos.distanceTo( position )
+
+      if ( newDist < distance ) {  console.log("comparing component distance ", newDist, distance)
+
+        distance = newDist
+        closest = component
+
+      }
+
+    })
+
+    if ( !!!closest ) {
+
+      distance = 200000
+      newDist = 0
+      this.combinedComponents.map( component => {
+
+        //compPos.fromArray( component.position )
+        // apply world transformation
+        // implement
+
+      })
+
+    }
+
+    return closest
 
   }
 

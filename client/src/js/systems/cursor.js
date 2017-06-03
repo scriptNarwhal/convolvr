@@ -55,18 +55,10 @@ export default class CursorSystem {
 
                     component = obj.object.userData.component
 
-                }
+                } else { 
 
-                if ( !! component && component.props.captureEvents ) {
+                    component = entity.getClosestComponent( obj.point ); console.log("more than one component", component)
 
-                    eventsToChildren = true
-
-                }
-
-                if ( !!! component || eventsToChildren ) { // console.log("didn't get component from mesh.. trying by face", obj.faceIndex)
-                    
-                    component = entity.getComponentByFace( obj.faceIndex );  //!!component && console.log(component.props.geometry.size)
-                    //console.log(" ...raycasting.. component: ", obj.faceIndex, !!component && component.props ? component.props.geometry.size : false, !!component ? component.props : false )
                 }
 
             }
@@ -181,6 +173,7 @@ export default class CursorSystem {
             newCursorState = {
                 distance,
                 mesh: obj.object,
+                point: obj.point,
                 faceIndex: obj.faceIndex,
                 component
             }

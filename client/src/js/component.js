@@ -5,7 +5,7 @@ export default class Component {
       var mesh = null,
           props = data.props,
           quaternion = data.quaternion ? data.quaternion : false,
-          position = data.position ? data.position : [0, 0, 0]
+          position = data.position ? data.position : [ 0, 0, 0 ]
       
       this.entity = entity
       this.data = data
@@ -13,14 +13,26 @@ export default class Component {
       this.state = {}
       this.components = data.components || []
       this.compsByFaceIndex = []
+      this.allComponents = []
+      this.combinedComponents = []
       this.lastFace = 0
       this.detached = false
+      this.merged = false
+      this.compPos = new THREE.Vector3()
 
       if ( props.geometry == undefined ) {
         props.geometry = {
           shape: "box",
           size: [ 8000, 8000, 8000 ]
         }
+      } else {
+
+        if ( props.geometry.merge === true ) {
+
+          this.merged = true
+
+        }
+
       }
 
       if ( props.material == undefined ) {
@@ -37,11 +49,7 @@ export default class Component {
           entity
       }
 
-      if ( !! quaternion ) {
-
-          mesh.quaternion.set( quaternion[0], quaternion[1], quaternion[2], quaternion[3] )
-
-      }
+      !! quaternion && mesh.quaternion.set( quaternion[0], quaternion[1], quaternion[2], quaternion[3] )
 
       mesh.position.set( position[0], position[1], position[2] )
       mesh.updateMatrix()
@@ -52,11 +60,7 @@ export default class Component {
 
       }
 
-      if ( this.components.length > 0 ) {
-
-        this.initSubComponents( this.components, entity, systems, appConfig )
-
-      }
+      this.components.length > 0 && this.initSubComponents( this.components, entity, systems, appConfig )
 
   }
 
@@ -82,7 +86,7 @@ export default class Component {
         
    while ( c < ncomps ) {
 
-        comp = new Component( components[c], entity, systems, {mobile} ) // use simpler shading for mobile gpus
+        comp = new Component( components[ c ], entity, systems, {mobile} ) // use simpler shading for mobile gpus
 
         if ( comp.props.noRaycast === true ) {
           addToOctree = false
@@ -104,14 +108,15 @@ export default class Component {
 
         }
 
-        if ( comp.props.geometry && comp.props.geometry.merge === true ) {
+        if ( comp.merged ) {
 
+          this.combinedComponents.push( comp )
           materials.push( compMesh.material )
           compMesh.updateMatrix()
 
           while ( face > -1 ) {
 
-              faces[face].materialIndex = s
+              faces[ face ].materialIndex = s
               face --
 
           }
@@ -121,10 +126,11 @@ export default class Component {
 
         } else {
 
-          nonStructural.push(comp.mesh)
+          nonStructural.push( comp.mesh )
 
         }
 
+        this.allComponents.push( comp )
         c ++
     }
     
@@ -142,7 +148,7 @@ export default class Component {
 
       while ( s < nonStructural.length ) { // these might thow things off /wrt face index / ray casting
 
-          this.mesh.add( nonStructural[s] )
+          this.mesh.add( nonStructural[ s ] )
           s ++
 
       }
@@ -150,6 +156,53 @@ export default class Component {
     }
 
     this.mesh.userData.compsByFaceIndex = this.compsByFaceIndex     
+
+  }
+
+  getClosestComponent( position ) {
+
+    this.mesh.updateMatrixWorld()
+ 
+    let compPos = this.compPos, 
+        distance = 200000,
+        newDist = 0,
+        closest = null;
+
+    this.allComponents.map( component => {
+
+      if ( !! component.merged ) {
+
+        return false
+
+      }
+
+      compPos.setFromMatrixPosition( component.mesh.matrixWorld ) // get world position
+      newDist = compPos.distanceTo( position )
+
+      if ( newDist < distance ) {  console.log("comparing component distance ", newDist, distance)
+
+        distance = newDist
+        closest = component
+
+      }
+
+    })
+
+    if ( !!!closest ) {
+
+      distance = 200000
+      newDist = 0
+      this.combinedComponents.map( component => {
+
+        //compPos.fromArray( component.position )
+        // apply world transformation
+        // implement
+
+      })
+
+    }
+
+    return closest
 
   }
 
