@@ -1,10 +1,4 @@
 console.log('Convolvr Client Initializing')
-if (localStorage.getItem("postProcessing") != null) {
-  if (localStorage.getItem("version0.35") == null) {
-    localStorage.setItem("version0.35", "1")
-    localStorage.setItem("postProcessing", "off")
-  }
-}
 // React
 import ReactDOM from 'react-dom'
 import React, { Component, PropTypes } from 'react'
@@ -49,14 +43,18 @@ let socket = events,
     chatScreen = null,
     httpClient = null
 
+_clearOldData()
+  
 userInput = new UserInput()
 
 loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
-  toolMenu.position = [ 2500, 50000, 0 ]
+  //toolMenu.position = [ 2500, 50000, 0 ]
   toolMenu.init( three.scene ) // toolMenu.componentsByProp.toolUI[0].state.hide()
   user.hud = toolMenu
+  
+
 
   avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) // entity id can be passed into config object
   avatar.init( three.scene )
@@ -99,14 +97,17 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   setTimeout(()=>{
 
+    toolMenu.componentsByProp.toolUI[0].state.toolUI.updatePosition()
+
     httpClient = world.systems.assets.makeEntity( "help-screen", true ) // simple example of displaying GET response from server
-    httpClient.components[0].props.rest = {
+    let compProps = httpClient.components[0].props
+    compProps.rest = {
       get: {
         url: "http://localhost:3007/api/chunks/"+world.name+"/0x0x0"
       }
     }
-    httpClient.components[0].props.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0"] // really just clearing the default text until something loads
-    httpClient.components[0].props.text.color = "#f0f0f0"
+    compProps.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0"] // really just clearing the default text until something loads
+    compProps.text.color = "#f0f0f0"
     httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
     httpClient.update( [ -80000, 0, 0 ] )
 
@@ -139,3 +140,18 @@ ReactDOM.render(
   </Provider>),
   document.getElementsByTagName('main')[0]
 )
+
+function _clearOldData () {
+
+  if (localStorage.getItem("postProcessing") != null) {
+
+    if (localStorage.getItem("version0.35") == null) {
+
+      localStorage.setItem("version0.35", "1")
+      localStorage.setItem("postProcessing", "off")
+
+    }
+
+  }
+
+}

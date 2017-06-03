@@ -38,7 +38,7 @@ let toolMenu = (assetSystem) => {
             row = Math.floor( i / 5 ) * 12000
 
         toolMenuIcons.push(Object.assign({}, button, {
-            position: [ -22500 + (i % 5) * 12000, row, 10000 ],
+            position: [ -24000 + (i % 5) * 12000, row - 1000, 6000 ],
             quaternion: null
         }))
 
@@ -84,27 +84,27 @@ let toolMenu = (assetSystem) => {
     return {
         id: -2,
         components: [
-            currentIndicator,
-            ...toolMenuIcons
-            // {
-            //     props: {
-            //         geometry: {
-            //             shape: "box",
-            //             size: [ 64000, 12000, 4000 ]
-            //         },
-            //         material: {
-            //             color: 0x808080,
-            //             name: "plastic"
-            //         },
-            //         toolUI: {
-            //             menu: true
-            //         },
-            //         captureEvents: true // pass them to child components
-            //     },
-            //     components: [currentIndicator, ...toolMenuIcons],
-            //     quaternion: null,
-            //     position: [ 0, 0, 8000 ]
-            // }
+            //currentIndicator,
+            //...toolMenuIcons
+            {
+                props: {
+                    geometry: {
+                        shape: "box",
+                        size: [ 64000, 12000, 4000 ]
+                    },
+                    material: {
+                        color: 0x404040,
+                        name: "plastic"
+                    },
+                    toolUI: {
+                        menu: true
+                    },
+                    captureEvents: true // pass them to child components
+                },
+                components: [ ...toolMenuIcons ],
+                quaternion: null,
+                position: [ 0, 0, 8000 ]
+            }
         ],
         position: [ 0, 0, 0 ],
         quaternion: null

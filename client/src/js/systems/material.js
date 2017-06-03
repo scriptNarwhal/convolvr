@@ -14,13 +14,14 @@ export default class MaterialSystem {
             assets = this.world.systems.assets,
             materialSystem = this,
             mobile = this.world.mobile,
-            path = '/data/images/',
+            path = '/data',
             material = null,
             basic = false,
             textureConfig = { },
             diffuse = !!prop.map ? prop.map.replace(path, '') : "",
             specular = !!prop.specularMap ? prop.specularMap.replace(path, '') : "",
-            reflection = !!prop.envMap ? prop.envMap.replace(path, '') : "",
+            envMapUrl = !! prop.envMap ? prop.envMap : assets.envMaps.default,
+            reflection = !!envMapUrl ? envMapUrl.replace(path, '') : "",
             materialCode = `${prop.name}:${prop.color}:${diffuse}:${specular}:${reflection}`,
             shading = !!prop.shading ? prop.shading : 'default',
             simpleShading = this.world.lighting != 'high',
@@ -41,8 +42,6 @@ export default class MaterialSystem {
           }
 
           basic = this._initMaterialProp( prop, simpleShading )
-
-          let envMapUrl = !! prop.envMap ? prop.envMap : assets.envMaps.default
 
           if ( envMapUrl && envMapUrl != "none" && prop.roughnessMap || shading == 'physical' ) {
 

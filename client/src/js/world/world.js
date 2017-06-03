@@ -152,23 +152,22 @@ export default class Convolvr {
 
 	}
 
-	init ( config ) {
+	init ( config, callback ) {
 		
-		let skyLight =  new THREE.DirectionalLight(config.light.color, 1),
+		let coords = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
+			skyLight =  new THREE.DirectionalLight(config.light.color, 1),
 			camera = three.camera,
 			skyMaterial = new THREE.MeshBasicMaterial( {color: 0x303030} ),
 			skyTexture = null,
 			skybox = this.skybox
 
-		console.log(config)
-		this.config = config;
+		
+		this.config = config; console.log(config)
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
 		three.scene.add(this.ambientLight);
 
-		if ( !!config && !!config.sky.photosphere ) {
-
-			console.log("init world: photosphere: ", config.sky.photosphere)
+		if ( !!config && !!config.sky.photosphere ) { console.log("init world: photosphere: ", config.sky.photosphere)
 
 			this.systems.assets.envMaps.default = '/data/user/'+config.sky.photosphere
 
@@ -187,6 +186,26 @@ export default class Convolvr {
 			skybox.material = skyMaterial
 
 		}
+
+		let deferWorldLoading = false,
+			world = this,
+			rebuildWorld = () => {
+
+				!!world.skyLight && three.scene.remove( world.skyLight )
+				!!world.ambientLight && three.scene.remove( world.ambientLight )
+
+				world.skyLight = skyLight
+				three.scene.add(skyLight)
+				skyLight.position.set( Math.sin(config.light.yaw)*3000000, Math.sin(config.light.pitch)*3000000, Math.cos(config.light.yaw)*3000000)
+				skyLight.lookAt(new THREE.Vector3(0,0,0))
+				three.scene.add(this.skybox)
+				world.skybox.position.set(camera.position.x, 0, camera.position.z)
+
+				world.terrain.bufferChunks(true, 0)
+				world.gravity = config.gravity
+				world.highAltitudeGravity = config.highAltitudeGravity
+				callback()
+			}
 
 		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
 
@@ -210,27 +229,15 @@ export default class Convolvr {
 
 		} else {
 			// load sky texture 
+			deferWorldLoading = true
 			this.systems.assets.loadImage( '/data/user/'+this.config.sky.photosphere, {}, ( texture ) => {
 				texture.magFilter = THREE.LinearFilter
 	 			skybox.material = new THREE.MeshBasicMaterial({map: texture, side:1, fog: false})
+				rebuildWorld()
 			}) 
 
 		}
 
-		if ( !!this.skyLight ) {
-
-			three.scene.remove(this.skyLight)
-
-		}
-
-		if ( !!this.ambientLight ) {
-
-			three.scene.remove(this.ambientLight)
-
-		}
-
-		//handle re-initialization here..
-		let coords = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false
 		if ( coords ) {
 
 			coords = coords.split(".")
@@ -240,17 +247,7 @@ export default class Convolvr {
 		}
 
 		document.title = config.name == 'overworld' && config.userName == 'space' ? `Convolvr` : config.name // make "Convolvr" default configurable via admin settings
-
-		this.skyLight = skyLight
-		three.scene.add(skyLight)
-		skyLight.position.set( Math.sin(config.light.yaw)*3000000, Math.sin(config.light.pitch)*3000000, Math.cos(config.light.yaw)*3000000)
-		skyLight.lookAt(new THREE.Vector3(0,0,0))
-		three.scene.add(this.skybox)
-		this.skybox.position.set(camera.position.x, 0, camera.position.z)
-
-		this.terrain.bufferChunks(true, 0)
-		this.gravity = config.gravity
-		this.highAltitudeGravity = config.highAltitudeGravity
+		false == deferWorldLoading && rebuildWorld()
 
 	}
 
@@ -348,13 +345,13 @@ export default class Convolvr {
 	}
 
 	load ( userName, name, callback ) {
-
+		let world = this
 		console.log("load world", userName, name)
 		this.name = name; // fix this... needs userName now
 	
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
-			 this.init(response.data)
-			 callback && callback(this)
+			 this.init(response.data, ()=> { callback && callback(world) } )
+
 		}).catch(response => {
 			console.log("World Error", response)
 		})
