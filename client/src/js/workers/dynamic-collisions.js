@@ -2,17 +2,17 @@
 // collisions btween entities in motion and other entities
 let distance2d = ( a, b ) => {
 
-    return Math.sqrt(Math.pow((a[0]-b[0]), 2) + Math.pow((a[2]-b[2]), 2))
+    return Math.sqrt( Math.pow((a[0]-b[0]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) )
 
   },
-  distance2dCompare = (a, b, n) => { // more efficient version of distance2d()
+  distance2dCompare = ( a, b, n ) => { // more efficient version of distance2d()
 
-	  return Math.pow((a[0]-b[0]), 2)+Math.pow((a[2]-b[2]), 2) < (n*n)
+	  return Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) < (n*n)
 
   },
-  distance3dCompare = (a, b, n) => { // ..faster than using Math.sqrt()
+  distance3dCompare = ( a, b, n ) => { // ..faster than using Math.sqrt()
 
-	  return (Math.pow((a[0]-b[0]), 2) + Math.pow((a[1]-b[1]), 2) + Math.pow((a[2]-b[2]), 2)) < (n*n)
+	  return (Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[1]-b[1]), 2 ) + Math.pow( (a[2]-b[2]), 2 )) < (n*n)
 
   }
 
@@ -25,7 +25,8 @@ let voxels = {}, // map of string coordinates to arrays of entities
   		vrHeight: 0
   	}
 
-self.onmessage = event => { // Do some work.
+self.onmessage = event => { // probably going to replace most of this worker with Cannon.js.. & can fallback to static-collision worker in most cases 
+
 	let message = JSON.parse(event.data),
 			data = message.data,
       entities = [],
@@ -49,13 +50,13 @@ self.onmessage = event => { // Do some work.
 
   } else if ( message.command == "remove voxels" ) {
 
-    p = data.length -1
+    c = data.length -1
 
-		while ( p >= 0 ) {
+		while ( c >= 0 ) {
 
-			toRemove = data[ p ]
+			toRemove = data[ c ]
 			voxels[ toRemove.cell ] = null
-			p --
+			c --
 
 		}
 
@@ -65,7 +66,7 @@ self.onmessage = event => { // Do some work.
 
     if (entities != null) {
 
-      voxels[data.coords.join("x")].entities.push(data.entity)
+      voxels[ data.coords.join("x") ].entities.push(data.entity)
 
     }
 
@@ -79,9 +80,9 @@ self.onmessage = event => { // Do some work.
 
   		while ( c >= 0 ) {
 
-  			if (entities[c].id == data.entityId) {
+  			if ( entities[ c ].id == data.entityId ) {
 
-  				voxels[data.coords.join(".")].entities.splice(c, 1)
+  				voxels[data.coords.join(".")].entities.splice( c, 1 )
           c = -1
 
         }
@@ -92,7 +93,30 @@ self.onmessage = event => { // Do some work.
 
     }
 
-  } else if ( message.command == "update" ) {
+  } else if ( message.command == "update entity" ) {
+
+		entities = voxels[ data.coords.join(".") ].entities
+
+		if (entities != null) {
+
+			c = entities.length-1
+
+			while ( c >= 0 ) {
+
+				if (entities[ c ].id == data.entityId) {
+
+					entities[ c ] = data.entity
+					c = -1
+
+				}
+
+				c--
+
+			}
+
+		}
+
+	} else if ( message.command == "update" ) {
 
     user.position = data.position
 		user.velocity = data.velocity

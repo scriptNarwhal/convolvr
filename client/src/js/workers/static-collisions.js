@@ -100,35 +100,33 @@ self.update = ( ) => {
 						
 				}
 							
-
 			 }
-
 
 		}
 
 	}
 
 	if ( !collision) {
-		observer.prevPos = [observer.position[0], observer.position[1], observer.position[2]];
+		observer.prevPos = [ observer.position[0], observer.position[1], observer.position[2] ]
 	}
 
 	self.postMessage('{"command": "update"}');
-	self.updateLoop = setTimeout(function () {
+	self.updateLoop = setTimeout( () => {
 		self.update();
 	}, 15);
 }
 
 self.onmessage = function ( event ) { 
 
-	var message = JSON.parse(event.data),
-			data = message.data,
-			user = observer,
-			c = 0,
-			p = 0,
-			items = [],
-			platform = null,
-			toRemove = null
-
+	var message = JSON.parse( event.data ),
+		data = message.data,
+		user = observer,
+		platform = null,
+		toRemove = null,
+		items = [],
+		c = 0,
+		p = 0
+		
 	if ( message.command == "update" ) {
 		// user.prevPos = [user.position[0], user.position[1], user.position[2]];
 		user.position = data.position
@@ -141,56 +139,83 @@ self.onmessage = function ( event ) {
 
 	} else if ( message.command == "remove voxels" ) {
 
-		p = data.length -1;
+		p = data.length -1
+
 		while ( p >= 0 ) {
-			toRemove = data[p];
-			c = voxels.length-1;
+
+			toRemove = data[p]
+			c = voxels.length-1
+
 			while ( c >= 0 ) {
-				platform = voxels[c];
-				if (platform != null) {
-					if (platform.cell[0] == toRemove.cell[0] && platform.cell[1] == toRemove.cell[1]  && platform.cell[2] == toRemove.cell[2]) {
-						voxels.splice(c, 1);
-					}
+
+				platform = voxels[ c ]
+
+				if ( platform != null && platform.cell[0] == toRemove.cell[0] && platform.cell[1] == toRemove.cell[1]  && platform.cell[2] == toRemove.cell[2] ) {
+					
+					voxels.splice( c, 1 )
 				}
-				c--;
+
+				c--
+
 			}
-			p --;
+
+			p --
+
 		}
 
 	} else if ( message.command == "add entity" ) {
 
     entities = voxels[data.coords.join(".")].entities
 
-    if (entities != null) {
-
-      voxels[data.coords.join("x")].entities.push(data.entity)
-
-    }
+    !! entities && voxels[data.coords.join("x")].entities.push( data.entity )
 
   } else if ( message.command == "remove entity" ) {
 
-    entities = voxels[data.coords.join(".")].entities
+    	entities = voxels[ data.coords.join(".") ].entities
 
-    if (entities != null) {
+		if (entities != null) {
 
-      c = entities.length-1
+		c = entities.length-1
 
-  		while ( c >= 0 ) {
+			while ( c >= 0 ) {
 
-  			if (entities[c].id == data.entityId) {
+				if (entities[c].id == data.entityId) {
 
-  				voxels[data.coords.join(".")].entities.splice(c, 1)
-          c = -1
+					voxels[ data.coords.join(".") ].entities.splice(c, 1)
+					c = -1
 
-        }
+				}
 
-  			c--
+				c--
 
-  		}
+			}
 
-    }
+		}
 
-  } else if ( message.command == "clear" ) {
+	} else if ( message.command == "update entity" ) {
+
+		entities = voxels[ data.coords.join(".") ].entities
+
+		if (entities != null) {
+
+			c = entities.length-1
+
+			while ( c >= 0 ) {
+
+				if (entities[ c ].id == data.entityId) {
+
+					entities[ c ] = data.entity
+					c = -1
+
+				}
+
+				c--
+
+			}
+
+		}
+
+	} else if ( message.command == "clear" ) {
 
 		voxels = []
 
@@ -212,8 +237,8 @@ self.onmessage = function ( event ) {
 	}
 };
 
-self.stop = function () {
+self.stop = () => {
 
-	clearTimeout(self.updateLoop)
+	clearTimeout( self.updateLoop )
 
 }
