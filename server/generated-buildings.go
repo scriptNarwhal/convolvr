@@ -10,7 +10,7 @@ func generateBuilding(world string, x int, z int, altitude float32) *Entity {
 		structure           *Entity
 		structureComponents []*Component
 	)
-	floors := 2 + rand.Intn(8)
+	floors := 1 + rand.Intn(3)*rand.Intn(3)*rand.Intn(3)
 	width := 1.0 + float64(rand.Intn(2))
 	structureSize := 300000.0
 	// create components for each floor & long / windowed wall
@@ -87,7 +87,7 @@ func canPlaceStructureAt(x int, y int, z int) bool {
 	zOffset := int(math.Abs(float64(z % 5)))
 	placeStructure := false
 
-	if int(math.Abs(float64(x%30))) < 8 && int(math.Abs(float64(z%30))) < 10 {
+	if int(math.Abs(float64(x%30))) < 8 && int(math.Abs(float64(z%30))) < 8 {
 
 		if xOffset == 0 {
 			if zOffset == 2 || zOffset == 3 {
