@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import Button from './button'
+import NewFolder from './data/new-folder'
+import TextEditor from './data/text-editor'
+import UploadFiles from './data/upload-files'
 
 let styles = {
   bar: () => {
@@ -14,7 +17,7 @@ let styles = {
       height: '48px',
       display: 'inline-block',
       marginRight: '0.5em',
-      marginBottom: '0.5em'
+      marginBottom: '1em'
     }
   },
   title: {
@@ -43,7 +46,11 @@ let styles = {
     width: 'auto'
   },
   fileOptions: {
-    display: 'none'
+    position: 'fixed',
+    right: '60px',
+    top: '14px',
+    height: '60px',
+    display: 'inline-block'
   }
 }
 
@@ -55,7 +62,7 @@ export default class LocationBar extends Component {
   }
   render() {
     return (
-        <div style={styles.bar()}>
+        <div style={ Object.assign({}, styles.bar(), this.props.style) }>
           <div onClick={ e=> { this.props.onItemSelect(this.props.label, 0) } }
                style={styles.home}
           >
@@ -75,20 +82,13 @@ export default class LocationBar extends Component {
                 )
               })
             }
-            <div style={styles.fileOptions}>
-              <Button title="Upload File"
-                      style={styles.fileOption}
-                      onClick={e=> this.props.onOptionClick(e, "upload-file")}
-              />
-              <Button title="New File"
-                      style={styles.fileOption}
-                      onClick={e=> this.props.onOptionClick(e, "new-file")}
-              />
-              <Button title="New Folder"
-                      style={styles.fileOption}
-                      onClick={e=> this.props.onOptionClick(e, "new-folder")}
-              />
-            </div>
+            { this.props.showFileOptions ? (
+              <div style={styles.fileOptions}>
+                <UploadFiles username={ this.props.username } path={ this.props.path } />
+                <TextEditor username={ this.props.username } path={ this.props.path } />
+                <NewFolder username={ this.props.username } path={ this.props.path } />
+              </div>) : ""
+            }
         </div>
     )
   }
@@ -98,6 +98,8 @@ LocationBar.defaultProps = {
   path: [],
   username: "",
   label: "",
+  style: {},
+  showFileOptions: false,
   onOptionClick: (e, option) => {
 
   }

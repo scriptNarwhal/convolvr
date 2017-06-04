@@ -123,12 +123,14 @@ class App extends Component {
 
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
 
-    if (window.location.href.indexOf("/chat") > -1 ||
-        window.location.href.indexOf("/login") > -1) {
-      this.props.toggleMenu(true);
-    }
-    // detect user credentials
-    let rememberUser = localStorage.getItem("rememberUser"),
+    let showMenuURLs = [ "chat", "login", "worlds", "files", "places", "settings", "network", "new-world" ]
+    showMenuURLs.map( (menuUrl) => {
+
+      window.location.pathname.indexOf(`/${menuUrl}`) > -1 && this.props.toggleMenu(true)
+
+    })
+    
+    let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...
         username = '',
         password = '',
         autoSignIn = false

@@ -122,7 +122,7 @@ func postWorlds(c echo.Context) error {
 		log.Println(err)
 		return err
 	}
-	createDataDir(world.UserName, world.Name)
+	createDataDir(world.UserName, "worlds/"+world.Name)
 	return c.JSON(http.StatusOK, nil)
 }
 
@@ -201,7 +201,7 @@ func getWorld(c echo.Context) error { // load specific world
 		if saveErr != nil {
 			log.Println(saveErr)
 		}
-		createDataDir("public", name)
+		createDataDir("public", "worlds/"+name)
 	}
 	return c.JSON(http.StatusOK, &world)
 }

@@ -49,6 +49,8 @@ func postUsers(c echo.Context) (err error) {
 			return dbErr
 		}
 		createDataDir(user.Name, "")
+		createDataDir(user.Name, "worlds")
+		createDataDir(user.Name, "chat-uploads")
 		return c.JSON(http.StatusOK, &user)
 	} else {
 		lookupErr := db.Select(q.And(

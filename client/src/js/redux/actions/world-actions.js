@@ -77,7 +77,7 @@ export function fetchUniverseSettings () {
               dispatch({
                 type: WORLD_SET_CURRENT,
                 current: response.data.defaultWorld,
-                userName: "world" 
+                userName: "space" 
               })
             }
 

@@ -25,12 +25,17 @@ let styles = {
 }
 
 export default class ContextMenu extends Component {
+
   componentWillMount () {
+
     this.setState({
 
     })
+    
   }
+
   render() {
+
     return (
         <div style={styles.card(this.props.color, this.props.compact)} title={this.props.title }
              onClick={ (evt) => { this.props.clickHandler(evt, this.props.title) } }
@@ -41,7 +46,7 @@ export default class ContextMenu extends Component {
                 </span>
             ) : "")}
             {
-              this.options.map((opt, i) =>{
+              this.props.options.map((opt, i) =>{
                 return (
                   <div style={styles.option}
                        key={i}
@@ -53,7 +58,9 @@ export default class ContextMenu extends Component {
             }
         </div>
     )
+
   }
+
 }
 
 ContextMenu.defaultProps = {

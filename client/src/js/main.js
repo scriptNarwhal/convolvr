@@ -50,12 +50,9 @@ userInput = new UserInput()
 loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
-  //toolMenu.position = [ 2500, 50000, 0 ]
   toolMenu.init( three.scene ) // toolMenu.componentsByProp.toolUI[0].state.hide()
   user.hud = toolMenu
   
-
-
   avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) // entity id can be passed into config object
   avatar.init( three.scene )
   user.useAvatar( avatar )
@@ -67,6 +64,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
   three.camera.position.set( -220000+Math.random()*60000, 100000, -220000+Math.random()*60000 )
 
   chatScreen = world.systems.assets.makeEntity( "chat-screen", true )
+  //chatScreen.components[0].props.speech = {}
   chatScreen.init( three.scene )
   chatScreen.update( [ 0, 50000, 0 ] )
   world.chat = chatScreen

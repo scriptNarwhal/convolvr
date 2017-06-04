@@ -30,9 +30,6 @@ export default class DynamicCollisions {
 	                           '],"velocity":['+user.velocity.x+','+user.velocity.y+','+user.velocity.z+'],"vrHeight":'+vrHeight+'}}')
 
 
-		} else if ( message.command == "entity-user collision" ) {
-			console.log("!!!!!  entity-user collision")
-
 		} else if ( message.command == "entity-entity collision" ) {
 			console.log("!!!!!  entity-entity collision")
 

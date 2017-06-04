@@ -1,20 +1,74 @@
-/* implement this */
-import React, { Component } from 'react';
-import Button from '../button';
-import { browserHistory } from 'react-router';
+import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
+import FileButton from './file-button'
+
+let styles = {
+  modal: {
+    width: '60%',
+    maxWidth: '729px',
+    minWidth: '320px',
+    padding: '1em',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    margin: 'auto'
+  }
+}
 
 class NewFolder extends Component {
 
-    toggleMenu (force) {
-        this.props.toggleMenu(force);
+  constructor () {
+
+    this.state = {
+      activated: false
     }
 
+  }
+
+  componentWillMount () {
+
+    this.setState({
+      activated: false
+    })
+
+  }
+
+  componentWillReceiveProps ( nextProps ) {
+
+  }
+
+  componentWillUpdate ( nextProps, nextState ) {
+
+  }
+
+  toggleModal () {
+
+    this.setState({
+      activated: !this.state.activated
+    })
+
+  }
+
   render() {
-    return (
-        <div className="hud">
+
+    if ( this.state.activated ) {
+
+      return (
+        <div style={ styles.modal } >
 
         </div>
-    )
+      )
+
+    } else {
+
+      return (
+        <FileButton title="New Folder" onClick={ () => { this.toggleModal() } } />
+      )
+
+    }
+    
   }
 }
 
@@ -22,11 +76,10 @@ NewFolder.defaultProps = {
 
 }
 
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
 import {
-    toggleMenu,
-    toggleVR
- } from '../../redux/actions/app-actions'
+    toggleMenu
+ } from '../../../redux/actions/app-actions'
 
 export default connect(
   (state, ownProps) => {
@@ -41,9 +94,6 @@ export default connect(
     return {
       toggleMenu: (force) => {
           dispatch(toggleMenu(force))
-      },
-      toggleVRMode: () => {
-          dispatch(toggleVR())
       }
     }
   }

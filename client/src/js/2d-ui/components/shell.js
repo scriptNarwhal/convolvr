@@ -5,7 +5,7 @@ import Button from './button'
 import { browserHistory } from 'react-router'
 
 let styles = {
-  shell: (hasMenu, menuOpen, menuOnly, noBackground, droppingFile) => {
+  shell: ( hasMenu, menuOpen, menuOnly, noBackground, droppingFile ) => {
     let mobile = window.innerWidth <= 640
     return {
       margin: 'auto',
@@ -28,22 +28,25 @@ let styles = {
   inner: () => {
     let mobile = window.innerWidth <= 640
     return {
-      paddingTop: mobile ? '86px' : '48px',
+      paddingTop: mobile ? '86px' : '56px',
       paddingLeft: mobile ? '0px' : '72px'
     }
   }
 }
 
 class Shell extends Component {
+
   componentWillMount () {
     this.setState({
       droppingFile: false
     })
   }
-  componentWillUpdate(nextProps, nextState) {
+
+  componentWillUpdate( nextProps, nextState ) {
 
   }
-  uploadFiles (files) {
+
+  uploadFiles ( files ) {
     let dir = ""
     if (this.props.reactPath.indexOf("/chat") > -1) {
       dir = "chat-uploads"
@@ -76,7 +79,7 @@ class Shell extends Component {
 		xhr.open("POST", "/api/files/upload-multiple/"+username+"?dir="+dir, true);
 		//xhr.setRequestHeader("x-access-token", localStorage.getItem("token"));
 		if ("upload" in new XMLHttpRequest) { // add upload progress event
-				xhr.upload.onprogress = function (event) {
+				xhr.upload.onprogress = function ( event ) {
 				if (event.lengthComputable) {
 					let complete = (event.loaded / event.total * 100 | 0);
 					console.log(complete)
@@ -94,12 +97,15 @@ class Shell extends Component {
     let from = this.props.username
     this.setDropBackground(false)
   }
-  setDropBackground (mode) {
+
+  setDropBackground ( mode ) {
     this.setState({
       droppingFile: mode
     })
   }
+
   render() {
+
     let hasMenu = !!this.props.hasMenu,
         menuOnly = !!this.props.menuOnly,
         menuOpen = this.props.menuOpen,
@@ -132,7 +138,9 @@ class Shell extends Component {
             )}
         </div>
     )
+
   }
+
 }
 
 Shell.defaultProps = {

@@ -11,25 +11,32 @@ let styles = {
 }
 
 class Data extends Component {
+
   componentWillMount () {
+
     this.props.listFiles(this.props.username, this.props.workingPath.join("/"))
     this.props.listDirectories(this.props.username, this.props.workingPath.join("/"))
     this.setState({
       update: 0,
       workingPath: []
     })
+
   }
-  componentWillUpdate (nextProps, nextState) {
-    console.log("next props workingPath")
-    console.log(nextProps.workingPath.length)
-    if (nextProps.workingPath.length != this.props.workingPath.length ||
-        nextProps.username != this.props.username) {
-      console.log("changing directory...", nextProps.workingPath)
+
+  componentWillReceiveProps ( nextProps ) {
+
+    let userNameChanged = nextProps.username != this.props.username,
+        finishedFetchingDirs = this.props.dirsFetching == true && nextProps.dirsFetching == false,
+        finishedFetchingFiles = (this.props.filesFetching == true && nextProps.filesFetching == false)
+
+    if ( nextProps.workingPath.length != this.props.workingPath.length || userNameChanged ) { console.log("changing directory...", nextProps.workingPath)
+
       this.props.listFiles(nextProps.username, nextProps.workingPath.join("/"))
       this.props.listDirectories(nextProps.username, nextProps.workingPath.join("/"))
+
     }
-    if ((this.props.filesFetching == false && nextProps.filesFetching != false) ||
-         this.props.dirsFetching == false && nextProps.dirsFetching != false) {
+
+    if ( finishedFetchingFiles || finishedFetchingDirs ) {
       let newPath = []
       nextProps.workingPath.map(p=> {
         newPath.push(p)
@@ -39,25 +46,39 @@ class Data extends Component {
         workingPath: newPath
       })
     }
+
   }
+
+  componentWillUpdate (nextProps, nextState) {
+
+
+  }
+
   isImage (file) {
+
     return /(.png|.jpg|.jpeg|.gif|webp)/.test(file)
+
   }
+
   getFullPath (file, thumbnail) {
+
     let username = this.props.username,
         workingPath = this.state.workingPath.join("/")
+
     if (thumbnail && this.isImage(file)) {
       return `/data/user/${username}${workingPath}/thumbs/${file}.jpg`
     } else {
       return `/data/user/${username}${workingPath}/${file}`
     }
   }
+
   enterDirectory (dir) {
     let path = this.state.workingPath
     path.push(dir)
     this.props.changeDirectory(path)
     //this.update(250)
   }
+
   update (time) {
     setTimeout(()=>{
       this.setState({
@@ -65,25 +86,64 @@ class Data extends Component {
       })
     }, time)
   }
-  onFileOptionClick (e, option) {
-    console.log("on file option click", e, option)
-    if (option == "upload-file") {
 
-    } else if (option == "new-file") {
+  _renderFiles ( files, mobile ) {
 
-    } else if (option == "new-folder") {
+    if ( !!files && !this.props.filesFetching) {
 
-    }
+      return files.map((file, i) => {
+              return (
+                <Card image={this.isImage(file) ? this.getFullPath(file, true) : ''}
+                      clickHandler={ (e, title) => {
+                        console.log(e, title, "clicked")
+                        let newWindow = window.open(this.getFullPath(file), "_blank")
+                        newWindow.focus()
+                      }}
+                      compact={!this.isImage(file)}
+                      quarterSize={mobile && this.isImage(file) }
+                      showTitle={true}
+                      title={file}
+                      key={i}
+                />
+            )
+        })
+
+    } else {
+
+      return ""
+
+    } 
+            
   }
+
   render() {
+
     let files = this.props.files,
         dirs = this.props.dirs,
-        mobile = window.innerWidth <= 640
+        mobile = window.innerWidth <= 720,
+        imageFiles = [],
+        nonImages = []
+
+      !! files && files.map( ( file ) => {
+
+        if ( this.isImage( file ) ) {
+
+          imageFiles.push( file )
+
+        } else {
+
+          nonImages.push( file )
+
+        }
+
+      })
+
     return (
-        <Shell className="data-view">
+        <Shell className="data-view" style={ mobile ? { paddingTop: '60px' } : {} }>
           <LocationBar path={this.state.workingPath}
                        label="Data"
                        username={this.props.username}
+                       showFileOptions={ true } // show Upload Files, New File, New Folder
                        onItemSelect={  (item, index, length) => {
                           console.log("changing dir from location bar")
                           let path = this.state.workingPath
@@ -91,7 +151,6 @@ class Data extends Component {
                           this.props.changeDirectory(path)
                           //this.update(250)
                        }}
-                       onOptionClick={ (e, option) => this.onFileOptionClick(e,option) }
           />
           {
             dirs !== false && !this.props.dirsFetching &&
@@ -112,33 +171,20 @@ class Data extends Component {
             })
           }
           <hr style={styles.hr} />
-          {
-            files !== false && !this.props.filesFetching &&
-            files.map((file, i) => {
-              return (
-                <Card image={this.isImage(file) ? this.getFullPath(file, true) : ''}
-                      clickHandler={ (e, title) => {
-                        console.log(e, title, "clicked")
-                        let newWindow = window.open(this.getFullPath(file), "_blank")
-                        newWindow.focus()
-                      }}
-                      compact={!this.isImage(file)}
-                      quarterSize={mobile && this.isImage(file) }
-                      showTitle={true}
-                      title={file}
-                      key={i}
-                />
-              )
-            })
-          }
+          { this._renderFiles( nonImages, mobile ) }
+          <hr style={styles.hr} />
+          { this._renderFiles( imageFiles, mobile ) }
         </Shell>
     )
+
   }
+
 }
 
 Data.defaultProps = {
 
 }
+
 import { connect } from 'react-redux';
 import {
     sendMessage
@@ -153,6 +199,7 @@ import {
   changeDirectory,
   uploadFiles
 } from '../../redux/actions/file-actions'
+
 export default connect(
   (state, ownProps) => {
     return {

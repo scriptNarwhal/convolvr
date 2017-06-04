@@ -37,7 +37,10 @@ export default class StaticCollisions {
 	          console.log("collision");
 	          console.log(message.data);
 
-		  } else if ( message.command == "platform collision" ) { // consider sending "top" or "bottom" collision type
+		}  else if ( message.command == "entity-user collision" ) {
+			console.log("!!!!!  entity-user collision", message.data)
+
+		} else if ( message.command == "platform collision" ) { // consider sending "top" or "bottom" collision type
 
 	      if ( message.data.type == "top" ) {
 

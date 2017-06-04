@@ -27,6 +27,9 @@ export default class SpeechSystem {
         return {
             speak: (text, voice, voiceIndex) => {
                 this.speak(text, voice, voiceIndex)
+            },
+            speakAll: (lines, voice, voiceIndex) => {
+                this.speak( lines.join(". "), voice, voiceIndex )
             }
         }
 
@@ -55,7 +58,7 @@ export default class SpeechSystem {
 
         }
         
-        synth.speak( utterThis )
+        this.synth.speak( utterThis )
     }
 }
 

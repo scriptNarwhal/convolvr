@@ -197,11 +197,14 @@ func postText(c echo.Context) error {
 }
 
 func createDataDir(username string, dir string) {
+
 	if _, err := os.Stat("../web/user/" + username + "/" + dir); err != nil {
+
 		if os.IsNotExist(err) {
 			os.MkdirAll("../web/user/"+username+"/"+dir+"/thumbs", 0777)
 		}
 	}
+
 }
 
 func createFileIfMissing(username string, dir string, filename string) {

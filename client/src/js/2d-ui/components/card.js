@@ -15,6 +15,7 @@ let styles = {
       backgroundSize: 'cover',
       backgroundImage: `url(${image})`,
       textAlign: "center",
+      verticalAlign: "top",
       borderRadius: '1.5px',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)'
     }

@@ -17,10 +17,18 @@ export default class RESTSystem {
 
                 component.state.rest.getResponse = response
 
-                if ( !!component.props.text ) {
+                if ( !!component.props.text ) { // abstract this logic away some how.. and make it scriptable
 
-                    component.props.text.lines = JSON.stringify(response.data).match(/(.|[\r\n]){1,42}/g)
+                    let responseLines = JSON.stringify(response.data).match(/(.|[\r\n]){1,42}/g)
+
+                    component.props.text.lines = responseLines
                     component.state.text.update()
+
+                    if ( !!component.props.speech ) {
+
+                        component.state.speech.speakAll( responseLines, false, 0)
+
+                    }
 
                 }
 
