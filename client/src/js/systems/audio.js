@@ -1,27 +1,32 @@
 export default class AudioSystem {
 
-    constructor (world) {
+    constructor ( world ) {
 
         this.world = world
         this.listener = new THREE.AudioListener()
 
     }
 
-    init (component) { 
+    init ( component ) { 
 
         let prop = component.props.audio,
-            assets = this.world.systems.assets
+            assets = this.world.systems.assets,
+            sound = null
         // find out what kind of node...
 
-        //Create the PositionalAudio object (passing in the listener)
-        var sound = new THREE.PositionalAudio( this.listener )
-        
-        assets.loadSound(prop.asset, sound, ()=>{
-            component.mesh.add(sound)
-            sound.setRefDistance( 5000 )
-            sound.setMaxDistance(300000)
-            sound.play()
-        })
+        if ( prop.type == 'stereo') {
+            // implement
+
+        } else { // if (prop.type == 'positional')
+            sound = new THREE.PositionalAudio( this.listener ) //Create the PositionalAudio object (passing in the listener)
+            
+            assets.loadSound(prop.asset, sound, ()=>{
+                component.mesh.add(sound)
+                sound.setRefDistance( 5000 )
+                sound.setMaxDistance(300000)
+                prop.autoPlay !== false && sound.play()
+            })
+        }
         
 
         return {

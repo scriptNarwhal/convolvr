@@ -103,7 +103,7 @@ export default class TerrainSystem {
         viewDistance = (this.world.mobile ? 5 : 6) + this.world.viewDistance,
         removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
         endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
-        x = coords[0]-phase,
+        x = coords[0]-phase + 1,
         y = coords[2]-phase
         this.chunkCoords = coords
 
@@ -188,15 +188,15 @@ export default class TerrainSystem {
 
       c = 0
       
-      while (x <= endCoords[0]) { // load new terrain voxels
+      while ( x <= endCoords[0] - 1 ) { // load new terrain voxels
 
-        while (y <= endCoords[1]) {
+        while ( y <= endCoords[1] ) {
 
-            if (c < 6 && voxels[x+".0."+y] == null) { // only if its not already loaded
+            if ( c < 6 && voxels[x+".0."+y] == null ) { // only if its not already loaded
 
-                voxels[x+".0."+y] = true
+                voxels[ x+".0."+y ] = true
                 c ++
-                this.reqChunks.push(x+"x0x"+y)
+                this.reqChunks.push( x+"x0x"+y )
       
             }
 
@@ -232,15 +232,12 @@ export default class TerrainSystem {
         axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`).then(response => {
 
              let physicsVoxels = []
-             typeof response.data.map == 'function' && response.data.map(c =>{
+             typeof response.data.map == 'function' && response.data.map(c => {
+
                  let voxelData = {visible: showVoxels, altitude: c.altitude, color: c.color, entities: c.entities, structures: c.structures || []},
                      chunk = new Voxel(voxelData, [c.x, 0, c.z])
 
-              if (!!chunk.geometry != "space") { // if its not empty space
-
-                     three.scene.add(chunk.mesh)
-
-              }
+              !!chunk.geometry != "space" && three.scene.add(chunk.mesh)
 
               physicsVoxels.push(chunk.data)
               voxelList.push(chunk)

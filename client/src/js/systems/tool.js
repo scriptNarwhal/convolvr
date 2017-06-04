@@ -139,13 +139,9 @@ export default class ToolSystem {
 
         let compMesh = component.mesh
 
-        if (compMesh != null) {
-        
-            if (compMesh.parent != null) {
+        if ( compMesh != null && compMesh.parent != null ) {
             
-                compMesh.parent.remove( compMesh )
-
-            }
+            compMesh.parent.remove( compMesh )
 
         }
 

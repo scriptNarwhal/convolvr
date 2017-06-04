@@ -2,7 +2,6 @@ package convolvr
 
 import (
 	"math"
-	"math/rand"
 	"net/http"
 	"strconv"
 	"strings"
@@ -86,8 +85,15 @@ func getWorldChunks(c echo.Context) error {
 			if initErr != nil {
 				log.Println(initErr)
 			}
-			if rand.Intn(26) > 21 && worldData.Spawn.Structures {
-				entities = append(entities, generateBuilding(world, x, z, altitude))
+
+			if worldData.Spawn.Structures {
+
+				if canPlaceStructureAt(x, 0, z) {
+
+					entities = append(entities, generateBuilding(world, x, z, altitude))
+
+				}
+
 			}
 
 			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, nil)

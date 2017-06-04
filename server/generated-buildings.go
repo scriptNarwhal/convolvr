@@ -1,6 +1,9 @@
 package convolvr
 
-import "math/rand"
+import (
+	"math"
+	"math/rand"
+)
 
 func generateBuilding(world string, x int, z int, altitude float32) *Entity {
 	var (
@@ -76,4 +79,34 @@ func generateWall(w int, i int, floors int, width float64, structureSize float64
 	wallProps["material"] = material
 	wallState := make(map[string]interface{})
 	return NewComponent("", wallPos, wallQuat, wallProps, wallState, []*Component{})
+}
+
+func canPlaceStructureAt(x int, y int, z int) bool {
+
+	xOffset := int(math.Abs(float64(x % 4)))
+	zOffset := int(math.Abs(float64(z % 5)))
+	placeStructure := false
+
+	if xOffset == 0 {
+
+		if zOffset == 2 || zOffset == 3 {
+			placeStructure = true
+		}
+
+	} else if xOffset == 1 {
+
+		if zOffset == 4 || zOffset == 1 {
+			placeStructure = true
+		}
+
+	} else if xOffset == 2 {
+
+		if zOffset == 2 || zOffset == 3 {
+			placeStructure = true
+		}
+
+	}
+
+	return placeStructure
+
 }

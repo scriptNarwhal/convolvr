@@ -5,21 +5,6 @@ let panel2 = {
                     props: {
                         geometry: {
                             merge: true,
-                            shape: "hexagon",
-                            size: [28000, 28000, 1500]
-                        },
-                        material: {
-                            color: 0x808080,
-                            name: "plastic"
-                        }
-                    },
-                    quaternion: null,
-                    position: [-4625, 0, 0]
-                },
-                {
-                    props: {
-                        geometry: {
-                            merge: true,
                             shape: "torus",
                             size: [28000, 28000, 15000]
                         },
@@ -29,7 +14,7 @@ let panel2 = {
                         }
                     },
                     quaternion: null,
-                    position: [4625, 0, 0]
+                    position: [ 0, 0, 0]
                 },
                 {
                     props: {
@@ -44,7 +29,22 @@ let panel2 = {
                         }
                     },
                     quaternion: null,
-                    position: [-10250, 0, 0]
+                    position: [0, 0, 0]
+                },
+                {
+                    props: {
+                        geometry: {
+                            merge: true,
+                            shape: "hexagon",
+                            size: [28000, 28000, 1500]
+                        },
+                        material: {
+                            color: 0xffffff,
+                            name: "metal"
+                        }
+                    },
+                    quaternion: null,
+                    position: [0, 20000, 0]
                 },
                 {
                     props: {
@@ -59,7 +59,7 @@ let panel2 = {
                         }
                     },
                     quaternion: null,
-                    position: [10250, 0, 0]
+                    position: [0, -10250, 0]
                 },
             ],
             position: [ 0, 0, 0 ],
