@@ -87,22 +87,20 @@ func canPlaceStructureAt(x int, y int, z int) bool {
 	zOffset := int(math.Abs(float64(z % 5)))
 	placeStructure := false
 
-	if xOffset == 0 {
+	if int(math.Abs(float64(x%30))) < 8 && int(math.Abs(float64(z%30))) < 10 {
 
-		if zOffset == 2 || zOffset == 3 {
-			placeStructure = true
-		}
-
-	} else if xOffset == 1 {
-
-		if zOffset == 4 || zOffset == 1 {
-			placeStructure = true
-		}
-
-	} else if xOffset == 2 {
-
-		if zOffset == 2 || zOffset == 3 {
-			placeStructure = true
+		if xOffset == 0 {
+			if zOffset == 2 || zOffset == 3 {
+				placeStructure = true
+			}
+		} else if xOffset == 1 {
+			if zOffset == 4 || zOffset == 1 {
+				placeStructure = true
+			}
+		} else if xOffset == 2 {
+			if zOffset == 2 || zOffset == 3 {
+				placeStructure = true
+			}
 		}
 
 	}
