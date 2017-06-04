@@ -20,9 +20,9 @@ import {
     DIRECTORIES_LIST_FETCH,
     DIRECTORIES_LIST_FAIL,
     DIRECTORIES_LIST_DONE,
-    DIRECTORIES_MAKE_FETCH,
-    DIRECTORIES_MAKE_FAIL,
-    DIRECTORIES_MAKE_DONE,
+    DIRECTORY_MAKE_FETCH,
+    DIRECTORY_MAKE_FAIL,
+    DIRECTORY_MAKE_DONE,
     CHANGE_DIRECTORY
 } from '../constants/action-types'
 
@@ -103,7 +103,6 @@ export function createFile (username, dir) {
          username,
          dir
      })
-     let dir = !!dir && dir != "" ? "/"+dir : ""
      return axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+dir : ''}`, {})
         .then(response => {
             dispatch({
@@ -119,23 +118,22 @@ export function createFile (username, dir) {
    }
 }
 
-export function createDirectory (username, dir) {
+export function createDirectory ( username, dir ) {
     return dispatch => {
      dispatch({
-         type: DIRECTORY_CREATE_FETCH,
+         type: DIRECTORY_MAKE_FETCH,
          username,
          dir
      })
-     let dir = !!dir && dir != "" ? "/"+dir : ""
-     return axios.post(`${API_SERVER}/api/directories/${username}/${dir != null ? "?dir="+dir : ''}`, {})
+     return axios.post(`${API_SERVER}/api/directories/${username}?dir=${dir}`, {})
         .then(response => {
             dispatch({
-                type: DIRECTORY_CREATE_DONE,
+                type: DIRECTORY_MAKE_DONE,
                 data: response.data
             })
         }).catch(response => {
             dispatch({
-                type: DIRECTORY_CREATE_FAIL,
+                type: DIRECTORY_MAKE_FAIL,
                 error: response.data
             })
         })

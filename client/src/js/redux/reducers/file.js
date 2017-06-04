@@ -20,9 +20,9 @@ import {
     DIRECTORIES_LIST_FETCH,
     DIRECTORIES_LIST_FAIL,
     DIRECTORIES_LIST_DONE,
-    DIRECTORIES_MAKE_FETCH,
-    DIRECTORIES_MAKE_FAIL,
-    DIRECTORIES_MAKE_DONE,
+    DIRECTORY_MAKE_FETCH,
+    DIRECTORY_MAKE_FAIL,
+    DIRECTORY_MAKE_DONE,
     CHANGE_DIRECTORY
 } from '../constants/action-types';
 
@@ -37,6 +37,11 @@ module.exports = function files (state = {
     fetching: false,
     error: false,
     workingPath: [""]
+  },
+  createDirectory: {
+    data: false,
+    fetching: false,
+    error: false
   },
   delete: {
     data: false,
@@ -113,7 +118,31 @@ module.exports = function files (state = {
           error: action.error
         })
       })
-    case DIRECTORIES_LIST_FETCH:
+    case DIRECTORY_MAKE_FETCH:
+      return Object.assign({}, state, {
+        createDirectory: Object.assign({}, state.createDirectory, {
+          fetching: true,
+          data: false,
+          error: false
+        })
+      })
+    case DIRECTORY_MAKE_DONE:
+      return Object.assign({}, state, {
+        createDirectory: Object.assign({}, state.createDirectory, {
+          fetching: false,
+          data: action.data,
+          error: false
+        })
+      })
+    case DIRECTORY_MAKE_FAIL:
+      return Object.assign({}, state, {
+        createDirectory: Object.assign({}, state.createDirectory, {
+          fetching: false,
+          data: false,
+          error: action.error
+        })
+      })
+      case DIRECTORIES_LIST_FETCH:
       return Object.assign({}, state, {
         listDirectories: Object.assign({}, state.listDirectories, {
           fetching: true,

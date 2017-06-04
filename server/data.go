@@ -158,7 +158,7 @@ func getDirectories(c echo.Context) error {
 	return c.JSON(http.StatusOK, fileNames)
 }
 
-/* /directories/:username/:dir */
+/* /directories/:username */
 func postDirectories(c echo.Context) error {
 	username := c.Param("username")
 	dir := c.QueryParam("dir")

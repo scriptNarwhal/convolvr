@@ -11,7 +11,7 @@ import (
 type User struct {
 	ID       int    `storm:"id,increment" json:"id"`
 	Name     string `storm:"index,unique" json:"name"`
-	Password string `json:"Password"`
+	Password string `json:"password"`
 	Email    string `storm:"unique" json:"email"`
 	Data     string `json:"data"`
 }
@@ -21,16 +21,31 @@ func NewUser(id int, name string, password string, email string, data string) *U
 }
 
 func getUsers(c echo.Context) error {
-	var users []User
+
+	var (
+		users         []User
+		filteredUsers []User
+	)
+
 	err := db.All(&users)
+
 	if err != nil {
 		log.Println(err)
 		return err
 	}
-	return c.JSON(http.StatusOK, &users)
+
+	for _, v := range users {
+
+		v.Password = ""
+		filteredUsers = append(filteredUsers, v)
+	}
+
+	return c.JSON(http.StatusOK, filteredUsers)
+
 }
 
 func postUsers(c echo.Context) (err error) {
+
 	var (
 		user           *User
 		foundUser      User
@@ -66,9 +81,11 @@ func postUsers(c echo.Context) (err error) {
 			return c.JSON(http.StatusOK, &authUsersFound[0]) // valid login
 		}
 	}
+
 }
 
 func getUserInventory(c echo.Context) (err error) {
+
 	var (
 		itemsFound []*Entity
 	)
@@ -88,10 +105,12 @@ func getUserInventory(c echo.Context) (err error) {
 	} else {
 		return c.JSON(http.StatusOK, &itemsFound)
 	}
+
 }
 
 // TODO: implement  saving item to inventory
 func saveItemToInventory(c echo.Context) (err error) {
+
 	var (
 		item *Entity
 	)
@@ -108,6 +127,7 @@ func saveItemToInventory(c echo.Context) (err error) {
 	}
 	userInventory.Save(&item)
 	return c.JSON(http.StatusOK, nil)
+
 }
 
 // TODO: implement removing item from inventory

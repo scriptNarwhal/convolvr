@@ -47,7 +47,7 @@ class Shell extends Component {
   }
 
   uploadFiles ( files ) {
-    let dir = ""
+    let dir = this.props.cwd.join("/")
     if (this.props.reactPath.indexOf("/chat") > -1) {
       dir = "chat-uploads"
     }
@@ -156,6 +156,7 @@ import {
 export default connect(
   state => {
     return {
+      cwd: state.files.listDirectories.workingPath,
       menuOpen: state.app.menuOpen,
       username: state.users.loggedIn != false ? state.users.loggedIn.name : "Human",
       users: state.users,
