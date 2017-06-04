@@ -48,13 +48,17 @@ class Shell extends Component {
 
   uploadFiles ( files ) {
 
-    let dir = this.props.cwd.join("/")
-    console.log("upload files dir ", dir)
-    if ( (dir == "/" || dir == "") && this.props.worldUser == this.props.username ) {
+    let dir = this.props.cwd.join("/"); console.log("upload files dir ", dir)
+    
+    if ( !!this.props.currentWorld ) {
 
-      dir = "/worlds/"+this.props.currentWorld
+      if ( (dir == "/" || dir == "") && this.props.worldUser == this.props.username ) {
 
-    } 
+        dir = "/worlds/"+this.props.currentWorld
+
+      } 
+
+    }
 
     if (this.props.reactPath.indexOf("/chat") > -1) {
       dir = "chat-uploads"
