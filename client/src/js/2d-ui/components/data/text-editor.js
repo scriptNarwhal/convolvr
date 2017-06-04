@@ -2,29 +2,75 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
 
-let styles = {
-  button: {
-    height: '32px',
-    display: 'inline-block',
-    marginLeft: '0.75em',
-    background: 'rgba(255, 255, 255, 0.15)',
-    textAlign: "center",
-    borderRadius: '1.5px',
-    boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)'
+let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
+    return `rgb(${r}, ${g}, ${b})`
   },
+  rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
+    return `rgba(${r}, ${g}, ${b}, ${a})`
+  }
+
+let styles = {
   modal: {
-    width: '60%',
+    width: '50%',
     maxWidth: '729px',
     minWidth: '320px',
-    padding: '1em',
+    height: '480px',
+    padding: '0.25em',
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    margin: 'auto'
+    margin: 'auto',
+    background: rgb(38, 38, 38),
+    borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+  },
+  lightbox: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    background: rgba(0, 0, 0, 0.8)
+  },
+  resultingPath: {
+    marginBottom: '1em'
+  },
+  cancelButton: {
+    borderLeft: 'solid 0.2em magenta'
+  },
+  header: {
+    width: '100%',
+    marginTop: '0.5em',
+    marginBotto: '0.5em'
+  },
+  text: {
+    width: '75%',
+    padding: '0.25em',
+    marginBottom: '0.5em',
+    background: '#212121',
+    border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
+    borderRadius: '2px',
+    fontSize: '1em',
+    color: 'white',
+  },
+  textArea: {
+    margin: '0px',
+    width: '580px',
+    height: '358px',
+    color: 'white',
+    marginBottom: '0.5em',
+    padding: '0.5em',
+    background: 'black'
+  },
+  body: {
+
+  },
+  title: {
+
   }
 }
+
 
 class TextEditor extends Component {
 
@@ -52,6 +98,38 @@ class TextEditor extends Component {
 
   }
 
+  handleTextChange (e) {
+
+    this.setState({
+      name: e.target.value
+    })
+
+  }
+
+  handleTextArea (e) {
+
+    this.setState({
+      text: e.target.value
+    })
+
+  }
+
+  save () {
+
+    let name = this.state.name
+
+    if ( name != "" ) {
+
+      this.toggleModal()
+
+    } else {
+
+      alert("Name is required.")
+
+    }
+
+  }
+
   toggleModal () {
 
     this.setState({
@@ -65,8 +143,19 @@ class TextEditor extends Component {
     if ( this.state.activated ) {
 
       return (
-        <div style={ styles.modal } >
-
+       <div style={ styles.lightbox }>
+          <div style={ styles.modal } >
+            <div style={ styles.header }>
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
+                <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
+              </span>
+            </div>
+            <div style={ styles.body }>
+              <textarea style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
+              <FileButton title="Save" onClick={ () => { this.save() } } />
+              <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
+            </div>
+          </div>
         </div>
       )
 
@@ -88,7 +177,11 @@ TextEditor.defaultProps = {
 import { connect } from 'react-redux'
 import {
     toggleMenu
- } from '../../../redux/actions/app-actions'
+} from '../../../redux/actions/app-actions'
+import {
+  readText,
+  writeText
+} from '../../../redux/actions/file-actions'
 
 export default connect(
   (state, ownProps) => {
@@ -101,6 +194,12 @@ export default connect(
   },
   dispatch => {
     return {
+      readText: (filename, username, dir) => {
+        dispatch( readText (filename, username, dir) )
+      },
+      writeText: (text, filename, username, dir) => {
+        dispatch ( writeText (text, filename, username, dir) )
+      },
       toggleMenu: (force) => {
           dispatch(toggleMenu(force))
       }

@@ -37,7 +37,7 @@ let styles = {
     marginBottom: '1em'
   },
   cancelButton: {
-    borderLeft: 'solid 0.2em red'
+    borderLeft: 'solid 0.2em magenta'
   },
   header: {
     width: '100%',

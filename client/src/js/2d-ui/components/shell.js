@@ -86,6 +86,7 @@ class Shell extends Component {
 		xhr.onload = function () {
 			if (xhr.status == 200) {
 				console.log("finished uploading")
+        shell.props.listFiles(shell.props.username, shell.props.cwd.join("/"))
 			}
 		}
 		xhr.open("POST", "/api/files/upload-multiple/"+username+"?dir="+dir, true);
@@ -164,6 +165,9 @@ import { toggleMenu, toggleVR } from '../../redux/actions/app-actions'
 import {
     sendMessage
 } from '../../redux/actions/message-actions'
+import {
+  listFiles
+} from '../../redux/actions/file-actions'
 
 export default connect(
   state => {
@@ -180,6 +184,9 @@ export default connect(
   },
   dispatch => {
     return {
+      listFiles: (username, dir) => {
+          dispatch(listFiles(username, dir))
+      },
       toggleMenu: (force) => {
         dispatch(toggleMenu(force))
       },
