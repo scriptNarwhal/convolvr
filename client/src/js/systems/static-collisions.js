@@ -3,7 +3,8 @@ export default class StaticCollisions {
 	constructor( world ) {
 
 		this.worker = null
-		let worker = new Worker('/data/js/workers/static-collisions.js')
+		this.entPos = new THREE.Vector3()
+		let worker = new Worker('/data/js/workers/static-collision.js')
 
 	      worker.onmessage = function ( event ) {
 
@@ -12,6 +13,7 @@ export default class StaticCollisions {
 				vrHeight = 0,
 	          	cam = three.camera,
 	          	user = world.user,
+				userPos = three.camera.position,
 	          	position = [],
 	          	velocity = []
 
@@ -37,8 +39,16 @@ export default class StaticCollisions {
 	          console.log("collision");
 	          console.log(message.data);
 
-		}  else if ( message.command == "entity-user collision" ) {
-			console.log("!!!!!  entity-user collision", message.data)
+		}  else if ( message.command == "entity-user collision" ) {  console.log("!!!!!  entity-user collision", message.data)
+
+			let distance = this.entPos.distanceTo( userPos ),
+				direction = this.entPos.sub(userPos)	
+
+			if ( distance < 50000) { // debug
+
+				three.camera.position.add(direction)
+
+			}
 
 		} else if ( message.command == "platform collision" ) { // consider sending "top" or "bottom" collision type
 

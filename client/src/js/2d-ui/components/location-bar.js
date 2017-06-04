@@ -84,7 +84,7 @@ export default class LocationBar extends Component {
             }
             { this.props.showFileOptions ? (
               <div style={styles.fileOptions}>
-                <UploadFiles username={ this.props.username } path={ this.props.path } />
+                
                 <TextEditor username={ this.props.username } path={ this.props.path } />
                 <NewFolder username={ this.props.username } path={ this.props.path } />
               </div>) : ""
@@ -93,7 +93,7 @@ export default class LocationBar extends Component {
     )
   }
 }
-
+//<UploadFiles username={ this.props.username } path={ this.props.path } />
 LocationBar.defaultProps = {
   path: [],
   username: "",

@@ -2,7 +2,7 @@ export default class DynamicCollisions {
 
 	constructor(world) {
 
-		let worker = this.worker = new Worker('/data/js/workers/dynamic-collisions.js')
+		let worker = this.worker = new Worker('/data/js/workers/dynamic-collision.js')
 		// consider using Cannon.js here in the near future.. 
 
 		this.world = world

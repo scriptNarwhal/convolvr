@@ -14,7 +14,10 @@ build() {
  [ -d $dist ] || mkdir -p $dist
  echo "browserify" $(pwd)/src/js/main.js
  browserify -d -e src/js/main.js -t babelify -o "$dist/js/app.js" -v
-
+ echo "browserify static-collision worker"
+ browserify -d -e src/js/workers/static-collisions.js -t babelify -o "$dist/js/workers/static-collision.js" -v
+ echo "browserify dynamic-collision worker"
+ browserify -d -e src/js/workers/dynamic-collisions.js -t babelify -o "$dist/js/workers/dynamic-collision.js" -v
 }
 
 build $output
