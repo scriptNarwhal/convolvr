@@ -47,7 +47,15 @@ class Shell extends Component {
   }
 
   uploadFiles ( files ) {
+
     let dir = this.props.cwd.join("/")
+    console.log("upload files dir ", dir)
+    if ( (dir == "/" || dir == "") && this.props.worldUser == this.props.username ) {
+
+      dir = "/worlds/"+this.props.currentWorld
+
+    } 
+
     if (this.props.reactPath.indexOf("/chat") > -1) {
       dir = "chat-uploads"
     }
@@ -117,9 +125,9 @@ class Shell extends Component {
                         e.preventDefault()
                         this.uploadFiles(e.target.files || e.dataTransfer.files)}
                     }
-            onDragEnter={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); this.setDropBackground(true) }}
-            onDragOver={e=>{ console.log(e);   e.preventDefault(); e.stopPropagation();  }}
-            onDragLeave={e=>{ console.log(e); e.preventDefault();  e.stopPropagation(); this.setDropBackground(false) }}
+            onDragEnter={e=>{ console.log(e); e.preventDefault(); e.stopPropagation(); this.setDropBackground(true) }}
+            onDragOver={e=> { console.log(e); e.preventDefault(); e.stopPropagation(); }}
+            onDragLeave={e=>{ console.log(e); e.preventDefault(); e.stopPropagation(); this.setDropBackground(false) }}
           onClick={e=> {
             if (e.target.getAttribute('id') == 'shell') {
               this.props.toggleMenu(true)
@@ -157,9 +165,11 @@ export default connect(
   state => {
     return {
       cwd: state.files.listDirectories.workingPath,
-      menuOpen: state.app.menuOpen,
+      currentWorld: state.worlds.current,
+      worldUser: state.worlds.worldUser,
       username: state.users.loggedIn != false ? state.users.loggedIn.name : "Human",
       users: state.users,
+      menuOpen: state.app.menuOpen,
       stereoMode: state.app.vrMode,
       reactPath: state.routing.locationBeforeTransitions.pathname
     }

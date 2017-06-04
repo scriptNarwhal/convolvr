@@ -111,7 +111,7 @@ class Settings extends Component {
       welcomeMessage: this.state.welcomeMessage,
       network: this.state.network
     }
-    this.props.updateUniverseSettings(data, this.props.user.Password)
+    this.props.updateUniverseSettings(data, this.props.user.password)
   }
   addServer() {
     let network = this.state.network
