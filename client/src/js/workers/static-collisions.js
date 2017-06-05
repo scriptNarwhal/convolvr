@@ -22,7 +22,7 @@ let observer = {
 		velocity: [0, 0, 0],
 		vrHeight: 0
 	},
-	entities = [],
+	voxelList = [],
 	voxels = []
 
 self.update = ( ) => {
@@ -50,13 +50,13 @@ self.update = ( ) => {
 		i = 0,
 		v = 0
 
-		for ( i = 0; i < voxels.length; i ++ ) {
+		for ( i = 0; i < voxelList.length; i ++ ) {
 
-			obj = voxels[i];
+			obj = voxelList[ i ]
 
 			if ( !!obj  && distance2dCompare( position, obj.position, 2500000 ) ) { 	// do collisions on voxels & structures... just walls at first..
 					
-				if (obj.loaded == undefined) {
+				if ( obj.loaded == undefined ) {
 				
 					obj.loaded = true
 					self.postMessage('{"command": "load entities", "data":{"coords":"'+obj.cell[0]+'.'+obj.cell[1]+'.'+obj.cell[2]+'"}}');
@@ -85,7 +85,7 @@ self.update = ( ) => {
 
 							ent = obj.entities[ e ]
 
-							if ( distance3dCompare( position, ent.position, (ent.boundingRadius||20000)+10000) ) { 
+							if ( distance3dCompare( position, ent.position, (ent.boundingRadius||50000)+10000) ) { 
 
 								collision = true
 								self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: ent.position }} ) )
@@ -106,7 +106,7 @@ self.update = ( ) => {
 
 	}
 
-	if ( !collision) {
+	if ( !collision ) {
 		observer.prevPos = [ observer.position[0], observer.position[1], observer.position[2] ]
 	}
 
@@ -121,9 +121,10 @@ self.onmessage = function ( event ) {
 	var message = JSON.parse( event.data ),
 		data = message.data,
 		user = observer,
-		platform = null,
+		voxel = null,
 		toRemove = null,
 		items = [],
+		entities = [],
 		c = 0,
 		p = 0
 		
@@ -135,7 +136,11 @@ self.onmessage = function ( event ) {
 		//self.postMessage(JSON.stringify(self.observer));
 	} else if ( message.command == "add voxels" ) {
 
-		voxels = voxels.concat(data);
+		voxelList = voxelList.concat(data)
+
+		data.map( v => {
+			voxels[ v.cell.join(".") ] = v
+		})
 
 	} else if ( message.command == "remove voxels" ) {
 
@@ -144,15 +149,16 @@ self.onmessage = function ( event ) {
 		while ( p >= 0 ) {
 
 			toRemove = data[p]
-			c = voxels.length-1
+			c = voxelList.length-1
 
 			while ( c >= 0 ) {
 
-				platform = voxels[ c ]
+				voxel = voxelList[ c ]
 
-				if ( platform != null && platform.cell[0] == toRemove.cell[0] && platform.cell[1] == toRemove.cell[1]  && platform.cell[2] == toRemove.cell[2] ) {
+				if ( voxel != null && voxel.cell[0] == toRemove.cell[0] && voxel.cell[1] == toRemove.cell[1]  && voxel.cell[2] == toRemove.cell[2] ) {
 					
-					voxels.splice( c, 1 )
+					voxelList.splice( c, 1 )
+					voxels[ voxel.cell.join(".")] = null
 				}
 
 				c--
@@ -193,7 +199,7 @@ self.onmessage = function ( event ) {
 		}
 
 	} else if ( message.command == "update entity" ) {
-
+		console.log("update entity, ", data.coords.join("."))
 		entities = voxels[ data.coords.join(".") ].entities
 
 		if ( entities != null ) {

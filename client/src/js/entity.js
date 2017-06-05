@@ -48,7 +48,7 @@ export default class Entity {
     if ( !! components ) {
 
       this.components = components
-      this.init( this.parent, { updateWorkers: true } )
+      this.init( this.anchor, { updateWorkers: true } )
 
     }
 
@@ -98,8 +98,18 @@ export default class Entity {
 
     if ( this.mesh != null ) {
 
-      world.octree.remove(this.mesh)
-      this.anchor.remove(this.mesh)
+      world.octree.remove( this.mesh )
+
+      if ( this.anchor ) {
+
+        this.anchor.remove( this.mesh )
+
+      } else {
+
+        three.scene.remove( this.mesh )
+
+      }
+      
       workerUpdate = !! config && config.updateWorkers ? "update" : workerUpdate
 
     } else {
@@ -171,7 +181,15 @@ export default class Entity {
 
     if ( !! workerUpdate ) {
 
-      let message = ""
+      let message = "",
+          entityData = {
+            id: this.id,
+            components: this.components,
+            position: this.position,
+            quaternion: this.quaternion,
+            boundingRadius: this.boundingRadius,
+            boundingBox: this.boundingBox
+          }
 
       if ( workerUpdate == "add" ) {
 

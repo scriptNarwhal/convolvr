@@ -1,9 +1,10 @@
+let entPos = new THREE.Vector3()
+
 export default class StaticCollisions {
 
 	constructor( world ) {
 
 		this.worker = null
-		this.entPos = new THREE.Vector3()
 		let worker = new Worker('/data/js/workers/static-collision.js')
 
 	      worker.onmessage = function ( event ) {
@@ -41,12 +42,15 @@ export default class StaticCollisions {
 
 		}  else if ( message.command == "entity-user collision" ) {  console.log("!!!!!  entity-user collision", message.data)
 
-			let distance = this.entPos.distanceTo( userPos ),
-				direction = this.entPos.sub(userPos)	
+			entPos.fromArray( message.data.position )
+
+			let distance = entPos.distanceTo( userPos ),
+				direction = entPos.sub(userPos)	
 
 			if ( distance < 50000) { // debug
 
-				three.camera.position.add(direction)
+				user.velocity.sub(direction)
+				//three.camera.position.add(direction)
 
 			}
 

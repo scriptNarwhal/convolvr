@@ -16,7 +16,8 @@ let distance2d = ( a, b ) => {
 
   }
 
-let voxels = {}, // map of string coordinates to arrays of entities
+let voxelList = [],
+	  voxels = {}, // map of string coordinates to arrays of entities
     observer = {
   		position: [0, 0, 0],
   		prevPos: [0, 0, 0],
@@ -30,6 +31,7 @@ self.onmessage = event => { // probably going to replace most of this worker wit
 	let message = JSON.parse(event.data),
 			data = message.data,
       entities = [],
+      toRemove = null,
       voxel = null,
       user = observer,
 			c = 0
@@ -42,11 +44,13 @@ self.onmessage = event => { // probably going to replace most of this worker wit
 
   } else if ( message.command == "add voxels" ) {
 
-    data.map( voxel => {
+    voxelList = voxelList.concat(data)
 
-      voxels[ voxel.cell.join(".") ] = voxel
+		data.map( v => {
+      
+			voxels[ v.cell.join(".") ] = v
 
-    })
+		})
 
   } else if ( message.command == "remove voxels" ) {
 
@@ -55,7 +59,8 @@ self.onmessage = event => { // probably going to replace most of this worker wit
 		while ( c >= 0 ) {
 
 			toRemove = data[ c ]
-			voxels[ toRemove.cell ] = null
+      voxelList.splice( voxelList.indexOf(voxels[ toRemove.cell ]) , 1 )
+      voxels[ toRemove.cell ] = null
 			c --
 
 		}
