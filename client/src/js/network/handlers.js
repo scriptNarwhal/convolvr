@@ -70,10 +70,10 @@ export default class SocketHandlers {
 				case "Component Tool":
 					chunk.entities.map(voxelEnt => { // find & re-init entity
 
-						if ( voxelEnt.id == data.entityId ) {
-							// console.log("got component tool message", data.entity.components); // concat with existing components array
-							voxelEnt.components = voxelEnt.components.concat(data.entity.components)
-							voxelEnt.init(three.scene)
+						if ( voxelEnt.id == data.entityId ) { // console.log("got component tool message", data.entity.components); // concat with existing components array
+						
+							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
+						
 						}
 
 					})
@@ -89,8 +89,7 @@ export default class SocketHandlers {
 
 						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
-							//voxelEnt.components = voxelEnt.components.concat(data.entity.components)
-							//voxelEnt.init(three.scene)
+							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
 						}
 
 					})
@@ -100,8 +99,7 @@ export default class SocketHandlers {
 
 						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
-							//voxelEnt.components = voxelEnt.components.concat(data.entity.components)
-							//voxelEnt.init(three.scene)
+							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
 						}
 
 					})
@@ -111,8 +109,7 @@ export default class SocketHandlers {
 
 						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
-							//voxelEnt.components = voxelEnt.components.concat(data.entity.components)
-							//voxelEnt.init(three.scene)
+							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
 						}
 						
 					})

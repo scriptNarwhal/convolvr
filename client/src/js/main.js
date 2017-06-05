@@ -73,8 +73,8 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
   helpScreen.components[0].props.text.lines = [
       "#💻 Desktop users",
       "- ⌨️ WASD, RF, space keys: movement",
-      "- Mouselook (click screen to enable)",
-      "- Left/right click: primary tool / mode",
+      "- Mouselook (click screen)",
+      "- Left/right click: use tool / cycle mode",
       "- Keys 0-9: switch tool",
       "- 🎮 Gamepads are supported",
       "",

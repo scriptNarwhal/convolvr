@@ -173,13 +173,13 @@ self.onmessage = function ( event ) {
 
     	entities = voxels[ data.coords.join(".") ].entities
 
-		if (entities != null) {
+		if ( entities != null ) {
 
-		c = entities.length-1
+			c = entities.length-1
 
 			while ( c >= 0 ) {
 
-				if (entities[c].id == data.entityId) {
+				if ( entities[c].id == data.entityId ) {
 
 					voxels[ data.coords.join(".") ].entities.splice(c, 1)
 					c = -1
@@ -196,7 +196,7 @@ self.onmessage = function ( event ) {
 
 		entities = voxels[ data.coords.join(".") ].entities
 
-		if (entities != null) {
+		if ( entities != null ) {
 
 			c = entities.length-1
 

@@ -23,10 +23,41 @@ export default class Entity {
 
   }
 
-  update ( position, quaternion = false ) {
+  update ( position, quaternion = false, components, componentIndex, props, state ) {
 
-    this.position = position
-    this.mesh.position.fromArray( position )
+    let component = null
+
+    if ( !! componentIndex ) {
+
+      component = this.components[ componentIndex ]
+
+      if ( !! props ) {
+
+        component.props = Object.assign({}, component.props, props)
+
+      }
+
+      if ( !! state ) {
+
+        component.props = Object.assign({}, component.props, props)
+
+      }
+
+    }
+
+    if ( !! components ) {
+
+      this.components = components
+      this.init( this.parent, { updateWorkers: true } )
+
+    }
+
+    if ( !! position ) {
+
+      this.position = position
+      this.mesh.position.fromArray( position )
+
+    }
 
     if ( !!quaternion ) {
 
@@ -39,7 +70,7 @@ export default class Entity {
 
   }
 
-  init ( scene ) {
+  init ( parent, config ) {
 
     var mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
@@ -55,6 +86,7 @@ export default class Entity {
         compRadius = 10000,
         materials = [],
         addToOctree = true,
+        workerUpdate = "",
         comp = null,
         face = 0,
         faces = null,
@@ -67,10 +99,16 @@ export default class Entity {
     if ( this.mesh != null ) {
 
       world.octree.remove(this.mesh)
+      this.anchor.remove(this.mesh)
+      workerUpdate = !! config && config.updateWorkers ? "update" : workerUpdate
 
-      scene.remove(this.mesh)
+    } else {
+
+      workerUpdate = !! config && config.updateWorkers ? "add" : workerUpdate
 
     }
+
+    this.anchor = parent 
 
     while ( c < ncomps ) {
 
@@ -131,6 +169,39 @@ export default class Entity {
     this.boundingRadius = Math.max( dimensions[0], dimensions[1], dimensions[2] )
     this.boundingBox = dimensions
 
+    if ( !! workerUpdate ) {
+
+      let message = ""
+
+      if ( workerUpdate == "add" ) {
+
+        message = {
+          command: "add entity",
+          data: {
+            coords: this.voxel,
+            entity: entityData
+          }
+        }
+        systems.staticCollisions.worker.postMessage( JSON.stringify(message) )
+        systems.dynamicCollisions.worker.postMessage( JSON.stringify(message) )
+
+      } else if ( workerUpdate == "update") {
+        
+        message = {
+          command: "update entity",
+          data: { 
+            entityId: this.id,
+            coords: this.voxel,
+            entity: entityData
+          }
+        }
+        systems.staticCollisions.worker.postMessage( JSON.stringify(message) )
+        systems.dynamicCollisions.worker.postMessage( JSON.stringify(message) )
+
+      }
+
+    }
+
     if ( s > 0 ) {
 
       mesh = new THREE.Mesh(base, new THREE.MultiMaterial( materials ))
@@ -167,7 +238,7 @@ export default class Entity {
 
     addToOctree && world.octree.add( mesh )
 
-    scene.add( mesh )
+    parent.add( mesh )
     this.mesh = mesh
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()

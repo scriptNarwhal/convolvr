@@ -74,7 +74,7 @@ self.onmessage = event => { // probably going to replace most of this worker wit
 
     entities = voxels[data.coords.join(".")].entities
 
-    if (entities != null) {
+    if ( entities != null ) {
 
       c = entities.length-1
 
@@ -97,13 +97,13 @@ self.onmessage = event => { // probably going to replace most of this worker wit
 
 		entities = voxels[ data.coords.join(".") ].entities
 
-		if (entities != null) {
+		if ( entities != null ) {
 
 			c = entities.length-1
 
 			while ( c >= 0 ) {
 
-				if (entities[ c ].id == data.entityId) {
+				if ( entities[ c ].id == data.entityId ) {
 
 					entities[ c ] = data.entity
 					c = -1
@@ -152,29 +152,27 @@ self.update = () => {
       i = 0,
       o = 0
 
-  while (x <= 2) { // only simulate entities in 9 voxels around the user
+  while ( x <= 2 ) { // only simulate entities in 9 voxels around the user
 
-    while (z <= 2) {
+    while ( z <= 2 ) {
 
       key = (x+coords[0])+'.0.'+(z+coords[2])
 
-      if (voxels[key] != null) {
+      if ( voxels[key] != null ) {
 
         entities = voxels[key].entities
 
-        if (!!entities) {
+        if ( !!entities ) {
 
           i = entities.length
 
-          while (i >= 0) {
+          while ( i >= 0 ) {
 
             obj = entities[i]
-
-            if (!!obj) {
             
-              if (!! obj.moving) { //moving) {
+            if ( !!obj && !! obj.moving ) { //moving) {
                 
-                o = entities.length -1 // if moving, check collisions against all other entities (in that voxel)
+              o = entities.length -1 // if moving, check collisions against all other entities (in that voxel)
                 
                 while (o >= 0) {
 
@@ -190,8 +188,6 @@ self.update = () => {
                   o --
 
                 }
-
-              }
 
             }
 
