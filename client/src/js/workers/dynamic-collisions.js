@@ -179,7 +179,7 @@ self.update = () => {
                 
               o = entities.length -1 // if moving, check collisions against all other entities (in that voxel)
                 
-                while (o >= 0) {
+                while ( o >= 0 ) {
 
                   secondObj = entities[o]
                   secondPos = secondObj.position

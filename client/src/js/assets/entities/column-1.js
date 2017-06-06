@@ -1,5 +1,6 @@
 let column1 = {
             id: 0,
+            name: "column1",
             components: [
                 {
                 props: {

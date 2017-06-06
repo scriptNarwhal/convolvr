@@ -1,5 +1,6 @@
 let wirebox = {
     id: 0,
+    name: "wirebox",
     components: [
         {
             props: {
@@ -19,13 +20,13 @@ let wirebox = {
         {
             props: {
                 geometry: {
-                merge: true,
-                shape: "torus",
-                size: [16000, 16000, 1000]
+                    merge: true,
+                    shape: "torus",
+                    size: [16000, 16000, 1000]
                 },
                 material: {
-                color: 0x808080,
-                name: "plastic"
+                    color: 0x808080,
+                    name: "plastic"
                 }
             },
             quaternion: null,

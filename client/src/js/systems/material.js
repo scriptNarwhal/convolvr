@@ -27,7 +27,7 @@ export default class MaterialSystem {
             simpleShading = this.world.lighting != 'high',
             renderer = three.renderer
 
-        if ( assets.materials[materialCode] == null ) {
+        if ( assets.materials[ materialCode ] == null ) {
 
           if ( !! prop.config ) { // raw, three.js material properties, to override things
 
@@ -113,17 +113,13 @@ export default class MaterialSystem {
             shading = 'phong'
             material = this._initMaterial( prop, mat, shading, basic, mobile )
 
-            if ( prop.specular ) {
+            prop.specularMap && assets.loadImage( prop.specularMap, textureConfig, ( specularMap ) => { 
 
-              assets.loadImage( prop.specular, textureConfig, ( specularMap )=>{ 
+                  specularMap.anisotropy = renderer.getMaxAnisotropy()
+                  material.specularMap = specularMap
+                  material.needsUpdate = true 
 
-                specularMap.anisotropy = renderer.getMaxAnisotropy()
-                material.specularMap = specularMap
-                material.needsUpdate = true 
-
-              })
-
-            }
+            })
 
             !!prop.map && assets.loadImage( prop.map, textureConfig, (texture) => { 
 
@@ -257,7 +253,7 @@ export default class MaterialSystem {
                 prop.map = '/data/images/textures/shattered_@2X.png'
                 prop.specularMap = '/data/images/textures/gplaypattern_@2X.png'
                 prop.envMap = 'none'
-                prop.repeat = [ 'wrapping', 12, 12 ]
+                prop.repeat = [ 'wrapping', 14, 14 ]
             break
             case "metal":
                 //prop.envMap = '/data/images/textures/sky-reflection.jpg'

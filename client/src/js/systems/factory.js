@@ -41,6 +41,7 @@ export default class FactorySystem {
             entityPos = !!prop.anchorOutput ? [0, 0, 0] : position.toArray(),
             miniature = !!prop.miniature,
             type = prop.type,
+            preset = prop.preset,
             propName = prop.propName,
             data = prop.data,
             quat = data.quaternion,
@@ -49,7 +50,7 @@ export default class FactorySystem {
             
         if ( type == 'entity' ) {
  
-            created = this._generateEntity( components, entityPos, quat )
+            created = this._generateEntity( components, entityPos, quat, preset )
 
         } else if (type == 'component') {
 
@@ -107,11 +108,17 @@ export default class FactorySystem {
 
     }
 
-    _generateEntity ( components, position, quaternion ) { 
+    _generateEntity ( components, position, quaternion, preset ) { 
 
         if ( !! components && components.length > 0 ) { // debugging this..
             
             components[0].props.miniature = { }
+            components[0].props.toolUI = {
+            configureTool: {
+                tool: 0,
+                preset
+            }
+        }
         
         }
 
@@ -122,6 +129,12 @@ export default class FactorySystem {
     _generateComponent ( data, position, quaternion ) {
 
         data.props.miniature = { }
+        data.props.toolUI = {
+            configureTool: {
+                tool: 1,
+                data
+            }
+        }
         return new Entity( -1, [ data ], position, quaternion )
     }
 
@@ -134,6 +147,12 @@ export default class FactorySystem {
                     material: {
                         name: "wireframe",
                         color: 0xffffff
+                    },
+                    toolUI: {
+                        configureTool: {
+                            tool: 3,
+                            preset: data.shape
+                        }
                     }
                 }
             )}
@@ -153,6 +172,12 @@ export default class FactorySystem {
                     geometry: {
                         shape: "sphere",
                         size: [4500, 4500, 4500]
+                    },
+                    toolUI: {
+                        configureTool: {
+                            tool: 2,
+                            data
+                        }
                     }
                 }
             )}
@@ -168,6 +193,12 @@ export default class FactorySystem {
                     geometry: {
                         shape: "sphere",
                         size: [4500, 4500, 4500]
+                    },
+                    toolUI: {
+                        configureTool: {
+                            tool: 4,
+                            data
+                        }
                     }
                 }
             )}

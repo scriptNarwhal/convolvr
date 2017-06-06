@@ -1,5 +1,6 @@
 let panel1 = {
         id: 0,
+        name: "panel1",
         components: [
             {
                 props: {

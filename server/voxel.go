@@ -37,6 +37,7 @@ func getWorldChunks(c echo.Context) error {
 		entities       []*Entity
 		chunkVoxels    []*Voxel
 	)
+	generatedBuildings := 0
 	chunk := c.Param("chunks")
 	world := c.Param("worldId")
 	chunks := strings.Split(chunk, ",")
@@ -90,7 +91,8 @@ func getWorldChunks(c echo.Context) error {
 
 				if canPlaceStructureAt(x, 0, z) {
 
-					entities = append(entities, generateBuilding(world, x, z, altitude))
+					entities = append(entities, generateBuilding(generatedBuildings, world, x, z, altitude))
+					generatedBuildings++
 
 				}
 

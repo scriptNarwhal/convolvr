@@ -77,7 +77,9 @@ class TextEditor extends Component {
   constructor () {
 
     this.state = {
-      activated: false
+      activated: false,
+      text: "",
+      name: ""
     }
 
   }
@@ -85,12 +87,27 @@ class TextEditor extends Component {
   componentWillMount () {
 
     this.setState({
-      activated: false
+      activated: false,
+      editMode: false
     })
+
+    if ( !!this.props.fileURL ) {
+
+      this.props.readText( this.props.fileURL, this.props.username, this.props.cwd.join("/") )
+
+    }
     
   }
 
   componentWillReceiveProps ( nextProps ) {
+
+    if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.readText ) {
+
+      this.setState({
+        text: nextProps.readText
+      })
+
+    }
 
   }
 
@@ -120,6 +137,7 @@ class TextEditor extends Component {
 
     if ( name != "" ) {
 
+      this.props.writeText( this.state.text, name, this.props.username, this.props.cwd.join("/") )
       this.toggleModal()
 
     } else {

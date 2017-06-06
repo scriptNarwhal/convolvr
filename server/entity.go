@@ -16,8 +16,18 @@ type Entity struct {
 	Quaternion []float64    `json:"quaternion"`
 }
 
-func NewEntity(name string, world string, components []*Component, pos []float64, quat []float64) *Entity {
-	return &Entity{Name: name, World: world, Components: components, Position: pos, Quaternion: quat}
+func NewEntity(id int, name string, world string, components []*Component, pos []float64, quat []float64) *Entity {
+
+	if id == -1 {
+
+		return &Entity{Name: name, World: world, Components: components, Position: pos, Quaternion: quat}
+
+	} else {
+
+		return &Entity{ID: id, Name: name, World: world, Components: components, Position: pos, Quaternion: quat}
+
+	}
+
 }
 
 func getEntities(c echo.Context) error { // entity types

@@ -85,10 +85,18 @@ self.update = ( ) => {
 
 							ent = obj.entities[ e ]
 
-							if ( distance3dCompare( position, ent.position, (ent.boundingRadius||50000)+10000) ) { 
+							if ( distance3dCompare( position, ent.position, (ent.boundingRadius||100000)+10000) ) { 
 
-								collision = true
-								self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: ent.position }} ) )
+								ent.components.map( entComp => {
+
+									if ( distance3dCompare( position, entComp.position, entComp.boundingRadius || 20000) ) {
+
+										collision = true
+										self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: entComp.position }} ) )
+
+									}
+
+								})
 
 							}
 

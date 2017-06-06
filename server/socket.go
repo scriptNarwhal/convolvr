@@ -37,7 +37,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) {
 
 		if action.Tool == "Entity Tool" {
 
-			entity = *NewEntity("", action.World, action.Entity.Components, action.Position, action.Quaternion)
+			entity = *NewEntity(-1, "", action.World, action.Entity.Components, action.Position, action.Quaternion)
 			saveErr := voxelEntities.Save(&entity)
 			if saveErr != nil {
 				log.Println(saveErr)

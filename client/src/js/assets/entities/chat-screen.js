@@ -1,5 +1,6 @@
 let chatScreen = {
         id: -4,
+        name: "chat-screen",
         components: [
             {
                 props: {

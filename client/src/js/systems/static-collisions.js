@@ -40,7 +40,7 @@ export default class StaticCollisions {
 	          console.log("collision");
 	          console.log(message.data);
 
-		}  else if ( message.command == "entity-user collision" ) {  console.log("!!!!!  entity-user collision", message.data)
+		}  else if ( message.command == "entity-user collision" ) {  //console.log("!!!!!  entity-user collision", message.data)
 
 			entPos.fromArray( message.data.position )
 
@@ -49,7 +49,7 @@ export default class StaticCollisions {
 
 			if ( distance < 50000) { // debug
 
-				user.velocity.sub(direction)
+				user.velocity.sub( direction.multiplyScalar(20000) )
 				//three.camera.position.add(direction)
 
 			}

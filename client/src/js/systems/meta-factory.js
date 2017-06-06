@@ -1,6 +1,6 @@
 export default class MetaFactorySystem {
     
-    constructor (world) {
+    constructor ( world ) {
 
         this.world = world
         // this should only support a limited subset of things.. as not to cuase insanity :P
@@ -9,7 +9,7 @@ export default class MetaFactorySystem {
 
     }
 
-    init (component) { 
+    init ( component ) { 
         
         let components = component.components,
             prop = component.props.metaFactory,
@@ -20,6 +20,7 @@ export default class MetaFactorySystem {
             gridSize = prop.gridSize || 20000,
             vOffset = prop.vOffset || -12000,
             sourceCategory = "none",
+            preset = "",
             factories = [],
             keys = {},
             x = 0,
@@ -27,13 +28,15 @@ export default class MetaFactorySystem {
             
         if ( typeof source.map == 'function') { // array of geometries / materials, components, entities, worlds, places, files, (directories could use source[category])
 
-            source.map((item, i) => {
+            source.map( (item, i) => {
                 
                 if ( assetType == 'entity' && typeof item == 'function' ) {
                     return
                 }
 
-                this._addComponent( component, item, assetType, category, x, y, gridSize, vOffset)
+                preset = assetType == "entity" ? item.name : ""
+
+                this._addComponent( component, item, assetType, category, preset, x, y, gridSize, vOffset)
 
                 x ++
 
@@ -48,10 +51,10 @@ export default class MetaFactorySystem {
             
         } else { // map through system categories
             
-            sourceCategory = source[category]
-            keys = Object.keys(sourceCategory) // structures, vehicles, media, interactivity
+            sourceCategory = source[ category ]
+            keys = Object.keys( sourceCategory ) // structures, vehicles, media, interactivity
             
-            keys.map(key => {
+            keys.map( key => {
                 
                 x ++
 
@@ -62,7 +65,7 @@ export default class MetaFactorySystem {
 
                 } 
 
-                this._addComponent( component, sourceCategory[key], assetType, "systems", x, y, gridSize, vOffset)
+                this._addComponent( component, sourceCategory[ key ], assetType, "systems", preset,  x, y, gridSize, vOffset)
 
 
             })
@@ -71,7 +74,7 @@ export default class MetaFactorySystem {
 
     }
 
-    _addComponent ( component, factoryItem, assetType, assetCategory, x, y, gridSize, vOffset ) {
+    _addComponent ( component, factoryItem, assetType, assetCategory, preset, x, y, gridSize, vOffset ) {
 
         let addTo = null
 
@@ -90,6 +93,7 @@ export default class MetaFactorySystem {
                     factory: {
                         type: assetType,
                         data: factoryItem,
+                        preset,
                         propName: assetCategory,
                         anchorOutput: true
                     },

@@ -3,7 +3,7 @@ import Entity from '../../entity'
 
 export default class EntityTool extends Tool  {
 
-  constructor (data, world, toolbox) {
+  constructor ( data, world, toolbox ) {
 
     super(data, world, toolbox)
 

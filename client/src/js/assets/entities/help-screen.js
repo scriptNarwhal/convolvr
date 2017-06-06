@@ -1,5 +1,6 @@
 let helpScreen = {
     id: -3,
+    name: "help-screen",
     components: [
         {
             props: {

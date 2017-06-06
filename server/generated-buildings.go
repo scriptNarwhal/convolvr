@@ -5,7 +5,7 @@ import (
 	"math/rand"
 )
 
-func generateBuilding(world string, x int, z int, altitude float32) *Entity {
+func generateBuilding(id int, world string, x int, z int, altitude float32) *Entity {
 	var (
 		structure           *Entity
 		structureComponents []*Component
@@ -43,7 +43,7 @@ func generateBuilding(world string, x int, z int, altitude float32) *Entity {
 		structureComponents = append(structureComponents, wall)
 	}
 	structurePos := []float64{100000 + (float64(x) * 928000.0), float64(altitude) + 10000, float64(z) * 807360.0} //  + (structureSize * width)
-	structure = NewEntity("Generic Building", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0})
+	structure = NewEntity(id+1, "Generic Building", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0})
 	return structure
 }
 
