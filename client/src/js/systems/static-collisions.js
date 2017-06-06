@@ -35,10 +35,9 @@ export default class StaticCollisions {
 	          ','+user.velocity.z+
 						'],"vrHeight":'+vrHeight+'}}');
 
-		  } else if ( message.command == "collision" ) { // not implemented
-
-	          console.log("collision");
-	          console.log(message.data);
+		} else if ( message.command == "collision" ) { console.log("collision") // not implemented
+	          
+	        console.log(message.data)
 
 		}  else if ( message.command == "entity-user collision" ) {  //console.log("!!!!!  entity-user collision", message.data)
 

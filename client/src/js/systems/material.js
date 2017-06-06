@@ -250,10 +250,10 @@ export default class MaterialSystem {
                 basic = true
             break
             case "terrain":
-                prop.map = '/data/images/textures/shattered_@2X.png'
-                prop.specularMap = '/data/images/textures/gplaypattern_@2X.png'
+                prop.map = '/data/images/textures/wall4_@2X.png' // /data/images/textures/gplaypattern_@2X.png'
+                prop.specularMap = '/data/images/textures/shattered_@2X.png'
                 prop.envMap = 'none'
-                prop.repeat = [ 'wrapping', 14, 14 ]
+                prop.repeat = [ 'wrapping', 12, 12 ]
             break
             case "metal":
                 //prop.envMap = '/data/images/textures/sky-reflection.jpg'

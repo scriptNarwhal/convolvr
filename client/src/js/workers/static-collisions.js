@@ -7,12 +7,12 @@ let distance2d = ( a, b ) => {
   },
   distance2dCompare = ( a, b, n ) => { // more efficient version of distance2d()
 
-	  return Math.pow( (a[0]-b[0]), 2 )+Math.pow( (a[2]-b[2]), 2 ) < (n*n)
+	  return Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) < (n*n)
 
   },
   distance3dCompare = ( a, b, n ) => { // ..faster than using Math.sqrt()
 
-	  return (Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[1]-b[1]), 2 ) + Math.pow( (a[2]-b[2]), 2 )) < (n*n)
+	  return (Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[1]-b[1]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) ) < (n*n)
 
   }
 
@@ -50,31 +50,31 @@ self.update = ( ) => {
 		i = 0,
 		v = 0
 
-		for ( i = 0; i < voxelList.length; i ++ ) {
+	for ( i = 0; i < voxelList.length; i ++ ) {
 
-			obj = voxelList[ i ]
+		obj = voxelList[ i ]
 
-			if ( !!obj  && distance2dCompare( position, obj.position, 2500000 ) ) { 	// do collisions on voxels & structures... just walls at first..
+		if ( !!obj  && distance2dCompare( position, obj.position, 2500000 ) ) { 	// do collisions on voxels & structures... just walls at first..
 					
-				if ( obj.loaded == undefined ) {
+			if ( obj.loaded == undefined ) {
 				
-					obj.loaded = true
-					self.postMessage('{"command": "load entities", "data":{"coords":"'+obj.cell[0]+'.'+obj.cell[1]+'.'+obj.cell[2]+'"}}');
+				obj.loaded = true
+				self.postMessage('{"command": "load entities", "data":{"coords":"'+obj.cell[0]+'.'+obj.cell[1]+'.'+obj.cell[2]+'"}}');
 						
-				}
+			}
 
-				if ( distance2dCompare( position, obj.position, 900000 ) ) {
+			if ( distance2dCompare( position, obj.position, 900000 ) ) {
 					
-					let alt = obj.altitude || 0
-						yPos = obj.position[1]
+				let alt = obj.altitude || 0
+					yPos = obj.position[1]
 				
 				if ( distance2dCompare( position, obj.position, 528000 ) ) {
-					
+						
 					if ( position[1] > yPos - 160000 + vrHeight  && position[1] < yPos + 470000 + vrHeight ) {
 
-						collision = true;
+						collision = true
 						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');
-				
+					
 					}
 
 					if ( !!obj.entities && obj.entities.length > 0 ) {
@@ -89,10 +89,22 @@ self.update = ( ) => {
 
 								ent.components.map( entComp => {
 
-									if ( distance3dCompare( position, entComp.position, entComp.boundingRadius || 20000) ) {
+									if ( distance3dCompare( position, entComp.position, entComp.boundingRadius || 28000) ) {
 
 										collision = true
-										self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: entComp.position }} ) )
+
+										if ( !! entComp.props.floor ) { 
+
+											self.postMessage( JSON.stringify( {command: "floor collision", data: { 
+												position: entComp.position, 
+												floorData: entComp.props.floor
+											}}))
+
+										} else {
+
+											self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: entComp.position }} ) )
+
+										}
 
 									}
 
@@ -105,10 +117,10 @@ self.update = ( ) => {
 						}
 
 					}
-						
+							
 				}
 							
-			 }
+			}
 
 		}
 
@@ -207,7 +219,7 @@ self.onmessage = function ( event ) {
 		}
 
 	} else if ( message.command == "update entity" ) {
-		console.log("update entity, ", data.coords.join("."))
+
 		entities = voxels[ data.coords.join(".") ].entities
 
 		if ( entities != null ) {
