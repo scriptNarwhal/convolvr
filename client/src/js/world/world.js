@@ -344,16 +344,22 @@ export default class Convolvr {
 
 	}
 
-	load ( userName, name, callback ) {
+	load ( userName, name, callback, readyCallback ) { console.log("load world", userName, name)
+
 		let world = this
-		console.log("load world", userName, name)
-		this.name = name; // fix this... needs userName now
+		
+		this.name = name
+		console.log( this.systems.terrain )
+		this.systems.terrain.readyCallback = readyCallback
 	
-		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then(response => {
+		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then( response => { // fix this... needs userName now
+
 			 this.init(response.data, ()=> { callback && callback(world) } )
 
 		}).catch(response => {
+
 			console.log("World Error", response)
+
 		})
 
 	}

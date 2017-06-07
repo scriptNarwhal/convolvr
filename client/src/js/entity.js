@@ -345,4 +345,12 @@ export default class Entity {
 
   }
 
+  getVoxel () {
+
+    let position = this.mesh.position
+
+    return [ Math.floor( position.z / 928000 ), 0, Math.floor( position.z / 807360 ) ]
+
+  }
+
 }

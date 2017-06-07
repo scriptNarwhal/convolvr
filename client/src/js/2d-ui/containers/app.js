@@ -80,16 +80,17 @@ class App extends Component {
 
     this.props.fetchUniverseSettings()
 
-    setTimeout( ()=> {
+    setTimeout( ()=> { console.log("world & worldUser ", world, worldUser )
 
-      let world = three.world,
+      let world = three.world, 
           worldName = this.props.world,
           worldUser = this.props.worldUser
-      console.log("world & worldUser ", world, worldUser )
+      
       let init3DUI = () => {
 
         let world = window.three.world,
-            altitude = (world.terrain.voxels["0.0.0"].data.altitude) - 52000
+            voxelKey = world.user.avatar.getVoxel().join("."),
+            altitude = (world.terrain.voxels[ voxelKey ].data.altitude) - 52000
 
         world.chat.update( [ 0, altitude, -5000 ] )
         world.help.update( [ -80000, altitude, -5000 ] )
@@ -97,7 +98,7 @@ class App extends Component {
 
         if (three.camera.position.y < altitude) {
 
-          three.camera.position.y = (world.terrain.voxels["0.0.0"].data.altitude) + 20000
+          three.camera.position.y = (world.terrain.voxels[ voxelKey ].data.altitude) + 50000
 
         }
 
@@ -105,13 +106,11 @@ class App extends Component {
 
       }
 
-      world.load( worldUser, worldName, () => {
+      world.load( worldUser, worldName, () => { /* systems online */ }, ()=> { /* terrain finished loading */
 
-        setTimeout( () => {
 
-          init3DUI() // wait for world & terrain to load before positioning these
-
-        }, 2500)
+        console.log("init 3d UI / terrain loaded")
+        init3DUI()
 
       })
 
