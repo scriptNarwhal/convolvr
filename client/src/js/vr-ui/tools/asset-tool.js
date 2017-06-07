@@ -36,7 +36,7 @@ export default class AssetTool extends Tool {
               }
             },
             components: [
-              this.initLabel("Asset Tool")
+              this.initLabel( false, "Asset Tool")
             ]
           }
         ])

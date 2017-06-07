@@ -42,7 +42,7 @@ export default class ComponentTool extends Tool {
               }
             },
             components: [
-              this.initLabel("Component")
+              this.initLabel( false, "Component")
             ]
           }
         ])

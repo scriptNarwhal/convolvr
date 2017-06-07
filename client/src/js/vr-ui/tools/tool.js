@@ -79,7 +79,7 @@ export default class Tool {
 
     }
 
-    initLabel ( value ) {
+    initLabel ( component, value ) {
 
       return {
             props: {
@@ -88,7 +88,7 @@ export default class Tool {
                 size: [ 8000, 3000, 2000 ]
               },
               material: {
-                name: "glass"
+                name: "plastic"
               },
               text: {
                 label: true,

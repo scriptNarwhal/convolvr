@@ -36,7 +36,7 @@ export default class MaterialTool extends Tool {
               }
             },
             components: [
-              this.initLabel("Material")
+              this.initLabel( false, "Material")
             ]
           }
         ])

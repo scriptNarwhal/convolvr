@@ -89,7 +89,7 @@ export default class ToolSystem {
             },
             initLabel: ( value ) => {
 
-                this._initLabel( component, value )
+                this.initLabel( component, value )
             
             }
         }
@@ -148,7 +148,7 @@ export default class ToolSystem {
 
     }
 
-    _initLabel ( component, value ) {
+    initLabel ( component, value ) {
 
         return {
             props: {

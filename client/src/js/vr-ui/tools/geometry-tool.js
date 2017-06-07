@@ -37,7 +37,7 @@ export default class GeometryTool extends Tool {
               }
             },
             components: [
-              this.initLabel("Geometry")
+              this.initLabel( false, "Geometry")
             ]
           }
         ])

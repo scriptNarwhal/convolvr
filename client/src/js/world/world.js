@@ -179,7 +179,7 @@ export default class Convolvr {
 
 		if ( !!! skybox ) {
 
-			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 12000000+(this.viewDistance*1.4)*600000, 4), skyMaterial )
+			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 12000000+((this.viewDistance+2)*1.4)*600000, 4), skyMaterial )
 		
 		} else {
 
@@ -406,9 +406,9 @@ export default class Convolvr {
 
 			if (voxel != null && voxel.cleanUp == false) {
 
-				voxel.entities.map(entity=>{
+				voxel.entities.map( ( entity, i )=>{
 
-					entity.init(scene)
+					i > 0 && entity.init(scene)
 
 				})
 

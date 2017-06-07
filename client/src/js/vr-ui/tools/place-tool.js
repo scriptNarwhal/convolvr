@@ -38,7 +38,7 @@ export default class PlaceTool extends Tool {
               }
             },
             components: [
-              this.initLabel("Places")
+              this.initLabel( false, "Places")
             ]
           }
         ])

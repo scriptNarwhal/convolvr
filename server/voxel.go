@@ -18,14 +18,11 @@ type Voxel struct {
 	Altitude float32   `json:"altitude"`
 	World    string    `storm:"id" json:"world"`
 	Name     string    `json:"name"`
-	Geometry string    `json:"geometry"`
-	Material string    `json:"material"`
-	Color    int       `json:"color"`
 	Entities []*Entity `json:"entities"`
 }
 
-func NewVoxel(id int, x int, y int, z int, alt float32, world string, name string, geom string, mat string, color int, entities []*Entity) *Voxel {
-	return &Voxel{id, x, y, z, alt, world, name, geom, mat, color, entities}
+func NewVoxel(id int, x int, y int, z int, alt float32, world string, name string, entities []*Entity) *Voxel {
+	return &Voxel{id, x, y, z, alt, world, name, entities}
 }
 
 func getWorldChunks(c echo.Context) error {
@@ -81,7 +78,9 @@ func getWorldChunks(c echo.Context) error {
 
 			}
 
-			chunkGeom := "flat"
+			// create terrain as entity.. 1st entity in voxel should have higher LOD priority / further distance
+			entities = append(entities, generateTerrain(world, x, y, z, altitude, worldData.Terrain.Color, "metalic"))
+
 			initErr := voxelEntities.Init(&Entity{})
 			if initErr != nil {
 				log.Println(initErr)
@@ -98,7 +97,7 @@ func getWorldChunks(c echo.Context) error {
 
 			}
 
-			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", chunkGeom, "metal", worldData.Terrain.Color, nil)
+			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", nil)
 			saveErr := voxel.Save(&generatedChunk)
 			generatedChunk.Entities = entities
 			chunksData = append(chunksData, generatedChunk)
@@ -125,4 +124,35 @@ func getWorldChunks(c echo.Context) error {
 
 	}
 	return c.JSON(http.StatusOK, &chunksData)
+}
+
+func generateTerrain(world string, x int, y int, z int, altitude float32, color int, terrainType string) *Entity {
+
+	var (
+		components []*Component
+	)
+
+	compPos := []float64{0.0, 0.0, 0.0}
+	quat := []float64{0.0, 0.0, 0.0, 0.0}
+	props := make(map[string]interface{})
+	geometry := make(map[string]interface{})
+	material := make(map[string]interface{})
+	props["terrain"] = map[string]string{
+		"type": terrainType + "rough",
+	}
+	geometry["size"] = []float64{537000, 537000, 835664}
+	geometry["shape"] = "hexagon"
+	geometry["faceNormals"] = false
+	material["name"] = "terrain"
+	material["color"] = color
+	props["geometry"] = geometry
+	props["material"] = material
+	state := make(map[string]interface{})
+	components = append(components, NewComponent("Terrain", compPos, quat, props, state, []*Component{}))
+
+	xOffset := float64(1-(z%2)) * (928000 / 2)
+	pos := []float64{(float64(x) * 928000.0) + xOffset, -520000 + float64(altitude) + 10000, float64(z) * 807360.0} //  + (structureSize * width)
+
+	return NewEntity(1, "Terrain", world, components, pos, []float64{0.0, 0.0, 0.0, 0.0})
+
 }

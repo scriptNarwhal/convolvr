@@ -41,7 +41,7 @@ export default class EntityTool extends Tool  {
               }
             },
             components: [
-              this.initLabel("Entity")
+              this.initLabel( false, "Entity")
             ]
           }
         ])

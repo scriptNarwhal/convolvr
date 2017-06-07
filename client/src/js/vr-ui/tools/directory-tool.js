@@ -38,7 +38,7 @@ export default class DirectoryTool extends Tool {
               }
             },
             components: [
-              this.initLabel("Files")
+              this.initLabel( false, "Directories")
             ]
           }
         ])

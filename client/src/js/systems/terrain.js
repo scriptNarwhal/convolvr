@@ -100,7 +100,7 @@ export default class TerrainSystem {
         coords = [ Math.floor(position.x/928000), 0, Math.floor(position.z/807360) ],
         lastCoords = this.lastChunkCoords,
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
-        viewDistance = (this.world.mobile ? 5 : 6) + this.world.viewDistance,
+        viewDistance = (this.world.mobile ? 5 : 8) + this.world.viewDistance,
         removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
         endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
         x = coords[0]-phase + 1,
@@ -236,8 +236,6 @@ export default class TerrainSystem {
 
                  let voxelData = {visible: showVoxels, altitude: c.altitude, color: c.color, entities: c.entities, structures: c.structures || []},
                      chunk = new Voxel(voxelData, [c.x, 0, c.z])
-
-              !!chunk.geometry != "space" && three.scene.add(chunk.mesh)
 
               physicsVoxels.push(chunk.data)
               voxelList.push(chunk)

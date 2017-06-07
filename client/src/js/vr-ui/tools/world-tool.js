@@ -38,7 +38,7 @@ export default class WorldTool extends Tool {
               }
             },
             components: [
-              this.initLabel("Worlds")
+              this.initLabel( false, "Worlds")
             ]
           }
         ])

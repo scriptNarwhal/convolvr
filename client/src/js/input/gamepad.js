@@ -23,26 +23,9 @@ export default class GamePad {
 
         gamepads[gamepad.index] = gamepad
 
-        if (gamepad) {
+        if ( gamepad ) {
 
           let id = gamepad.id
-
-          if (id.indexOf('Oculus Touch') > -1 || id.indexOf('OpenVR Gamepad') > -1) {
-            
-            input.trackedControls = true
-            input.handsDetected ++
-
-            if (input.handsDetected < 2) {
-
-              setTimeout(()=>{
-
-                input.world.user.avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands(true)
-
-              }, 500 )
-            
-            }
-          
-          }
 
         }
 
@@ -54,8 +37,8 @@ export default class GamePad {
 
     }
 
-    window.addEventListener("gamepadconnected", function(e) { gamepadHandler(e, true); }, false)
-    window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler(e, false); }, false)
+    window.addEventListener("gamepadconnected", function(e) { gamepadHandler( e, true ) }, false)
+    window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler( e, false ) }, false)
 
   }
 
@@ -64,6 +47,7 @@ export default class GamePad {
     let g = 0,
         id = "",
         gamepad = null,
+        trackedControls = false,
         gamepads = navigator.getGamepads()
 
     if ( !gamepads ) {
@@ -80,11 +64,13 @@ export default class GamePad {
         if ( id.indexOf('Oculus Touch') > -1 || id.indexOf('OpenVR Gamepad') > -1 ) { // test with vive then remove second half of this if statement
 
           this.trackedControllers.handleOculusTouch( gamepad )
+          trackedControls = true
 
         } else if ( id.indexOf('OpenVR Gamepad') > -1 ) {
 
           this.trackedControllers.handleOpenVRGamepad(gamepad)
-        
+          trackedControls = true
+
         } else if ( id.indexOf('Oculus Remote') > -1 ) {
 
           this.trackedControllers.handleOculusRemote( gamepad )
@@ -92,16 +78,24 @@ export default class GamePad {
         } else if ( id.indexOf('Daydream Controller') > -1 ) {
 
           this.trackedControllers.handleDaydreamController( gamepad )
+          trackedControls = true
 
         } else if ( id.toLowerCase().indexOf('xbox') > -1 ) {
 
           this._handleXboxGamepad( input, world, gamepad )
-
+          
         } else if ( id.indexOf('Gamepad') > -1 ) { 
 
           this._handleMobileGamepad( input, world, gamepad )
 
         }
+
+        if ( trackedControls && input.trackedControls == false && world.mode == "stereo" ) {
+
+          input.trackedControls = true
+          setTimeout(()=>{ world.user.avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands(true) }, 500 )
+
+        } 
 
       }
 

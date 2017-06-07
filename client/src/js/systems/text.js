@@ -10,16 +10,16 @@ export default class TextSystem {
             textMaterial = null,
             textCanvas = document.createElement("canvas"),
             canvasSize = !!prop.label ? [512, 128] : [1024, 1024],
-            context = null
+            context = null,
+            config = { label: !!prop.label }
 
         textCanvas.setAttribute("style", "display:none")
         textCanvas.width = canvasSize[0]
         textCanvas.height = canvasSize[1]
         document.body.appendChild(textCanvas)
-        
         context = textCanvas.getContext("2d")
         
-        this._renderText(context, text, color, background, canvasSize)
+        this._renderText(context, text, color, background, canvasSize, config )
         
         textTexture = new THREE.Texture( textCanvas )
         textTexture.anisotropy = three.renderer.getMaxAnisotropy()
@@ -29,9 +29,6 @@ export default class TextSystem {
         })
         let matTest = new THREE.MeshBasicMaterial({ color: 0xff0000 })
         textMaterial.map.needsUpdate = true
-        //textMaterial.needsUpdate = true
-
-        //component.mesh = new THREE.Mesh(component.mesh.geometry, matTest ) // textMaterial)
         component.mesh.material = textMaterial
 
         return {
@@ -41,6 +38,7 @@ export default class TextSystem {
             textCanvas,
             canvasSize,
             context,
+            config,
             update: ( textProp ) => {
 
                 if ( !!textProp ) {
@@ -78,23 +76,25 @@ export default class TextSystem {
             textMaterial = null,
             textCanvas = state.textCanvas,
             canvasSize = state.canvasSize,
-            context = state.context
+            context = state.context,
+            config = state.config
         
-        this._renderText( context, text, color, background, canvasSize )
+        this._renderText( context, text, color, background, canvasSize, config )
         textTexture.needsUpdate = true   
 
     }
     
-    _renderText ( context, text, color, background, canvasSize ) {
+    _renderText ( context, text, color, background, canvasSize, config ) {
 
-        let fontSize = 42,
-            textLine = '',
+        let textLine = '',
             textRenderState = {
                 codeBlock: false,
                 canvasSize,
                 fontSize,
                 color
             },
+            label = config.label,
+            fontSize = label ? 72 : 42,
             lines = 0,
             line = '',
             l = 0
@@ -108,7 +108,7 @@ export default class TextSystem {
 
         while ( l < text.length ) {
 
-            line = text[l]
+            line = text[ l ]
 
             if ( line.length > (42) * (canvasSize[0]/1024) ) {
 
@@ -122,21 +122,33 @@ export default class TextSystem {
 
         }
 
-        text.map(( line, l ) => { 
-            
-            this._highlightMarkdown( l, line, lines, context, textRenderState ) // markdown
-            context.fillText( line, 16, 960-(1+(lines-l)*fontSize*1.35) )
+        if ( label ) {
 
-        })
+            text.map(( line, l ) => { 
+            
+                context.fillText( line, 0, 16 + ((lines-l)*fontSize*1.35) )
+
+            })
+
+        } else {
+
+            text.map(( line, l ) => { 
+            
+                this._highlightMarkdown( l, line, lines, context, textRenderState ) // markdown
+                context.fillText( line, 16, 960-(1 + (lines-l)*fontSize*1.35) )
+
+            })
+
+        }
 
     }
 
     _highlightMarkdown( l, line, lines, context, textState ) {
 
         let xSize = textState.canvasSize[0],
-          lineHeight = textState.fontSize,
-          height = 960-(1+(lines-l)*lineHeight),
-          toggleCodeBlock = line.indexOf('```') > -1
+            lineHeight = textState.fontSize,
+            height = 960-(1 + (lines-l)*lineHeight),
+            toggleCodeBlock = line.indexOf('```') > -1
           
         if ( line[0] == '#' ) { // markdown heading
             context.fillStyle = '#ffffff'

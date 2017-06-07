@@ -41,7 +41,7 @@ export default class SystemTool extends Tool {
               }
             },
             components: [
-              this.initLabel("System")
+              this.initLabel( false, "System")
             ]
           }
         ])

@@ -38,7 +38,7 @@ export default class FileTool extends Tool {
               }
             },
             components: [
-              this.initLabel("Files")
+              this.initLabel( false, "Files")
             ]
           }
         ])
