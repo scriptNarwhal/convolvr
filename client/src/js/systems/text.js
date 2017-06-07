@@ -94,7 +94,7 @@ export default class TextSystem {
                 color
             },
             label = config.label,
-            fontSize = label ? 72 : 42,
+            fontSize = label ? 60 : 42,
             lines = 0,
             line = '',
             l = 0
@@ -126,7 +126,7 @@ export default class TextSystem {
 
             text.map(( line, l ) => { 
             
-                context.fillText( line, 0, 16 + ((lines-l)*fontSize*1.35) )
+                context.fillText( line, 16, 16 )
 
             })
 

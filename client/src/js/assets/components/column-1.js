@@ -6,7 +6,7 @@ let column1Comp = {
                 size: [12000, 22000, 12000]
             },
             material: {
-                color: 0x404040,
+                color: 0xa0a0a0,
                 name: "plastic"
             }
         },

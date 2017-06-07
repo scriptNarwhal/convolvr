@@ -3,10 +3,10 @@ let column2Comp = {
         geometry: {
             merge: true,
             shape: "box",
-            size: [8000, 72000, 8000]
+            size: [ 8000, 72000, 8000 ]
         },
         material: {
-            color: 0x404040,
+            color: 0x606060,
             name: "plastic"
         }
     },
