@@ -28,7 +28,7 @@ import { events } from './network/socket'
 import UserInput from './input/user-input'
 import User from './user'
 // 3D UI // 
-import Avatar from './assets/avatars/avatar' // default avatar
+import Avatar from './assets/entities/avatars/avatar' // default avatar
 import Toolbox from './vr-ui/tools/toolbox'
 import HUDMenu from './vr-ui/menu' //deprecated.. migrating these to entity-generator / systems.assets.entities
 

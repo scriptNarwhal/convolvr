@@ -39,7 +39,7 @@ export default class StaticCollisions {
 	          
 	        console.log(message.data)
 
-		}  else if ( message.command == "entity-user collision" ) {  //console.log("!!!!!  entity-user collision", message.data)
+		}  else if ( message.command == "entity-user collision" ) {  console.log("!!!!!  entity-user collision", message.data)
 
 			entPos.fromArray( message.data.position )
 

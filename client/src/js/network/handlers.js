@@ -1,4 +1,4 @@
-import Avatar from '../assets/avatars/avatar'
+import Avatar from '../assets/entities/avatars/avatar'
 import Entity from '../entity'
 import { animate } from '../world/render'
 
@@ -9,39 +9,56 @@ export default class SocketHandlers {
         this.world = world
         this.socket = socket
 
-        socket.on("update", packet => {
+        socket.on( "update", packet => {
 
-			let data = JSON.parse(packet.data),
+			let data = JSON.parse( packet.data ),
                 world = this.world,
 				entity = null,
 				avatar = null,
 				user = null,
 				pos = null,
 				quat = null,
-				mesh = null
+				mesh = null,
+				hands = [],
+				hand = null,
+				h = 0
 
-			if (!! data.entity) {
+			if ( !! data.entity ) {
 
 				entity = data.entity
 
-				if (entity.id != world.user.id) {
+				if ( entity.id != world.user.id ) {
 
 					pos = entity.position
 					quat = entity.quaternion
-					user = world.users["user"+entity.id]
+					user = world.users[ "user"+entity.id ]
 					
-					if (user == null) {
+					if ( user == null ) {
 
 						avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id } )
 						avatar.init( window.three.scene )
-						user = world.users["user"+entity.id] = {
+						user = world.users[ "user"+entity.id ] = {
 							id: entity.id,
-							avatar, // render whole body, not just hands
+							avatar,
 							mesh: avatar.mesh
 						}
 
 					}
-					
+
+					if ( data.entity.hands.length > 0 ) {
+
+						hands = user.avatar.componentsByProp.hand
+
+						while ( h > -1 ) {
+
+							hand = hands[ h ]
+							hand.mesh.position.fromArray( data.entity.hands[ h ].pos )
+							hand.mesh.quaternion.fromArray( data.entity.hands[ h ].quat )
+							hand.mesh.updateMatrix()
+
+						}
+					}
+
 					user.avatar.update( [ pos.x, pos.y, pos.z ], [ quat.x, quat.z, quat.y, quat.w ] )
 
 				}
@@ -50,25 +67,26 @@ export default class SocketHandlers {
 
 		})
 
-		socket.on("tool action", packet => {
+		socket.on( "tool action", packet => {
 
-			let data = JSON.parse(packet.data),
+			let data = JSON.parse( packet.data ),
                 world = this.world,
                 user = world.user,
 				pos = data.position,
 				coords = data.coords,
-				chunk = world.terrain.voxels[coords[0]+".0."+coords[2]],
+				chunk = world.terrain.voxels[ coords[0]+".0."+coords[2] ],
 				quat = data.quaternion
 
 			switch (data.tool) {
 				case "Entity Tool":
 					let ent = data.entity,
-							entity = new Entity(ent.id, ent.components, data.position, data.quaternion)
+						entity = new Entity(ent.id, ent.components, data.position, data.quaternion)
+
 					chunk.entities.push(entity)
 					entity.init(three.scene)
 				break
 				case "Component Tool":
-					chunk.entities.map(voxelEnt => { // find & re-init entity
+					chunk.entities.map( voxelEnt => { // find & re-init entity
 
 						if ( voxelEnt.id == data.entityId ) { // console.log("got component tool message", data.entity.components); // concat with existing components array
 						
@@ -85,7 +103,7 @@ export default class SocketHandlers {
 
 				break
 				case "System Tool":
-					chunk.entities.map(voxelEnt => { // find & re-init entity
+					chunk.entities.map( voxelEnt => { // find & re-init entity.. also probably look up the right component to modify by id *******************
 
 						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
@@ -95,7 +113,7 @@ export default class SocketHandlers {
 					})
 				break
 				case "Geometry Tool":
-					chunk.entities.map(voxelEnt => { // find & re-init entity
+					chunk.entities.map( voxelEnt => { // find & re-init entity ^^^^^^
 
 						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
@@ -105,7 +123,7 @@ export default class SocketHandlers {
 					})
 				break
 				case "Material Tool":
-					chunk.entities.map(voxelEnt => { // find & re-init entity
+					chunk.entities.map( voxelEnt => { // find & re-init entity ^^^^^^
 
 						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
@@ -131,9 +149,9 @@ export default class SocketHandlers {
 
 		})
 
-		socket.on("rtc", packet => {
+		socket.on( "rtc", packet => {
 
-			let signal = JSON.parse(packet),
+			let signal = JSON.parse( packet ),
 				webrtc = this.world.systems.webrtc,
 				peerConn = webrtc.peerConn
 

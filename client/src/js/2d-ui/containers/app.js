@@ -91,7 +91,7 @@ class App extends Component {
 
         let world = window.three.world,
             voxelKey = world.user.avatar.getVoxel().join("."),
-            altitude = (world.terrain.voxels[ voxelKey ].data.altitude) - 52000
+            altitude = (world.terrain.voxels[ voxelKey ].data.altitude) - 35000
 
         world.chat.update( [ 0, altitude, -5000 ] )
         world.help.update( [ -80000, altitude, -5000 ] )

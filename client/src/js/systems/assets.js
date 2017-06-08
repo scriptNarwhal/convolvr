@@ -1,19 +1,23 @@
 import Entity from '../entity'
-
-import avatar from '../assets/avatars/avatar'
+import avatar from '../assets/entities/avatars/avatar'
 import toolMenu from '../assets/entities/tool-menu'
 import helpScreen from '../assets/entities/help-screen'
 import chatScreen from '../assets/entities/chat-screen'
+
 import panel1 from '../assets/entities/panel-1'
 import panel2 from '../assets/entities/panel-2'
 import panel3 from '../assets/entities/panel-3'
 import block from '../assets/entities/block'
 import column1 from '../assets/entities/column-1'
 import wirebox from '../assets/entities/wirebox'
+
 import panel1Comp from '../assets/components/panel-1'
 import column1Comp from '../assets/components/column-1'
 import panel2Comp from '../assets/components/panel-2'
 import column2Comp from '../assets/components/column-2'
+
+import battleship from '../assets/entities/vehicles/battleship'
+import car from '../assets/entities/vehicles/car'
 
 export default class AssetSystem {
 
