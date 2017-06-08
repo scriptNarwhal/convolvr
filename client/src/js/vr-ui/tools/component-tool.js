@@ -11,6 +11,7 @@ export default class ComponentTool extends Tool {
         this.mesh = null;
         this.name = "Component Tool"
         this.components = new ComponentGenerator()
+        this.selectedVec3 = new THREE.Vector3()
         this.options = {
           componentType: "column"
         }
@@ -70,9 +71,9 @@ export default class ComponentTool extends Tool {
 
       entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat )
       
-      if ( ( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents ) )
-           && cursorSystem.entityCoolDown < 0 
-         )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
+
+
+      if ( ( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents )) && cursorSystem.entityCoolDown < 0 )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
        
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByProp.toolUI[0].state.toolUI.show()
@@ -104,7 +105,7 @@ export default class ComponentTool extends Tool {
       }
 
       !!selected && !!selected.mesh && selected.mesh.updateMatrixWorld()
-      let selectedPos = !!selected && !!selected.mesh ? selected.mesh.localToWorld(new THREE.Vector3()) : false
+      let selectedPos = !!selected && !!selected.mesh ? selected.mesh.localToWorld(  new THREE.Vector3() ) : false
       
       components.map(( comp, i ) => { // apply transformation and offset to components
 

@@ -153,6 +153,6 @@ func generateTerrain(world string, x int, y int, z int, altitude float32, color 
 	xOffset := float64(1-(z%2)) * (928000 / 2)
 	pos := []float64{(float64(x) * 928000.0) + xOffset, -520000 + float64(altitude) + 10000, float64(z) * 807360.0} //  + (structureSize * width)
 
-	return NewEntity(1, "Terrain", world, components, pos, []float64{0.0, 0.0, 0.0, 0.0})
+	return NewEntity(-1, "Terrain", world, components, pos, []float64{0.0, 0.0, 0.0, 0.0})
 
 }

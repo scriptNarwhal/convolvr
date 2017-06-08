@@ -176,6 +176,12 @@ export default class Entity {
 
     }
 
+    if ( this.componentsByProp.terrain ) { //  console.log("terrain; not adding to octree / for raycasting", this.componentsByProp)
+     
+      addToOctree = false
+
+    }
+
     this.boundingRadius = Math.max( dimensions[0], dimensions[1], dimensions[2] )
     this.boundingBox = dimensions
 

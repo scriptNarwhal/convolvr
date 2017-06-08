@@ -18,8 +18,9 @@ class App extends Component {
 
     events.on("chat message", message => {
 
-      let chatMessage = JSON.parse(message.data),
+      let chatMessage = JSON.parse( message.data ),
           chatUI = three.world.chat,
+          chatText = chatUI.componentsByProp.text[ 0 ],
           worldName = '',
           from = ''
 
@@ -33,8 +34,8 @@ class App extends Component {
         lastSender: chatMessage.from
       })
 
-      chatUI.componentsByProp.text[0].state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
-      chatUI.componentsByProp.text[0].state.text.update()
+      chatText.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
+      chatText.state.text.update()
 
       this.notify(chatMessage.message, chatMessage.from)
       worldName = this.props.world == "overworld" ? "Convolvr" : this.props.world

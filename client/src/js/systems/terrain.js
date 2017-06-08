@@ -53,7 +53,7 @@ export default class TerrainSystem {
          
            if ( !!!this.mesh ) {
 
-            geom = new THREE.PlaneGeometry( 24000000+world.viewDistance*800000, 24000000+world.viewDistance*800000*2.0, 2, 2 ),
+            geom = new THREE.PlaneGeometry( 24000000+world.viewDistance*800000, 24000000+(2+world.viewDistance)*800000*2.0, 2, 2 ),
             mesh = new THREE.Mesh( geom, mat )
             three.scene.add(mesh)
             this.world.octree.add(mesh)
@@ -99,15 +99,16 @@ export default class TerrainSystem {
         pCell = [ 0, 0, 0 ],
         position = three.camera.position,
         terrainChunk = null,
-        c = 0,
-        coords = [ Math.floor(position.x/928000), 0, Math.floor(position.z/807360) ],
+        coords = [ Math.floor(position.x / 928000), 0, Math.floor(position.z / 807360) ],
         lastCoords = this.lastChunkCoords,
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
         viewDistance = (this.world.mobile ? 5 : 8) + this.world.viewDistance,
         removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
         endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
         x = coords[0]-phase + 1,
-        y = coords[2]-phase
+        y = coords[2]-phase,
+        c = 0
+
         this.chunkCoords = coords
 
     if ( force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
@@ -213,10 +214,12 @@ export default class TerrainSystem {
 
         let chunks = ""
 
-        this.reqChunks.map( (rc, i) => {
-          if (i > 0) {
+        this.reqChunks.map( ( rc, i ) => {
+
+          if ( i > 0 ) {
             chunks += ","
           }
+          
           chunks += rc
         })
 
@@ -234,20 +237,20 @@ export default class TerrainSystem {
              let physicsVoxels = []
              typeof response.data.map == 'function' && response.data.map( c => {
 
-                 let voxelKey = c.x+".0."+c.z,
-                     voxelData = { visible: showVoxels, altitude: c.altitude, color: c.color, entities: c.entities },
-                     chunk = new Voxel( voxelData, [c.x, 0, c.z] )
+                let voxelKey = c.x+".0."+c.z,
+                    voxelData = { visible: showVoxels, altitude: c.altitude, color: c.color, entities: c.entities },
+                    chunk = new Voxel( voxelData, [c.x, 0, c.z] )
 
-              physicsVoxels.push(chunk.data)
-              voxelList.push(chunk)
-              voxels[ voxelKey ] = chunk
+                physicsVoxels.push(chunk.data)
+                voxelList.push(chunk)
+                voxels[ voxelKey ] = chunk
 
-              if ( terrain.loaded == false && world.user.avatar.getVoxel().join(".") == voxelKey ) {
+                if ( terrain.loaded == false && world.user.avatar.getVoxel().join(".") == voxelKey ) {
 
-                terrain.loaded = true
-                terrain.readyCallback()
+                  terrain.loaded = true
+                  terrain.readyCallback()
 
-              }
+                }
 
             })
 
