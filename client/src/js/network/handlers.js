@@ -42,6 +42,14 @@ export default class SocketHandlers {
 							avatar,
 							mesh: avatar.mesh
 						}
+						
+						if ( data.entity.hands.length > 0 ) {
+
+							setTimeout( () => {
+								user.avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands( true )
+							}, 1000 )
+
+						}
 
 					}
 
@@ -55,6 +63,7 @@ export default class SocketHandlers {
 							hand.mesh.position.fromArray( data.entity.hands[ h ].pos )
 							hand.mesh.quaternion.fromArray( data.entity.hands[ h ].quat )
 							hand.mesh.updateMatrix()
+							h --
 
 						}
 					}
