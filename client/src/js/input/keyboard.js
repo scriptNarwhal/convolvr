@@ -1,14 +1,16 @@
-let isVRMode = (mode) => {
-  return (mode == "3d" || mode == "stereo");
+let isVRMode = ( mode ) => {
+  return (mode == "3d" || mode == "stereo")
 }
 
 export default class Keyboard {
-	constructor (input, world) {
-    let keys = input.keys;
 
-    document.addEventListener("keydown", function (event) {
+	constructor ( input, world ) {
 
-      if (isVRMode( world.mode )) { // 0 = chat, 1 = vr
+    let keys = input.keys
+
+    document.addEventListener("keydown", ( event ) => {
+
+      if ( isVRMode( world.mode ) ) { // 0 = chat, 1 = vr
 
         switch ( event.keyCode ) {
 
@@ -24,10 +26,9 @@ export default class Keyboard {
           world.mode = "web"
 
           if (world.user.username != "") {
-            //world.showChat();
-            //;
-            document.body.setAttribute("class", "desktop");
-            //document.querySelector("#chatMode").click();
+           
+            document.body.setAttribute("class", "desktop")
+           
           }
 
           break;
@@ -63,6 +64,12 @@ export default class Keyboard {
 
         tools.useTool( e.which - 49, 0)
         tools.useTool( e.which - 49, 1) // both hands switch.. you can manually pick up a tool in one hand, none the less
+
+      }
+
+      if ( e.which == 192 ) { // debugging tool
+
+        tools.useTool( 10, 0 )
 
       }
 

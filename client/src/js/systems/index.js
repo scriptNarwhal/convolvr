@@ -12,7 +12,7 @@ import InputSystem from './input'
 import MediaSystem from './media'
 import CameraSystem from './camera'
 import CPUSystem from './cpu'
-import GPUSystem from './gpu'
+import DisplayAdapterSystem from './display-adapter'
 import MemorySystem from './memory'
 import IOControllerSystem from './io-controller'
 import NetworkInterfaceSystem from './network-interface'
@@ -72,11 +72,11 @@ export default class Systems {
 			signal: new SignalSystem(world),
             input: new InputSystem(world),
 			cpu: new CPUSystem(world),
-			gpu: new GPUSystem(world),
 			memory: new MemorySystem(world),
+			displayAdapter: new DisplayAdapterSystem(world),
 			ioController: new IOControllerSystem(world),
-			networkInterface: new NetworkInterfaceSystem(world),
 			driveController: new DriveControllerSystem(world),
+			networkInterface: new NetworkInterfaceSystem(world),
             media: new MediaSystem(world),
 			drawing: new DrawingSystem(world),
 			control: new ControlSystem(world),

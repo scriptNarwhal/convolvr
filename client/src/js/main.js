@@ -22,15 +22,13 @@ import Network from './2d-ui/containers/network'
 import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
 import HUD from './2d-ui/containers/hud'
-// World
+// 3D World
 import Convolvr from './world/world'
 import { events } from './network/socket'
 import UserInput from './input/user-input'
 import User from './user'
-// 3D UI // 
 import Avatar from './assets/entities/avatars/avatar' // default avatar
-import Toolbox from './vr-ui/tools/toolbox'
-import HUDMenu from './vr-ui/menu' //deprecated.. migrating these to entity-generator / systems.assets.entities
+import Toolbox from './tools/toolbox'
 
 let socket = events,
     token = localStorage.getItem("token"),
