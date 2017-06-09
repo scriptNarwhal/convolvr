@@ -8,6 +8,11 @@ import Entity from '../entity'
 import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
+import { 
+	compressFloatArray,
+	compressVector3,
+	compressVector4
+ } from '../network/util'
 
 let world = null
 
@@ -439,7 +444,7 @@ export default class Convolvr {
 
 	  	this.sendUpdatePacket += 1
 
-	  	if (this.sendUpdatePacket %((2+(1*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) {
+	  	if (this.sendUpdatePacket %((3+(2*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) { // send packets faster / slower for all vr / mobile combinations
 
 			if (input.trackedControls || input.leapMotion) {
 
@@ -447,12 +452,15 @@ export default class Convolvr {
 
 					let hand = handComponent.mesh
 
-					hands.push( {pos: hand.position.toArray(), quat: hand.quaternion.toArray() } )
+					hands.push( {
+						pos: compressFloatArray(hand.position.toArray(), 4), 
+						quat: compressFloatArray(hand.quaternion.toArray(), 8) 
+					} )
 
 				})
 			}
 
-			send('update', {
+			send( 'update', {
 
 				entity: {
 					id: this.user.id,
@@ -460,8 +468,8 @@ export default class Convolvr {
 					image: this.webcamImage,
 					imageSize,
 					hands,
-					position: {x:camera.position.x, y:camera.position.y, z: camera.position.z},
-					quaternion: {x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
+					position: compressVector3( camera.position, 4 ), //{x:camera.position.x, y:camera.position.y, z: camera.position.z},
+					quaternion: compressVector4( camera.quaternion, 8 ), //{x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
 				}
 			
 			})
@@ -474,17 +482,17 @@ export default class Convolvr {
 	    }
 	}
 
-	updateSkybox (delta) {
+	updateSkybox ( delta ) {
 
 		let camera = three.camera,
 			terrainMesh = this.terrain.mesh,
 			skyMat = null
 
-		if (this.skybox) {
+		if ( this.skybox ) {
 
 			skyMat = this.skybox.material
 
-			if (skyMat) {
+			if ( skyMat ) {
 
 				if (skyMat.uniforms) {
 
@@ -496,7 +504,7 @@ export default class Convolvr {
 			}
     	}
 
-		if (terrainMesh) {
+		if ( terrainMesh ) {
 
 			terrainMesh.position.x = camera.position.x
 			terrainMesh.position.z = camera.position.z
@@ -507,7 +515,9 @@ export default class Convolvr {
 	sendVideoFrame () { // probably going to remove this now that webrtc is in place
 
 		let imageSize = [0, 0]
+
 		if (this.capturing) {
+
 		 let v = document.getElementById('webcam'),
 				 canvas = document.getElementById('webcam-canvas'),
 				 context = canvas.getContext('2d'),
@@ -519,7 +529,9 @@ export default class Convolvr {
 		 canvas.height = 240
 		 context.drawImage(v, 0, 0, 320, 240);
 		 this.webcamImage = canvas.toDataURL("image/jpg", 0.6)
+
 	 }
+
 	 this.sendUpdatePacket = 0
 	 return imageSize
 
