@@ -19,17 +19,22 @@ export default class Voxel {
 
         this.entities = []  
 
-        if ( !!data.entities ) { 
+        !!data.entities && data.entities.map( (e, i) => {
 
-            let e = data.entities[0],
-                entity = new Entity( e.id, e.components, e.position, e.quaternion )
+            if ( i > 1 ) {
+                return
+            } else if ( i == 0 ) {
+                data.position = e.position
+            } else {
+
+                 this.entities.push(entity) // init later
+
+            }
+
+            let entity = new Entity( e.id, e.components, e.position, e.quaternion )
+            entity.init( scene )
             
-            this.entities.push(entity) // init later
-
-            this.entities[0].init( scene )
-            data.position = data.entities[0].position
-
-        }
+        })
 
         altitude = data.altitude || 0
 

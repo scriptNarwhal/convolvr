@@ -42,7 +42,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 		wall := generateWall(w, 0, floors, width, structureSize)
 		structureComponents = append(structureComponents, wall)
 	}
-	structurePos := []float64{100000 + (float64(x) * 928000.0), float64(altitude) + 10000, float64(z) * 807360.0} //  + (structureSize * width)
+	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) + 10000, float64(z) * 807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
 	structure = NewEntity(id+1, "Generic Building", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius)
 	return structure

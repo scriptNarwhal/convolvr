@@ -293,7 +293,7 @@ export default class TerrainSystem {
         phase = 1
       }
 
-      setTimeout(() => { this.bufferChunks(force, phase) }, 32)
+      setTimeout(() => { this.bufferChunks(force, phase) }, 256) // experiment // 32)
 
     }
 

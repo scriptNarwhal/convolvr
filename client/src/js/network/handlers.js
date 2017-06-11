@@ -83,7 +83,7 @@ export default class SocketHandlers {
                 user = world.user,
 				pos = data.position,
 				coords = data.coords,
-				chunk = world.terrain.voxels[ coords[0]+".0."+coords[2] ],
+				voxel = world.terrain.voxels[ coords[0]+".0."+coords[2] ],
 				quat = data.quaternion
 
 			switch (data.tool) {
@@ -91,11 +91,12 @@ export default class SocketHandlers {
 					let ent = data.entity,
 						entity = new Entity(ent.id, ent.components, data.position, data.quaternion)
 
-					chunk.entities.push(entity)
+					voxel.entities.push(entity)
 					entity.init(three.scene)
 				break
 				case "Component Tool":
-					chunk.entities.map( voxelEnt => { // find & re-init entity
+					console.log("component tool, ", voxel)
+					voxel.entities.map( voxelEnt => { // find & re-init entity
 
 						if ( voxelEnt.id == data.entityId ) { // console.log("got component tool message", data.entity.components); // concat with existing components array
 						
@@ -112,7 +113,7 @@ export default class SocketHandlers {
 
 				break
 				case "System Tool":
-					chunk.entities.map( voxelEnt => { // find & re-init entity.. also probably look up the right component to modify by id *******************
+					voxel.entities.map( voxelEnt => { // find & re-init entity.. also probably look up the right component to modify by id *******************
 
 						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
@@ -122,7 +123,7 @@ export default class SocketHandlers {
 					})
 				break
 				case "Geometry Tool":
-					chunk.entities.map( voxelEnt => { // find & re-init entity ^^^^^^
+					voxel.entities.map( voxelEnt => { // find & re-init entity ^^^^^^
 
 						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array
@@ -132,7 +133,7 @@ export default class SocketHandlers {
 					})
 				break
 				case "Material Tool":
-					chunk.entities.map( voxelEnt => { // find & re-init entity ^^^^^^
+					voxel.entities.map( voxelEnt => { // find & re-init entity ^^^^^^
 
 						if ( voxelEnt.id == data.entityId ) {
 							console.log("got component tool message", data.entity.components) // concat with existing components array

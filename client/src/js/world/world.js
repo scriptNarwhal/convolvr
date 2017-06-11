@@ -206,7 +206,8 @@ export default class Convolvr {
 				three.scene.add(this.skybox)
 				world.skybox.position.set(camera.position.x, 0, camera.position.z)
 
-				world.terrain.bufferChunks(true, 0)
+				world.terrain.bufferChunks( true, 0 )
+
 				world.gravity = config.gravity
 				world.highAltitudeGravity = config.highAltitudeGravity
 				callback()
@@ -224,7 +225,9 @@ export default class Convolvr {
 					blue: { type: "f", value: config.sky.blue },
 					terrainRed: { type: "f", value: config.terrain.red },
 					terrainGreen: { type: "f", value: config.terrain.green },
-					terrainBlue: { type: "f", value: config.terrain.blue }
+					terrainBlue: { type: "f", value: config.terrain.blue },
+					lightYaw: { type: "f", value: config.light.yaw },
+					lightPitch: { type: "f", value: config.light.pitch }
 				},
 				vertexShader: document.getElementById('sky-vertex').textContent,
 				fragmentShader: document.getElementById('sky-fragment').textContent
@@ -419,7 +422,7 @@ export default class Convolvr {
 
 				voxel.entities.map( ( entity, i )=>{
 
-					i > 0 && entity.init(scene)
+					i > 1 && entity.init(scene)
 
 				})
 

@@ -14,7 +14,7 @@ func update(c *nexus.Client, p *nexus.Packet) { // broadcast user telemetry to a
 	hub.All().Broadcast(p)
 }
 
-func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you're trying to change the world ;)
+func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 it looks like you're trying to change the world
 
 	var (
 		action ToolAction
@@ -82,6 +82,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 				// check ComponentPath
 
 				//}
+				log.Printf(`tool action: "%s"`, action.Tool)
 
 			} else if action.Tool == "World Tool" || action.Tool == "Place Tool" {
 
@@ -111,7 +112,6 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 			log.Println(readErr)
 		}
 
-		log.Printf(`tool action: "%s"`, action.Tool)
 	}
 
 	hub.All().Broadcast(p)
