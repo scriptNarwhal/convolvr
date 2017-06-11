@@ -7,11 +7,11 @@ export default class DebugTool extends Tool {
 
     super ( data, world, toolbox )
       this.mesh = null
-      this.name = "File Tool"
+      this.name = "Debug Tool"
       this.options = {
 
       }
-      this.entity = new Entity(-1, [
+      this.entity = new Entity( -1, [
           {
             props: {
               geometry: {
@@ -32,6 +32,11 @@ export default class DebugTool extends Tool {
                           position: true,
                           voxel: true,
                           cursors: true,
+                      },
+                      text: {
+                        color: "#ffffff",
+                        background: "#0000ff",
+                        lines: [ "Debug out" ]
                       }
                     }
                   }

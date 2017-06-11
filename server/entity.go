@@ -8,29 +8,30 @@ import (
 )
 
 type Entity struct {
-	ID         int          `storm:"id,increment" json:"id"`
-	Name       string       `storm:"index" json:"name"`
-	World      string       `json:"world"`
-	Components []*Component `storm:"inline" json:"components"`
-	Position   []float64    `json:"position"`
-	Quaternion []float64    `json:"quaternion"`
+	ID             int          `storm:"id,increment" json:"id"`
+	Name           string       `storm:"index" json:"name"`
+	World          string       `json:"world"`
+	Components     []*Component `storm:"inline" json:"components"`
+	Position       []float64    `json:"position"`
+	Quaternion     []float64    `json:"quaternion"`
+	BoundingRadius float64      `json:"boundingRadius"`
 }
 
-func NewEntity(id int, name string, world string, components []*Component, pos []float64, quat []float64) *Entity {
+func NewEntity(id int, name string, world string, components []*Component, pos []float64, quat []float64, boundingRadius float64) *Entity {
 
 	if id == -1 {
 
-		return &Entity{Name: name, World: world, Components: components, Position: pos, Quaternion: quat}
+		return &Entity{Name: name, World: world, Components: components, Position: pos, Quaternion: quat, BoundingRadius: boundingRadius}
 
 	} else {
 
-		return &Entity{ID: id, Name: name, World: world, Components: components, Position: pos, Quaternion: quat}
+		return &Entity{ID: id, Name: name, World: world, Components: components, Position: pos, Quaternion: quat, BoundingRadius: boundingRadius}
 
 	}
 
 }
 
-func getEntities(c echo.Context) error { // entity types
+func getEntities(c echo.Context) error { // entities from and for everyone
 	var entities []Entity
 	err := db.All(&entities)
 	if err != nil {
@@ -40,7 +41,7 @@ func getEntities(c echo.Context) error { // entity types
 	return c.JSON(http.StatusOK, entities)
 }
 
-func postEntities(c echo.Context) error {
+func postEntities(c echo.Context) error { // save entity publicly / server-wide
 	var (
 		entity *Entity
 	)
@@ -56,6 +57,6 @@ func postEntities(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
 
-func getEntitiesByUser(c echo.Context) error { // custom entities
+func getEntitiesByUser(c echo.Context) error { // entities from someone, for everyone
 	return c.JSON(http.StatusOK, nil)
 }

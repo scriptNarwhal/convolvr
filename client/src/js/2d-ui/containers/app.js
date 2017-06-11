@@ -192,13 +192,13 @@ class App extends Component {
 
       newWorld = detectWorldDetailsFromURL() // console.log("detected world details from url (app.js willUpdate) ", newWorld)
       
-      if ( newWorld[2] == true ) { // not navigating to built in ui / page
+      if ( newWorld[ 2 ] == true ) { // not navigating to built in ui / page
 
-          if ( newWorld[0] != nextProps.worldUser || newWorld[1] != nextProps.world ) {
+          if ( newWorld[ 0 ] != nextProps.worldUser || newWorld[ 1 ] != nextProps.world ) {
           
-          if (newWorld[1] != nextProps.world || newWorld[0] != nextProps.worldUser ) {
+          if (newWorld[ 1 ] != nextProps.world || newWorld[ 0 ] != nextProps.worldUser ) {
 
-            three.world.reload ( newWorld[0], newWorld[1], "", [0,0,0], true ) // load new world (that's been switched to via browser history)
+            three.world.reload ( newWorld[ 0 ], newWorld[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
 
           }
 

@@ -51,7 +51,7 @@ export default class DebugSystem { // gather helpful info & display as text
 
                 if ( cursorIndex == undefined || c == cursorIndex ) {
 
-                    text.write( JSON.stringify( cursor.state.cursor ) )
+                    !!cursor.state.cursor.component && text.write( JSON.stringify( cursor.state.cursor.component ) )
 
                 }
                 

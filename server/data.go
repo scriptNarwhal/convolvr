@@ -14,6 +14,12 @@ import (
 	"github.com/labstack/echo"
 )
 
+type Document struct {
+	Name     string `json:"name"`
+	Text     string `json:"text"`
+	UserName string `json:"username"`
+}
+
 /* /files/list/:username/:dir */
 func listFiles(c echo.Context) error {
 	username := c.Param("username")
@@ -182,17 +188,22 @@ func getText(c echo.Context) error {
 /* /documents/:username/:dir/:filename */
 func postText(c echo.Context) error {
 	username := c.Param("username")
-	dir := c.QueryParam("dir")
 	filename := c.Param("filename")
-	text := c.FormValue("text")
+	dir := c.QueryParam("dir")
+
+	d := new(Document)
+	if err := c.Bind(d); err != nil {
+		return c.JSON(http.StatusOK, nil)
+	}
+
 	filepath := "../web/user/" + username + "/" + dir + "/" + filename
 	createFileIfMissing(username, dir, filename)
-	file, err := os.OpenFile(filepath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0777)
-	if err != nil {
-		log.Fatal("Cannot open file", err)
+
+	writeErr := ioutil.WriteFile(filepath, []byte(d.Text), 0644)
+	if writeErr != nil {
+		panic(writeErr)
 	}
-	defer file.Close()
-	fmt.Fprintf(file, text)
+
 	return c.JSON(http.StatusOK, nil)
 }
 

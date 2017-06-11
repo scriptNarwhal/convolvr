@@ -56,7 +56,7 @@ let styles = {
   },
   textArea: {
     margin: '0px',
-    width: '580px',
+    width: '95%',
     height: '358px',
     color: 'white',
     marginBottom: '0.5em',
@@ -204,6 +204,7 @@ import {
 export default connect(
   (state, ownProps) => {
     return {
+        cwd: state.files.listDirectories.workingPath,
         section: state.routing.locationBeforeTransitions.pathname,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,

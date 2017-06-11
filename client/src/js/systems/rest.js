@@ -85,8 +85,6 @@ export default class RESTSystem {
 
     getRequest ( component, url, callback, onError ) {
 
-        console.log("getRequest", callback, onError )
-
         axios.get(url).then( res => {
 
             callback ( res, component )

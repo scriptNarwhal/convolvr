@@ -22,7 +22,8 @@ export default class ToolSystem {
            
             panel = new Entity(-1, [ // move panels to asset system perhaps.. or define below*
                 {
-                    props: { // colored top bar
+                    position: [0, 0, 0],
+                    props: { // colored top bar                      
                         geometry: {
                             shape: "box",
                             size: [60000, 10000, 2000],
@@ -34,29 +35,30 @@ export default class ToolSystem {
                         },
                         components: [
                             {
+                                position: [ 0, 0, -7000 ],
                                 props: { // title for top bar
-                                    geometry: {
-                                        shape: "box",
-                                        size: [60000, 10000, 2000]
-                                    },
-                                    material: {
-                                        name: "metal",
-                                        color: 0x000000
-                                    },
-                                    text: { // throw this in child component?
+                                    text: {
                                         lines: [ prop.panel.title ],
                                         color: "#ffffff",
                                         background: "#000000"
+                                    },
+                                    geometry: {
+                                        shape: "box",
+                                        size: [ 60000, 10000, 2000 ]
+                                    },
+                                    material: {
+                                        name: "metal",
+                                        color: 0xffffff
                                     }
                                 },
-                                position: [0, 0, 7000]
+                                components: []
                             }
                         ]
                         
-                    },
-                    position: [0, 0, 0]
+                    }
                 },
                 {
+                    position: [0, -45000, 0], // position & init the panel once the tool is equipped
                     props: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel
                         geometry: {
                             shape: "box",
@@ -67,8 +69,7 @@ export default class ToolSystem {
                             color: 0x808080
                         },
                     }),
-                    components: [],
-                    position: [0, -45000, 0] // position & init the panel once the tool is equipped
+                    components: []
                 }
             ], [0, 0, 0], false)
             this.panels.push(panel)

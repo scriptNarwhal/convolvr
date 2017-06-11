@@ -10,16 +10,13 @@ export default class Entity {
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
       this.boundingRadius = 10000 // set in init()
-      this.componentsByProp = {
-        // arrays are defined here with key of prop
-      }
-      
-      this.voxel = this.position ? [ Math.floor(this.position[0] / 928000), 0, Math.floor(this.position[2] / 807360) ] : [ 0, 0, 0 ] // vertical axis disabled for now
+      this.componentsByProp = {} // arrays are defined here with key of prop
       this.compsByFaceIndex = [] // possibly deprecated
       this.allComponents = []
       this.combinedComponents = []
+      this.voxel = this.position ? [ Math.floor(this.position[0] / 928000), 0, Math.floor(this.position[2] / 807360) ] : [ 0, 0, 0 ] // vertical axis disabled for now
       this.lastFace = 0
-      this.compPos = new THREE.Vector3()
+      this._compPos = new THREE.Vector3()
 
   }
 
@@ -79,7 +76,7 @@ export default class Entity {
         systems = world.systems,
         mobile = world.mobile,
         ncomps = this.components.length,
-        nonStructural = [],
+        nonMerged = [],
         dimensions = [0, 0, 0],
         compMesh = null,
         compGeom = null,
@@ -167,7 +164,7 @@ export default class Entity {
 
         } else if ( !comp.detached ) {
 
-          nonStructural.push( comp.mesh )
+          nonMerged.push( comp.mesh )
           
         }
 
@@ -187,40 +184,42 @@ export default class Entity {
 
     if ( !! workerUpdate ) {
 
-      let message = "",
-          entityData = {
+      let entityData = {
             id: this.id,
             components: this.components,
             position: this.position,
             quaternion: this.quaternion,
             boundingRadius: this.boundingRadius,
             boundingBox: this.boundingBox
-          }
+          },
+          message = ""
 
       if ( workerUpdate == "add" ) {
 
-        message = {
+        message = JSON.stringify({
           command: "add entity",
           data: {
             coords: this.voxel,
             entity: entityData
           }
-        }
-        systems.staticCollisions.worker.postMessage( JSON.stringify(message) )
-        systems.dynamicCollisions.worker.postMessage( JSON.stringify(message) )
+        })
+
+        systems.staticCollisions.worker.postMessage( message )
+        systems.dynamicCollisions.worker.postMessage( message )
 
       } else if ( workerUpdate == "update") {
         
-        message = {
+        message = JSON.stringify({
           command: "update entity",
           data: { 
             entityId: this.id,
             coords: this.voxel,
             entity: entityData
           }
-        }
-        systems.staticCollisions.worker.postMessage( JSON.stringify(message) )
-        systems.dynamicCollisions.worker.postMessage( JSON.stringify(message) )
+        })
+
+        systems.staticCollisions.worker.postMessage( message )
+        systems.dynamicCollisions.worker.postMessage( message )
 
       }
 
@@ -228,19 +227,19 @@ export default class Entity {
 
     if ( s > 0 ) {
 
-      mesh = new THREE.Mesh(base, new THREE.MultiMaterial( materials ))
+      mesh = new THREE.Mesh( base, new THREE.MultiMaterial( materials ) )
 
     } else {
 
-      mesh = nonStructural[0] // maybe nest inside of Object3D ?
+      mesh = nonMerged[ 0 ] // maybe nest inside of Object3D ?
 
     }
 
     s = 1
 
-    while ( s < nonStructural.length ) {
+    while ( s < nonMerged.length ) {
 
-        mesh.add( nonStructural[ s ] )
+        mesh.add( nonMerged[ s ] )
         s ++
 
     }
@@ -272,7 +271,7 @@ export default class Entity {
 
   getClosestComponent( position, recursive = true ) {
  
-    let compPos = this.compPos, 
+    let compPos = this._compPos, 
         entMesh = this.mesh,
         worldCompPos = null,
         distance = 200000,

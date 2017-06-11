@@ -18,7 +18,7 @@ export default class Component {
       this.lastFace = 0
       this.detached = false
       this.merged = false
-      this.compPos = new THREE.Vector3()
+      this._compPos = new THREE.Vector3()
 
       if ( props.geometry == undefined ) {
         props.geometry = {
@@ -70,7 +70,7 @@ export default class Component {
         three = window.three,
         mobile = !!appConfig ? appConfig.mobile : three.world.mobile,
         ncomps = components.length,
-        nonStructural = [],
+        nonMerged = [],
         compMesh = null,
         materials = [],
         addToOctree = true,
@@ -126,7 +126,7 @@ export default class Component {
 
         } else {
 
-          nonStructural.push( comp.mesh )
+          nonMerged.push( comp.mesh )
 
         }
 
@@ -146,9 +146,9 @@ export default class Component {
 
     } else {
 
-      while ( s < nonStructural.length ) { // these might thow things off /wrt face index / ray casting
+      while ( s < nonMerged.length ) { // these might thow things off /wrt face index / ray casting
 
-          this.mesh.add( nonStructural[ s ] )
+          this.mesh.add( nonMerged[ s ] )
           s ++
 
       }
@@ -161,7 +161,7 @@ export default class Component {
 
   getClosestComponent( position, recursive = false ) {
  
-    let compPos = this.compPos, 
+    let compPos = this._compPos, 
         entMesh = this.mesh,
         worldCompPos = null,
         distance = 200000,

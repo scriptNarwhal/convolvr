@@ -14,18 +14,20 @@ export default class Voxel {
             mesh = null,
             geom = null, //new THREE.CylinderGeometry(532000, 532000, 835664, 6, 1),
             mat = null,
-            x = 8
+            x = 8,
+            e = null
 
         this.entities = []  
 
-        if ( !!data.entities ) { // do this in terrain system
+        if ( !!data.entities ) { 
 
-          data.entities.map(e => {
-            let entity = new Entity(e.id, e.components, e.position, e.quaternion)
+            let e = data.entities[0],
+                entity = new Entity( e.id, e.components, e.position, e.quaternion )
+            
             this.entities.push(entity) // init later
-          })
-          this.entities[0].init( scene )
-          data.position = data.entities[0].position
+
+            this.entities[0].init( scene )
+            data.position = data.entities[0].position
 
         }
 

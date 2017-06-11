@@ -99,7 +99,7 @@ export default class TerrainSystem {
         pCell = [ 0, 0, 0 ],
         position = three.camera.position,
         terrainChunk = null,
-        coords = [ Math.floor(position.x / 928000), 0, Math.floor(position.z / 807360) ],
+        coords = [ Math.floor( position.x / 929300 ), 0, Math.floor( position.z / 808360 ) ],
         lastCoords = this.lastChunkCoords,
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
         viewDistance = (this.world.mobile ? 5 : 8) + this.world.viewDistance,
@@ -118,7 +118,7 @@ export default class TerrainSystem {
 
       for ( c in voxelList ) {
 
-          voxel = voxelList[c]
+          voxel = voxelList[ c ]
           pCell = voxel.data.cell
 
           if (!!!voxel.cleanUp && (pCell[0] < coords[0] - removeDistance || pCell[0] > coords[0] + removeDistance ||
@@ -143,7 +143,7 @@ export default class TerrainSystem {
 
       this.cleanUpChunks.map(( cleanUp, i ) => {
 
-          if (c < 4) {
+          if ( c < 4 ) {
 
               if ( !!cleanUp ) {
 
@@ -232,25 +232,25 @@ export default class TerrainSystem {
 
         }
 
-        axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`).then(response => {
+        axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`).then( response => {
 
              let physicsVoxels = []
              typeof response.data.map == 'function' && response.data.map( c => {
 
-                let voxelKey = c.x+".0."+c.z,
-                    voxelData = { visible: showVoxels, altitude: c.altitude, color: c.color, entities: c.entities },
+                let voxelKey = c.x+".0."+c.z, // debugging this.. 
+                    voxelData = { name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities }, //, entities: c.entities },
                     chunk = new Voxel( voxelData, [c.x, 0, c.z] )
 
-                physicsVoxels.push(chunk.data)
-                voxelList.push(chunk)
+                physicsVoxels.push( chunk.data )
+                voxelList.push( chunk )
                 voxels[ voxelKey ] = chunk
 
-                if ( terrain.loaded == false && world.user.avatar.getVoxel().join(".") == voxelKey ) {
+                 if ( terrain.loaded == false && world.user.avatar.getVoxel().join(".") == voxelKey ) {
 
-                  terrain.loaded = true
-                  terrain.readyCallback()
+                   terrain.loaded = true
+                   terrain.readyCallback()
 
-                }
+                 }
 
             })
 
@@ -277,9 +277,11 @@ export default class TerrainSystem {
       }
 
       if ( removePhysicsChunks.length > 0 ) {
+
         let removeChunkData = JSON.stringify(removePhysicsChunks)
         this.StaticCollisions.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
         this.DynamicCollisions.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
+        
       }
 
       lastCoords[0] = coords[0]
