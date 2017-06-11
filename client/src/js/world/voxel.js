@@ -19,20 +19,25 @@ export default class Voxel {
 
         this.entities = []  
 
-        !!data.entities && data.entities.map( (e, i) => {
+        !!data.entities && data.entities.map( ( e, i ) => {
+            
+            let entity = new Entity( e.id, e.components, e.position, e.quaternion )
 
-            if ( i > 1 ) {
-                return
-            } else if ( i == 0 ) {
-                data.position = e.position
-            } else {
+            if ( i < 2 ) {
+            
+                entity.init( scene )
 
-                 this.entities.push(entity) // init later
+                if ( i == 0 ) {
+
+                    data.position = e.position
+                    
+                } else {
+
+                    this.entities.push(entity) // init later
+
+                }
 
             }
-
-            let entity = new Entity( e.id, e.components, e.position, e.quaternion )
-            entity.init( scene )
             
         })
 

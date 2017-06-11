@@ -103,7 +103,7 @@ export default class TerrainSystem {
         lastCoords = this.lastChunkCoords,
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
         viewDistance = (this.world.mobile ? 5 : 8) + this.world.viewDistance,
-        removeDistance = viewDistance + 2 + (window.innerWidth > 2100 ?  2 : 1),
+        removeDistance = viewDistance + 1 + (window.innerWidth > 2100 ?  2 : 1),
         endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
         x = coords[0]-phase + 1,
         y = coords[2]-phase,
@@ -147,7 +147,7 @@ export default class TerrainSystem {
 
               if ( !!cleanUp ) {
 
-                terrainChunk = voxels[cleanUp.cell]
+                terrainChunk = voxels[ cleanUp.cell ]
 
                 if ( terrainChunk ) {
                   
@@ -155,7 +155,7 @@ export default class TerrainSystem {
 
                     terrainChunk.entities.map( e => {
 
-                      if ( !!e.mesh ) {
+                      if ( !!e && !!e.mesh ) {
 
                         octree.remove(e.mesh)
                         three.scene.remove(e.mesh)
@@ -166,11 +166,11 @@ export default class TerrainSystem {
 
                   }
 
-                  if ( terrainChunk.mesh ) {
+                  // if ( terrainChunk.mesh ) {
 
-                    three.scene.remove(terrainChunk.mesh)
+                  //   three.scene.remove(terrainChunk.mesh)
 
-                  }
+                  // }
 
                 }
                 
@@ -237,6 +237,8 @@ export default class TerrainSystem {
              let physicsVoxels = []
              typeof response.data.map == 'function' && response.data.map( c => {
 
+                console.log("loaded ")
+
                 let voxelKey = c.x+".0."+c.z, // debugging this.. 
                     voxelData = { name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities }, //, entities: c.entities },
                     chunk = new Voxel( voxelData, [c.x, 0, c.z] )
@@ -293,7 +295,7 @@ export default class TerrainSystem {
         phase = 1
       }
 
-      setTimeout(() => { this.bufferChunks(force, phase) }, 256) // experiment // 32)
+      setTimeout(() => { this.bufferChunks(force, phase) }, 32 ) // experiment // 32)
 
     }
 
