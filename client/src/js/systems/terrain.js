@@ -166,12 +166,6 @@ export default class TerrainSystem {
 
                   }
 
-                  // if ( terrainChunk.mesh ) {
-
-                  //   three.scene.remove(terrainChunk.mesh)
-
-                  // }
-
                 }
                 
                 removePhysicsChunks.push(cleanUp.physics)
@@ -237,7 +231,7 @@ export default class TerrainSystem {
              let physicsVoxels = []
              typeof response.data.map == 'function' && response.data.map( c => {
 
-                console.log("loaded ")
+                console.log("loaded ", c.entities )
 
                 let voxelKey = c.x+".0."+c.z, // debugging this.. 
                     voxelData = { name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities }, //, entities: c.entities },

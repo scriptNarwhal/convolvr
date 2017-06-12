@@ -30,12 +30,10 @@ export default class Voxel {
                 if ( i == 0 ) {
 
                     data.position = e.position
-                    
-                } else {
-
-                    this.entities.push(entity) // init later
 
                 }
+
+                this.entities.push( entity ) // init later
 
             }
             

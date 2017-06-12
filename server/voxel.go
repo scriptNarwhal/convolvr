@@ -32,7 +32,6 @@ func getWorldChunks(c echo.Context) error {
 		chunksData     []Voxel
 		foundChunks    []Voxel
 		entities       []*Entity
-		chunkVoxels    []*Voxel
 	)
 	generatedBuildings := 0
 	chunk := c.Param("chunks")
@@ -52,7 +51,6 @@ func getWorldChunks(c echo.Context) error {
 		z, _ := strconv.Atoi(coords[2])
 		voxel := voxels.From("X_" + coords[0]).From("Y_" + coords[1]).From("Z_" + coords[2])
 		voxelEntities := voxel.From("entities")
-		subVoxels := voxel.From("voxels")
 		voxel.All(&foundChunks)
 
 		if len(foundChunks) == 0 {
@@ -90,7 +88,7 @@ func getWorldChunks(c echo.Context) error {
 
 				if canPlaceStructureAt(x, 0, z) {
 
-					entities = append(entities, generateBuilding(generatedBuildings, world, x, z, altitude))
+					entities = append(entities, generateBuilding(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 
 				}
@@ -117,7 +115,6 @@ func getWorldChunks(c echo.Context) error {
 
 		} else {
 			voxelEntities.All(&entities)
-			subVoxels.All(&chunkVoxels)
 			foundChunks[0].Entities = entities
 			chunksData = append(chunksData, foundChunks[0])
 		}
