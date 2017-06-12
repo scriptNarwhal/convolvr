@@ -57,7 +57,7 @@ export default class StaticCollisions {
 
 	      if ( message.data.type == "top" ) {
 
-				three.camera.position.set( three.camera.position.x, message.data.position[1]+470000 +vrHeight, three.camera.position.z )
+				three.camera.position.set( three.camera.position.x, message.data.position[1]+452000 +vrHeight, three.camera.position.z )
 
 				if ( Math.abs( user.velocity.y ) > 350000 ) {
 

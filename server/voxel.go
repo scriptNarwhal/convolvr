@@ -55,6 +55,7 @@ func getWorldChunks(c echo.Context) error {
 
 		if len(foundChunks) == 0 {
 
+			entities = nil
 			altitude := float32(0)
 			flatArea := worldData.Terrain.FlatAreas == true && math.Sin(2+float64(x)/9.0)+math.Cos(2+float64(z)/9.0) > 0.66
 
@@ -95,13 +96,15 @@ func getWorldChunks(c echo.Context) error {
 
 			}
 
-			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", nil)
-			saveErr := voxel.Save(&generatedChunk)
-			generatedChunk.Entities = entities
-			chunksData = append(chunksData, generatedChunk)
+			if worldData.Spawn.Roads {
 
-			if saveErr != nil {
-				log.Println(saveErr)
+				if canPlaceRoadAt(x, 0, z) {
+
+					entities = append(entities, generateRoad(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+
+				}
+
 			}
 
 			for _, g := range entities {
@@ -113,43 +116,24 @@ func getWorldChunks(c echo.Context) error {
 
 			}
 
+			//voxelEntities.All(&entities)
+
+			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", entities)
+			saveErr := voxel.Save(&generatedChunk)
+			chunksData = append(chunksData, generatedChunk)
+
+			if saveErr != nil {
+				log.Println(saveErr)
+			}
+
 		} else {
+
 			voxelEntities.All(&entities)
 			foundChunks[0].Entities = entities
 			chunksData = append(chunksData, foundChunks[0])
+
 		}
 
 	}
 	return c.JSON(http.StatusOK, &chunksData)
-}
-
-func generateTerrain(world string, x int, y int, z int, altitude float32, color int, terrainType string) *Entity {
-
-	var (
-		components []*Component
-	)
-
-	compPos := []float64{0.0, 0.0, 0.0}
-	quat := []float64{0.0, 0.0, 0.0, 0.0}
-	props := make(map[string]interface{})
-	geometry := make(map[string]interface{})
-	material := make(map[string]interface{})
-	props["terrain"] = map[string]string{
-		"type": terrainType + "rough",
-	}
-	geometry["size"] = []float64{537000, 537000, 835664}
-	geometry["shape"] = "hexagon"
-	geometry["faceNormals"] = false
-	material["name"] = "terrain"
-	material["color"] = color
-	props["geometry"] = geometry
-	props["material"] = material
-	state := make(map[string]interface{})
-	components = append(components, NewComponent("Terrain", compPos, quat, props, state, []*Component{}))
-
-	xOffset := float64(1-(z%2)) * (928000 / 2)
-	pos := []float64{(float64(x) * 929300.0) + xOffset, -524000 + float64(altitude) + 10000, float64(z) * 808360.0} //  + (structureSize * width)
-
-	return NewEntity(0, "Terrain", world, components, pos, []float64{0.0, 0.0, 0.0, 0.0}, 537000.0)
-
 }

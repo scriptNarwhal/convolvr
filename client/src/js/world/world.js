@@ -184,7 +184,7 @@ export default class Convolvr {
 
 		if ( !!! skybox ) {
 
-			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 12000000+((this.viewDistance+2)*1.4)*600000, 4), skyMaterial )
+			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 12000000+((this.viewDistance+2.5)*1.4)*600000, 4), skyMaterial )
 		
 		} else {
 

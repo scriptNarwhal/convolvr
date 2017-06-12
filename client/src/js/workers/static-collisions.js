@@ -70,7 +70,7 @@ self.update = ( ) => {
 				
 				if ( distance2dCompare( position, obj.position, 528000 ) ) {
 						
-					if ( position[1] > yPos - 160000 + vrHeight  && position[1] < yPos + 470000 + vrHeight ) {
+					if ( position[1] > yPos - 300000 + vrHeight  && position[1] < yPos + 452000 + vrHeight ) {
 
 						collision = true
 						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');

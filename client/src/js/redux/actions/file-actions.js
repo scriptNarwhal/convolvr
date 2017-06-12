@@ -171,10 +171,10 @@ export function writeText (text, filename, username, dir) {
          username,
          dir
      })
-     let dir = !!dir && dir != "" ? "/"+dir : "",
+     let dir = !!dir && dir != "" ? "?dir="+dir : "",
          data = { text, username, name: filename }
 
-     return axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`, data )
+     return axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir}`, data )
         .then(response => {
             dispatch({
                 type: TEXT_WRITE_DONE,

@@ -97,6 +97,7 @@ class NewWorld extends Component {
       flatAreas: true,
       entities: true,
       structures: true,
+      roads: true,
       npcs: true,
       tools: true,
       vehicles: true,
@@ -104,7 +105,7 @@ class NewWorld extends Component {
   }
 
   createWorld() {
-    let lightColor = [parseFloat(this.state.red), parseFloat(this.state.green), parseFloat(this.state.blue)],
+    let lightColor = [ parseFloat(this.state.red), parseFloat(this.state.green), parseFloat(this.state.blue) ],
         data = {
           id: 0,
           name: this.state.name,
@@ -180,6 +181,12 @@ class NewWorld extends Component {
     let value = e.target.value
     this.setState({
       structures: value == 'yes' ? true : false
+    })
+  }
+  onToggleRoads (e) {
+    let value = e.target.value
+    this.setState({
+      roads: value == 'yes' ? true : false
     })
   }
   onToggleGravity (e) {
@@ -317,6 +324,15 @@ class NewWorld extends Component {
                   <span style={styles.label}>Generate Structures?</span>
                   <span style={styles.setting}>
                     <select onChange={ e=> { this.onToggleStructures(e) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </span>
+                </div>
+                <div style={styles.option}>
+                  <span style={styles.label}>Generate Roads?</span>
+                  <span style={styles.setting}>
+                    <select onChange={ e=> { this.onToggleRoads(e) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>

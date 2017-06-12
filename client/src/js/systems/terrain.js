@@ -53,7 +53,7 @@ export default class TerrainSystem {
          
            if ( !!!this.mesh ) {
 
-            geom = new THREE.PlaneGeometry( 24000000+world.viewDistance*800000, 24000000+(2+world.viewDistance)*800000*2.0, 2, 2 ),
+            geom = new THREE.PlaneGeometry( 24000000+(2+world.viewDistance)*800000, 24000000+(2+world.viewDistance)*800000*2.0, 2, 2 ),
             mesh = new THREE.Mesh( geom, mat )
             three.scene.add(mesh)
             this.world.octree.add(mesh)
@@ -99,7 +99,7 @@ export default class TerrainSystem {
         pCell = [ 0, 0, 0 ],
         position = three.camera.position,
         terrainChunk = null,
-        coords = [ Math.floor( position.x / 929300 ), 0, Math.floor( position.z / 808360 ) ],
+        coords = [ Math.floor( position.x / 928500 ), 0, Math.floor( position.z / 810060 ) ],
         lastCoords = this.lastChunkCoords,
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
         viewDistance = (this.world.mobile ? 5 : 8) + this.world.viewDistance,
@@ -230,8 +230,6 @@ export default class TerrainSystem {
 
              let physicsVoxels = []
              typeof response.data.map == 'function' && response.data.map( c => {
-
-                console.log("loaded ", c.entities )
 
                 let voxelKey = c.x+".0."+c.z, // debugging this.. 
                     voxelData = { name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities }, //, entities: c.entities },
