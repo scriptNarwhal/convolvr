@@ -59,4 +59,8 @@ export default class DebugTool extends Tool {
     
     }
     
+    configure ( config ) {
+
+    }
+    
 }

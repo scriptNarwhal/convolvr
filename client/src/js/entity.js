@@ -67,7 +67,7 @@ export default class Entity {
 
   }
 
-  init ( parent, config ) {
+  init ( parent, config, callback ) {
 
     var mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
@@ -265,6 +265,7 @@ export default class Entity {
     this.mesh = mesh
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()
+    !! callback && callback( this )
     return this
 
   }

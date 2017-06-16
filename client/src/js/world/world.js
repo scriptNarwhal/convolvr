@@ -37,7 +37,7 @@ export default class Convolvr {
 		this.viewDistance = 0 // default
 		this.initLocalSettings()
 		usePostProcessing = this.enablePostProcessing == 'on'
-		camera = new THREE.PerspectiveCamera( 78, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + this.viewDistance*600000 )
+		camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + (3+this.viewDistance)*600000 )
 
 		let rendererOptions = {antialias: this.aa != 'off' && !usePostProcessing}
 
@@ -80,7 +80,7 @@ export default class Convolvr {
 		this.vrMovement = "stick" // teleport
 		this.vrHeight = 0
 		this.screenResX = screenResX
-		this.initRenderer(renderer, "viewport")
+		this.initRenderer( renderer, "viewport" )
 		this.octree = new THREE.Octree({
 			undeferred: false,
 			depthMax: Infinity,
@@ -184,7 +184,7 @@ export default class Convolvr {
 
 		if ( !!! skybox ) {
 
-			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 12000000+((this.viewDistance+2.5)*1.4)*600000, 4), skyMaterial )
+			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 12000000+((this.viewDistance+3.5)*1.4)*600000, 4), skyMaterial )
 		
 		} else {
 

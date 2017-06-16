@@ -47,7 +47,7 @@ let column1 = {
                 }
             ],
             position: [ 0, 0, 0 ],
-            quaternion: null
+            quaternion: [ 0, 0, 0, 1 ]
         }
 
 export default column1

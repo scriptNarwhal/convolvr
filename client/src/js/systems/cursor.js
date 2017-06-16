@@ -75,7 +75,8 @@ export default class CursorSystem {
 
         let handMesh = null,
             input = world.userInput,
-            cursorSystem = world.systems.cursor
+            cursorSystem = world.systems.cursor,
+            trackedControls = (input.trackedControls || input.leapMotion)
 
         cursors.map(( cursor, i ) => { // animate cursors & raycast scene
 
@@ -86,11 +87,11 @@ export default class CursorSystem {
             
             if ( i == 0 ) { // head cursor
                 
-                if ( cursorMesh.visible == true && (input.trackedControls || input.leapMotion) ) {
+                if ( trackedControls && cursorMesh.visible == true ) {
 
                     cursorMesh.visible = false
 
-                } else if ( cursorMesh.visible == false && (!input.trackedControls && !input.leapMotion) ) {
+                } else if ( !trackedControls && cursorMesh.visible == false ) {
 
                     cursorMesh.visible = true
 
@@ -98,11 +99,11 @@ export default class CursorSystem {
 
             } else if ( i > 0 ) { // hands
 
-                if ( cursorMesh.visible == false && (input.trackedControls || input.leapMotion) ) {
+                if ( trackedControls && cursorMesh.visible == false ) {
 
                     cursorMesh.visible = true
 
-                } else if ( cursorMesh.visible && (!input.trackedControls && !input.leapMotion) ) {
+                } else if ( !trackedControls && cursorMesh.visible ) {
 
                     cursorMesh.visible = false
 

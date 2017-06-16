@@ -64,4 +64,9 @@ export default class DeleteTool extends Tool  {
     secondaryAction (telemetry, value) { // remove component?
       // implement
     }
+
+    configure ( config ) {
+
+    }
+    
 }

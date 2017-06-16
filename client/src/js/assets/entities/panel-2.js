@@ -14,8 +14,9 @@ let panel2 = {
                             name: "plastic"
                         }
                     },
-                    quaternion: null,
-                    position: [ 0, 0, 0]
+                    quaternion: [ 0, 0, 0, 1 ],
+                    position: [ 0, 0, 0],
+                    components: []
                 },
                 {
                     props: {
@@ -29,8 +30,9 @@ let panel2 = {
                             name: "plastic"
                         }
                     },
-                    quaternion: null,
-                    position: [0, 0, 0]
+                    quaternion: [ 0, 0, 0, 1 ],
+                    position: [0, 0, 0],
+                    components: []
                 },
                 {
                     props: {
@@ -44,8 +46,9 @@ let panel2 = {
                             name: "metal"
                         }
                     },
-                    quaternion: null,
-                    position: [0, 20000, 0]
+                    quaternion: [ 0, 0, 0, 1 ],
+                    position: [0, 20000, 0],
+                    components: []
                 },
                 {
                     props: {
@@ -60,11 +63,12 @@ let panel2 = {
                         }
                     },
                     quaternion: null,
-                    position: [0, -10250, 0]
+                    position: [0, -10250, 0],
+                    components: []
                 },
             ],
             position: [ 0, 0, 0 ],
-            quaternion: null
+            quaternion: [ 0, 0, 0, 1 ]
         }
 
 export default panel2

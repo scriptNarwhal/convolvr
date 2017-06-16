@@ -28,7 +28,11 @@ export default class CPUSystem { //
     operate ( state ) {
 
         let stack = state.stack
-        // implement
+        // supporting webasm would be ideal.. also interesting would be:
+        
+        // implement some kind of imperative syntax for:
+        // setting, getting vars, calculations, comparisons / if / loops, 
+        // calling & defining functions, with params & return / end of function,
 
     }
     

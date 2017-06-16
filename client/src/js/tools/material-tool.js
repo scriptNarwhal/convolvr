@@ -9,37 +9,36 @@ export default class MaterialTool extends Tool {
       this.options = {
 
       }
-      this.entity = new Entity(-1, [
-          {
-            props: {
-              geometry: {
-                shape: "box",
-                size: [3000, 1200, 8000]
-              },
-              material: {
-                name: "metal"
-              },
-              tool: {
-                panel: {
-                  title: "Materials",
-                  color: 0x07ffff,
-                  content: {
-                    props: {
-                      metaFactory: { // generates factory for each item in dataSource
-                        type: "prop", // entity, prop
-                        propName: "material",
-                        dataSource: this.world.systems.assets.props.material
-                      }
+      this.entity = new Entity(-1, [{
+          props: {
+            geometry: {
+              shape: "box",
+              size: [3000, 1200, 8000]
+            },
+            material: {
+              name: "metal"
+            },
+            tool: {
+              panel: {
+                title: "Materials",
+                color: 0x07ffff,
+                content: {
+                  props: {
+                    metaFactory: { // generates factory for each item in dataSource
+                      type: "prop", // entity, prop
+                      propName: "material",
+                      dataSource: this.world.systems.assets.props.material
                     }
                   }
                 }
               }
-            },
-            components: [
-              this.initLabel( false, "Material")
-            ]
-          }
-        ])
+            }
+          },
+          components: [
+            this.initLabel( false, "Material")
+          ]
+        }
+      ])
     }
 
     primaryAction (telemetry) {
@@ -49,4 +48,9 @@ export default class MaterialTool extends Tool {
     secondaryAction (telemetry, value) {
     
     }
+    
+    configure ( config ) {
+
+    }
+
 }

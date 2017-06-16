@@ -53,4 +53,8 @@ export default class DirectoryTool extends Tool {
     
     }
     
+    configure ( config ) {
+
+    }
+    
 }

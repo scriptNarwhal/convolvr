@@ -20,7 +20,7 @@ let chatScreen = {
                         background: "#000000"
                     }
                 },
-                quaternion: null,
+                quaternion: [ 0, 0, 0, 1 ],
                 position: [ 0, 0, 0 ]
             }
         ]

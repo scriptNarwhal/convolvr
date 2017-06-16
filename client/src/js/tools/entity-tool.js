@@ -7,13 +7,27 @@ export default class EntityTool extends Tool  {
 
     super(data, world, toolbox)
 
+    let assets = world.systems.assets,
+        allEntities = assets.entitiesByName,
+        allOptions = []
+
+      Object.keys( allEntities ).map( name => {
+    
+        if ( name != "default-avatar" ) {
+
+          allOptions.push( name ) 
+
+        }
+        
+      })
+      console.log( "all entities", allEntities )
       this.mesh = null
       this.name = "Entity Tool"
       this.options = {
-        entityType: "panel"
+        entityType: allOptions[ 5 ]
       }
-      this.all = [ "panel", "panel2", "panel3", "block", "column", "wirebox" ]  // deprecated, migrating toward tool option panels
-      this.current = 0
+      this.all = allOptions
+      this.current = 5
       this.entity = new Entity(-1, [
           {
             props: {
@@ -59,9 +73,9 @@ export default class EntityTool extends Tool  {
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
           user = this.world.user,
-          entity = params.entity ? params.entity : assetSystem.makeEntity(this.options.entityType), // console.log("Entity Tool"); console.log(JSON.stringify(entity.components))
+          entity =  params.entity ? params.entity : assetSystem.makeEntity( this.options.entityType ),
           tooManyComponents = !!selected && selected.components.length >= 48
-
+      
       if ( ! tooManyComponents ) {
 
         if ((selected && cursorState.distance < 200000) || cursorSystem.entityCoolDown > 10 ) { // switch to component tool
@@ -103,8 +117,22 @@ export default class EntityTool extends Tool  {
         
       }
 
+      this.selectedEntity = null
       this.options.entityType = this.all[this.current]
+
+      if ( this.entity.componentsByProp ) {
+
+        this.entity.componentsByProp.text[0].state.text.update( this.options.entityType )
+
+      }
+
       return false // no socket event
+
+    }
+    
+    configure ( config ) {
+
+      this.options.entityType = config.preset
 
     }
 

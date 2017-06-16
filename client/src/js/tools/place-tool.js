@@ -53,4 +53,7 @@ export default class PlaceTool extends Tool {
     
     }
     
+    configure ( config ) {
+
+    }
 }

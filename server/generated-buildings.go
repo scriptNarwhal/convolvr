@@ -15,6 +15,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 	structureSize := 300000.0
 	// create components for each floor & long / windowed wall
 	for i := 0; i < floors; i++ {
+
 		floorPos := []float64{0.0, structureSize * 0.5 * float64(i), 0.0}
 		floorQuat := []float64{0.0, 0.0, 0.0, 0.0}
 		floorProps := make(map[string]interface{})
@@ -22,6 +23,13 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 		floorMaterial := make(map[string]interface{})
 		floorProps["floor"] = map[string]int{
 			"level": i,
+		}
+		if i == 1 && rand.Float64() < 0.06 {
+			light := make(map[string]interface{})
+			light["type"] = "point"
+			light["intensity"] = 1.0
+			light["color"] = 0xffffff
+			floorProps["light"] = light
 		}
 		floorGeometry["size"] = []float64{structureSize * width, 5000, structureSize}
 		floorGeometry["shape"] = "box"

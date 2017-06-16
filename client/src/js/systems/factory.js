@@ -54,7 +54,7 @@ export default class FactorySystem {
 
         } else if (type == 'component') {
 
-            created = this._generateComponent( data, entityPos, quat )
+            created = this._generateComponent( data, entityPos, quat, preset )
 
         } else if ( type == 'prop' ) {
 
@@ -126,13 +126,13 @@ export default class FactorySystem {
 
     }
 
-    _generateComponent ( data, position, quaternion ) {
+    _generateComponent ( data, position, quaternion, preset ) {
 
         data.props.miniature = { }
         data.props.toolUI = {
             configureTool: {
                 tool: 1,
-                data
+                preset
             }
         }
         return new Entity( -1, [ data ], position, quaternion )

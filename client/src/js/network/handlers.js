@@ -95,7 +95,6 @@ export default class SocketHandlers {
 					entity.init(three.scene)
 				break
 				case "Component Tool":
-					console.log("component tool, ", voxel)
 					voxel.entities.map( voxelEnt => { // find & re-init entity
 
 						if ( voxelEnt.id == data.entityId ) { // console.log("got component tool message", data.entity.components); // concat with existing components array

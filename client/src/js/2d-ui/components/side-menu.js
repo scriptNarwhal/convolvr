@@ -66,7 +66,7 @@ class SideMenu extends Component {
                  title="Places"
             />
             <Tab clickHandler={ (e)=> { this.navigate(e, "/network") }}
-                 image="/data/images/square-a.png"
+                 image="/data/images/network.png"
                  style={ styles.mobileHidden() }
                  title="View Network"
             />

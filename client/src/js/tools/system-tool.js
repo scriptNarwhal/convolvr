@@ -55,4 +55,9 @@ export default class SystemTool extends Tool {
     secondaryAction ( telemetry, value) {
       
     }
+
+    configure ( config ) {
+
+    }
+    
 }

@@ -108,7 +108,7 @@ let toolMenu = (assetSystem) => {
             }
         ],
         position: [ 0, 0, 0 ],
-        quaternion: null
+        quaternion: [ 0, 0, 0, 1 ]
     }
 
 }

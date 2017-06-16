@@ -53,4 +53,8 @@ export default class FileTool extends Tool {
     
     }
     
+    configure ( config ) {
+
+    }
+    
 }

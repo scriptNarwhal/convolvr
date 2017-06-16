@@ -14,7 +14,7 @@ let wirebox = {
                     name: "plastic"
                 }
             },
-            quaternion: null,
+            quaternion: [ 0, 0, 0, 1 ],
             position: [0, 0, 0]
         },
         {
@@ -29,12 +29,12 @@ let wirebox = {
                     name: "plastic"
                 }
             },
-            quaternion: null,
+            quaternion: [ 0, 0, 0, 1 ],
             position: [0, 0, 0]
         }
     ],
     position: [ 0, 0, 0 ],
-    quaternion: null
+    quaternion: [ 0, 0, 0, 1 ]
 }
 
 export default wirebox

@@ -52,4 +52,8 @@ export default class WorldTool extends Tool {
     secondaryAction ( telemetry, value ) {
     
     }
+    
+    configure ( config ) {
+
+    }
 }

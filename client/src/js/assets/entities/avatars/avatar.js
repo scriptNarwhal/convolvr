@@ -61,7 +61,7 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
                 user: userData
              },
              position: [ 0, (n-1)*600, 0 ],
-             quaternion: false
+             quaternion: [ 0, 0, 0, 1 ]
         }
        components.push(component)
        componentB = {
@@ -76,7 +76,7 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
                 }
              },
              position: [ 0, (n-1)*600, 0 ],
-             quaternion: false
+             quaternion: [ 0, 0, 0, 1 ]
          }
          components.push( componentB )
 
@@ -95,7 +95,7 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
             user: userData
           },
           position: [ 0, 0, 0 ],
-          quaternion: false,
+          quaternion: [ 0, 0, 0, 1 ],
           components: [
             Object.assign( {}, cursorComponent )
           ]
@@ -121,7 +121,7 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
                   color: 0xffffff,
                 }
             },
-            quaternion: null,
+            quaternion: [ 0, 0, 0, 1 ],
             position: [(n-1)*1500, 0, 0],
             components: [
               Object.assign( {}, cursorComponent )
@@ -131,7 +131,7 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
 
         }
         
-    entity = new Entity( id, components )
+    entity = new Entity( id, components, [0, 0, 0], [ 0, 0, 0, 1 ] )
   
     return entity
 

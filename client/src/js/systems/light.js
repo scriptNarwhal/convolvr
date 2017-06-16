@@ -23,9 +23,39 @@ export default class LightSystem {
         component.mesh.add(light)
 
         return {
-            light
+            light,
+            update: ({ color, intensity, distance }) => {
+                
+                this._update( component, { color, intensity, distance })
+
+            }
+        }
+
+    }
+
+    _update ( component, { color, intensity, distance }) {
+
+        let light = component.state.light.light
+
+        if ( color ) {
+
+            light.color.set( color )
+
+        } 
+
+        if ( intensity ) {
+
+            light.intensity = intensity
+
+        }
+
+        if ( distance ) {
+
+            light.distance = distance
+
         }
 
     }
 }
 
+ 

@@ -47,24 +47,27 @@ userInput = new UserInput()
 
 loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
-  toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
-  toolMenu.init( three.scene ) // toolMenu.componentsByProp.toolUI[0].state.hide()
-  user.hud = toolMenu
-  
   avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) // entity id can be passed into config object
   avatar.init( three.scene )
   user.useAvatar( avatar )
   user.toolbox = new Toolbox( user, world )
-
   world.user = user
+
+  toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
+  user.hud = toolMenu
+  toolMenu.init( three.scene, {}, menu => { 
+    console.log("menu init ", menu)
+    menu.componentsByProp.toolUI[0].state.toolUI.updatePosition()
+  
+  }) 
+  
   userInput.init( world, world.camera, user )
   userInput.rotationVector = { x: 0, y: 4.5, z: 0 }
   three.camera.position.set( -220000+Math.random()*60000, 100000, -220000+Math.random()*60000 )
 
-  chatScreen = world.systems.assets.makeEntity( "chat-screen", true )
-  //chatScreen.components[0].props.speech = {}
+  chatScreen = world.systems.assets.makeEntity( "chat-screen", true ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( three.scene )
-  chatScreen.update( [ 0, 50000, 0 ] )
+  chatScreen.update( [ 0, 50000, 0 ] )  
   world.chat = chatScreen
 
   helpScreen = world.systems.assets.makeEntity( "help-screen", true )
@@ -87,27 +90,9 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
       "- Device orientation controls the camera",
       "- Swiping & dragging move you"
     ]
-  helpScreen.init(three.scene)
+  helpScreen.init(three.scene, {}, help => { _initHTTPClientTest( world, help) })
   helpScreen.update( [ -80000, 50000, 0 ] )
   world.help = helpScreen
-
-  setTimeout(()=>{
-
-    toolMenu.componentsByProp.toolUI[0].state.toolUI.updatePosition()
-
-    httpClient = world.systems.assets.makeEntity( "help-screen", true ) // simple example of displaying GET response from server
-    let compProps = httpClient.components[0].props
-    compProps.rest = {
-      get: {
-        url: "http://localhost:3007/api/chunks/"+world.name+"/0x0x0"
-      }
-    }
-    compProps.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0"] // really just clearing the default text until something loads
-    compProps.text.color = "#f0f0f0"
-    httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
-    httpClient.update( [ -80000, 0, 0 ] )
-
-  }, 1000)
 
 })
 
@@ -149,5 +134,21 @@ function _clearOldData () {
     }
 
   }
+
+}
+
+function _initHTTPClientTest ( world, helpScreen ) {
+
+  httpClient = world.systems.assets.makeEntity( "help-screen", true ) // simple example of displaying GET response from server
+    let compProps = httpClient.components[0].props
+    compProps.rest = {
+      get: {
+        url: "http://localhost:3007/api/chunks/"+world.name+"/0x0x0"
+      }
+    }
+    compProps.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0"] // really just clearing the default text until something loads
+    compProps.text.color = "#f0f0f0"
+    httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
+    httpClient.update( [ -80000, 0, 0 ] )
 
 }

@@ -18,5 +18,9 @@ export default class CustomTool extends Tool {
     secondaryAction (telemetry, value) {
 
     }
+    
+    configure ( config ) {
+
+    }
 
 }

@@ -51,4 +51,9 @@ export default class GeometryTool extends Tool {
     secondaryAction ( telemetry, value ) {
     
     }
+
+    configure ( config ) {
+
+    }
+
 }

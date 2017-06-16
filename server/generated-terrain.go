@@ -14,7 +14,7 @@ func generateTerrain(world string, x int, y int, z int, altitude float32, color 
 	props["terrain"] = map[string]string{
 		"type": terrainType + "rough",
 	}
-	geometry["size"] = []float64{537000, 537000, 835664}
+	geometry["size"] = []float64{536000, 536000, 835664}
 	geometry["shape"] = "hexagon"
 	geometry["faceNormals"] = false
 	material["name"] = "terrain"
@@ -25,7 +25,7 @@ func generateTerrain(world string, x int, y int, z int, altitude float32, color 
 	components = append(components, NewComponent("Terrain", compPos, quat, props, state, []*Component{}))
 
 	xOffset := float64(1-(z%2)) * (928000 / 2)
-	pos := []float64{(float64(x) * 928500.0) + xOffset, -524000 + float64(altitude) + 10000, float64(z) * 810060.0} //  + (structureSize * width)
+	pos := []float64{(float64(x) * 928000.0) + xOffset, -524000 + float64(altitude) + 10000, float64(z) * 806360.0} //  + (structureSize * width)
 
 	return NewEntity(0, "Terrain", world, components, pos, []float64{0.0, 0.0, 0.0, 0.0}, 537000.0)
 

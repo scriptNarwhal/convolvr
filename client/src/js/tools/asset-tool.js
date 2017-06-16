@@ -49,4 +49,9 @@ export default class AssetTool extends Tool {
     secondaryAction (telemetry, value) {
     
     }
+    
+    configure ( config ) {
+
+    }
+
 }

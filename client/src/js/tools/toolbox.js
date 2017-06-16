@@ -44,7 +44,8 @@ export default class Toolbox {
         new AssetTool({}, world, this),
         new FileTool({}, world, this),
         new DirectoryTool({}, world, this),
-        new DebugTool({}, world, this)
+        new DebugTool({}, world, this),
+        new DeleteTool({}, world, this)
       ]
       this.currentTools = [ 0, 0 ]
 
@@ -172,6 +173,7 @@ export default class Toolbox {
           { position, quaternion } = telemetry,
           cursorEntity = !!telemetry.cursor ? telemetry.cursor.state.cursor.entity : false,
           cursorState = !!telemetry.cursor ? telemetry.cursor.state : false,
+          componentsByProp =  !!cursorEntity ? cursorEntity.componentsByProp : {},
           action = null
       
       if ( telemetry.cursor && cursorEntity ) { // check telemetry here to see if activate callbacks should fire instead of tool action
@@ -185,6 +187,16 @@ export default class Toolbox {
           
           return // cursor system has found the component ( provided all has gone according to plan.. )
 
+        }
+
+        if ( componentsByProp.miniature && componentsByProp.toolUI ) {
+
+            if ( componentsByProp.toolUI[ 0 ].props.toolUI.configureTool ) {
+
+              console.log(" configure tool: ", componentsByProp.toolUI[ 0 ].props.toolUI.configureTool )
+              tool.configure( componentsByProp.toolUI[ 0 ].props.toolUI.configureTool )
+
+            }
         }
 
       }

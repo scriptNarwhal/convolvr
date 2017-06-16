@@ -284,6 +284,20 @@ export default class AssetSystem {
 
     }
 
+    makeComponent ( name, data, config ) {
+
+        if ( data ) {
+
+            return Object.assign( {}, this.componentsByName[ name ], data )
+
+        } else {
+
+            return Object.assign( {}, this.componentsByName[ name ] )
+
+        }
+
+    }
+
     autoEntityID ( ) {
 
         this.autoDecrementEntity --
