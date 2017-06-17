@@ -83,26 +83,45 @@ export default class GeometrySystem {
 
     }
 
-    _extrudeGeometry ( prop ) {
+    _extrudeGeometry ( prop ) { // prop.size, shape, settings
 
-      let length = prop.size[2], width = prop.size[0],
+      let length = prop.size[2], 
+          width = prop.size[0],
           shape = new THREE.Shape()
 
-          //TODO: make this configurable fully
-      shape.moveTo( 0,0 )
-      shape.lineTo( 0, width )
-      shape.lineTo( length, width )
-      shape.lineTo( length, 0 )
-      shape.lineTo( 0, 0 )
+      if ( prop.shape ) {
 
-      var extrudeSettings = {
+        shape.moveTo( prop.shape[0][0], prop.shape[0][1] )
+
+        prop.shape.map( (point, i) => {
+
+          if ( i > 0 ) {
+
+            shape.lineTo( point[ 0 ], point[ 1 ] )
+            
+          }
+           
+        })
+
+      } else {
+
+        shape.moveTo( 0,0 )
+        shape.lineTo( 0, width )
+        shape.lineTo( length, width )
+        shape.lineTo( length, 0 )
+        shape.lineTo( 0, 0 )
+
+      }
+      
+
+      var extrudeSettings = Object.assign({}, {
         steps: 2,
         amount: 16,
         bevelEnabled: true,
         bevelThickness: 1,
         bevelSize: 1,
         bevelSegments: 1
-      }
+      }, prop.settings || {})
 
       return new THREE.ExtrudeGeometry( shape, Object.assign({}, extrudeSettings, prop.extrudeSettings) )
 

@@ -254,10 +254,16 @@ export default class UserInput {
 					//world.vibrate(50);
 				}
 			}
-			if ( (velocity.x * velocity.x) + (velocity.z * velocity.z) > 20000 ) {
+			
+			if ( this.keys.shift == false && this.device.falling == false ) { // (velocity.x * velocity.x) + (velocity.z * velocity.z) > 20000 
 
-					velocity.x *=  (1 - (0.01 * delta * 1000))
-					velocity.z *= (1 - (0.01 * delta * 1000))
+					velocity.x *=  (1 - (0.03 * delta * 1000))
+					velocity.z *= (1 - (0.03 * delta * 1000))
+
+			} else {
+
+				velocity.x *=  (1 - (0.02 * delta * 1000))
+				velocity.z *= (1 - (0.02 * delta * 1000))
 
 			}
 			if ( !!world.user.mesh ) {

@@ -36,6 +36,8 @@ export default class FileSystem {
         }
 
         return {
+            workingPath: [],
+            workingDirectory: "/",
             setWorkingDirectory: ( username, dir ) => {
                 this.setWorkingDirectory( component, username, dir )
             },
@@ -149,6 +151,7 @@ export default class FileSystem {
     setWorkingDirectory ( component, username, dir ) {
 
         component.state.file.workingDirectory = username+dir
+        component.state.file.workingPath = (username+dir).split("/")
 
     }
 

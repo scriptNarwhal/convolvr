@@ -109,6 +109,7 @@ class NewWorld extends Component {
         data = {
           id: 0,
           name: this.state.name,
+          tags: [],
           gravity: this.state.gravity,
           highAltitudeGravity: this.state.highAltitudeGravity,
           sky: {

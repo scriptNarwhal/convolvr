@@ -32,6 +32,7 @@ type World struct {
 	Light               `storm:"inline" json:"light"`
 	Terrain             `storm:"inline" json:"terrain"`
 	Spawn               `storm:"inline" json:"spawn"`
+	Tags                []string `json:"tags",omitempty`
 }
 
 type Sky struct {
@@ -83,8 +84,8 @@ type Spawn struct {
 	Vehicles   bool `json:"vehicles"`
 }
 
-func NewWorld(id int, userId int, userName string, name string, gravity float64, highAltitudeGravity bool, sky Sky, light Light, terrain Terrain, spawn Spawn) *World {
-	return &World{id, userId, userName, name, gravity, highAltitudeGravity, sky, light, terrain, spawn}
+func NewWorld(id int, userId int, userName string, name string, gravity float64, highAltitudeGravity bool, sky Sky, light Light, terrain Terrain, spawn Spawn, tags []string) *World {
+	return &World{id, userId, userName, name, gravity, highAltitudeGravity, sky, light, terrain, spawn, tags}
 }
 
 func getWorlds(c echo.Context) error {
@@ -154,12 +155,12 @@ func getWorld(c echo.Context) error { // load specific world
 
 		if rand.Intn(12) > 6 {
 			if rand.Intn(12) > 6 {
-				red = second / 3.0
-				green = second / 4.0
+				red = second / 4.0
+				green = second / 2.0
 				blue = first
 			} else {
-				red = third / 3.0
-				green = first / 1.5
+				red = third / 2.0
+				green = first / 1.6
 				blue = first
 			}
 		} else {
@@ -169,33 +170,34 @@ func getWorld(c echo.Context) error { // load specific world
 				blue = first
 			} else {
 				red = first
-				green = first / 2.0
-				blue = third / 5.0
+				green = first / 1.5
+				blue = third / 2.0
 			}
 		}
 
-		terrainRed = math.Max(1.0, red+blue)
+		terrainRed = math.Max(1.0, red)
 		terrainGreen = math.Min(green-blue, 0)
-		terrainBlue = math.Min(blue-red, 0)
+		terrainBlue = math.Min(blue+red/2.0, 0)
 		terrainColor = int(math.Floor(terrainRed*255))<<16 | int(math.Floor(terrainGreen*255))<<8 | int(math.Floor(terrainBlue*255))
 
 		lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
-
-		//lightColor = int(math.Floor(155+red*100))<<16 | int(math.Floor(155+green*100))<<8 | int(math.Floor(155+blue*100))
-		ambientColor = 8 + int(255*red/4.0)<<16 | 8 + int(255*green/4.0)<<8 | 8 + int(255*blue/4.0)
-
-		// terrainRed += blue / 2.0
-		// terrainGreen += green / 2.0
-		// terrainBlue += red / 2.0
+		//lightColor = int(math.Floor(200+red*55))<<16 | int(math.Floor(200+green*55))<<8 | int(math.Floor(200+blue*55))
+		ambientColor = 8 + int(255*red/12.0)<<16 | 8 + int(255*green/12.0)<<8 | 8 + int(255*blue/12.0)
+		terrainRed /= 2
+		terrainGreen /= 2
+		terrainRed /= 2
+		terrainRed += blue / 2.0
+		terrainGreen += green / 2.0
+		terrainBlue += red / 2.0
 
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}
-		light := Light{Color: lightColor, Intensity: 0.9, Pitch: 1.64, Yaw: rand.Float64() * 3.14, AmbientColor: ambientColor}
+		light := Light{Color: lightColor, Intensity: 1.1, Pitch: 1.64, Yaw: rand.Float64() * 3.14, AmbientColor: ambientColor}
 
 		terrain := Terrain{TerrainType: "both", Height: 20000, Color: terrainColor, Red: terrainRed, Green: terrainGreen, Blue: terrainBlue, FlatAreas: true, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
 		spawn := Spawn{Entities: true, Structures: true, Roads: true, Trees: true, NPCS: true, Tools: true, Vehicles: true}
 		gravity := 1.0
 		highAltitudeGravity := false
-		world = *NewWorld(0, -1, "space", name, gravity, highAltitudeGravity, sky, light, terrain, spawn)
+		world = *NewWorld(0, -1, "space", name, gravity, highAltitudeGravity, sky, light, terrain, spawn, []string{})
 		saveErr := db.Save(&world)
 		if saveErr != nil {
 			log.Println(saveErr)

@@ -13,19 +13,20 @@ type Entity struct {
 	World          string       `json:"world"`
 	Components     []*Component `storm:"inline" json:"components"`
 	Position       []float64    `json:"position"`
-	Quaternion     []float64    `json:"quaternion"`
-	BoundingRadius float64      `json:"boundingRadius"`
+	Quaternion     []float64    `json:"quaternion",omitempty`
+	BoundingRadius float64      `json:"boundingRadius",omitempty`
+	Tags           []string     `json:"tags",omitempty`
 }
 
-func NewEntity(id int, name string, world string, components []*Component, pos []float64, quat []float64, boundingRadius float64) *Entity {
+func NewEntity(id int, name string, world string, components []*Component, pos []float64, quat []float64, boundingRadius float64, tags []string) *Entity {
 
 	if id == -1 {
 
-		return &Entity{Name: name, World: world, Components: components, Position: pos, Quaternion: quat, BoundingRadius: boundingRadius}
+		return &Entity{Name: name, World: world, Components: components, Position: pos, Quaternion: quat, BoundingRadius: boundingRadius, Tags: tags}
 
 	} else {
 
-		return &Entity{ID: id, Name: name, World: world, Components: components, Position: pos, Quaternion: quat, BoundingRadius: boundingRadius}
+		return &Entity{ID: id, Name: name, World: world, Components: components, Position: pos, Quaternion: quat, BoundingRadius: boundingRadius, Tags: tags}
 
 	}
 

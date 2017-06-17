@@ -39,7 +39,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 		floorProps["geometry"] = floorGeometry
 		floorProps["material"] = floorMaterial
 		wallState := make(map[string]interface{})
-		structureComponents = append(structureComponents, NewComponent("", floorPos, floorQuat, floorProps, wallState, []*Component{}))
+		structureComponents = append(structureComponents, NewComponent("", floorPos, floorQuat, floorProps, wallState, []*Component{}, nil))
 		for w := 0; w < 2; w++ {
 			wall := generateWall(w, i, floors, width, structureSize)
 			structureComponents = append(structureComponents, wall)
@@ -52,7 +52,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 	}
 	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) + 10000, float64(z) * 807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
-	structure = NewEntity(id+1, "Generic Building", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius)
+	structure = NewEntity(id+1, "Generic Building", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure
 }
 
@@ -83,7 +83,7 @@ func generateWall(w int, i int, floors int, width float64, structureSize float64
 	wallProps["geometry"] = geometry
 	wallProps["material"] = material
 	wallState := make(map[string]interface{})
-	return NewComponent("", wallPos, wallQuat, wallProps, wallState, []*Component{})
+	return NewComponent("", wallPos, wallQuat, wallProps, wallState, []*Component{}, nil)
 }
 
 func canPlaceStructureAt(x int, y int, z int) bool {

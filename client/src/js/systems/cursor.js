@@ -40,21 +40,26 @@ export default class CursorSystem {
         }
 
         raycaster.ray.far = 80000
+
+        // refactor this
+
         octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
         intersections = raycaster.intersectOctreeObjects( octreeObjects )
+
         i = intersections.length -1
+        component = null
 
         while ( i > -1 ) {
 
             obj = intersections[i]
             entity = obj.object.userData.entity
-            component = null
+            
             
             if ( !!entity && obj.distance < 90000 ) {
 
                 if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
 
-                    component = entity.allComponents[0] //obj.object.userData.component
+                    component = entity.allComponents[0]; //console.log("one component: ", component ? Object.keys(component.props).join("-") : "")
 
                 } else { 
 

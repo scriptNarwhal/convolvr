@@ -18,10 +18,11 @@ type Place struct {
 	X        int                    `json:"x"`
 	Y        int                    `json:"y"`
 	Z        int                    `json:"z"`
+	Tags     []string               `json:"tags",omitempty`
 }
 
-func NewPlace(id int, userId int, userName string, name string, world string, config map[string]interface{}, x int, y int, z int) *Place {
-	return &Place{id, userId, userName, name, world, config, x, y, z}
+func NewPlace(id int, userId int, userName string, name string, world string, config map[string]interface{}, x int, y int, z int, tags []string) *Place {
+	return &Place{id, userId, userName, name, world, config, x, y, z, tags}
 }
 
 func getPlaces(c echo.Context) error {

@@ -14,18 +14,36 @@ export default class MetaFactorySystem {
         let components = component.components,
             prop = component.props.metaFactory,
             assetType = prop.type,
-            source = prop.dataSource,
+            source = [],
             category = prop.propName,
             gridWidth = prop.gridWidth || 3,
             gridSize = prop.gridSize || 20000,
             vOffset = prop.vOffset || -12000,
             sourceCategory = "none",
             preset = "",
+            presets = [],
             factories = [],
             keys = {},
             x = 0,
             y = 0
-            
+
+        if ( assetType == "component" ) {
+
+            Object.keys( prop.dataSource ).map( name => {
+
+                presets.push( name )
+                source.push( prop.dataSource[ name ] )  
+
+            })
+
+            console.log( "presets", presets )
+
+        } else { 
+
+            source = prop.dataSource
+
+        }
+
         if ( typeof source.map == 'function') { // array of geometries / materials, components, entities, worlds, places, files, (directories could use source[category])
 
             source.map( (item, i) => {
@@ -34,7 +52,8 @@ export default class MetaFactorySystem {
                     return
                 }
 
-                preset = assetType == "entity" ? item.name : ""
+                preset = assetType == "entity" ? item.name : preset
+                preset = assetType == "component" ? presets[ i ] : preset
 
                 this._addComponent( component, item, assetType, category, preset, x, y, gridSize, vOffset)
 

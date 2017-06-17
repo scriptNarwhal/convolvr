@@ -233,11 +233,10 @@ export default class TerrainSystem {
 
                 let voxelKey = c.x+".0."+c.z, // debugging this.. 
                     voxelData = { name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities }, //, entities: c.entities },
-                    chunk = new Voxel( voxelData, [c.x, 0, c.z] )
+                    chunk = new Voxel( voxelData, [c.x, 0, c.z], voxels )
 
                 physicsVoxels.push( chunk.data )
                 voxelList.push( chunk )
-                voxels[ voxelKey ] = chunk
 
                  if ( terrain.loaded == false && world.user.avatar.getVoxel().join(".") == voxelKey ) {
 

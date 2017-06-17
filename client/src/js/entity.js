@@ -1,4 +1,4 @@
-import Component from './component.js';
+import Component from './component.js'
 
 export default class Entity {
 
@@ -262,6 +262,23 @@ export default class Entity {
     addToOctree && world.octree.add( mesh )
 
     parent.add( mesh )
+    let addToVoxel = systems.terrain.voxels[ this.voxel.join(".") ]
+
+    if ( !!! addToVoxel || typeof addToVoxel == 'boolean' ) {
+
+      if (!!! systems.terrain.voxels["0.0.0"] || typeof  systems.terrain.voxels["0.0.0"] == 'boolean') {
+
+        let voxel = { entities: [], meshes: [], data: { cell: [0, 0, 0] } }
+        systems.terrain.voxels["0.0.0"] = voxel
+        systems.terrain.voxelList.push(voxel)
+
+      }
+
+      addToVoxel = systems.terrain.voxels["0.0.0"]
+
+    }
+    
+    addToVoxel.meshes.push( mesh )
     this.mesh = mesh
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()

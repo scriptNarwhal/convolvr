@@ -8,19 +8,19 @@
         <meta name='theme-color' content='rgb(20, 20, 20)' />
         <meta name="msapplication-TileColor" content="#151515" />
         <meta name="application-name" content="Convolvr" />
-        <meta name="description" content="WebVR game engine, server and virtual reality authoring tool." />
+        <meta name="description" content="WebVR framework & authoring tool for highly dynamic, infinite, social spaces" />
         <!-- TODO: make metatags configurable 
                    ..and dynamic per world / place
         -->
         <meta property="og:title" content="Convolvr" />
-        <meta property="og:description" content="WebVR game engine, server and virtual reality authoring tool." />
+        <meta property="og:description" content="WebVR framework & authoring tool for highly dynamic, infinite, social spaces" />
         <meta property="og:image" content="https://convolvr.io/data/images/convolvr2.png" / >
         <meta property="og:image:width" content="192" />
         <meta property="og:image:height" content="192" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="https://convolvr.io" />
         <meta name="twitter:title" content="Convolvr" />
-        <meta name="twitter:description" content="WebVR game engine, server and virtual reality authoring tool."  />
+        <meta name="twitter:description" content="WebVR framework & authoring tool for highly dynamic, infinite, social spaces"  />
         <meta name="twitter:image" content="https://convolvr.io/data/images/convolvr2.png" />
         <style>
 			body {
@@ -103,13 +103,13 @@
 
                 if ( vUv.y >= 0.5 ) {
 
-                    luminance += 0.5 + depth * 1.2;
+                    luminance += 0.5 + depth * 1.7;
                     glow =+ 0.7 * depth * depth;
                     color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
                     glow += sin( abs( ((vUv.x * PI) -lightYaw) ) );
                 } else if ( vUv.y < 0.5 && vUv.y > 0.49 ) {
 
-                    luminance += 0.5 + depth;
+                    luminance += depth * 1.7;
                     glow += 0.3 * depth * depth;
                     glow += sin( abs( ((vUv.x * PI) -lightYaw) ) );
                     float p = 1.0 - (vUv.y-0.49)*100.0;

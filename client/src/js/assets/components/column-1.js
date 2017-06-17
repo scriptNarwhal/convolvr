@@ -10,8 +10,8 @@ let column1Comp = {
                 name: "plastic"
             }
         },
-        quaternion: null,
-        position: [0, 0, 0]
+        quaternion: [ 0, 0, 0, 1 ],
+        position: [ 0, 0, 0 ]
     }
 
 export default column1Comp

@@ -2,7 +2,7 @@ import Entity from '../entity'
 
 export default class Voxel {
 
-    constructor ( data, cell ) { // this should be refactored to use the terrain system
+    constructor ( data, cell, voxels ) { // this should be refactored to use the terrain system
 
         let visible = data.visible,
             voxelGeom = null,
@@ -17,7 +17,10 @@ export default class Voxel {
             x = 8,
             e = null
 
+        voxels[ cell.join(".") ] = this
+
         this.entities = []  
+        this.meshes = []
 
         !!data.entities && data.entities.map( ( e, i ) => {
             
@@ -43,13 +46,8 @@ export default class Voxel {
 
         if ( !! cell ) {
 
-            data.cell = cell;
-            // data.position = [
-            //     (cell[ 0 ] * 928000) + (cell[ 2 ] % 2 == 0 ? 0 : 928000 / 2),
-            //     altitude + (cell[ 1 ]*928000) - 528000,
-            //     cell[ 2 ] * 807360
-            // ]
-
+            data.cell = cell
+           
         } else {
 
             data.position = [ 0, 0, 0 ]
@@ -58,7 +56,9 @@ export default class Voxel {
 
         this.data = data
         this.cleanUp = false
-        
+
+        return this
+
     }
 
 }

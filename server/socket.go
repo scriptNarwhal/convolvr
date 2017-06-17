@@ -37,7 +37,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 it looks like yo
 
 		if action.Tool == "Entity Tool" {
 
-			entity = *NewEntity(-1, "", action.World, action.Entity.Components, action.Position, action.Quaternion, action.Entity.BoundingRadius)
+			entity = *NewEntity(-1, "", action.World, action.Entity.Components, action.Position, action.Quaternion, action.Entity.BoundingRadius, nil)
 			saveErr := voxelEntities.Save(&entity)
 			if saveErr != nil {
 				log.Println(saveErr)
@@ -64,7 +64,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 it looks like yo
 					for _, v := range action.Components {
 						if len(v.Position) > 0 {
 
-							newComp := *NewComponent(v.Name, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props, v.State, v.Components)
+							newComp := *NewComponent(v.Name, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props, v.State, v.Components, nil)
 							newComps = append(newComps, &newComp)
 
 						}

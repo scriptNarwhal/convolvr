@@ -56,13 +56,13 @@ export default class TrackedController {
 
         if (Math.abs(axes[0]) > 0.1) {
 
-            input.moveVector.x = axes[0] * 24000
+            input.moveVector.x = axes[0] * 32000
 
         }
 
         if (Math.abs(axes[1]) > 0.1) {
 
-            input.moveVector.z = axes[1] * 24000
+            input.moveVector.z = axes[1] * 32000
 
         }
       } else { // teleport mode
@@ -121,7 +121,7 @@ export default class TrackedController {
         tools.useSecondary(0, toolOptionChange)
       }
 
-      buttons.map((button, i) =>{
+      buttons.map( ( button, i ) => {
 
         if (lastButtons.right[i] == false && this.buttonPressed(button)) {
 

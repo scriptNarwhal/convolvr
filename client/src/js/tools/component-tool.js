@@ -41,7 +41,7 @@ export default class ComponentTool extends Tool {
                     props: {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "component", // component, entity, prop
-                        dataSource: this.world.systems.assets.components
+                        dataSource: this.world.systems.assets.componentsByName
                       }
                     }
                   }
