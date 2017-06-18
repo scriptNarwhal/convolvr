@@ -37,7 +37,7 @@ export let detectWorldDetailsFromURL = () => {
             isWorld = false
         }
     })
-    console.log("detect world details from URL ", isWorld, slashes)
+    
     if (isWorld) {
         if (slashes >= 2) {
             userAndWorld = [params[1], params[2], isWorld]

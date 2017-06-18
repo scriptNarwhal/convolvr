@@ -21,30 +21,72 @@ export default class CursorSystem {
         let raycaster = world.raycaster,
             eventsToChildren = false,
             octreeObjects = [],
+            castObjects = [],
             intersections = [],
             component = null,
+            voxels = world.systems.terrain.voxels,
+            coords = [ 0, 0, 0 ],
+            key = "",
+            position = null,
             entity = null,
             obj = null,
+            x = -1,
+            z = -1,
             i = 0
 
         if ( handMesh != null ) {
 
             handMesh.getWorldDirection( handDirection )
             handDirection.multiplyScalar( -1 )
+            position = handMesh.position
             raycaster.set( handMesh.position, handDirection )
 
         } else {
 
+            position = camera.position
             raycaster.setFromCamera( tmpVector2, camera )
 
         }
 
+        coords = ([Math.floor( position.z / 928000 ), 0, Math.floor( position.z / 807360 )])
+
         raycaster.ray.far = 80000
 
-        // refactor this
+        while ( x < 2 ) {
+            
+            while ( z < 2 ) {
 
-        octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
-        intersections = raycaster.intersectOctreeObjects( octreeObjects )
+                key = [ coords[0] + x, 0, coords[2] + z ].join(".")
+
+                castObjects = castObjects.concat( !!voxels[ key ] ? voxels[ key ].meshes : [] )
+                z ++
+            }
+
+            z = -1
+            x ++
+
+        }
+        
+        if ( voxels[ "0.0.0" ] != null ) {
+            castObjects = castObjects.concat(voxels[ "0.0.0" ].meshes )
+        }
+
+       while ( i < castObjects.length ) {
+
+             if ( !!!castObjects[ i ] ) {
+
+                castObjects.splice( i, 1 )
+
+            } else {
+
+                i++
+            
+            }
+            
+       }
+
+        //octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
+        intersections = raycaster.intersectOctreeObjects( castObjects ) //octreeObjects )
 
         i = intersections.length -1
         component = null
@@ -53,7 +95,6 @@ export default class CursorSystem {
 
             obj = intersections[i]
             entity = obj.object.userData.entity
-            
             
             if ( !!entity && obj.distance < 90000 ) {
 
@@ -187,13 +228,12 @@ export default class CursorSystem {
             }
 
         distance = obj.distance
-        // console.log("cursor callback")
-        // console.log(obj)
-        if ( !! entity && distance < 180000 ) {
+  
+        // if ( !! entity && distance < 180000 ) {
 
-            cursorSystem.entityCoolDown = 100
+        //     cursorSystem.entityCoolDown = 100
 
-        } // cursorSystem.entityCoolDown > 0 &&
+        // } 
 
         if ( ( !!entity ) || ( cursorSystem.entityCoolDown < 0 && !!!entity ) ) { // if components are spawned in rapid succession, attach them to the current entity even if not pointing at it
             

@@ -160,7 +160,7 @@ func getWorld(c echo.Context) error { // load specific world
 				blue = first
 			} else {
 				red = third / 2.0
-				green = first / 1.6
+				green = first / 1.7
 				blue = first
 			}
 		} else {
@@ -169,15 +169,15 @@ func getWorld(c echo.Context) error { // load specific world
 				green = first / 4.7
 				blue = first
 			} else {
-				red = first
-				green = first / 1.5
-				blue = third / 2.0
+				red = 0.0
+				green = first
+				blue = 0.0
 			}
 		}
 
-		terrainRed = math.Max(1.0, red)
-		terrainGreen = math.Min(green-blue, 0)
-		terrainBlue = math.Min(blue+red/2.0, 0)
+		terrainRed = blue/2.0 + red/2.0
+		terrainGreen = green/2.0 + blue/2.0
+		terrainBlue = red/2.0 + blue/2.0
 		terrainColor = int(math.Floor(terrainRed*255))<<16 | int(math.Floor(terrainGreen*255))<<8 | int(math.Floor(terrainBlue*255))
 
 		lightColor = int(math.Floor(red*255))<<16 | int(math.Floor(green*255))<<8 | int(math.Floor(blue*255))
@@ -186,10 +186,10 @@ func getWorld(c echo.Context) error { // load specific world
 		terrainRed /= 2
 		terrainGreen /= 2
 		terrainRed /= 2
-		terrainRed += blue / 2.0
-		terrainGreen += green / 2.0
-		terrainBlue += red / 2.0
 
+		red *= 1.1
+		green *= 1.1
+		blue *= 1.1
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}
 		light := Light{Color: lightColor, Intensity: 1.1, Pitch: 1.64, Yaw: rand.Float64() * 3.14, AmbientColor: ambientColor}
 

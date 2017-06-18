@@ -71,6 +71,7 @@ export default class ComponentTool extends Tool {
           componentType = !!params.component ? params.component : this.options.componentType,
           component = assetSystem.makeComponent( componentType ),
           tooManyComponents = !!selected && selected.components.length >= 48,
+          pointingAtTerrain = !!selected && selected.componentsByProp.terrain,
           coords = [ 0, 0, 0 ],
           components = [],
           entityId = -1,
@@ -78,7 +79,7 @@ export default class ComponentTool extends Tool {
 
       entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat )
       
-      if ( ( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents )) && cursorSystem.entityCoolDown < 0 )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
+      if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
        
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByProp.toolUI[0].state.toolUI.show()

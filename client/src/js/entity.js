@@ -268,7 +268,7 @@ export default class Entity {
 
       if (!!! systems.terrain.voxels["0.0.0"] || typeof  systems.terrain.voxels["0.0.0"] == 'boolean') {
 
-        let voxel = { entities: [], meshes: [], data: { cell: [0, 0, 0] } }
+        let voxel = { entities: [], meshes: [], cleanUp: false, data: { cell: [0, 0, 0] } }
         systems.terrain.voxels["0.0.0"] = voxel
         systems.terrain.voxelList.push(voxel)
 

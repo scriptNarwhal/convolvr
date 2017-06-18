@@ -13,7 +13,7 @@ export default class EntityTool extends Tool  {
 
       Object.keys( allEntities ).map( name => {
     
-        if ( name != "default-avatar" ) {
+        if ( name != "default-avatar" && name != "tool-menu" && name != "help-screen" && name != "chat-screen" ) {
 
           allOptions.push( name ) 
 
@@ -74,11 +74,12 @@ export default class EntityTool extends Tool  {
           selected = !!cursorState.entity ? cursorState.entity : false,
           user = this.world.user,
           entity =  params.entity ? params.entity : assetSystem.makeEntity( this.options.entityType ),
-          tooManyComponents = !!selected && selected.components.length >= 48
-      
-      if ( ! tooManyComponents ) {
+          tooManyComponents = !!selected && selected.components.length >= 48,
+          pointingAtTerrain = !!selected && selected.componentsByProp.terrain
+      console.log("primary action: cooldown ", cursorSystem.entityCoolDown)
+      if ( ! tooManyComponents && !pointingAtTerrain ) {
 
-        if ((selected && cursorState.distance < 200000) || cursorSystem.entityCoolDown > 10 ) { // switch to component tool
+        if ( ((selected && cursorState.distance < 200000) || cursorSystem.entityCoolDown > 10) ) { // switch to component tool
             
             user.toolbox.useTool( 1, telemetry.hand )
             user.hud.componentsByProp.toolUI[0].state.toolUI.show()
@@ -90,7 +91,7 @@ export default class EntityTool extends Tool  {
       }
       
       if ( cursorSystem.entityCoolDown < 0 ) {
-
+        cursorSystem.entityCoolDown = 100
         return {
           entity
         }
