@@ -35,9 +35,10 @@ export default class ToolSystem {
                         },
                         components: [
                             {
-                                position: [ 0, 0, -7000 ],
+                                position: [ 0, 2000, 7000 ],
                                 props: { // title for top bar
                                     text: {
+                                        label: true,
                                         lines: [ prop.panel.title ],
                                         color: "#ffffff",
                                         background: "#000000"
@@ -131,6 +132,17 @@ export default class ToolSystem {
         toolPanel.mesh.translateZ(-72000)
         toolPanel.mesh.translateX(35000)
         toolPanel.mesh.updateMatrix()
+
+        this.panels.map( panel => {
+
+            if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 40000 ) {
+
+                panel.mesh.translateX(20000)
+                panel.mesh.translateZ(20000)
+
+            }
+
+        })
 
       }
 

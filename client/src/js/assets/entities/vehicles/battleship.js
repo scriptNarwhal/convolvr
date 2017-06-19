@@ -52,7 +52,7 @@ let battleship = ( assetSystem, config ) => {  // implement
             }
           },
           position: [ 0, 0, 0 ],
-          quaternion: false,
+          quaternion: [ 0, 0, 0, 1 ],
           components: [
             Object.assign( {}, cursorComponent )
           ]

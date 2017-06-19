@@ -76,14 +76,14 @@ export default class EntityTool extends Tool  {
           entity =  params.entity ? params.entity : assetSystem.makeEntity( this.options.entityType ),
           tooManyComponents = !!selected && selected.components.length >= 48,
           pointingAtTerrain = !!selected && selected.componentsByProp.terrain
-      console.log("primary action: cooldown ", cursorSystem.entityCoolDown)
-      if ( ! tooManyComponents && !pointingAtTerrain ) {
+  
+      if ( ! tooManyComponents ) {
 
         if ( ((selected && cursorState.distance < 200000) || cursorSystem.entityCoolDown > 10) ) { // switch to component tool
             
             user.toolbox.useTool( 1, telemetry.hand )
             user.hud.componentsByProp.toolUI[0].state.toolUI.show()
-            user.toolbox.usePrimary(0)
+            user.toolbox.usePrimary( telemetry.hand )
             return false
 
         }

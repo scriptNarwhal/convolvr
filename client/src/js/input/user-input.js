@@ -234,6 +234,8 @@ export default class UserInput {
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
 			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
 			this.camera.matrixWorldNeedsUpdate = true
+			
+			let friction = 0
 
 			if ( this.camera.position.y < bottom + 70000 ) {
 
@@ -255,17 +257,25 @@ export default class UserInput {
 				}
 			}
 			
-			if ( this.keys.shift == false && this.device.falling == false ) { // (velocity.x * velocity.x) + (velocity.z * velocity.z) > 20000 
+			if ( this.device.falling == false ) { // (velocity.x * velocity.x) + (velocity.z * velocity.z) > 20000 
 
-					velocity.x *=  (1 - (0.03 * delta * 1000))
-					velocity.z *= (1 - (0.03 * delta * 1000))
+				friction = 0.03
 
 			} else {
 
-				velocity.x *=  (1 - (0.02 * delta * 1000))
-				velocity.z *= (1 - (0.02 * delta * 1000))
+				friction = 0.013
 
 			}
+
+			if ( this.keys.shift == true) {
+					
+				friction = 0.01
+
+			}
+
+			velocity.x *=  (1 - (friction * delta * 1000))
+			velocity.z *= (1 - (friction * delta * 1000))
+
 			if ( !!world.user.mesh ) {
 
 				world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z)

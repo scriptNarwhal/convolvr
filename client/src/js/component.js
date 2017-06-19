@@ -20,6 +20,13 @@ export default class Component {
       this.merged = false
       this._compPos = new THREE.Vector3()
 
+      if ( !!! props ) {
+
+        console.warn("Component must have props")
+        this.props = props = {}
+
+      }
+
       if ( props.geometry == undefined ) {
         props.geometry = {
           shape: "box",

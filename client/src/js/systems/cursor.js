@@ -6,6 +6,7 @@ export default class CursorSystem {
 
         this.world = world
         this.entityCoolDown = -1
+        this.resetEntityTimeout = null
 
     }
 
@@ -95,7 +96,10 @@ export default class CursorSystem {
 
             obj = intersections[i]
             entity = obj.object.userData.entity
-            
+            if (!! entity && entity.componentsByProp.terrain ) {
+                i --
+                continue
+            }
             if ( !!entity && obj.distance < 90000 ) {
 
                 if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
@@ -228,16 +232,15 @@ export default class CursorSystem {
             }
 
         distance = obj.distance
-  
-        // if ( !! entity && distance < 180000 ) {
 
-        //     cursorSystem.entityCoolDown = 100
-
-        // } 
-
-        if ( ( !!entity ) || ( cursorSystem.entityCoolDown < 0 && !!!entity ) ) { // if components are spawned in rapid succession, attach them to the current entity even if not pointing at it
+        if ( !!entity || ( cursorSystem.entityCoolDown < 0 && !!!entity ) ) { // if components are spawned in rapid succession, attach them to the current entity even if not pointing at it
             
             newCursorState.entity = entity
+
+        } else {
+
+             newCursorState.entity = false
+             newCursorState.component = false // might fix it ??
 
         }
 

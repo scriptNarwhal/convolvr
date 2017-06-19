@@ -119,7 +119,7 @@ export default class Keyboard {
     if ( keys.space && !input.device.falling ) {
 
       input.device.falling = true;
-      velocity.y = 1600000
+      velocity.y = 2400000
 
     }
 

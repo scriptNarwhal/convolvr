@@ -84,7 +84,7 @@ export default class SocketHandlers {
 				pos = data.position,
 				coords = data.coords,
 				voxel = world.terrain.voxels[ coords[0]+".0."+coords[2] ],
-				quat = data.quaternion
+				quat = data.quaternion	
 
 			switch (data.tool) {
 				case "Entity Tool":
@@ -106,7 +106,7 @@ export default class SocketHandlers {
 					})
 				break;
 				case "Custom Tool":
-
+					// check tool functionality from tool prop
 				break
 				case "Voxel Tool":
 
@@ -142,7 +142,16 @@ export default class SocketHandlers {
 					})
 				break
 				case "Delete Tool":
+					voxel.entities.map( ( voxelEnt, i ) => { // find & re-init entity ^^^^^^
 
+						if ( voxelEnt.id == data.entityId ) {
+							console.log("got delete tool message", data.entityId) // concat with existing components array
+							world.octree.remove( voxelEnt.mesh )
+							three.scene.remove( voxelEnt.mesh )
+							voxel.entities.splice( i, 1 )
+						}
+						
+					})
 				break
 				case "Geotag Tool":
 					// mostly going to use rest api for this..

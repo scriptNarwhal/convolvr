@@ -275,7 +275,8 @@ export default class Toolbox {
             three.scene.remove(entity.mesh)
             hand.userData.grabbedEntity = entity
             hand.add(entity.mesh)
-            entity.update( [0, 0, 0] )
+            //entity.update( [0, 0, 0] )
+            entity.mesh.position.fromArray([0,0,0])
 
           }
 
@@ -290,7 +291,7 @@ export default class Toolbox {
       let userHand = !!this.hands[hand] ? this.hands[hand].mesh : false
 
       if ( userHand ) {
-
+        userHand.autoUpdateMatrix = false
         userHand.position.fromArray(position).multiplyScalar(22000).add(this.world.camera.position)
         userHand.translateX(725+ hand*-1250)
         userHand.position.y += -22000+this.world.floorHeight*6
