@@ -8,11 +8,13 @@ import Entity from '../entity'
 import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
+import initLocalSettings from './local-settings'
 import { 
 	compressFloatArray,
 	compressVector3,
 	compressVector4
- } from '../network/util'
+} from '../network/util'
+
 
 let world = null
 
@@ -35,7 +37,7 @@ export default class Convolvr {
 		this.floorHeight = 0
 		this.highAltitudeGravity = false
 		this.viewDistance = 0 // default
-		this.initLocalSettings()
+		initLocalSettings( this )
 		usePostProcessing = this.enablePostProcessing == 'on'
 		camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + (3+this.viewDistance)*600000 )
 
@@ -57,15 +59,12 @@ export default class Convolvr {
 
 		}
 
-	// 	 THREE.ShaderChunk["envmap_fragment"] = THREE.ShaderChunk["envmap_fragment"]
-    // .split("reflectVec = reflect( cameraToVertex, worldNormal )")
-    // .join("reflectVec = transformDirection( reflect( cameraToVertex, worldNormal ), viewMatrix )");
-
 		this.postProcessing = postProcessing
 		this.socket = socket
 		this.config = false
 		this.windowFocus = true
 		this.name = "convolvr"
+		this.userName = "space"
 		this.mode = "3d" // web, stereo ( IOTmode should be set this way )
 		this.rPos = false
 		this.users = []
@@ -206,7 +205,7 @@ export default class Convolvr {
 				three.scene.add(this.skybox)
 				world.skybox.position.set(camera.position.x, 0, camera.position.z)
 
-				world.terrain.bufferChunks( true, 0 )
+				world.terrain.bufferVoxels( true, 0 )
 
 				world.gravity = config.gravity
 				world.highAltitudeGravity = config.highAltitudeGravity
@@ -247,7 +246,7 @@ export default class Convolvr {
 		}
 
 		if ( coords ) {
-
+			console.log("world init")
 			coords = coords.split(".")
 			three.camera.position.fromArray([parseInt(coords[0])*928000, parseInt(coords[1])*807360, parseInt(coords[2])*807360])
 			three.camera.updateMatrix()
@@ -262,7 +261,7 @@ export default class Convolvr {
 	initRenderer ( renderer, id ) {
 
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1
-		renderer.setClearColor(0x1b1b1b)
+		renderer.setClearColor(0x2b2b2b)
 		renderer.setPixelRatio(pixelRatio)
 		renderer.setSize(window.innerWidth, window.innerHeight)
 		document.body.appendChild( renderer.domElement )
@@ -270,93 +269,12 @@ export default class Convolvr {
 		renderer.domElement.setAttribute("id", id)
 	}
 
-	initLocalSettings () {
-
-		let cameraMode = localStorage.getItem("camera"),
-			vrMovement = localStorage.getItem("vrMovement"),
-			IOTMode = localStorage.getItem("IOTMode"),
-			lighting = localStorage.getItem("lighting"),
-			enablePostProcessing = localStorage.getItem("postProcessing"),
-			aa = localStorage.getItem("aa"),
-			floorHeight = localStorage.getItem("floorHeight"),
-			viewDistance = localStorage.getItem("viewDistance")
-
-		if ( cameraMode == null ) {
-
-			cameraMode = 'fps'
-			localStorage.setItem("camera", 'fps')
-
-		}
-
-		if ( vrMovement == null ) {
-
-			vrMovement = 'stick' // change to teleport later
-			localStorage.setItem("vrMovement", vrMovement)
-
-		}
-
-		if ( IOTMode == null ) {
-
-			IOTMode = 'off'
-			localStorage.setItem("IOTMode", IOTMode)
-
-		}
-
-		if ( aa == null ) {
-
-			aa = 'on'
-			localStorage.setItem("aa", aa)
-
-		}
-
-		if ( lighting == null ) {
-
-			lighting = 'high'
-			localStorage.setItem("lighting", !this.mobile ? 'high' : 'low')
-
-		}
-
-		if ( enablePostProcessing == null ) {
-
-			enablePostProcessing = 'off'
-			localStorage.setItem("postProcessing", enablePostProcessing)
-
-		}
-
-		if ( floorHeight == null ) {
-
-			floorHeight = 0
-			localStorage.setItem("floorHeight", floorHeight)
-
-		} 
-
-		if ( viewDistance == null ) {
-
-			viewDistance = 0
-			localStorage.setItem("viewDistance", 0)
-
-		} else {
-
-			viewDistance = parseInt(viewDistance)
-
-		}
-
-		this.aa = aa
-		this.viewDistance = viewDistance
-		this.cameraMode = cameraMode
-		this.vrMovement = vrMovement
-		this.lighting = lighting
-		this.enablePostProcessing = enablePostProcessing
-		this.IOTMode = IOTMode == 'on'
-		this.floorHeight = parseInt(floorHeight)
-
-	}
-
 	load ( userName, name, callback, readyCallback ) { console.log("load world", userName, name)
 
 		let world = this
 		
 		this.name = name
+		this.userName = userName
 		console.log( this.systems.terrain )
 		this.systems.terrain.readyCallback = readyCallback
 	

@@ -1,3 +1,4 @@
+import { browserHistory } from 'react-router'
 import axios from 'axios'
 import Voxel from '../world/voxel'
 import { animate } from '../world/render'
@@ -82,7 +83,7 @@ export default class TerrainSystem {
 
   }
 
-  bufferChunks ( force, phase ) {
+  bufferVoxels ( force, phase ) {
 
     let voxels = this.voxels,
         voxelList = this.voxelList,
@@ -99,7 +100,7 @@ export default class TerrainSystem {
         pCell = [ 0, 0, 0 ],
         position = three.camera.position,
         terrainChunk = null,
-        coords = [ Math.floor( position.x / 928000 ), 0, Math.floor( position.z / 806360 ) ],
+        coords = [ Math.floor( position.x / 928000 ), Math.floor( position.y / 928000 ), Math.floor( position.z / 806360 ) ],
         lastCoords = this.lastChunkCoords,
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
         viewDistance = (this.world.mobile ? 5 : 8) + this.world.viewDistance,
@@ -114,6 +115,19 @@ export default class TerrainSystem {
     if ( force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
 
       lastCoords = this.lastChunkCoords = [ coords[0], coords[1], coords[2] ]
+      let userName = world.userName || "space"
+
+      if ( userName == "space" && world.name == "convolvr" ) {
+
+        browserHistory.push( "/at/"+coords.join("."))
+
+      } else {
+
+        browserHistory.push( "/"+(userName)+"/"+world.name+"/at/"+coords.join("."))
+
+      }
+      
+
       force = false 	// remove old chunks
 
       for ( c in voxelList ) {
@@ -286,7 +300,7 @@ export default class TerrainSystem {
         phase = 1
       }
 
-      setTimeout(() => { this.bufferChunks(force, phase) }, 32 ) // experiment // 32)
+      setTimeout(() => { this.bufferVoxels(force, phase) }, 32 ) // experiment // 32)
 
     }
 

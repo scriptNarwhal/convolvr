@@ -67,8 +67,8 @@ export default class SocketHandlers {
 
 						}
 					}
-
-					user.avatar.update( [ pos.x, pos.y, pos.z ], [ quat.x, quat.z, quat.y, quat.w ] )
+					
+					user.avatar.update( [ pos.x, pos.y, pos.z ], [ quat.x, quat.y, quat.z, quat.w ] )
 
 				}
 

@@ -54,7 +54,7 @@ export default class GeometrySystem {
               geometry = new THREE.CylinderGeometry( size[0], size[2], size[1], 4, 1, true )
             break
             case "frustum": 
-              geometry = new THREE.CylinderGeometry( size[0], size[0] * (2/3), size[0], 4, 1, true )
+              geometry = new THREE.CylinderGeometry( size[0], size[0] * (2/3), size[0], 4, 1 )
             break
             case "extrude":
               geometry = this._extrudeGeometry( prop )
@@ -69,11 +69,11 @@ export default class GeometrySystem {
 
           }
           
-          assets.geometries[geometryCode] = geometry
+          assets.geometries[ geometryCode ] = geometry
 
         } else {
 
-          geometry = assets.geometries[geometryCode] // used cached copy
+          geometry = assets.geometries[ geometryCode ] // used cached copy
 
         }
 

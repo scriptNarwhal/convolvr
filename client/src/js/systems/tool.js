@@ -134,7 +134,7 @@ export default class ToolSystem {
         toolPanel.mesh.updateMatrix()
 
         this.panels.map( panel => {
-
+            console.log("panel distance ", toolPanel.mesh.position.sub( panel.mesh.position ).length())
             if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 40000 ) {
 
                 panel.mesh.translateX(20000)

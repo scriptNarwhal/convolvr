@@ -8,13 +8,13 @@ export let compressFloat = ( float, n ) => {
 
 export let compressFloatArray = ( floats, n ) => {
 
-    let x = floats.length -1,
+    let x = 0,
         out = []
 
-    while ( x >= 0 ) {
+    while ( x < floats.length ) {
 
         out.push( parseFloat( floats[ x ].toFixed( n ) ) )
-        x --
+        x += 1
 
     }
 

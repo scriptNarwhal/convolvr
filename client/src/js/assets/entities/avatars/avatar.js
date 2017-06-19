@@ -51,7 +51,7 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
         component = {
              props: { 
                 geometry: {
-                  shape: "cylinder",
+                  shape: "box",
                   size: [ 1800, 1200, 1800 ]
                 },
                 material: {
@@ -60,25 +60,51 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
                 },
                 user: userData
              },
-             position: [ 0, (n-1)*600, 0 ],
+             position: [ 0, (n - 1)*600, 0 ],
              quaternion: [ 0, 0, 0, 1 ]
         }
        components.push(component)
+       cursorAxis.fromArray( [ 0, 1, 0 ] )
+       cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
+       
        componentB = {
              props: { 
                 geometry: {
-                  shape: "octahedron",
-                  size: [ 2800, 2800, 2800 ],
+                  shape: "frustum",
+                  size: [ 5200, 5200, 4200 ],
                 },
                 material: {
-                  color: 0xffffff,
-                  name: "wireframe",
+                  color: 0xf0f0f0,
+                  name: "metal",
                 }
              },
-             position: [ 0, (n-1)*600, 0 ],
-             quaternion: [ 0, 0, 0, 1 ]
+             position: [ 0, (n - 1)*600, 0 ],
+             quaternion: cursorRot.toArray()
          }
          components.push( componentB )
+         n = 0
+      
+        while (n < 2) {
+
+          components.push(Object.assign({}, {
+            props: {
+              noRaycast: true,
+              geometry: {
+                size: [ 3000, 6000, 9200 ],
+                shape: "box"
+              },
+              material: {
+                name: "metal",
+                color: 0x3b3b3b,
+              }
+            },
+            quaternion: [0, 0, 0, 1],
+            position: [ 2000+(n - 1) * 5000, 0, 0],
+            components: []
+          }))
+          ++n
+
+        }
 
       } else {
 
@@ -105,31 +131,31 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
 
       n = 0
 
-        while ( n < 2 ) {
+      while (n < 2) {
 
-          components.push(Object.assign({}, {
-            props: {
-                hand: n,
-                noRaycast: true,
-                geometry: {
-                  size: [2200, 1200, 3200],
-                  shape: "box",
-                  faceNormals: false
-                },
-                material: {
-                  name: "metal",
-                  color: 0xffffff,
-                }
+        components.push(Object.assign({}, {
+          props: {
+            hand: n,
+            noRaycast: true,
+            geometry: {
+              size: [2200, 1200, 3200],
+              shape: "box",
+              faceNormals: false
             },
-            quaternion: [ 0, 0, 0, 1 ],
-            position: [(n-1)*1500, 0, 0],
-            components: [
-              Object.assign( {}, cursorComponent )
-            ]
-          }))
-          ++n
+            material: {
+              name: "metal",
+              color: 0xffffff,
+            }
+          },
+          quaternion: [0, 0, 0, 1],
+          position: [(n - 1) * 1500, 0, 0],
+          components: [
+            Object.assign({}, cursorComponent)
+          ]
+        }))
+        ++n
 
-        }
+      }
         
     entity = new Entity( id, components, [0, 0, 0], [ 0, 0, 0, 1 ] )
   

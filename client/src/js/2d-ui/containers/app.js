@@ -186,9 +186,10 @@ class App extends Component {
 
   componentWillUpdate ( nextProps, nextState ) {
 
-    let newWorld = ["space", "overworld"]
+    let newWorld = ["space", "overworld"],
+        pathChange = nextProps.url.pathname.indexOf("/at") > -1 ? false : nextProps.url.pathname != this.props.url.pathname
 
-    if ( nextProps.url.pathname != this.props.url.pathname ) {
+    if ( pathChange ) {
 
       newWorld = detectWorldDetailsFromURL() // console.log("detected world details from url (app.js willUpdate) ", newWorld)
       
