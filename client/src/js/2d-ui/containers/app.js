@@ -34,8 +34,8 @@ class App extends Component {
         lastSender: chatMessage.from
       })
 
-      chatText.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
-      chatText.state.text.update()
+      // chatText.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
+      // chatText.state.text.update()
 
       this.notify(chatMessage.message, chatMessage.from)
       worldName = this.props.world == "overworld" ? "Convolvr" : this.props.world

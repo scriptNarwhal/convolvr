@@ -12,6 +12,10 @@ let chatScreen = {
                         color: 0x808080,
                         name: "plastic"
                     },
+                    chat: {
+                        userId: "all",
+                        displayMessages: true
+                    },
                     text: {
                         lines: [ 
                             "Welcome To Convolvr", 

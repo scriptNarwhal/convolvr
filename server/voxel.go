@@ -85,6 +85,28 @@ func getWorldChunks(c echo.Context) error {
 				log.Println(initErr)
 			}
 
+			if worldData.Spawn.NPCS {
+
+				if canPlaceNPCAt(x, 0, z) {
+
+					entities = append(entities, generateNPC(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+
+				}
+
+			}
+
+			if worldData.Spawn.Trees {
+
+				if canPlaceTreeAt(x, 0, z) {
+
+					entities = append(entities, generateTree(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+
+				}
+
+			}
+
 			if worldData.Spawn.Structures {
 
 				if canPlaceStructureAt(x, 0, z) {
@@ -107,6 +129,28 @@ func getWorldChunks(c echo.Context) error {
 
 			}
 
+			if worldData.Spawn.Vehicles {
+
+				if canPlaceVehicleAt(x, 0, z) {
+
+					entities = append(entities, generateVehicle(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+
+				}
+
+			}
+
+			if worldData.Spawn.Tools {
+
+				if canPlaceToolAt(x, 0, z) {
+
+					entities = append(entities, generateTool(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+
+				}
+
+			}
+
 			for _, g := range entities {
 
 				saveEntitiesError := voxelEntities.Save(g)
@@ -115,8 +159,6 @@ func getWorldChunks(c echo.Context) error {
 				}
 
 			}
-
-			//voxelEntities.All(&entities)
 
 			generatedChunk = *NewVoxel(0, x, y, z, altitude, world, "", entities)
 			saveErr := voxel.Save(&generatedChunk)
