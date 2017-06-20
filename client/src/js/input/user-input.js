@@ -37,7 +37,7 @@ export default class UserInput {
 		this.lastTouch = [[0,0], [0,0]]
 		this.tiltControls = null
 		this.leapMotion = false
-		this.leapMode = "movement"
+		this.leapMode = "hybrid"
 		this.gamepadMode = false
 		this.trackedControls = false
 		this.handsDetected = 0

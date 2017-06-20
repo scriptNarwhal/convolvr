@@ -52,6 +52,7 @@ const styles = {
 }
 
 class Settings extends Component {
+
   constructor () {
     this.state = {
       camera: 'fps',
@@ -60,6 +61,7 @@ class Settings extends Component {
       postProcessing: 'on',
       defaultWorld: 'overworld',
       welcomeMessage: 'Welcome to Convolvr!',
+      leapMode: "hybrid",
       floorHeight: 0,
       viewDistance: 0,
       profilePicture: '',
@@ -67,6 +69,7 @@ class Settings extends Component {
       IOTMode: false
     }
   }
+
   componentWillMount () {
     this.setState({
       camera: localStorage.getItem("camera") || 'fps',
@@ -76,11 +79,13 @@ class Settings extends Component {
       aa: localStorage.getItem("aa") || "on",
       floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
       IOTMode: localStorage.getItem("IOTMode") || 'off',
+      leapMode: localStorage.getItem("leapMode") || "hybrid",
       viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0
     })
     this.props.fetchUniverseSettings()
   }
-  componentWillUpdate(nextProps, nextState) {
+
+  componentWillReceiveProps ( nextProps, nextState ) {
     if (this.props.fetchingSettings == true && nextProps.fetchingSettings == false && nextProps.settings != null) {
       console.log("Done Loading Universe Settings")
       this.setState({
@@ -90,9 +95,11 @@ class Settings extends Component {
       })
     }
   }
+
   reload () {
     window.location.href = window.location.href
   }
+
   save () {
     localStorage.setItem('camera', this.state.camera)
     localStorage.setItem('lighting', this.state.lighting)
@@ -101,9 +108,11 @@ class Settings extends Component {
     localStorage.setItem('vrMovement', this.state.vrMovement) 
     localStorage.setItem('IOTMode', this.state.IOTMode)
     localStorage.setItem('floorHeight', this.state.floorHeight)
+    localStorage.setItem( 'leapMode', this.state.leapMode )
     localStorage.setItem('viewDistance', this.state.viewDistance)
     this.reload()
   }
+
   updateUniverseSettings () {
     let data = {
       id: 1,
@@ -113,22 +122,26 @@ class Settings extends Component {
     }
     this.props.updateUniverseSettings(data, this.props.user.password)
   }
+
   addServer() {
     let network = this.state.network
     network.push({domain: '', image: ''})
     this.setState({network})
   }
+
   removeServer(index) {
     let network = this.state.network
     network.splice(index, 1)
     this.setState({network})
   }
+
   updateServer (index, name, image = '') {
     let network = this.state.network
     network[index].name = name
     network[index].image = image
     this.setState({network})
   }
+
   upload (e) {
     let data = new FormData(),
         username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
@@ -138,48 +151,27 @@ class Settings extends Component {
     })
     this.props.uploadFile(data, username, "")
   }
+  
   render() {
     let isAdmin = this.props.user.name == 'admin'
     return (
         <Shell className="settings">
           <div style={styles.modal}>
-          <h1>Settings</h1>
-          <div>
-            <h3 style={styles.h3}>Profile Picture</h3>
-            <span style={{paddingLeft: '1em'}}>
-              <input onChange={ (e)=> this.upload(e) }
-                           style={styles.fileUpload} 
-                           type='file' 
+            <div>
+              <h1>Settings</h1>
+              <h3 style={styles.h3}>View Distance</h3>
+              <input onBlur={e=> {this.setState({viewDistance: parseInt(e.target.value)})}}
+                    style={styles.range}
+                    defaultValue={this.state.viewDistance}
+                    step={1}
+                    type='range'
+                    min='-4'
+                    max='6'
               />
-            </span>
-          <div>
-            <h3 style={styles.h3}>View Distance</h3>
-            <input onBlur={e=> {this.setState({viewDistance: parseInt(e.target.value)})}}
-                   style={styles.range}
-                   defaultValue={this.state.viewDistance}
-                   step={1}
-                   type='range'
-                   min='-4'
-                   max='6'
-            />
-            <span style={{paddingLeft: '1em'}}>
-              {(this.state.viewDistance > 0 ?'+ ':'- ')+this.state.viewDistance} Voxels 
-            </span>
-          </div>
-          <div>
-            <h3 style={styles.h3}>Floor Height (VR)</h3>
-            <input onBlur={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
-                   style={styles.range}
-                   defaultValue={this.state.floorHeight}
-                   step={1}
-                   type='range'
-                   min='-30000'
-                   max='20000'
-            />
-            <span style={{paddingLeft: '1em'}}>
-              {this.state.floorHeight} Units
-            </span>
-          </div>
+              <span style={{paddingLeft: '1em'}}>
+                {(this.state.viewDistance > 0 ?'+ ':'- ')+this.state.viewDistance} Voxels 
+              </span>
+            </div>
           <div>
             <h3 style={styles.h3}>Lighting Quality</h3>
             <select onChange={e=> {this.setState({lighting: e.target.value})}}
@@ -211,6 +203,31 @@ class Settings extends Component {
             </select>
           </div>
           <div>
+            <h3 style={styles.h3}>Floor Height (VR)</h3>
+            <input onBlur={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
+                   style={styles.range}
+                   defaultValue={this.state.floorHeight}
+                   step={1}
+                   type='range'
+                   min='-30000'
+                   max='20000'
+            />
+            <span style={{paddingLeft: '1em'}}>
+              {this.state.floorHeight} Units
+            </span>
+          </div>
+          <div>
+            <h3 style={styles.h3}>Leap Motion Mode</h3>
+            <select onChange={e=> {this.setState({leapMode: e.target.value})}}
+                    value={ this.state.leapMode }
+                    style={ styles.select }
+            >
+              <option value="hybrid">Hybrid Mode</option>
+              <option value="movement">Movement & Look Only</option>
+              <option value="avatar">Control Both Hands</option>
+            </select>
+          </div>
+          <div>
             <h3 style={styles.h3}>Camera Control Mode</h3>
             <select onChange={e=> { this.setState({camera: e.target.value})}}
                     value={ this.state.camera }
@@ -227,6 +244,15 @@ class Settings extends Component {
               <option value="off">Off (Recommended)</option>
               <option value="on">On (Only renders after world update)</option>
             </select>
+          </div>
+          <div>
+            <h3 style={styles.h3}>Profile Picture</h3>
+            <span style={{paddingLeft: '1em'}}>
+              <input onChange={ (e)=> this.upload(e) }
+                           style={styles.fileUpload} 
+                           type='file' 
+              />
+            </span>
           </div>
           <input style={styles.save}
                  type='submit'
@@ -316,7 +342,6 @@ class Settings extends Component {
               />
             </div>
           ): ""}
-          </div>
           </div>
         </Shell>
     )

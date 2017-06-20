@@ -122,10 +122,12 @@ export default class Entity {
     }
 
     this.anchor = parent 
+    
     if ( this.components.length == 0 ) {
       console.warn("Entity must have at least 1 component")
       return false
     }
+
     while ( c < ncomps ) {
 
         comp = new Component( this.components[ c ], this, systems, {mobile} ) // use simpler shading for mobile gpus

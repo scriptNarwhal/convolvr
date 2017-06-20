@@ -37,6 +37,7 @@ export default class Convolvr {
 		this.floorHeight = 0
 		this.highAltitudeGravity = false
 		this.viewDistance = 0 // default
+		this.userInput = userInput
 		initLocalSettings( this )
 		usePostProcessing = this.enablePostProcessing == 'on'
 		camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + (3+this.viewDistance)*600000 )
@@ -71,7 +72,6 @@ export default class Convolvr {
 		this.user = user || {}
 		this.camera = camera
 		this.vrFrame = !!window.VRFrameData ? new VRFrameData() : null
-		this.userInput = userInput
 		this.sendUpdatePacket = 0
 		this.capturing = false
 		this.webcamImage = ""

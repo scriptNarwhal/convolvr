@@ -1,54 +1,86 @@
 export default class LeapMotion {
+
 	constructor (uInput, world) {
+
     Leap.loop(function (frame) {
-      var mode = world.mode,
-        input = uInput,
-        user = world.user;
-        uInput.leapMotion = true;
-      if (isVRMode(mode)) { // if its VR mode and not chat mode
-        if (input.leapMode == "movement") {
-          frame.hands.forEach(function (hand, index) {
-            var position = hand.screenPosition();
-            input.moveVector.x = ((-window.innerWidth / 2) + position[0]);
-            input.moveVector.z = ((-window.innerWidth / 2) + position[2]);
-            input.rotationVector.y -= 0.025 * hand.yaw(); //((-window.innerWidth / 2) + position[0]) / 3000;
-            input.rotationVector.x += 0.015 * hand.pitch();
-          });
+
+      let mode = world.mode,
+          input = uInput,
+          user = world.user,
+          toolbox = user.toolbox
+
+        uInput.leapMotion = true
+
+      if ( true ) { //isVRMode(mode)) { // if its VR mode and not chat mode
+
+        if ( input.leapMode == "movement" ) {
+          frame.hands.forEach(( hand, index ) => {
+
+            let position = hand.screenPosition()
+            input.moveVector.x = (((-window.innerWidth / 2) + position[0])) * 30
+            input.moveVector.z = (((-window.innerWidth / 2) + position[2])) * 30
+            input.rotationVector.y -= 0.025 * hand.yaw() //((-window.innerWidth / 2) + position[0]) / 3000;
+            input.rotationVector.x += 0.015 * hand.pitch()
+
+          })
+
         } else {
-          if (input.leapMode == "avatar") {
-            frame.hands.forEach(function (hand, index) {
-              var position = hand.screenPosition();
-              if (user.hands[index] != null) {
-                user.hands[index].visible = true;
-                user.hands[index].rotation.set(hand.pitch(), -hand.yaw(), 0);
-                user.hands[index].position.set(-50+((-window.innerWidth / 2) + position[0]), 0, -350 + position[2]);
-                user.hands[index].updateMatrix();
+
+          if ( input.leapMode == "avatar" ) {
+
+            frame.hands.forEach( ( hand, index ) => {
+
+              let position = hand.screenPosition(),
+                  handMesh = null
+
+              if ( toolbox.hands[ index ] != null ) {
+
+                handMesh = toolbox.hands[ index ].mesh
+                handMesh.visible = true
+                handMesh.rotation.set( hand.pitch(), -hand.yaw(), 0 )
+                handMesh.position.set( -8000+(((-window.innerWidth / 2) )+ position[0]* 10), 0, -1150 - position[2]* 10 )
+                handMesh.updateMatrix()
                 // refactor this..
                 // include logic for moving by grabbing..
                 // possibly modify this to work with teleporting 
               }
-            });
+
+            })
+
           } else {
-            frame.hands.forEach(function (hand, index) {
-              var position = hand.screenPosition(),
-              handIndex = 0;
-              if (index == 0) { // if its the first hand, control the camera
-                input.moveVector.x = ((-window.innerWidth / 2) + position[0]);
-                input.moveVector.z = ((-window.innerWidth / 2) + position[2]);
-                input.rotationVector.y -= 0.025 * hand.yaw(); //((-window.innerWidth / 2) + position[0]) / 3000;
-                input.rotationVector.x += 0.015 * hand.pitch();
+
+            frame.hands.forEach( ( hand, index ) => {
+
+              let position = hand.screenPosition(),
+                  handIndex = 0,
+                  handMesh = null
+
+              if ( index == 0 ) { // if its the first hand, control the camera
+                input.moveVector.x = (((-window.innerWidth / 2) + position[0])) * 30
+                input.moveVector.z = (((-window.innerWidth / 2) + position[2])) * 30
+                input.rotationVector.y -= 0.025 * hand.yaw() //((-window.innerWidth / 2) + position[0]) / 3000;
+                input.rotationVector.x += 0.015 * hand.pitch()
               } else { // if its the second hand, control the hands/hands
-                while (handIndex < 2) {
-                  if (user.hands[handIndex] != null) {
-                    user.hands[handIndex].visible = true;
-                    user.hands[handIndex].rotation.set(hand.pitch(), -hand.yaw(), 0);
-                    user.hands[handIndex].position.set(-50+((300*handIndex)+((-window.innerWidth / 2) + position[0])), 0, -350 + position[2]);
-                    user.hands[handIndex].updateMatrix();
-                    handIndex ++;
+
+                while ( handIndex < 2 ) {
+                  
+                  if ( toolbox.hands[ handIndex ] != null ) {
+                    
+                    handMesh = toolbox.hands[ handIndex ].mesh
+                    handMesh.visible = true
+                    handMesh.rotation.set( hand.pitch(), -hand.yaw(), 0 )
+                    handMesh.position.set( -10000+((10000*handIndex)+((-window.innerWidth / 2) + position[0]) * 10), -1500, -1150 + position[2] * 10 )
+                    handMesh.updateMatrix()
+                    handIndex ++
+
                   }
+
                 }
+
               }
-            });
+
+            })
+
           }
         }
       }

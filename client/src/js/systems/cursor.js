@@ -80,7 +80,7 @@ export default class CursorSystem {
 
             } else {
 
-                i++
+                i += 1
             
             }
             
@@ -282,19 +282,19 @@ export default class CursorSystem {
 
             }
 
-            // if ( activate ) { .. handling ```activate``` in the toolbox helper for now
-
-            //     callbacks = component.state.activate.callbacks // check if cursor / hand is activated
-            //     cb = callbacks.length-1
-
-            //     while ( cb >= 0 ) {
-
-            //         callbacks[cb]()
-            //         cb --
-
-            //     }
-
         }
+
+    }
+
+    _updatePreview ( mesh, type, data ) {
+
+        // implement
+
+    }
+
+    _snapToComponent( mesh, component, entity ) {
+
+        // implement
 
     }
 }

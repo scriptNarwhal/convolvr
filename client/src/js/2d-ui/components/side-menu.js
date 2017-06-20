@@ -80,6 +80,7 @@ class SideMenu extends Component {
             />
             <Tab image="/data/images/logout.png"
                  title="Sign In / Switch Accounts"
+                 style={ styles.mobileHidden() }
                  clickHandler={ (e)=> { this.navigate(e, "/login") } }
             />
             <Tab image="/data/images/configure-h.png"

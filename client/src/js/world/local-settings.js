@@ -7,12 +7,20 @@ export default function initLocalSettings ( world ) {
 			enablePostProcessing = localStorage.getItem("postProcessing"),
 			aa = localStorage.getItem("aa"),
 			floorHeight = localStorage.getItem("floorHeight"),
-			viewDistance = localStorage.getItem("viewDistance")
+			viewDistance = localStorage.getItem("viewDistance"),
+			leapMode = localStorage.getItem("leapMode")
 
 		if ( cameraMode == null ) {
 
 			cameraMode = 'fps'
 			localStorage.setItem("camera", 'fps')
+
+		}
+
+		if ( leapMode == null ) {
+
+			leapMode = "hybrid"
+			localStorage.setItem( "leapMode", leapMode )
 
 		}
 
@@ -77,5 +85,6 @@ export default function initLocalSettings ( world ) {
 		world.enablePostProcessing = enablePostProcessing
 		world.IOTMode = IOTMode == 'on'
 		world.floorHeight = parseInt(floorHeight)
+		world.userInput.leapMode = leapMode
 
 	}

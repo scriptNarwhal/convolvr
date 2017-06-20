@@ -144,7 +144,7 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
             },
             material: {
               name: "metal",
-              color: 0xffffff,
+              color: 0x000000,
             }
           },
           quaternion: [0, 0, 0, 1],
