@@ -38,7 +38,7 @@ export default class LeapMotion {
                 handMesh = toolbox.hands[ index ].mesh
                 handMesh.visible = true
                 handMesh.rotation.set( hand.pitch(), -hand.yaw(), 0 )
-                handMesh.position.set( -8000+(((-window.innerWidth / 2) )+ position[0]* 10), 0, -1150 - position[2]* 10 )
+                handMesh.position.set( -8000+(((-window.innerWidth / 2) )+ position[0]* 10), 0, -2550 - position[2]* 10 )
                 handMesh.updateMatrix()
                 // refactor this..
                 // include logic for moving by grabbing..
@@ -69,7 +69,7 @@ export default class LeapMotion {
                     handMesh = toolbox.hands[ handIndex ].mesh
                     handMesh.visible = true
                     handMesh.rotation.set( hand.pitch(), -hand.yaw(), 0 )
-                    handMesh.position.set( -10000+((10000*handIndex)+((-window.innerWidth / 2) + position[0]) * 10), -1500, -1150 + position[2] * 10 )
+                    handMesh.position.set( -8000+((10000*handIndex)+((-window.innerWidth / 2) + position[0]) * 10), -2500, -1150 + position[2] * 10 )
                     handMesh.updateMatrix()
                     handIndex ++
 

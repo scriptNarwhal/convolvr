@@ -1,6 +1,3 @@
-## convolvr
-WebVR game engine, server and virtual reality authoring tool.
-
 ## Overview
 - Component Entity System Framework
 - Multiplayer telemetry, chat, action & asset persistence provided by server
