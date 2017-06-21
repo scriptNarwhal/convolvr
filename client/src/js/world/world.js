@@ -40,7 +40,7 @@ export default class Convolvr {
 		this.userInput = userInput
 		initLocalSettings( this )
 		usePostProcessing = this.enablePostProcessing == 'on'
-		camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + (3+this.viewDistance)*600000 )
+		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + (3+this.viewDistance)*600000 )
 
 		let rendererOptions = {antialias: this.aa != 'off' && !usePostProcessing}
 
@@ -118,7 +118,7 @@ export default class Convolvr {
 			
 			if ( three.world.mode != "stereo" ) {
 
-				three.renderer.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
+				three.renderer.setSize(window.innerWidth, window.innerHeight)
 
 			}
 
@@ -142,14 +142,15 @@ export default class Convolvr {
 		animate(this, 0, 0)
 
 		three.vrDisplay = null
-		navigator.getVRDisplays().then(function(displays) { console.log("displays", displays)
+		
+		navigator.getVRDisplays().then( displays => { console.log("displays", displays)
+				
+			if (displays.length > 0) {
+
+				three.vrDisplay = displays[0]
+
+			}
 			
-		  if (displays.length > 0) {
-
-		    three.vrDisplay = displays[0]
-
-		  }
-		  
 		})
 
 		loadedCallback( this )

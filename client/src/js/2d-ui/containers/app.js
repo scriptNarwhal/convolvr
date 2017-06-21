@@ -320,6 +320,8 @@ class App extends Component {
                           three.vrEffect = effect
                           three.vrControls = controls
 
+                          
+
                           function onResize() {
                             let ratio = window.devicePixelRatio || 1
                             effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
@@ -333,10 +335,20 @@ class App extends Component {
                           window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
                           console.log("vrDisplay", three.vrDisplay)
                           if (three.vrDisplay != null) {
+
                             three.vrDisplay.requestPresent([{source: renderer.domElement}]);
+                            
+                            if ( three.world.manualLensDistance && three.vrDisplay.dpdb_) {
+                              setTimeout(()=>{
+                                console.warn("Falling back to Convolvr lens distance settings")
+                                three.vrDisplay.deviceInfo_.viewer.interLensDistance = three.world.manualLensDistance || 0.057 // since it's not in the db, let's assume it's a futuristic device
+                              }, 2000)// also let's hook this up to a slider in settings
+                            }
+                            
                             three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
                               vrAnimate(Date.now(), [0,0,0], 0)
                             })
+
                           } else {
                             alert("Connect VR Display and then reload page.")
                           }

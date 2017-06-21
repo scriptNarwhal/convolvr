@@ -6,7 +6,7 @@ export default class Touch {
 
   constructor (input) {
     
-	document.body.addEventListener("touchmove", (event) =>  {
+	three.renderer.domElement.addEventListener("touchmove", (event) =>  {
 			
 			let  data = event.touches,
 				 touch = data.length
@@ -23,50 +23,53 @@ export default class Touch {
 
 			}
 
-		})
+		}, false)
 
-		document.body.addEventListener("touchstart", (event) => {
+		three.renderer.domElement.addEventListener("touchstart", (event) => {
 			
 			let data = event.touches,
-				touch = data.length
+				touch = data.length -1
 
-			if ( input.world.mode != "web" ) { 
+			// if ( input.world.mode != "web" ) { 
 
-				event.preventDefault()
+			// 	event.preventDefault()
 
+			// }
+
+			while ( touch >= 0 ) {
+			
+					input.lastTouch[touch] = [data[touch].pageX, data[touch].pageY]
+					touch -= 1
+			
 			}
 
-			while (touch-- >= 0) {
-			
-					input.lastTouch[touch] = [data[touch].pageX, data[touch].pageY];
-			
-			}
+		}, false)
 
-		})
-
-		document.body.addEventListener("touchend", (event) => {
+		three.renderer.domElement.addEventListener("touchend", (event) => {
 			
 			let data = event.touches,
-					touch = data.length,
+					touch = data.length - 1,
 					last = input.lastTouch
 
-			if ( input.world.mode != "web" ) { 
+			// if ( input.world.mode != "web" ) { 
 
-				event.preventDefault()
+			// 	event.preventDefault()
 
-			}
+			// }
 
-			while ( touch-- > 0 ) {
+			while ( touch > 0 ) {
 
-					if (!! data[touch]) {
+					if ( !! data[touch] ) {
 
 						input.lastTouch[touch] = [data[touch].pageX, data[touch].pageY]
 
 					}
 					
+					touch -= 1
+
 			}
 
-		})
+		}, false)
 
   }
   
