@@ -2,11 +2,52 @@ let isVRMode = (mode) => {
 	return (mode == "3d" || mode == "stereo");
 }
 
-export default class Touch {
+export default class Touch { // based on example here https://developer.mozilla.org/en/docs/Web/API/Touch_events
 
   constructor (input) {
     
-	three.renderer.domElement.addEventListener("touchmove", (event) =>  {
+	this.ongoingTouches = []
+
+	let world = input.world,
+		tools = world.user.toolbox,
+		ongoingTouches = this.ongoingTouches
+
+	function _handleCancel( evt ) {
+
+		evt.preventDefault()
+
+		let touches = evt.changedTouches
+			
+		for (let i = 0; i < touches.length; i++) {
+			let idx = ongoingTouchIndexById(touches[i].identifier)
+			ongoingTouches.splice( idx, 1 )  // remove it; we're done
+		}
+
+	}
+
+	function _ongoingTouchById( idToFind ) {
+
+		let ongoingTouches = this.ongoingTouches
+
+		for (let i = 0; i < ongoingTouches.length; i++) {
+			let id = ongoingTouches[i].identifier
+			
+			if (id == idToFind) {
+				return i
+			}
+		}
+
+		return -1    // not found
+
+	}
+
+	function _copyTouch( touch ) {
+
+		return { identifier: touch.identifier, pageX: touch.pageX, pageY: touch.pageY }
+
+	}
+
+	three.renderer.domElement.addEventListener("touchmove", event =>  {
 			
 			let  data = event.touches,
 				 touch = data.length
@@ -25,16 +66,9 @@ export default class Touch {
 
 		}, false)
 
-		three.renderer.domElement.addEventListener("touchstart", (event) => {
+		three.renderer.domElement.addEventListener("touchstart", event => {
 			
-			let data = event.touches,
-				touch = data.length -1
-
-			// if ( input.world.mode != "web" ) { 
-
-			// 	event.preventDefault()
-
-			// }
+			var touches = evt.changedTouches;
 
 			while ( touch >= 0 ) {
 			
@@ -45,32 +79,28 @@ export default class Touch {
 
 		}, false)
 
-		three.renderer.domElement.addEventListener("touchend", (event) => {
+		three.renderer.domElement.addEventListener("touchend", event => {
 			
-			let data = event.touches,
-					touch = data.length - 1,
-					last = input.lastTouch
+			let last = input.lastTouch,
+				touches = evt.changedTouches;
 
-			// if ( input.world.mode != "web" ) { 
+			input.world.mode != "web" && event.preventDefault()
 
-			// 	event.preventDefault()
+			for (let i = 0; i < touches.length; i++) {
 
-			// }
+				let idx = _ongoingTouchIndexById(touches[i].identifier);
 
-			while ( touch > 0 ) {
-
-					if ( !! data[touch] ) {
-
-						input.lastTouch[touch] = [data[touch].pageX, data[touch].pageY]
-
-					}
-					
-					touch -= 1
-
+				if (idx > -1 && idx <= 2) {
+					last[touch] = [ongoingTouches[idx].pageX, ongoingTouches[idx].pageY]
+				} 
+				ongoingTouches.splice(idx, 1)
 			}
 
 		}, false)
 
   }
+
+  
+
   
 }

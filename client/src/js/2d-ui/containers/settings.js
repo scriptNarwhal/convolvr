@@ -20,7 +20,7 @@ const styles = {
     float: 'right',
     marginRight: '2em',
     marginTop: '1em',
-    marginBottom: '1em',
+    marginBottom: '3em',
     fontSize: '1.25em',
     background: '#2b2b2b',
     color: 'white',
@@ -31,8 +31,14 @@ const styles = {
   },
   h3: {
     textAlign: 'left',
-    width: '45%',
-    display: 'inline-block'
+    width: '42%',
+    fontSize: '14px',
+    display: 'inline-block',
+    marginLeft: '3%'
+  },
+  col: {
+    width: '55%',
+    display: 'inline-block',
   },
   textInput: {
 
@@ -48,7 +54,8 @@ const styles = {
   },
   table: {
     marginLeft: '3em'
-  }
+  },
+  numericLabel: {paddingLeft: '1em', width: '100px', display: 'inline-block'}
 }
 
 class Settings extends Component {
@@ -65,6 +72,7 @@ class Settings extends Component {
       floorHeight: 0,
       viewDistance: 0,
       profilePicture: '',
+      manualLensDistance: 0,
       network: [],
       IOTMode: false
     }
@@ -80,7 +88,8 @@ class Settings extends Component {
       floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
       IOTMode: localStorage.getItem("IOTMode") || 'off',
       leapMode: localStorage.getItem("leapMode") || "hybrid",
-      viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0
+      viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0,
+      manualLensDistance: localStorage.getItem("manualLensDistance") != null ? localStorage.getItem("manualLensDistance") : 0
     })
     this.props.fetchUniverseSettings()
   }
@@ -110,6 +119,7 @@ class Settings extends Component {
     localStorage.setItem('floorHeight', this.state.floorHeight)
     localStorage.setItem( 'leapMode', this.state.leapMode )
     localStorage.setItem('viewDistance', this.state.viewDistance)
+    localStorage.setItem('manualLensDistance', this.state.manualLensDistance)
     this.reload()
   }
 
@@ -160,99 +170,135 @@ class Settings extends Component {
             <div>
               <h1>Settings</h1>
               <h3 style={styles.h3}>View Distance</h3>
-              <input onBlur={e=> {this.setState({viewDistance: parseInt(e.target.value)})}}
-                    style={styles.range}
-                    defaultValue={this.state.viewDistance}
-                    step={1}
-                    type='range'
-                    min='-4'
-                    max='6'
-              />
-              <span style={{paddingLeft: '1em'}}>
-                {(this.state.viewDistance > 0 ?'+ ':'- ')+this.state.viewDistance} Voxels 
-              </span>
+              <div style={styles.col}>
+                <input onChange={e=> {this.setState({viewDistance: parseInt(e.target.value)})}}
+                      style={styles.range}
+                      defaultValue={this.state.viewDistance}
+                      step={1}
+                      type='range'
+                      min='-4'
+                      max='6'
+                />
+                <span style={styles.numericLabel}>
+                  {(this.state.viewDistance >= 0 ?'+ ':'')+this.state.viewDistance} Voxels 
+                </span>
+              </div>
+            </div>
+            <div>
+              <h3 style={styles.h3}>Lighting Quality</h3>
+              <div style={styles.col}>
+                <select onChange={e=> {this.setState({lighting: e.target.value})}}
+                        value={ this.state.lighting }
+                        style={ styles.select }
+                >
+                  <option value="high">High (recommended)</option>
+                  <option value="low">Low (mobile devices)</option>
+                </select>
+              </div>
             </div>
           <div>
-            <h3 style={styles.h3}>Lighting Quality</h3>
-            <select onChange={e=> {this.setState({lighting: e.target.value})}}
-                    value={ this.state.lighting }
-                    style={ styles.select }
-            >
-              <option value="high">High (recommended)</option>
-              <option value="low">Low (mobile devices)</option>
-            </select>
-          </div>
-          <div>
             <h3 style={styles.h3}>Antialiasing</h3>
-            <select onChange={e=> {this.setState({aa: e.target.value})}}
-                    value={ this.state.aa }
-                    style={ styles.select }
-            >
-              <option value="on">On (recommended)</option>
-              <option value="off">Off (for older GPUs)</option>
-            </select>
+            <div style={styles.col}>
+              <select onChange={e=> {this.setState({aa: e.target.value})}}
+                      value={ this.state.aa }
+                      style={ styles.select }
+              >
+                <option value="on">On (recommended)</option>
+                <option value="off">Off (for older GPUs)</option>
+              </select>
+            </div>
           </div>
           <div>
-            <h3 style={styles.h3}>Post Processing</h3>
-            <select onChange={e=> {this.setState({postProcessing: e.target.value})}}
-                    value={ this.state.postProcessing }
-                    style={ styles.select }
-            >
-              <option value="on">On (Bloom HDR Effect)</option>
-              <option value="off">Off (Better Performance)</option>
-            </select>
+            <h3 style={styles.h3}>Override Lens Spacing</h3>
+            <div style={styles.col}>
+              <input onChange={e=> {this.setState({manualLensDistance: parseFloat(e.target.value)})}}
+                    style={styles.range}
+                    defaultValue={this.state.manualLensDistance}
+                    step='0.001'
+                    type='range'
+                    min='0.01'
+                    max='0.1'
+              />
+              <span style={styles.numericLabel}>
+                { this.state.manualLensDistance || "Using auto detection."}
+              </span>
+            </div>
           </div>
           <div>
             <h3 style={styles.h3}>Floor Height (VR)</h3>
-            <input onBlur={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
+            <div style={styles.col}>
+              <input onChange={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
                    style={styles.range}
                    defaultValue={this.state.floorHeight}
                    step={1}
                    type='range'
                    min='-30000'
                    max='20000'
-            />
-            <span style={{paddingLeft: '1em'}}>
-              {this.state.floorHeight} Units
-            </span>
+              />
+              <span style={styles.numericLabel}>
+                {this.state.floorHeight} Units
+              </span>
+            </div>
           </div>
           <div>
             <h3 style={styles.h3}>Leap Motion Mode</h3>
-            <select onChange={e=> {this.setState({leapMode: e.target.value})}}
+            <div style={styles.col}>
+              <select onChange={e=> {this.setState({leapMode: e.target.value})}}
                     value={ this.state.leapMode }
                     style={ styles.select }
-            >
-              <option value="hybrid">Hybrid Mode</option>
-              <option value="movement">Movement & Look Only</option>
-              <option value="avatar">Control Both Hands</option>
-            </select>
+              >
+                  <option value="hybrid">Hybrid Mode</option>
+                  <option value="movement">Movement & Look Only</option>
+                  <option value="avatar">Control Both Hands</option>
+              </select>
+            </div>
           </div>
           <div>
             <h3 style={styles.h3}>Camera Control Mode</h3>
-            <select onChange={e=> { this.setState({camera: e.target.value})}}
+            <div style={styles.col}>
+              <select onChange={e=> { this.setState({camera: e.target.value})}}
                     value={ this.state.camera }
                     style={ styles.select }
-            >
+              >
               <option value="fps">First Person Camera</option>
               <option value="vehicle">Flight Camera (relative rotation)</option>
             </select>
+            </div>
+          </div>
+          <div>
             <h3 style={styles.h3}>IOT Mode</h3>
-            <select onChange={e=> {this.setState({IOTMode: e.target.value})}}
+            <div style={styles.col}>
+              <select onChange={e=> {this.setState({IOTMode: e.target.value})}}
                     value={ this.state.IOTMode }
                     style={ styles.select }
-            >
-              <option value="off">Off (Recommended)</option>
-              <option value="on">On (Only renders after world update)</option>
-            </select>
+              >
+                <option value="off">Off (Recommended)</option>
+                <option value="on">On (Only renders after world update)</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <h3 style={styles.h3}>Post Processing</h3>
+            <div style={styles.col}>
+              <select onChange={e=> {this.setState({postProcessing: e.target.value})}}
+                      value={ this.state.postProcessing }
+                      style={ styles.select }
+              >
+                <option value="on">On (Bloom HDR Effect)</option>
+                <option value="off">Off (Better Performance)</option>
+              </select>
+            </div>
           </div>
           <div>
             <h3 style={styles.h3}>Profile Picture</h3>
-            <span style={{paddingLeft: '1em'}}>
-              <input onChange={ (e)=> this.upload(e) }
-                           style={styles.fileUpload} 
-                           type='file' 
-              />
-            </span>
+            <div style={styles.col}>
+              <span style={{paddingLeft: '1em'}}>
+                <input onChange={ (e)=> this.upload(e) }
+                            style={styles.fileUpload} 
+                            type='file' 
+                />
+              </span>
+            </div>
           </div>
           <input style={styles.save}
                  type='submit'
@@ -265,27 +311,31 @@ class Settings extends Component {
               <h2 style={{marginTop: '1em'}}>Admin Settings</h2>
               <div>
                 <h3 style={styles.h3}>Default World</h3>
-                <select onChange={e=> { this.setState({defaultWorld: e.target.value})}}
-                        value={ this.state.defaultWorld }
-                        style={ styles.select }
-                >
-                {
-                  this.props.worlds.map( (world, i) => {
-                    return (
-                      <option value={world.name} key={i}>{world.name}</option>
-                    )
-                  })
-                }
-                </select>
-              </div>
+                <div style={styles.col}>
+                  <select onChange={e=> { this.setState({defaultWorld: e.target.value})}}
+                            value={ this.state.defaultWorld }
+                            style={ styles.select }
+                    >
+                    {
+                      this.props.worlds.map( (world, i) => {
+                        return (
+                          <option value={world.name} key={i}>{world.name}</option>
+                        )
+                      })
+                    }
+                    </select>
+                  </div>
+                </div>
               <div>
                 <h3 style={styles.h3}>Welcome Message</h3>
-                <input onBlur={e=> { this.setState({welcomeMessage: e.target.value})}}
-                       value={ this.state.welcomeMessage }
-                       style={styles.textInput}
-                       type='text'
-                />
-              </div>
+                <div style={styles.col}>
+                  <input onBlur={e=> { this.setState({welcomeMessage: e.target.value})}}
+                          value={ this.state.welcomeMessage }
+                          style={styles.textInput}
+                          type='text'
+                    />
+                  </div>
+                </div>
               <div style={styles.table}>
                 <h3 style={styles.h3}>Manage Network</h3>
                 <table>

@@ -51,6 +51,7 @@ import ChatSystem from './chat'
 import WebRTCSystem from './webrtc'
 import NPCSystem from './npc'
 import SpeechSystem from './speech'
+import DatGUIVRPluginSystem from './datguivr-plugin'
 
 
 export default class Systems {
@@ -63,6 +64,7 @@ export default class Systems {
 			material: new MaterialSystem(world),
 			staticCollisions: new StaticCollisions(world),
 			dynamicCollisions: new DynamicCollisions(world),
+			datgui: new DatGUIVRPluginSystem(world),
 			light: new LightSystem(world),
 			text: new TextSystem(world),
 			audio: new AudioSystem(world),

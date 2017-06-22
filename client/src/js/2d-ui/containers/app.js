@@ -302,6 +302,7 @@ class App extends Component {
                         ratio = window.devicePixelRatio || 1,
                         camera = three.camera,
                         scene = three.scene,
+                        world = three.world,
                         controls = null,
                         effect = null
 
@@ -314,7 +315,7 @@ class App extends Component {
                           if (!three.world.mobile) {
                             renderer.autoClear = false
                           }
-                          effect = new THREE.VREffect(renderer, three.world.postProcessing)
+                          effect = new THREE.VREffect(renderer, world.postProcessing)
                           effect.scale = 22000
                           effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
                           three.vrEffect = effect
@@ -338,11 +339,13 @@ class App extends Component {
 
                             three.vrDisplay.requestPresent([{source: renderer.domElement}]);
                             
-                            if ( three.world.manualLensDistance && three.vrDisplay.dpdb_) {
+                            if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
                               setTimeout(()=>{
-                                console.warn("Falling back to Convolvr lens distance settings")
-                                three.vrDisplay.deviceInfo_.viewer.interLensDistance = three.world.manualLensDistance || 0.057 // since it's not in the db, let's assume it's a futuristic device
-                              }, 2000)// also let's hook this up to a slider in settings
+
+                                console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
+                                three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
+                              
+                              }, 2000)
                             }
                             
                             three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function

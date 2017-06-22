@@ -8,7 +8,8 @@ export default function initLocalSettings ( world ) {
 			aa = localStorage.getItem("aa"),
 			floorHeight = localStorage.getItem("floorHeight"),
 			viewDistance = localStorage.getItem("viewDistance"),
-			leapMode = localStorage.getItem("leapMode")
+			leapMode = localStorage.getItem("leapMode"),
+			manualLensDistance = localStorage.getItem("manualLensDistance")
 
 		if ( cameraMode == null ) {
 
@@ -77,6 +78,16 @@ export default function initLocalSettings ( world ) {
 
 		}
 
+		if ( manualLensDistance == null ) {
+
+			manualLensDistance = 0
+
+		} else {
+
+			manualLensDistance = parseFloat(manualLensDistance)
+
+		}
+
 		world.aa = aa
 		world.viewDistance = viewDistance
 		world.cameraMode = cameraMode
@@ -86,5 +97,6 @@ export default function initLocalSettings ( world ) {
 		world.IOTMode = IOTMode == 'on'
 		world.floorHeight = parseInt(floorHeight)
 		world.userInput.leapMode = leapMode
+		world.manualLensDistance = manualLensDistance
 
 	}
