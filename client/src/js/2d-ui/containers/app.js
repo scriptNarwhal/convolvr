@@ -175,6 +175,7 @@ class App extends Component {
 
       if (!uInput.fullscreen) {
 
+          three.world.mode = "3d"
 						elem.requestPointerLock()
             this.props.toggleMenu(false)
 
