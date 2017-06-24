@@ -70,6 +70,7 @@ const styles = {
         position: 'fixed',
         left: mobile ? 0 : '65px',
         bottom: '58px',
+        top: mobile ? '162px' : 0,
         overflowY: 'auto',
         height: '93%',
         overflowX: 'hidden',

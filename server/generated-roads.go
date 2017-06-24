@@ -11,7 +11,7 @@ func generateRoad(id int, world string, x int, z int, altitude float32) *Entity 
 	)
 	floors := 1
 	width := 2.8
-	structureSize := 300000.0
+	structureSize := 285000.0
 
 	floorPos := []float64{0.0, 0.0, 0.0}
 	floorQuat := []float64{0.0, 0.0, 0.0, 0.0}
@@ -24,14 +24,14 @@ func generateRoad(id int, world string, x int, z int, altitude float32) *Entity 
 	floorGeometry["size"] = []float64{structureSize, 5000, structureSize * width}
 	floorGeometry["shape"] = "box"
 	floorGeometry["merge"] = true
-	floorMaterial["name"] = "terrain"
-	floorMaterial["color"] = 0x404040
+	floorMaterial["name"] = "plastic"
+	floorMaterial["color"] = 0x303030
 	floorProps["geometry"] = floorGeometry
 	floorProps["material"] = floorMaterial
 	wallState := make(map[string]interface{})
 	structureComponents = append(structureComponents, NewComponent("", floorPos, floorQuat, floorProps, wallState, []*Component{}, nil))
 
-	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) - 86000, float64(z) * 807360.0} //  + (structureSize * width)
+	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) - 89000, float64(z) * 807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
 	structure = NewEntity(id+1, "Generic Roadway", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure

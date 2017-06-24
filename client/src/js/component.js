@@ -1,6 +1,6 @@
 export default class Component {
 
-  constructor ( data, entity, systems, appConfig = false ) {
+  constructor ( data, entity, systems, appConfig = false, parent = false ) {
 
       var mesh = null,
           props = data.props,
@@ -19,6 +19,12 @@ export default class Component {
       this.detached = false
       this.merged = false
       this._compPos = new THREE.Vector3()
+
+      if ( parent ) {
+
+        this.parent = parent
+
+      }
 
       if ( !!! props ) {
 
@@ -93,7 +99,7 @@ export default class Component {
         
    while ( c < ncomps ) {
 
-        comp = new Component( components[ c ], entity, systems, {mobile} ) // use simpler shading for mobile gpus
+        comp = new Component( components[ c ], entity, systems, {mobile}, this ) // use simpler shading for mobile gpus
 
         if ( comp.props.noRaycast === true ) {
           addToOctree = false

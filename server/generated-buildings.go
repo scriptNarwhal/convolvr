@@ -35,7 +35,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 		floorGeometry["shape"] = "box"
 		floorGeometry["merge"] = true
 		floorMaterial["name"] = "terrain"
-		floorMaterial["color"] = 0x404040
+		floorMaterial["color"] = 0x808080
 		floorProps["geometry"] = floorGeometry
 		floorProps["material"] = floorMaterial
 		wallState := make(map[string]interface{})

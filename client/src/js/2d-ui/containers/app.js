@@ -34,9 +34,6 @@ class App extends Component {
         lastSender: chatMessage.from
       })
 
-      // chatText.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
-      // chatText.state.text.update()
-
       this.notify(chatMessage.message, chatMessage.from)
       worldName = this.props.world == "overworld" ? "Convolvr" : this.props.world
 
@@ -192,7 +189,7 @@ class App extends Component {
 
     if ( pathChange ) {
 
-      newWorld = detectWorldDetailsFromURL() // console.log("detected world details from url (app.js willUpdate) ", newWorld)
+      newWorld = detectWorldDetailsFromURL()
       
       if ( newWorld[ 2 ] == true ) { // not navigating to built in ui / page
 
@@ -228,7 +225,7 @@ class App extends Component {
 
   goBack () {
 
-    browserHistory.push(`/world/${this.props.world}`)
+    browserHistory.push(`/${this.props.worldUser}/${this.props.world}`)
 
   }
 

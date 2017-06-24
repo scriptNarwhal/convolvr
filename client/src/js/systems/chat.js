@@ -35,8 +35,8 @@ export default class ChatSystem {
 
                         } else if ( userId == props.chat.userId  && props.text ) {
 
-                            comp.state.text.write(`${chatMessage.from}${chatMessage.message}`) // can batch this without re-rendering each time
-                            comp.state.text.update()  
+                             comp.state.text.write(`${chatMessage.from}${chatMessage.message}`) // can batch this without re-rendering each time
+                             comp.state.text.update()  
 
                         }
 
@@ -50,7 +50,7 @@ export default class ChatSystem {
 
     }
 
-    init (component) { 
+    init ( component ) { 
         
         let prop = component.props.chat,
             userId = prop.userId || "",
@@ -63,9 +63,13 @@ export default class ChatSystem {
             this.componentsByUserId[ prop.userId ] = []
 
         }
+       
+        if ( !this.containsObject( component, this.componentsByUserId[ prop.userId ] ) ) {
 
-        this.componentsByUserId[ prop.userId ].push( component )
+            this.componentsByUserId[ prop.userId ].push( component )
 
+        }
+        
         if ( prop.sendMessage ) {
 
         }
@@ -83,6 +87,21 @@ export default class ChatSystem {
 
     sendMessage (message) {
         
+    }
+
+    containsObject ( obj, list ) {
+
+        let  i = 0
+
+        for ( i = list.length - 1; i >= 0; i-- ) {
+
+            if ( list[ i ] === obj ) {
+                return true
+            }
+
+        }
+
+        return false
     }
 }
 

@@ -40,6 +40,7 @@ import HandSystem from './hand'
 import TerrainSystem from './terrain'
 import ContainerSystem from './container'
 import RESTSystem from './rest'
+import TimeSystem from './time'
 import ToolUISystem from './tool-ui'
 import TabViewSystem from './tab-view'
 import TabSystem from './tab'
@@ -103,6 +104,7 @@ export default class Systems {
 			container: new ContainerSystem(world),
 			tab: new TabSystem(world),
 			tabView: new TabViewSystem(world),
+			time: new TimeSystem(world),
 			toolUI: new ToolUISystem(world),
 			tool: new ToolSystem(world),
 			miniature: new MiniatureSystem(world),
@@ -136,27 +138,27 @@ export default class Systems {
             deferredSystems = [],
             mesh = null
 
-        Object.keys(props).map(prop => {
+        Object.keys( props ).map( prop => {
 
-            if (this[prop] != null) {
+            if ( this[ prop ] != null ) {
 
                 if ( !!this.deffered[prop] ) { /* add other systems here */
                     
-					deferredSystems.push(prop)
+					deferredSystems.push( prop )
 
                 } else {
 
-                    state[prop] = this[prop].init(component)
+                    state[ prop ] = this[ prop ].init( component )
 
                 }
 
-				if ( !!!componentsByProp[prop] ) {
+				if ( !!!componentsByProp[ prop ] ) {
 
-                    componentsByProp[prop] = []
+                    componentsByProp[ prop ] = []
 
                 }
 
-				componentsByProp[prop].push(component)
+				componentsByProp[ prop ].push( component )
 
             }
 
