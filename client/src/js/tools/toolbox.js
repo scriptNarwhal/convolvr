@@ -178,9 +178,9 @@ export default class Toolbox {
       
       if ( telemetry.cursor && cursorEntity ) { // check telemetry here to see if activate callbacks should fire instead of tool action
 
-        if ( cursorEntity.componentsByProp.activate ) { console.log("usePrimary cursor entity components activate ",  cursorEntity.componentsByProp.activate)
+        if ( cursorEntity.componentsByProp.activate ) { 
 
-          !!cursorState.component && console.log("*** usePrimary entity mesh, face ", !!cursorState.mesh ? cursorState.mesh.userData : "-", cursorState.face, cursorState.component )
+          !!cursorState.component && console.log("*** usePrimary ", cursorState.component )
           !!cursorState.component && cursorState.component.state.activate.callbacks.map( (callback) => {
               callback() // action is handled by checking component props ( besides .activate )
           })

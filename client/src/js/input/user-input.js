@@ -97,7 +97,7 @@ export default class UserInput {
 								// tools.selectObject() .. might be handy
 							break
 							case 3: // right click
-								this.user.toolbox.useSecondary(0, 1) // right hand // change tool option in forward direction
+								//this.user.toolbox.useSecondary(0, 1) // right hand // change tool option in forward direction
 								// refactor this to grab entity
 							break
 

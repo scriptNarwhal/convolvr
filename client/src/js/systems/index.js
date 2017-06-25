@@ -3,7 +3,9 @@ import DynamicCollisions from './dynamic-collisions'
 import GeometrySystem from './geometry'
 import MaterialSystem from './material'
 import AssetSystem from './assets'
+import BrowserSystem from './browser'
 import LightSystem from './light'
+import LayoutSystem from './layout'
 import TextSystem from './text'
 import AudioSystem from './audio'
 import VideoSystem from './video'
@@ -61,12 +63,14 @@ export default class Systems {
 
         let systems = {
 			assets: new AssetSystem(world),
+			browser: new BrowserSystem(world),
 			geometry: new GeometrySystem(world),
 			material: new MaterialSystem(world),
 			staticCollisions: new StaticCollisions(world),
 			dynamicCollisions: new DynamicCollisions(world),
 			datgui: new DatGUIVRPluginSystem(world),
 			light: new LightSystem(world),
+			layout: new LayoutSystem(world),
 			text: new TextSystem(world),
 			audio: new AudioSystem(world),
 			video: new VideoSystem(world),

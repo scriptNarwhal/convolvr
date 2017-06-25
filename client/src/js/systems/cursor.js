@@ -163,7 +163,7 @@ export default class CursorSystem {
 
             if ( !!state ) { // animate cursor (in / out)
 
-                if ( state.distance-12000 < (-cursorPos.z) && (cursorPos.z < 80000 - cursorSpeed) ) { // near bound of allowed movement
+                if ( state.distance-32000 < (-cursorPos.z) && (cursorPos.z < 80000 - cursorSpeed) ) { // near bound of allowed movement
 
                     cursorPos.z += cursorSpeed
 

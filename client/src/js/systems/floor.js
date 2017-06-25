@@ -1,9 +1,12 @@
 export default class FloorSystem {
-    constructor (world) {
+
+    constructor ( world ) {
+
         this.world = world
+
     }
 
-    init (component) { 
+    init ( component ) { 
         
         return {
             
