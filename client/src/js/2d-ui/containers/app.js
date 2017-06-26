@@ -165,10 +165,25 @@ class App extends Component {
 
     window.addEventListener('vrdisplayactivate', e => {
 
-      console.log('Display activated.')
+      console.log('Display activated.', e)
       //three.vrDisplay = e.display
       //this.initiateVRMode()
+      if (three.world.mode != "stereo") {
 
+        navigator.getVRDisplays().then( displays => { console.log("displays", displays)
+				
+          if ( displays.length > 0 ) {
+
+            console.log("vrdisplayactivate: found display: ", displays[0])
+            three.vrDisplay = displays[0]
+            this.initiateVRMode()
+
+          }
+          
+        })
+
+      }
+      
 
     })
 
