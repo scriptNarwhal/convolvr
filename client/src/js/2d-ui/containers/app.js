@@ -163,9 +163,12 @@ class App extends Component {
       })
     }
 
-    window.addEventListener('vrdisplayactivate', () => {
+    window.addEventListener('vrdisplayactivate', e => {
 
       console.log('Display activated.')
+      three.vrDisplay = e.display
+      this.initiateVRMode()
+
 
     })
 
@@ -264,69 +267,77 @@ class App extends Component {
   }
 
   initiateVRMode ( ) {
+
     this.props.toggleVRMode()
-                    let renderer = three.renderer,
-                        ratio = window.devicePixelRatio || 1,
-                        camera = three.camera,
-                        scene = three.scene,
-                        world = three.world,
-                        controls = null,
-                        effect = null
 
-                        if (three.vrControls == null) {
-                          window.WebVRConfig = {
-                            MOUSE_KEYBOARD_CONTROLS_DISABLED: true,
-                            TOUCH_PANNER_DISABLED: true
-                          }
-                          controls = new THREE.VRControls(camera)
-                          if (!three.world.mobile) {
-                            renderer.autoClear = false
-                          }
-                          effect = new THREE.VREffect(renderer, world.postProcessing)
-                          effect.scale = 22000
-                          effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
-                          three.vrEffect = effect
-                          three.vrControls = controls
+    let renderer = three.renderer,
+        ratio = window.devicePixelRatio || 1,
+        camera = three.camera,
+        scene = three.scene,
+        world = three.world,
+        controls = null,
+        effect = null
 
-                          
+        if (three.vrControls == null) {
 
-                          function onResize() {
-                            let ratio = window.devicePixelRatio || 1
-                            effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
-                          }
-                          function onVRDisplayPresentChange() {
-                            console.log('onVRDisplayPresentChange')
-                            onResize()
-                          }
-                          // Resize the WebGL canvas when we resize and also when we change modes.
-                          window.addEventListener('resize', onResize);
-                          window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
-                          console.log("vrDisplay", three.vrDisplay)
-                          if (three.vrDisplay != null) {
+          window.WebVRConfig = {
+            MOUSE_KEYBOARD_CONTROLS_DISABLED: true,
+            TOUCH_PANNER_DISABLED: true
+          }
+          controls = new THREE.VRControls(camera)
 
-                            three.vrDisplay.requestPresent([{source: renderer.domElement}]);
-                            
-                            if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
-                              setTimeout(()=>{
+          if (!three.world.mobile) {
+            renderer.autoClear = false
+          }
 
-                                console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
-                                three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
-                              
-                              }, 2000)
-                            }
-                            
-                            three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
-                              vrAnimate(Date.now(), [0,0,0], 0)
-                            })
+          effect = new THREE.VREffect(renderer, world.postProcessing)
+          effect.scale = 22000
+          effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
+          three.vrEffect = effect
+          three.vrControls = controls
+          
+          function onResize() {
+            let ratio = window.devicePixelRatio || 1
+            effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
+          }
+          function onVRDisplayPresentChange() {
+            console.log('onVRDisplayPresentChange')
+            onResize()
+          }
+          // Resize the WebGL canvas when we resize and also when we change modes.
+          window.addEventListener('resize', onResize);
+          window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
+          console.log("vrDisplay", three.vrDisplay)
+          if (three.vrDisplay != null) {
+            three.vrDisplay.requestPresent([{source: renderer.domElement}]);
+            
+            if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
+              setTimeout(()=>{
+                console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
+                three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
+              
+              }, 2000)
+            }
+            
+            three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
+              vrAnimate(Date.now(), [0,0,0], 0)
+            })
+          } else {
+            alert("Connect VR Display and then reload page.")
+          }
+         
+      } else {
+         if ( three.world.mode == "stereo" ) {
+          window.location.href = window.location.href
+        }
+      }
 
-                          } else {
-                            alert("Connect VR Display and then reload page.")
-                          }
-                         
-                      }
-                      this.props.toggleVRMode()
-                      three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
-                      three.world.onWindowResize()
+      this.props.toggleVRMode()
+      three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
+      three.world.onWindowResize()
+
+     
+
   }
 
   renderVRButtons () {

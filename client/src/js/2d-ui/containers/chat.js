@@ -89,6 +89,15 @@ const styles = {
         left: mobile ? 0 : '65px',
         marginLeft: '0.5em'
       }
+    },
+    uploadStyle: ( mobile ) => {
+      return mobile ? {
+        position: "fixed",
+        bottom: "1.75em",
+        right: 0
+      } : { 
+        marginRight: "0.25em", top: "-0.75em", position: "relative"
+      }
     }
 }
 
@@ -261,7 +270,7 @@ class Chat extends Component {
                     onClick={(evt, title) => {  }}
                     onFiles={ (files) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
                     image={"/data/images/upload.png"}
-                    style={{ marginRight: "0.25em", top: "1em", position: "relative"}}
+                    style={ styles.uploadStyle(mobile) }
                   />
             </section>
         </Shell>

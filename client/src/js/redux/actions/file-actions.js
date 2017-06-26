@@ -23,11 +23,14 @@ import {
     DIRECTORY_MAKE_FETCH,
     DIRECTORY_MAKE_FAIL,
     DIRECTORY_MAKE_DONE,
-    CHANGE_DIRECTORY
+    CHANGE_DIRECTORY,
+    MESSAGE_SEND
 } from '../constants/action-types'
 
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
+
+import { sendMessage } from './message-actions'
 
 export function listFiles (username, dir) {
     return dispatch => {
@@ -75,7 +78,9 @@ export function uploadFile (file, username, dir) {
 }
 
 export function uploadFiles ( files, username, dir ) {
-    return dispatch => {
+    return (dispatch, getState) => {
+
+    let state = getState()
 
      dispatch({
          type: FILE_UPLOAD_FETCH,
@@ -83,17 +88,17 @@ export function uploadFiles ( files, username, dir ) {
          dir
      }) 
 
-     if ( !!this.props.currentWorld ) {
+     if ( !!state.worlds.current ) {
 
-      if ( (dir == "/" || dir == "") && this.props.worldUser == this.props.username ) {
+      if ( (dir == "/" || dir == "") && state.worlds.worldUser == state.users.loggedIn.name ) {
 
-        dir = "/worlds/"+this.props.currentWorld
+        dir = "/worlds/"+state.worlds.current
 
       } 
 
     }
 
-    if (window.location.href.indexOf("/chat") > -1) {
+    if ( window.location.href.indexOf("/chat") > -1 ) {
       dir = "chat-uploads"
     }
 		
@@ -101,7 +106,7 @@ export function uploadFiles ( files, username, dir ) {
 		formData = new FormData(),
 		ins = files.length,
         thumbs = [],
-        images = /(\.jpg|\.jpeg|\.png|\.webp)$/i,
+        images = /(\.jpg|\.jpeg|\.png|\.webp|\.gif|\.svg)$/i,
         fileNames = [],
         shell = this
 
@@ -113,20 +118,20 @@ export function uploadFiles ( files, username, dir ) {
 
         if ( images.test(files[x].name) ) {
 
-            thumbs.push(files[x]);
+            thumbs.push(files[x])
 
         }
 	
-        formData.append("files", files[x]);
+        formData.append("files", files[x])
         fileNames.push(files[x].name.replace(/\s/g, '-'))
 
 	}
 	
-    xhr.onload = function () {
+    xhr.onload = () => {
 
-		if (xhr.status == 200) {
+		if ( xhr.status == 200 ) {
 
-				console.log("finished uploading")
+		    console.log("finished uploading")
 
 		}
 
@@ -149,12 +154,13 @@ export function uploadFiles ( files, username, dir ) {
                         if (window.location.href.indexOf("/chat") > -1) {
 
                             setTimeout(()=>{
-                                dispatch({
-                                    type: MESSAGE_SEND,
-                                    username,
-                                    dir
-                                }) 
-                            shell.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames)
+                                dispatch(
+                                    sendMessage(
+                                        "Uploaded "+(ins > 1 ? ins+ " Files" : "a File"),
+                                        username,
+                                        fileNames
+                                    )
+                                ) 
                         
                             }, 500)
 
