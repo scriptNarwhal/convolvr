@@ -166,8 +166,8 @@ class App extends Component {
     window.addEventListener('vrdisplayactivate', e => {
 
       console.log('Display activated.')
-      three.vrDisplay = e.display
-      this.initiateVRMode()
+      //three.vrDisplay = e.display
+      //this.initiateVRMode()
 
 
     })

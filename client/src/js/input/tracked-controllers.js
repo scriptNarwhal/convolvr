@@ -165,22 +165,33 @@ export default class TrackedController {
         rotation = input.rotationVector,
         tools = world.user.toolbox,
         button = gamepad.buttons[0]
-    //console.log("oculus remote handler ", b, buttons)
-    // implement
+
+        if ( this.buttonReleased( this.buttons.right[0] ) && this.buttonPressed( button ) )
+
+          tools.usePrimary(0) // right hand
+
+        this.buttons.right[0] = button
+        input.moveVector.x += gamepad.buttons[5].pressed * 12500 - gamepad.buttons[4].pressed * 12500
+        input.moveVector.z += gamepad.buttons[3].pressed * 12500 - gamepad.buttons[2].pressed * 12500
+
   }
 
   
 
   handleDaydreamController ( gamepad ) {
 
-    // implement
     let button = gamepad.buttons[0]
 
-    if ( gamepad.pose ) {
+    if ( gamepad.pose )
 
-        tools.setHandOrientation(0, [ 0, -5000, 5000 ], gamepad.pose.orientation)
-        
-      }
+      tools.setHandOrientation(0, [ 0, -5000, 5000 ], gamepad.pose.orientation)
+  
+    if ( this.buttonReleased( this.buttons.right[0] ) && this.buttonPressed( button ) )
+
+        tools.usePrimary(0) // right hand
+
+    this.buttons.right[0] = button
+
   }
 
   
