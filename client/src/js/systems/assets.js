@@ -3,6 +3,7 @@ import avatar from '../assets/entities/avatars/avatar'
 import toolMenu from '../assets/entities/tool-menu'
 import helpScreen from '../assets/entities/help-screen'
 import chatScreen from '../assets/entities/chat-screen'
+import videoChat from '../assets/entities/video-chat'
 
 import panel1 from '../assets/entities/panel-1'
 import panel2 from '../assets/entities/panel-2'
@@ -334,6 +335,7 @@ export default class AssetSystem {
         this._addBuiltInEntity( "tool-menu", toolMenu )
         this._addBuiltInEntity( "help-screen", helpScreen )
         this._addBuiltInEntity( "chat-screen", chatScreen )
+        this._addBuiltInEntity( "video-chat", videoChat )
         this._addBuiltInEntity( "panel", panel1 )
         this._addBuiltInEntity( "panel2", panel2 )
         this._addBuiltInEntity( "panel3", panel3 )

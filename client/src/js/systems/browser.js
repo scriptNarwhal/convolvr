@@ -54,15 +54,44 @@ export default class BrowserSystem {
         }
 
         return {
+            navigate: ( url ) => {
+                this.navigate( component, url )
+            },
+            upOneLevel: ( url ) => {
+                this.upOneLevel( component )
+            },
+            back: ( url ) => {
+                this.back( component )
+            },
+            forward: ( url ) => {
+                this.forward( component )
+            },
+            refresh: ( url ) => {
+                this.refresh( component )
+            },
             type: prop.type
         }
+    }
+
+    upOneLevel ( component ) {
+
+    }
+
+    navigate ( component, url ) {
+
     }
 
     back ( component ) {
 
     }
 
-    forward ( component, url ) {
+    forward ( component ) {
+
+
+    }
+    
+    refresh ( component ) {
+
 
     }
 

@@ -82,7 +82,7 @@ let toolMenu = (assetSystem) => {
     }
 
     return {
-        id: -2,
+        id: -1,
         name: "tool-menu",
         components: [
             //currentIndicator,

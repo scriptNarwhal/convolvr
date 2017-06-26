@@ -6,6 +6,7 @@ export default class WebRTCSystem {
     constructor (world) {
 
         this.world = world
+
         let localVideoStream = null,
             peerConn = null,
             peerConnCfg = {'iceServers': [
@@ -27,35 +28,44 @@ export default class WebRTCSystem {
         this.videoCallButton = document.getElementById("videoCallButton")
         this.endCallButton = document.getElementById("endCallButton")
             
-        if (navigator.getUserMedia && this.videoCallButton) { // probably don't need a button to use this.. debug later
+        if ( navigator.getUserMedia && this.videoCallButton ) { // probably don't need a button to use this.. debug later
+
             this.videoCallButton.addEventListener("click", this.initiateCall)
-            this.endCallButton.addEventListener("click", function (evt) {
+            this.endCallButton.addEventListener("click", evt => {
                 send("rtc", {"closeConnection": true })
             })
+
         } else {
             console.log("Sorry, your browser does not support WebRTC!")
         }
         
     }
 
-    prepareCall() {
-        this.peerConn = new RTCPeerConnection(peerConnCfg)
+    prepareCall( component, params ) {
+
+        this.peerConn = new RTCPeerConnection( this.peerConnCfg )
         this.peerConn.onicecandidate = this.onIceCandidateHandler
         this.peerConn.onaddstream = this.onAddStreamHandler
+
     }
     
     onIceCandidateHandler (evt) {
+
         if (!evt || !evt.candidate) return
         send("rtc", {"candidate": evt.candidate })
+
     }
 
     onAddStreamHandler (evt) {
+
         this.videoCallButton.setAttribute("disabled", true)
         this.endCallButton.removeAttribute("disabled")
         this.remoteVideo.src = URL.createObjectURL(evt.stream)
+
     }
 
-    createAndSendOffer() {
+    createAndSendOffer( component, params ) {
+
         let connection = this.peerConn
         connection.createOffer(
             offer => {
@@ -66,9 +76,11 @@ export default class WebRTCSystem {
                 console.log(error)
             }
         )
+
     }
 
-    createAndSendAnswer () {
+    createAndSendAnswer ( component, params ) {
+
         let connection = this.peerConn
         connection.createAnswer(
             answer => {
@@ -79,9 +91,11 @@ export default class WebRTCSystem {
                 console.log(error)
             }
         )
+
     }
 
-    initiateCall () {
+    initiateCall ( component, params ) {
+
         let connection = this.peerConn,
             localStream = this.localVideoStream,
             localVideo = this.localVideoElem,
@@ -89,15 +103,17 @@ export default class WebRTCSystem {
 
         prepareCall()
         // get the local stream, show it in the local video element and send it
-        navigator.getUserMedia({"audio": true, "video": true }, function (stream) {
+        navigator.getUserMedia({"audio": true, "video": true }, stream => {
             localStream = stream
             localVideo.src = URL.createObjectURL(localVideoStream)
             connection.addStream(localVideoStream)
             webrtc.createAndSendOffer()
-        }, function(error) { console.log(error)})
+        }, error => { console.log(error)})
+
     }
 
-    answerCall () {
+    answerCall ( component, params ) {
+
         let connection = this.peerConn,
             localStream = this.localVideoStream,
             localVideo = this.localVideoElem,
@@ -111,10 +127,12 @@ export default class WebRTCSystem {
             connection.addStream(stream)
             webrtc.createAndSendAnswer()
         }, error => { console.log(error) })
+
     }
 
-    endCall () {
-        peerConn.close()
+    endCall ( component, params ) {
+
+        this.peerConn.close()
         this.localVideoStream.getTracks().forEach(track => {
             track.stop()
         })
@@ -122,21 +140,39 @@ export default class WebRTCSystem {
         this.remoteVideo.src = ""
         this.videoCallButton.removeAttribute("disabled")
         this.endCallButton.setAttribute("disabled", true)
-    }
-
-    getVideo (params) {
 
     }
 
-    init (component) { 
+    getVideo ( video ) {
+
+        if ( video == "local" ) {
+
+            return this.localVideo
+
+        } else {
+
+            return this.remoteVideo
+
+        }
+
+    }
+
+    init ( component ) { 
         
         return {
             initiateCall: (params) => {
-                this.initiateCall(params)
+                this.initiateCall( component, params)
             },
-            getVideo: (params) => {
-                this.getVideo(params)
-            }
+            getVideo: ( video ) => {
+                this.getVideo( component, params )
+            },
+            answerCall: (params) => {
+                this.answerCall( component, params )
+            },
+            endCall: (params) => {
+                this.endCall( component, params )
+            },
+
         }
     }
 }

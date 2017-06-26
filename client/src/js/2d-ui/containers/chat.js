@@ -2,6 +2,7 @@
 import React, { Component } from 'react'
 import Shell from '../components/shell'
 import Card from '../components/card'
+import Button from '../components/button'
 import LocationBar from '../components/location-bar'
 
 const styles = {
@@ -256,6 +257,12 @@ class Chat extends Component {
                        }}
                        style={styles.text(mobile)} />
                 <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button} />
+                <Button title={"Upload Files"}
+                    onClick={(evt, title) => {  }}
+                    onFiles={ (files) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
+                    image={"/data/images/upload.png"}
+                    style={{ marginRight: "0.25em", top: "1em", position: "relative"}}
+                  />
             </section>
         </Shell>
     )
@@ -277,10 +284,14 @@ import {
   toggleMenu,
   showChat
 } from '../../redux/actions/app-actions'
+import {
+  uploadFiles
+} from '../../redux/actions/file-actions'
 
 export default connect(
   (state, ownProps) => {
     return {
+        cwd: state.files.listDirectories.workingPath,
         loggedIn: state.users.loggedIn,
         username: !!state.users.loggedIn ? state.users.loggedIn.name : "Human",
         messages: state.messages.messages,
@@ -294,6 +305,9 @@ export default connect(
     return {
       sendMessage: (message, from) => {
           dispatch(sendMessage(message, from))
+      },
+      uploadMultiple: ( files, username, dir ) => {
+        dispatch( uploadFiles( files, username, dir ) )
       },
       toggleMenu: (toggle) => {
         dispatch(toggleMenu(toggle))

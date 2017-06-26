@@ -9,6 +9,7 @@ export default class DatGUIVRPluginSystem {
         let prop = component.props.datgui,
             gui = null,
             state = null,
+            property = [],
             controller = null,
             controllerData = null,
             controllers = prop.controllers,
@@ -35,28 +36,36 @@ export default class DatGUIVRPluginSystem {
 
                 state = null
                 controllerData = controllers[ c ]
+                
 
                 if ( controllerData.value.statePath ) {
 
-                    state = this.getByPath( component.state, controllerData.value.statePath )
+                    
+                    path = controllerData.value.statePath
+                    property = path.splice( path.length-1, 1 )
+                    state = this.getByPath( component.state, path )
 
                 } else if ( controllerData.value.propsPath ) {
 
-                    state = this.getByPath( component.props, controllerData.value.propsPath )
+                    path = controllerData.value.propsPath
+                    property = path.splice( path.length-1, 1 )
+                    state = this.getByPath( component.props, path )
 
                 } else {
 
-                    state = this.getByPath( component, controllerData.value.path )
+                    path = controllerData.value.path
+                    property = path.splice( path.length-1, 1 )
+                    state = this.getByPath( component, path )
 
                 }
 
-                if (typeof state == 'boolean') {
+                if ( typeof state[ property ] == 'boolean' || typeof state[ property ] == 'function' ) {
 
-                    controller = gui.add( state, controllerData.label );
+                    controller = gui.add( state, property );
 
-                } else if ( typeof state == 'number' ) {
+                } else if ( typeof state[ property ] == 'number' ) {
 
-                    controller = gui.add( state, controllerData.label, controllerData.min, controllerData.max );
+                    controller = gui.add( state, property, controllerData.min, controllerData.max );
 
                 }
 

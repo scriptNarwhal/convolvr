@@ -13,7 +13,7 @@ export default class CursorSystem {
     init ( component ) {
          
         return {
-            distance: 18000
+            distance: 32000
         }
     }
 
@@ -163,11 +163,11 @@ export default class CursorSystem {
 
             if ( !!state ) { // animate cursor (in / out)
 
-                if ( state.distance-32000 < (-cursorPos.z) && (cursorPos.z < 80000 - cursorSpeed) ) { // near bound of allowed movement
+                if ( state.distance-8000 < (-cursorPos.z) && (cursorPos.z < 88000 - cursorSpeed) ) { // near bound of allowed movement
 
                     cursorPos.z += cursorSpeed
 
-                } else if ( state.distance > (-cursorPos.z) && (cursorPos.z > -80000 + cursorSpeed) ) { // far bound of allowed movement
+                } else if ( state.distance-8000 > (-cursorPos.z) && (cursorPos.z > -88000 + cursorSpeed) ) { // far bound of allowed movement
                 
                     cursorPos.z -= cursorSpeed
                 

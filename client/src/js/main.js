@@ -27,7 +27,6 @@ import Convolvr from './world/world'
 import { events } from './network/socket'
 import UserInput from './input/user-input'
 import User from './user'
-import Avatar from './assets/entities/avatars/avatar' // default avatar
 import Toolbox from './tools/toolbox'
 
 let socket = events,
@@ -75,7 +74,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
       "#💻 Desktop users",
       "- ⌨️ WASD, RF, space keys: movement",
       "- Mouselook (click screen)",
-      "- Left/right click: use tool / cycle mode",
+      "- Left click: use tool Right click: grab",
       "- Keys 0-9: switch tool",
       "- 🎮 Gamepads are supported",
       "",
@@ -90,7 +89,10 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
       "- Device orientation controls the camera",
       "- Swiping & dragging move you"
     ]
-  helpScreen.init(three.scene, {}, help => { _initHTTPClientTest( world, help) })
+  helpScreen.init(three.scene, {}, help => { 
+    _initHTTPClientTest( world, help) 
+    _initVideoChat( world, help ) 
+  })
   helpScreen.update( [ -80000, 50000, 0 ] )
   world.help = helpScreen
 
@@ -109,8 +111,7 @@ ReactDOM.render(
 				<Route path="/login" component={Login} />
 				<Route path="/chat" component={Chat} />
 				<Route path="/files" component={Data} />
-        <Route path="/files/:username/:dir" component={Data} />
-        <Route path="/files/:username/:dir/:dirTwo" component={Data} />
+        <Route path="/files/:username" component={Data} />
 				<Route path="/worlds" component={Worlds} />
         <Route path="/places" component={Places} />
         <Route path="/new-world" component={NewWorld} />
@@ -137,16 +138,24 @@ function _clearOldData () {
 
 }
 
+function _initVideoChat ( world, helpScreen ) {
+
+  let videoChat = world.systems.assets.makeEntity( "video-chat", true ) // simple example of displaying GET response from server
+  videoChat.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
+  videoChat.update( [ -160000, 0, 0 ] )
+
+}
+
 function _initHTTPClientTest ( world, helpScreen ) {
 
   httpClient = world.systems.assets.makeEntity( "help-screen", true ) // simple example of displaying GET response from server
     let compProps = httpClient.components[0].props
     compProps.rest = {
       get: {
-        url: "http://localhost:3007/api/chunks/"+world.name+"/0x0x0"
+        url: "http://localhost:3007/api/chunks/"+world.name+"/0x0x0,-1x0x0"
       }
     }
-    compProps.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0"] // really just clearing the default text until something loads
+    compProps.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0,-1x0x0"] // really just clearing the default text until something loads
     compProps.text.color = "#f0f0f0"
     httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
     httpClient.update( [ -80000, 0, 0 ] )

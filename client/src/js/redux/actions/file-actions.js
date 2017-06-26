@@ -74,6 +74,104 @@ export function uploadFile (file, username, dir) {
    }
 }
 
+export function uploadFiles ( files, username, dir ) {
+    return dispatch => {
+
+     dispatch({
+         type: FILE_UPLOAD_FETCH,
+         username,
+         dir
+     }) 
+
+     if ( !!this.props.currentWorld ) {
+
+      if ( (dir == "/" || dir == "") && this.props.worldUser == this.props.username ) {
+
+        dir = "/worlds/"+this.props.currentWorld
+
+      } 
+
+    }
+
+    if (window.location.href.indexOf("/chat") > -1) {
+      dir = "chat-uploads"
+    }
+		
+	let xhr = new XMLHttpRequest(),
+		formData = new FormData(),
+		ins = files.length,
+        thumbs = [],
+        images = /(\.jpg|\.jpeg|\.png|\.webp)$/i,
+        fileNames = [],
+        shell = this
+
+    if (username == 'Human') {
+      username = 'public'
+    }
+
+	for (let x = 0; x < ins; x++) {
+
+        if ( images.test(files[x].name) ) {
+
+            thumbs.push(files[x]);
+
+        }
+	
+        formData.append("files", files[x]);
+        fileNames.push(files[x].name.replace(/\s/g, '-'))
+
+	}
+	
+    xhr.onload = function () {
+
+		if (xhr.status == 200) {
+
+				console.log("finished uploading")
+
+		}
+
+	}
+
+	xhr.open("POST", "/api/files/upload-multiple/"+username+"?dir="+dir, true);
+
+		//xhr.setRequestHeader("x-access-token", localStorage.getItem("token"));
+		if ("upload" in new XMLHttpRequest) { // add upload progress event
+			
+            xhr.upload.onprogress = function ( event ) {
+
+				if (event.lengthComputable) {
+
+					let complete = (event.loaded / event.total * 100 | 0);
+					console.log(complete)
+
+                    if (complete == 100) {
+
+                        if (window.location.href.indexOf("/chat") > -1) {
+
+                            setTimeout(()=>{
+                                dispatch({
+                                    type: MESSAGE_SEND,
+                                    username,
+                                    dir
+                                }) 
+                            shell.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames)
+                        
+                            }, 500)
+
+                        }
+        
+                    }
+				}
+            }
+
+	    }
+        
+        xhr.send(formData)
+
+   }
+
+}
+
 export function listDirectories (username, dir) {
     return dispatch => {
      dispatch({

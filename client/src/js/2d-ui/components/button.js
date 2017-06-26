@@ -15,6 +15,13 @@ let styles = {
     backgroundRepeat: 'no-repeat',
     backgroundPosition: '50%',
     cursor: 'pointer'
+  },
+  file: {
+    position: 'relative',
+    bottom: '-1em',
+    left: '0.5em',
+    width: '92px',
+    opacity: 0
   }
 }
 export default class Button extends Component {
@@ -31,6 +38,10 @@ export default class Button extends Component {
                    this.props.onClick && this.props.onClick(evt, this.props.title)
                  } }
             >
+            { !!this.props.onFiles ? (
+                <input type="file" multiple onChange={ e=> this.props.onFiles( e.target.files ) } style={styles.file} />
+              ) : ""
+            }
             </div>
         </div>
     )

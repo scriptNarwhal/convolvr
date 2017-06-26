@@ -163,6 +163,12 @@ class App extends Component {
       })
     }
 
+    window.addEventListener('vrdisplayactivate', () => {
+
+      console.log('Display activated.')
+
+    })
+
     let renderCanvas = document.querySelector("#viewport")
 
     renderCanvas.onclick = (event) => {
@@ -257,45 +263,8 @@ class App extends Component {
 
   }
 
-  renderVRButtons () {
-
-    return this.props.stereoMode ?
-        [<Button title="Reset Pose"
-                id="reset-pose"
-                style={{
-                  position: 'fixed',
-                  right: '10vh',
-                  bottom: 0
-                }}
-                key='1'
-                image="/data/images/x.png"
-                onClick={ (evt, title) => {
-
-                } }
-        />,
-        <Button title="Exit VR"
-                style={{
-                  position: "fixed",
-                  right: 0,
-                  top: 0
-                }}
-                key='2'
-                image="/data/images/x.png"
-                onClick={ (evt, title) => {
-                    this.props.toggleVRMode();
-                } }
-        />]
-       : <Button title="Enter VR"
-                  style={{
-                      position: "fixed",
-                      right:0,
-                      bottom: 0,
-                      zIndex: 9999,
-                      background: 'none'
-                  }}
-                  image="/data/images/vr.png"
-                  onClick={ (evt, title) => {
-                    this.props.toggleVRMode()
+  initiateVRMode ( ) {
+    this.props.toggleVRMode()
                     let renderer = three.renderer,
                         ratio = window.devicePixelRatio || 1,
                         camera = three.camera,
@@ -358,6 +327,47 @@ class App extends Component {
                       this.props.toggleVRMode()
                       three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
                       three.world.onWindowResize()
+  }
+
+  renderVRButtons () {
+
+    return this.props.stereoMode ?
+        [<Button title="Reset Pose"
+                id="reset-pose"
+                style={{
+                  position: 'fixed',
+                  right: '10vh',
+                  bottom: 0
+                }}
+                key='1'
+                image="/data/images/x.png"
+                onClick={ (evt, title) => {
+
+                } }
+        />,
+        <Button title="Exit VR"
+                style={{
+                  position: "fixed",
+                  right: 0,
+                  top: 0
+                }}
+                key='2'
+                image="/data/images/x.png"
+                onClick={ (evt, title) => {
+                    this.props.toggleVRMode();
+                } }
+        />]
+       : <Button title="Enter VR"
+                  style={{
+                      position: "fixed",
+                      right:0,
+                      bottom: 0,
+                      zIndex: 9999,
+                      background: 'none'
+                  }}
+                  image="/data/images/vr.png"
+                  onClick={ (evt, title) => {
+                    this.initiateVRMode()
                   }
                 }
             />

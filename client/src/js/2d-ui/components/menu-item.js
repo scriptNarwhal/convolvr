@@ -1,6 +1,6 @@
 /* menu item */
-import React, { Component } from 'react';
-import Button from './button';
+import React, { Component } from 'react'
+import Button from './button'
 
 export default class MenuItem extends Component {
   render() {
