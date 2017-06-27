@@ -216,7 +216,7 @@ export default class CursorSystem {
         let cb = 0,
             callbacks = [],
             cursorState = cursor.state,
-            distance = !!cursorState.cursor ? cursorState.cursor.distance: 12000,
+            distance = !!cursorState.cursor ? cursorState.cursor.distance : 28000,
             props = !!component ? component.props : false,
             hover = !!props ? props.hover : false,
             lookAway = !!props ? props.lookAway : false,
@@ -224,35 +224,31 @@ export default class CursorSystem {
             comp = false,
             cursorSystem = world.systems.cursor,
             newCursorState = {
-                distance,
+                distance: 28000,
                 mesh: obj.object,
                 point: obj.point,
                 faceIndex: obj.faceIndex,
                 component
             }
 
-        distance = obj.distance
-
-        if ( !!entity || ( cursorSystem.entityCoolDown < 0 && !!!entity ) ) { // if components are spawned in rapid succession, attach them to the current entity even if not pointing at it
+        if ( !!entity || ( cursorSystem.entityCoolDown < 0 && !!!entity ) ) { 
             
             newCursorState.entity = entity
 
         } else {
 
-             newCursorState.entity = false
-             newCursorState.component = false // might fix it ??
+            newCursorState.entity = cursorState.cursor.entity
 
         }
 
-        if ( !!obj.distance ) {
+        if ( !!obj.distance )
 
             newCursorState.distance = obj.distance
 
-        }
 
-        if ( !!cursor.state.component && !!!component && lookAway) {
+        if ( !!cursorState.component && !!!component && lookAway) {
          
-            callbacks = cursor.state.component.state.lookAway.callbacks
+            callbacks = cursorState.component.state.lookAway.callbacks
             cb = callbacks.length-1
 
             while ( cb >= 0 ) {
@@ -264,7 +260,7 @@ export default class CursorSystem {
 
         }
 
-        cursor.state.cursor = Object.assign( {}, cursorState.cursor, { faceIndex: -1 }, newCursorState )
+        cursorState.cursor = Object.assign( { faceIndex: -1 }, newCursorState )
 
         if ( !!entity && !!component ) {
 

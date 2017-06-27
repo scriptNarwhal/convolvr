@@ -32,7 +32,7 @@
                 position: absolute;
                 font-size: 20px;
                 font-family: sans-serif;
-				background: #101010;
+				background: #202020;
 				color: #ffffff;
 			}
 			canvas {
@@ -123,19 +123,18 @@
                     color = vec4(red / 2.0 + terrainRed * 0.5, green / 2.0 + terrainGreen* 0.5, blue / 2.0 + terrainBlue* 0.5, 1.0);
 
                 }
-
                 
-               
                gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
 
             }
         </script>
         <script src='/data/lib/notify.js'></script>
-        <script src='/data/lib/three.min.js'></script>
-        <script src='/data/lib/csg.js'></script>
-        <script src='/data/lib/ThreeCSG.js'></script>
-        <script src='/data/lib/BufferSubdivisionModifier.js'></script>
-        <script src='/data/lib/threeoctree.js'></script>
+        <script src='/data/lib/threejs/three.min.js'></script>
+        <script src='/data/lib/threejs/plugins/csg.js'></script>
+        <script src='/data/lib/threejs/plugins/ThreeCSG.js'></script>
+        <script src='/data/lib/threejs/plugins/BufferSubdivisionModifier.js'></script>
+        <script src='/data/lib/threejs/plugins/threeoctree.js'></script>
+        <script src='/data/lib/threejs/plugins/GPUParticleSystem.js'></script>
         <script src='/data/lib/webvr-polyfill.min.js'></script>
         <script src='/data/lib/VRControls.js'></script>
         <!-- <script src='/data/lib/VREffect.js'></script> -->

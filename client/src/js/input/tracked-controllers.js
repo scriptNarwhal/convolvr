@@ -29,7 +29,7 @@ export default class TrackedController {
 
   }
 
-  handleOculusTouch (gamepad)  {
+  handleOculusTouch ( gamepad )  {
 
     let axes = gamepad.axes,
         buttons = gamepad.buttons,

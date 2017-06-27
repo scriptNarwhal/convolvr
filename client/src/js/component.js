@@ -149,7 +149,7 @@ export default class Component {
     
     if ( s > 0 ) {
 
-      combined = new THREE.Mesh( base, new THREE.MultiMaterial( materials ) )
+      combined = new THREE.Mesh( base, materials ) //new THREE.MultiMaterial( materials ) )
       combined.userData = {
         compsByFaceIndex: this.compsByFaceIndex,
         component: this,

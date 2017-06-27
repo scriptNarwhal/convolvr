@@ -126,8 +126,8 @@ export default class Systems {
         })
 
 		this.deffered = {
-			hand: true, light: true, particle: true, text: true, audio: true, video: true, metaFactory: true, miniature: true,
-			toolUI: true
+			hand: true, light: true, particles: true, text: true, audio: true, video: true, metaFactory: true, miniature: true,
+			tool: true, toolUI: true, layout: true, datgui: true
 		}
 
     }
@@ -180,6 +180,12 @@ export default class Systems {
 
         return mesh
     }
+
+	update ( delta, time ) {
+
+		this.particles.update( delta, time )
+
+	}
 	
 }
 

@@ -25,28 +25,30 @@ export let animate = ( world, last, cursorIndex ) => {
 
   world.sendUserData()
   world.updateSkybox( delta )
+  world.systems.update( delta, time )
 
-    if ( mode == "3d" || mode == "web" ) {
+  if ( mode == "3d" || mode == "web" ) {
 
-      if (world.postProcessing.enabled) {
+    if (world.postProcessing.enabled) {
 
-        world.postProcessing.composer.render()
+      world.postProcessing.composer.render()
 
-      } else {
+    } else {
 
-        three.renderer.render( three.scene, camera )
-
-      }
-
-      world.octree.update()
+      three.renderer.render( three.scene, camera )
 
     }
 
-    if ( mode != "stereo" && !world.IOTMode ) {
+    world.octree.update()
 
-      requestAnimationFrame( () => { animate( world, time, cursorIndex ) } )
+  }
 
-    }
+  if ( mode != "stereo" && !world.IOTMode ) {
+
+    requestAnimationFrame( () => { animate( world, time, cursorIndex ) } )
+
+  }
+
 }
 
 export let vrAnimate = ( time, oldPos, cursorIndex ) => {
@@ -55,16 +57,17 @@ export let vrAnimate = ( time, oldPos, cursorIndex ) => {
       delta = Math.min(now - time, 500) / 16000,
       t = three,
       world = t.world,
-      floorHeight = world.floorHeight,
-      user = world.user,
-      frame = world.vrFrame,
       camera = t.camera,
       cPos = camera.position,
-      vrPos = [],
-      vrWorldPos = [],
+      frame = world.vrFrame,
+      floorHeight = world.floorHeight,
+      user = world.user,
       cursors = !!user ? user.avatar.componentsByProp.cursor : false,
       cursor = !!cursors ? cursors[cursorIndex] : false,
-      hands = !!user && !!user.avatar ? user.avatar.componentsByProp.hand : false
+      hands = !!user && !!user.avatar ? user.avatar.componentsByProp.hand : false,
+      vrPos = [],
+      vrWorldPos = []
+      
 
     if ( world.HMDMode != "flymode" ) {  // room scale + gamepad movement
 
@@ -87,8 +90,9 @@ export let vrAnimate = ( time, oldPos, cursorIndex ) => {
     user.mesh.updateMatrix()
     camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
-    world.updateSkybox(delta)
     world.sendUserData()
+    world.updateSkybox(delta)
+    world.systems.update( delta, time )
     t.vrEffect.render(t.scene, t.camera) // Render the scene.
     world.octree.update()
     t.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now, vrWorldPos, cursorIndex) }) // Keep looping.

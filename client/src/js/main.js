@@ -141,6 +141,7 @@ function _clearOldData () {
 function _initVideoChat ( world, helpScreen ) {
 
   let videoChat = world.systems.assets.makeEntity( "video-chat", true ) // simple example of displaying GET response from server
+  // videoChat.components[0].props.particles = {}
   videoChat.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
   videoChat.update( [ -160000, 0, 0 ] )
 

@@ -4,9 +4,11 @@ export default class Entity {
 
   constructor ( id, components, position, quaternion ) {
 
+      let world = window.three.world
+
       if ( id == -1 ) {
 
-        three.world && three.world.systems.assets.autoEntityID()
+        world && world.systems.assets.autoEntityID()
 
       }
 
@@ -90,6 +92,7 @@ export default class Entity {
         materials = [],
         addToOctree = true,
         workerUpdate = "",
+        updateVoxel = false,
         comp = null,
         face = 0,
         faces = null,
@@ -112,6 +115,8 @@ export default class Entity {
         three.scene.remove( this.mesh )
 
       }
+
+      this.removeFromVoxel( this.voxel )
       
       workerUpdate = !! config && config.updateWorkers ? "update" : workerUpdate
 
@@ -238,7 +243,7 @@ export default class Entity {
 
     if ( s > 0 ) {
 
-      mesh = new THREE.Mesh( base, new THREE.MultiMaterial( materials ) )
+      mesh = new THREE.Mesh( base, materials ) // new THREE.MultiMaterial( materials ) )
 
     } else {
 
@@ -273,28 +278,64 @@ export default class Entity {
     addToOctree && world.octree.add( mesh )
 
     parent.add( mesh )
-    let addToVoxel = systems.terrain.voxels[ this.voxel.join(".") ]
-
-    if ( !!! addToVoxel || typeof addToVoxel == 'boolean' ) {
-
-      if (!!! systems.terrain.voxels["0.0.0"] || typeof  systems.terrain.voxels["0.0.0"] == 'boolean') {
-
-        let voxel = { entities: [], meshes: [], cleanUp: false, data: { cell: [0, 0, 0] } }
-        systems.terrain.voxels["0.0.0"] = voxel
-        systems.terrain.voxelList.push(voxel)
-
-      }
-
-      addToVoxel = systems.terrain.voxels["0.0.0"]
-
-    }
-    
-    addToVoxel.meshes.push( mesh )
+    this.addToVoxel( this.voxel, mesh )
     this.mesh = mesh
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()
     !! callback && callback( this )
     return this
+
+  }
+
+  getVoxel () {
+
+    let position = this.mesh.position,
+        coords = [Math.floor( position.z / 928000 ), 0, Math.floor( position.z / 807360 )]
+
+    this.voxel = coords
+
+    return coords
+
+  }
+
+  addToVoxel ( coords, mesh ) {
+
+    let addTo = this.getVoxelForUpdate( coords.join(".") )
+
+    addTo.meshes.push( mesh )
+    
+  }
+
+  removeFromVoxel ( coords, mesh ) {
+
+    let removeFrom = this.getVoxelForUpdate( coords.join(".") )
+
+    removeFrom.meshes.splice( removeFrom.meshes.indexOf( mesh ), 1 )
+
+  }
+
+  getVoxelForUpdate ( key ) {
+
+    let world = window.three.world,
+        systems = world.systems,
+        terrain = systems.terrain,
+        voxel = terrain.voxels[ key ]
+
+    if ( !!! voxel || typeof voxel == 'boolean' ) {
+
+      if (!!! terrain.voxels[ "0.0.0" ] || typeof  terrain.voxels[ "0.0.0" ] == 'boolean') {
+
+        voxel = { entities: [], meshes: [], cleanUp: false, data: { cell: [0, 0, 0] } }
+        terrain.voxels[ "0.0.0" ] = voxel
+        terrain.voxelList.push( voxel )
+
+      }
+
+      voxel = terrain.voxels[ "0.0.0" ]
+
+    }
+
+    return voxel
 
   }
 
@@ -376,14 +417,6 @@ export default class Entity {
     })
 
     return component
-
-  }
-
-  getVoxel () {
-
-    let position = this.mesh.position
-
-    return [ Math.floor( position.z / 928000 ), 0, Math.floor( position.z / 807360 ) ]
 
   }
 

@@ -106,7 +106,6 @@ class App extends Component {
 
       world.load( worldUser, worldName, () => { /* systems online */ }, ()=> { /* terrain finished loading */
 
-
         console.log("init 3d UI / terrain loaded")
         init3DUI()
 

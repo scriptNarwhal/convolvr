@@ -114,41 +114,41 @@ export default class TerrainSystem {
 
     if ( force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
 
-      lastCoords = this.lastChunkCoords = [ coords[0], coords[1], coords[2] ]
-      let userName = world.userName || "space"
+        lastCoords = this.lastChunkCoords = [ coords[0], coords[1], coords[2] ]
+        let userName = world.userName || "space"
 
-      if ( userName == "space" && world.name == "convolvr" ) {
+        if ( userName == "space" && world.name == "convolvr" ) {
 
-        browserHistory.push( "/at/"+coords.join("."))
+          browserHistory.push( "/at/"+coords.join("."))
 
-      } else {
+        } else {
 
-        browserHistory.push( "/"+(userName)+"/"+world.name+"/at/"+coords.join("."))
-
-      }
-      
-
-      force = false 	// remove old chunks
-
-      for ( c in voxelList ) {
-
-          voxel = voxelList[ c ]
-          pCell = voxel.data.cell
-
-          if (!!!voxel.cleanUp && (pCell[0] < coords[0] - removeDistance || pCell[0] > coords[0] + removeDistance ||
-                                   pCell[2] < coords[2] - removeDistance || pCell[2] > coords[2] + removeDistance) ) { 	// mark voxels for removal
-
-              voxel.cleanUp = true
-              this.cleanUpChunks.push({
-                physics: {
-                  cell: [ pCell[0], 0, pCell[2] ]
-                }, 
-                cell: pCell[0]+".0."+pCell[2]
-              })
-
-          }
+          browserHistory.push( "/"+(userName)+"/"+world.name+"/at/"+coords.join("."))
 
         }
+      
+
+        force = false 	// remove old chunks
+
+        for ( c in voxelList ) {
+
+            voxel = voxelList[ c ]
+            pCell = voxel.data.cell
+
+            if (!!!voxel.cleanUp && (pCell[0] < coords[0] - removeDistance || pCell[0] > coords[0] + removeDistance ||
+                                    pCell[2] < coords[2] - removeDistance || pCell[2] > coords[2] + removeDistance) ) { 	// mark voxels for removal
+
+                voxel.cleanUp = true
+                this.cleanUpChunks.push({
+                  physics: {
+                    cell: [ pCell[0], 0, pCell[2] ]
+                  }, 
+                  cell: pCell[0]+".0."+pCell[2]
+                })
+
+            }
+
+          }
 
       }
 
