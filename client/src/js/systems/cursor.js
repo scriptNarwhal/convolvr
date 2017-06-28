@@ -2,6 +2,7 @@ let handDirection = new THREE.Vector3(0, 0, 0),
     tmpVector2 = new THREE.Vector2(0, 0)
 
 export default class CursorSystem {
+
     constructor ( world ) {
 
         this.world = world
@@ -19,20 +20,16 @@ export default class CursorSystem {
 
     rayCast ( world, camera, cursor, hand, handMesh, callback ) { // public method; will use from other systems
 
-        let raycaster = world.raycaster,
-            eventsToChildren = false,
+        let voxels = world.systems.terrain.voxels,
+            raycaster = world.raycaster,
+            coords = [ 0, 0, 0 ],
             octreeObjects = [],
             castObjects = [],
             intersections = [],
             component = null,
-            voxels = world.systems.terrain.voxels,
-            coords = [ 0, 0, 0 ],
-            key = "",
             position = null,
             entity = null,
             obj = null,
-            x = -1,
-            z = -1,
             i = 0
 
         if ( handMesh != null ) {
@@ -49,9 +46,66 @@ export default class CursorSystem {
 
         }
 
-        coords = ([Math.floor( position.z / 928000 ), 0, Math.floor( position.z / 807360 )])
+        coords = [ Math.floor( position.z / 928000 ), 0, Math.floor( position.z / 807360 ) ]
 
         raycaster.ray.far = 80000
+
+        castObjects = this.getSurroundingVoxels( voxels, coords )
+
+        //octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
+        intersections = raycaster.intersectObjects( castObjects ) //octreeObjects ) intersectOctreeObjects
+
+        i = intersections.length -1
+        component = null
+
+        if ( i > -1 ) { //console.log( i+1, " intersections")
+
+            while ( i > -1 ) {
+
+                obj = intersections[i]
+                entity = obj.object.userData.entity
+
+                if (!! entity && entity.componentsByProp.terrain ) {
+
+                    i --
+                    continue
+
+                }
+
+                if ( !!entity && obj.distance < 90000 ) {
+
+                    if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
+
+                        component = entity.allComponents[0]; //console.log("one component: ", component ? Object.keys(component.props).join("-") : "")
+
+                    } else { 
+
+                        component = entity.getClosestComponent( obj.point ); //console.log("closest", component ? Object.keys(component.props).join("-") : "")
+
+                    }
+
+                }
+
+                callback( cursor, hand, world, obj, entity, component )
+                i --
+
+            }
+
+        } else {
+
+            callback( cursor, hand, world, null, null, null )
+
+        }
+
+    }
+
+    getSurroundingVoxels ( voxels, coords ) {
+
+        let castObjects = [],
+            key = "",
+            x = -1,
+            z = -1,
+            i = 0
 
         while ( x < 2 ) {
             
@@ -72,7 +126,7 @@ export default class CursorSystem {
             castObjects = castObjects.concat(voxels[ "0.0.0" ].meshes )
         }
 
-       while ( i < castObjects.length ) {
+        while ( i < castObjects.length ) {
 
              if ( !!!castObjects[ i ] ) {
 
@@ -84,40 +138,9 @@ export default class CursorSystem {
             
             }
             
-       }
-
-        //octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
-        intersections = raycaster.intersectOctreeObjects( castObjects ) //octreeObjects )
-
-        i = intersections.length -1
-        component = null
-
-        while ( i > -1 ) {
-
-            obj = intersections[i]
-            entity = obj.object.userData.entity
-            if (!! entity && entity.componentsByProp.terrain ) {
-                i --
-                continue
-            }
-            if ( !!entity && obj.distance < 90000 ) {
-
-                if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
-
-                    component = entity.allComponents[0]; //console.log("one component: ", component ? Object.keys(component.props).join("-") : "")
-
-                } else { 
-
-                    component = entity.getClosestComponent( obj.point ); //console.log("closest", component ? Object.keys(component.props).join("-") : "")
-
-                }
-
-            }
-
-            callback( cursor, hand, world, obj, entity, component )
-            i --
-
         }
+
+        return castObjects
 
     }
 
@@ -213,25 +236,41 @@ export default class CursorSystem {
 
     _cursorCallback ( cursor, hand, world, obj, entity, component ) {
 
-        let cb = 0,
-            callbacks = [],
-            cursorState = cursor.state,
+        let cursorState = cursor.state,
             distance = !!cursorState.cursor ? cursorState.cursor.distance : 28000,
             props = !!component ? component.props : false,
             hover = !!props ? props.hover : false,
             lookAway = !!props ? props.lookAway : false,
             activate = !!props ? props.activate : false,
-            comp = false,
             cursorSystem = world.systems.cursor,
+            newCursorState = null,
+            callbacks = null,
+            comp = false,
+            cb = 0
+           
+
+        if ( !!obj ) {
+
             newCursorState = {
-                distance: 28000,
+                distance: obj.distance || 28000,
                 mesh: obj.object,
                 point: obj.point,
                 faceIndex: obj.faceIndex,
                 component
             }
 
-        if ( !!entity || ( cursorSystem.entityCoolDown < 0 && !!!entity ) ) { 
+        } else {
+
+            newCursorState = {
+                distance: 28000,
+                mesh: null,
+                point: null,
+                faceIndex: -1,
+            }
+
+        }
+
+        if ( !!entity || ( cursorSystem.entityCoolDown <= 0 && !!!entity ) ) { 
             
             newCursorState.entity = entity
 
@@ -240,11 +279,6 @@ export default class CursorSystem {
             newCursorState.entity = cursorState.cursor.entity
 
         }
-
-        if ( !!obj.distance )
-
-            newCursorState.distance = obj.distance
-
 
         if ( !!cursorState.component && !!!component && lookAway) {
          

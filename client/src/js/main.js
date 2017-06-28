@@ -11,6 +11,7 @@ import { createStore } from 'redux'
 import makeStore from './redux/makeStore'
 let store = makeStore(routerReducer)
 const history = syncHistoryWithStore(browserHistory, store)
+import { clearOldData } from './config'
 // 2D UI
 import App from './2d-ui/containers/app'
 import Data from './2d-ui/containers/data'
@@ -26,7 +27,7 @@ import HUD from './2d-ui/containers/hud'
 import Convolvr from './world/world'
 import { events } from './network/socket'
 import UserInput from './input/user-input'
-import User from './user'
+import User from './world/user'
 import Toolbox from './tools/toolbox'
 
 let socket = events,
@@ -40,19 +41,20 @@ let socket = events,
     chatScreen = null,
     httpClient = null
 
-_clearOldData()
-  
+clearOldData()
 userInput = new UserInput()
 
 loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
-  avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) // entity id can be passed into config object
+  let systems = world.systems
+
+  avatar = systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) // entity id can be passed into config object
   avatar.init( three.scene )
   user.useAvatar( avatar )
   user.toolbox = new Toolbox( user, world )
   world.user = user
 
-  toolMenu = world.systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
+  toolMenu = systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
   user.hud = toolMenu
   toolMenu.init( three.scene, {}, menu => { 
     console.log("menu init ", menu)
@@ -64,12 +66,12 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
   userInput.rotationVector = { x: 0, y: 4.5, z: 0 }
   three.camera.position.set( -220000+Math.random()*60000, 100000, -220000+Math.random()*60000 )
 
-  chatScreen = world.systems.assets.makeEntity( "chat-screen", true ) //; chatScreen.components[0].props.speech = {}
+  chatScreen = systems.assets.makeEntity( "chat-screen", true ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( three.scene )
   chatScreen.update( [ 0, 50000, 0 ] )  
   world.chat = chatScreen
 
-  helpScreen = world.systems.assets.makeEntity( "help-screen", true )
+  helpScreen = systems.assets.makeEntity( "help-screen", true )
   helpScreen.components[0].props.text.lines = [
       "#💻 Desktop users",
       "- ⌨️ WASD, RF, space keys: movement",
@@ -122,21 +124,6 @@ ReactDOM.render(
   </Provider>),
   document.getElementsByTagName('main')[0]
 )
-
-function _clearOldData () {
-
-  if (localStorage.getItem("postProcessing") != null) {
-
-    if (localStorage.getItem("version0.35") == null) {
-
-      localStorage.setItem("version0.35", "1")
-      localStorage.setItem("postProcessing", "off")
-
-    }
-
-  }
-
-}
 
 function _initVideoChat ( world, helpScreen ) {
 
