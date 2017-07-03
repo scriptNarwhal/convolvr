@@ -85,6 +85,8 @@ self.update = ( ) => {
 
 							ent = obj.entities[ e ]
 
+							if ( !!! ent || !!!ent.components ) { console.warn("Problem with entity! ",e ,ent); continue }
+
 							if ( distance3dCompare( position, ent.position, (ent.boundingRadius||100000)+10000) ) { 
 
 								ent.components.map( entComp => {

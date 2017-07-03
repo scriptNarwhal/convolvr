@@ -224,21 +224,20 @@ export default class TerrainSystem {
 
         this.reqChunks.map( ( rc, i ) => {
 
-          if ( i > 0 ) {
+          if ( i > 0 )
             chunks += ","
-          }
           
           chunks += rc
+
         })
 
         this.reqChunks = [] // empty array
         let showVoxels = true
 
-        if ( !!config ) {
+        if ( !!config )
 
           showVoxels = config.type == "voxels" || config.type == "both"
 
-        }
 
         axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`).then( response => {
 
@@ -247,10 +246,11 @@ export default class TerrainSystem {
 
                 let voxelKey = c.x+".0."+c.z, // debugging this.. 
                     voxelData = { name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities }, //, entities: c.entities },
-                    chunk = new Voxel( voxelData, [c.x, 0, c.z], voxels )
+                    v = new Voxel( voxelData, [c.x, 0, c.z], voxels )
 
-                physicsVoxels.push( chunk.data )
-                voxelList.push( chunk )
+                v.preLoadEntities()
+                physicsVoxels.push( v.data )
+                voxelList.push( v )
 
                  if ( terrain.loaded == false && world.user.avatar.getVoxel().join(".") == voxelKey ) {
 
@@ -271,14 +271,15 @@ export default class TerrainSystem {
                     command: "add voxels",
                     data: physicsVoxels
                 }))
-                if (world.IOTMode) {
+
+                if ( world.IOTMode ) 
+
                   animate(world, Date.now(), 0)
-                }
 
              }
 
           }).catch(response => {
-             console.log("Chunk Error", response)
+             console.log("Voxel Error", response)
           })
 
       }

@@ -47,9 +47,7 @@ export default class CursorSystem {
         }
 
         coords = [ Math.floor( position.z / 928000 ), 0, Math.floor( position.z / 807360 ) ]
-
         raycaster.ray.far = 80000
-
         castObjects = this.getSurroundingVoxels( voxels, coords )
 
         //octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
@@ -62,10 +60,10 @@ export default class CursorSystem {
 
             while ( i > -1 ) {
 
-                obj = intersections[i]
+                obj = intersections[ i ]
                 entity = obj.object.userData.entity
 
-                if (!! entity && entity.componentsByProp.terrain ) {
+                if ( !! entity && entity.componentsByProp.terrain ) {
 
                     i --
                     continue
@@ -112,7 +110,7 @@ export default class CursorSystem {
             while ( z < 2 ) {
 
                 key = [ coords[0] + x, 0, coords[2] + z ].join(".")
-
+                if ( typeof voxels[ key ] == 'object' ) //console.warn("Empty Voxel! ", key, voxels[ key ] ) }
                 castObjects = castObjects.concat( !!voxels[ key ] ? voxels[ key ].meshes : [] )
                 z ++
             }
@@ -280,7 +278,7 @@ export default class CursorSystem {
 
         }
 
-        if ( !!cursorState.component && !!!component && lookAway) {
+        if ( !!cursorState.component && !!!component && lookAway ) {
          
             callbacks = cursorState.component.state.lookAway.callbacks
             cb = callbacks.length-1

@@ -243,7 +243,7 @@ export default class Entity {
 
     if ( s > 0 ) {
 
-      mesh = new THREE.Mesh( base, materials ) // new THREE.MultiMaterial( materials ) )
+      mesh = new THREE.Mesh( base, materials )
 
     } else {
 
@@ -321,8 +321,8 @@ export default class Entity {
         terrain = systems.terrain,
         voxel = terrain.voxels[ key ]
 
-    if ( !!! voxel || typeof voxel == 'boolean' ) {
-
+    if ( !!! voxel || typeof voxel == 'boolean' ) { console.warn("Voxel not loaded!")
+      
       if (!!! terrain.voxels[ "0.0.0" ] || typeof  terrain.voxels[ "0.0.0" ] == 'boolean') {
 
         voxel = { entities: [], meshes: [], cleanUp: false, data: { cell: [0, 0, 0] } }
