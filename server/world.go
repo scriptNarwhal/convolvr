@@ -136,9 +136,6 @@ func getWorld(c echo.Context) error { // load specific world
 		terrainRed   float64
 		terrainGreen float64
 		terrainBlue  float64
-		first        float64
-		second       float64
-		third        float64
 		lightColor   int
 		ambientColor int
 		terrainColor int
@@ -149,30 +146,30 @@ func getWorld(c echo.Context) error { // load specific world
 	if err != nil {
 		log.Println(err)
 
-		first = 0.9 + (rand.Float64() * 0.1)
-		second = first*0.95 - rand.Float64()*0.05
-		third = second*0.2 - rand.Float64()*0.1
-
 		if rand.Intn(12) > 6 {
+
 			if rand.Intn(12) > 6 {
-				red = second / 2.0
-				green = second / 4.0
-				blue = first
+				red = 0.2
+				green = 0.06
+				blue = 1.0
 			} else {
-				red = third / 2.5
-				green = first / 2.2
-				blue = first
+				red = 1.0
+				green = 0.06
+				blue = 0.3
 			}
+
 		} else {
+
 			if rand.Intn(12) > 6 {
-				red = first / 4.5
-				green = first / 2.7
-				blue = first
+				red = 0.06
+				green = 1.0
+				blue = 0.6
 			} else {
-				red = first
-				green = first
-				blue = first
+				red = 0.06
+				green = 0.4
+				blue = 1.0
 			}
+
 		}
 
 		terrainRed = blue/2.0 + red/2.0

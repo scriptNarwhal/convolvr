@@ -37,16 +37,21 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 it looks like yo
 
 		if action.Tool == "Entity Tool" {
 
-			entity = *NewEntity(-1, "", action.World, action.Entity.Components, action.Position, action.Quaternion, action.Entity.BoundingRadius, nil)
-			saveErr := voxelEntities.Save(&entity)
-			if saveErr != nil {
-				log.Println(saveErr)
+			if len(action.Entity.Components) == 0 {
+				log.Println("Can't save entity with 0 components")
+			} else {
+				entity = *NewEntity(-1, "", action.World, action.Entity.Components, action.Position, action.Quaternion, action.Entity.BoundingRadius, nil)
+				saveErr := voxelEntities.Save(&entity)
+				if saveErr != nil {
+					log.Println(saveErr)
+				}
+				action.EntityID = entity.ID
+				action.Entity.ID = entity.ID
+				log.Println(entity.ID)
+				entityOut, _ = json.Marshal(action)
+				p.Data = string(entityOut[:])
 			}
-			action.EntityID = entity.ID
-			action.Entity.ID = entity.ID
-			log.Println(entity.ID)
-			entityOut, _ = json.Marshal(action)
-			p.Data = string(entityOut[:])
+
 		}
 		log.Printf(`tool action: "%s"`, action.Tool) // modify chunk where this tool was used...
 

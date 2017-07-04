@@ -323,7 +323,7 @@ export default class Entity {
 
     if ( !!! voxel || typeof voxel == 'boolean' ) { console.warn("Voxel not loaded!")
       
-      if (!!! terrain.voxels[ "0.0.0" ] || typeof  terrain.voxels[ "0.0.0" ] == 'boolean') {
+      if ( !!! terrain.voxels[ "0.0.0" ] || typeof  terrain.voxels[ "0.0.0" ] == 'boolean' ) {
 
         voxel = { entities: [], meshes: [], cleanUp: false, data: { cell: [0, 0, 0] } }
         terrain.voxels[ "0.0.0" ] = voxel
