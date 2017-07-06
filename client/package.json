@@ -8,7 +8,7 @@
   "description": "Modular webvr game engine, authoring tool and server.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SpaceHexagon/convolvr"
+    "url": "https://github.com/convolvr/convolvr"
   },
   "author": "Jeremy Evans <jeremy@spacehexagon.com>",
   "license": "ISC",

@@ -8,7 +8,7 @@ import (
 
 	"encoding/json"
 
-	"github.com/SpaceHexagon/convolvr"
+	"github.com/convolvr/convolvr"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

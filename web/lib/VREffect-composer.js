@@ -11,7 +11,7 @@
 
 /**
  	This file has been slightly modified for convolvr.io / in order to use effect composer (optionally)
-	https://github.com/SpaceHexagon/convolvr
+	https://github.com/convolvr
 **/
 THREE.VREffect = function ( renderer, post, onError ) {
 

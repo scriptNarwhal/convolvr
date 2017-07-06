@@ -7,8 +7,8 @@
 - Supports infinite, configurable, procedural worlds 
 - Mesh based VR UI; Multiline text rendering
 
-## Client Example [full code here](https://github.com/SpaceHexagon/convolvr/blob/dev/client/src/js/main.js)
-```
+## Client Example [full code here](https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
+```js
 loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   let avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) 
@@ -31,18 +31,19 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 })
 ```
 ## Server Examples
-- [Generating Buildings](https://github.com/SpaceHexagon/convolvr/blob/dev/server/generated-buildings.go)
-- [Handling User Actions](https://github.com/SpaceHexagon/convolvr/blob/dev/server/socket.go#L17)
+- [Generating Buildings](https://github.com/convolvr/convolvr/blob/dev/server/generated-buildings.go)
+- [Handling User Actions](https://github.com/convolvr/convolvr/blob/dev/server/socket.go#L17)
 
 ## Installation
-```
-  git clone https://github.com/SpaceHexagon/convolvr.git
+```shell
+  git clone https://github.com/convolvr/convolvr
   cd convolvr/client
   npm install
   ./build.sh
   cd ../cmd
+  go get github.com/convolvr/convolvr/server
   go build
-  ./cmd # starts server on default port 3007
+  ./cmd # starts http on :3007 by default
 
 ```
 ![infinite procedural worlds](https://spacehexagon.com/app/external/Screenshot_2-crop.png)
