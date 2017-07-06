@@ -146,57 +146,14 @@ export default class CursorSystem {
 
         let handMesh = null,
             input = world.userInput,
-            cursorSystem = world.systems.cursor,
-            trackedControls = (input.trackedControls || input.leapMotion)
+            cursorSystem = world.systems.cursor
 
         cursors.map(( cursor, i ) => { // animate cursors & raycast scene
 
             let state = cursor.state.cursor,
-                cursorMesh = cursor.mesh,
-                cursorPos = cursorMesh.position,
-                cursorSpeed = (state.distance - cursorPos.z) / 10
+                cursorMesh = cursor.mesh
             
-            if ( i == 0 ) { // head cursor
-                
-                if ( trackedControls && cursorMesh.visible == true ) {
-
-                    cursorMesh.visible = false
-
-                } else if ( !trackedControls && cursorMesh.visible == false ) {
-
-                    cursorMesh.visible = true
-
-                }
-
-            } else if ( i > 0 ) { // hands
-
-                if ( trackedControls && cursorMesh.visible == false ) {
-
-                    cursorMesh.visible = true
-
-                } else if ( !trackedControls && cursorMesh.visible ) {
-
-                    cursorMesh.visible = false
-
-                }
-
-            }
-
-            if ( !!state ) { // animate cursor (in / out)
-
-                if ( state.distance-8000 < (-cursorPos.z) && (cursorPos.z < 88000 - cursorSpeed) ) { // near bound of allowed movement
-
-                    cursorPos.z += cursorSpeed
-
-                } else if ( state.distance-8000 > (-cursorPos.z) && (cursorPos.z > -88000 + cursorSpeed) ) { // far bound of allowed movement
-                
-                    cursorPos.z -= cursorSpeed
-                
-                }
-            }
-
-            cursorMesh.updateMatrix()
-            cursorMesh.updateMatrixWorld()
+            cursorSystem._animateCursors( world, input, cursorSystem, cursor, cursorMesh, state, i, cursorIndex )
 
             if ( i > 0 ) { // possibly refactor this to stop hands from lagging behind at high speed*
 
@@ -308,6 +265,57 @@ export default class CursorSystem {
 
                 }
 
+            }
+
+        }
+
+    }
+
+    _animateCursors ( world, input, cursorSystem, cursor, cursorMesh, state, i, cursorIndex ) {
+
+        let cursorPos = cursorMesh.position,
+            cursorSpeed = ( state.distance - cursorPos.z ) / 10,
+            trackedControls = ( input.trackedControls || input.leapMotion )
+            
+        cursorMesh.updateMatrix()
+        cursorMesh.updateMatrixWorld()
+
+        if ( i == 0 ) { // head cursor
+                
+            if ( trackedControls && cursorMesh.visible == true ) {
+
+                cursorMesh.visible = false
+
+            } else if ( !trackedControls && cursorMesh.visible == false ) {
+
+                cursorMesh.visible = true
+
+            }
+
+        } else if ( i > 0 ) { // hands
+
+            if ( trackedControls && cursorMesh.visible == false ) {
+
+                cursorMesh.visible = true
+
+            } else if ( !trackedControls && cursorMesh.visible ) {
+
+                cursorMesh.visible = false
+
+            }
+
+        }
+
+        if ( !!state ) { // animate cursor (in / out)
+
+            if ( state.distance-8000 < (-cursorPos.z) && (cursorPos.z < 88000 - cursorSpeed) ) { // near bound of allowed movement
+
+                cursorPos.z += cursorSpeed
+
+            } else if ( state.distance-8000 > (-cursorPos.z) && (cursorPos.z > -88000 + cursorSpeed) ) { // far bound of allowed movement
+                
+                cursorPos.z -= cursorSpeed
+                
             }
 
         }
