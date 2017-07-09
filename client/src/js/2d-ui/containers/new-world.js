@@ -118,7 +118,7 @@ class NewWorld extends Component {
         data = {
           id: 0,
           name: this.state.name,
-          description: "",
+          description: this.state.description,
           tags: [],
           gravity: this.state.gravity,
           highAltitudeGravity: this.state.highAltitudeGravity,

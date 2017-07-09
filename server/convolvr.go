@@ -126,8 +126,26 @@ func Start(configName string) {
 
 	// Named route "foobar"
 	var handleWorld = func(c echo.Context) error {
+		var (
+			world       World
+			name        string
+			description string
+			icon        string
+			themeColor  string
+		)
+		description = ""
+		icon = "/data/images/convolvr2.png"
+		themeColor = "#151515"
+		name = c.Param("worldName")
+		err := db.One("Name", name, &world)
+		if err == nil {
+			description = world.Description
+		}
 		return c.Render(http.StatusOK, "world.html", map[string]interface{}{
-			"name": "Hello World!",
+			"name":        name,
+			"description": description,
+			"icon":        icon,
+			"themeColor":  themeColor,
 		})
 	}
 	e.GET("/:userName/:worldName", handleWorld).Name = "user-world"             // fairly simple, readable url structure

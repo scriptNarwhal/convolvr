@@ -33,6 +33,7 @@ type World struct {
 	Terrain             `storm:"inline" json:"terrain"`
 	Spawn               `storm:"inline" json:"spawn"`
 	Tags                []string `json:"tags",omitempty`
+	Description         string   `json:"description"`
 }
 
 type Sky struct {
@@ -90,8 +91,8 @@ type Spawn struct {
 	Nets       bool `json:"nets"`
 }
 
-func NewWorld(id int, userId int, userName string, name string, gravity float64, highAltitudeGravity bool, sky Sky, light Light, terrain Terrain, spawn Spawn, tags []string) *World {
-	return &World{id, userId, userName, name, gravity, highAltitudeGravity, sky, light, terrain, spawn, tags}
+func NewWorld(id int, userId int, userName string, name string, gravity float64, highAltitudeGravity bool, sky Sky, light Light, terrain Terrain, spawn Spawn, tags []string, description string) *World {
+	return &World{id, userId, userName, name, gravity, highAltitudeGravity, sky, light, terrain, spawn, tags, description}
 }
 
 func getWorlds(c echo.Context) error {
@@ -197,10 +198,10 @@ func getWorld(c echo.Context) error { // load specific world
 		light := Light{Color: lightColor, Intensity: 1.1, Pitch: 1.64, Yaw: rand.Float64() * 3.14, AmbientColor: ambientColor}
 
 		terrain := Terrain{TerrainType: "both", Height: 20000, Color: terrainColor, Red: terrainRed, Green: terrainGreen, Blue: terrainBlue, FlatAreas: true, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
-		spawn := Spawn{Entities: true, Structures: true, Roads: true, Trees: true, NPCS: true, Tools: true, Vehicles: true}
+		spawn := Spawn{Entities: true, Structures: true, Roads: true, Trees: true, NPCS: true, Tools: true, Vehicles: true, Columns: true, Wheels: true, Orbs: true, Blocks: true, Nets: true, Pyramids: true}
 		gravity := 1.0
 		highAltitudeGravity := false
-		world = *NewWorld(0, -1, "space", name, gravity, highAltitudeGravity, sky, light, terrain, spawn, []string{})
+		world = *NewWorld(0, -1, "space", name, gravity, highAltitudeGravity, sky, light, terrain, spawn, []string{}, "Auto-generated World")
 		saveErr := db.Save(&world)
 		if saveErr != nil {
 			log.Println(saveErr)

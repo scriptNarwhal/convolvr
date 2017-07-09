@@ -5,21 +5,18 @@
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <link rel='icon' type='image/png' sizes='192x192' href='/data/images/convolvr2.png' />
         <meta name='theme-color' content='rgb(20, 20, 20)' />
-        <meta name="msapplication-TileColor" content="#151515" />
+        <meta name="msapplication-TileColor" content='{{ index . "themeColor" }}' />
         <meta name="application-name" content="{{index . "name"}}" />
-        <meta name="description" content="{{index . "description"}}" />
-        <!-- TODO: make metatags configurable 
-                   ..and dynamic per world / place
-        -->
-        <meta property="og:title" content="Convolvr" />
-        <meta property="og:description" content="{{index . "description"}}" />
+        <meta name="description" content='{{index . "description"}}' />
+        <meta property="og:title" content='{{index . "name"}}' />
+        <meta property="og:description" content='{{index . "description"}}' />
         <meta property="og:image" content="https://convolvr.io/data/images/convolvr2.png" / >
         <meta property="og:image:width" content="192" />
         <meta property="og:image:height" content="192" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="https://convolvr.io" />
-        <meta name="twitter:title" content="Convolvr" />
-        <meta name="twitter:description" content="{{index . "description"}}"  />
+        <meta name="twitter:title" content='{{index . "name"}}' />
+        <meta name="twitter:description" content='{{index . "description"}}'  />
         <meta name="twitter:image" content="https://convolvr.io/data/images/convolvr2.png" />
         <style>
 			body {
