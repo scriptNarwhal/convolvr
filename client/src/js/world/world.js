@@ -215,25 +215,31 @@ export default class Convolvr {
 
 		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
 
-			skyMaterial = new THREE.ShaderMaterial({
-				side: 1,
-				fog: false,
-				uniforms: {
-					time: { type: "f", value: 1.0 },
-					red: { type: "f", value: config.sky.red },
-					green: { type: "f", value: config.sky.green },
-					blue: { type: "f", value: config.sky.blue },
-					terrainRed: { type: "f", value: config.terrain.red },
-					terrainGreen: { type: "f", value: config.terrain.green },
-					terrainBlue: { type: "f", value: config.terrain.blue },
-					lightYaw: { type: "f", value: config.light.yaw },
-					lightPitch: { type: "f", value: config.light.pitch }
-				},
-				vertexShader: document.getElementById('sky-vertex').textContent,
-				fragmentShader: document.getElementById('sky-fragment').textContent
-			})
+			this.loadShaders( "/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl", (vert, frag) => {
 
-			skybox.material = skyMaterial
+				skyMaterial = new THREE.ShaderMaterial({
+					side: 1,
+					fog: false,
+					uniforms: {
+						time: { type: "f", value: 1.0 },
+						red: { type: "f", value: config.sky.red },
+						green: { type: "f", value: config.sky.green },
+						blue: { type: "f", value: config.sky.blue },
+						terrainRed: { type: "f", value: config.terrain.red },
+						terrainGreen: { type: "f", value: config.terrain.green },
+						terrainBlue: { type: "f", value: config.terrain.blue },
+						lightYaw: { type: "f", value: config.light.yaw },
+						lightPitch: { type: "f", value: config.light.pitch }
+					},
+					vertexShader: vert,
+					fragmentShader: frag
+				})
+
+				skybox.material = skyMaterial
+
+			}, error => {
+				console.error("Error Loading Shaders: ", error)
+			})	
 
 		} else {
 			// load sky texture 
@@ -256,6 +262,22 @@ export default class Convolvr {
 
 		document.title = config.name == 'overworld' && config.userName == 'space' ? `Convolvr` : config.name // make "Convolvr" default configurable via admin settings
 		false == deferWorldLoading && rebuildWorld()
+
+	}
+
+	loadShaders (vertex_url, fragment_url, onLoad, onProgress, onError) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
+
+		var vertex_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
+		vertex_loader.setResponseType('text')
+		vertex_loader.load(vertex_url, vertex_text => {
+
+			var fragment_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
+			fragment_loader.setResponseType('text')
+			fragment_loader.load(fragment_url, fragment_text => {
+				onLoad(vertex_text, fragment_text)
+			});
+
+		}, onProgress, onError)
 
 	}
 
