@@ -238,6 +238,7 @@ class NewWorld extends Component {
               Create New World
             </div>
             <table className="table new-world" style={{ width: "95%" }}>
+              <tbody>
               <tr>
                 <td>World Name</td>
                 <td>
@@ -531,6 +532,7 @@ class NewWorld extends Component {
                 <td></td>
                 <td></td>
               </tr>
+              </tbody>
             </table>
           </div>
         </Shell>
