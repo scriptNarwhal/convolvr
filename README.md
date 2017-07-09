@@ -43,4 +43,4 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
   go build && ./cmd # starts http on :3007 by default
 
 ```
-![infinite procedural worlds](https://spacehexagon.com/app/external/Screenshot_2-crop.png)
+![infinite procedural worlds](https://spacehexagon.com/app/external/Screenshot_658.png)
