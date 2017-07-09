@@ -1,0 +1,154 @@
+<html>
+    <head>
+        <title>{{index . "name"}}</title>
+        <meta content="utf-8" http-equiv="encoding">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <link rel='icon' type='image/png' sizes='192x192' href='/data/images/convolvr2.png' />
+        <meta name='theme-color' content='rgb(20, 20, 20)' />
+        <meta name="msapplication-TileColor" content="#151515" />
+        <meta name="application-name" content="{{index . "name"}}" />
+        <meta name="description" content="{{index . "description"}}" />
+        <!-- TODO: make metatags configurable 
+                   ..and dynamic per world / place
+        -->
+        <meta property="og:title" content="Convolvr" />
+        <meta property="og:description" content="{{index . "description"}}" />
+        <meta property="og:image" content="https://convolvr.io/data/images/convolvr2.png" / >
+        <meta property="og:image:width" content="192" />
+        <meta property="og:image:height" content="192" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="https://convolvr.io" />
+        <meta name="twitter:title" content="Convolvr" />
+        <meta name="twitter:description" content="{{index . "description"}}"  />
+        <meta name="twitter:image" content="https://convolvr.io/data/images/convolvr2.png" />
+        <style>
+			body {
+				padding: 0;
+				margin: 0;
+                width: 100%;
+                height:100%;
+                overflow-x: hidden;
+                position: absolute;
+                font-size: 20px;
+                font-family: sans-serif;
+				background: #202020;
+				color: #ffffff;
+			}
+			canvas {
+				position: fixed;
+				z-index: 2;
+			}
+		</style>
+    </head>
+    <body>
+        <main id="root"></main>
+        <link rel='stylesheet' href='/data/css/app.css' />
+        <script type="x-shader/x-vertex" id="sky-vertex">
+            #ifdef GL_ES
+            precision highp float;
+            #endif
+            varying vec2 vUv;
+            void main () {
+
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+
+            }
+        </script>
+        <script type="x-shader/x-fragment" id="sky-fragment">
+            #ifdef GL_ES
+            precision mediump float;
+            #endif
+            varying vec2 vUv;
+            uniform float time;
+            uniform float red;
+            uniform float green;
+            uniform float blue;
+            uniform float terrainRed;
+            uniform float terrainGreen;
+            uniform float terrainBlue;
+            uniform float lightYaw;
+            uniform float lightPitch;
+            vec4 color;
+
+            
+            float hash( float n ) {
+                return fract(sin(n)*43758.5453);
+            }
+            float noise( vec3 x ) {
+                // The noise function returns a value in the range -1.0f -> 1.0f
+                vec3 p = floor(x);
+                vec3 f = fract(x); 
+                f       = f*f*(3.0-2.0*f);
+                float n = p.x + p.y*57.0 + 113.0*p.z;
+
+                return mix(mix(mix( hash(n+0.0), hash(n+1.0),f.x),
+                               mix( hash(n+57.0), hash(n+58.0),f.x),f.y),
+                           mix(mix( hash(n+113.0), hash(n+114.0),f.x),
+                               mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
+            }
+
+            void main( void ) {
+
+                float depth = (1.0 - (abs(0.5 - vUv.y) * 2.5));
+                float intense = vUv.y*2.0*abs(0.25 - (vUv.x / 2.0));
+                float radial = abs(0.25 - (vUv.x / 2.0));
+                float glow = 0.0;
+                float luminance = 0.0;
+                float PI = 3.141592654;
+                float mixedTerrainRed = red / 2.0 + terrainRed* 0.75;
+                float mixedTerrainGreen = green / 2.0 + terrainGreen* 0.75;
+                float mixedTerrainBlue = blue / 2.0 + terrainBlue* 0.75;
+
+                if ( vUv.y >= 0.5 ) {
+
+                    luminance += 0.5 + depth * 1.7;
+                    glow =+ 0.7 * depth * depth;
+                    color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
+                    glow += sin( abs( ((vUv.x * PI) -lightYaw) ) );
+                } else if ( vUv.y < 0.5 && vUv.y > 0.49 ) {
+
+                    luminance += depth * 1.7;
+                    glow += 0.3 * depth * depth;
+                    glow += sin( abs( ((vUv.x * PI) -lightYaw) ) );
+                    float p = 1.0 - (vUv.y-0.49)*100.0;
+                    glow = mix( glow, 0.2, p );
+                    //color = vec4(terrainRed, terrainGreen, terrainBlue, 1.0);
+                    color = vec4( luminance*mix( luminance*red, mixedTerrainRed, p), luminance*mix( luminance*green, mixedTerrainGreen, p), luminance*mix(luminance*blue, mixedTerrainBlue, p), 1.0 );
+
+                } else {    
+
+                    glow = 0.55;
+                    color = vec4(red / 2.0 + terrainRed * 0.5, green / 2.0 + terrainGreen* 0.5, blue / 2.0 + terrainBlue* 0.5, 1.0);
+
+                }
+                
+               gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
+
+            }
+        </script>
+        <script src='/data/lib/notify.js'></script>
+        <script src='/data/lib/threejs/three.js'></script>
+        <script src='/data/lib/threejs/plugins/csg.js'></script>
+        <script src='/data/lib/threejs/plugins/ThreeCSG.js'></script>
+        <script src='/data/lib/threejs/plugins/BufferSubdivisionModifier.js'></script>
+        <script src='/data/lib/threejs/plugins/threeoctree.js'></script>
+        <script src='/data/lib/threejs/plugins/GPUParticleSystem.js'></script>
+        <script src='/data/lib/webvr-polyfill.js'></script>
+        <script src='/data/lib/VRControls.js'></script>
+        <!-- <script src='/data/lib/VREffect.js'></script> -->
+        <script src='/data/lib/VREffect-composer.js'></script> <!-- experimental -->
+        <script src='/data/lib/dat.guiVR/datguivr.min.js'></script>
+        <script src="/data/lib/leap.js"></script>
+        <script src="/data/lib/leap-plugins.js"></script>
+        <script src="/data/lib/shaders/FXAAShader.js"></script>
+        <script src="/data/lib/shaders/CopyShader.js"></script>
+        <script src="/data/lib/shaders/ConvolutionShader.js"></script>
+        <script src="/data/lib/postprocessing/EffectComposer.js"></script>
+        <script src="/data/lib/postprocessing/MaskPass.js"></script>
+        <script src="/data/lib/postprocessing/RenderPass.js"></script>
+        <script src="/data/lib/postprocessing/ShaderPass.js"></script>
+        <script src="/data/lib/postprocessing/BloomPass.js"></script>
+        <script src='/data/js/app.js'></script>
+    </body>
+</html>

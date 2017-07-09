@@ -22,10 +22,10 @@ func generateOrb(id int, world string, x int, z int, altitude float32) *Entity {
 		"level": 0,
 	}
 	floorGeometry["size"] = []float64{structureSize, 5000, structureSize * width}
-	floorGeometry["shape"] = "box"
+	floorGeometry["shape"] = "sphere"
 	floorGeometry["merge"] = true
-	floorMaterial["name"] = "plastic"
-	floorMaterial["color"] = 0x303030
+	floorMaterial["name"] = "metal"
+	floorMaterial["color"] = 0xff0530
 	floorProps["geometry"] = floorGeometry
 	floorProps["material"] = floorMaterial
 	wallState := make(map[string]interface{})
@@ -33,7 +33,7 @@ func generateOrb(id int, world string, x int, z int, altitude float32) *Entity {
 
 	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) - 89000, float64(z) * 807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
-	structure = NewEntity(id+1, "Generic Roadway", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
+	structure = NewEntity(id+1, "Mystical Orb", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure
 }
 

@@ -18,9 +18,9 @@ const styles = {
     background: 'rgb(27, 27, 27)'
   },
   title: {
-    fontSize: "4vh",
-    paddingTop: "3.5vh",
-    paddingBottom: "5vh"
+    fontSize: "2em",
+    paddingTop: "1.5vh",
+    paddingBottom: "1vh"
   },
   form: {
     overflowY: 'auto',
@@ -98,9 +98,15 @@ class NewWorld extends Component {
       entities: true,
       structures: true,
       roads: true,
-      npcs: true,
-      tools: true,
-      vehicles: true,
+      npcs: false,
+      tools: false,
+      vehicles: false,
+      orbs: true,
+      blocks: true,
+      pyramids: true,
+      columns: true,
+      wheels: true,
+      nets: true
     }
   }
 
@@ -109,6 +115,7 @@ class NewWorld extends Component {
         data = {
           id: 0,
           name: this.state.name,
+          description: "",
           tags: [],
           gravity: this.state.gravity,
           highAltitudeGravity: this.state.highAltitudeGravity,
@@ -143,16 +150,37 @@ class NewWorld extends Component {
             trees: this.state.trees,
             npcs: this.state.npcs,
             tools: this.state.tools,
-            vehicles: this.state.vehicles
+            vehicles: this.state.vehicles,
+            orbs: this.state.orbs,
+            blocks: this.state.blocks,
+            columns: this.state.columns,
+            pyramids: this.state.pyramids,
+            wheels: this.state.wheels,
+            nets: this.state.nets
           }
       }
 
     data.userName = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'space' // mark as public / not tied to user if no userName
-    if (this.state.name != "") {
-      this.props.createWorld(data)
+    if ( this.state.name != "" || this.state.description == "" ) {
+
+      this.props.createWorld( data )
+
     } else {
-      alert("World name is required.")
+
+      alert("World name & description are required.")
+
     }
+
+  }
+  onToggle( group, which, e ) {
+    
+    let value = e.target.value,
+        state = this.state
+        
+    state[ group ][ which ] = value
+
+    this.setState(state)
+
   }
   onSkyTypeChange (e) {
     let value = e.target.value
@@ -176,18 +204,6 @@ class NewWorld extends Component {
     let value = e.target.value
     this.setState({
       flatAreas: value == 'yes' ? true : false
-    })
-  }
-  onToggleStructures (e) {
-    let value = e.target.value
-    this.setState({
-      structures: value == 'yes' ? true : false
-    })
-  }
-  onToggleRoads (e) {
-    let value = e.target.value
-    this.setState({
-      roads: value == 'yes' ? true : false
     })
   }
   onToggleGravity (e) {
@@ -216,155 +232,303 @@ class NewWorld extends Component {
         <Shell className="login">
           <div style={styles.innerLogin}>
             <div style={styles.title}>
-              New World
+              Create New World
             </div>
-            <div style={styles.form}>
-              <div style={styles.username}>
-                <span style={styles.label}>World Name</span>
-                <span style={styles.setting}>
-                  <input name="convolvr-login"
-                         autoComplete="false"
+            <table className="table new-world" style={{ width: "95%" }}>
+              <tr>
+                <td>World Name</td>
+                <td>
+                  <input autoComplete="false"
+                         key={"worldName"}
                          ref={(input) => { this.nameInput = input }}
                          type='text'
                          onBlur={(e)=>{ this.setState({name: e.target.value }) }}
                          style={styles.input}
                   />
-                </span>
-              </div>
-              <div style={styles.option}>
-                <span style={styles.label}>Skybox Type</span>
-                <span style={styles.setting}>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>World Description</td>
+                <td colspan="2">
+                  <input autoComplete="false"
+                         key={"worldDescription"}
+                         ref={(input) => { this.descriptionInput = input }}
+                         type='text'
+                         onBlur={(e)=>{ this.setState({description: e.target.value }) }}
+                         style={styles.input}
+                  />
+                  </td>
+              </tr>
+              <tr>
+                <td>Skybox Type</td>
+                <td>
                   <select onChange={ e=> { this.onSkyTypeChange(e) }}>
                     <option value="shader">Gradient Sky</option>
                     <option value="photosphere">Photosphere</option>
                   </select>
-                </span>
-              </div>
-              {
-                this.state.skyType == 'photosphere' ? (
-                  <div style={styles.option}>
-                    <span style={styles.label}>Skybox Photosphere</span>
-                    <span style={styles.setting}>
-                      <input style={styles.fileUpload} type='file' onChange={ (e)=> this.upload(e) } />
-                    </span>
-                  </div>
-                ) : ""
-              }
-              <div style={styles.option}>
-                <span style={styles.label}>Light Color: Red </span>
-                <span style={styles.setting}>
-                 <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/> { this.state.red }
-                </span>
-              </div>
-              <div style={styles.option}>
-                <span style={styles.label}>Light Color: Green</span>
-                <span style={styles.setting}>
-                   <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/> { this.state.green }
-                </span>
-              </div>
-              <div style={styles.option}>
-                <span style={styles.label}>Light Color: Blue</span>
-                <span style={styles.setting}>
-                   <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} /> { this.state.blue }
-                </span>
-              </div>
-              <div style={styles.option}>
-                <span style={styles.label}>Light Intensity</span>
-                <span style={styles.setting}>
+                </td>
+                <td>
+                  {
+                  this.state.skyType == 'photosphere' ? (
+                    <div style={styles.option}>
+                      <span style={styles.label}>Skybox Photosphere</span>
+                      <span style={styles.setting}>
+                        <input style={styles.fileUpload} type='file' onChange={ (e)=> this.upload(e) } />
+                      </span>
+                    </div>
+                  ) : ""
+                }
+                </td>
+              </tr>
+              <tr>
+                <td>Light Intensity</td>
+                <td>
                   <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({intensity: e.target.value })}}/> { this.state.intensity }
-                </span>
-              </div>
-              <div style={styles.option}>
-                <span style={styles.label}>Light Direction</span>
-                <span style={styles.setting}>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Light Direction</td>
+                <td>
                   Pitch <input type='range' min='0' max='3.14' step='0.001' onChange={e=> { this.setState({lightPitch: e.target.value })}}/> { this.state.lightPitch }
-                </span>
-              </div>
-              <div style={styles.option}>
-                <span style={styles.label}></span>
-                <span style={styles.setting}>
-                Yaw <input type='range' min='0' max='6.28' step='0.001' onChange={e=> { this.setState({lightYaw: e.target.value })}}/> { this.state.lightYaw }
-                </span>
-              </div>
-              <div style={styles.option}>
-                <span style={styles.label}>Terrain Type</span>
-                <span style={styles.setting}>
-                <select onChange={ e=> { this.onTerrainTypeChange(e) }}>
-                <option value="both">Voxels + Plane</option>
-                <option value="voxels">Terrain Voxels</option>
-                <option value="plane">Ground Plane</option>
-                <option value="empty">Empty Space</option>
-                </select>
-                </span>
-              </div>
-              <div style={styles.option}>
-                  <span style={styles.label}>Flat Areas?</span>
-                  <span style={styles.setting}>
-                    <select onChange={ e=> { this.onToggleFlatAreas(e) }}>
+                </td>
+                <td>
+                  Yaw <input type='range' min='0' max='6.28' step='0.001' onChange={e=> { this.setState({lightYaw: e.target.value })}}/> { this.state.lightYaw }
+                </td>
+              </tr>
+               <tr>
+                <td>Light Color: Red</td>
+                <td>Green</td>
+                <td>Blue</td>
+              </tr>
+              <tr>
+                <td>
+                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/> 
+                  { this.state.red }
+                  </td>
+                <td>
+                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/> 
+                   { this.state.green }
+                </td>
+                <td>
+                  <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} /> 
+                   { this.state.blue }
+                </td>
+              </tr>
+               <tr>
+                <td>Terrain Color: Red</td>
+                <td>Green</td>
+                <td>Blue</td>
+              </tr>
+              <tr>
+                <td>
+                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/> 
+                  { this.state.red }
+                  </td>
+                <td>
+                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/> 
+                   { this.state.green }
+                </td>
+                <td>
+                  <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} /> 
+                   { this.state.blue }
+                </td>
+              </tr>
+              <tr>
+                <td>Terrain Type</td>
+                <td>
+                  <select onChange={ e=> { this.onTerrainTypeChange(e) }}>
+                    <option value="both">Voxels + Plane</option>
+                    <option value="voxels">Terrain Voxels</option>
+                    <option value="plane">Ground Plane</option>
+                    <option value="empty">Empty Space</option>
+                  </select>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Flat Areas?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggleFlatAreas(e) }}>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Turbulent Terrain?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggleTurbulentTerrain(e) }}>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Terrain Flatness</td>
+                <td>
+                  <input type='range' min='1' max='16' step='0.1'  onChange={e=> { this.setState({flatness: e.target.value })}}/>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Use Gravity?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggleGravity(e) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>
-                  </span>
-              </div>
-              <div style={styles.option}>
-                  <span style={styles.label}>Turbulent Terrain?</span>
-                  <span style={styles.setting}>
-                    <select onChange={ e=> { this.onToggleTurbulentTerrain(e) }}>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>(High Altitude) Zero Gravity?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggleHighAltitudeGravity(e) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>
-                  </span>
-              </div>
-              <div style={styles.option}>
-                <span style={styles.label}>Terrain Flatness</span>
-                <span style={styles.setting}>
-                <input type='range' min='1' max='16' step='0.1'  onChange={e=> { this.setState({flatness: e.target.value })}}/>
-                </span>
-              </div>
-                <div style={styles.option}>
-                  <span style={styles.label}>Generate Structures?</span>
-                  <span style={styles.setting}>
-                    <select onChange={ e=> { this.onToggleStructures(e) }}>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Generate Common Entities</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Generate Trees?</td>
+                  <td>
+                    <select onChange={ e=> { this.onToggle( 'spawn', 'trees', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>
-                  </span>
-                </div>
-                <div style={styles.option}>
-                  <span style={styles.label}>Generate Roads?</span>
-                  <span style={styles.setting}>
-                    <select onChange={ e=> { this.onToggleRoads(e) }}>
+                  </td>
+                </tr>
+             
+              <tr>
+                <td></td>
+                <td>Generate Roads?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'roads', e) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>
-                  </span>
-                </div>
-                <div style={styles.option}>
-                  <span style={styles.label}>Use Gravity?</span>
-                  <span style={styles.setting}>
-                    <select onChange={ e=> { this.onToggleGravity(e) }}>
+                </td>
+              </tr>
+               <tr>
+                <td></td>
+                <td>Generate Buildings?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'structures', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
-                    </select>
-                  </span>
-                </div>
-                <div style={styles.option}>
-                  <span style={styles.label}>(High Altitude) Zero Gravity?</span>
-                  <span style={styles.setting}>
-                    <select onChange={ e=> { this.onToggleHighAltitudeGravity(e) }}>
+                  </select>
+                </td>
+              </tr>
+               <tr>
+                <td></td>
+                <td>Generate Vehicles?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'vehicles', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
-                    </select>
-                  </span>
-                </div>
-                <div style={styles.go}>
-                <input type="button"
-                        value="Create"
-                        style={styles.signInButton}
-                        onClick={e=> { this.createWorld() } }
-                />
-              </div>
-            </div>
+                  </select>
+                </td>
+              </tr>
+               <tr>
+                <td></td>
+                <td>Generate Tools?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'tools', e ) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Generate Mental Imagery</td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Generate Orbs?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'orbs', e ) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Generate Blocks?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'blocks', e) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Generate Columns?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'columns', e ) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Generate Wheels?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'wheels', e) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Generate Pyramids?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'pyramids', e ) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>Generate Indra's Net?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'nets', e) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div style={styles.go}>
+                    <input type="button"
+                            value="Create"
+                            style={styles.signInButton}
+                            onClick={e=> { this.createWorld() } }
+                    />
+                  </div>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </table>
           </div>
         </Shell>
     )

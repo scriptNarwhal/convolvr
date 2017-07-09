@@ -21,7 +21,7 @@ func generateBlock(id int, world string, x int, z int, altitude float32) *Entity
 	floorProps["floor"] = map[string]int{
 		"level": 0,
 	}
-	floorGeometry["size"] = []float64{structureSize, 5000, structureSize * width}
+	floorGeometry["size"] = []float64{structureSize, structureSize, structureSize}
 	floorGeometry["shape"] = "box"
 	floorGeometry["merge"] = true
 	floorMaterial["name"] = "plastic"
@@ -33,7 +33,7 @@ func generateBlock(id int, world string, x int, z int, altitude float32) *Entity
 
 	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) - 89000, float64(z) * 807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
-	structure = NewEntity(id+1, "Generic Roadway", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
+	structure = NewEntity(id+1, "Cubist Painting", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure
 }
 

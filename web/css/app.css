@@ -6,6 +6,9 @@
 body {
   font-family: RobotoLight, sans-serif;
 }
+.table td {
+    padding: '0.5em'
+}
 #root {
   position: absolute;
   top: 0;

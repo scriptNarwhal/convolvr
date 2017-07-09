@@ -52,10 +52,11 @@ class SideMenu extends Component {
     return (
         <div style={styles.sideMenu()} >
           <div style={styles.inner()}>
-            <Tab image="/data/images/plus.png"
-                 title="Create New World"
-                 clickHandler={ (e)=> { this.navigate(e, "/new-world") } }
-            />
+            <Tab image="/data/images/convolvr2.png"
+                 title="Home"
+                 buttonStyle={{ backgroundSize: "100%" }}
+                 clickHandler={ (e)=> { this.navigate(e, "/space/overworld") } }
+            /> 
             <Tab image="/data/images/circle-a.png"
                  title="Switch Worlds"
                  clickHandler={ (e)=> { this.navigate(e, "/worlds") }}
@@ -65,18 +66,22 @@ class SideMenu extends Component {
                  style={ styles.mobileHidden() }
                  title="Places"
             />
-            <Tab clickHandler={ (e)=> { this.navigate(e, "/network") }}
-                 image="/data/images/network.png"
-                 style={ styles.mobileHidden() }
-                 title="View Network"
-            />
-            <Tab image="/data/images/voxel-white.png"
-                 title="Manage Files"
-                 clickHandler={ (e)=> { this.navigate(e, "/files") }}
+            <Tab image="/data/images/plus.png"
+                 title="Create New World"
+                 clickHandler={ (e)=> { this.navigate(e, "/new-world") } }
             />
             <Tab image="/data/images/chat.png"
                  title="Chat"
                  clickHandler={ (e)=> { this.navigate(e, "/chat") } }
+            />
+             <Tab image="/data/images/voxel-white.png"
+                 title="Manage Files"
+                 clickHandler={ (e)=> { this.navigate(e, "/files") }}
+            />
+            <Tab clickHandler={ (e)=> { this.navigate(e, "/network") }}
+                 image="/data/images/network.png"
+                 style={ styles.mobileHidden() }
+                 title="View Network"
             />
             <Tab image="/data/images/logout.png"
                  title="Sign In / Switch Accounts"

@@ -85,13 +85,13 @@ func getWorldChunks(c echo.Context) error {
 				log.Println(initErr)
 			}
 
+			// Spawn useful entities, if desired
+
 			if worldData.Spawn.NPCS {
 
 				if canPlaceNPCAt(x, 0, z) {
-
 					entities = append(entities, generateNPC(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
-
 				}
 
 			}
@@ -99,10 +99,8 @@ func getWorldChunks(c echo.Context) error {
 			if worldData.Spawn.Trees {
 
 				if canPlaceTreeAt(x, 0, z) {
-
 					entities = append(entities, generateTree(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
-
 				}
 
 			}
@@ -110,10 +108,8 @@ func getWorldChunks(c echo.Context) error {
 			if worldData.Spawn.Structures {
 
 				if canPlaceStructureAt(x, 0, z) {
-
 					entities = append(entities, generateBuilding(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
-
 				}
 
 			}
@@ -121,10 +117,8 @@ func getWorldChunks(c echo.Context) error {
 			if worldData.Spawn.Roads {
 
 				if canPlaceRoadAt(x, 0, z) {
-
 					entities = append(entities, generateRoad(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
-
 				}
 
 			}
@@ -132,10 +126,8 @@ func getWorldChunks(c echo.Context) error {
 			if worldData.Spawn.Vehicles {
 
 				if canPlaceVehicleAt(x, 0, z) {
-
 					entities = append(entities, generateVehicle(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
-
 				}
 
 			}
@@ -143,10 +135,64 @@ func getWorldChunks(c echo.Context) error {
 			if worldData.Spawn.Tools {
 
 				if canPlaceToolAt(x, 0, z) {
-
 					entities = append(entities, generateTool(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
+				}
 
+			}
+
+			// Spawn entities resembling mental imagery:
+
+			if worldData.Spawn.Blocks {
+
+				if canPlaceBlockAt(x, 0, z) {
+					entities = append(entities, generateBlock(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+				}
+
+			}
+
+			if worldData.Spawn.Orbs {
+
+				if canPlaceOrbAt(x, 0, z) {
+					entities = append(entities, generateOrb(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+				}
+
+			}
+
+			if worldData.Spawn.Columns {
+
+				if canPlaceColumnAt(x, 0, z) {
+					entities = append(entities, generateColumn(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+				}
+
+			}
+
+			if worldData.Spawn.Wheels {
+
+				if canPlaceWheelAt(x, 0, z) {
+					entities = append(entities, generateWheel(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+				}
+
+			}
+
+			if worldData.Spawn.Pyramids {
+
+				if canPlacePyramidAt(x, 0, z) {
+					entities = append(entities, generatePyramid(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+				}
+
+			}
+
+			if worldData.Spawn.Nets {
+
+				if canPlaceNetAt(x, 0, z) {
+					entities = append(entities, generateNet(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
 				}
 
 			}

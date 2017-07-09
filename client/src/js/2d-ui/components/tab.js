@@ -23,6 +23,7 @@ export default class Tab extends Component {
                 </span>
             ) : "")}
             <Button title={this.props.title}
+                    innerStyle={ this.props.buttonStyle }
                     image={this.props.image}
             />
         </div>

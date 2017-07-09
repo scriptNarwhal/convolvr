@@ -75,13 +75,19 @@ type Terrain struct {
 }
 
 type Spawn struct {
-	Entities   bool `json:"entities"`
+	Entities   bool `json:"entities"` // useful things
 	Structures bool `json:"structures"`
 	Roads      bool `json:"roads"`
-	Trees      bool `jsong:"trees"`
+	Trees      bool `json:"trees"`
 	NPCS       bool `json:"npcs"`
 	Tools      bool `json:"tools"`
 	Vehicles   bool `json:"vehicles"`
+	Blocks     bool `json:"blocks"` // mental imagery
+	Orbs       bool `json:"orbs"`
+	Columns    bool `json:"columns"`
+	Pyramids   bool `json:"pyramids"`
+	Wheels     bool `json:"wheels"`
+	Nets       bool `json:"nets"`
 }
 
 func NewWorld(id int, userId int, userName string, name string, gravity float64, highAltitudeGravity bool, sky Sky, light Light, terrain Terrain, spawn Spawn, tags []string) *World {

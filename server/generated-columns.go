@@ -21,8 +21,8 @@ func generateColumn(id int, world string, x int, z int, altitude float32) *Entit
 	floorProps["floor"] = map[string]int{
 		"level": 0,
 	}
-	floorGeometry["size"] = []float64{structureSize, 5000, structureSize * width}
-	floorGeometry["shape"] = "box"
+	floorGeometry["size"] = []float64{structureSize, structureSize * 4, structureSize}
+	floorGeometry["shape"] = "cylinder"
 	floorGeometry["merge"] = true
 	floorMaterial["name"] = "plastic"
 	floorMaterial["color"] = 0x303030
@@ -33,7 +33,7 @@ func generateColumn(id int, world string, x int, z int, altitude float32) *Entit
 
 	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) - 89000, float64(z) * 807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
-	structure = NewEntity(id+1, "Generic Roadway", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
+	structure = NewEntity(id+1, "Ancient Column", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure
 }
 

@@ -44,8 +44,9 @@ import ContainerSystem from './container'
 import RESTSystem from './rest'
 import TimeSystem from './time'
 import ToolUISystem from './tool-ui'
-import TabViewSystem from './tab-view'
-import TabSystem from './tab'
+import ConditionSystem from './condition'
+import SwitchSystem from './switch'
+import LoopSystem from './loop'
 import ToolSystem from './tool'
 import MiniatureSystem from './miniature'
 import UserSystem from './user'
@@ -106,8 +107,9 @@ export default class Systems {
 			activate: new ActivateSystem(world),
 			terrain: new TerrainSystem(world),
 			container: new ContainerSystem(world),
-			tab: new TabSystem(world),
-			tabView: new TabViewSystem(world),
+			condition: new ConditionSystem(world),
+			switch: new SwitchSystem(world),
+			loop: new LoopSystem(world),
 			time: new TimeSystem(world),
 			toolUI: new ToolUISystem(world),
 			tool: new ToolSystem(world),
