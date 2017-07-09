@@ -186,6 +186,7 @@ export default class Systems {
 	update ( delta, time ) {
 
 		this.particles.update( delta, time )
+		this.terrain.update( delta, time )
 
 	}
 	

@@ -2,6 +2,8 @@ package convolvr
 
 import (
 	"fmt"
+	"html/template"
+	"io"
 	"net/http"
 
 	log "github.com/Sirupsen/logrus"
@@ -16,6 +18,21 @@ var (
 	hub *nexus.Nexus
 	db  *storm.DB
 )
+
+// TemplateRenderer is a custom html/template renderer for Echo framework
+type TemplateRenderer struct {
+	templates *template.Template
+}
+
+// Render renders a template document
+func (t *TemplateRenderer) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	// Add global methods if data is a map
+	if viewContext, isMap := data.(map[string]interface{}); isMap {
+		viewContext["reverse"] = c.Echo().Reverse
+	}
+
+	return t.templates.ExecuteTemplate(w, name, data)
+}
 
 func Start(configName string) {
 	viper.SetConfigName(configName)        // name of config file (without extension)
@@ -68,6 +85,7 @@ func Start(configName string) {
 	if historyErr != nil {
 		log.Fatal(historyErr)
 	}
+
 	api := e.Group("/api")
 	api.GET("/users", getUsers)
 	api.POST("/users", postUsers)
@@ -100,9 +118,24 @@ func Start(configName string) {
 
 	e.Static("/data", "../web")
 	e.File("/", "../web/index.html")
-	e.File("/:userName/:worldName", "../web/index.html")            // fairly simple, readable url structure
-	e.File("/:userName/:worldName/at/:coords", "../web/index.html") // linking to individual voxels
-	e.File("/:userName/:worldName/:placeName", "../web/index.html") // linking to named places
+
+	renderer := &TemplateRenderer{
+		templates: template.Must(template.ParseGlob("*.html")),
+	}
+	e.Renderer = renderer
+
+	// Named route "foobar"
+	var handleWorld = func(c echo.Context) error {
+		return c.Render(http.StatusOK, "world.html", map[string]interface{}{
+			"name": "Hello World!",
+		})
+	}
+	e.GET("/:userName/:worldName", handleWorld).Name = "user-world"             // fairly simple, readable url structure
+	e.GET("/:userName/:worldName/at/:coords", handleWorld).Name = "world-voxel" // linking to individual voxels
+	e.GET("/:userName/:worldName/:placeName", handleWorld).Name = "world-place" // linking to named places
+	// e.File("/:userName/:worldName", "../web/index.html")
+	// e.File("/:userName/:worldName/at/:coords", "../web/index.html")
+	// e.File("/:userName/:worldName/:placeName", "../web/index.html")
 
 	e.File("/network", "../web/index.html") // client should generate a meta-world out of (portals to) networked convolvr (or other webvr) sites
 	e.File("/worlds", "../web/index.html")  // this one also needs its 2d ui replaced with something nicer

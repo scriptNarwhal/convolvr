@@ -11,6 +11,7 @@ export default class TerrainSystem {
         this.world = world
         this.config = world.config.terrain
         this.octree = world.octree
+        this.phase = 0
         this.StaticCollisions = null
         this.DynamicCollisions = null
         this.voxels = []
@@ -30,6 +31,12 @@ export default class TerrainSystem {
             state = {}
             
         return state
+    }
+
+    update ( delta, time ) {
+
+      this.bufferVoxels( false, this.phase )
+
     }
 
     initTerrain ( config ) {
@@ -157,7 +164,7 @@ export default class TerrainSystem {
 
       this.cleanUpChunks.map(( cleanUp, i ) => {
 
-          if ( c < 4 ) {
+          if ( c < 2 ) {
 
               if ( !!cleanUp ) {
 
@@ -301,8 +308,8 @@ export default class TerrainSystem {
         phase = 1
       }
 
-      setTimeout(() => { this.bufferVoxels(force, phase) }, 32 ) // experiment // 32)
-
+      //setTimeout(() => { this.bufferVoxels(force, phase) }, 32 ) // experiment // 32)
+      this.phase = phase
     }
 
 }

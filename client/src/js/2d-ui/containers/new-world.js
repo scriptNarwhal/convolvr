@@ -43,6 +43,9 @@ const styles = {
     padding: '0.5em',
     border: '2px solid rgba(255,255,255,0.25)'
   },
+  textInput: {
+    width: '100%'
+  },
   username: {
     marginBottom: "1em"
   },
@@ -243,20 +246,20 @@ class NewWorld extends Component {
                          ref={(input) => { this.nameInput = input }}
                          type='text'
                          onBlur={(e)=>{ this.setState({name: e.target.value }) }}
-                         style={styles.input}
+                         style={ Object.assign({}, styles.input, styles.textInput) }
                   />
                 </td>
                 <td></td>
               </tr>
               <tr>
                 <td>World Description</td>
-                <td colspan="2">
+                <td colSpan="2">
                   <input autoComplete="false"
                          key={"worldDescription"}
                          ref={(input) => { this.descriptionInput = input }}
                          type='text'
                          onBlur={(e)=>{ this.setState({description: e.target.value }) }}
-                         style={styles.input}
+                         style={ Object.assign({}, styles.input, styles.textInput) }
                   />
                   </td>
               </tr>

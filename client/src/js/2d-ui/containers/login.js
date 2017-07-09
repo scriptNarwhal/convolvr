@@ -19,10 +19,20 @@ const styles = {
   title: {
     fontSize: '2em',
     paddingTop: '0.5em',
-    paddingBottom: '1em'
+    paddingBottom: '0.66em'
+  },
+  subtitle: {
+    fontSize: '0.5em',
+    display: 'inline-block',
+    maxWidth: '400px',
+    background: 'rgba(0,0,0,0.1)',
+    padding: '1em'
   },
   form: {
-
+    background: 'rgba(0,0,0,0.1)',
+    maxWidth: '435px',
+    margin: 'auto',
+    paddingTop: '1em'
   },
   label: {
     marginRight: "1em"
@@ -52,7 +62,13 @@ const styles = {
   },
   signInButton: {
     fontSize: '1em',
-    marginRight: '1em'
+    marginRight: '1em',
+    color: 'white',
+    border: '0',
+    marginBottom: '0.5em',
+    background: 'rgba(63, 0, 255, 0.37)',
+    borderRadius: '2px',
+    padding: '0.2em'
   },
   remember: {
 
@@ -62,7 +78,7 @@ const styles = {
   }
 }
 
-export default class Login extends Component {
+class Login extends Component {
   componentDidMount() {
     this.state = {
       username: "",
@@ -97,7 +113,10 @@ export default class Login extends Component {
         <Shell className="login" noBackground={true}>
           <div style={styles.innerLogin}>
             <div style={styles.title}>
-              Sign in to Convolvr
+              Login to Convolvr Metaverse
+              <span style={styles.subtitle}>
+                Import 3D models, create new worlds & software in VR, with friends, in real time.
+              </span>
             </div>
             <div style={styles.form}>
               <div style={styles.username}>
