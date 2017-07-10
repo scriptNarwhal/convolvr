@@ -170,7 +170,7 @@ export default class Convolvr {
 		this.config = config; console.log(config)
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
-		three.scene.add(this.ambientLight);
+		three.scene.add(this.ambientLight)
 
 		if ( !!config && !!config.sky.photosphere ) { console.log("init world: photosphere: ", config.sky.photosphere)
 

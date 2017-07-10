@@ -13,6 +13,7 @@ import SignalSystem from './signal'
 import InputSystem from './input'
 import MediaSystem from './media'
 import CameraSystem from './camera'
+import CannonJSPluginSystem from './cannonjs-plugin'
 import CPUSystem from './cpu'
 import DisplayAdapterSystem from './display-adapter'
 import MemorySystem from './memory'
@@ -67,6 +68,7 @@ export default class Systems {
 			browser: new BrowserSystem(world),
 			geometry: new GeometrySystem(world),
 			material: new MaterialSystem(world),
+			cannon: new CannonJSPluginSystem(world),
 			staticCollisions: new StaticCollisions(world),
 			dynamicCollisions: new DynamicCollisions(world),
 			datgui: new DatGUIVRPluginSystem(world),
@@ -119,6 +121,7 @@ export default class Systems {
 			user: new UserSystem(world),
 			file: new FileSystem(world),
 			chat: new ChatSystem(world),
+			obj: new ObjSystem(world),
 			speech: new SpeechSystem(world),
 			npc: new NPCSystem(world)
 		}
@@ -187,6 +190,7 @@ export default class Systems {
 
 		this.particles.update( delta, time )
 		this.terrain.update( delta, time )
+		this.cannon.update( delta, time )
 
 	}
 	

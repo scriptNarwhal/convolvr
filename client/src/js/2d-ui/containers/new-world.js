@@ -237,7 +237,7 @@ class NewWorld extends Component {
             <div style={styles.title}>
               Create New World
             </div>
-            <table className="table new-world" style={{ width: "95%" }}>
+            <table className="table new-world" style={{ paddingLeft: "1em", width: "95%" }}>
               <tbody>
               <tr>
                 <td>World Name</td>
@@ -327,16 +327,16 @@ class NewWorld extends Component {
               </tr>
               <tr>
                 <td>
-                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/> 
-                  { this.state.red }
+                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({terrainRed: e.target.value })}}/> 
+                  { this.state.terrainRed }
                   </td>
                 <td>
-                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/> 
-                   { this.state.green }
+                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({terrainGreen: e.target.value })}}/> 
+                   { this.state.terrainGreen }
                 </td>
                 <td>
-                  <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} /> 
-                   { this.state.blue }
+                  <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({terrainBlue: e.target.value })}} /> 
+                   { this.state.terrainBlue }
                 </td>
               </tr>
               <tr>

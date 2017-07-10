@@ -88,6 +88,11 @@ class SideMenu extends Component {
                  style={ styles.mobileHidden() }
                  clickHandler={ (e)=> { this.navigate(e, "/login") } }
             />
+            <Tab image="/data/images/obj.png"
+                 title="Import *.OBJ Files"
+                 style={ styles.mobileHidden() }
+                 clickHandler={ (e)=> { this.navigate(e, "/import") } }
+            />
             <Tab image="/data/images/configure-h.png"
                  title="Settings"
                  clickHandler={ (e)=> { this.navigate(e, "/settings") } }

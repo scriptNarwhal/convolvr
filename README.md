@@ -1,6 +1,6 @@
 ## Overview
 - Component Entity System Framework
-- Multiplayer telemetry, chat, action & asset persistence provided by server
+- Multiplayer telemetry, chat, action & asset persistence provided by server using [Nexus](https://github.com/ds0nt/nexus)
 - Built in tools to build world entities from components
 - Tools to visually build components from props (geometries, materials & other systems)
 - Handles user input from keyboard/mouse, touch, tracked controllers

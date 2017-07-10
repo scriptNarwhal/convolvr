@@ -19,6 +19,7 @@ import Worlds from './2d-ui/containers/worlds'
 import Places from './2d-ui/containers/places'
 import NewWorld from './2d-ui/containers/new-world'
 import Settings from './2d-ui/containers/settings'
+import ImportUI from './2d-ui/containers/import'
 import Network from './2d-ui/containers/network'
 import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
@@ -118,6 +119,7 @@ ReactDOM.render(
         <Route path="/places" component={Places} />
         <Route path="/new-world" component={NewWorld} />
 				<Route path="/settings" component={Settings} />
+        <Route path="/import" component={ImportUI} />
         <Route path="/network" component={Network} />
 			</Route>
 		</Router>

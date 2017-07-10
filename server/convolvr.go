@@ -93,6 +93,7 @@ func Start(configName string) {
 	api.GET("/users/:userId/inventory/:inventoryId", getUserInventory)
 	api.POST("/users/:userId/inventory/:inventoryId", saveItemToInventory)
 	api.POST("/users/:userId/inventory/:inventoryId", removeItemFromInventory)
+	api.POST("/import-as-entity/:userName/:worldName/:coords", importAsEntityToWorld)
 	api.GET("/chat-history/:skip", getChatHistory)
 	api.GET("/worlds", getWorlds)
 	api.GET("/worlds/user/:userId", getUserWorlds)

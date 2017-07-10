@@ -61,3 +61,29 @@ func postEntities(c echo.Context) error { // save entity publicly / server-wide
 func getEntitiesByUser(c echo.Context) error { // entities from someone, for everyone
 	return c.JSON(http.StatusOK, nil)
 }
+
+func importAsEntityToWorld (c echo.Context) error {
+	var (
+		entity *Entity
+	)
+	coordStr := c.Param("coords")
+	world := c.Param("worldName")
+	coords := strings.Split(coordStr, "x")
+	x, _ := strconv.Atoi(coords[0])
+	y, _ := strconv.Atoi(coords[1])
+	z, _ := strconv.Atoi(coords[2])
+	voxel := voxels.From("X_" + coords[0]).From("Y_" + coords[1]).From("Z_" + coords[2])
+	voxelEntities := voxel.From("entities")
+
+	entity = new(Entity)
+	if err := c.Bind(&entity); err != nil {
+		return err
+	}
+	dbErr := voxelEntities.Save(&entity)
+	if dbErr != nil {
+		log.Println(dbErr)
+		return dbErr
+	}
+	return c.JSON(http.StatusOK, nil)
+}
+}
