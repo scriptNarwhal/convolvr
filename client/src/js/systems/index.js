@@ -56,6 +56,7 @@ import ChatSystem from './chat'
 import WebRTCSystem from './webrtc'
 import NPCSystem from './npc'
 import SpeechSystem from './speech'
+import ObjSystem from './obj-plugin'
 import DatGUIVRPluginSystem from './datguivr-plugin'
 
 
