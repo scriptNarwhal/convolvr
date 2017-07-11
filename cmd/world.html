@@ -10,14 +10,14 @@
         <meta name="description" content='{{index . "description"}}' />
         <meta property="og:title" content='{{index . "name"}}' />
         <meta property="og:description" content='{{index . "description"}}' />
-        <meta property="og:image" content="https://convolvr.io/data/images/convolvr2.png" / >
+        <meta property="og:image" content='/data/user{{index . "userName"}}/{{index . "image"}}' / >
         <meta property="og:image:width" content="192" />
         <meta property="og:image:height" content="192" />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:site" content="https://convolvr.io" />
         <meta name="twitter:title" content='{{index . "name"}}' />
         <meta name="twitter:description" content='{{index . "description"}}'  />
-        <meta name="twitter:image" content="https://convolvr.io/data/images/convolvr2.png" />
+        <meta name="twitter:image" content='/data/user{{index . "userName"}}/{{index . "image"}}' />
         <style>
 			body {
 				padding: 0;

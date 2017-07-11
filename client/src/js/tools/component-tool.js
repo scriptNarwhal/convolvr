@@ -88,7 +88,7 @@ export default class ComponentTool extends Tool {
 
       }
 
-      if ( tooManyComponents && cursorSystem.entityCoolDown > 0 ) {
+      if ( tooManyComponents && cursorSystem.entityCoolDown > -1 ) {
 
         return false // stop spamming lol.. // console.log("too many components; waiting for entity cooldown; aborting")
 

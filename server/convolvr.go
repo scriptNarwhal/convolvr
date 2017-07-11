@@ -133,20 +133,26 @@ func Start(configName string) {
 			description string
 			icon        string
 			themeColor  string
+			image       string
+			userName    string
 		)
 		description = "Auto Generated World"
 		icon = "/data/images/convolvr2.png"
+		image = ""
 		themeColor = "#151515"
 		name = c.Param("worldName")
 		err := db.One("Name", name, &world)
 		if err == nil {
 			description = world.Description
-
+			image = World.Sky.Photosphere
+			userName = World.UserName
 		}
 		return c.Render(http.StatusOK, "world.html", map[string]interface{}{
 			"name":        name,
 			"description": description,
 			"icon":        icon,
+			"image":       image,
+			"userName":    userName,
 			"themeColor":  themeColor,
 		})
 	}

@@ -202,7 +202,6 @@ export default class CursorSystem {
             callbacks = null,
             comp = false,
             cb = 0
-           
 
         if ( !!obj ) {
 
@@ -225,7 +224,7 @@ export default class CursorSystem {
 
         }
 
-        if ( !!entity || ( cursorSystem.entityCoolDown <= 0 && !!!entity ) ) { 
+        if ( !!entity && !entity.componentsByProp.terrain && cursorSystem.entityCoolDown <= 0 && !!!entity ) {
             
             newCursorState.entity = entity
 
@@ -234,6 +233,8 @@ export default class CursorSystem {
             newCursorState.entity = cursorState.cursor.entity
 
         }
+
+        newCursorState.lookingAtEntity = entity
 
         if ( !!cursorState.component && !!!component && lookAway ) {
          
