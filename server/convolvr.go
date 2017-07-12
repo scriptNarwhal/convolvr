@@ -144,8 +144,8 @@ func Start(configName string) {
 		err := db.One("Name", name, &world)
 		if err == nil {
 			description = world.Description
-			image = World.Sky.Photosphere
-			userName = World.UserName
+			image = world.Sky.Photosphere
+			userName = world.UserName
 		}
 		return c.Render(http.StatusOK, "world.html", map[string]interface{}{
 			"name":        name,

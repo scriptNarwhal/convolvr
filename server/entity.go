@@ -2,6 +2,7 @@ package convolvr
 
 import (
 	"net/http"
+	"strings"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
@@ -62,16 +63,14 @@ func getEntitiesByUser(c echo.Context) error { // entities from someone, for eve
 	return c.JSON(http.StatusOK, nil)
 }
 
-func importAsEntityToWorld (c echo.Context) error {
+func importAsEntityToWorld(c echo.Context) error {
 	var (
 		entity *Entity
 	)
 	coordStr := c.Param("coords")
 	world := c.Param("worldName")
 	coords := strings.Split(coordStr, "x")
-	x, _ := strconv.Atoi(coords[0])
-	y, _ := strconv.Atoi(coords[1])
-	z, _ := strconv.Atoi(coords[2])
+	voxels := db.From("World_" + world)
 	voxel := voxels.From("X_" + coords[0]).From("Y_" + coords[1]).From("Z_" + coords[2])
 	voxelEntities := voxel.From("entities")
 
@@ -85,5 +84,4 @@ func importAsEntityToWorld (c echo.Context) error {
 		return dbErr
 	}
 	return c.JSON(http.StatusOK, nil)
-}
 }
