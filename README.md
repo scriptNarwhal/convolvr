@@ -30,6 +30,40 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
 })
 ```
+### Entity / System Mapping
+```js
+{
+  id: -4,
+  name: "chat-screen",
+  components: [
+    {
+      props: {
+          geometry: {
+              shape: "box",
+              size: [ 72000, 72000, 1000 ]
+          },
+              material: {
+              color: 0x808080,
+              name: "plastic"
+          },
+          chat: {
+              userId: "all",
+              displayMessages: true
+          },
+          text: {
+              lines: [ 
+                  "Welcome To Convolvr", 
+              ],
+              color: "#ffffff",
+              background: "#000000"
+          }
+      },
+      quaternion: [ 0, 0, 0, 1 ],
+      position: [ 0, 0, 0 ]
+    }
+  ]
+}
+```
 ## Server Examples
 - [Generating Buildings](https://github.com/convolvr/convolvr/blob/dev/server/generated-buildings.go)
 - [Handling User Actions](https://github.com/convolvr/convolvr/blob/dev/server/socket.go#L17)
