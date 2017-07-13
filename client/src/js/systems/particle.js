@@ -46,7 +46,7 @@ export default class ParticleSystem {
 
     }
 
-    update ( delta, time ) {
+    tick ( delta, time ) {
 
         let pSystems = this.particleSystems,
             p = pSystems.length -1,

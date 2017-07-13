@@ -25,7 +25,7 @@ export let animate = ( world, last, cursorIndex ) => {
 
   world.sendUserData()
   world.updateSkybox( delta )
-  world.systems.update( delta, time )
+  world.systems.tick( delta, time )
 
   if ( mode == "3d" || mode == "web" ) {
 
@@ -92,7 +92,7 @@ export let vrAnimate = ( time, oldPos, cursorIndex ) => {
     cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
     world.sendUserData()
     world.updateSkybox(delta)
-    world.systems.update( delta, time )
+    world.systems.tick( delta, time )
     t.vrEffect.render(t.scene, t.camera) // Render the scene.
     world.octree.update()
     t.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now, vrWorldPos, cursorIndex) }) // Keep looping.

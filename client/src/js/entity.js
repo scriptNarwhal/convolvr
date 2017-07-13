@@ -135,7 +135,7 @@ export default class Entity {
 
     while ( c < ncomps ) {
 
-        comp = new Component( this.components[ c ], this, systems, {mobile} ) // use simpler shading for mobile gpus
+        comp = new Component( this.components[ c ], this, systems, { mobile, index: c } ) // use simpler shading for mobile gpus
         
         if ( comp.props.noRaycast === true ) { // this should be checked in a system
           addToOctree = false
@@ -144,9 +144,11 @@ export default class Entity {
         compMesh = comp.mesh
         compMesh.geometry.computeBoundingSphere() // check bounding radius
         compRadius = compMesh.geometry.boundingSphere.radius 
-        dimensions = [Math.max(dimensions[0], Math.abs(compMesh.position.x)+compRadius),
-                      Math.max(dimensions[1], Math.abs(compMesh.position.y)+compRadius), 
-                      Math.max(dimensions[2], Math.abs(compMesh.position.z)+compRadius)]
+        dimensions = [
+          Math.max( dimensions[ 0 ], Math.abs( compMesh.position.x ) + compRadius ),
+          Math.max( dimensions[ 1 ], Math.abs( compMesh.position.y ) + compRadius ), 
+          Math.max( dimensions[ 2 ], Math.abs( compMesh.position.z ) + compRadius )
+        ]
 
         if ( comp.props.geometry ) {
 

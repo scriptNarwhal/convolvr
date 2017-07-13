@@ -67,21 +67,27 @@ func Start(configName string) {
 	if userErr != nil {
 		log.Fatal(userErr)
 	}
+
 	if worldErr != nil {
 		log.Fatal(worldErr)
 	}
+
 	if worldErr != nil {
 		log.Fatal(placeErr)
 	}
+
 	if chunkErr != nil {
 		log.Fatal(chunkErr)
 	}
+
 	if componentErr != nil {
 		log.Fatal(componentErr)
 	}
+
 	if entityErr != nil {
 		log.Fatal(entityErr)
 	}
+
 	if historyErr != nil {
 		log.Fatal(historyErr)
 	}
@@ -118,7 +124,6 @@ func Start(configName string) {
 	api.POST("/documents/:username/:filename", postText)
 
 	e.Static("/data", "../web")
-	e.File("/", "../web/index.html")
 
 	renderer := &TemplateRenderer{
 		templates: template.Must(template.ParseGlob("*.html")),
@@ -127,6 +132,7 @@ func Start(configName string) {
 
 	// Named route "foobar"
 	var handleWorld = func(c echo.Context) error {
+
 		var (
 			world       World
 			name        string
@@ -136,17 +142,28 @@ func Start(configName string) {
 			image       string
 			userName    string
 		)
+
 		description = "Auto Generated World"
 		icon = "/data/images/convolvr2.png"
 		image = ""
 		themeColor = "#151515"
 		name = c.Param("worldName")
 		err := db.One("Name", name, &world)
+
 		if err == nil {
+
+			userName = world.UserName
 			description = world.Description
 			image = world.Sky.Photosphere
-			userName = world.UserName
+
+			if image != "" {
+
+				icon = "/data/user/" + image
+
+			}
+
 		}
+
 		return c.Render(http.StatusOK, "world.html", map[string]interface{}{
 			"name":        name,
 			"description": description,
@@ -155,7 +172,10 @@ func Start(configName string) {
 			"userName":    userName,
 			"themeColor":  themeColor,
 		})
+
 	}
+
+	e.GET("/", handleWorld).Name = "default-world"
 	e.GET("/:userName/:worldName", handleWorld).Name = "user-world"             // fairly simple, readable url structure
 	e.GET("/:userName/:worldName/at/:coords", handleWorld).Name = "world-voxel" // linking to individual voxels
 	e.GET("/:userName/:worldName/:placeName", handleWorld).Name = "world-place" // linking to named places

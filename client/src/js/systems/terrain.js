@@ -33,7 +33,7 @@ export default class TerrainSystem {
         return state
     }
 
-    update ( delta, time ) {
+    tick ( delta, time ) {
 
       this.bufferVoxels( false, this.phase )
 

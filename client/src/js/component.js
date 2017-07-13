@@ -7,6 +7,7 @@ export default class Component {
           quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : [ 0, 0, 0 ]
       
+      this.index = appConfig.index ? appConfig.index : -1
       this.entity = entity
       this.data = data
       this.props = data.props || {}
@@ -99,7 +100,7 @@ export default class Component {
         
    while ( c < ncomps ) {
 
-        comp = new Component( components[ c ], entity, systems, {mobile}, this ) // use simpler shading for mobile gpus
+        comp = new Component( components[ c ], entity, systems, { mobile, index: c }, this ) // use simpler shading for mobile gpus
 
         if ( comp.props.noRaycast === true ) {
           addToOctree = false
