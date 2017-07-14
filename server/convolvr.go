@@ -146,8 +146,12 @@ func Start(configName string) {
 		description = "Auto Generated World"
 		icon = "/data/images/convolvr2.png"
 		image = ""
+		userName = "Space"
 		themeColor = "#151515"
 		name = c.Param("worldName")
+		if name == "" {
+			name = "Overworld"
+		}
 		err := db.One("Name", name, &world)
 
 		if err == nil {
@@ -175,7 +179,6 @@ func Start(configName string) {
 
 	}
 
-	e.GET("/", handleWorld).Name = "default-world"
 	e.GET("/:userName/:worldName", handleWorld).Name = "user-world"             // fairly simple, readable url structure
 	e.GET("/:userName/:worldName/at/:coords", handleWorld).Name = "world-voxel" // linking to individual voxels
 	e.GET("/:userName/:worldName/:placeName", handleWorld).Name = "world-place" // linking to named places
@@ -196,5 +199,6 @@ func Start(configName string) {
 	hub.Handle("update", update)
 	hub.Handle("tool action", toolAction)
 	e.Any("/connect", echo.WrapHandler(http.HandlerFunc(hub.Handler)))
+	e.GET("/", handleWorld).Name = "default-world"
 	e.Logger.Fatal(e.Start(port))
 }

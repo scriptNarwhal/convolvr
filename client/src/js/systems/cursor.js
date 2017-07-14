@@ -56,7 +56,7 @@ export default class CursorSystem {
         i = intersections.length -1
         component = null
 
-        if ( i > -1 ) { //console.log( i+1, " intersections")
+        if ( i > 0 ) { //console.log( i+1, " intersections")
 
             while ( i > -1 ) {
 
@@ -74,7 +74,7 @@ export default class CursorSystem {
 
                     if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
 
-                        component = entity.allComponents[0]; //console.log("one component: ", component ? Object.keys(component.props).join("-") : "")
+                        component = entity.allComponents[ 0 ]; //console.log("one component: ", component ? Object.keys(component.props).join("-") : "")
 
                     } else { 
 
@@ -109,7 +109,7 @@ export default class CursorSystem {
             
             while ( z < 2 ) {
 
-                key = [ coords[0] + x, 0, coords[2] + z ].join(".")
+                key = [ coords[ 0 ] + x, 0, coords[ 2 ] + z ].join(".")
                 if ( typeof voxels[ key ] == 'object' ) //console.warn("Empty Voxel! ", key, voxels[ key ] ) }
                 castObjects = castObjects.concat( !!voxels[ key ] ? voxels[ key ].meshes : [] )
                 z ++
@@ -120,10 +120,11 @@ export default class CursorSystem {
 
         }
         
-        if ( voxels[ "0.0.0" ] != null ) {
-            castObjects = castObjects.concat(voxels[ "0.0.0" ].meshes )
-        }
+        if ( voxels[ "0.0.0" ] != null )
 
+            castObjects = castObjects.concat(voxels[ "0.0.0" ].meshes )
+
+            
         while ( i < castObjects.length ) {
 
              if ( !!!castObjects[ i ] ) {
@@ -239,11 +240,11 @@ export default class CursorSystem {
         if ( !!cursorState.component && !!!component && lookAway ) {
          
             callbacks = cursorState.component.state.lookAway.callbacks
-            cb = callbacks.length-1
+            cb = callbacks.length - 1
 
             while ( cb >= 0 ) {
 
-                callbacks[cb]()
+                callbacks[ cb ]()
                 cb --
 
             }
@@ -257,11 +258,11 @@ export default class CursorSystem {
             if ( hover ) {
 
                 callbacks = component.state.hover.callbacks
-                cb = callbacks.length-1
+                cb = callbacks.length - 1
 
                 while ( cb >= 0 ) {
 
-                    callbacks[cb]()
+                    callbacks[ cb ]()
                     cb --
 
                 }

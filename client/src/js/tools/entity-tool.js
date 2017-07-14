@@ -108,22 +108,22 @@ export default class EntityTool extends Tool  {
       
       this.current += value // cycle entities
 
-      if (this.current >= this.all.length) {
+      if ( this.current >= this.all.length ) {
 
         this.current = 0
 
-      } else if (this.current < 0) {
+      } else if ( this.current < 0 ) {
 
         this.current = this.all.length -1
         
       }
 
       this.selectedEntity = null
-      this.options.entityType = this.all[this.current]
+      this.options.entityType = this.all[ this.current ]
 
       if ( this.entity.componentsByProp ) {
 
-        this.entity.componentsByProp.text[0].state.text.update( this.options.entityType )
+        this.entity.componentsByProp.text[ 0 ].state.text.update( this.options.entityType )
 
       }
 

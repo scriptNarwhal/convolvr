@@ -16,6 +16,7 @@ vec4 color;
 float hash( float n ) {
     return fract(sin(n)*43758.5453);
 }
+
 float noise( vec3 x ) {
     // The noise function returns a value in the range -1.0f -> 1.0f
     vec3 p = floor(x);
@@ -27,7 +28,9 @@ float noise( vec3 x ) {
                mix(mix( hash(n+113.0), hash(n+114.0),f.x),
                    mix( hash(n+170.0), hash(n+171.0),f.x),f.y),f.z);
 }
+
 void main( void ) {
+
     float depth = (1.0 - (abs(0.5 - vUv.y) * 2.5));
     float intense = vUv.y*2.0*abs(0.25 - (vUv.x / 2.0));
     float radial = abs(0.25 - (vUv.x / 2.0));
@@ -37,12 +40,16 @@ void main( void ) {
     float mixedTerrainRed = red / 2.0 + terrainRed* 0.75;
     float mixedTerrainGreen = green / 2.0 + terrainGreen* 0.75;
     float mixedTerrainBlue = blue / 2.0 + terrainBlue* 0.75;
+
     if ( vUv.y >= 0.5 ) {
+
         luminance += 0.5 + depth * 1.7;
         glow =+ 0.7 * depth * depth;
         color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
-        glow += sin( abs( ((vUv.x * PI) -lightYaw) ) );
+        glow += sin( abs( ((vUv.x * PI) -lightYaw) ) )* 2.0;
+
     } else if ( vUv.y < 0.5 && vUv.y > 0.49 ) {
+
         luminance += depth * 1.7;
         glow += 0.3 * depth * depth;
         glow += sin( abs( ((vUv.x * PI) -lightYaw) ) );
@@ -50,10 +57,14 @@ void main( void ) {
         glow = mix( glow, 0.2, p );
         //color = vec4(terrainRed, terrainGreen, terrainBlue, 1.0);
         color = vec4( luminance*mix( luminance*red, mixedTerrainRed, p), luminance*mix( luminance*green, mixedTerrainGreen, p), luminance*mix(luminance*blue, mixedTerrainBlue, p), 1.0 );
+
     } else {    
+
         glow = 0.55;
         color = vec4(red / 2.0 + terrainRed * 0.5, green / 2.0 + terrainGreen* 0.5, blue / 2.0 + terrainBlue* 0.5, 1.0);
+
     }
     
    gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
+
 }

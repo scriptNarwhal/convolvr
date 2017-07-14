@@ -156,8 +156,8 @@ func getWorld(c echo.Context) error { // load specific world
 		if rand.Intn(12) > 6 {
 
 			if rand.Intn(12) > 6 {
-				red = 0.2
-				green = 0.06
+				red = 0.3
+				green = 0.07
 				blue = 1.0
 			} else {
 				red = 1.0
@@ -168,12 +168,12 @@ func getWorld(c echo.Context) error { // load specific world
 		} else {
 
 			if rand.Intn(12) > 6 {
-				red = 0.06
-				green = 1.0
-				blue = 0.6
+				red = 0.07
+				green = 0.7
+				blue = 1.6
 			} else {
-				red = 0.06
-				green = 0.4
+				red = 0.16
+				green = 0.3
 				blue = 1.0
 			}
 

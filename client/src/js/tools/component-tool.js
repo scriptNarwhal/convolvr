@@ -79,26 +79,27 @@ export default class ComponentTool extends Tool {
 
       entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat )
       pointingAtTerrain && console.log("pointingAtTerrain")
+
       if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
        
         user.toolbox.useTool( 0, telemetry.hand )
-        user.hud.componentsByProp.toolUI[0].state.toolUI.show()
+        user.hud.componentsByProp.toolUI[ 0 ].state.toolUI.show()
         //user.toolbox.usePrimary( telemetry.hand, entity  )
         return false
 
       }
 
-      if ( tooManyComponents && cursorSystem.entityCoolDown > -1 ) {
+      if ( tooManyComponents && cursorSystem.entityCoolDown > -1 )
 
         return false // stop spamming lol.. // console.log("too many components; waiting for entity cooldown; aborting")
 
-      }
 
       entityId = selected.id
 
-      if ( components.length == 0 ) {
-        components = [component]
-      }
+      if ( components.length == 0 )
+        
+        components = [ component ]
+      
 
       if ( !!!selected ) {
         
@@ -111,7 +112,7 @@ export default class ComponentTool extends Tool {
       }
 
       !!selected && !!selected.mesh && selected.mesh.updateMatrixWorld()
-      let selectedPos = !!selected && !!selected.mesh ? selected.mesh.localToWorld(  new THREE.Vector3() ) : false
+      let selectedPos = !!selected && !!selected.mesh ? selected.mesh.localToWorld( new THREE.Vector3() ) : false
       
       components.map(( comp, i ) => { // apply transformation and offset to components
 
@@ -120,9 +121,9 @@ export default class ComponentTool extends Tool {
           if ( selectedPos ) {
 
             comp.position = [
-              position[0] - selectedPos.x,
-              position[1] - selectedPos.y,
-              position[2] - selectedPos.z
+              position[ 0 ] - selectedPos.x,
+              position[ 1 ] - selectedPos.y,
+              position[ 2 ] - selectedPos.z
             ]
 
           }
@@ -148,21 +149,22 @@ export default class ComponentTool extends Tool {
 
       this.current += value // cycle components
 
-      if (this.current >= this.all.length) {
+      if ( this.current >= this.all.length ) {
 
         this.current = 0
 
-      } else if (this.current < 0) {
+      } else if ( this.current < 0 ) {
 
         this.current = this.all.length - 1
 
       }
+      
       this.selectedComponent = null
-      this.options.componentType = this.all[this.current]
+      this.options.componentType = this.all[ this.current ]
 
       if ( this.entity.componentsByProp ) {
 
-        this.entity.componentsByProp.text[0].state.text.update( this.options.componentType )
+        this.entity.componentsByProp.text[ 0 ].state.text.update( this.options.componentType )
 
       }
 
