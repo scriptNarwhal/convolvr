@@ -65,7 +65,7 @@ export default class CursorSystem {
 
                 if ( !! entity && entity.componentsByProp.terrain ) {
 
-                    i --
+                    i -= 1
                     continue
 
                 }
@@ -85,7 +85,7 @@ export default class CursorSystem {
                 }
 
                 callback( cursor, hand, world, obj, entity, component )
-                i --
+                i -= 1
 
             }
 
@@ -163,28 +163,26 @@ export default class CursorSystem {
 
             }
 
-            if ( i == cursorIndex ) { // ray cast from one cursor at a time to save CPU
+            if ( i == cursorIndex ) // ray cast from one cursor at a time to save CPU
                 
                 cursorSystem.rayCast( world, camera, cursor, i -1, handMesh, cursorSystem._cursorCallback )
 
-            }
+            
 
         })
 
 
-        if ( cursorSystem.entityCoolDown  > -3 ) {
+        if ( cursorSystem.entityCoolDown  > -3 )
         
             cursorSystem.entityCoolDown -= 2
 
-        }
+        
+        cursorIndex += 1
 
-        cursorIndex ++
-
-        if ( cursorIndex == cursors.length ) {
+        if ( cursorIndex == cursors.length )
 
             cursorIndex = 0
 
-        }
 
         return cursorIndex
 
@@ -207,7 +205,7 @@ export default class CursorSystem {
         if ( !!obj ) {
 
             newCursorState = {
-                distance: obj.distance || 28000,
+                distance: obj.distance || 48000,
                 mesh: obj.object,
                 point: obj.point,
                 faceIndex: obj.faceIndex,
@@ -217,7 +215,7 @@ export default class CursorSystem {
         } else {
 
             newCursorState = {
-                distance: 28000,
+                distance: 48000,
                 mesh: null,
                 point: null,
                 faceIndex: -1,
@@ -225,7 +223,9 @@ export default class CursorSystem {
 
         }
 
-        if ( !!entity && !entity.componentsByProp.terrain && cursorSystem.entityCoolDown <= 0 && !!!entity ) {
+        //entity && console.warn(cursorSystem.entityCoolDown, entity)
+
+        if ( !!entity || ( cursorSystem.entityCoolDown <= 0 && !!!entity ) ) {
             
             newCursorState.entity = entity
 
@@ -253,7 +253,7 @@ export default class CursorSystem {
 
         cursorState.cursor = Object.assign( { faceIndex: -1 }, newCursorState )
 
-        if ( !!entity && !!component ) {
+        if ( !!entity && !!component ) 
 
             if ( hover ) {
 
@@ -269,7 +269,7 @@ export default class CursorSystem {
 
             }
 
-        }
+        
 
     }
 

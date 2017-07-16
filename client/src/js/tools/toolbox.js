@@ -10,7 +10,7 @@ import SystemTool from './system-tool'
 import PlaceTool from './place-tool'
 import WorldTool from './world-tool'
 import FileTool from './file-tool'
-import DirectoryTool from './directory-tool'
+import SocialTool from './social-tool'
 import DebugTool from './debug-tool.js'
 import CustomTool from './custom-tool'
 
@@ -43,7 +43,7 @@ export default class Toolbox {
         new PlaceTool({}, world, this),
         new AssetTool({}, world, this),
         new FileTool({}, world, this),
-        new DirectoryTool({}, world, this),
+        new SocialTool({}, world, this),
         new DebugTool({}, world, this),
         new DeleteTool({}, world, this)
       ]
@@ -167,13 +167,15 @@ export default class Toolbox {
     
     usePrimary ( hand ) {
 
-      let tool = this.tools[this.currentTools[hand]],
+      let toolIndex = this.currentTools[ hand ],
+          tool = this.tools[ toolIndex ],
           camera = this.world.camera,
           telemetry = this.initActionTelemetry(camera, true, hand),
           { position, quaternion } = telemetry,
           cursorEntity = !!telemetry.cursor ? telemetry.cursor.state.cursor.entity : false,
           cursorState = !!telemetry.cursor ? telemetry.cursor.state : false,
           componentsByProp =  !!cursorEntity ? cursorEntity.componentsByProp : {},
+          configureTool = null,
           action = null
       
       if ( telemetry.cursor && cursorEntity ) { // check telemetry here to see if activate callbacks should fire instead of tool action
@@ -191,10 +193,18 @@ export default class Toolbox {
 
         if ( componentsByProp.miniature && componentsByProp.toolUI ) {
 
-            if ( componentsByProp.toolUI[ 0 ].props.toolUI.configureTool ) {
+          configureTool = componentsByProp.toolUI[ 0 ].props.toolUI.configureTool 
 
-              console.log(" configure tool: ", componentsByProp.toolUI[ 0 ].props.toolUI.configureTool )
-              tool.configure( componentsByProp.toolUI[ 0 ].props.toolUI.configureTool )
+            if ( configureTool ) {
+
+              if ( toolIndex != configureTool.tool ) {
+
+                this.currentTools[ hand ] = configureTool.tool
+                tool = this.tools[ configureTool.tool ]
+
+              }         
+
+              tool.configure( configureTool ); //console.log(" configure tool: ", configureTool )
 
             }
         }

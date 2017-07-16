@@ -58,7 +58,7 @@ export default class ComponentTool extends Tool {
 
     // going to refactor this into the tool system.. next release
     primaryAction ( telemetry, params = {} ) { // place component (into entity if pointing at one)
-      
+
       let cursor = telemetry.cursor,
           user = this.world.user,
           systems = this.world.systems,
@@ -78,10 +78,11 @@ export default class ComponentTool extends Tool {
           entity = null //console.log("Selected ", tooManyComponents, selected, selected.components)
 
       entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat )
-      pointingAtTerrain && console.log("pointingAtTerrain")
+
+      console.warn( `Component Tool Type ${componentType} Selected ${selected}` )
 
       if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
-       
+        
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByProp.toolUI[ 0 ].state.toolUI.show()
         //user.toolbox.usePrimary( telemetry.hand, entity  )
@@ -114,11 +115,11 @@ export default class ComponentTool extends Tool {
       !!selected && !!selected.mesh && selected.mesh.updateMatrixWorld()
       let selectedPos = !!selected && !!selected.mesh ? selected.mesh.localToWorld( new THREE.Vector3() ) : false
       
-      components.map(( comp, i ) => { // apply transformation and offset to components
+      components.map( ( comp, i ) => { // apply transformation and offset to components
 
         if ( !!comp ) {
 
-          if ( selectedPos ) {
+          if ( selectedPos )
 
             comp.position = [
               position[ 0 ] - selectedPos.x,
@@ -126,7 +127,6 @@ export default class ComponentTool extends Tool {
               position[ 2 ] - selectedPos.z
             ]
 
-          }
           
           comp.quaternion = quat
 

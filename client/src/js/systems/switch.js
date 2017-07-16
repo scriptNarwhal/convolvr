@@ -11,6 +11,8 @@ export default class SwitchSystem {
         let prop = component.props.switch,
             state = {}
 
+        //TODO: implement
+
         return state
 
     }

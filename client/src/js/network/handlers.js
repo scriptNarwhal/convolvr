@@ -86,6 +86,8 @@ export default class SocketHandlers {
 				voxel = world.terrain.voxels[ coords[0]+".0."+coords[2] ],
 				quat = data.quaternion	
 
+			//console.log("Tool Action", data )
+
 			switch (data.tool) {
 				case "Entity Tool":
 					let ent = data.entity,
@@ -115,7 +117,7 @@ export default class SocketHandlers {
 					voxel.entities.map( voxelEnt => { // find & re-init entity.. also probably look up the right component to modify by id *******************
 
 						if ( voxelEnt.id == data.entityId ) {
-							console.log("got component tool message", data.entity.components) // concat with existing components array
+							console.log("got system tool message", data.entity.components) // concat with existing components array
 							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
 						}
 
@@ -125,7 +127,7 @@ export default class SocketHandlers {
 					voxel.entities.map( voxelEnt => { // find & re-init entity ^^^^^^
 
 						if ( voxelEnt.id == data.entityId ) {
-							console.log("got component tool message", data.entity.components) // concat with existing components array
+							console.log("got geometry tool message", data.entity.components) // concat with existing components array
 							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
 						}
 
@@ -135,7 +137,7 @@ export default class SocketHandlers {
 					voxel.entities.map( voxelEnt => { // find & re-init entity ^^^^^^
 
 						if ( voxelEnt.id == data.entityId ) {
-							console.log("got component tool message", data.entity.components) // concat with existing components array
+							console.log("got material tool message", data.entity.components) // concat with existing components array
 							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
 						}
 						

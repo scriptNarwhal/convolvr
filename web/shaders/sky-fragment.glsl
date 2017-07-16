@@ -44,15 +44,15 @@ void main( void ) {
     if ( vUv.y >= 0.5 ) {
 
         luminance += 0.5 + depth * 1.7;
-        glow =+ 0.7 * depth * depth;
+        glow =+ sin(0.5 * depth * depth);
         color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
-        glow += sin( abs( ((vUv.x * PI) -lightYaw) ) )* 2.0;
+        glow += sin( abs( ((vUv.x * PI) -lightYaw/2.0) ) )* 2.0;
 
     } else if ( vUv.y < 0.5 && vUv.y > 0.49 ) {
 
         luminance += depth * 1.7;
         glow += 0.3 * depth * depth;
-        glow += sin( abs( ((vUv.x * PI) -lightYaw) ) );
+        glow += sin( abs( ((vUv.x * PI) -lightYaw/2.0) ) );
         float p = 1.0 - (vUv.y-0.49)*100.0;
         glow = mix( glow, 0.2, p );
         //color = vec4(terrainRed, terrainGreen, terrainBlue, 1.0);
@@ -65,6 +65,6 @@ void main( void ) {
 
     }
     
-   gl_FragColor = (color * vec4(0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 0.1+1.0*glow*depth, 1.0));
+   gl_FragColor = (color * vec4(0.1+1.0*glow, 0.1+1.0*glow, 0.1+1.0*glow, 1.0));
 
 }

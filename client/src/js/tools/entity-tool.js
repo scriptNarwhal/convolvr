@@ -63,7 +63,7 @@ export default class EntityTool extends Tool  {
     }
 
     primaryAction ( telemetry, params = {} ) { // place entity
-
+      
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
           systems = this.world.systems,
@@ -79,7 +79,7 @@ export default class EntityTool extends Tool  {
   
       if ( ! tooManyComponents ) {
 
-        if ( ((selected && cursorState.distance < 200000) || cursorSystem.entityCoolDown > 10) ) { // switch to component tool
+        if ( selected && (cursorState.distance < 200000 || cursorSystem.entityCoolDown > 0 ) ) { // switch to component tool
             
             user.toolbox.useTool( 1, telemetry.hand )
             user.hud.componentsByProp.toolUI[0].state.toolUI.show()
@@ -90,8 +90,9 @@ export default class EntityTool extends Tool  {
 
       }
       
-      if ( cursorSystem.entityCoolDown < 0 ) {
-        cursorSystem.entityCoolDown = 100
+      if ( entity && cursorSystem.entityCoolDown <= 0 ) {
+
+        cursorSystem.entityCoolDown = 150
         return {
           entity
         }

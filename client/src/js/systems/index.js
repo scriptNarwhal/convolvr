@@ -9,6 +9,7 @@ import LayoutSystem from './layout'
 import TextSystem from './text'
 import AudioSystem from './audio'
 import VideoSystem from './video'
+import EmoteSystem from './emote'
 import SignalSystem from './signal'
 import InputSystem from './input'
 import MediaSystem from './media'
@@ -16,6 +17,7 @@ import CameraSystem from './camera'
 import OmioPluginSystem from './omio-plugin'
 import CPUSystem from './cpu'
 import DisplayAdapterSystem from './display-adapter'
+import GraphSystem from './graph'
 import MemorySystem from './memory'
 import IOControllerSystem from './io-controller'
 import NetworkInterfaceSystem from './network-interface'
@@ -43,6 +45,7 @@ import HandSystem from './hand'
 import TerrainSystem from './terrain'
 import ContainerSystem from './container'
 import RESTSystem from './rest'
+import SocialMediaSystem from './social-media'
 import TimeSystem from './time'
 import ToolUISystem from './tool-ui'
 import ConditionSystem from './condition'
@@ -66,67 +69,70 @@ export default class Systems {
     constructor ( world )  {
 
         let systems = {
+			activate: new ActivateSystem( world ),
+			audio: new AudioSystem( world ),
 			assets: new AssetSystem( world ),
 			browser: new BrowserSystem( world ),
-			geometry: new GeometrySystem( world ),
-			material: new MaterialSystem( world ),
-			omio: new OmioPluginSystem( world ),
-			staticCollisions: new StaticCollisions( world ),
-			dynamicCollisions: new DynamicCollisions( world ),
-			datgui: new DatGUIVRPluginSystem( world ),
-			light: new LightSystem( world ),
-			layout: new LayoutSystem( world ),
-			text: new TextSystem( world ),
-			audio: new AudioSystem( world ),
-			video: new VideoSystem( world ),
 			camera: new CameraSystem( world ),
-			display: new DisplaySystem( world ),
-			signal: new SignalSystem( world ),
-            input: new InputSystem( world ),
-			cpu: new CPUSystem( world ),
-			memory: new MemorySystem( world ),
-			displayAdapter: new DisplayAdapterSystem( world ),
-			ioController: new IOControllerSystem( world ),
-			driveController: new DriveControllerSystem( world ),
-			networkInterface: new NetworkInterfaceSystem( world ),
-            media: new MediaSystem( world ),
-			drawing: new DrawingSystem( world ),
-			control: new ControlSystem( world ),
-			propulsion: new PropulsionSystem( world ),
-			powerSupply: new PowerSupplySystem( world ),
-			factory: new FactorySystem( world ),
-			metaFactory: new MetaFactorySystem( world ),
-			particles: new ParticleSystem( world ),
-			projectile: new ProjectileSystem( world ),
-			destructable: new DestructableSystem( world ),
-			floor: new FloorSystem( world ),
-			wall: new WallSystem( world ),
-			vehicle: new VehicleSystem( world ),
-			portal: new PortalSystem( world ),
-			door: new DoorSystem( world ),
-			cursor: new CursorSystem( world ),
-			hand: new HandSystem( world ),
-			hover: new HoverSystem( world ),
-			lookAway: new LookAwaySystem( world ),
-			activate: new ActivateSystem( world ),
-			terrain: new TerrainSystem( world ),
+			chat: new ChatSystem( world ),
 			container: new ContainerSystem( world ),
 			condition: new ConditionSystem( world ),
-			switch: new SwitchSystem( world ),
+			control: new ControlSystem( world ),
+			cursor: new CursorSystem( world ),
+			cpu: new CPUSystem( world ),
+			datgui: new DatGUIVRPluginSystem( world ),
+			destructable: new DestructableSystem( world ),
+			display: new DisplaySystem( world ),
+			displayAdapter: new DisplayAdapterSystem( world ),
+			door: new DoorSystem( world ),
+			drawing: new DrawingSystem( world ),
+			driveController: new DriveControllerSystem( world ),
+			dynamicCollisions: new DynamicCollisions( world ),
+			emote: new EmoteSystem( world ),
+			factory: new FactorySystem( world ),
+			file: new FileSystem( world ),
+			floor: new FloorSystem( world ),
+			geometry: new GeometrySystem( world ),
+			graph: new GraphSystem( world ),
+			hand: new HandSystem( world ),
+			hover: new HoverSystem( world ),
+			ioController: new IOControllerSystem( world ),
+			input: new InputSystem( world ),
 			loop: new LoopSystem( world ),
+			light: new LightSystem( world ),
+			layout: new LayoutSystem( world ),
+			lookAway: new LookAwaySystem( world ),
+			material: new MaterialSystem( world ),
+			memory: new MemorySystem( world ),
+			media: new MediaSystem( world ),
+			metaFactory: new MetaFactorySystem( world ),
+			miniature: new MiniatureSystem( world ),
+			networkInterface: new NetworkInterfaceSystem( world ),
+			npc: new NPCSystem( world ),
+			obj: new ObjSystem( world ),
+			omio: new OmioPluginSystem( world ),
+			particles: new ParticleSystem( world ),
+			propulsion: new PropulsionSystem( world ),
+			powerSupply: new PowerSupplySystem( world ),
+			portal: new PortalSystem( world ),
+			projectile: new ProjectileSystem( world ),
+			rest: new RESTSystem( world ),
+			signal: new SignalSystem( world ),
+			screenshot: new ScreenshotSystem( world ),
+			socialMedia: new SocialMediaSystem( world ),
+			speech: new SpeechSystem( world ),
+			staticCollisions: new StaticCollisions( world ),
+			switch: new SwitchSystem( world ),
+			terrain: new TerrainSystem( world ),
+			text: new TextSystem( world ),
 			time: new TimeSystem( world ),
 			toolUI: new ToolUISystem( world ),
 			tool: new ToolSystem( world ),
-			miniature: new MiniatureSystem( world ),
-			rest: new RESTSystem( world ),
-			webrtc: new WebRTCSystem( world ),
 			user: new UserSystem( world ),
-			file: new FileSystem( world ),
-			chat: new ChatSystem( world ),
-			obj: new ObjSystem( world ),
-			screenshot: new ScreenshotSystem( world ),
-			speech: new SpeechSystem( world ),
-			npc: new NPCSystem( world )
+			vehicle: new VehicleSystem( world ),
+			video: new VideoSystem( world ),
+			wall: new WallSystem( world ),
+			webrtc: new WebRTCSystem( world ),
 		}
 
         this.systems = systems

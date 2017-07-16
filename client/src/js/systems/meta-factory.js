@@ -17,7 +17,7 @@ export default class MetaFactorySystem {
             source = [],
             category = prop.propName,
             gridWidth = prop.gridWidth || 3,
-            gridSize = prop.gridSize || 20000,
+            gridSize = prop.gridSize || 22000,
             vOffset = prop.vOffset || -12000,
             sourceCategory = "none",
             preset = "",
@@ -48,9 +48,10 @@ export default class MetaFactorySystem {
 
             source.map( (item, i) => {
                 
-                if ( assetType == 'entity' && typeof item == 'function' ) {
+                if ( assetType == 'entity' && typeof item == 'function' )
+                
                     return
-                }
+                
 
                 preset = assetType == "entity" ? item.name : preset
                 preset = assetType == "component" ? presets[ i ] : preset
@@ -97,7 +98,7 @@ export default class MetaFactorySystem {
 
         let addTo = null
 
-        if (!!component.state.tool) {
+        if ( !!component.state.tool ) {
 
             addTo = component.state.tool.panel.components[1].components
 
@@ -125,7 +126,7 @@ export default class MetaFactorySystem {
                         color: 0x000000
                     }
                 },
-                position:  [ gridSize * (x-1), vOffset + gridSize * y, 16000 ],
+                position:  [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 24000 ],
                 quaternion: null
         })
 
