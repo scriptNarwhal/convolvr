@@ -123,6 +123,15 @@ func getWorldChunks(c echo.Context) error {
 
 			}
 
+			if worldData.Spawn.Walls {
+
+				if canPlaceWallAt(x, 0, z) {
+					entities = append(entities, generateWall(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+				}
+
+			}
+
 			if worldData.Spawn.Vehicles {
 
 				if canPlaceVehicleAt(x, 0, z) {
@@ -192,6 +201,15 @@ func getWorldChunks(c echo.Context) error {
 
 				if canPlaceNetAt(x, 0, z) {
 					entities = append(entities, generateNet(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+				}
+
+			}
+
+			if worldData.Spawn.Curtains {
+
+				if canPlaceCurtainAt(x, 0, z) {
+					entities = append(entities, generateCurtain(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
