@@ -28,6 +28,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 			light := make(map[string]interface{})
 			light["type"] = "point"
 			light["intensity"] = 1.0
+			light["distance"] = 100000
 			light["color"] = 0xffffff
 			floorProps["light"] = light
 		}
@@ -41,13 +42,13 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 		wallState := make(map[string]interface{})
 		structureComponents = append(structureComponents, NewComponent("", floorPos, floorQuat, floorProps, wallState, []*Component{}, nil))
 		for w := 0; w < 2; w++ {
-			wall := generateWall(w, i, floors, width, structureSize)
+			wall := generateBuildingWall(w, i, floors, width, structureSize)
 			structureComponents = append(structureComponents, wall)
 		}
 	}
 	// add long walls
 	for w := 2; w < 4; w++ {
-		wall := generateWall(w, 0, floors, width, structureSize)
+		wall := generateBuildingWall(w, 0, floors, width, structureSize)
 		structureComponents = append(structureComponents, wall)
 	}
 	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) + 10000, float64(z) * 807360.0} //  + (structureSize * width)
@@ -56,7 +57,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 	return structure
 }
 
-func generateWall(w int, i int, floors int, width float64, structureSize float64) *Component {
+func generateBuildingWall(w int, i int, floors int, width float64, structureSize float64) *Component {
 	wallPos := []float64{}
 	geometry := make(map[string]interface{})
 	material := make(map[string]interface{})

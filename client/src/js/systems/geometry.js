@@ -59,6 +59,9 @@ export default class GeometrySystem {
             case "extrude":
               geometry = this._extrudeGeometry( prop )
             break
+            case "lathe":
+              geometry = this._latheGeometry( prop )
+            break
             // define more mappings here..
 
           }
@@ -78,7 +81,8 @@ export default class GeometrySystem {
         }
 
         return {
-          geometry
+          geometry,
+          geometryCode
         }
 
     }
@@ -124,6 +128,40 @@ export default class GeometrySystem {
       }, prop.settings || {})
 
       return new THREE.ExtrudeGeometry( shape, Object.assign({}, extrudeSettings, prop.extrudeSettings) )
+
+    }
+
+    _latheGeometry ( prop ) { // prop.size, shape, settings
+
+      let segments = 8 || prop.segments,
+          phiStart = prop.phiStart ? prop.phiStart : 0,
+          phiLength = prop.phiLength ? prop.phiLength : 2 * Math.PI,
+          propPoints = prop.points,
+          points = [],
+          p = 0
+
+      if ( !!! propPoints ) {
+
+        propPoints = [
+          [15000, 500], 
+          [5000, 500],
+          [1000, 5000],
+          [1000, 2000],
+          [5000, 15000],
+        ]
+
+      }
+
+      p = propPoints.length -1
+
+      while ( p >= 0 ) {
+
+        points.push( new THREE.Vector2( propPoints[p][0], propPoints[p][1] ) )
+        p -= 1
+      
+      }
+
+      return new THREE.LatheGeometry( points, phiStart, phiLength )
 
     }
 
