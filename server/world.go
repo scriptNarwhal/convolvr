@@ -162,7 +162,7 @@ func getWorld(c echo.Context) error { // load specific world
 			} else {
 				red = 1.0
 				green = 0.26
-				blue = 0.3
+				blue = 0.01
 			}
 
 		} else {
