@@ -23,6 +23,7 @@ import ImportUI from './2d-ui/containers/import'
 import Network from './2d-ui/containers/network'
 import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
+import Profile from './2d-ui/containers/profile'
 import HUD from './2d-ui/containers/hud'
 // 3D World
 import Convolvr from './world/world'
@@ -93,7 +94,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
       "- Swiping & dragging move you"
     ]
   helpScreen.init(three.scene, {}, help => { 
-    _initHTTPClientTest( world, help) 
+    _initHTTPClientTest( world, help ) 
     _initVideoChat( world, help ) 
   })
   helpScreen.update( [ -80000, 50000, 0 ] )
@@ -111,16 +112,18 @@ ReactDOM.render(
         <Route path="/:userName/:worldName" component={HUD} />
         <Route path="/:userName/:worldName/at/:coords" component={HUD} />
         <Route path="/:userName/:worldName/:placeName" component={HUD} />
-				<Route path="/login" component={Login} />
-				<Route path="/chat" component={Chat} />
-				<Route path="/files" component={Data} />
-        <Route path="/files/:username" component={Data} />
-				<Route path="/worlds" component={Worlds} />
-        <Route path="/places" component={Places} />
-        <Route path="/new-world" component={NewWorld} />
-				<Route path="/settings" component={Settings} />
-        <Route path="/import" component={ImportUI} />
-        <Route path="/network" component={Network} />
+        <Route path="/:userName/:worldName/login" component={Login} />
+        <Route path="/:userName/:worldName/chat" component={Chat} />
+        <Route path="/:userName/:worldName/files" component={Data} />
+        <Route path="/:userName/:worldName/files/:username" component={Data} />
+        <Route path="/:userName/:worldName/worlds" component={Worlds} />
+        <Route path="/:userName/:worldName/places" component={Places} />
+        <Route path="/:userName/:worldName/new-world" component={NewWorld} />
+        <Route path="/:userName/:worldName/settings" component={Settings} />
+        <Route path="/:userName/:worldName/import" component={ImportUI} />
+        <Route path="/:userName/:worldName/network" component={Network} />
+        <Route path="/:userName/:worldName/profile" component={Profile} />
+				
 			</Route>
 		</Router>
   </Provider>),

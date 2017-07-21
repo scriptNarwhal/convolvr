@@ -37,15 +37,21 @@ let styles = {
 class SideMenu extends Component {
 
   toggleMenu (force) {
+
       this.props.toggleMenu(force)
+
   }
 
   toggleVRMode () {
+
       this.props.toggleVRMode()
+
   }
 
   navigate (evt, url) {
-    browserHistory.push(url)
+    
+    browserHistory.push( `${this.props.world}/${this.props.worldUser}${url}` )
+
   }
 
   render() {
@@ -74,7 +80,11 @@ class SideMenu extends Component {
                  title="Chat"
                  clickHandler={ (e)=> { this.navigate(e, "/chat") } }
             />
-             <Tab image="/data/images/voxel-white.png"
+            <Tab image="/data/images/profile.png"
+                 title="Chat"
+                 clickHandler={ (e)=> { this.navigate(e, "/profile") } }
+            />
+            <Tab image="/data/images/voxel-white.png"
                  title="Manage Files"
                  clickHandler={ (e)=> { this.navigate(e, "/files") }}
             />
@@ -100,7 +110,9 @@ class SideMenu extends Component {
           </div>
         </div>
     )
+
   }
+
 }
 
 SideMenu.defaultProps = {
@@ -117,6 +129,7 @@ export default connect(
   (state, ownProps) => {
     return {
         world: state.worlds.current,
+        worldUser: state.worlds.worldUser,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen
     }

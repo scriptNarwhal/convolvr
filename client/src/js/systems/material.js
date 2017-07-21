@@ -87,7 +87,7 @@ export default class MaterialSystem {
                   metalnessCallback = metalnessMap => {
 
                     !!prop.repeat && this._setTextureRepeat( metalnessMap, prop.repeat )
-                    metalnessMap.anisotropy = renderer.getMaxAnisotropy() / 2.0
+                    metalnessMap.anisotropy = renderer.getMaxAnisotropy() / 2.0 
                     mat.metalnessMap = metalnessMap
                     material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
 
@@ -158,7 +158,7 @@ export default class MaterialSystem {
             shading = 'phong'
             material = this._initMaterial( prop, mat, shading, basic, mobile )
 
-            prop.specularMap && assets.loadImage( prop.specularMap, textureConfig, ( specularMap ) => { 
+            prop.specularMap && assets.loadImage( prop.specularMap, textureConfig, specularMap => { 
 
                   specularMap.anisotropy = renderer.getMaxAnisotropy()
                   material.specularMap = specularMap
@@ -166,7 +166,7 @@ export default class MaterialSystem {
 
             })
 
-            !!prop.map && assets.loadImage( prop.map, textureConfig, (texture) => { 
+            !!prop.map && assets.loadImage( prop.map, textureConfig, texture => { 
 
               if ( !!prop.repeat ) {
 
@@ -186,7 +186,7 @@ export default class MaterialSystem {
 
         } else {
 
-          material = assets.materials[materialCode]
+          material = assets.materials[ materialCode ]
 
         }
 
@@ -296,16 +296,29 @@ export default class MaterialSystem {
                 basic = true
             break
             case "terrain":
-                prop.map = '/data/images/textures/tiles.png' // /data/images/textures/gplaypattern_@2X.png'
-                prop.specularMap = '/data/images/textures/shattered_@2X.png'
-                prop.envMap = 'none'
-                prop.repeat = [ 'wrapping', 12, 12 ]
+            
+            if ( !simpleShading ) {
+
+              prop.metalnessMap = "/data/images/textures/tiles.png" 
+              prop.roughnessMap = '/data/images/textures/tiles.png'
+              prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
+
+            } else {
+
+              prop.map = '/data/images/textures/tiles-light.png' // /data/images/textures/gplaypattern_@2X.png'
+              prop.specularMap = '/data/images/textures/tiles.png'
+              prop.envMap = 'none'
+
+            }
+                
+            prop.repeat = [ 'wrapping', 12, 12 ]
+
             break
             case "metal":
-                
                 prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
+                
                 if ( !simpleShading ) {
-                  prop.metalnessMap = "/data/images/textures/tiles.png" 
+                  prop.metalnessMap = "/data/images/textures/tiles-light.png" 
                   prop.roughnessMap = '/data/images/textures/gplaypattern_@2X.png'
                   prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
 
@@ -315,11 +328,13 @@ export default class MaterialSystem {
             case "glass":
               prop.specularMap = '/data/images/textures/tiles.png'
               prop.repeat = [ 'wrapping', 2, 2 ]
+
               if ( !simpleShading ) {
 
                   prop.roughnessMap = '/data/images/textures/shattered_@2X.png'
 
               }
+
             break
             case "plastic":
                 prop.repeat = [ 'wrapping', 2, 2 ]

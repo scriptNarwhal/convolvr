@@ -130,75 +130,27 @@ func Start(configName string) {
 	}
 	e.Renderer = renderer
 
-	// Named route "foobar"
-	var handleWorld = func(c echo.Context) error {
-
-		var (
-			world       World
-			name        string
-			description string
-			icon        string
-			themeColor  string
-			image       string
-			userName    string
-		)
-
-		description = "Auto Generated World"
-		icon = "/data/images/convolvr2.png"
-		image = ""
-		userName = "Space"
-		themeColor = "#151515"
-		name = c.Param("worldName")
-		if name == "" {
-			name = "Overworld"
-		}
-		err := db.One("Name", name, &world)
-
-		if err == nil {
-
-			userName = world.UserName
-			description = world.Description
-			image = world.Sky.Photosphere
-
-			if image != "" {
-
-				icon = "/data/user/" + image
-
-			}
-
-		}
-
-		return c.Render(http.StatusOK, "world.html", map[string]interface{}{
-			"name":        name,
-			"description": description,
-			"icon":        icon,
-			"image":       image,
-			"userName":    userName,
-			"themeColor":  themeColor,
-		})
-
-	}
-
 	e.GET("/:userName/:worldName", handleWorld).Name = "user-world"             // fairly simple, readable url structure
 	e.GET("/:userName/:worldName/at/:coords", handleWorld).Name = "world-voxel" // linking to individual voxels
 	e.GET("/:userName/:worldName/:placeName", handleWorld).Name = "world-place" // linking to named places
-	// e.File("/:userName/:worldName", "../web/index.html")
-	// e.File("/:userName/:worldName/at/:coords", "../web/index.html")
-	// e.File("/:userName/:worldName/:placeName", "../web/index.html")
 
-	e.File("/network", "../web/index.html") // client should generate a meta-world out of (portals to) networked convolvr (or other webvr) sites
-	e.File("/worlds", "../web/index.html")  // this one also needs its 2d ui replaced with something nicer
-	e.File("/places", "../web/index.html")
-	e.File("/new-world", "../web/index.html")
-	e.File("/chat", "../web/index.html")
-	e.File("/files", "../web/index.html")
-	e.File("/login", "../web/index.html")
-	e.File("/settings", "../web/index.html")
+	e.GET("/:userName/:worldName/:settings", handleWorld).Name = "settings"
+	e.GET("/:userName/:worldName/:network", handleWorld).Name = "settings"
+	e.GET("/:userName/:worldName/:worlds", handleWorld).Name = "settings"
+	e.GET("/:userName/:worldName/:places", handleWorld).Name = "settings"
+	e.GET("/:userName/:worldName/:new-world", handleWorld).Name = "settings"
+	e.GET("/:userName/:worldName/:chat", handleWorld).Name = "settings"
+	e.GET("/:userName/:worldName/:files", handleWorld).Name = "settings"
+	e.GET("/:userName/:worldName/:login", handleWorld).Name = "settings"
+	e.GET("/:userName/:worldName/:import", handleWorld).Name = "settings"
+	e.GET("/:userName/:worldName/:settings", handleWorld).Name = "settings"
 
 	hub.Handle("chat message", chatMessage)
 	hub.Handle("update", update)
 	hub.Handle("tool action", toolAction)
 	e.Any("/connect", echo.WrapHandler(http.HandlerFunc(hub.Handler)))
 	e.GET("/", handleWorld).Name = "default-world"
+
 	e.Logger.Fatal(e.Start(port))
+
 }

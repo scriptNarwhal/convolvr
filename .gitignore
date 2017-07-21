@@ -11,8 +11,7 @@ _out
 *.exe
 world.db
 world.db.lock
-/cmd/cmd
-/cmd/cmd.exe
+/cmd/cmd*
 /web/data/*
 !/web/data/public
 /web/data/public/*

@@ -14,7 +14,7 @@ func update(c *nexus.Client, p *nexus.Packet) { // broadcast user telemetry to a
 	hub.All().Broadcast(p)
 }
 
-func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 it looks like you're trying to change the world
+func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you're trying to change the world
 
 	var (
 		action ToolAction

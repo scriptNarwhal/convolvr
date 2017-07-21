@@ -136,7 +136,56 @@ func postWorlds(c echo.Context) error {
 	return c.JSON(http.StatusOK, nil)
 }
 
+func handleWorld(c echo.Context) error {
+
+	var (
+		world       World
+		name        string
+		description string
+		icon        string
+		themeColor  string
+		image       string
+		userName    string
+	)
+
+	description = "Auto Generated World"
+	icon = "/data/images/convolvr2.png"
+	image = ""
+	userName = "Space"
+	themeColor = "#151515"
+	name = c.Param("worldName")
+	if name == "" {
+		name = "Overworld"
+	}
+	err := db.One("Name", name, &world)
+
+	if err == nil {
+
+		userName = world.UserName
+		description = world.Description
+		image = world.Sky.Photosphere
+
+		if image != "" {
+
+			icon = "/data/user/" + image
+
+		}
+
+	}
+
+	return c.Render(http.StatusOK, "world.html", map[string]interface{}{
+		"name":        name,
+		"description": description,
+		"icon":        icon,
+		"image":       image,
+		"userName":    userName,
+		"themeColor":  themeColor,
+	})
+
+}
+
 func getWorld(c echo.Context) error { // load specific world
+
 	var (
 		world        World
 		red          float64
@@ -149,34 +198,45 @@ func getWorld(c echo.Context) error { // load specific world
 		ambientColor int
 		terrainColor int
 	)
+
 	name := c.Param("name")
 	log.Println(name)
 	err := db.One("Name", name, &world)
+
 	if err != nil {
+
 		log.Println(err)
 
-		if rand.Intn(12) > 6 {
+		if rand.Intn(12) > 5 {
 
-			if rand.Intn(12) > 6 {
-				red = 0.2
-				green = 0.17
+			if rand.Intn(12) > 5 {
+
+				red = 0.26
+				green = 0.02
 				blue = 1.0
+
 			} else {
+
 				red = 1.0
-				green = 0.26
-				blue = 0.01
+				green = 0.16
+				blue = 0.02
+
 			}
 
 		} else {
 
-			if rand.Intn(12) > 6 {
-				red = 0.07
-				green = 0.7
-				blue = 1.0
+			if rand.Intn(12) > 5 {
+
+				red = 0.02
+				green = 1.0
+				blue = 0.44
+
 			} else {
-				red = 0.06
-				green = 0.2
+
+				red = 0.02
+				green = 0.44
 				blue = 1.0
+
 			}
 
 		}
@@ -205,9 +265,11 @@ func getWorld(c echo.Context) error { // load specific world
 		highAltitudeGravity := false
 		world = *NewWorld(0, -1, "space", name, gravity, highAltitudeGravity, sky, light, terrain, spawn, []string{}, "Auto-generated World")
 		saveErr := db.Save(&world)
+
 		if saveErr != nil {
 			log.Println(saveErr)
 		}
+
 		createDataDir("public", "worlds/"+name)
 	}
 	return c.JSON(http.StatusOK, &world)
