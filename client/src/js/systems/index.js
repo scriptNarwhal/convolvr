@@ -14,7 +14,7 @@ import SignalSystem from './signal'
 import InputSystem from './input'
 import MediaSystem from './media'
 import CameraSystem from './camera'
-import OmioPluginSystem from './omio-plugin'
+import OimoPluginSystem from './oimo-plugin'
 import CPUSystem from './cpu'
 import DisplayAdapterSystem from './display-adapter'
 import GraphSystem from './graph'
@@ -110,7 +110,7 @@ export default class Systems {
 			networkInterface: new NetworkInterfaceSystem( world ),
 			npc: new NPCSystem( world ),
 			obj: new ObjSystem( world ),
-			omio: new OmioPluginSystem( world ),
+			oimo: new OimoPluginSystem( world ),
 			particles: new ParticleSystem( world ),
 			propulsion: new PropulsionSystem( world ),
 			powerSupply: new PowerSupplySystem( world ),
@@ -200,7 +200,7 @@ export default class Systems {
 
 		this.particles.tick( delta, time )
 		this.terrain.tick( delta, time )
-		this.omio.tick( delta, time )
+		this.oimo.tick( delta, time )
 
 	}
 	

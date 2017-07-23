@@ -51,7 +51,7 @@ export default class MaterialSystem {
 
             assets.loadImage( envMapUrl, textureConfig, ( envMap ) => { 
 
-              envMap.mapping = THREE.SphericalReflectionMapping
+              envMap.mapping = THREE.EquirectangularReflectionMapping 
               mat.envMap = envMap
 
               assets.loadImage( prop.roughnessMap, textureConfig, ( roughnessMap ) => {
@@ -63,7 +63,7 @@ export default class MaterialSystem {
                 let roughnessCallback = roughnessMap => { 
 
                     !!prop.repeat && this._setTextureRepeat( roughnessMap, prop.repeat )
-                    roughnessMap.anisotropy = anisotropy
+                    roughnessMap.anisotropy = anisotropy / 2.0
                     mat.roughnessMap = roughnessMap
                     material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
 
@@ -87,7 +87,7 @@ export default class MaterialSystem {
                   metalnessCallback = metalnessMap => {
 
                     !!prop.repeat && this._setTextureRepeat( metalnessMap, prop.repeat )
-                    metalnessMap.anisotropy = renderer.getMaxAnisotropy() / 2.0 
+                    metalnessMap.anisotropy = anisotropy / 2.0
                     mat.metalnessMap = metalnessMap
                     material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
 
@@ -103,7 +103,7 @@ export default class MaterialSystem {
                   metalnessAndRoughnessCallBack = roughnessMap => {
 
                     !!prop.repeat && this._setTextureRepeat( roughnessMap, prop.repeat )
-                    roughnessMap.anisotropy = renderer.getMaxAnisotropy() / 2.0
+                    roughnessMap.anisotropy = anisotropy / 2.0
                     mat.roughnessMap = roughnessMap
                     assets.loadImage( prop.roughnessMap, textureConfig, metalnessCallback )
 
@@ -264,9 +264,11 @@ export default class MaterialSystem {
                   mat.shininess = 9.4
 
                 }
+                mat.transparent = true
+                mat.opacity = 0.2
               break
               case "plastic":
-                if (shading == 'physical') {
+                if ( shading == 'physical' ) {
 
                   mat.metalness = 0.75
 
@@ -299,7 +301,7 @@ export default class MaterialSystem {
             
             if ( !simpleShading ) {
 
-              prop.metalnessMap = "/data/images/textures/tiles.png" 
+              //prop.metalnessMap = "/data/images/textures/tiles.png" 
               prop.roughnessMap = '/data/images/textures/tiles.png'
               prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
 
@@ -318,8 +320,7 @@ export default class MaterialSystem {
                 prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
                 
                 if ( !simpleShading ) {
-                  prop.metalnessMap = "/data/images/textures/tiles-light.png" 
-                  prop.roughnessMap = '/data/images/textures/gplaypattern_@2X.png'
+                  prop.metalnessMap = "/data/images/textures/gplaypattern_@2X.png" 
                   prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
 
                 }
@@ -343,7 +344,6 @@ export default class MaterialSystem {
                 if ( !simpleShading ) {
 
                   prop.metalnessMap = "/data/images/textures/tiles.png" 
-                  prop.roughnessMap = '/data/images/textures/shattered_@2X.png'
 
                 }
 

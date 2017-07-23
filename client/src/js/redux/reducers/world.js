@@ -32,8 +32,8 @@ export let detectWorldDetailsFromURL = () => {
         isWorld = true,
         userAndWorld = [ "space", "overworld" ]
 
-    nonWorlds.map(nWorld => {
-        if (url.indexOf(`/${nWorld}`) == 0) {
+    nonWorlds.map( nWorld => {
+        if ( url.indexOf(`/${nWorld}`) == 0 ) {
             isWorld = false
         }
     })

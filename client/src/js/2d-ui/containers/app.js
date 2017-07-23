@@ -205,7 +205,7 @@ class App extends Component {
 
   }
 
-  componentWillUpdate ( nextProps, nextState ) {
+  componentWillReceiveProps ( nextProps ) {
 
     let newWorld = ["space", "overworld"],
         pathChange = nextProps.url.pathname.indexOf("/at") > -1 ? false : nextProps.url.pathname != this.props.url.pathname
@@ -229,6 +229,11 @@ class App extends Component {
       }
 
     }
+
+  }
+
+  componentWillUpdate ( nextProps, nextState ) {
+
 
   }
 

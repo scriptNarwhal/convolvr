@@ -112,17 +112,17 @@ ReactDOM.render(
         <Route path="/:userName/:worldName" component={HUD} />
         <Route path="/:userName/:worldName/at/:coords" component={HUD} />
         <Route path="/:userName/:worldName/:placeName" component={HUD} />
-        <Route path="/:userName/:worldName/login" component={Login} />
-        <Route path="/:userName/:worldName/chat" component={Chat} />
-        <Route path="/:userName/:worldName/files" component={Data} />
-        <Route path="/:userName/:worldName/files/:username" component={Data} />
-        <Route path="/:userName/:worldName/worlds" component={Worlds} />
-        <Route path="/:userName/:worldName/places" component={Places} />
-        <Route path="/:userName/:worldName/new-world" component={NewWorld} />
-        <Route path="/:userName/:worldName/settings" component={Settings} />
-        <Route path="/:userName/:worldName/import" component={ImportUI} />
-        <Route path="/:userName/:worldName/network" component={Network} />
-        <Route path="/:userName/:worldName/profile" component={Profile} />
+        <Route path="/login" component={Login} />
+        <Route path="/chat" component={Chat} />
+        <Route path="/files" component={Data} />
+        <Route path="/files/:username" component={Data} />
+        <Route path="/worlds" component={Worlds} />
+        <Route path="/places" component={Places} />
+        <Route path="/new-world" component={NewWorld} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/import" component={ImportUI} />
+        <Route path="/network" component={Network} />
+        <Route path="/profile" component={Profile} />
 				
 			</Route>
 		</Router>

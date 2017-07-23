@@ -130,20 +130,20 @@ func Start(configName string) {
 	}
 	e.Renderer = renderer
 
+	e.GET("/:settings", handleWorld).Name = "settings"
+	e.GET("/:network", handleWorld).Name = "settings"
+	e.GET("/:worlds", handleWorld).Name = "settings"
+	e.GET("/:places", handleWorld).Name = "settings"
+	e.GET("/:new-world", handleWorld).Name = "settings"
+	e.GET("/:chat", handleWorld).Name = "settings"
+	e.GET("/:files", handleWorld).Name = "settings"
+	e.GET("/:login", handleWorld).Name = "settings"
+	e.GET("/:import", handleWorld).Name = "settings"
+	e.GET("/:settings", handleWorld).Name = "settings"
+
 	e.GET("/:userName/:worldName", handleWorld).Name = "user-world"             // fairly simple, readable url structure
 	e.GET("/:userName/:worldName/at/:coords", handleWorld).Name = "world-voxel" // linking to individual voxels
 	e.GET("/:userName/:worldName/:placeName", handleWorld).Name = "world-place" // linking to named places
-
-	e.GET("/:userName/:worldName/:settings", handleWorld).Name = "settings"
-	e.GET("/:userName/:worldName/:network", handleWorld).Name = "settings"
-	e.GET("/:userName/:worldName/:worlds", handleWorld).Name = "settings"
-	e.GET("/:userName/:worldName/:places", handleWorld).Name = "settings"
-	e.GET("/:userName/:worldName/:new-world", handleWorld).Name = "settings"
-	e.GET("/:userName/:worldName/:chat", handleWorld).Name = "settings"
-	e.GET("/:userName/:worldName/:files", handleWorld).Name = "settings"
-	e.GET("/:userName/:worldName/:login", handleWorld).Name = "settings"
-	e.GET("/:userName/:worldName/:import", handleWorld).Name = "settings"
-	e.GET("/:userName/:worldName/:settings", handleWorld).Name = "settings"
 
 	hub.Handle("chat message", chatMessage)
 	hub.Handle("update", update)

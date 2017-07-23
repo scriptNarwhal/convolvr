@@ -50,7 +50,7 @@ class SideMenu extends Component {
 
   navigate (evt, url) {
     
-    browserHistory.push( `${this.props.world}/${this.props.worldUser}${url}` )
+    browserHistory.push( `${url}` )
 
   }
 
@@ -61,34 +61,34 @@ class SideMenu extends Component {
             <Tab image="/data/images/convolvr2.png"
                  title="Home"
                  buttonStyle={{ backgroundSize: "100%" }}
-                 clickHandler={ (e)=> { this.navigate(e, "/space/overworld") } }
+                 clickHandler={ e => { this.toggleMenu(); this.navigate(e, "");  } }
             /> 
             <Tab image="/data/images/circle-a.png"
                  title="Switch Worlds"
-                 clickHandler={ (e)=> { this.navigate(e, "/worlds") }}
+                 clickHandler={ e => { this.navigate(e, "/worlds") }}
             />
-            <Tab clickHandler={ (e)=> { this.navigate(e, "/places") }}
+            <Tab clickHandler={ e => { this.navigate(e, "/places") }}
                  image="/data/images/places-s.png"
                  style={ styles.mobileHidden() }
                  title="Places"
             />
             <Tab image="/data/images/plus.png"
                  title="Create New World"
-                 clickHandler={ (e)=> { this.navigate(e, "/new-world") } }
+                 clickHandler={ e => { this.navigate(e, "/new-world") } }
             />
             <Tab image="/data/images/chat.png"
                  title="Chat"
-                 clickHandler={ (e)=> { this.navigate(e, "/chat") } }
+                 clickHandler={ e => { this.navigate(e, "/chat") } }
             />
             <Tab image="/data/images/profile.png"
                  title="Chat"
-                 clickHandler={ (e)=> { this.navigate(e, "/profile") } }
+                 clickHandler={ e => { this.navigate(e, "/profile") } }
             />
             <Tab image="/data/images/voxel-white.png"
                  title="Manage Files"
-                 clickHandler={ (e)=> { this.navigate(e, "/files") }}
+                 clickHandler={ e => { this.navigate(e, "/files") }}
             />
-            <Tab clickHandler={ (e)=> { this.navigate(e, "/network") }}
+            <Tab clickHandler={ e => { this.navigate(e, "/network") }}
                  image="/data/images/network.png"
                  style={ styles.mobileHidden() }
                  title="View Network"
@@ -96,16 +96,16 @@ class SideMenu extends Component {
             <Tab image="/data/images/logout.png"
                  title="Sign In / Switch Accounts"
                  style={ styles.mobileHidden() }
-                 clickHandler={ (e)=> { this.navigate(e, "/login") } }
+                 clickHandler={ e => { this.navigate(e, "/login") } }
             />
             <Tab image="/data/images/obj.png"
                  title="Import *.OBJ Files"
                  style={ styles.mobileHidden() }
-                 clickHandler={ (e)=> { this.navigate(e, "/import") } }
+                 clickHandler={ e => { this.navigate(e, "/import") } }
             />
             <Tab image="/data/images/configure-h.png"
                  title="Settings"
-                 clickHandler={ (e)=> { this.navigate(e, "/settings") } }
+                 clickHandler={ e => { this.navigate(e, "/settings") } }
             />
           </div>
         </div>

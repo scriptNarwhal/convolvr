@@ -40,13 +40,35 @@ void main( void ) {
     float mixedTerrainRed = red / 2.0 + terrainRed* 0.75;
     float mixedTerrainGreen = green / 2.0 + terrainGreen* 0.75;
     float mixedTerrainBlue = blue / 2.0 + terrainBlue* 0.75;
+    vec3 newColor = vec3(0,0,0);
 
     if ( vUv.y >= 0.5 ) {
 
         luminance += 0.5 + depth * 1.7;
         glow =+ sin(0.5 * depth * depth);
-        color = vec4(luminance*red, luminance*green, luminance*blue, 1.0);
-        glow += sin( abs( ((vUv.x * PI) -lightYaw/2.0) ) )* 2.0;
+        newColor = vec3( luminance * red, luminance * green, luminance * blue );
+
+        if ( luminance * green > 1.0 ) {
+             newColor.x += ((luminance * green) -1.0) / 1.5;
+        } 
+        if ( luminance * blue > 1.0 ) {
+             newColor.x += ((luminance * blue) -1.0) / 1.5;
+        } 
+        if ( luminance * red > 1.0 ) {
+             newColor.y += ((luminance * red) -1.0) / 1.5;
+        } 
+        if ( luminance * blue > 1.0 ) {
+             newColor.y += ((luminance * blue) -1.0) / 1.5;
+        } 
+        if ( luminance * green > 1.0 ) {
+             newColor.z += ((luminance * green) -1.0) / 1.5;
+        } 
+        if ( luminance * red > 1.0 ) {
+             newColor.z += ((luminance * red) -1.0) / 1.5;
+        } 
+
+        color = vec4( newColor, 1.0 );
+        glow += sin( abs( ((vUv.x * PI) -lightYaw/2.0) ) )/ 2.0;
 
     } else if ( vUv.y < 0.5 && vUv.y > 0.49 ) {
 

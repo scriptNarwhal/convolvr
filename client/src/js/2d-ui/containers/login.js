@@ -6,7 +6,7 @@ const styles = {
     width: '100%',
     minHeight: '291px',
     minWidth: '252px',
-    maxWidth: '512px',
+    maxWidth: '530px',
     borderRadius: '4px',
     margin: 'auto',
     display: 'block',
@@ -24,13 +24,18 @@ const styles = {
   subtitle: {
     fontSize: '0.5em',
     display: 'inline-block',
-    maxWidth: '400px',
+    maxWidth: '360px',
     background: 'rgba(0,0,0,0.1)',
-    padding: '1em'
+    padding: '0.5em',
+    paddingBottom: '0.5em',
+    paddingLeft: '2em',
+    paddingRight: '2em',
+    marginTop: '1em',
+    marginBottom: '1em'
   },
   form: {
     background: 'rgba(0,0,0,0.1)',
-    maxWidth: '435px',
+    maxWidth: '530px',
     margin: 'auto',
     paddingTop: '1em'
   },
@@ -113,9 +118,12 @@ class Login extends Component {
         <Shell className="login" noBackground={true}>
           <div style={styles.innerLogin}>
             <div style={styles.title}>
-              Login to Convolvr Metaverse
+              Sign in to Convolvr Metaverse
               <span style={styles.subtitle}>
-                Import 3D models, create new worlds & software in VR, with friends, in real time.
+                Build machines, art & software in VR, with friends, in real time.
+              </span>
+              <span style={ Object.assign({}, styles.subtitle, { width: '280px' }) }>
+                Run your own server, contribute or learn more on <a href="https://github.com/Convolvr/convolvr">Github</a>
               </span>
             </div>
             <div style={styles.form}>

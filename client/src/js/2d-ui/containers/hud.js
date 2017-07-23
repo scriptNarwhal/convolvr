@@ -12,7 +12,7 @@ class HUD extends Component {
     return (
         <div className="hud">
             {this.props.fullscreen == false ? (<Button title="Options"
-                    image="/data/images/configure.png"
+                    image="/data/images/configure-h.png"
                     className="options-button"
                     style={{display: this.props.menuOpen ? "none" : "inline-block", backgroundColor: 'transparent'}}
                     onClick={ (evt, title) => {
