@@ -45,7 +45,7 @@ export default class MaterialSystem {
 
           basic = this._initMaterialProp( prop, simpleShading )
 
-          if ( envMapUrl && envMapUrl != "none" && prop.roughnessMap || shading == 'physical' ) {
+          if ( envMapUrl && envMapUrl != "none" && (prop.roughnessMap || prop.metalnessMap) || shading == 'physical' ) {
 
             shading = 'physical'
 
@@ -63,7 +63,7 @@ export default class MaterialSystem {
                 let roughnessCallback = roughnessMap => { 
 
                     !!prop.repeat && this._setTextureRepeat( roughnessMap, prop.repeat )
-                    roughnessMap.anisotropy = anisotropy / 2.0
+                    roughnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
                     mat.roughnessMap = roughnessMap
                     material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
 
@@ -87,7 +87,7 @@ export default class MaterialSystem {
                   metalnessCallback = metalnessMap => {
 
                     !!prop.repeat && this._setTextureRepeat( metalnessMap, prop.repeat )
-                    metalnessMap.anisotropy = anisotropy / 2.0
+                    metalnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
                     mat.metalnessMap = metalnessMap
                     material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
 
@@ -103,7 +103,7 @@ export default class MaterialSystem {
                   metalnessAndRoughnessCallBack = roughnessMap => {
 
                     !!prop.repeat && this._setTextureRepeat( roughnessMap, prop.repeat )
-                    roughnessMap.anisotropy = anisotropy / 2.0
+                    roughnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
                     mat.roughnessMap = roughnessMap
                     assets.loadImage( prop.roughnessMap, textureConfig, metalnessCallback )
 
@@ -117,7 +117,7 @@ export default class MaterialSystem {
 
                   }
 
-                if ( prop.roughnessMap && !!! prop.map ) { //console.log("**** roughnessMap but no map")
+                if ( prop.roughnessMap && !!! prop.map ) { 
                   
                   assets.loadImage( prop.roughnessMap, textureConfig, roughnessCallback )
 
@@ -125,11 +125,11 @@ export default class MaterialSystem {
                 
                   assets.loadImage( prop.roughnessMap, textureConfig, metalnessAndRoughnessCallBack )
 
-                } else if ( prop.map && prop.roughnessMap ) { //console.log("**** roughnessMap AND map")
+                } else if ( prop.map && prop.roughnessMap ) {
                   
                   assets.loadImage( prop.map, textureConfig, mapAndRoughnessCallback )
 
-                } else if ( !!! prop.roughnessMap && prop.map ) { //console.log("**** NO roughnessMap. map, however")
+                } else if ( !!! prop.roughnessMap && prop.map ) {
                   
                   assets.loadImage( prop.map, textureConfig, mapCallback )
 
@@ -141,7 +141,7 @@ export default class MaterialSystem {
 
                   assets.loadImage( prop.map, textureConfig, mapMetalnessAndRoughnessCallback )
 
-                } else { //console.log("**** No metalness. No map.")
+                } else {
                   
                   material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
 
@@ -207,7 +207,7 @@ export default class MaterialSystem {
 
           material = new THREE.MeshBasicMaterial( config )
 
-        } else if ( shading == 'physical' ) { // breaks when specular map hasn't loaded yet
+        } else if ( shading == 'physical' ) {
 
             material = new THREE.MeshPhysicalMaterial( config )
 
@@ -237,7 +237,7 @@ export default class MaterialSystem {
                 if ( shading != 'physical' ) {
                   
                   mat.specular = 0xffffff
-                  mat.shininess = 2.0
+                  mat.shininess = 1.0
 
                 }
               break
@@ -320,6 +320,7 @@ export default class MaterialSystem {
                 prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
                 
                 if ( !simpleShading ) {
+                  
                   prop.metalnessMap = "/data/images/textures/gplaypattern_@2X.png" 
                   prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
 

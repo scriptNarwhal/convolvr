@@ -42,7 +42,7 @@ export default class Convolvr {
 		usePostProcessing = this.enablePostProcessing == 'on'
 		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + (3+this.viewDistance)*600000 )
 
-		let rendererOptions = {antialias: this.aa != 'off' && !usePostProcessing}
+		let rendererOptions = { antialias: this.aa != 'off' && !usePostProcessing }
 
 		if ( usePostProcessing ) {
 
@@ -54,11 +54,10 @@ export default class Convolvr {
 		renderer = new THREE.WebGLRenderer(rendererOptions)
 		postProcessing = new PostProcessing(renderer, scene, camera)
 
-		if ( usePostProcessing ) {
+		if ( usePostProcessing )
 
 			postProcessing.init()
 
-		}
 
 		this.postProcessing = postProcessing
 		this.socket = socket
@@ -107,34 +106,35 @@ export default class Convolvr {
 		this.terrain = this.systems.terrain
 		this.workers = {
 			staticCollisions: this.systems.staticCollisions.worker,
-			dynamicCollisions: this.systems.dynamicCollisions.worker
+			// oimo: this.systems.oimo.worker
 		}
 		camera.add(this.systems.audio.listener)
-		this.socketHandlers = new SocketHandlers(this, socket)
+		this.socketHandlers = new SocketHandlers( this, socket )
 
 		function onResize () {
 
 			world.screenResX = window.devicePixelRatio * window.innerWidth
 			
-			if ( three.world.mode != "stereo" ) {
+			if ( three.world.mode != "stereo" )
 
 				three.renderer.setSize(window.innerWidth, window.innerHeight)
 
-			}
 
-			if ( world.postProcessing.enabled ) {
+			if ( world.postProcessing.enabled )
 
 				world.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
-			}
+			
 
 			three.camera.aspect = innerWidth / innerHeight
 			three.camera.updateProjectionMatrix()
 
-			if ( world.IOTMode ) {
+			if ( world.IOTMode ) 
+
 				animate( world, Date.now(), 0 )
-			}
+			
 
 		}
+
 		window.addEventListener('resize', onResize, true)
 		this.onWindowResize = onResize
 		onResize()	
@@ -143,13 +143,12 @@ export default class Convolvr {
 
 		three.vrDisplay = null
 		
-		navigator.getVRDisplays().then( displays => { console.log("displays", displays)
+		navigator.getVRDisplays().then( displays => { console.log( "displays", displays )
 				
-			if (displays.length > 0) {
+			if ( displays.length > 0 )
 
-				three.vrDisplay = displays[0]
+				three.vrDisplay = displays[ 0 ]
 
-			}
 			
 		})
 
@@ -196,14 +195,17 @@ export default class Convolvr {
 			world = this,
 			rebuildWorld = () => {
 
+				let yaw = config.light.yaw - Math.PI / 2.0
+
 				!!world.skyLight && three.scene.remove( world.skyLight )
 				!!world.ambientLight && three.scene.remove( world.ambientLight )
 
 				world.skyLight = skyLight
 				three.scene.add(skyLight)
-				skyLight.position.set( Math.sin(config.light.yaw)*3000000, Math.sin(config.light.pitch)*3000000, Math.cos(config.light.yaw)*3000000)
+				skyLight.position.set( Math.sin(yaw)*3000000, Math.sin(config.light.pitch)*3000000, Math.cos(yaw)*3000000)
 				skyLight.lookAt(new THREE.Vector3(0,0,0))
 				three.scene.add(this.skybox)
+				this.skybox.rotation.set(0, -Math.PI/2.0, 0)
 				world.skybox.position.set(camera.position.x, 0, camera.position.z)
 
 				world.terrain.bufferVoxels( true, 0 )
@@ -253,7 +255,7 @@ export default class Convolvr {
 		}
 
 		if ( coords ) {
-			console.log("world init")
+			
 			coords = coords.split(".")
 			three.camera.position.fromArray([parseInt(coords[0])*928000, parseInt(coords[1])*807360, parseInt(coords[2])*807360])
 			three.camera.updateMatrix()
@@ -269,11 +271,11 @@ export default class Convolvr {
 
 		var vertex_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
 		vertex_loader.setResponseType('text')
-		vertex_loader.load(vertex_url, vertex_text => {
+		vertex_loader.load( vertex_url, vertex_text => {
 
 			var fragment_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
 			fragment_loader.setResponseType('text')
-			fragment_loader.load(fragment_url, fragment_text => {
+			fragment_loader.load( fragment_url, fragment_text => {
 				onLoad(vertex_text, fragment_text)
 			});
 
@@ -318,39 +320,37 @@ export default class Convolvr {
 		let world = this,
 			octree = this.octree
 
-		this.terrain.voxelList.map(p => {
+		this.terrain.voxelList.map( v => {
 
-			p.entities.map(e => {
+			v.entities.map(e => {
 				
-				if (e.mesh) {
+				if ( e.mesh ) {
 
-					octree.remove(e.mesh)
-					three.scene.remove(e.mesh)
+					octree.remove( e.mesh )
+					three.scene.remove( e.mesh )
 
 				}
 					
 			})
 
-			if (p.mesh) {
+			if ( v.mesh )
 				
-				three.scene.remove(p.mesh)
+				three.scene.remove( v.mesh )
 
-			}
 
 		})
 
 		this.workers.staticCollisions.postMessage(JSON.stringify( { command: "clear", data: {}} ))
-		this.workers.dynamicCollisions.postMessage(JSON.stringify( { command: "clear", data: {}} ))
+		//this.workers.oimo.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		this.terrain.platforms = []
 		this.terrain.voxels = {}
 		this.terrain.voxelList = []
 		this.load( user, name )
 
-		if ( !!! noRedirect ) {
+		if ( !!! noRedirect )
 
 			browserHistory.push("/"+(user||"space")+"/"+name+(!!place ? `/${place}` : ''))
 
-		}
 		
 	}
 
@@ -359,7 +359,7 @@ export default class Convolvr {
 			let voxel = this.terrain.voxels[coords],
 				scene = three.scene
 
-			if (voxel != null && voxel.cleanUp == false) {
+			if ( voxel != null && voxel.cleanUp == false ) {
 
 				voxel.entities.map( ( entity, i )=>{
 
@@ -380,26 +380,25 @@ export default class Convolvr {
 			userHands = !!world.user.toolbox ? world.user.toolbox.hands : [],
 			hands = []
 
-		if (this.sendUpdatePacket == 12) { // send image
+		if ( this.sendUpdatePacket == 12 ) // send image
 
 	    	imageSize = this.sendVideoFrame()
 
-	  	}
-
+	
 	  	this.sendUpdatePacket += 1
 
-	  	if (this.sendUpdatePacket %((3+(2*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0) { // send packets faster / slower for all vr / mobile combinations
+	  	if ( this.sendUpdatePacket %((3+(2*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0 ) { // send packets faster / slower for all vr / mobile combinations
 
-			if (input.trackedControls || input.leapMotion) {
+			if ( input.trackedControls || input.leapMotion ) {
 
 				userHands.forEach( handComponent => {
 
 					let hand = handComponent.mesh
 
-					hands.push( {
+					hands.push({
 						pos: compressFloatArray(hand.position.toArray(), 4), 
 						quat: compressFloatArray(hand.quaternion.toArray(), 8) 
-					} )
+					})
 
 				})
 			}
@@ -418,11 +417,10 @@ export default class Convolvr {
 			
 			})
 
-			if ( this.capturing ) {
+			if ( this.capturing )
 
 				this.webcamImage = ""
 
-			}
 	    }
 	}
 
@@ -438,11 +436,10 @@ export default class Convolvr {
 
 			if ( skyMat ) {
 
-				if (skyMat.uniforms) {
+				if ( skyMat.uniforms )
 
 					skyMat.uniforms.time.value += delta
 
-				}
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
 				//this.skyLight.position.set(camera.position.x, camera.position.y+180000, camera.position.z+500000)
 			}
@@ -460,21 +457,21 @@ export default class Convolvr {
 
 		let imageSize = [0, 0]
 
-		if (this.capturing) {
+		if ( this.capturing ) {
 
-		 let v = document.getElementById('webcam'),
-				 canvas = document.getElementById('webcam-canvas'),
-				 context = canvas.getContext('2d'),
-				 cw = Math.floor(v.videoWidth),
-				 ch = Math.floor(v.videoHeight),
+			let v = document.getElementById('webcam'),
+					canvas = document.getElementById('webcam-canvas'),
+					context = canvas.getContext('2d'),
+					cw = Math.floor(v.videoWidth),
+					ch = Math.floor(v.videoHeight)
 
-		 imageSize = [cw, ch]
-		 canvas.width = 320
-		 canvas.height = 240
-		 context.drawImage(v, 0, 0, 320, 240);
-		 this.webcamImage = canvas.toDataURL("image/jpg", 0.6)
+			imageSize = [cw, ch]
+			canvas.width = 320
+			canvas.height = 240
+			context.drawImage(v, 0, 0, 320, 240);
+			this.webcamImage = canvas.toDataURL("image/jpg", 0.6)
 
-	 }
+	 	}
 
 	 this.sendUpdatePacket = 0
 	 return imageSize

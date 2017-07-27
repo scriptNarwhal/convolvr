@@ -274,10 +274,10 @@ export default class TerrainSystem {
                      command: "add voxels",
                      data: physicsVoxels
                 }))
-                systems.dynamicCollisions.worker.postMessage(JSON.stringify({
-                    command: "add voxels",
-                    data: physicsVoxels
-                }))
+                // systems.oimo.worker.postMessage(JSON.stringify({
+                //     command: "add voxels",
+                //     data: physicsVoxels
+                // }))
 
                 if ( world.IOTMode ) 
 
@@ -295,7 +295,7 @@ export default class TerrainSystem {
 
         let removeChunkData = JSON.stringify(removePhysicsChunks)
         this.StaticCollisions.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
-        this.DynamicCollisions.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
+        //this.Oimo.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
         
       }
 

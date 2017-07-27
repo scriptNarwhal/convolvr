@@ -223,7 +223,7 @@ export default class Entity {
         })
 
         systems.staticCollisions.worker.postMessage( message )
-        systems.dynamicCollisions.worker.postMessage( message )
+        //systems.oimo.worker.postMessage( message )
 
       } else if ( workerUpdate == "update") {
         
@@ -237,7 +237,7 @@ export default class Entity {
         })
 
         systems.staticCollisions.worker.postMessage( message )
-        systems.dynamicCollisions.worker.postMessage( message )
+        //systems.oimo.worker.postMessage( message )
 
       }
 

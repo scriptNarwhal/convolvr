@@ -67,7 +67,7 @@ export default class ToolSystem {
                         },
                         material: {
                             name: "metal",
-                            color: 0x808080
+                            color: 0x404050
                         },
                     }),
                     components: []
