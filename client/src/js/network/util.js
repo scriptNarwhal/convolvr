@@ -1,15 +1,16 @@
+// @flow
 /* bandwidth saving utility functions for multiplayer telemetry */
 
-export let compressFloat = ( float, n ) => {
+export let compressFloat = ( float: number, n: number ) => {
 
     return parseFloat( (float).toFixed(n) )
 
 }
 
-export let compressFloatArray = ( floats, n ) => {
+export let compressFloatArray = ( floats: Array<number>, n: number ) => {
 
-    let x = 0,
-        out = []
+    let x:   number        = 0,
+        out: Array<number> = []
 
     while ( x < floats.length ) {
 
@@ -22,7 +23,7 @@ export let compressFloatArray = ( floats, n ) => {
 
 }
 
-export let compressVector3 = ( vec, n ) => {
+export let compressVector3 = ( vec: Object, n: number ) => {
 
     return Object.assign({}, {
         x: parseFloat( vec.x.toFixed( n ) ),
@@ -32,7 +33,7 @@ export let compressVector3 = ( vec, n ) => {
 
 }
 
-export let compressVector4 = ( vec, n ) => {
+export let compressVector4 = ( vec: Object, n: number ) => {
 
     return Object.assign({}, {
         w: parseFloat( vec.w.toFixed( n ) ),

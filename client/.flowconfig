@@ -1,0 +1,13 @@
+[ignore]
+.*/node_modules/protobufjs.*
+.*/node_modules/react-tap-event-plugin*
+<PROJECT_ROOT>/client/libdefs.js
+
+[include]
+
+[libs]
+./libdefs.js
+[options]
+all=false
+sharedmemory.hash_table_pow=21
+[lints]
