@@ -5,6 +5,7 @@ import Shell from '../components/shell'
 import Button from '../components/button'
 import { vrAnimate } from '../../world/render'
 import { detectWorldDetailsFromURL } from '../../redux/reducers/world'
+import { GRID_SIZE } from '../../config'
 
 class App extends Component {
 
@@ -227,6 +228,11 @@ class App extends Component {
         }
 
       }
+
+    } else if ( newWorld.length >= 4 ) {
+
+      console.warn("detected world coords ", newWorld[3])
+      three.camera.position.set( newWorld[3][0] * GRID_SIZE[0], newWorld[3][1] * GRID_SIZE[1], newWorld[3][2] * GRID_SIZE[2] )
 
     }
 

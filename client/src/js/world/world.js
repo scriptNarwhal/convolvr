@@ -163,7 +163,8 @@ export default class Convolvr {
 			camera = three.camera,
 			skyMaterial = new THREE.MeshBasicMaterial( {color: 0x303030} ),
 			skyTexture = null,
-			skybox = this.skybox
+			skybox = this.skybox,
+			rotateSky = false
 
 		
 		this.config = config; console.log(config)
@@ -174,6 +175,7 @@ export default class Convolvr {
 		if ( !!config && !!config.sky.photosphere ) { console.log("init world: photosphere: ", config.sky.photosphere)
 
 			this.systems.assets.envMaps.default = '/data/user/'+config.sky.photosphere
+			rotateSky = true
 
 		} else {
 
@@ -205,7 +207,7 @@ export default class Convolvr {
 				skyLight.position.set( Math.sin(yaw)*3000000, Math.sin(config.light.pitch)*3000000, Math.cos(yaw)*3000000)
 				skyLight.lookAt(new THREE.Vector3(0,0,0))
 				three.scene.add(this.skybox)
-				this.skybox.rotation.set(0, -Math.PI/2.0, 0)
+				//rotateSky && this.skybox.rotation.set(0, Math.PI * 1, 0)
 				world.skybox.position.set(camera.position.x, 0, camera.position.z)
 
 				world.terrain.bufferVoxels( true, 0 )
@@ -239,8 +241,8 @@ export default class Convolvr {
 
 				skybox.material = skyMaterial
 
-			}, error => {
-				console.error("Error Loading Shaders: ", error)
+			}, progress => {
+				console.log("Loading Shaders: ", progress)
 			})	
 
 		} else {

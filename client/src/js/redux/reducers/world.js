@@ -28,9 +28,10 @@ export let detectWorldDetailsFromURL = () => {
     let url = window.location.pathname,
         params = url.split("/"),
         slashes = params.length -1,
+        coords = [0,0,0],
         nonWorlds = ["login", "network", "chat", "files", "settings", "worlds", "new-world"],
         isWorld = true,
-        userAndWorld = [ "space", "overworld" ]
+        worldDetails = [ "space", "overworld" ]
 
     nonWorlds.map( nWorld => {
         if ( url.indexOf(`/${nWorld}`) == 0 ) {
@@ -38,12 +39,16 @@ export let detectWorldDetailsFromURL = () => {
         }
     })
     
+    if (url.indexOf("/at") > -1 ) 
+
+        coords = url.split("/at")[1].split(".").map( v => parseInt(v) )
+
     if (isWorld) {
         if (slashes >= 2) {
-            userAndWorld = [params[1], params[2], isWorld]
+            worldDetails = [params[1], params[2], isWorld, coords]
         }
     }
-    return userAndWorld
+    return worldDetails
 
 }
 

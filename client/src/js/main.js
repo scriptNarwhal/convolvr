@@ -1,3 +1,4 @@
+// @flow
 console.log('Convolvr Client Initializing')
 // React
 import ReactDOM from 'react-dom'
@@ -31,24 +32,28 @@ import { events } from './network/socket'
 import UserInput from './input/user-input'
 import User from './world/user'
 import Toolbox from './tools/toolbox'
+import Entity from './entity'
 
-let socket = events,
-    token = localStorage.getItem("token"),
-		userInput,
-		user = new User(),
-	  loadingWorld = null,
-	  avatar = null,
-    toolMenu = null,
-    helpScreen = null, // built in ui entities
-    chatScreen = null,
-    httpClient = null
+let socket =      events,
+    token:        string = "",
+		userInput:    UserInput,
+		user:         User = new User(),
+	  loadingWorld: Convolvr = null,
+	  avatar:       Entity = null,
+    toolMenu:     Entity = null,
+    helpScreen:   Entity = null, // built in ui entities
+    chatScreen:   Entity = null,
+    httpClient:   Entity = null
 
+token = localStorage.getItem("token") || ""
 clearOldData()
 userInput = new UserInput()
 
-loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
-  let systems = world.systems
+loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) => {
+
+  let systems = world.systems,
+      three = world.three
 
   avatar = systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) // entity id can be passed into config object
   avatar.init( three.scene )
@@ -58,7 +63,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   toolMenu = systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
   user.hud = toolMenu
-  toolMenu.init( three.scene, {}, menu => { 
+  toolMenu.init( three.scene, {}, (menu: Entity) => { 
     console.log("menu init ", menu)
     menu.componentsByProp.toolUI[0].state.toolUI.updatePosition()
   
@@ -66,7 +71,10 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
   
   userInput.init( world, world.camera, user )
   userInput.rotationVector = { x: 0, y: 4.5, z: 0 }
-  three.camera.position.set( -220000+Math.random()*60000, 100000, -220000+Math.random()*60000 )
+
+  // if ( world.user == "space" && world.name == "overworld" ) 
+    
+  //   three.camera.position.set( -220000+Math.random()*60000, 100000, -220000+Math.random()*60000 )
 
   chatScreen = systems.assets.makeEntity( "chat-screen", true ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( three.scene )
@@ -93,7 +101,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
       "- Device orientation controls the camera",
       "- Swiping & dragging move you"
     ]
-  helpScreen.init(three.scene, {}, help => { 
+  helpScreen.init(three.scene, {}, (help: Entity) => { 
     _initHTTPClientTest( world, help ) 
     _initVideoChat( world, help ) 
   })
@@ -130,7 +138,7 @@ ReactDOM.render(
   document.getElementsByTagName('main')[0]
 )
 
-function _initVideoChat ( world, helpScreen ) {
+function _initVideoChat ( world, helpScreen: Entity ) {
 
   let videoChat = world.systems.assets.makeEntity( "video-chat", true ) // simple example of displaying GET response from server
   // videoChat.components[0].props.particles = {}
@@ -139,7 +147,7 @@ function _initVideoChat ( world, helpScreen ) {
 
 }
 
-function _initHTTPClientTest ( world, helpScreen ) {
+function _initHTTPClientTest ( world, helpScreen: Entity ) {
 
   httpClient = world.systems.assets.makeEntity( "help-screen", true ) // simple example of displaying GET response from server
     let compProps = httpClient.components[0].props

@@ -24,10 +24,12 @@ export default class MaterialSystem {
             specular = !!prop.specularMap ? prop.specularMap.replace(path, '') : "",
             envMapUrl = !! prop.envMap ? prop.envMap : assets.envMaps.default,
             reflection = !!envMapUrl ? envMapUrl.replace(path, '') : "",
-            materialCode = `${prop.name}:${prop.color}:${diffuse}:${specular}:${reflection}`,
+            materialCode = '',
             shading = !!prop.shading ? prop.shading : 'default',
             simpleShading = this.world.lighting != 'high'
             
+        basic = this._initMaterialProp( prop, simpleShading )
+        materialCode = `${prop.repeat ? prop.repeat.join(",") : ""}:${prop.name}:${prop.color}:${diffuse}:${specular}:${reflection}`
 
         if ( assets.materials[ materialCode ] == null ) {
 
@@ -43,7 +45,7 @@ export default class MaterialSystem {
 
           }
 
-          basic = this._initMaterialProp( prop, simpleShading )
+         
 
           if ( envMapUrl && envMapUrl != "none" && (prop.roughnessMap || prop.metalnessMap) || shading == 'physical' ) {
 
@@ -265,7 +267,7 @@ export default class MaterialSystem {
 
                 }
                 mat.transparent = true
-                mat.opacity = 0.2
+                mat.opacity = 0.5
               break
               case "plastic":
                 if ( shading == 'physical' ) {
@@ -303,11 +305,11 @@ export default class MaterialSystem {
 
               //prop.metalnessMap = "/data/images/textures/tiles.png" 
               prop.roughnessMap = '/data/images/textures/tiles.png'
-              prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
+              prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
 
             } else {
 
-              prop.map = '/data/images/textures/tiles-light.png' // /data/images/textures/gplaypattern_@2X.png'
+              prop.map = '/data/images/textures/tiles-light.png' // /data/images/textures/gplaypattern_@2X-2.png'
               prop.specularMap = '/data/images/textures/tiles.png'
               prop.envMap = 'none'
 
@@ -321,8 +323,8 @@ export default class MaterialSystem {
                 
                 if ( !simpleShading ) {
                   
-                  prop.metalnessMap = "/data/images/textures/gplaypattern_@2X.png" 
-                  prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X.png' : prop.map
+                  prop.metalnessMap = "/data/images/textures/gplaypattern_@2X-2.png" 
+                  prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
 
                 }
 
@@ -333,14 +335,14 @@ export default class MaterialSystem {
 
               if ( !simpleShading ) {
 
-                  prop.roughnessMap = '/data/images/textures/shattered_@2X.png'
+                  prop.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
 
               }
 
             break
             case "plastic":
                 prop.repeat = [ 'wrapping', 2, 2 ]
-                prop.map = '/data/images/textures/gplaypattern_@2X.png'
+                prop.map = '/data/images/textures/gplaypattern_@2X-2.png'
 
                 if ( !simpleShading ) {
 
