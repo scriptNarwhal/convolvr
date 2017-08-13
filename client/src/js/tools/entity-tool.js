@@ -73,7 +73,7 @@ export default class EntityTool extends Tool  {
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
           user = this.world.user,
-          entity =  params.entity ? params.entity : assetSystem.makeEntity( this.options.entityType ),
+          entity =  params.entity ? params.entity : assetSystem.makeEntity( this.options.entityType, null, {}, telemetry.voxel ),
           tooManyComponents = !!selected && selected.components.length >= 48,
           pointingAtTerrain = !!selected && selected.componentsByProp.terrain
   

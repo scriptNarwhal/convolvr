@@ -249,7 +249,7 @@ export default class TerrainSystem {
                     cameraKey = Math.floor( cam.position.x / GRID_SIZE[0] )+".0."+Math.floor( cam.position.z / GRID_SIZE[2] ),
                     voxelKey = c.x+".0."+c.z, // debugging this.. 
                     voxelData = { name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities },
-                    v = new Voxel( voxelData, [c.x, 0, c.z] ),
+                    v = new Voxel( voxelData, [c.x, 0, c.z], this.world ),
                     initialLoad = terrain.world.initialLoad
 
                 //console.log(`INIT VOXEL ${voxelKey}`)

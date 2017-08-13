@@ -13,7 +13,7 @@ import FileTool from './file-tool'
 import SocialTool from './social-tool'
 import DebugTool from './debug-tool.js'
 import CustomTool from './custom-tool'
-
+import { GRID_SIZE } from '../config'
 
 export default class Toolbox {
     constructor ( user, world ) {
@@ -122,6 +122,7 @@ export default class Toolbox {
 
       let input = this.world.userInput,
           position = camera.position.toArray(),
+          voxel = [ position[0], 0, position[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) ),
           quaternion = camera.quaternion.toArray(),
           user = this.world.user,
           cursors = user.avatar.componentsByProp.cursor,
@@ -156,6 +157,7 @@ export default class Toolbox {
       }
 
       return {
+        voxel,
         position,
         quaternion,
         cursor,
@@ -171,7 +173,7 @@ export default class Toolbox {
           tool = this.tools[ toolIndex ],
           camera = this.world.camera,
           telemetry = this.initActionTelemetry(camera, true, hand),
-          { position, quaternion } = telemetry,
+          { position, quaternion, voxel } = telemetry,
           cursorEntity = !!telemetry.cursor ? telemetry.cursor.state.cursor.entity : false,
           cursorState = !!telemetry.cursor ? telemetry.cursor.state : false,
           componentsByProp =  !!cursorEntity ? cursorEntity.componentsByProp : {},

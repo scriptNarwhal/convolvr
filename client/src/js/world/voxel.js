@@ -1,26 +1,29 @@
 //@flow
 
 import Entity from '../entity'
+import Convolvr from './world'
 import { THREE } from 'three'
 
 export default class Voxel {
 
     data: Object
+    world: Convolvr
     entities: Array<Entity>
     meshes: Array<THREE.Mesh>
     coords: Array<number>
+    cleanUp: boolean
 
-    constructor ( data: Object, cell: Array<number> ) {
+    constructor ( data: Object, cell: Array<number>, world: Convolvr ) {
 
         let visible = data.visible,
-            voxelGeom = null,
-            world = three.world,
-            scene = three.scene,
+            scene = world.three.scene,
             altitude = 0
 
+        this.coords = cell
         this.data = data
         this.entities = []  
         this.meshes = []
+        this.world = world
         
         altitude = data.altitude || 0
 
@@ -34,21 +37,21 @@ export default class Voxel {
 
         }
 
-        this.cell = cell
-        this.data = data
         this.cleanUp = false
 
     }
 
     preLoadEntities () {
-        
+
+        let scene: Object = this.world.three.scene
+
         !!this.data.entities && this.data.entities.map( ( e, i ) => {
             
-            let entity = new Entity( e.id, this.cell, e.components, e.position, e.quaternion )
+            let entity: Entity = new Entity( e.id, this.coords, e.components, e.position, e.quaternion )
 
             if ( i < 2 ) {
             
-                entity.init( three.scene )
+                entity.init( scene )
 
                 if ( i == 0 )
 

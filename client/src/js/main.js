@@ -34,16 +34,16 @@ import User from './world/user'
 import Toolbox from './tools/toolbox'
 import Entity from './entity'
 
-let socket =      events,
-    token:        string = "",
+let socket:       Object   = events,
+    token:        string   = "",
 		userInput:    UserInput,
-		user:         User = new User(),
+		user:         User     = new User(),
 	  loadingWorld: Convolvr = null,
-	  avatar:       Entity = null,
-    toolMenu:     Entity = null,
-    helpScreen:   Entity = null, // built in ui entities
-    chatScreen:   Entity = null,
-    httpClient:   Entity = null
+	  avatar:       Entity   = null, 
+    toolMenu:     Entity   = null, // built in ui entities
+    helpScreen:   Entity   = null, 
+    chatScreen:   Entity   = null,
+    httpClient:   Entity   = null
 
 token = localStorage.getItem("token") || ""
 clearOldData()
@@ -70,9 +70,13 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
   userInput.init( world, world.camera, user )
   userInput.rotationVector = { x: 0, y: 4.5, z: 0 }
 
-  // if ( world.user == "space" && world.name == "overworld" ) 
+  if ( world.user == "convolvr" && world.name == "overworld" ) {
+
+    let pos = three.camera.position
+    pos.set( pos.x -60000+Math.random()*30000, pos.y + 100000, pos.z -60000+Math.random()*30000 )
     
-  //   three.camera.position.set( -220000+Math.random()*60000, 100000, -220000+Math.random()*60000 )
+  }
+    
 
   chatScreen = systems.assets.makeEntity( "chat-screen", true ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( three.scene )
