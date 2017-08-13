@@ -1,12 +1,12 @@
 export default class BrowserSystem {
 
-    constructor ( world ) {
+    constructor ( world: Convolvr ) {
 
         this.world = world
 
     }
 
-    init ( component ) { 
+    init ( component: Component ) { 
         
         let prop = component.props.browser
 

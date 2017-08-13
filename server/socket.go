@@ -40,7 +40,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 			if len(action.Entity.Components) == 0 {
 				log.Println("Can't save entity with 0 components")
 			} else {
-				entity = *NewEntity(-1, "", action.World, action.Entity.Components, action.Position, action.Quaternion, action.Entity.BoundingRadius, nil)
+				entity = *NewEntity(-1, "", action.World, action.Entity.Voxel, action.Entity.Components, action.Position, action.Quaternion, action.Entity.BoundingRadius, nil)
 				saveErr := voxelEntities.Save(&entity)
 				if saveErr != nil {
 					log.Println(saveErr)

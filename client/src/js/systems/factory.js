@@ -1,14 +1,19 @@
+//@flow
+import Convolvr from '../world/world'
+import Component from '../component'
 import Entity from '../entity'
 
 export default class FactorySystem {
 
-    constructor ( world ) {
+    world: Convolvr
+
+    constructor ( world: Convolvr ) {
 
         this.world = world
 
     }
   
-    init ( component ) { //console.log("factory component init ", component) 
+    init ( component: Component ) { //console.log("factory component init ", component) 
         
         let prop = component.props.factory
         
@@ -34,91 +39,100 @@ export default class FactorySystem {
 
     }
 
-    generate ( component ) {
+    generate ( component: Component ) {
 
         let prop = component.props.factory,
             position = component.entity.mesh.position,
-            entityPos = !!prop.anchorOutput ? [0, 0, 0] : position.toArray(),
+            voxel: Array<number> = component.entity.voxel,
+            entityPos: Array<number> = !!prop.anchorOutput ? [0, 0, 0] : position.toArray(),
             miniature = !!prop.miniature,
             type = prop.type,
             preset = prop.preset,
             propName = prop.propName,
             data = prop.data,
-            quat = data.quaternion,
+            quat: Array<number> = data.quaternion,
             components = data.components,
             created = null
             
         if ( type == 'entity' ) {
  
-            created = this._generateEntity( components, entityPos, quat, preset )
+            created = this._generateEntity( components, voxel, entityPos, quat, preset )
 
         } else if (type == 'component') {
 
-            created = this._generateComponent( data, entityPos, quat, preset )
+            created = this._generateComponent( data, voxel, entityPos, quat, preset )
 
         } else if ( type == 'prop' ) {
 
             switch (propName) {
 
                 case "geometry":
-                    created = this._generateGeometry( data, entityPos, quat )
+                    created = this._generateGeometry( data, voxel, entityPos, quat )
                 break
                 case "material":
-                    created = this._generateMaterial( data, entityPos, quat )
+                    created = this._generateMaterial( data, voxel, entityPos, quat )
                 break
                 case "assets":
-                    created = this._generateAsset( data, entityPos, quat )
+                    created = this._generateAsset( data, voxel, entityPos, quat )
                 break
                 case "systems":
-                    created = this._generateSystem( data, entityPos, quat )
+                    created = this._generateSystem( data, voxel, entityPos, quat )
                 break
 
             }
 
         } else if ( type == "world" ) {
 
-            created = this._generateWorld( data, entityPos, quat )
+            created = this._generateWorld( data, voxel, entityPos, quat )
 
         } else if ( type == "place" ) {
 
-            created = this._generatePlace( data, entityPos, quat )
+            created = this._generatePlace( data, voxel, entityPos, quat )
 
         } else if ( type == "file" ) {
 
-            created = this._generateFile( data, entityPos, quat )
+            created = this._generateFile( data, voxel, entityPos, quat )
 
         } else if ( type == "directory" ) {
 
-            created = this._generateDirectory( data, entityPos, quat )
+            created = this._generateDirectory( data, voxel, entityPos, quat )
 
         }
 
-        if ( !!prop.anchorOutput ) {
+        if ( created != null && created.mesh != null ) {
 
-            created.init(component.mesh)
+            if ( !!prop.anchorOutput ) {
+
+                created.init(component.mesh)
+
+            } else {
+
+                created.init(window.three.scene)
+
+            }
+
+            created.mesh.translateZ(-10000)
+            created.update(created.mesh.position.toArray())
 
         } else {
 
-            created.init(window.three.scene)
+            console.error( "error generating entity", created, prop )
 
         }
 
-        created.mesh.translateZ(-10000)
-        created.update(created.mesh.position.toArray())
-
     }
 
-    _generateEntity ( components, position, quaternion, preset ) { 
+    _generateEntity ( components: Array<Component>, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) { 
 
         if ( !! components && components.length > 0 ) { // debugging this..
             
             components[0].props.miniature = { }
             components[0].props.toolUI = {
-            configureTool: {
-                tool: 0,
-                preset
+                configureTool: {
+                    tool: 0,
+                    preset
+                }
             }
-        }
         
         }
 
@@ -126,7 +140,7 @@ export default class FactorySystem {
 
     }
 
-    _generateComponent ( data, position, quaternion, preset ) {
+    _generateComponent ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         data.props.miniature = { }
         data.props.toolUI = {
@@ -138,9 +152,9 @@ export default class FactorySystem {
         return new Entity( -1, [ data ], position, quaternion )
     }
 
-    _generateGeometry ( data, position, quaternion ) {
+    _generateGeometry ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, [{ 
+        return new Entity(-1, voxel, [{ 
                 props: Object.assign({}, {geometry: data}, {
                     mixin: true,
                     miniature: {},
@@ -160,9 +174,9 @@ export default class FactorySystem {
 
     }
 
-    _generateSystem ( data, position, quaternion ) {
+    _generateSystem ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, [{
+        return new Entity(-1, voxel, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     material: {
@@ -185,9 +199,9 @@ export default class FactorySystem {
 
     }
 
-    _generateMaterial ( data, position, quaternion ) {
+    _generateMaterial ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, [{
+        return new Entity(-1, voxel, [{
                 props: Object.assign({}, {material: data}, {
                     mixin: true,
                     geometry: {
@@ -206,9 +220,9 @@ export default class FactorySystem {
 
     }
 
-    _generateAsset ( data, position, quaternion ) {
+    _generateAsset ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, [{
+        return new Entity(-1, voxel, [{
                 props: Object.assign({}, {material: data}, {
                     mixin: true,
                     assets: {
@@ -229,9 +243,9 @@ export default class FactorySystem {
 
     }
 
-    _generateWorld ( data, position, quaternion ) {
+    _generateWorld ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, [{
+        return new Entity(-1, voxel, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     portal: {
@@ -252,9 +266,9 @@ export default class FactorySystem {
 
     }
 
-    _generatePlace ( data, position, quaternion ) {
+    _generatePlace ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-         return new Entity(-1, [{
+         return new Entity(-1, voxel, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     portal: {
@@ -276,9 +290,9 @@ export default class FactorySystem {
 
     }
 
-    _generateFile ( data, position, quaternion ) {
+    _generateFile ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, [{
+        return new Entity(-1, voxel, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     text: {
@@ -306,9 +320,9 @@ export default class FactorySystem {
 
     }
 
-    _generateDirectory ( data, position, quaternion ) {
+    _generateDirectory ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, [{
+        return new Entity(-1, voxel, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     text: {

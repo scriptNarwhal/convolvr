@@ -1,12 +1,23 @@
+//@flow
+import Convolvr from '../world/world'
+import Component from '../component'
+import { THREE } from 'three'
+import { dat } from 'datguivr'
+
 export default class DatGUIVRPluginSystem {
 
-    constructor ( world ) {
+    world: Convolvr
+
+    constructor ( world: Convolvr ) {
+
         this.world = world
+        
     }
 
-    init ( component ) { 
+    init ( component: Component ) { 
         
         let prop = component.props.datgui,
+            path = "",
             gui = null,
             state = null,
             property = [],
@@ -20,7 +31,7 @@ export default class DatGUIVRPluginSystem {
         if ( prop.gui ) {
 
             gui = dat.GUIVR.create( prop.gui.name )
-            three.scene.add( gui )
+            this.world.three.scene.add( gui )
 
         } else if ( component.parent && component.parent.props.datgui && component.parent.props.datgui.gui ) {
 
@@ -40,7 +51,6 @@ export default class DatGUIVRPluginSystem {
 
                 if ( controllerData.value.statePath ) {
 
-                    
                     path = controllerData.value.statePath
                     property = path.splice( path.length-1, 1 )
                     state = this.getByPath( component.state, path )
@@ -81,9 +91,9 @@ export default class DatGUIVRPluginSystem {
         }
     }
 
-    getByPath ( obj, path ) { // based off of https://stackoverflow.com/a/20424385/2961114
+    getByPath ( obj: Object, path: string ) { // based off of https://stackoverflow.com/a/20424385/2961114
 
-        let parts = path.split('.'),
+        let parts: Array<string> = path.split('.'),
             o = obj
 
         if ( parts.length > 1 ) {

@@ -16,32 +16,11 @@ import {
     PLACE_DELETE_DONE,
     PLACE_DELETE_FAI
 } from '../constants/action-types'
-
-let detectPlaceDetailsFromURL = () => {
-    let url = window.location.pathname,
-        params = url.split("/"),
-        slashes = params.length -1,
-        nonPlaces = ["login", "network", "chat", "files", "settings", "places", "new-place"],
-        isPlace = true,
-        userAndPlace = ["space", "overworld"]
-
-    nonPlaces.map(nPlace => {
-        if (url.indexOf(`/${nPlace}`) == 0) {
-            isPlace = false
-        }
-    })
-    //console.log("detect place details from URL ", isPlace, slashes)
-    if (isPlace) {
-        if (slashes >= 2) {
-            userAndPlace = [params[1], params[2]]
-        }
-    }
-    return userAndPlace
-}
+import { detectWorldDetailsFromURL } from '../../config'
 
 module.exports = function places (state = {
-    current: detectPlaceDetailsFromURL()[1],
-    placeUser: detectPlaceDetailsFromURL()[0],
+    current: detectWorldDetailsFromURL()[1],
+    placeUser: detectWorldDetailsFromURL()[0],
     all: [],
     userPlaces: [],
     updated: false,

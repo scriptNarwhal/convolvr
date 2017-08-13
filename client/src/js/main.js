@@ -60,13 +60,11 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
   user.useAvatar( avatar )
   user.toolbox = new Toolbox( user, world )
   world.user = user
-
+  
   toolMenu = systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
   user.hud = toolMenu
   toolMenu.init( three.scene, {}, (menu: Entity) => { 
-    console.log("menu init ", menu)
     menu.componentsByProp.toolUI[0].state.toolUI.updatePosition()
-  
   }) 
   
   userInput.init( world, world.camera, user )
@@ -102,7 +100,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       "- Swiping & dragging move you"
     ]
   helpScreen.init(three.scene, {}, (help: Entity) => { 
-    _initHTTPClientTest( world, help ) 
+    //_initHTTPClientTest( world, help ) 
     _initVideoChat( world, help ) 
   })
   helpScreen.update( [ -80000, 50000, 0 ] )

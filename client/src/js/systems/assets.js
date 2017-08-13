@@ -22,7 +22,7 @@ import car from '../assets/entities/vehicles/car'
 
 export default class AssetSystem {
 
-    constructor ( world ) {
+    constructor ( world: Convolvr ) {
 
         this.world = world
         this.geometries = {}
@@ -44,16 +44,17 @@ export default class AssetSystem {
         this.worlds = []
         this.props = {
             geometry: [
-                { shape: 'node', size: [1, 1, 1] },
-                { shape: 'box', size: [28000, 28000, 28000] },
-                { shape: 'plane', size: [28000, 10000, 28000] },
-                { shape: 'octahedron', size: [28000, 10000, 10000] },
-                { shape: 'sphere', size: [28000, 10000, 10000] },
-                { shape: 'cylinder', size: [28000, 28000, 10000] },
-                { shape: 'torus', size: [28000, 28000, 10000] },
-                { shape: 'hexagon', size: [28000, 28000, 10000] },
-                { shape: 'open-box', size: [28000, 28000, 10000] },
-                { shape: 'frustum', size: [8000, 8000, 8000] }
+                { shape: 'node', size:          [1, 1, 1] },
+                { shape: 'box', size:           [28000, 28000, 28000] },
+                { shape: 'plane', size:         [28000, 10000, 28000] },
+                { shape: 'octahedron', size:    [28000, 10000, 10000] },
+                { shape: 'sphere', size:        [28000, 10000, 10000] },
+                { shape: 'cylinder', size:      [28000, 28000, 10000] },
+                { shape: 'torus', size:         [28000, 28000, 10000] },
+                { shape: 'hexagon', size:       [28000, 28000, 10000] },
+                { shape: 'open-box', size:      [28000, 28000, 10000] },
+                { shape: 'open-clyinder', size: [22000, 22000, 22000] },
+                { shape: 'frustum', size:       [8000, 8000, 8000] }
             ],
             material: [
                 { name: "basic", color: 0xffffff },
@@ -175,14 +176,14 @@ export default class AssetSystem {
             configCode = !!config.repeat ? `:repeat:${config.repeat.join('.')}` : '',
             textureCode = `${asset}:${configCode}`
 
-        if ( this.textures[textureCode] == null ) {
+        if ( this.textures[ textureCode ] == null ) {
 
-            texture = this.textureLoader.load(asset, (texture)=>{ callback(texture)})
-            this.textures[textureCode] = texture
+            texture = this.textureLoader.load(asset, texture => { callback(texture) })
+            this.textures[ textureCode ] = texture
 
         } else {
 
-            texture = this.textures[textureCode]
+            texture = this.textures[ textureCode ]
 
         }
 
@@ -192,16 +193,18 @@ export default class AssetSystem {
 
     loadSound ( asset, sound, callback ) {
 
-        if (this.audioBuffers[asset] == null) {
+        if (this.audioBuffers[ asset ] == null) {
 
-           this.audioLoader.load(asset, function(buffer) {
-                sound.setBuffer(buffer)
+           this.audioLoader.load( asset, buffer => {
+
+                sound.setBuffer( buffer )
                 callback()
+
            })
 
         } else {
 
-            sound.setBuffer( this.audioBuffers[asset] )
+            sound.setBuffer( this.audioBuffers[ asset ] )
             callback()
 
         }
@@ -258,7 +261,7 @@ export default class AssetSystem {
 
     }
 
-    makeEntity ( name, init, config ) {
+    makeEntity ( name,  init, config, voxel = [ 0, 0, 0 ] ) {
         
         let toMake = this.entitiesByName[name],
             ent = null //Object.assign({}, this.entitiesByName[name])
@@ -270,12 +273,13 @@ export default class AssetSystem {
         } else {
 
             ent = toMake
+            ent.voxel = voxel
 
         }
 
         if ( !!init ) {
 
-            return new Entity( ent.id, ent.components, ent.position, ent.quaternion)
+            return new Entity( ent.id, voxel, ent.components, ent.position, ent.quaternion)
         
         } else {
 

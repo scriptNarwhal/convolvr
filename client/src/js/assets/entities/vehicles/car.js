@@ -4,7 +4,7 @@ import Component from '../../../component'
 
 let cursorAxis = new THREE.Vector3( 1, 0, 0 )
 
-let car = ( assetSystem, config ) => {  // implement
+let car = ( assetSystem, config, voxel ) => {  // implement
 
         var mesh = null,
             entity = null,

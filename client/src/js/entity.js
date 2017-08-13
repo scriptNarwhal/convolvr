@@ -1,8 +1,9 @@
-import Component from './component.js'
+import Component from './component'
+import { GRID_SIZE } from './config'
 
 export default class Entity {
 
-  constructor ( id, components, position, quaternion ) {
+  constructor ( id, voxel, components, position, quaternion ) {
 
       let world = window.three.world
 
@@ -22,10 +23,10 @@ export default class Entity {
       this.compsByFaceIndex = [] // possibly deprecated
       this.allComponents = []
       this.combinedComponents = []
-      this.voxel = this.position ? [ Math.floor(this.position[0] / 928000), 0, Math.floor(this.position[2] / 807360) ] : [ 0, 0, 0 ] // vertical axis disabled for now
+      this.voxel = voxel
       this.lastFace = 0
       this._compPos = new THREE.Vector3()
-
+      this.world = world
   }
 
   update ( position, quaternion = false, components, componentIndex, props, state ) {
@@ -77,7 +78,7 @@ export default class Entity {
 
   init ( parent, config, callback ) {
 
-    var mesh = new THREE.Object3D(),
+    let mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
         three = window.three,
         world = three.world,
@@ -292,7 +293,7 @@ export default class Entity {
   getVoxel () {
 
     let position = this.mesh.position,
-        coords = [Math.floor( position.z / 928000 ), 0, Math.floor( position.z / 807360 )]
+        coords = [Math.floor( position.x / GRID_SIZE[ 0 ] ), 0, Math.floor( position.z / GRID_SIZE[ 2 ] )]
 
     this.voxel = coords
 
@@ -302,7 +303,7 @@ export default class Entity {
 
   addToVoxel ( coords, mesh ) {
 
-    let addTo = this.getVoxelForUpdate( coords.join(".") )
+    let addTo = this.getVoxelForUpdate( coords )
 
     addTo.meshes.push( mesh )
     
@@ -310,30 +311,23 @@ export default class Entity {
 
   removeFromVoxel ( coords, mesh ) {
 
-    let removeFrom = this.getVoxelForUpdate( coords.join(".") )
+    let removeFrom = this.getVoxelForUpdate( coords )
 
     removeFrom.meshes.splice( removeFrom.meshes.indexOf( mesh ), 1 )
 
   }
 
-  getVoxelForUpdate ( key ) {
+  getVoxelForUpdate ( coords ) {
 
-    let world = window.three.world,
+    let world = this.world,
         systems = world.systems,
         terrain = systems.terrain,
-        voxel = terrain.voxels[ key ]
+        voxel = terrain.voxels[ coords.join(".") ]
 
-    if ( !!! voxel || typeof voxel == 'boolean' ) { console.warn("Voxel not loaded!")
+    if ( !!! voxel) { console.warn("voxel not loaded")
       
-      if ( !!! terrain.voxels[ "0.0.0" ] || typeof  terrain.voxels[ "0.0.0" ] == 'boolean' ) {
-
-        voxel = { entities: [], meshes: [], cleanUp: false, data: { cell: [0, 0, 0] } }
-        terrain.voxels[ "0.0.0" ] = voxel
-        terrain.voxelList.push( voxel )
-
-      }
-
-      voxel = terrain.voxels[ "0.0.0" ]
+      voxel = voxel || terrain.voxels[ `${(coords[0])}.0.${(coords[2]-1)}`]
+      if ( !!! voxel ) console.warn("adjacent voxel not loaded")
 
     }
 

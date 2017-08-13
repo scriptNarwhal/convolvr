@@ -33,7 +33,7 @@ func generateCurtain(id int, world string, x int, z int, altitude float32) *Enti
 
 	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) - 89000, float64(z) * 807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
-	structure = NewEntity(id+1, "Curtain of Separation", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
+	structure = NewEntity(id+1, "Curtain of Separation", world, []int{x, 0, z}, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure
 }
 

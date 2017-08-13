@@ -30,7 +30,8 @@ export default class Convolvr {
 			self = this,
 			three = {},
 			postProcessing = false,
-			usePostProcessing = false
+			usePostProcessing = false,
+			viewDist = [ 1, 1000000 ]
 
 		//scene.scale.setScalar( 1 / 22000 ) 
 		this.mobile = mobile
@@ -39,8 +40,9 @@ export default class Convolvr {
 		this.viewDistance = 0 // default
 		this.userInput = userInput
 		initLocalSettings( this )
+		viewDist = [ 1000+this.viewDistance*200, 15000000 + (3+this.viewDistance)*600000 ]
 		usePostProcessing = this.enablePostProcessing == 'on'
-		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1000+this.viewDistance*200, 15000000 + (3+this.viewDistance)*600000 )
+		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
 
 		let rendererOptions = { antialias: this.aa != 'off' && !usePostProcessing }
 
@@ -58,13 +60,12 @@ export default class Convolvr {
 
 			postProcessing.init()
 
-
 		this.postProcessing = postProcessing
 		this.socket = socket
 		this.config = false
 		this.windowFocus = true
-		this.name = "convolvr"
-		this.userName = "space"
+		this.name = "Overworld"
+		this.userName = "convolvr"
 		this.mode = "3d" // web, stereo ( IOTmode should be set this way )
 		this.rPos = false
 		this.users = []
@@ -89,6 +90,7 @@ export default class Convolvr {
 			overlapPct: 0.15,
 			scene
 		})
+
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
 		this.raycaster.near = 4000
@@ -100,6 +102,7 @@ export default class Convolvr {
 			renderer,
 			vrDisplay: null
 		}
+
 		world = this
 		window.three = this.three
 		this.systems = new Systems( this )
@@ -108,41 +111,14 @@ export default class Convolvr {
 			staticCollisions: this.systems.staticCollisions.worker,
 			// oimo: this.systems.oimo.worker
 		}
+
 		camera.add(this.systems.audio.listener)
 		this.socketHandlers = new SocketHandlers( this, socket )
-
-		function onResize () {
-
-			world.screenResX = window.devicePixelRatio * window.innerWidth
-			
-			if ( three.world.mode != "stereo" )
-
-				three.renderer.setSize(window.innerWidth, window.innerHeight)
-
-
-			if ( world.postProcessing.enabled )
-
-				world.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
-			
-
-			three.camera.aspect = innerWidth / innerHeight
-			three.camera.updateProjectionMatrix()
-
-			if ( world.IOTMode ) 
-
-				animate( world, Date.now(), 0 )
-			
-
-		}
-
-		window.addEventListener('resize', onResize, true)
-		this.onWindowResize = onResize
-		onResize()	
-		
+		window.addEventListener('resize', e => this.onWindowResize( e ), true)
+		this.onWindowResize()	
 		animate(this, 0, 0)
-
+	
 		three.vrDisplay = null
-		
 		navigator.getVRDisplays().then( displays => { console.log( "displays", displays )
 				
 			if ( displays.length > 0 )
@@ -152,7 +128,8 @@ export default class Convolvr {
 			
 		})
 
-		loadedCallback( this )
+		this.initialLoad = false
+		this.loadedCallback = () => { loadedCallback( this ); this.initialLoad = true;  }
 
 	}
 
@@ -166,7 +143,6 @@ export default class Convolvr {
 			skybox = this.skybox,
 			rotateSky = false
 
-		
 		this.config = config; console.log(config)
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
@@ -209,9 +185,7 @@ export default class Convolvr {
 				three.scene.add(this.skybox)
 				//rotateSky && this.skybox.rotation.set(0, Math.PI * 1, 0)
 				world.skybox.position.set(camera.position.x, 0, camera.position.z)
-
-				world.terrain.bufferVoxels( true, 0 )
-
+				//world.terrain.bufferVoxels( true, 0 )
 				world.gravity = config.gravity
 				world.highAltitudeGravity = config.highAltitudeGravity
 				callback()
@@ -264,12 +238,12 @@ export default class Convolvr {
 
 		}
 
-		document.title = config.name == 'overworld' && config.userName == 'space' ? `Convolvr` : config.name // make "Convolvr" default configurable via admin settings
+		document.title = config.name == 'Overworld' && config.userName == 'convolvr' ? `Convolvr` : config.name // make "Convolvr" default configurable via admin settings
 		false == deferWorldLoading && rebuildWorld()
 
 	}
 
-	loadShaders (vertex_url, fragment_url, onLoad, onProgress, onError) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
+	loadShaders ( vertex_url, fragment_url, onLoad, onProgress, onError ) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
 
 		var vertex_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
 		vertex_loader.setResponseType('text')
@@ -347,11 +321,11 @@ export default class Convolvr {
 		this.terrain.platforms = []
 		this.terrain.voxels = {}
 		this.terrain.voxelList = []
-		this.load( user, name )
+		this.load( user, name, () => {}, () => {} )
 
 		if ( !!! noRedirect )
 
-			browserHistory.push("/"+(user||"space")+"/"+name+(!!place ? `/${place}` : ''))
+			browserHistory.push("/"+(user||"convolvr")+"/"+name+(!!place ? `/${place}` : ''))
 
 		
 	}
@@ -365,7 +339,7 @@ export default class Convolvr {
 
 				voxel.entities.map( ( entity, i )=>{
 
-					i > 1 && entity.init(scene)
+					i > 2 && entity.init(scene)
 
 				})
 
@@ -389,7 +363,7 @@ export default class Convolvr {
 	
 	  	this.sendUpdatePacket += 1
 
-	  	if ( this.sendUpdatePacket %((3+(2*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0 ) { // send packets faster / slower for all vr / mobile combinations
+	  	if ( this.sendUpdatePacket %((2+(2*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0 ) { // send packets faster / slower for all vr / mobile combinations
 
 			if ( input.trackedControls || input.leapMotion ) {
 
@@ -413,8 +387,8 @@ export default class Convolvr {
 					image: this.webcamImage,
 					imageSize,
 					hands,
-					position: compressVector3( camera.position, 4 ), //{x:camera.position.x, y:camera.position.y, z: camera.position.z},
-					quaternion: compressVector4( camera.quaternion, 8 ), //{x: camera.quaternion.x, y: camera.quaternion.y, z: camera.quaternion.z, w:camera.quaternion.w}
+					position: compressVector3( camera.position, 4 ),
+					quaternion: compressVector4( camera.quaternion, 8 ),
 				}
 			
 			})
@@ -454,6 +428,30 @@ export default class Convolvr {
 
 		}
 	}
+
+	onWindowResize () {
+
+			this.screenResX = window.devicePixelRatio * window.innerWidth
+			
+			if ( this.mode != "stereo" )
+
+				three.renderer.setSize(window.innerWidth, window.innerHeight)
+
+
+			if ( this.postProcessing.enabled )
+
+				this.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
+			
+
+			three.camera.aspect = innerWidth / innerHeight
+			three.camera.updateProjectionMatrix()
+
+			if ( this.IOTMode ) 
+
+				animate( this, Date.now(), 0 )
+			
+
+		}
 
 	sendVideoFrame () { // probably going to remove this now that webrtc is in place
 

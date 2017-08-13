@@ -1,12 +1,14 @@
 export default class FloorSystem {
 
-    constructor ( world ) {
+    world: Convolvr
+
+    constructor ( world: Convolvr ) {
 
         this.world = world
 
     }
 
-    init ( component ) { 
+    init ( component: Component ) { 
         
         return {
             

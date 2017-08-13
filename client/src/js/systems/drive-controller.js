@@ -1,12 +1,18 @@
+//@flow
+import Convolvr from '../world/world'
+import Component from '../component'
+
 export default class DriveControllerSystem {
 
-    constructor (world) {
+    world: Convolvr
+
+    constructor ( world: Convolvr ) {
 
         this.world = world
         
     }
 
-    init (component) {
+    init ( component: Component ) {
         
         let prop = component.props.driveController,
             fs = this.world.systems.file

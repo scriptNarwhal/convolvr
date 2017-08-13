@@ -57,7 +57,7 @@ func getWorldChunks(c echo.Context) error {
 
 			entities = nil
 			altitude := float32(0)
-			flatArea := worldData.Terrain.FlatAreas == true && math.Sin(2+float64(x)/9.0)+math.Cos(2+float64(z)/9.0) > 0.66
+			flatArea := worldData.Terrain.FlatAreas == true && math.Sin(2+float64(x)/9.0)+math.Cos(2+float64(z)/9.0) > 0.62
 
 			if worldData.Terrain.TerrainType == "voxels" || worldData.Terrain.TerrainType == "both" {
 
@@ -65,7 +65,7 @@ func getWorldChunks(c echo.Context) error {
 
 					if worldData.Terrain.Turbulent {
 
-						altitude = float32((math.Sin(float64(x)/2)*9+float64((x%2)-(z%3))+math.Cos(float64(z)/2)*9)/worldData.Terrain.Flatness) * 200000.0
+						altitude = float32((math.Sin(float64(x)/2)*9+float64((x%5)-(z%5))+math.Cos(float64(z)/2)*9)/worldData.Terrain.Flatness) * 200000.0
 
 					} else {
 

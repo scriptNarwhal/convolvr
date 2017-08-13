@@ -73,13 +73,14 @@ export default class ComponentTool extends Tool {
           tooManyComponents = !!selected && selected.components.length >= 48,
           pointingAtTerrain = !!selected && selected.componentsByProp.terrain,
           coords = [ 0, 0, 0 ],
+          props = {},
           components = [],
           entityId = -1,
           entity = null //console.log("Selected ", tooManyComponents, selected, selected.components)
 
       entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat )
 
-      console.warn( `Component Tool Type ${componentType} Selected ${selected}` )
+      //console.warn( `Component Tool Type ${componentType} Selected`, selected )
 
       if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
         
@@ -101,9 +102,10 @@ export default class ComponentTool extends Tool {
         
         components = [ component ]
       
+      props = selected.componentsByProp
 
-      if ( !!!selected ) {
-        
+      if ( !!!selected || props.miniature || props.activate ) {
+        console.warn("no tool action, calling activation callbacks")
         return false 
 
       } else {

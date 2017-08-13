@@ -1,13 +1,13 @@
 export default class AudioSystem {
 
-    constructor ( world ) {
+    constructor ( world: Convolvr ) {
 
         this.world = world
         this.listener = new THREE.AudioListener()
 
     }
 
-    init ( component ) { 
+    init ( component: Component ) { 
 
         let prop = component.props.audio,
             assets = this.world.systems.assets,

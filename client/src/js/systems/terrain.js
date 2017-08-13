@@ -2,7 +2,10 @@ import { browserHistory } from 'react-router'
 import axios from 'axios'
 import Voxel from '../world/voxel'
 import { animate } from '../world/render'
-import { API_SERVER } from '../config'
+import { 
+  API_SERVER,
+  GRID_SIZE
+} from '../config'
 
 export default class TerrainSystem {
 
@@ -13,7 +16,6 @@ export default class TerrainSystem {
         this.octree = world.octree
         this.phase = 0
         this.StaticCollisions = null
-        this.DynamicCollisions = null
         this.voxels = []
         this.voxelList = [] // map of coord strings to voxels
         this.lastChunkCoords = [0, 0, 0]
@@ -44,7 +46,6 @@ export default class TerrainSystem {
         let world = this.world
 
         this.StaticCollisions = world.systems.staticCollisions
-        this.DynamicCollisions = world.systems.dynamicCollisions
         this.config = config
 
         let type = this.config.type,
@@ -59,9 +60,9 @@ export default class TerrainSystem {
 
           mat = this.world.mobile ? new THREE.MeshLambertMaterial({color: config.color }) : new THREE.MeshPhongMaterial({color: config.color})
          
-           if ( !!!this.mesh ) {
+          if ( !!!this.mesh ) {
 
-            geom = new THREE.PlaneGeometry( 24000000+(3.5+world.viewDistance)*1600000, 24000000+(3.5+world.viewDistance)*1600000, 2, 2 ),
+            geom = new THREE.PlaneGeometry( 24000000+(3.5+world.viewDistance)*1600000, 24000000+(3.5+world.viewDistance)*1600000, 2, 2 )
             mesh = new THREE.Mesh( geom, mat )
             three.scene.add(mesh)
             this.world.octree.add(mesh)
@@ -82,7 +83,7 @@ export default class TerrainSystem {
 
             } else {
 
-                mesh.position.y = -(5400000 / this.config.flatness) + 6000 //-168000 - 125000 / this.config.flatness
+                mesh.position.y = -(5400000 / this.config.flatness ) + 6000
             
             }
 
@@ -107,33 +108,25 @@ export default class TerrainSystem {
         pCell = [ 0, 0, 0 ],
         position = three.camera.position,
         terrainChunk = null,
-        coords = [ Math.floor( position.x / 928000 ), Math.floor( position.y / 928000 ), Math.floor( position.z / 806360 ) ],
+        coords = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), Math.floor( position.y / GRID_SIZE[ 1 ] ), Math.floor( position.z / GRID_SIZE[ 2 ] ) ],
         lastCoords = this.lastChunkCoords,
         moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
         viewDistance = (this.world.mobile ? 5 : 8) + this.world.viewDistance,
         removeDistance = viewDistance + 1 + (window.innerWidth > 2100 ?  2 : 1),
         endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
-        x = coords[0]-phase + 1,
+        x = coords[0]-phase,
         y = coords[2]-phase,
         c = 0
 
-        this.chunkCoords = coords
+    this.chunkCoords = coords
+    force = phase == 0
 
     if ( force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
 
         lastCoords = this.lastChunkCoords = [ coords[0], coords[1], coords[2] ]
-        let userName = world.userName || "space"
+        let userName = world.userName || "convolvr"
 
-        if ( userName == "space" && world.name == "convolvr" ) {
-
-          browserHistory.push( "/at/"+coords.join("."))
-
-        } else {
-
-          browserHistory.push( "/"+(userName)+"/"+world.name+"/at/"+coords.join("."))
-
-        }
-      
+        phase > 0 && browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
 
         force = false 	// remove old chunks
 
@@ -209,9 +202,9 @@ export default class TerrainSystem {
         while ( y <= endCoords[1] ) {
 
             if ( c < 6 && voxels[x+".0."+y] == null ) { // only if its not already loaded
-
+              
                 voxels[ x+".0."+y ] = true
-                c ++
+                c += 1
                 this.reqChunks.push( x+"x0x"+y )
       
             }
@@ -232,13 +225,14 @@ export default class TerrainSystem {
         this.reqChunks.map( ( rc, i ) => {
 
           if ( i > 0 )
+
             chunks += ","
           
           chunks += rc
 
         })
 
-        this.reqChunks = [] // empty array
+        this.reqChunks = []
         let showVoxels = true
 
         if ( !!config )
@@ -251,20 +245,32 @@ export default class TerrainSystem {
              let physicsVoxels = []
              typeof response.data.map == 'function' && response.data.map( c => {
 
-                let voxelKey = c.x+".0."+c.z, // debugging this.. 
-                    voxelData = { name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities }, //, entities: c.entities },
-                    v = new Voxel( voxelData, [c.x, 0, c.z], voxels )
+                let cam = three.camera,
+                    cameraKey = Math.floor( cam.position.x / GRID_SIZE[0] )+".0."+Math.floor( cam.position.z / GRID_SIZE[2] ),
+                    voxelKey = c.x+".0."+c.z, // debugging this.. 
+                    voxelData = { name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities },
+                    v = new Voxel( voxelData, [c.x, 0, c.z] ),
+                    initialLoad = terrain.world.initialLoad
 
-                v.preLoadEntities()
-                physicsVoxels.push( v.data )
+                //console.log(`INIT VOXEL ${voxelKey}`)
+                
+                voxels[ voxelKey ] = v
                 voxelList.push( v )
+                physicsVoxels.push( v.data )
+                v.preLoadEntities()
+        
+                if ( initialLoad == false && cameraKey == voxelKey ) {
 
-                 if ( terrain.loaded == false && world.user.avatar.getVoxel().join(".") == voxelKey ) {
+                  terrain.world.initialLoad = true
+                  terrain.world.loadedCallback()
+                  terrain.readyCallback()
 
-                   terrain.loaded = true
-                   terrain.readyCallback()
+                } else if ( terrain.loaded == false && cameraKey == voxelKey ) {
 
-                 }
+                  terrain.loaded = true
+                  terrain.readyCallback()
+
+                }
 
             })
 
@@ -304,12 +310,14 @@ export default class TerrainSystem {
       lastCoords[2] = coords[2]
       phase ++
 
-      if (phase > viewDistance) {
-        phase = 1
-      }
+      if ( phase > viewDistance )
+
+        phase = 0
+      
 
       //setTimeout(() => { this.bufferVoxels(force, phase) }, 32 ) // experiment // 32)
       this.phase = phase
+
     }
 
 }

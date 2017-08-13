@@ -4,8 +4,10 @@ import { events } from '../../network/socket'
 import Shell from '../components/shell'
 import Button from '../components/button'
 import { vrAnimate } from '../../world/render'
-import { detectWorldDetailsFromURL } from '../../redux/reducers/world'
-import { GRID_SIZE } from '../../config'
+import { 
+  detectWorldDetailsFromURL,
+  GRID_SIZE 
+} from '../../config'
 
 class App extends Component {
 
@@ -16,6 +18,9 @@ class App extends Component {
       lastSender: ''
     }
     this.props.fetchWorlds()
+
+    let world = three.world, 
+        worldDetails = detectWorldDetailsFromURL()
 
     events.on("chat message", message => {
 
@@ -53,20 +58,20 @@ class App extends Component {
       }
 
       let worldMode = three.world.mode,
-          worldUser = this.props.worldUser
+          worldUser = worldDetails[ 0 ]
 
-      if (!this.props.menuOpen) {
+      if ( !this.props.menuOpen ) {
         
         browserHistory.push("/chat")
 
-        if (worldMode != 'vr' && worldMode != 'stereo') { // 3d ui will show the chat in vr without interrupting things
+        if ( worldMode != 'vr' && worldMode != 'stereo' ) { // 3d ui will show the chat in vr without interrupting things
         
             this.props.toggleMenu()
         
         } else {
           setTimeout(()=>{
 
-            browserHistory.push(`/${worldUser}/${worldName}`)
+            browserHistory.push(`/${worldDetails[ 0 ]}/${worldDetails[ 1 ]}`)
             this.props.toggleMenu()
           
           }, 3500)
@@ -79,23 +84,20 @@ class App extends Component {
 
     this.props.fetchUniverseSettings()
 
-    setTimeout( ()=> { console.log("world & worldUser ", world, worldUser )
+    setTimeout( ()=> { console.log("world & worldUser ", worldDetails[0], worldDetails[1] )
 
-      let world = three.world, 
-          worldName = this.props.world,
-          worldUser = this.props.worldUser
-      
+
       let init3DUI = () => {
 
-        let world = window.three.world,
-            voxelKey = world.user.avatar.getVoxel().join("."),
+        let cameraPos = world.three.camera.position,
+            voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
             altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
 
         world.chat.update( [ -80000, altitude, -5000 ] )
         world.help.update( [ -160000, altitude, -5000 ] )
         world.user.hud.update( [ 2500, altitude + 52000, 0 ], null )
 
-        if (three.camera.position.y < altitude) {
+        if ( three.camera.position.y < altitude ) {
 
           three.camera.position.y = (world.terrain.voxels[ voxelKey ].data.altitude) + 50000
 
@@ -105,7 +107,7 @@ class App extends Component {
 
       }
 
-      world.load( worldUser, worldName, () => { /* systems online */ }, ()=> { /* terrain finished loading */
+      world.load( worldDetails[ 0 ], worldDetails[ 1 ], () => { /* systems online */ }, ()=> { /* terrain finished loading */
 
         console.log("init 3d UI / terrain loaded")
         init3DUI()
@@ -134,7 +136,7 @@ class App extends Component {
 
     if (rememberUser != null) {
 
-      username = localStorage.getItem("username")
+      username = localStorage.getItem("username") // refactor this to be more secure before beta
       password = localStorage.getItem("password")
 
       if (username != null && username != '') {
@@ -208,7 +210,7 @@ class App extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    let newWorld = ["space", "overworld"],
+    let newWorld = ["convolvr", "Overworld"],
         pathChange = nextProps.url.pathname.indexOf("/at") > -1 ? false : nextProps.url.pathname != this.props.url.pathname
 
     if ( pathChange ) {
@@ -231,8 +233,8 @@ class App extends Component {
 
     } else if ( newWorld.length >= 4 ) {
 
-      console.warn("detected world coords ", newWorld[3])
-      three.camera.position.set( newWorld[3][0] * GRID_SIZE[0], newWorld[3][1] * GRID_SIZE[1], newWorld[3][2] * GRID_SIZE[2] )
+      console.warn("detected world voxel coords ", newWorld[3])
+      //three.camera.position.set( newWorld[3][0] * GRID_SIZE[0], newWorld[3][1] * GRID_SIZE[1], newWorld[3][2] * GRID_SIZE[2] )
 
     }
 
@@ -485,7 +487,7 @@ export default connect(
       stereoMode: state.app.vrMode,
       focus: state.app.windowFocus,
       world: state.worlds.current,
-      worldUser: state.worlds.currentWorldUser
+      worldUser: state.worlds.worldUser
     }
   },
   dispatch => {

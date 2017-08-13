@@ -2,7 +2,7 @@ import { events } from '../network/socket'
 
 export default class ChatSystem {
 
-    constructor ( world ) {
+    constructor ( world: Convolvr ) {
 
         this.world = world
         this.componentsByUserId = { all: [] }
@@ -50,7 +50,7 @@ export default class ChatSystem {
 
     }
 
-    init ( component ) { 
+    init ( component: Component ) { 
         
         let prop = component.props.chat,
             userId = prop.userId || "",

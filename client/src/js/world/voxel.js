@@ -1,8 +1,16 @@
+//@flow
+
 import Entity from '../entity'
+import { THREE } from 'three'
 
 export default class Voxel {
 
-    constructor ( data, cell, voxels ) { // this should be refactored to use the terrain system
+    data: Object
+    entities: Array<Entity>
+    meshes: Array<THREE.Mesh>
+    coords: Array<number>
+
+    constructor ( data: Object, cell: Array<number> ) {
 
         let visible = data.visible,
             voxelGeom = null,
@@ -13,31 +21,30 @@ export default class Voxel {
         this.data = data
         this.entities = []  
         this.meshes = []
-        voxels[ cell.join(".") ] = this
+        
         altitude = data.altitude || 0
 
         if ( !! cell ) {
 
             data.cell = cell
-           
+            
         } else {
 
             data.position = [ 0, 0, 0 ]
 
         }
 
+        this.cell = cell
         this.data = data
         this.cleanUp = false
-
-        return this
 
     }
 
     preLoadEntities () {
-
+        
         !!this.data.entities && this.data.entities.map( ( e, i ) => {
             
-            let entity = new Entity( e.id, e.components, e.position, e.quaternion )
+            let entity = new Entity( e.id, this.cell, e.components, e.position, e.quaternion )
 
             if ( i < 2 ) {
             
@@ -47,12 +54,14 @@ export default class Voxel {
 
                     this.data.position = e.position
 
-                this.entities.push( entity ) // init later
 
             }
+
+            this.entities.push( entity ) // init later
             
         })
 
     }
+    
 
 }

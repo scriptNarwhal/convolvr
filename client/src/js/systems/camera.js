@@ -1,12 +1,12 @@
 export default class CameraSystem {
 
-    constructor ( world ) {
+    constructor ( world: Convolvr ) {
         
         this.world = world
 
     }
 
-    init ( component ) { 
+    init ( component: Component ) { 
         
         let prop = component.props.camera,
             type = prop.type,
@@ -18,18 +18,21 @@ export default class CameraSystem {
             camera,
             viewDistance,
             textureChannel: "", // implement
-            update: ( ) => {
+            update: ( position, quaternion  ) => {
 
-                this._update( component )
+                this._update( component, position, quaternion  )
 
             }
         }
         
     }
 
-    _update ( component ) {
+    _update ( component, position, quaternion ) {
 
-        // implement
+        let camera = component.state.camera.camera
+
+        camera.position.fromArray( position )
+        camera.quaternion.fromArray( quaternion )
 
     }
 }

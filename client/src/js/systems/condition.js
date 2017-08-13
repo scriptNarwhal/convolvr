@@ -1,12 +1,12 @@
 export default class ConditionSystem {
 
-    constructor ( world ) {
+    constructor ( world: Convolvr ) {
 
         this.world = world
 
     }
 
-    init ( component ) {
+    init ( component: Component ) {
 
         let prop = component.props.condition,
             state = {}

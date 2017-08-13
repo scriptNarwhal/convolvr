@@ -151,7 +151,7 @@ func handleWorld(c echo.Context) error {
 	description = "Auto Generated World"
 	icon = "/data/images/convolvr2.png"
 	image = ""
-	userName = "Space"
+	userName = "convolvr"
 	themeColor = "#151515"
 	name = c.Param("worldName")
 	if name == "" {
@@ -210,40 +210,32 @@ func getWorld(c echo.Context) error { // load specific world
 		if rand.Intn(12) > 5 {
 
 			if rand.Intn(12) > 5 {
-
 				red = 0.12
 				green = 0.02
 				blue = 1.0
-
 			} else {
-
 				red = 1.0
-				green = 0.16
+				green = 0.12
 				blue = 0.02
-
 			}
 
 		} else {
 
 			if rand.Intn(12) > 5 {
-
 				red = 0.02
 				green = 1.0
 				blue = 0.44
-
 			} else {
-
 				red = 0.02
 				green = 0.44
 				blue = 1.0
-
 			}
 
 		}
 
 		terrainRed = red
-		terrainGreen = green + blue
-		terrainBlue = math.Max(red/2.0+blue/2.0+green/2, 1.0)
+		terrainGreen = blue
+		terrainBlue = green
 		terrainColor = int(math.Floor(terrainRed*255))<<16 | int(math.Floor(terrainGreen*255))<<8 | int(math.Floor(terrainBlue*255))
 
 		lightColor = int(230+math.Floor(red*25))<<16 | int(230+math.Floor(green*25))<<8 | int(230+math.Floor(blue*25))
@@ -280,7 +272,10 @@ func getUniverseSettings(c echo.Context) error {
 	err := db.One("ID", 1, &settings)
 	if err != nil {
 		log.Println(err)
-		return err
+
+		settings = UniverseSettings{ID: -1, WelcomeMessage: "Welcome", DefaultWorld: "Overworld", Network: []NetworkDomain{}}
+		return c.JSON(http.StatusOK, &settings)
+
 	}
 	return c.JSON(http.StatusOK, &settings)
 }

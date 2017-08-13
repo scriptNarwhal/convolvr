@@ -29,7 +29,7 @@ func generateTool(id int, world string, x int, z int, altitude float32) *Entity 
 
 	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) - 80000, float64(z) * 807360.0} //  + (structureSize * width)
 
-	structure = NewEntity(id+1, "Generic Tool", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, 6000, nil)
+	structure = NewEntity(id+1, "Generic Tool", world, []int{x, 0, z}, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, 6000, nil)
 	return structure
 }
 

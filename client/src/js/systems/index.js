@@ -2,21 +2,28 @@ import ActivateSystem from './activate'
 import AudioSystem from './audio'
 import AssetSystem from './assets'
 import BrowserSystem from './browser'
+import CameraSystem from './camera'
+import CPUSystem from './cpu'
 import ConditionSystem from './condition'
 import ContainerSystem from './container'
 import ChatSystem from './chat'
+import CursorSystem from './cursor'
+import DatGUIVRPluginSystem from './datguivr-plugin'
+import DestructableSystem from './destructable'
+import DoorSystem from './door'
 import EmoteSystem from './emote'
+import FBXPluginSystem from './fbx-plugin'
 import FileSystem from './file'
+import FactorySystem from './factory'
+import FloorSystem from './floor'
 import GeometrySystem from './geometry'
+import HoverSystem from './hover'
 import HandSystem from './hand'
 import LightSystem from './light'
 import LayoutSystem from './layout'
 import VideoSystem from './video'
 import InputSystem from './input'
 import MediaSystem from './media'
-import CameraSystem from './camera'
-import OimoPluginSystem from './oimo-plugin'
-import CPUSystem from './cpu'
 import DisplayAdapterSystem from './display-adapter'
 import GraphSystem from './graph'
 import MemorySystem from './memory'
@@ -28,25 +35,21 @@ import DrawingSystem from './drawing'
 import ControlSystem from './control'
 import PropulsionSystem from './propulsion'
 import PowerSupplySystem from './power-supply'
-import FactorySystem from './factory'
 import MetaFactorySystem from './meta-factory'
 import ParticleSystem from './particle'
-import ProjectileSystem from './projectile'
-import DestructableSystem from './destructable'
-import FloorSystem from './floor'
-import WallSystem from './wall'
-import VehicleSystem from './vehicle'
 import PortalSystem from './portal'
-import DoorSystem from './door'
-import HoverSystem from './hover'
+import ProjectileSystem from './projectile'
 import LookAwaySystem from './look-away'
-import CursorSystem from './cursor'
 import LoopSystem from './loop'
 import MaterialSystem from './material'
 import MiniatureSystem from './miniature'
+import ObjPluginSystem from './obj-plugin'
+import OimoPluginSystem from './oimo-plugin'
 import RESTSystem from './rest'
-import SocialMediaSystem from './social-media'
+import ScreenshotSystem from './screenshot'
 import SignalSystem from './signal'
+import SocialMediaSystem from './social-media'
+import SpeechSystem from './speech'
 import StaticCollisions  from './static-collisions'
 import SwitchSystem from './switch'
 import TerrainSystem from './terrain'
@@ -55,15 +58,17 @@ import ToolSystem from './tool'
 import TimeSystem from './time'
 import ToolUISystem from './tool-ui'
 import UserSystem from './user'
+import VehicleSystem from './vehicle'
+import WallSystem from './wall'
 import WebRTCSystem from './webrtc'
 import NPCSystem from './npc'
-import SpeechSystem from './speech'
-import ScreenshotSystem from './screenshot'
-import ObjSystem from './obj-plugin'
-import DatGUIVRPluginSystem from './datguivr-plugin'
 
 export default class Systems {
 
+	/**
+	*  Initializes all systems before components can be registered
+	*  @param {Convolvr} world 
+	**/
     constructor ( world )  {
 
         let systems = {
@@ -87,6 +92,7 @@ export default class Systems {
 			driveController: new DriveControllerSystem( world ),
 			emote: new EmoteSystem( world ),
 			factory: new FactorySystem( world ),
+			fbx: new FBXPluginSystem( world ),
 			file: new FileSystem( world ),
 			floor: new FloorSystem( world ),
 			geometry: new GeometrySystem( world ),
@@ -106,7 +112,7 @@ export default class Systems {
 			miniature: new MiniatureSystem( world ),
 			networkInterface: new NetworkInterfaceSystem( world ),
 			npc: new NPCSystem( world ),
-			obj: new ObjSystem( world ),
+			obj: new ObjPluginSystem( world ),
 			oimo: new OimoPluginSystem( world ),
 			particles: new ParticleSystem( world ),
 			propulsion: new PropulsionSystem( world ),
@@ -139,11 +145,15 @@ export default class Systems {
 
 		this.deffered = {
 			hand: true, light: true, particles: true, text: true, audio: true, video: true, metaFactory: true, miniature: true,
-			tool: true, toolUI: true, layout: true, datgui: true
+			tool: true, toolUI: true, layout: true, datgui: true, obj: true, fbx: true
 		}
 
     }
 
+	/**
+	*  Reads component props, registers with systems and populates state with the resulting data
+	*  @param {Component} component 
+	**/
     registerComponent ( component ) {
 
         let componentsByProp = component.entity.componentsByProp,
@@ -197,7 +207,7 @@ export default class Systems {
 
 		this.particles.tick( delta, time )
 		this.terrain.tick( delta, time )
-		this.oimo.tick( delta, time )
+		this.fbx.tick( delta, time )
 
 	}
 	

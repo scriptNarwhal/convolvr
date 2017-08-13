@@ -22,35 +22,7 @@ import {
     UNIVERSE_SETTINGS_UPDATE_DONE,
     UNIVERSE_SETTINGS_UPDATE_FAIL
 } from '../constants/action-types'
-
-export let detectWorldDetailsFromURL = () => {
-
-    let url = window.location.pathname,
-        params = url.split("/"),
-        slashes = params.length -1,
-        coords = [0,0,0],
-        nonWorlds = ["login", "network", "chat", "files", "settings", "worlds", "new-world"],
-        isWorld = true,
-        worldDetails = [ "space", "overworld" ]
-
-    nonWorlds.map( nWorld => {
-        if ( url.indexOf(`/${nWorld}`) == 0 ) {
-            isWorld = false
-        }
-    })
-    
-    if (url.indexOf("/at") > -1 ) 
-
-        coords = url.split("/at")[1].split(".").map( v => parseInt(v) )
-
-    if (isWorld) {
-        if (slashes >= 2) {
-            worldDetails = [params[1], params[2], isWorld, coords]
-        }
-    }
-    return worldDetails
-
-}
+import { detectWorldDetailsFromURL } from '../../config'
 
 function worlds (state = {
     current: detectWorldDetailsFromURL()[1],
@@ -65,7 +37,7 @@ function worlds (state = {
     fetchingSettings: false,
     universeSettings: {
       id: 1,
-      defaultWorld: "overworld",
+      defaultWorld: "Overworld",
       welcomeMessage: "Welcome to Convolvr!"
     }
 }, action) {

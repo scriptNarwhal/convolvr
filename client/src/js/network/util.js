@@ -1,5 +1,6 @@
 // @flow
 /* bandwidth saving utility functions for multiplayer telemetry */
+import { THREE } from 'three'
 
 export let compressFloat = ( float: number, n: number ) => {
 
@@ -23,7 +24,7 @@ export let compressFloatArray = ( floats: Array<number>, n: number ) => {
 
 }
 
-export let compressVector3 = ( vec: Object, n: number ) => {
+export let compressVector3 = ( vec: THREE.Vector3, n: number ) => {
 
     return Object.assign({}, {
         x: parseFloat( vec.x.toFixed( n ) ),
@@ -33,7 +34,7 @@ export let compressVector3 = ( vec: Object, n: number ) => {
 
 }
 
-export let compressVector4 = ( vec: Object, n: number ) => {
+export let compressVector4 = ( vec: THREE.Quaternion, n: number ) => {
 
     return Object.assign({}, {
         w: parseFloat( vec.w.toFixed( n ) ),

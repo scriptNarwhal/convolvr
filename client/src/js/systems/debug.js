@@ -1,12 +1,18 @@
+//@flow
+import Convolvr from '../world/world'
+import Component from '../component'
+
 export default class DebugSystem { // gather helpful info & display as text
     
-    constructor ( world ) {
+    world: Convolvr
+
+    constructor ( world: Convolvr ) {
 
         this.world = world
 
     }
 
-    init ( component ) { // implement
+    init ( component: Component ) { // implement
 
         return {
             update: ( ) => {
@@ -18,7 +24,7 @@ export default class DebugSystem { // gather helpful info & display as text
 
     }
 
-    _updateInfo ( component ) {
+    _updateInfo ( component: Component ) {
 
         let prop = component.props.debug,
             text = component.state.text,

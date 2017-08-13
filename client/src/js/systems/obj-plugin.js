@@ -1,4 +1,4 @@
-export default class ObjSystem { // allows use of imported .obj meshes
+export default class ObjPluginSystem { // allows use of imported .obj meshes
 
     constructor ( world ) {
 
@@ -15,14 +15,15 @@ export default class ObjSystem { // allows use of imported .obj meshes
 
         this.loader.load(
 			prop.url,
-			 loadedObj => {
-				component.mesh.add( loadedObj )
+			 obj => {
+                component.mesh.add( obj )
+                component.state.obj.obj = obj
 			}
 		);
 
         return {
            url: prop.url,
-           loadedObj
+           obj: null
         }
         
     }

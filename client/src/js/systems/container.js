@@ -1,9 +1,10 @@
 export default class ContainerSystem {
-    constructor (world) {
+    
+    constructor ( world: Convolvr ) {
         this.world = world
     }
 
-    init (component) { 
+    init (component: Component ) { 
         
     }
 }

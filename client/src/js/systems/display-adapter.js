@@ -1,12 +1,18 @@
+//@flow
+import Convolvr from '../world/world'
+import Component from '../component'
+
 export default class DisplayAdapterSystem { // renders graphics to canvas via 2d api or glsl
     
-    constructor (world) {
+    world: Convolvr
+
+    constructor ( world: Convolvr ) {
 
         this.world = world
         
     }
 
-    init ( component ) {
+    init ( component: Component ) {
 
         // create a canvas, save the context, etc
         // implement
@@ -23,13 +29,13 @@ export default class DisplayAdapterSystem { // renders graphics to canvas via 2d
 
     }
     
-    configure ( data ) {
+    configure ( data: Object ) {
 
         // implement 
 
     }
 
-    draw ( type, data ) {
+    draw ( type: string, data: Object ) {
 
         switch ( type ) {
 
@@ -53,29 +59,29 @@ export default class DisplayAdapterSystem { // renders graphics to canvas via 2d
 
     }
 
-    renderText ( data ) {
+    renderText ( data: Object ) {
 
 
 
     }
 
-    renderShape ( data ) {
+    renderShape ( data: Object ) {
 
 
         
     }
 
-    renderShader ( data ) {
+    renderShader ( data: Object ) {
 
 
     }
 
-    renderCamera ( data ) {
+    renderCamera ( data: Object ) {
         
 
     }
     
-    renderVirtualCamera ( camera ) {
+    renderVirtualCamera ( camera: Object ) {
 
 
     }

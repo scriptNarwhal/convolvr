@@ -1,9 +1,12 @@
-export default class CPUSystem { // 
-    constructor (world) {
+export default class CPUSystem {
+
+    constructor ( world: Convolvr ) {
+
         this.world = world
+
     }
 
-    init ( component ) {
+    init ( component: Component ) {
 
         let stack = []
 

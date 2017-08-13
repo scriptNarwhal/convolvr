@@ -53,7 +53,7 @@ self.update = ( ) => {
 	for ( i = 0; i < voxelList.length; i ++ ) {
 
 		obj = voxelList[ i ]
-
+		if ( !!!obj ) continue
 		if ( !!obj  && distance2dCompare( position, obj.position, 2500000 ) ) { 	// do collisions on voxels & structures... just walls at first..
 					
 			if ( obj.loaded == undefined ) {
@@ -66,7 +66,8 @@ self.update = ( ) => {
 			if ( distance2dCompare( position, obj.position, 900000 ) ) {
 					
 				let alt = obj.altitude || 0
-					yPos = obj.position[1]
+				
+				yPos = obj.position[1]
 				
 				if ( distance2dCompare( position, obj.position, 528000 ) ) {
 						

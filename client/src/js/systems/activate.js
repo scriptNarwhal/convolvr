@@ -1,12 +1,12 @@
 export default class ActivateSystem { // respond to activate / click pointer events & register callbacks
     
-    constructor ( world ) {
+    constructor ( world: Convolvr ) {
 
         this.world = world
 
     }
 
-    init (component) {
+    init ( component: Component ) {
 
         let callbacks = []
 

@@ -3,13 +3,15 @@ import { API_SERVER } from '../config.js'
 
 export default class FileSystem {
 
-    constructor ( world ) {
+    world: Convolvr
+
+    constructor ( world: Convolvr ) {
 
         this.world = world
 
     }
 
-    init ( component ) { 
+    init ( component: Component ) { 
 
         let prop = component.props.file,
             params = {}

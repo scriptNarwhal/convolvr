@@ -39,6 +39,10 @@ export default class GeometrySystem {
               geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 14, 1 )
               faceNormals = true
             break
+            case "open-cylinder":
+              geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 28, 1, true )
+              faceNormals = true
+            break
             case "cone":
               geometry = new THREE.ConeGeometry( size[0], size[1], size[2] )
               faceNormals = true

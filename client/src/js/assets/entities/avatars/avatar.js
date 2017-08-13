@@ -4,7 +4,7 @@ import Component from '../../../component'
 
 let cursorAxis = new THREE.Vector3( 1, 0, 0 )
 
-let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr hands'
+let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 'vr hands'
     
   console.log("init avatar, assetSystem ", assetSystem )
 
@@ -28,8 +28,8 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
           props: {
               cursor: true,
               geometry: {
-                shape: "open-box",
-                size: [ 1500, 1500, 1500 ]
+                shape: "open-cylinder", // "open-box",
+                size: [ 1300, 1300, 1300 ]
               },
               material: {
                 name: "wireframe",
@@ -157,7 +157,7 @@ let avatar = ( assetSystem, config ) => { // wholeBody == true == not just 'vr h
 
       }
         
-    entity = new Entity( id, components, [0, 0, 0], [ 0, 0, 0, 1 ] )
+    entity = new Entity( id, voxel, components, [0, 0, 0], [ 0, 0, 0, 1 ] )
   
     return entity
 

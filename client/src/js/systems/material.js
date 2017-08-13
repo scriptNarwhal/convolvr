@@ -45,8 +45,6 @@ export default class MaterialSystem {
 
           }
 
-         
-
           if ( envMapUrl && envMapUrl != "none" && (prop.roughnessMap || prop.metalnessMap) || shading == 'physical' ) {
 
             shading = 'physical'

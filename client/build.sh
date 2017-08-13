@@ -18,7 +18,7 @@ build() {
  browserify -d -e src/js/workers/static-collisions.js -t babelify -o "$dist/js/workers/static-collision.js" -v
  echo "browserify oimo worker"
  browserify -d -e src/js/workers/oimo.js -t babelify -o "$dist/js/workers/oimo.js" -v
- flow
+ flow status
 }
 
 build $output

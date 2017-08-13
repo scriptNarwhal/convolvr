@@ -33,7 +33,7 @@ func generateColumn(id int, world string, x int, z int, altitude float32) *Entit
 
 	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) - 89000, float64(z) * 807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
-	structure = NewEntity(id+1, "Ancient Column", world, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
+	structure = NewEntity(id+1, "Ancient Column", world, []int{x, 0, z}, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure
 }
 

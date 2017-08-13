@@ -20,7 +20,7 @@ export default class ToolSystem {
 
         if ( prop.panel ) {
            
-            panel = new Entity(-1, [ // move panels to asset system perhaps.. or define below*
+            panel = new Entity(-1, component.entity.voxel, [ // move panels to asset system perhaps.. or define below*
                 {
                     position: [0, 0, 0],
                     props: { // colored top bar                      
@@ -137,8 +137,8 @@ export default class ToolSystem {
             console.log("panel distance ", toolPanel.mesh.position.sub( panel.mesh.position ).length())
             if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 40000 ) {
 
-                panel.mesh.translateX(20000)
-                panel.mesh.translateZ(20000)
+                panel.mesh.translateX(100000)
+                panel.mesh.translateZ(100000)
 
             }
 

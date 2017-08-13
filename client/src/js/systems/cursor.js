@@ -1,17 +1,19 @@
+import { GRID_SIZE } from '../config'
+
 let handDirection = new THREE.Vector3(0, 0, 0),
     tmpVector2 = new THREE.Vector2(0, 0)
 
 export default class CursorSystem {
 
-    constructor ( world ) {
+    constructor ( world: Convolvr ) {
 
         this.world = world
         this.entityCoolDown = -1
         this.resetEntityTimeout = null
 
     }
-
-    init ( component ) {
+    
+    init ( component: Component ) {
          
         return {
             distance: 32000
@@ -46,7 +48,7 @@ export default class CursorSystem {
 
         }
 
-        coords = [ Math.floor( position.z / 928000 ), 0, Math.floor( position.z / 807360 ) ]
+        coords = [ Math.floor( position.z / GRID_SIZE[ 0 ] ), 0, Math.floor( position.z / GRID_SIZE[ 2 ] ) ]
         raycaster.ray.far = 80000
         castObjects = this.getSurroundingVoxels( voxels, coords )
 

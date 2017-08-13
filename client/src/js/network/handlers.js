@@ -1,6 +1,7 @@
 import Avatar from '../assets/entities/avatars/avatar'
 import Entity from '../entity'
 import { animate } from '../world/render'
+import { GRID_SIZE } from '../config'
 
 export default class SocketHandlers {
 
@@ -12,7 +13,8 @@ export default class SocketHandlers {
         socket.on( "update", packet => {
 
 			let data = JSON.parse( packet.data ),
-                world = this.world,
+				world = this.world,
+				voxel = [0, 0, 0],
 				entity = null,
 				avatar = null,
 				user = null,
@@ -35,7 +37,8 @@ export default class SocketHandlers {
 					
 					if ( user == null ) {
 
-						avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id } )
+						voxel = [ Math.floor( pos.x / GRID_SIZE[ 0 ] ), 0, Math.floor( pos.z / GRID_SIZE[ 2 ] ) ]
+						avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id }, voxel )
 						avatar.init( window.three.scene )
 						user = world.users[ "user"+entity.id ] = {
 							id: entity.id,

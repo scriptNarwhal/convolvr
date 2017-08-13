@@ -317,11 +317,11 @@ export default class Toolbox {
           cPos = camera.position,
           toolName = tool.name
 
-     if ( !!!coords ) {
+     if ( !!!coords )
 
         coords = [ Math.floor(cPos.x / 928000), 0, Math.floor(cPos.z / 807360) ]
 
-     }
+     entity.voxel = coords
 
       let actionData = {
         tool: toolName,
