@@ -1,5 +1,6 @@
 import Tool from './tool'
 import Entity from '../entity'
+import { GRID_SIZE } from '../config'
 
 export default class EntityTool extends Tool  {
 
@@ -9,7 +10,9 @@ export default class EntityTool extends Tool  {
 
     let assets = world.systems.assets,
         allEntities = assets.entitiesByName,
-        allOptions = []
+        allOptions = [],
+        cameraPos = world.three.camera.position,
+        coords =  [ cameraPos[0], 0, cameraPos[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
 
       Object.keys( allEntities ).map( name => {
     
@@ -28,7 +31,7 @@ export default class EntityTool extends Tool  {
       }
       this.all = allOptions
       this.current = 5
-      this.entity = new Entity(-1, [
+      this.entity = new Entity(-1, coords, [
           {
             props: {
               geometry: {

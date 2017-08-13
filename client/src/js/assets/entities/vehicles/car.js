@@ -58,7 +58,7 @@ let car = ( assetSystem, config, voxel ) => {  // implement
           ]
         }))
         
-    entity = new Entity( id, components )
+    entity = new Entity( id, voxel, components )
   
     return entity
 

@@ -1,6 +1,7 @@
 import Tool from './tool'
 import Component from '../component'
 import Entity from '../entity'
+import { GRID_SIZE } from '../config'
 
 export default class ComponentTool extends Tool {
   constructor ( data, world, toolbox ) {
@@ -9,8 +10,10 @@ export default class ComponentTool extends Tool {
 
       let assets = world.systems.assets,
           components = assets.componentsByName,
-          allOptions = []
-
+          allOptions = [],
+          cameraPos = world.three.camera.position,
+          coords =  [ cameraPos[0], 0, cameraPos[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+  
         Object.keys( components ).map( name => allOptions.push( name ) )
         console.log( "all components", components )
 
@@ -23,7 +26,7 @@ export default class ComponentTool extends Tool {
         }
         this.all = allOptions
         this.current = 2
-        this.entity = new Entity(-1, [
+        this.entity = new Entity(-1, coords, [
           {
             props: {
               geometry: {
