@@ -12,7 +12,7 @@ export default class ComponentTool extends Tool {
           components = assets.componentsByName,
           allOptions = [],
           cameraPos = world.three.camera.position,
-          coords =  [ cameraPos[0], 0, cameraPos[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+          coords =  [ cameraPos.x, 0, cameraPos.z ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
   
         Object.keys( components ).map( name => allOptions.push( name ) )
         console.log( "all components", components )

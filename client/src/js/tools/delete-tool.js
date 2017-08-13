@@ -11,7 +11,7 @@ export default class DeleteTool extends Tool  {
       super(data, world, toolbox)
 
       let cameraPos = world.three.camera.position,
-          coords =  [ cameraPos[0], 0, cameraPos[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+         coords =  [ cameraPos.x, 0, cameraPos.z ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
 
 
       this.mesh = null
@@ -37,10 +37,7 @@ export default class DeleteTool extends Tool  {
               this.initLabel( false, "Delete")
             ]
           }
-        ],
-        null,
-        null,
-        coords)
+        ], null, null, coords)
 
     }
 

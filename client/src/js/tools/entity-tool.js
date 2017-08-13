@@ -12,7 +12,7 @@ export default class EntityTool extends Tool  {
         allEntities = assets.entitiesByName,
         allOptions = [],
         cameraPos = world.three.camera.position,
-        coords =  [ cameraPos[0], 0, cameraPos[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+        coords =  [ cameraPos.x, 0, cameraPos.z ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
 
       Object.keys( allEntities ).map( name => {
     
@@ -31,7 +31,7 @@ export default class EntityTool extends Tool  {
       }
       this.all = allOptions
       this.current = 5
-      this.entity = new Entity(-1, coords, [
+      this.entity = new Entity(-1, [
           {
             props: {
               geometry: {
@@ -61,7 +61,7 @@ export default class EntityTool extends Tool  {
               this.initLabel( false, "Entity")
             ]
           }
-        ])
+        ], [0,0,0], [0,0,0,1], coords)
 
     }
 

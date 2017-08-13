@@ -9,8 +9,8 @@ export default class DebugTool extends Tool {
     super ( data, world, toolbox )
 
       let cameraPos = world.three.camera.position,
-          coords =  [ cameraPos[0], 0, cameraPos[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
-
+          coords =  [ cameraPos.x, 0, cameraPos.z ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+          
       this.mesh = null
       this.name = "Debug Tool"
       this.options = {
