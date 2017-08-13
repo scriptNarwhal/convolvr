@@ -94,7 +94,7 @@ export default class SocketHandlers {
 			switch (data.tool) {
 				case "Entity Tool":
 					let ent = data.entity,
-						entity = new Entity(ent.id, coords, ent.components, data.position, data.quaternion)
+						entity = new Entity(ent.id, ent.components, data.position, data.quaternion, coords )
 
 					voxel.entities.push(entity)
 					entity.init(three.scene)

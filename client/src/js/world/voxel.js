@@ -43,11 +43,12 @@ export default class Voxel {
 
     preLoadEntities () {
 
-        let scene: Object = this.world.three.scene
+        let scene: Object = this.world.three.scene,
+            coords = this.coords
 
         !!this.data.entities && this.data.entities.map( ( e, i ) => {
             
-            let entity: Entity = new Entity( e.id, this.coords, e.components, e.position, e.quaternion )
+            let entity: Entity = new Entity( e.id, e.components, e.position, e.quaternion, coords )
 
             if ( i < 2 ) {
             

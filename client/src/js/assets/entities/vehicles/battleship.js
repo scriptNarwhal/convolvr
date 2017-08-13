@@ -58,7 +58,7 @@ let battleship = ( assetSystem, config, voxel ) => {  // implement
           ]
         }))
         
-    entity = new Entity( id, voxel, components )
+    entity = new Entity( id, components, null, null, voxel )
   
     return entity
 

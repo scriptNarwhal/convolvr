@@ -47,7 +47,10 @@ export default class SocialTool extends Tool {
               this.initLabel( false, "Social Networks")
             ]
           }
-        ])
+        ],
+        null,
+        null,
+        coords)
 
     }
 

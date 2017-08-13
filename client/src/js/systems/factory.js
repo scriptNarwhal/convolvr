@@ -136,7 +136,7 @@ export default class FactorySystem {
         
         }
 
-        return  new Entity( -1, components, position, quaternion )
+        return  new Entity( -1, components, position, quaternion, voxel )
 
     }
 
@@ -149,12 +149,12 @@ export default class FactorySystem {
                 preset
             }
         }
-        return new Entity( -1, [ data ], position, quaternion )
+        return new Entity( -1, [ data ], position, quaternion, voxel )
     }
 
     _generateGeometry ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, voxel, [{ 
+        return new Entity(-1, [{ 
                 props: Object.assign({}, {geometry: data}, {
                     mixin: true,
                     miniature: {},
@@ -170,13 +170,13 @@ export default class FactorySystem {
                     }
                 }
             )}
-        ], position, quaternion)
+        ], position, quaternion, voxel)
 
     }
 
     _generateSystem ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, voxel, [{
+        return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     material: {
@@ -195,13 +195,13 @@ export default class FactorySystem {
                     }
                 }
             )}
-        ], position, quaternion)
+        ], position, quaternion, voxel)
 
     }
 
     _generateMaterial ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, voxel, [{
+        return new Entity(-1, [{
                 props: Object.assign({}, {material: data}, {
                     mixin: true,
                     geometry: {
@@ -216,13 +216,13 @@ export default class FactorySystem {
                     }
                 }
             )}
-        ], position, quaternion)
+        ], position, quaternion, voxel)
 
     }
 
     _generateAsset ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, voxel, [{
+        return new Entity(-1, [{
                 props: Object.assign({}, {material: data}, {
                     mixin: true,
                     assets: {
@@ -239,13 +239,13 @@ export default class FactorySystem {
                     }
                 }
             )}
-        ], position, quaternion)
+        ], position, quaternion, voxel)
 
     }
 
     _generateWorld ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, voxel, [{
+        return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     portal: {
@@ -262,13 +262,13 @@ export default class FactorySystem {
                     }
                 }
             )}
-        ], position, quaternion)
+        ], position, quaternion, voxel)
 
     }
 
     _generatePlace ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-         return new Entity(-1, voxel, [{
+         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     portal: {
@@ -286,13 +286,13 @@ export default class FactorySystem {
                     }
                 }
             )}
-        ], position, quaternion)
+        ], position, quaternion, voxel)
 
     }
 
     _generateFile ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, voxel, [{
+        return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     text: {
@@ -316,13 +316,13 @@ export default class FactorySystem {
                     }
                 }
             )}
-        ], position, quaternion)
+        ], position, quaternion, voxel)
 
     }
 
     _generateDirectory ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
-        return new Entity(-1, voxel, [{
+        return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     text: {
@@ -346,7 +346,7 @@ export default class FactorySystem {
                     }
                 }
             )}
-        ], position, quaternion)
+        ], position, quaternion, voxel)
 
     }
 

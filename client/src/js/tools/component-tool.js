@@ -26,7 +26,7 @@ export default class ComponentTool extends Tool {
         }
         this.all = allOptions
         this.current = 2
-        this.entity = new Entity(-1, coords, [
+        this.entity = new Entity(-1, [
           {
             props: {
               geometry: {
@@ -55,7 +55,10 @@ export default class ComponentTool extends Tool {
               this.initLabel( false, "Component")
             ]
           }
-        ])
+        ],
+        null,
+        null,
+        coords)
 
     }
 

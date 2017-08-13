@@ -1,5 +1,6 @@
 import Tool from './tool'
 import Entity from '../entity'
+import { GRID_SIZE } from '../config'
 
 /* delete (component | entity) tool */
 
@@ -8,6 +9,11 @@ export default class DeleteTool extends Tool  {
     constructor (data, world, toolbox) {
 
       super(data, world, toolbox)
+
+      let cameraPos = world.three.camera.position,
+          coords =  [ cameraPos[0], 0, cameraPos[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+
+
       this.mesh = null
       this.name = "Delete Tool"
       this.options = {
@@ -31,7 +37,10 @@ export default class DeleteTool extends Tool  {
               this.initLabel( false, "Delete")
             ]
           }
-        ])
+        ],
+        null,
+        null,
+        coords)
 
     }
 

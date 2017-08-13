@@ -47,7 +47,10 @@ export default class PlaceTool extends Tool {
               this.initLabel( false, "Places")
             ]
           }
-        ])
+        ],
+        null,
+        null,
+        coords)
 
     }
 

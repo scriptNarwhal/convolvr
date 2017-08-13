@@ -279,10 +279,11 @@ export default class AssetSystem {
 
         if ( !!init ) {
 
-            return new Entity( ent.id, voxel, ent.components, ent.position, ent.quaternion)
+            return new Entity( ent.id, ent.components, ent.position, ent.quaternion, voxel )
         
         } else {
-
+            
+            ent.voxel = voxel
             return ent
         
         }

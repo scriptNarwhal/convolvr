@@ -3,7 +3,7 @@ import { GRID_SIZE } from './config'
 
 export default class Entity {
 
-  constructor ( id, voxel, components, position, quaternion ) {
+  constructor ( id, components, position, quaternion, voxel ) {
 
       let world = window.three.world
 
@@ -23,7 +23,7 @@ export default class Entity {
       this.compsByFaceIndex = [] // possibly deprecated
       this.allComponents = []
       this.combinedComponents = []
-      this.voxel = voxel
+      this.voxel = voxel ? voxel : this.getVoxel( true )
       this.lastFace = 0
       this._compPos = new THREE.Vector3()
       this.world = world
@@ -290,10 +290,21 @@ export default class Entity {
 
   }
 
-  getVoxel () {
+  getVoxel ( initial ) {
 
-    let position = this.mesh.position,
-        coords = [Math.floor( position.x / GRID_SIZE[ 0 ] ), 0, Math.floor( position.z / GRID_SIZE[ 2 ] )]
+    let position = null,
+        coords = null
+    
+    if ( initial ) {
+
+      position = this.position
+      coords = [Math.floor( position[ 0 ] / GRID_SIZE[ 0 ] ), 0, Math.floor( position[ 2 ] / GRID_SIZE[ 2 ] )]
+
+    } else {
+
+      coords = this.voxel
+
+    }        
 
     this.voxel = coords
 

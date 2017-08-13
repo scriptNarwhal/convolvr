@@ -1,4 +1,5 @@
 import Entity from '../entity'
+import { GRID_SIZE } from '../config'
 
 // TODO: hook into user.toolbox interfaces (primaryAction, etc.. )
 
@@ -20,7 +21,7 @@ export default class ToolSystem {
 
         if ( prop.panel ) {
            
-            panel = new Entity(-1, component.entity.voxel, [ // move panels to asset system perhaps.. or define below*
+            panel = new Entity(-1, [ // move panels to asset system perhaps.. or define below*
                 {
                     position: [0, 0, 0],
                     props: { // colored top bar                      
@@ -72,7 +73,7 @@ export default class ToolSystem {
                     }),
                     components: []
                 }
-            ], [0, 0, 0], false)
+            ], [0, 0, 0], false, component.entity.voxel)
             this.panels.push(panel)
             
         }
