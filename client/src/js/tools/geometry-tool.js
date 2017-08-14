@@ -16,7 +16,7 @@ export default class GeometryTool extends Tool {
 
       }
 
-      this.entity = new Entity(-1, coords, [
+      this.entity = new Entity(-1, [
           {
             props: {
               geometry: {
@@ -46,7 +46,7 @@ export default class GeometryTool extends Tool {
               this.initLabel( false, "Geometry")
             ]
           }
-        ])
+        ], coords )
 
     }
 

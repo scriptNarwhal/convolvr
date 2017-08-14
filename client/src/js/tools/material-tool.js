@@ -17,7 +17,7 @@ export default class MaterialTool extends Tool {
 
     }
 
-      this.entity = new Entity(-1, coords, [{
+      this.entity = new Entity(-1, [{
           props: {
             geometry: {
               shape: "box",
@@ -46,7 +46,7 @@ export default class MaterialTool extends Tool {
             this.initLabel( false, "Material")
           ]
         }
-      ])
+      ], coords)
     }
 
     primaryAction (telemetry) {

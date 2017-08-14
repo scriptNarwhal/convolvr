@@ -47,7 +47,7 @@ export default class WorldTool extends Tool {
               this.initLabel( false, "Worlds")
             ]
           }
-        ], null, null, coords)
+        ], [0,0,0], [0,0,0,1], coords)
 
     }
 

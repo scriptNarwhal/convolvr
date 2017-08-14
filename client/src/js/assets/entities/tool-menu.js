@@ -1,4 +1,4 @@
-let toolMenu = (assetSystem) => {
+let toolMenu = (assetSystem, config, voxel) => {
 
     let toolColors = [
         0x07ff00, 0x0707ff, 0xff0707, 0xff8007, 0x07ffff,
@@ -108,7 +108,8 @@ let toolMenu = (assetSystem) => {
             }
         ],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        voxel: voxel || [ 0, 0, 0 ]
     }
 
 }

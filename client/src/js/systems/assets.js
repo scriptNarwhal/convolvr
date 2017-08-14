@@ -263,23 +263,17 @@ export default class AssetSystem {
 
     makeEntity ( name,  init, config, voxel  ) {
         
-        let toMake = this.entitiesByName[name],
-            ent =  typeof toMake == 'function' ? toMake( this, config, voxel ) : toMake
+        let toMake = this.entitiesByName[ name ],
+            ent = typeof toMake == 'function' ? toMake( this, config, voxel ) : toMake
 
-        if ( !!init ) {
+        if ( init ) {
 
             return new Entity( ent.id, ent.components, ent.position, ent.quaternion, voxel )
-        
+
         } else {
-            
-            if (ent != null) {
-                ent = Object.assign({}, ent, {voxel})
-            } else {
-                console.warn("entity generation failed: ", name, init, config, voxel, ent)
-            }
-            
+
             return ent
-        
+
         }
 
     }

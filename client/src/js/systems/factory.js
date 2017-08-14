@@ -48,11 +48,11 @@ export default class FactorySystem {
             miniature = !!prop.miniature,
             type = prop.type,
             preset = prop.preset,
-            propName = prop.propName,
+            propName: string = prop.propName,
             data = prop.data,
             quat: Array<number> = data.quaternion,
             components = data.components,
-            created = null
+            created: Entity = null
             
         if ( type == 'entity' ) {
  
@@ -64,7 +64,7 @@ export default class FactorySystem {
 
         } else if ( type == 'prop' ) {
 
-            switch (propName) {
+            switch ( propName ) {
 
                 case "geometry":
                     created = this._generateGeometry( data, voxel, entityPos, quat )

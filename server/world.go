@@ -210,7 +210,7 @@ func getWorld(c echo.Context) error { // load specific world
 		if rand.Intn(12) > 5 {
 
 			if rand.Intn(12) > 5 {
-				red = 0.12
+				red = 0.06
 				green = 0.02
 				blue = 1.0
 			} else {
@@ -226,7 +226,7 @@ func getWorld(c echo.Context) error { // load specific world
 				green = 1.0
 				blue = 0.44
 			} else {
-				red = 0.02
+				red = 0.012
 				green = 0.44
 				blue = 1.0
 			}
@@ -249,10 +249,10 @@ func getWorld(c echo.Context) error { // load specific world
 		green *= 1.1
 		blue *= 1.1
 		sky := Sky{SkyType: "standard", Red: float32(red), Green: float32(green), Blue: float32(blue), Layers: nil, Skybox: nil, Photosphere: ""}
-		light := Light{Color: lightColor, Intensity: 1.1, Pitch: 1.64, Yaw: rand.Float64() * 3.14, AmbientColor: ambientColor}
+		light := Light{Color: lightColor, Intensity: 0.95, Pitch: 1.64, Yaw: rand.Float64() * 3.14, AmbientColor: ambientColor}
 
 		terrain := Terrain{TerrainType: "both", Height: 20000, Color: terrainColor, Red: terrainRed, Green: terrainGreen, Blue: terrainBlue, FlatAreas: true, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
-		spawn := Spawn{Entities: true, Structures: true, Roads: true, Walls: true, Trees: true, NPCS: true, Tools: true, Vehicles: true, Columns: true, Wheels: true, Orbs: true, Blocks: true, Nets: true, Pyramids: true, Curtains: true}
+		spawn := Spawn{Entities: true, Structures: true, Roads: true, Walls: true, Trees: true, NPCS: true, Tools: true, Vehicles: true, Columns: rand.Intn(12) > 6, Wheels: rand.Intn(12) > 6, Orbs: rand.Intn(12) > 6, Blocks: rand.Intn(12) > 6, Nets: rand.Intn(12) > 6, Pyramids: rand.Intn(12) > 6, Curtains: rand.Intn(12) > 6}
 		gravity := 1.0
 		highAltitudeGravity := false
 		world = *NewWorld(0, -1, "space", name, gravity, highAltitudeGravity, sky, light, terrain, spawn, []string{}, "Auto-generated World")

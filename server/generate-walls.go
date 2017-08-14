@@ -39,13 +39,13 @@ func generateWall(id int, world string, x int, z int, altitude float32) *Entity 
 
 func canPlaceWallAt(x int, y int, z int) bool {
 
-	xOffset := int(math.Abs(float64(x % 4)))
+	xOffset := int(math.Abs(float64(x % 8)))
 	//zOffset := int(math.Abs(float64(z % 5)))
 	placeStructure := false
 
 	if (int(math.Abs(float64(x%30))) < 16) && (int(math.Abs(float64(z%30))) < 16) {
 
-		if xOffset == 2 {
+		if xOffset == 7 {
 
 			placeStructure = true
 

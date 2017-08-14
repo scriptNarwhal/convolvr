@@ -39,13 +39,13 @@ func generateColumn(id int, world string, x int, z int, altitude float32) *Entit
 
 func canPlaceColumnAt(x int, y int, z int) bool {
 
-	xOffset := int(math.Abs(float64(x % 4)))
+	xOffset := int(math.Abs(float64(x % 7)))
 	//zOffset := int(math.Abs(float64(z % 5)))
 	placeStructure := false
 
 	if (int(math.Abs(float64(x%30))) < 8) && (int(math.Abs(float64(z%30))) < 8) {
 
-		if xOffset == 3 {
+		if xOffset == 4 {
 
 			placeStructure = true
 
