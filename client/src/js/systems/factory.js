@@ -2,6 +2,7 @@
 import Convolvr from '../world/world'
 import Component from '../component'
 import Entity from '../entity'
+import { THREE } from 'three'
 
 export default class FactorySystem {
 
@@ -13,6 +14,7 @@ export default class FactorySystem {
 
     }
   
+
     init ( component: Component ) { //console.log("factory component init ", component) 
         
         let prop = component.props.factory
@@ -41,18 +43,18 @@ export default class FactorySystem {
 
     generate ( component: Component ) {
 
-        let prop = component.props.factory,
-            position = component.entity.mesh.position,
-            voxel: Array<number> = component.entity.voxel,
-            entityPos: Array<number> = !!prop.anchorOutput ? [0, 0, 0] : position.toArray(),
-            miniature = !!prop.miniature,
-            type = prop.type,
-            preset = prop.preset,
-            propName: string = prop.propName,
-            data = prop.data,
-            quat: Array<number> = data.quaternion,
-            components = data.components,
-            created: Entity = null
+        let prop:       Object           = component.props.factory,
+            position:   THREE.Vector3    = component.entity.mesh.position,
+            voxel:      Array<number>    = component.entity.voxel,
+            entityPos:  Array<number>    = !!prop.anchorOutput ? [0, 0, 0] : position.toArray(),
+            miniature:  boolean          = !!prop.miniature,
+            type:       string           = prop.type,
+            preset:     string           = prop.preset,
+            propName:   string           = prop.propName,
+            data:       Object           = prop.data,
+            quat:       Array<number>    = data.quaternion,
+            components: Array<Component> = data.components,
+            created:    Entity           = null
             
         if ( type == 'entity' ) {
  
@@ -99,7 +101,7 @@ export default class FactorySystem {
 
         }
 
-        if ( created != null && created.mesh != null ) {
+        if ( created != null ) {
 
             if ( !!prop.anchorOutput ) {
 
@@ -111,9 +113,13 @@ export default class FactorySystem {
 
             }
 
-            created.mesh.translateZ(-10000)
-            created.update(created.mesh.position.toArray())
+            if ( created.mesh != null ) {
 
+                created.mesh.translateZ(-10000)
+                created.update(created.mesh.position.toArray())
+
+            }
+            
         } else {
 
             console.error( "error generating entity", created, prop )
