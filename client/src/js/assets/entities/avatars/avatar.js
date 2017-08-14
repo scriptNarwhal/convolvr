@@ -157,7 +157,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
 
       }
         
-    entity = new Entity( id, components, [ 0, 0, 0, 1 ], [0, 0, 0] )
+    entity = new Entity( id, components, [0,0,0], [0,0,0,1], voxel )
   
     return entity
 

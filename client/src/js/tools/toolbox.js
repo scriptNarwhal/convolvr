@@ -21,7 +21,7 @@ export default class Toolbox {
       this.world = world
       this.user = user
       this.hands = []
-
+      console.warn(this.user.avatar)
       this.user.avatar.componentsByProp.hand.map(( m, i )=>{
 
         if ( i < 3 ) {

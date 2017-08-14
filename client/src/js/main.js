@@ -10,8 +10,8 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import makeStore from './redux/makeStore'
-let store = makeStore(routerReducer)
-const history = syncHistoryWithStore(browserHistory, store)
+let store: Object = makeStore(routerReducer)
+const history: Object = syncHistoryWithStore(browserHistory, store)
 import { clearOldData } from './config'
 // 2D UI
 import App from './2d-ui/containers/app'
@@ -28,6 +28,7 @@ import Profile from './2d-ui/containers/profile'
 import HUD from './2d-ui/containers/hud'
 // 3D World
 import Convolvr from './world/world'
+import Systems from './systems/index'
 import { events } from './network/socket'
 import UserInput from './input/user-input'
 import User from './world/user'
@@ -52,14 +53,14 @@ userInput = new UserInput()
 
 loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) => {
 
-  let systems = world.systems,
-      three = world.three
+  let systems: Systems = world.systems,
+      three: Object = world.three
 
   avatar = systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) // entity id can be passed into config object
   avatar.init( three.scene )
   user.useAvatar( avatar )
-  user.toolbox = new Toolbox( user, world )
   world.user = user
+  user.toolbox = new Toolbox( user, world )
   
   toolMenu = systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
   user.hud = toolMenu
@@ -68,7 +69,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
   }) 
   
   userInput.init( world, world.camera, user )
-  userInput.rotationVector = { x: 0, y: 4.5, z: 0 }
+  userInput.rotationVector = { x: 0, y: 3.5, z: 0 }
 
   if ( world.user == "convolvr" && world.name == "overworld" ) {
 
