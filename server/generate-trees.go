@@ -25,7 +25,7 @@ func generateTree(id int, world string, x int, z int, altitude float32) *Entity 
 	treeGeom["size"] = []float64{structureSize, structureSize, structureSize}
 	treeGeom["shape"] = "sphere"
 	treeGeom["merge"] = true
-	treeMat["name"] = "terrain"
+	treeMat["name"] = "organic"
 	treeMat["color"] = 0x20ff00
 	treeProps["geometry"] = treeGeom
 	treeProps["material"] = treeMat
@@ -37,10 +37,10 @@ func generateTree(id int, world string, x int, z int, altitude float32) *Entity 
 	trunkGeom := make(map[string]interface{})
 	trunkMat := make(map[string]interface{})
 	trunkState := make(map[string]interface{})
-	trunkGeom["size"] = []float64{structureSize / 8, structureSize, structureSize / 8}
+	trunkGeom["size"] = []float64{structureSize / 8, structureSize * 2.0, structureSize / 8}
 	trunkGeom["shape"] = "box"
 	trunkGeom["merge"] = true
-	trunkMat["name"] = "terrain"
+	trunkMat["name"] = "organic"
 	trunkMat["color"] = 0x803010
 	trunkProps["geometry"] = trunkGeom
 	trunkProps["material"] = trunkMat

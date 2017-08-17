@@ -281,8 +281,9 @@ export default class Entity {
     addToOctree && world.octree.add( mesh )
 
     parent.add( mesh )
-    this.addToVoxel( this.voxel, mesh )
     this.mesh = mesh
+    this.addToVoxel( this.voxel, mesh )
+    
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()
     !! callback && callback( this )
@@ -297,7 +298,7 @@ export default class Entity {
     
     if ( initial ) {
 
-      position = this.position
+      position = this.mesh != null ? this.mesh.position.toArray() : this.position
       coords = [Math.floor( position[ 0 ] / GRID_SIZE[ 0 ] ), 0, Math.floor( position[ 2 ] / GRID_SIZE[ 2 ] )]
 
     } else {

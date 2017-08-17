@@ -194,9 +194,14 @@ self.onmessage = function ( event ) {
 
 	} else if ( message.command == "add entity" ) {
 
-    entities = voxels[data.coords.join(".")].entities
+		if (!!! voxels[data.coords.join(".")])
 
-    !! entities && voxels[data.coords.join("x")].entities.push( data.entity )
+			voxels[data.coords.join(".")] = { entities: [], cell: data.coords }
+
+
+    	entities = voxels[data.coords.join(".")].entities
+
+    	entities.push( data.entity )
 
   } else if ( message.command == "remove entity" ) {
 

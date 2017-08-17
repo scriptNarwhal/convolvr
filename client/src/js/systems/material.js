@@ -302,13 +302,13 @@ export default class MaterialSystem {
             if ( !simpleShading ) {
 
               //prop.metalnessMap = "/data/images/textures/tiles.png" 
-              prop.roughnessMap = '/data/images/textures/tiles.png'
+              prop.roughnessMap = '/data/images/textures/gplaypattern_@2X-2.png'
               prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
 
             } else {
 
-              prop.map = '/data/images/textures/tiles-light.png' // /data/images/textures/gplaypattern_@2X-2.png'
-              prop.specularMap = '/data/images/textures/tiles.png'
+              prop.map = '/data/images/textures/gplaypattern_@2X-2.png' // /data/images/textures/gplaypattern_@2X-2.png'
+              prop.specularMap = '/data/images/textures/shattered_@2X-2.png'
               prop.envMap = 'none'
 
             }
@@ -316,15 +316,33 @@ export default class MaterialSystem {
             prop.repeat = [ 'wrapping', 12, 12 ]
 
             break
+            case "organic":
+            if ( !simpleShading ) {
+
+              prop.roughnessMap = "/data/images/textures/tiles-light.png" 
+              prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
+
+            } else {
+
+              prop.map = '/data/images/textures/tiles-light.png' // /data/images/textures/gplaypattern_@2X-2.png'
+              prop.specularMap = '/data/images/textures/shattered_@2X-2.png'
+              prop.envMap = 'none'
+
+            }
+
+            prop.repeat = [ 'wrapping', 6, 6 ]
+
+            break
             case "metal":
                 prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
                 
                 if ( !simpleShading ) {
                   
-                  prop.metalnessMap = "/data/images/textures/gplaypattern_@2X-2.png" 
-                  prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
-
+                  prop.metalnessMap = "/data/images/textures/tiles.png" 
+                
                 }
+
+                prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
 
             break
             case "glass":
