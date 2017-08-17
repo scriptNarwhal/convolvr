@@ -80,9 +80,13 @@ export default class EntityTool extends Tool  {
           tooManyComponents = !!selected && selected.components.length >= 48,
           pointingAtTerrain = !!selected && selected.componentsByProp.terrain
   
+      console.log( "( Entity Tool )" )
+
       if ( ! tooManyComponents ) {
 
-        if ( selected && (cursorState.distance < 200000 || cursorSystem.entityCoolDown > 0 ) ) { // switch to component tool
+        if ( cursorSystem.entityCoolDown > 0 ) return
+          
+        if ( selected && (cursorState.distance < 200000) ) { // switch to component tool
             
             user.toolbox.useTool( 1, telemetry.hand )
             user.hud.componentsByProp.toolUI[0].state.toolUI.show()

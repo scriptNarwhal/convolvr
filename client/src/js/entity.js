@@ -26,7 +26,7 @@ export default class Entity {
       this.voxel = voxel ? voxel : this.getVoxel( true )
       this.lastFace = 0
       this._compPos = new THREE.Vector3()
-      this.world = world
+      
   }
 
   update ( position, quaternion = false, components, componentIndex, props, state ) {
@@ -102,7 +102,7 @@ export default class Entity {
         s = 0
 
     this.lastFace = 0
-
+    
     if ( this.mesh != null ) {
 
       world.octree.remove( this.mesh )
@@ -330,7 +330,7 @@ export default class Entity {
 
   getVoxelForUpdate ( coords ) {
 
-    let world = this.world,
+    let world = window.three.world,
         systems = world.systems,
         terrain = systems.terrain,
         voxel = terrain.voxels[ coords.join(".") ]

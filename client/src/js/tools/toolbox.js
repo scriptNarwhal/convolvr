@@ -340,7 +340,7 @@ export default class Toolbox {
         entityId,
         primary
       }
-
+      console.log( "ACTION DATA ", actionData)
       send("tool action", actionData)
     }
 }

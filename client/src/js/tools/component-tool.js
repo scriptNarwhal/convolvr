@@ -78,29 +78,30 @@ export default class ComponentTool extends Tool {
           component = assetSystem.makeComponent( componentType ),
           tooManyComponents = !!selected && selected.components.length >= 48,
           pointingAtTerrain = !!selected && selected.componentsByProp.terrain,
-          coords = [ 0, 0, 0 ],
+          coords = telemetry.voxel,
           props = {},
           components = [],
           entityId = -1,
           entity = null //console.log("Selected ", tooManyComponents, selected, selected.components)
-
-      entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat )
+      
+      // console.log( " Component Tool", selected ? selected.components : 0)
+      // console.log( selected )
+      entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat, coords )
 
       //console.warn( `Component Tool Type ${componentType} Selected`, selected )
+      if ( cursorSystem.entityCoolDown > 25 )
 
+        return false // stop spamming lol.. // console.log("too many components; waiting for entity cooldown; aborting")
+      
+      console.log("pointingAtTerrain too many comps, distance", pointingAtTerrain, tooManyComponents, cursorState.distance)
       if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
-        
+        console.warn(" Problem ")
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByProp.toolUI[ 0 ].state.toolUI.show()
         //user.toolbox.usePrimary( telemetry.hand, entity  )
         return false
 
       }
-
-      if ( tooManyComponents && cursorSystem.entityCoolDown > -1 )
-
-        return false // stop spamming lol.. // console.log("too many components; waiting for entity cooldown; aborting")
-
 
       entityId = selected.id
 
