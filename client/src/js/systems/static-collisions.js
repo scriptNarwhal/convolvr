@@ -48,7 +48,7 @@ export default class StaticCollisions {
 
 			if ( distance < 50000) { // debug
 
-				user.velocity.sub( direction.multiplyScalar(20000) )
+				user.velocity.sub( direction.multiplyScalar(2000) )
 				//three.camera.position.add(direction)
 
 			}

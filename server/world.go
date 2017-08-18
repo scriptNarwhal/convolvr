@@ -254,7 +254,7 @@ func getWorld(c echo.Context) error { // load specific world
 		terrain := Terrain{TerrainType: "both", Height: 20000, Color: terrainColor, Red: terrainRed, Green: terrainGreen, Blue: terrainBlue, FlatAreas: true, Flatness: float64(1.0 + rand.Float64()*16.0), Decorations: ""}
 		spawn := Spawn{Entities: true, Structures: true, Roads: true, Walls: true, Trees: true, NPCS: true, Tools: true, Vehicles: true, Columns: rand.Intn(12) > 6, Wheels: rand.Intn(12) > 6, Orbs: rand.Intn(12) > 6, Blocks: rand.Intn(12) > 6, Nets: rand.Intn(12) > 6, Pyramids: rand.Intn(12) > 6, Curtains: rand.Intn(12) > 6}
 		gravity := 1.0
-		highAltitudeGravity := false
+		highAltitudeGravity := true
 		world = *NewWorld(0, -1, "space", name, gravity, highAltitudeGravity, sky, light, terrain, spawn, []string{}, "Auto-generated World")
 		saveErr := db.Save(&world)
 

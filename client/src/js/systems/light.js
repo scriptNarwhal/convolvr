@@ -32,7 +32,7 @@ export default class LightSystem {
                     light.shadow.camera.far = prop.distance;
                     light.shadow.camera.fov = 30;
                     light.target = component.mesh
-                    light.position.set( 0, 1.9, 1 )
+                    light.position.set( 0, 4000, -4000 )
                 }
 
             break
