@@ -89,7 +89,7 @@ export default class ComponentTool extends Tool {
       entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat, coords )
 
       //console.warn( `Component Tool Type ${componentType} Selected`, selected )
-      if ( cursorSystem.entityCoolDown > 25 )
+      if ( cursorSystem.entityCoolDown > 10 )
 
         return false // stop spamming lol.. // console.log("too many components; waiting for entity cooldown; aborting")
       
@@ -98,7 +98,7 @@ export default class ComponentTool extends Tool {
         console.warn(" Problem ")
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByProp.toolUI[ 0 ].state.toolUI.show()
-        //user.toolbox.usePrimary( telemetry.hand, entity  )
+        user.toolbox.usePrimary( telemetry.hand, entity  )
         return false
 
       }

@@ -85,7 +85,7 @@ export default class EntityTool extends Tool  {
       if ( ! tooManyComponents ) {
 
         if ( cursorSystem.entityCoolDown > 0 ) return
-          
+
         if ( selected && (cursorState.distance < 200000) ) { // switch to component tool
             
             user.toolbox.useTool( 1, telemetry.hand )
@@ -99,7 +99,7 @@ export default class EntityTool extends Tool  {
       
       if ( entity && cursorSystem.entityCoolDown <= 0 ) {
 
-        cursorSystem.entityCoolDown = 150
+        cursorSystem.entityCoolDown = 100
         return {
           entity
         }

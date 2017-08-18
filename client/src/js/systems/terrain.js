@@ -126,7 +126,7 @@ export default class TerrainSystem {
         lastCoords = this.lastChunkCoords = [ coords[0], coords[1], coords[2] ]
         let userName = world.userName || "convolvr"
 
-        phase > 0 && browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
+        phase > 0 && this.loaded && browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
 
         force = false 	// remove old chunks
 

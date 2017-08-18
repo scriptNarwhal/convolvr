@@ -17,21 +17,20 @@ export let detectWorldDetailsFromURL = () => {
         }
     })
 
-    if ( params.length > 2 ) {
+    if ( params.length > 2 )
 
         worldDetails = [ params[1], params[2] ]
 
-    }
     
     if ( params.length > 4 && url.search( 'at/*\.*\.*' ) > -1 ) 
 
         coords = params[4].split(".").map( v => parseInt(v) )
 
-    if ( isWorld && slashes >= 2 ) {
+    if ( isWorld && slashes >= 2 )
         
         worldDetails = [params[1], params[2], isWorld, coords]
         
-    }
+    
     return worldDetails
 
 }

@@ -83,7 +83,7 @@ export default class Toolbox {
       
     }
 
-    useTool ( index, hand, noHUDUpdate) {
+    useTool ( index, hand, noHUDUpdate ) {
 
       this.tools[ this.currentTools[ hand ] ].unequip()
       this.currentTools[ hand ] = index
@@ -213,11 +213,10 @@ export default class Toolbox {
 
       }
 
-      if ( tool.mesh == null ) {
+      if ( tool.mesh == null )
 
         tool.equip(hand)
         
-      }
 
       action = tool.primaryAction(telemetry)
 

@@ -112,8 +112,11 @@ export default class CursorSystem {
             while ( z < 2 ) {
 
                 key = [ coords[ 0 ] + x, 0, coords[ 2 ] + z ].join(".")
-                if ( typeof voxels[ key ] == 'object' ) //console.warn("Empty Voxel! ", key, voxels[ key ] ) }
-                castObjects = castObjects.concat( !!voxels[ key ] ? voxels[ key ].meshes : [] )
+                if ( typeof voxels[ key ] == 'object' ) { //console.warn("Empty Voxel! ", key, voxels[ key ] ) }
+                    castObjects = castObjects.concat( !!voxels[ key ] ? voxels[ key ].meshes : [] )
+                } else {
+                    //console.warn(key, 'notloaded')
+                }
                 z ++
             }
 
@@ -227,7 +230,7 @@ export default class CursorSystem {
 
         //entity && console.warn(cursorSystem.entityCoolDown, entity)
 
-        if ( !!entity || ( cursorSystem.entityCoolDown <= 0 && !!!entity ) ) {
+        if ( !!entity || !!!entity ) {
             
             newCursorState.entity = entity
 

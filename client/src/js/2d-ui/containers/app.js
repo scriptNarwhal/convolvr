@@ -234,7 +234,7 @@ class App extends Component {
     } else if ( newWorld.length >= 4 ) {
 
       console.warn("detected world voxel coords ", newWorld[3])
-      //three.camera.position.set( newWorld[3][0] * GRID_SIZE[0], newWorld[3][1] * GRID_SIZE[1], newWorld[3][2] * GRID_SIZE[2] )
+      three.camera.position.set( newWorld[3][0] * GRID_SIZE[0], newWorld[3][1] * GRID_SIZE[1], newWorld[3][2] * GRID_SIZE[2] )
 
     }
 
