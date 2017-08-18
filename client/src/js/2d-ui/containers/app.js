@@ -97,13 +97,13 @@ class App extends Component {
         world.help.update( [ -160000, altitude, -5000 ] )
         world.user.hud.update( [ 2500, altitude + 52000, 0 ], null )
 
-        if ( three.camera.position.y < altitude ) {
+        //if ( three.camera.position.y < altitude ) {
 
-          three.camera.position.y = (world.terrain.voxels[ voxelKey ].data.altitude) + 50000
+          three.camera.position.set( cameraPos.x+Math.random()*50000, world.terrain.voxels[ voxelKey ].data.altitude, cameraPos.z+Math.random()*50000) + 150000
 
-        }
+        //}
 
-        three.world.user.velocity.y = -10000
+        three.world.user.velocity.y = -1000
 
       }
 

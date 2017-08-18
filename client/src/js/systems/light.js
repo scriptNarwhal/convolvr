@@ -24,7 +24,7 @@ export default class LightSystem {
                 light = new THREE.SpotLight( prop.color, prop.intensity )
                 if ( world.shadows > 0 ) {
 
-                    shadowRes = world.mobile ? 256 : world.shadows > 1 ? 1024 : 512
+                    shadowRes = 128 * Math.pow(2, world.shadows) / (world.mobile ? 4 : 1) 
                     light.castShadow = true;
                     light.shadow.mapSize.width = shadowRes;
                     light.shadow.mapSize.height = shadowRes;
@@ -32,7 +32,7 @@ export default class LightSystem {
                     light.shadow.camera.far = prop.distance;
                     light.shadow.camera.fov = 30;
                     light.target = component.mesh
-                    light.position.set( 0, 2, 1 )
+                    light.position.set( 0, 1.9, 1 )
                 }
 
             break

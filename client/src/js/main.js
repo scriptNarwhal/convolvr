@@ -74,7 +74,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
   if ( world.user == "convolvr" && world.name == "overworld" ) {
 
     let pos = three.camera.position
-    pos.set( pos.x -60000+Math.random()*30000, pos.y + 100000, pos.z -60000+Math.random()*30000 )
+    pos.set( pos.x -60000+Math.random()*30000, pos.y + 200000, pos.z -60000+Math.random()*30000 )
     
   }
     

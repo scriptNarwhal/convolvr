@@ -206,8 +206,9 @@ class Settings extends Component {
                         value={ this.state.shadows }
                         style={ styles.select }
                 >
-                  <option value="2">High</option>
-                  <option value="1">Moderate</option>
+                  <option value="3">High</option>
+                  <option value="2">Moderate</option>
+                  <option value="1">Low</option>
                   <option value="0">Off</option>
                 </select>
               </div>
