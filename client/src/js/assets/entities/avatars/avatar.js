@@ -36,10 +36,10 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
                 color: 0xffffff
               },
               light: {
-                type: "point",
+                type: "spot",
                 intensity: 0.9,
                 color: 0xffffff,
-                distance: 20000
+                distance: 200000
               }
             },
             position: [ 0, 0, 0 ],

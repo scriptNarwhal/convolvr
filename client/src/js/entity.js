@@ -254,6 +254,13 @@ export default class Entity {
 
     }
 
+    if ( world.shadows > 0 ) {
+
+      mesh.castShadow = true
+      mesh.receiveShadow = true
+
+    }
+
     s = 1
 
     while ( s < nonMerged.length ) {

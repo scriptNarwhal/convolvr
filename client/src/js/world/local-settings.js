@@ -6,6 +6,7 @@ export default function initLocalSettings ( world ) {
 			lighting = localStorage.getItem("lighting"),
 			enablePostProcessing = localStorage.getItem("postProcessing"),
 			aa = localStorage.getItem("aa"),
+			shadows = localStorage.getItem("shadows"),
 			floorHeight = localStorage.getItem("floorHeight"),
 			viewDistance = localStorage.getItem("viewDistance"),
 			leapMode = localStorage.getItem("leapMode"),
@@ -43,6 +44,17 @@ export default function initLocalSettings ( world ) {
 
 			aa = 'on'
 			localStorage.setItem("aa", aa)
+
+		}
+
+		if ( shadows == null ) {
+
+			shadows = 1
+			localStorage.setItem( "shadows", shadows )
+
+		} else {
+
+			shadows = parseInt( shadows )
 
 		}
 
@@ -89,6 +101,7 @@ export default function initLocalSettings ( world ) {
 		}
 
 		world.aa = aa
+		world.shadows = shadows
 		world.viewDistance = viewDistance
 		world.cameraMode = cameraMode
 		world.vrMovement = vrMovement

@@ -71,6 +71,7 @@ class Settings extends Component {
       leapMode: "hybrid",
       floorHeight: 0,
       viewDistance: 0,
+      shadows: 1,
       profilePicture: '',
       manualLensDistance: 0,
       network: [],
@@ -85,6 +86,7 @@ class Settings extends Component {
       postProcessing: localStorage.getItem("postProcessing") || 'off',
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa: localStorage.getItem("aa") || "on",
+      shadows: parseInt(localStorage.getItem("shadows")) || 1,
       floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
       IOTMode: localStorage.getItem("IOTMode") || 'off',
       leapMode: localStorage.getItem("leapMode") || "hybrid",
@@ -113,6 +115,7 @@ class Settings extends Component {
     localStorage.setItem('camera', this.state.camera)
     localStorage.setItem('lighting', this.state.lighting)
     localStorage.setItem('aa', this.state.aa)
+    localStorage.setItem('shadows', this.state.shadows)
     localStorage.setItem('postProcessing', this.state.postProcessing)
     localStorage.setItem('vrMovement', this.state.vrMovement) 
     localStorage.setItem('IOTMode', this.state.IOTMode)
@@ -193,6 +196,19 @@ class Settings extends Component {
                 >
                   <option value="high">High (recommended)</option>
                   <option value="low">Low (mobile devices)</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <h3 style={styles.h3}>Shadow Quality</h3>
+              <div style={styles.col}>
+                <select onChange={e=> {this.setState({shadows: parseInt(e.target.value)})}}
+                        value={ this.state.shadows }
+                        style={ styles.select }
+                >
+                  <option value="2">High</option>
+                  <option value="1">Moderate</option>
+                  <option value="0">Off</option>
                 </select>
               </div>
             </div>
