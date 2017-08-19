@@ -1,5 +1,5 @@
-import Component from './component'
 import { GRID_SIZE } from './config'
+import Component from './component'
 
 export default class Entity {
 
@@ -323,7 +323,7 @@ export default class Entity {
   addToVoxel ( coords, mesh ) {
 
     let addTo = this.getVoxelForUpdate( coords )
-
+        
     addTo.meshes.push( mesh )
     
   }

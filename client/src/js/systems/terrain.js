@@ -91,6 +91,48 @@ export default class TerrainSystem {
 
   }
 
+  loadVoxel ( coords ) {
+
+    let voxels = this.voxels,
+        voxelList = this.voxelList,
+        collisions = this.world.systems.staticCollisions ? this.world.systems.staticCollisions : {},
+        voxelKey = coords[0]+".0."+coords[2], // debugging this.. 
+                    voxelData = { name: "generated space", visible: true, altitude: 0, entities: [] },
+                    v = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world )
+                
+        voxels[ voxelKey ] = v
+        voxelList.push( v )
+
+     axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${coords.join("x")}`).then( response => {
+
+        let physicsVoxels = []
+        typeof response.data.map == 'function' && response.data.map( c => {
+
+          v.preLoadEntities()
+          physicsVoxels.push( v.data )
+
+      })
+
+      if ( physicsVoxels.length > 0 ) { //console.log("physics voxels", physicsVoxels)
+               
+          collisions.worker.postMessage(JSON.stringify({
+              command: "add voxels",
+              data: [ v.data ]
+          }))
+                // systems.oimo.worker.postMessage(JSON.stringify({
+                //     command: "add voxels",
+                //     data: physicsVoxels
+                // }))
+      }
+
+    }).catch(response => {
+        console.log("Load Voxel Error", response)
+    })
+
+    return v
+
+  }
+
   bufferVoxels ( force, phase ) {
 
     let voxels = this.voxels,
@@ -251,8 +293,6 @@ export default class TerrainSystem {
                     voxelData = { name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities },
                     v = new Voxel( voxelData, [c.x, 0, c.z], this.world ),
                     initialLoad = terrain.world.initialLoad
-
-                //console.log(`INIT VOXEL ${voxelKey}`)
                 
                 voxels[ voxelKey ] = v
                 voxelList.push( v )
@@ -314,7 +354,6 @@ export default class TerrainSystem {
 
         phase = 0
       
-
       //setTimeout(() => { this.bufferVoxels(force, phase) }, 32 ) // experiment // 32)
       this.phase = phase
 
