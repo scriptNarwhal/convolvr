@@ -39,10 +39,11 @@ export let clearOldData = () => {
 
   if (localStorage.getItem("postProcessing") != null) {
 
-    if (localStorage.getItem("version0.4") == null) {
+    if (localStorage.getItem("version0.41") == null) {
 
-      localStorage.setItem("version0.4", "1")
+      localStorage.setItem("version0.41", "1")
       localStorage.setItem("postProcessing", "off")
+      localStorage.setItem("shadows", window.innerWidth < 720 ? 0 : 1 )
 
     }
 

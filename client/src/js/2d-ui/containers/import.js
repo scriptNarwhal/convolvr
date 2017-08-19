@@ -141,7 +141,7 @@ class ImportUI extends Component {
     return (
         <Shell className="data-view" style={ mobile ? { paddingTop: '60px' } : {} }>
           <LocationBar path={this.state.workingPath}
-                       label="Import OBJ Files"
+                       label="Import .OBJ or .FBX"
                        username={this.props.username}
                        showFileOptions={ true } // show Upload Files, New File, New Folder
                        onItemSelect={  (item, index, length) => {

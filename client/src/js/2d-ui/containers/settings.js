@@ -86,7 +86,7 @@ class Settings extends Component {
       postProcessing: localStorage.getItem("postProcessing") || 'off',
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa: localStorage.getItem("aa") || "on",
-      shadows: parseInt(localStorage.getItem("shadows")) || 1,
+      shadows: parseInt(localStorage.getItem("shadows")) || window.innerWidth < 720 ? 0 : 1,
       floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
       IOTMode: localStorage.getItem("IOTMode") || 'off',
       leapMode: localStorage.getItem("leapMode") || "hybrid",

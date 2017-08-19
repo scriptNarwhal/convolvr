@@ -60,7 +60,7 @@ func canPlaceTreeAt(x int, y int, z int) bool {
 	//zOffset := int(math.Abs(float64(z % 5)))
 	placeStructure := false
 
-	if (int(math.Abs(float64(x%30))) < 16) && (int(math.Abs(float64(z%30))) < 16) {
+	if (int(math.Abs(float64(x%30))) < 7) || (int(math.Abs(float64(z%30))) < 12) {
 
 		if xOffset == 0 {
 

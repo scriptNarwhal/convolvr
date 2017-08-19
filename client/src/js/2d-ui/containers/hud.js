@@ -2,6 +2,12 @@ import React, { Component } from 'react'
 import Button from '../components/button'
 import { browserHistory } from 'react-router'
 
+const styles = {
+    optionButton: {
+        float: "left"
+    }
+}
+
 class HUD extends Component {
 
     toggleMenu (force) {
@@ -13,8 +19,7 @@ class HUD extends Component {
         <div className="hud">
             {this.props.fullscreen == false ? (<Button title="Options"
                     image="/data/images/configure-h.png"
-                    className="options-button"
-                    style={{display: this.props.menuOpen ? "none" : "inline-block", backgroundColor: 'transparent'}}
+                    style={ Object.assign({}, styles.optionButton, {display: this.props.menuOpen ? "none" : "inline-block", backgroundColor: 'transparent'}) }
                     onClick={ (evt, title) => {
                         this.toggleMenu(true)
                         //browserHistory.push("/menu")

@@ -425,8 +425,8 @@ class App extends Component {
                  image="/data/images/x.png"
                  style={{
                      position: "fixed",
-                     right:0,
-                     top: 0,
+                     left:6,
+                     bottom: 0,
                      zIndex: 9999999,
                      background: 'transparent',
                      display: !this.props.menuOpen ? "none" : "inline-block"

@@ -81,7 +81,8 @@ class SideMenu extends Component {
                  clickHandler={ e => { this.navigate(e, "/chat") } }
             />
             <Tab image="/data/images/profile.png"
-                 title="Chat"
+                 title="Profile Settings"
+                 style={ styles.mobileHidden() }
                  clickHandler={ e => { this.navigate(e, "/profile") } }
             />
             <Tab image="/data/images/voxel-white.png"
