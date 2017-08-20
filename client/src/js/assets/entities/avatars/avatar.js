@@ -24,8 +24,9 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
         console.log("init avatar ", id)
 
         cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
-        cursorComponent = {
-          props: {
+        cursorComponent = (spotLight = false) => {
+          return {
+            props: {
               cursor: true,
               geometry: {
                 shape: "open-cylinder", // "open-box",
@@ -36,7 +37,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
                 color: 0xffffff
               },
               light: {
-                type: "spot",
+                type: spotLight ? "spot" : "point",
                 intensity: 0.86,
                 color: 0xffffff,
                 distance: 700000
@@ -44,6 +45,8 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
             },
             position: [ 0, 0, 0 ],
             quaternion: cursorRot.toArray()
+          }
+          
         }
 
       if ( wholeBody ) {
@@ -123,7 +126,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
           position: [ 0, 0, 0 ],
           quaternion: [ 0, 0, 0, 1 ],
           components: [
-            Object.assign( {}, cursorComponent )
+            Object.assign( {}, cursorComponent(false) )
           ]
         }))
 
@@ -150,7 +153,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
           quaternion: [0, 0, 0, 1],
           position: [(n - 1) * 1500, 0, 0],
           components: [
-            Object.assign({}, cursorComponent)
+            Object.assign({}, cursorComponent(n==1))
           ]
         }))
         ++n

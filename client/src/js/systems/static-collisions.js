@@ -46,9 +46,9 @@ export default class StaticCollisions {
 			let distance = entPos.distanceTo( userPos ),
 				direction = entPos.sub(userPos)	
 
-			if ( distance < 50000) { // debug
+			if ( distance < 20000) { // debug
 
-				user.velocity.sub( direction.multiplyScalar(10000) )
+				user.velocity.sub( direction.multiplyScalar(100) )
 				//three.camera.position.add(direction)
 
 			}

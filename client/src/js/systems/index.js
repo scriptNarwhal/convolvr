@@ -6,6 +6,7 @@ import CameraSystem from './camera'
 import CPUSystem from './cpu'
 import ConditionSystem from './condition'
 import ContainerSystem from './container'
+import ConveyorSystem from './conveyor'
 import ChatSystem from './chat'
 import CursorSystem from './cursor'
 import DatGUIVRPluginSystem from './datguivr-plugin'
@@ -81,6 +82,7 @@ export default class Systems {
 			container: new ContainerSystem( world ),
 			condition: new ConditionSystem( world ),
 			control: new ControlSystem( world ),
+			conveyor: new ConveyorSystem( world ),
 			cursor: new CursorSystem( world ),
 			cpu: new CPUSystem( world ),
 			datgui: new DatGUIVRPluginSystem( world ),
