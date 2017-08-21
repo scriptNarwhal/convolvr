@@ -2,7 +2,8 @@ export default class GeometrySystem {
 
     constructor (world) {
       this.world = world
-      this.nodeGeom = new THREE.PlaneGeometry(1/10000, 1/10000)
+      this.nodeGeom = new THREE.PlaneGeometry(1 / 10000, 1 / 10000)
+      this.detail = world.geometry
     }
 
     init ( component ) { 
@@ -32,15 +33,15 @@ export default class GeometrySystem {
               geometry = new THREE.OctahedronGeometry( size[0], 0 )
             break
             case "sphere":
-              geometry = new THREE.OctahedronGeometry( size[0], 3 )
+              geometry = new THREE.OctahedronGeometry( size[0], 1+this.detail )
               faceNormals = true
             break
             case "cylinder":
-              geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 14, 1 )
+              geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 6 + 6* this.detail, 1 )
               faceNormals = true
             break
             case "open-cylinder":
-              geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 28, 1, true )
+              geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 6 + 10 * this.detail, 1, true )
               faceNormals = true
             break
             case "cone":
@@ -48,7 +49,7 @@ export default class GeometrySystem {
               faceNormals = true
             break
             case "torus":
-              geometry = new THREE.TorusGeometry( size[0], 6.3, 5, 12 )
+              geometry = new THREE.TorusGeometry( size[0], 6.3, 5, 6 + this.detail * 6 )
             break
             case "hexagon":
               geometry = new THREE.CylinderGeometry( size[0], size[1], size[2], 6 )
@@ -124,10 +125,10 @@ export default class GeometrySystem {
 
       var extrudeSettings = Object.assign({}, {
         steps: 2,
-        amount: 16,
+        amount: 160,
         bevelEnabled: true,
         bevelThickness: 1,
-        bevelSize: 1,
+        bevelSize: 10,
         bevelSegments: 1
       }, prop.settings || {})
 

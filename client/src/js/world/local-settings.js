@@ -4,6 +4,7 @@ export default function initLocalSettings ( world ) {
 			vrMovement = localStorage.getItem("vrMovement"),
 			IOTMode = localStorage.getItem("IOTMode"),
 			lighting = localStorage.getItem("lighting"),
+			geometry = localStorage.getItem("geometry"),
 			enablePostProcessing = localStorage.getItem("postProcessing"),
 			aa = localStorage.getItem("aa"),
 			shadows = localStorage.getItem("shadows"),
@@ -58,6 +59,16 @@ export default function initLocalSettings ( world ) {
 
 		}
 
+		if ( geometry == null ) {
+
+			geometry = window.innerWidth < 720 ? 1 : 2
+
+		} else {
+
+			geometry = parseInt( geometry )
+
+		}
+
 		if ( lighting == null ) {
 
 			lighting = 'high'
@@ -102,6 +113,7 @@ export default function initLocalSettings ( world ) {
 
 		world.aa = aa
 		world.shadows = shadows
+		world.geometry = geometry
 		world.viewDistance = viewDistance
 		world.cameraMode = cameraMode
 		world.vrMovement = vrMovement

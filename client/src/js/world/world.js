@@ -1,7 +1,10 @@
 import axios from 'axios'
 import { browserHistory } from 'react-router'
 import { animate } from './render'
-import { API_SERVER } from '../config.js'
+import { 
+	API_SERVER,
+	GRID_SIZE
+} from '../config.js'
 import { send } from '../network/socket'
 import Avatar from '../assets/entities/avatars/avatar'
 import Entity from '../entity'
@@ -242,7 +245,7 @@ export default class Convolvr {
 		if ( coords ) {
 			
 			coords = coords.split(".")
-			three.camera.position.fromArray([parseInt(coords[0])*928000, parseInt(coords[1])*807360, parseInt(coords[2])*807360])
+			three.camera.position.fromArray([parseInt(coords[0])*GRID_SIZE[0], parseInt(coords[1])*GRID_SIZE[1], parseInt(coords[2])* GRID_SIZE[2] ])
 			three.camera.updateMatrix()
 
 		}

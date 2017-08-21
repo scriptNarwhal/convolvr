@@ -61,10 +61,12 @@ const styles = {
 class Settings extends Component {
 
   constructor () {
+    
     this.state = {
       camera: 'fps',
       lighting: 'high',
       aa: 'on',
+      geometry: 2,
       postProcessing: 'on',
       defaultWorld: 'overworld',
       welcomeMessage: 'Welcome to Convolvr!',
@@ -77,9 +79,11 @@ class Settings extends Component {
       network: [],
       IOTMode: false
     }
+
   }
 
   componentWillMount () {
+    
     this.setState({
       camera: localStorage.getItem("camera") || 'fps',
       lighting: localStorage.getItem("lighting") || 'high',
@@ -87,16 +91,20 @@ class Settings extends Component {
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa: localStorage.getItem("aa") || "on",
       shadows: parseInt(localStorage.getItem("shadows")) || window.innerWidth < 720 ? 0 : 1,
+      geometry: parseInt(localStorage.getItem("geometry") || 2),
       floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
       IOTMode: localStorage.getItem("IOTMode") || 'off',
       leapMode: localStorage.getItem("leapMode") || "hybrid",
       viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0,
       manualLensDistance: localStorage.getItem("manualLensDistance") != null ? localStorage.getItem("manualLensDistance") : 0
     })
+
     this.props.fetchUniverseSettings()
+  
   }
 
   componentWillReceiveProps ( nextProps, nextState ) {
+  
     if (this.props.fetchingSettings == true && nextProps.fetchingSettings == false && nextProps.settings != null) {
       console.log("Done Loading Universe Settings")
       this.setState({
@@ -105,6 +113,7 @@ class Settings extends Component {
         network: nextProps.settings.network || []
       })
     }
+  
   }
 
   reload () {
@@ -112,21 +121,25 @@ class Settings extends Component {
   }
 
   save () {
+
     localStorage.setItem('camera', this.state.camera)
     localStorage.setItem('lighting', this.state.lighting)
     localStorage.setItem('aa', this.state.aa)
+    localStorage.setItem('geometry', this.state.geometry)
     localStorage.setItem('shadows', this.state.shadows)
     localStorage.setItem('postProcessing', this.state.postProcessing)
     localStorage.setItem('vrMovement', this.state.vrMovement) 
     localStorage.setItem('IOTMode', this.state.IOTMode)
     localStorage.setItem('floorHeight', this.state.floorHeight)
-    localStorage.setItem( 'leapMode', this.state.leapMode )
+    localStorage.setItem('leapMode', this.state.leapMode )
     localStorage.setItem('viewDistance', this.state.viewDistance)
     localStorage.setItem('manualLensDistance', this.state.manualLensDistance)
     this.reload()
+
   }
 
   updateUniverseSettings () {
+
     let data = {
       id: 1,
       defaultWorld: this.state.defaultWorld,
@@ -134,39 +147,53 @@ class Settings extends Component {
       network: this.state.network
     }
     this.props.updateUniverseSettings(data, this.props.user.password)
+
   }
 
   addServer() {
+
     let network = this.state.network
     network.push({domain: '', image: ''})
     this.setState({network})
+
   }
 
   removeServer(index) {
+
     let network = this.state.network
     network.splice(index, 1)
     this.setState({network})
+
   }
 
   updateServer (index, name, image = '') {
+
     let network = this.state.network
     network[index].name = name
     network[index].image = image
     this.setState({network})
+
   }
 
   upload (e) {
+
     let data = new FormData(),
         username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
+
     data.append('file', e.target.files[0])
+
     this.setState({
       profilePicture: username+"/"+e.target.files[0].name.replace(/\s/g, '-')
     })
+
     this.props.uploadFile(data, username, "")
+
   }
   
   render() {
+
     let isAdmin = this.props.user.name == 'admin'
+
     return (
         <Shell className="settings">
           <div style={styles.modal}>
@@ -210,6 +237,20 @@ class Settings extends Component {
                   <option value="2">Moderate</option>
                   <option value="1">Low</option>
                   <option value="0">Off</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <h3 style={styles.h3}>Geometry Detail</h3>
+              <div style={styles.col}>
+                <select onChange={e=> {this.setState({geometry: parseInt(e.target.value)})}}
+                        value={ this.state.geometry }
+                        style={ styles.select }
+                >
+                  <option value="3">Ultra</option>
+                  <option value="2">High</option>
+                  <option value="1">Moderate</option>
+                  <option value="0">Low</option>
                 </select>
               </div>
             </div>
