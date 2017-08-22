@@ -11,7 +11,7 @@ func generatePylon(id int, world string, x int, z int, altitude float32) *Entity
 		structure           *Entity
 		structureComponents []*Component
 	)
-	floors := 1 + rand.Intn(3)*rand.Intn(3)*rand.Intn(3)
+	floors := 1 + rand.Intn(3)*rand.Intn(3)
 	width := 1.0 + float64(rand.Intn(2))
 	structureSize := 100000.0
 	// create components for each floor & long / windowed wall
@@ -68,13 +68,13 @@ func generatePylonSegment(w int, i int, floors int, width float64, structureSize
 	geometry["merge"] = true
 	wallHeight := 0.0
 	if w < 2 {
-		wallHeight = (-structureSize / 2.65) + float64(i)*structureSize/2
-		wallPos = []float64{0.0, wallHeight, structureSize/2.0 + float64(w-1)*structureSize}
-		geometry["size"] = []float64{structureSize * width, structureSize / 3.8, 5000}
+		wallHeight = (-structureSize / 2.65) + float64(i)*structureSize*2.0
+		wallPos = []float64{0.0, wallHeight, structureSize/2.65 + structureSize/2.0 + float64(w-1)*structureSize}
+		geometry["size"] = []float64{structureSize * width, structureSize, 5000}
 	} else if w < 4 {
-		wallHeight = structureSize * float64(floors)
-		wallPos = []float64{((float64(w-2) - 0.5) * width) * structureSize, wallHeight/4.0 - structureSize/2.0, 0.0}
-		geometry["size"] = []float64{5000, wallHeight / 2.0, structureSize}
+		wallHeight = structureSize * float64(floors) * 2.0
+		wallPos = []float64{((float64(w-2) - 0.5) * width) * structureSize, wallHeight/4.0 - structureSize/2.0, structureSize / 2.0}
+		geometry["size"] = []float64{5000, wallHeight, structureSize}
 	}
 
 	wallQuat := []float64{0.0, 0.0, 0.0, 0.0}
@@ -97,7 +97,7 @@ func canPlacePylonAt(x int, y int, z int) bool {
 	zOffset := int(math.Abs(float64(z % 5)))
 	placeStructure := false
 
-	if int(math.Abs(float64(x%30))) > 8 && int(math.Abs(float64(z%30))) < 8 {
+	if int(math.Abs(float64(x%30))) < 8 && int(math.Abs(float64(z%30))) >= 4 {
 
 		if xOffset == 0 {
 			if zOffset == 2 || zOffset == 3 {

@@ -45,7 +45,7 @@ func canPlaceBlockAt(x int, y int, z int) bool {
 
 	if (int(math.Abs(float64(x%30))) < 8) && (int(math.Abs(float64(z%30))) < 8) {
 
-		if xOffset == 3 {
+		if xOffset == 1 {
 
 			placeStructure = true
 

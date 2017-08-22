@@ -21,11 +21,11 @@ func generateWall(id int, world string, x int, z int, altitude float32) *Entity 
 	floorProps["floor"] = map[string]int{
 		"level": 0,
 	}
-	floorGeometry["size"] = []float64{structureSize, structureSize * 1.61, structureSize * width}
+	floorGeometry["size"] = []float64{structureSize / 8.0, structureSize * 1.61, structureSize * width}
 	floorGeometry["shape"] = "box"
 	floorGeometry["merge"] = true
 	floorMaterial["name"] = "plastic"
-	floorMaterial["color"] = 0x303030
+	floorMaterial["color"] = 0x707070
 	floorProps["geometry"] = floorGeometry
 	floorProps["material"] = floorMaterial
 	wallState := make(map[string]interface{})

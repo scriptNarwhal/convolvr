@@ -21,11 +21,11 @@ func generateCurtain(id int, world string, x int, z int, altitude float32) *Enti
 	floorProps["floor"] = map[string]int{
 		"level": 0,
 	}
-	floorGeometry["size"] = []float64{structureSize, structureSize * 1.61, structureSize * width}
+	floorGeometry["size"] = []float64{structureSize / 4.0, structureSize * 3.61, structureSize * width}
 	floorGeometry["shape"] = "box"
 	floorGeometry["merge"] = true
-	floorMaterial["name"] = "plastic"
-	floorMaterial["color"] = 0x303030
+	floorMaterial["name"] = "terrain"
+	floorMaterial["color"] = 0xff0000
 	floorProps["geometry"] = floorGeometry
 	floorProps["material"] = floorMaterial
 	wallState := make(map[string]interface{})
@@ -43,7 +43,7 @@ func canPlaceCurtainAt(x int, y int, z int) bool {
 	//zOffset := int(math.Abs(float64(z % 5)))
 	placeStructure := false
 
-	if (int(math.Abs(float64(x%30))) < 16) && (int(math.Abs(float64(z%30))) < 16) {
+	if (int(math.Abs(float64(x%30))) < 12) && (int(math.Abs(float64(z%30))) > 16) {
 
 		if xOffset == 2 {
 
