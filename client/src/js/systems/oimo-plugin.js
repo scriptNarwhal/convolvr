@@ -1,6 +1,8 @@
 //@flow
 import Convolvr from '../world/world'
 import Component from '../component'
+import Entity from '../entity'
+import Voxel from '../world/voxel'
 import { THREE } from 'three'
 
 export default class OimoPluginSystem {
@@ -12,31 +14,30 @@ export default class OimoPluginSystem {
 
     constructor ( world: Convolvr ) {
         
-        let worker: Object = new Worker("/data/js/workers/oimo.js"),
+        let worker: Object            = new Worker("/data/js/workers/oimo.js"),
             meshes: Array<THREE.Mesh> = this.meshes = [],
-            dt: number = 1/60;
+            dt:     number            = 1 / 60;
         
-        const ToRad = Math.PI / 180,
-              N = 666
+        const ToRad: number = Math.PI / 180,
+              N:     number = 666
 
         this.worker = worker
         this.world = world
         worker.postMessage = worker.webkitPostMessage || worker.postMessage
 
         worker.onmessage = e => {
-
             // stat
             this.oimoInfo = e.data.perf;
             // Get fresh data from the worker
             let minfo: Object = e.data.minfo,
-                body: Array<THREE.Mesh> = this.meshes;
+                body:  Array<THREE.Mesh> = this.meshes;
 
             if ( typeof minfo != 'object' ) return
 
-            var length = meshes.length,
-                b: Object = {},
-                id = 0,
-                n = 0
+            var length: number = meshes.length,
+                b:      Object = {},
+                id:     number = 0,
+                n:      number = 0
                
             while ( id < length ) {
 
@@ -66,7 +67,7 @@ export default class OimoPluginSystem {
     */
     init ( component: Component ) { 
         
-        let prop = component.props.omio
+        let prop: Object = component.props.oimo
 
         //TODO: implement
 
@@ -76,6 +77,42 @@ export default class OimoPluginSystem {
         }
 
     }
+
+    addVoxels ( voxels: Array<Object> ) {
+
+        this.worker.postMessage( { action: "add voxels", voxels } )  
+
+    }
+
+    addEntity ( entity: Object ) {
+
+        this.worker.postMessage( { action: "add entity", entity: { id: entity.id, position: entity.position, quaternion: entity.quaternion, components: entity.components }} )
+
+    }
+
+    setInMotion ( entity: Entity ) {
+
+        let hasPhysics = entity.componentsByProp.oimo
+
+        if ( false == hasPhysics ) {
+
+            this.addEntity( entity )
+
+        } 
+
+
+
+
+    }
+
+    makeStatic ( entity: Entity ) {
+        
+        let hasPhysics = entity.componentsByProp.oimo
+
+        this.worker.postMessage( { action: "make static", entityId: entity.id, voxel: entity.voxel } ) 
+
+    }
+
 
 }
 

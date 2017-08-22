@@ -6,18 +6,18 @@ import { THREE } from 'three'
 
 export default class Voxel {
 
-    data: Object
-    world: Convolvr
+    data:     Object
+    world:    Convolvr
     entities: Array<Entity>
-    meshes: Array<THREE.Mesh>
-    coords: Array<number>
-    cleanUp: boolean
+    meshes:   Array<THREE.Mesh>
+    coords:   Array<number>
+    cleanUp:  boolean
 
     constructor ( data: Object, cell: Array<number>, world: Convolvr ) {
 
-        let visible = data.visible,
-            scene = world.three.scene,
-            altitude = 0
+        let visible:  boolean     = data.visible,
+            scene:    THREE.Scene = world.three.scene,
+            altitude: number      = 0
 
         this.coords = cell
         this.data = data
@@ -43,8 +43,8 @@ export default class Voxel {
 
     preLoadEntities () {
 
-        let scene: Object = this.world.three.scene,
-            coords = this.coords
+        let scene:  Object        = this.world.three.scene,
+            coords: Array<number> = this.coords
 
         !!this.data.entities && this.data.entities.map( ( e, i ) => {
             

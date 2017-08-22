@@ -149,7 +149,14 @@ func getWorldChunks(c echo.Context) error {
 				}
 
 			}
+			if worldData.Spawn.Pylons {
 
+				if canPlacePylonAt(x, 0, z) {
+					entities = append(entities, generatePylon(generatedBuildings+1, world, x, z, altitude))
+					generatedBuildings++
+				}
+
+			}
 			// Spawn entities resembling mental imagery:
 
 			if worldData.Spawn.Blocks {

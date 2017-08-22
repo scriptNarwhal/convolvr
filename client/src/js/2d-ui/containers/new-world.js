@@ -100,6 +100,7 @@ class NewWorld extends Component {
       flatAreas: true,
       entities: true,
       structures: true,
+      pylons: true,
       roads: true,
       npcs: false,
       tools: false,
@@ -434,6 +435,16 @@ class NewWorld extends Component {
                   </select>
                 </td>
               </tr>
+              <tr>
+              <td></td>
+              <td>Generate Pylons?</td>
+              <td>
+                <select onChange={ e=> { this.onToggle( 'spawn', 'pylons', e ) }}>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+              </td>
+            </tr>
                <tr>
                 <td></td>
                 <td>Generate Vehicles?</td>

@@ -1,32 +1,50 @@
-let world = null,
-    minfo = null,
-    fps = 0,
-    f = [ 0, 0, 0 ],
-    body = []
+//@flow
+import { OIMO } from 'oimo'
 
-self.onmessage = e => {
+let world:  Object        = {},
+    minfo:  Object        = {},
+    fps:    number        = 0,
+    f:      Array<number> = [ 0, 0, 0 ],
+    body:   Array<Object> = [],
+    byCell: Object        = {}
 
-    if ( e.data.oimoUrl && !world ) {
-            // Load oimo.js
-        importScripts( e.data.oimoUrl )
+self.onmessage = ( e: Object ) => {
 
-            // Init physics
-        world = new OIMO.World( { timestep:e.data.dt, iterations:8, broadphase:2, worldscale:22000, random:true, info:false } )
+    if ( e.data.action ) {
 
-            // Ground plane // make configurable
-        let ground = world.add({size:[200, 20, 200], pos:[0,-10,0]}),
-            N = e.data.N
+        switch ( e.data.action ) {
 
-            minfo = new Float32Array( N * 8 );
+            case "add voxels":
+                addVoxels( e.data.voxels )
+            break
+            case "add entity":
+                addEntity( e.data.entity )
+            break
+            case "make static":
+                makeStatic( e.data.entityId, voxel )
+            break
 
-            // re-write this block             
-            //body[i] = world.add({type:'sphere', size:[0.25], pos:[x,(0.5*i)+0.5,z], move:true})
-            //body[i] = world.add({type:'box', size:[0.5,0.5,0.5], pos:[x,((0.5*i)+0.5),z], move:true})
-
-            setInterval( update, e.data.dt*1000 );
         }
 
     }
+
+    if ( e.data.oimoUrl && !world ) {
+        
+        // Load oimo.js
+        importScripts( e.data.oimoUrl )
+        // Init physics
+        world = new OIMO.World( { timestep:e.data.dt, iterations:8, broadphase:2, worldscale:22000, random:true, info:false } )
+        // Ground plane // make configurable
+        
+        let ground = world.add({size:[200, 20, 200], pos:[0,-10,0]}),
+            N = e.data.N
+
+            minfo = new Float32Array( N * 8 )
+            setInterval( update, e.data.dt*1000 )
+
+    }
+
+}
 
 let update = () => {
 
@@ -39,31 +57,75 @@ let update = () => {
         i = 0,
         b = null
             
-   while ( id < body.length ) {
+    while ( id < body.length ) {
 
-        b = body[ id ]
-        n = 8 * id
+            b = body[ id ]
+            n = 8 * id
 
-        if ( b.sleeeping ) {
+            if ( b.sleeeping ) {
 
-            minfo[ n + 7 ] = 1;
+                minfo[ n + 7 ] = 1;
 
-        } else {
+            } else {
 
-            minfo[ n + 7 ] = 0;
-            b.getPosition().toArray( minfo, n );
-            b.getQuaternion().toArray( minfo, n+3 );
+                minfo[ n + 7 ] = 0;
+                b.getPosition().toArray( minfo, n );
+                b.getQuaternion().toArray( minfo, n+3 );
+
+            }
+
+            id += 1
 
         }
 
-        id += 1
+        f[1] = Date.now();
+        if ( f[1]-1000>f[0]){ f[0]=f[1]; fps=f[2]; f[2]=0; } f[2]++;
+
+        self.postMessage({ perf:fps, minfo:minfo })
+
+    },
+    addEntity = ( entity: Object ) => {
+
+        let newBody:    Object  = {},
+            isInMotion: boolean = false
+
+        entity.components.map( comp => {
+
+            if ( comp.props.oimo && comp.props.oimo.velocity ) {
+                // set velocity
+            }
+
+        })
+
+        //body[i] = world.add({type:'sphere', size:[0.25], pos:[x,(0.5*i)+0.5,z], move:true})
+        //body[i] = world.add({type:'box', size:[0.5,0.5,0.5], pos:[x,((0.5*i)+0.5),z], move:true})
+
+
+    },
+    addVoxels = ( voxels: Array<Object> ) => {
+
+        if ( voxels != null ) {
+
+            voxels.map( v => {
+
+                if ( v.entities ) {
+
+                    v.entities.map( ent => {
+
+                        addEntity( ent )
+
+                    })
+
+                }
+
+            })
+
+        }
+
+    },
+    makeStatic = ( entityId: number, voxel: Array<number> ) => {
+
+        // implement
 
     }
-
-    f[1] = Date.now();
-    if (f[1]-1000>f[0]){ f[0]=f[1]; fps=f[2]; f[2]=0; } f[2]++;
-
-    self.postMessage({ perf:fps, minfo:minfo })
-
-}
 
