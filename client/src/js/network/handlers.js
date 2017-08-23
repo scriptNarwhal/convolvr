@@ -12,18 +12,18 @@ export default class SocketHandlers {
 
         socket.on( "update", packet => {
 
-			let data = JSON.parse( packet.data ),
-				world = this.world,
-				voxel = [0, 0, 0],
+			let data   = JSON.parse( packet.data ),
+				world  = this.world,
+				voxel  = [0, 0, 0],
 				entity = null,
 				avatar = null,
-				user = null,
-				pos = null,
-				quat = null,
-				mesh = null,
-				hands = [],
-				hand = null,
-				h = 0
+				user   = null,
+				pos    = null,
+				quat   =  null,
+				mesh   = null,
+				hands  = [],
+				hand   = null,
+				h      = 0
 
 			if ( !! data.entity ) {
 

@@ -32,7 +32,7 @@ import Systems from './systems/index'
 import { events } from './network/socket'
 import UserInput from './input/user-input'
 import User from './world/user'
-import Toolbox from './tools/toolbox'
+import Toolbox from './world/toolbox'
 import Entity from './entity'
 
 let socket:       Object   = events,

@@ -38,7 +38,7 @@ func makeBranches(d int) []*Component {
 	if d < 3 {
 
 		d += 1
-		subComponents = makeBranches(d)
+		//subComponents = makeBranches(d)
 
 	}
 
