@@ -38,7 +38,7 @@ func makeBranches(d int) []*Component {
 	if d < 3 {
 
 		d += 1
-		//subComponents = makeBranches(d)
+		subComponents = makeBranches(d)
 
 	}
 
@@ -48,7 +48,7 @@ func makeBranches(d int) []*Component {
 	if d > 1 {
 		treeQuat = []float64{0.49999999999999994, 0.0, 0.0, 0.8660254037844387}
 		treePos = []float64{0.0, 0, 150000.0}
-		structureSize = 150000.0 / float64(d+1)
+		structureSize = 250000.0 / float64(d+1)
 	}
 
 	treeProps := make(map[string]interface{})
@@ -65,7 +65,6 @@ func makeBranches(d int) []*Component {
 	structureComponents = append(structureComponents, NewComponent("", treePos, treeQuat, treeProps, treeState, subComponents, nil))
 
 	trunkPos := []float64{0.0, -50000.0, 0.0}
-	trunkQuat := []float64{0.0, 0.0, 0.0, 0.0}
 	trunkProps := make(map[string]interface{})
 	trunkGeom := make(map[string]interface{})
 	trunkMat := make(map[string]interface{})
@@ -77,7 +76,7 @@ func makeBranches(d int) []*Component {
 	trunkMat["color"] = 0x803010
 	trunkProps["geometry"] = trunkGeom
 	trunkProps["material"] = trunkMat
-	structureComponents = append(structureComponents, NewComponent("", trunkPos, trunkQuat, trunkProps, trunkState, []*Component{}, nil))
+	structureComponents = append(structureComponents, NewComponent("", trunkPos, treeQuat, trunkProps, trunkState, []*Component{}, nil))
 
 	return structureComponents
 

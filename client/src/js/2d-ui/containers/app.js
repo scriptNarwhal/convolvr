@@ -26,7 +26,7 @@ class App extends Component {
 
       let chatMessage = JSON.parse( message.data ),
           chatUI = three.world.chat,
-          chatText = chatUI.componentsByProp.text[ 0 ],
+          chatText = chatUI ? chatUI.componentsByProp.text[ 0 ] : "",
           worldName = '',
           from = ''
 

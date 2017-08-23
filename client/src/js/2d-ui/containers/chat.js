@@ -83,7 +83,7 @@ const styles = {
         minHeight: "2em",
         minWidth: "320px",
         position: "fixed",
-        bottom: "0.4em",
+        bottom: mobile ? "0.4em" : "-20px",
         width: (mobile ? 70: 70) + '%',
         textAlign: "left",
         left: mobile ? 0 : '65px',
