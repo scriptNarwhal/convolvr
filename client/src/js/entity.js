@@ -344,9 +344,8 @@ export default class Entity {
         voxel = terrain.voxels[ coords.join(".") ]
 
     if ( !!! voxel) { console.warn("voxel not loaded")
-      
-      voxel = voxel || terrain.voxels[ `${(coords[0])}.0.${(coords[2]-1)}`]
-      if ( !!! voxel ) console.warn("adjacent voxel not loaded")
+    
+     // voxel = terrain.loadVoxel( coords )
 
     }
 
@@ -408,8 +407,8 @@ export default class Entity {
 
     if ( !!closest && recursive && closest.components.length > 1 ) {
 
-      closestSubComp = component.getClosestComponent( position )
-      component = !!closestSubComp ? closestSubComp : component
+      closestSubComp = closest.getClosestComponent( position )
+      closest = !!closestSubComp ? closestSubComp : closest
 
     }
 

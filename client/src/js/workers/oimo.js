@@ -21,7 +21,7 @@ self.onmessage = ( e: Object ) => {
                 addEntity( e.data.entity )
             break
             case "make static":
-                makeStatic( e.data.entityId, voxel )
+                makeStatic( e.data.entityId, e.data.voxel )
             break
 
         }

@@ -20,7 +20,6 @@ export default class Voxel {
             altitude: number      = 0
 
         this.coords = cell
-        this.data = data
         this.entities = []  
         this.meshes = []
         this.world = world
@@ -37,6 +36,7 @@ export default class Voxel {
 
         }
 
+        this.data = data
         this.cleanUp = false
 
     }

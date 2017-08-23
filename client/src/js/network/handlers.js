@@ -37,13 +37,13 @@ export default class SocketHandlers {
 					
 					if ( user == null ) {
 
-						voxel = [ Math.floor( pos.x / GRID_SIZE[ 0 ] ), 0, Math.floor( pos.z / GRID_SIZE[ 2 ] ) ]
+						// voxel = [ Math.floor( pos.x / GRID_SIZE[ 0 ] ), 0, Math.floor( pos.z / GRID_SIZE[ 2 ] ) ]
 
-						if ( typeof world.systems.terrain.voxels[ voxel[0]+'.0.'+voxel[2]] != 'object' ) {
+						// if ( typeof world.systems.terrain.voxels[ voxel[0]+'.0.'+voxel[2]] != 'object' ) {
 
-							world.systems.terrain.loadVoxel( voxel )
+						// 	world.systems.terrain.loadVoxel( voxel )
 
-						}
+						// }
 
 						avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id }, voxel )
 						avatar.init( window.three.scene )

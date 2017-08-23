@@ -63,7 +63,6 @@ export default class OimoPluginSystem {
 
     /**
      * Registers component with this system
-     * @param {Component} component 
     */
     init ( component: Component ) { 
         

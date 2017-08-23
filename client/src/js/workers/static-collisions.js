@@ -29,26 +29,26 @@ self.update = ( ) => {
 
 	var distance = 0,
 		objPos = [],
-		position = observer.position,
-		innerBox = [false, false],
-		velocity = observer.velocity,
-		vrHeight = observer.vrHeight,
+		position 	 = observer.position,
+		innerBox 	 = [false, false],
+		velocity 	 = observer.velocity,
+		vrHeight 	 = observer.vrHeight,
 		closeToVenue =  false,
-		collision = false,
-		cKey = "",
-		yPos = 0,
-		size = 50000,
-		obj = null,
-		ent = null,
-		structure = null,
-		bounds = [0, 0],
-		voxel = null,
-		delta = [0, 0],
-		oPos = [],
-		speed = 0,
-		e = 0,
-		i = 0,
-		v = 0
+		collision 	 = false,
+		cKey 		 = "",
+		yPos 		 = 0,
+		size 		 = 50000,
+		obj 		 = null,
+		ent 		 = null,
+		structure 	 = null,
+		bounds 		 = [0, 0],
+		voxel 		 = null,
+		delta 		 = [0, 0],
+		oPos 		 = [],
+		speed 		 = 0,
+		e 			 = 0,
+		i 			 = 0,
+		v 			 = 0
 
 	for ( i = 0; i < voxelList.length; i ++ ) {
 
@@ -141,15 +141,15 @@ self.update = ( ) => {
 
 self.onmessage = function ( event ) { 
 
-	var message = JSON.parse( event.data ),
-		data = message.data,
-		user = observer,
-		voxel = null,
+	var message  = JSON.parse( event.data ),
+		data 	 = message.data,
+		user 	 = observer,
+		voxel 	 = null,
 		toRemove = null,
-		items = [],
+		items 	 = [],
 		entities = [],
-		c = 0,
-		p = 0
+		c 		 = 0,
+		p 		 = 0
 		
 	if ( message.command == "update" ) {
 		// user.prevPos = [user.position[0], user.position[1], user.position[2]];

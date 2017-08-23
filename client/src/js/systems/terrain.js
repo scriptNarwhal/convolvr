@@ -11,19 +11,19 @@ export default class TerrainSystem {
 
     constructor ( world ) {
 
-        this.world = world
-        this.config = world.config.terrain
-        this.octree = world.octree
-        this.phase = 0
+        this.world            = world
+        this.config           = world.config.terrain
+        this.octree           = world.octree
+        this.phase            = 0
         this.StaticCollisions = null
-        this.voxels = []
-        this.voxelList = [] // map of coord strings to voxels
-        this.lastChunkCoords = [0, 0, 0]
-        this.chunkCoords = [0, 0, 0]
-        this.cleanUpChunks = []
-        this.reqChunks = []
-        this.loaded = false
-        this.readyCallback = () => {}
+        this.voxels           = []
+        this.voxelList        = [] // map of coord strings to voxels
+        this.lastChunkCoords  = [ 0, 0, 0 ]
+        this.chunkCoords      = [ 0, 0, 0 ]
+        this.cleanUpChunks    = []
+        this.reqChunks        = []
+        this.loaded           = false
+        this.readyCallback    = () => {}
 
     }
 
@@ -48,13 +48,13 @@ export default class TerrainSystem {
         this.StaticCollisions = world.systems.staticCollisions
         this.config = config
 
-        let type = this.config.type,
-            red = this.config.red,
+        let type  = this.config.type,
+            red   = this.config.red,
             green = this.config.green,
-            blue = this.config.blue,
-            geom = null,
-            mesh = null,
-            mat = null
+            blue  = this.config.blue,
+            geom  = null,
+            mesh  = null,
+            mat   = null
 
         if ( type != 'empty' ) {
 
@@ -83,7 +83,7 @@ export default class TerrainSystem {
 
             } else {
 
-                mesh.position.y = -(5400000 / this.config.flatness ) + 6000
+                mesh.position.y = -( 5400000 / this.config.flatness ) + 6000
             
             }
 
@@ -93,12 +93,12 @@ export default class TerrainSystem {
 
   loadVoxel ( coords ) {
 
-    let voxels = this.voxels,
-        voxelList = this.voxelList,
+    let voxels     = this.voxels,
+        voxelList  = this.voxelList,
         collisions = this.world.systems.staticCollisions ? this.world.systems.staticCollisions : {},
-        voxelKey = coords[0]+".0."+coords[2], // debugging this.. 
-                    voxelData = { name: "generated space", visible: true, altitude: 0, entities: [] },
-                    v = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world )
+        voxelKey   = coords[0]+".0."+coords[2], // debugging this.. 
+        voxelData  = { cell: [coords[0], 0, coords[2]], name: "generated space", visible: true, altitude: 0, entities: [] },
+        v          = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world )
                 
         voxels[ voxelKey ] = v
         voxelList.push( v )
@@ -109,21 +109,15 @@ export default class TerrainSystem {
         typeof response.data.map == 'function' && response.data.map( c => {
 
           v.preLoadEntities()
-          physicsVoxels.push( v.data )
-
-      })
-
-      if ( physicsVoxels.length > 0 ) { //console.log("physics voxels", physicsVoxels)
-               
           collisions.worker.postMessage(JSON.stringify({
-              command: "add voxels",
-              data: [ v.data ]
+            command: "add voxels",
+            data: [ v.data ]
           }))
-                // systems.oimo.worker.postMessage(JSON.stringify({
+          // systems.oimo.worker.postMessage(JSON.stringify({
                 //     command: "add voxels",
                 //     data: physicsVoxels
                 // }))
-      }
+      })
 
     }).catch(response => {
         console.log("Load Voxel Error", response)
@@ -135,30 +129,30 @@ export default class TerrainSystem {
 
   bufferVoxels ( force, phase ) {
 
-    let voxels = this.voxels,
-        voxelList = this.voxelList,
-        config = this.config,
-        terrain = this,
-        world = this.world,
-        scene = three.scene,
-        systems = world.systems,
-        octree = world.octree,
-        voxel = null,
+    let voxels              = this.voxels,
+        voxelList           = this.voxelList,
+        config              = this.config,
+        terrain             = this,
+        world               = this.world,
+        scene               = three.scene,
+        systems             = world.systems,
+        octree              = world.octree,
+        voxel               = null,
         removePhysicsChunks = [],
-        cleanUpVoxels = [],
-        chunkPos = [],
-        pCell = [ 0, 0, 0 ],
-        position = three.camera.position,
-        terrainChunk = null,
-        coords = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), Math.floor( position.y / GRID_SIZE[ 1 ] ), Math.floor( position.z / GRID_SIZE[ 2 ] ) ],
-        lastCoords = this.lastChunkCoords,
-        moveDir = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
-        viewDistance = (this.world.mobile ? 5 : 8) + this.world.viewDistance,
-        removeDistance = viewDistance + 1 + (window.innerWidth > 2100 ?  2 : 1),
-        endCoords = [coords[0]+viewDistance, coords[2]+viewDistance],
-        x = coords[0]-phase,
-        y = coords[2]-phase,
-        c = 0
+        cleanUpVoxels       = [],
+        chunkPos            = [],
+        pCell               = [ 0, 0, 0 ],
+        position            = three.camera.position,
+        terrainChunk        = null,
+        coords              = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), Math.floor( position.y / GRID_SIZE[ 1 ] ), Math.floor( position.z / GRID_SIZE[ 2 ] ) ],
+        lastCoords          = this.lastChunkCoords,
+        moveDir             = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
+        viewDistance        = (this.world.mobile ? 5 : 8) + this.world.viewDistance,
+        removeDistance      = viewDistance + 1 + (window.innerWidth > 2100 ?  2 : 1),
+        endCoords           = [coords[0]+viewDistance, coords[2]+viewDistance],
+        x                   = coords[ 0 ] - phase,
+        y                   = coords[ 2 ] - phase,
+        c                   = 0
 
     this.chunkCoords = coords
     force = phase == 0
@@ -199,47 +193,39 @@ export default class TerrainSystem {
 
       this.cleanUpChunks.map(( cleanUp, i ) => {
 
-          if ( c < 2 ) {
+        if ( c < 2  && cleanUp ) {
 
-              if ( !!cleanUp ) {
+          terrainChunk = voxels[ cleanUp.cell ]
 
-                terrainChunk = voxels[ cleanUp.cell ]
+          if ( terrainChunk && terrainChunk.entities ) {
 
-                if ( terrainChunk ) {
-                  
-                  if ( terrainChunk.entities ) {
+            terrainChunk.entities.map( e => {
 
-                    terrainChunk.entities.map( e => {
+              if ( !!e && !!e.mesh ) {
 
-                      if ( !!e && !!e.mesh ) {
+                octree.remove(e.mesh)
+                three.scene.remove(e.mesh)
 
-                        octree.remove(e.mesh)
-                        three.scene.remove(e.mesh)
+              } 
 
-                      } 
+              removePhysicsChunks.push(cleanUp.physics)
+              voxelList.splice(voxelList.indexOf(terrainChunk), 1)
+              delete voxels[cleanUp.cell]
+              cleanUpVoxels.splice(i, 1)
 
-                    })
-
-                  }
-
-                }
-                
-                removePhysicsChunks.push(cleanUp.physics)
-                voxelList.splice(voxelList.indexOf(terrainChunk), 1)
-                delete voxels[cleanUp.cell]
-                cleanUpVoxels.splice(i, 1)
-                
-            }
-
-            c ++
+            })
 
           }
+              
+          c += 1
+
+        }
 
       })
 
       c = 0
       
-      while ( x <= endCoords[0] - 1 ) { // load new terrain voxels
+      while ( x <= endCoords[0] ) { // load new terrain voxels
 
         while ( y <= endCoords[1] ) {
 
@@ -332,7 +318,7 @@ export default class TerrainSystem {
              }
 
           }).catch(response => {
-             console.log("Voxel Error", response)
+             console.log("Voxel Error", coords, response)
           })
 
       }

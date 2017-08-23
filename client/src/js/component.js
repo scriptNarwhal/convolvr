@@ -177,12 +177,13 @@ export default class Component {
  
     let compPos = this._compPos, 
         entMesh = this.mesh,
+        parentMesh = this.parent ? this.parent.mesh : false,
         worldCompPos = null,
         distance = 200000,
         newDist = 0,
         closest = null;
 
-    parentMesh.updateMatrixWorld()
+    parentMesh && parentMesh.updateMatrixWorld()
     this.allComponents.map( component => {
 
       if ( !! component.merged ) {
@@ -208,9 +209,13 @@ export default class Component {
       distance = 200000
       newDist = 0
       this.combinedComponents.map( component => {
-        console.log("From Component: ")
+        console.log("Finding Combined Component: ")
         compPos.fromArray( component.data.position ); console.log("compPos", compPos)
-        worldCompPos = parentMesh.localToWorld( compPos ); console.log("worldCompPos", worldCompPos )
+        if ( parentMesh ) {
+          worldCompPos = parentMesh.localToWorld( compPos ); console.log("worldCompPos", worldCompPos )
+        } else {
+          worldCompPos = new THREE.Vector3().fromArray(this.entity.position).add( compPos )
+        }
         newDist = worldCompPos.distanceTo( position ); console.log("newDist", newDist)
         
         if ( newDist < distance ) {  
