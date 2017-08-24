@@ -96,7 +96,7 @@ const styles = {
         bottom: "1.75em",
         right: 0
       } : { 
-        marginRight: "0.25em", top: "-0.75em", position: "relative"
+        marginRight: "0.25em", top: "-1.2em", position: "relative"
       }
     }
 }
@@ -267,10 +267,10 @@ class Chat extends Component {
                        style={styles.text(mobile)} />
                 <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button} />
                 <Button title={"Upload Files"}
-                    onClick={(evt, title) => {  }}
-                    onFiles={ (files) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
-                    image={"/data/images/upload.png"}
-                    style={ styles.uploadStyle(mobile) }
+                        onClick={(evt, title) => {  }}
+                        onFiles={ (files) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
+                        image={"/data/images/upload.png"}
+                        style={ styles.uploadStyle(mobile) }
                   />
             </section>
         </Shell>

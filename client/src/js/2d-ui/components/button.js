@@ -1,5 +1,5 @@
-/* button */
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+
 let styles = {
   button: {
     display: 'inline-block',
@@ -18,17 +18,20 @@ let styles = {
   },
   file: {
     position: 'relative',
-    bottom: '-1em',
+    bottom: '-1.5em',
     left: '0.5em',
     width: '92px',
     opacity: 0
   }
 }
+
 export default class Button extends Component {
+
   render() {
+
       let innerStyle = this.props.innerStyle != false ? Object.assign({}, styles.inner, this.props.innerStyle) : styles.inner,
           style = this.props.style != false ? Object.assign({}, styles.button, this.props.style) : styles.button
-      innerStyle.backgroundImage = 'url('+(this.props.image != null ? this.props.image : "")+')';
+          innerStyle.backgroundImage = 'url('+(this.props.image != null ? this.props.image : "")+')';
 
     return (
         <div style={style}>
@@ -46,6 +49,7 @@ export default class Button extends Component {
         </div>
     )
   }
+
 }
 
 Button.defaultProps = {
