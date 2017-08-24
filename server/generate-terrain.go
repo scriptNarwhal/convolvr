@@ -1,6 +1,6 @@
 package convolvr
 
-func generateTerrain(world string, x int, y int, z int, altitude float32, color int, terrainType string) *Entity {
+func generateTerrain(world string, x int, y int, z int, altitude float32, flatArea bool, color int, terrainType string) *Entity {
 
 	var (
 		components []*Component
@@ -17,7 +17,12 @@ func generateTerrain(world string, x int, y int, z int, altitude float32, color 
 	geometry["size"] = []float64{536000, 536000, 835664}
 	geometry["shape"] = "hexagon"
 	geometry["faceNormals"] = false
-	material["name"] = "terrain"
+	if flatArea {
+		material["name"] = "terrain2"
+
+	} else {
+		material["name"] = "terrain"
+	}
 	material["color"] = color
 	props["geometry"] = geometry
 	props["material"] = material

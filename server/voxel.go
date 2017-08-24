@@ -78,7 +78,7 @@ func getWorldChunks(c echo.Context) error {
 			}
 
 			// create terrain as entity.. the 1st entity, or ideally, one with the largeset bounding radius should have higher LOD priority
-			entities = append(entities, generateTerrain(world, x, y, z, altitude, worldData.Terrain.Color, "default"))
+			entities = append(entities, generateTerrain(world, x, y, z, altitude, flatArea, worldData.Terrain.Color, "default"))
 
 			initErr := voxelEntities.Init(&Entity{})
 			if initErr != nil {

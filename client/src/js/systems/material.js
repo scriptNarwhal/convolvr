@@ -241,6 +241,9 @@ export default class MaterialSystem {
 
                 }
               break
+              case "terrain2":
+                
+              break
               case "metal":
                 if ( shading == 'physical' ) {
 
@@ -298,7 +301,6 @@ export default class MaterialSystem {
                 basic = true
             break
             case "terrain":
-            
             if ( !simpleShading ) {
 
               //prop.metalnessMap = "/data/images/textures/tiles.png" 
@@ -313,8 +315,23 @@ export default class MaterialSystem {
 
             }
                 
-            prop.repeat = [ 'wrapping', 12, 12 ]
+            prop.repeat = [ 'wrapping', 16, 16 ]
+            break
+            case "terrain2":
+            if ( !simpleShading ) {
 
+              prop.specularMap = "/data/images/textures/tiles.png" 
+              prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
+
+            } else {
+
+              prop.map = '/data/images/textures/tiles.png' // /data/images/textures/gplaypattern_@2X-2.png'
+              prop.specularMap = '/data/images/textures/gplaypattern_@2X-2.png'
+              prop.envMap = 'none'
+
+            }
+                
+            prop.repeat = [ 'wrapping', 14, 14 ]
             break
             case "organic":
             if ( !simpleShading ) {
