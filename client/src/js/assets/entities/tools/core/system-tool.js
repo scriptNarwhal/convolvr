@@ -14,7 +14,9 @@ export default class SystemTool extends Tool {
     this.mesh = null;
     this.name = "System Tool"
     this.options = {
-
+      system: {
+        none: true
+      }
     }
     this.all = [ "structures", "vehicles", "media", "interactivity" ]
     this.current = 0
@@ -55,6 +57,24 @@ export default class SystemTool extends Tool {
 
     primaryAction ( telemetry) {
       
+      let system = this.props.system,
+          cursor = telemetry.cursor,
+          user = this.world.user,
+          systems = this.world.systems,
+          assetSystem = systems.assets,
+          cursorSystem = systems.cursor,
+          cursorState = cursor.state.cursor || {},
+          position = telemetry.position,
+          quat = telemetry.quaternion,
+          selected = !!cursorState.entity ? cursorState.entity : false,
+          coords = telemetry.voxel,
+          props = {},
+          components = [],
+          entityId = -1,
+          entity = null
+      
+      if ( system.none ) return
+        
     }
 
     secondaryAction ( telemetry, value) {
@@ -62,6 +82,8 @@ export default class SystemTool extends Tool {
     }
 
     configure ( config ) {
+
+      
 
     }
     

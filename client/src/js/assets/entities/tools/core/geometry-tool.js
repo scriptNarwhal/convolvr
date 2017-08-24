@@ -13,7 +13,7 @@ export default class GeometryTool extends Tool {
       this.mesh = null
       this.name = "Geometry Tool"
       this.options = {
-
+        shape: "box"
       }
 
       this.entity = new Entity(-1, [
@@ -52,6 +52,22 @@ export default class GeometryTool extends Tool {
 
     primaryAction ( telemetry ) {
       
+      let shape = this.options.shape,
+          cursor = telemetry.cursor,
+          user = this.world.user,
+          systems = this.world.systems,
+          assetSystem = systems.assets,
+          cursorSystem = systems.cursor,
+          cursorState = cursor.state.cursor || {},
+          position = telemetry.position,
+          quat = telemetry.quaternion,
+          selected = !!cursorState.entity ? cursorState.entity : false,
+          coords = telemetry.voxel,
+          props = {},
+          components = [],
+          entityId = -1,
+          entity = null
+
     }
 
     secondaryAction ( telemetry, value ) {
@@ -59,6 +75,12 @@ export default class GeometryTool extends Tool {
     }
 
     configure ( config ) {
+
+      if ( config.shape ) {
+
+        this.options.shape = config.shape
+
+      }
 
     }
 

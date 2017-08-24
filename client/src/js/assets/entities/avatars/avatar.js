@@ -141,7 +141,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
             hand: n,
             noRaycast: true,
             geometry: {
-              size: [2200, 1200, 3200],
+              size: [1600, 500, 2400],
               shape: "box",
               faceNormals: false
             },

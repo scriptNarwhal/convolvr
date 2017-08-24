@@ -147,7 +147,17 @@ export default class MaterialSystem {
 
                 }
 
-                assets.materials[ materialCode ] = material // cache material for later
+                if ( prop.alphaMap ) {
+
+                  this._loadAlphaMap( prop, textureConfig, material, assets, () => {
+                    assets.materials[ materialCode ] = material // cache material for later
+                  })
+
+                } else {
+                  
+                  assets.materials[ materialCode ] = material 
+
+                }
 
               })
 
@@ -180,9 +190,19 @@ export default class MaterialSystem {
 
             })
 
-            assets.materials[ materialCode ] = material // cache material for later
+            if ( prop.alphaMap ) {
+              
+              this._loadAlphaMap( prop, textureConfig, material, assets, () => {
+                assets.materials[ materialCode ] = material // cache material for later
+              })
 
-          }        
+            } else {
+              
+              assets.materials[ materialCode ] = material 
+
+            }
+
+          } 
 
         } else {
 
@@ -194,6 +214,25 @@ export default class MaterialSystem {
           material,
           materialCode
       }
+
+    }
+
+    _loadAlphaMap ( prop, textureConfig, material, assets, callback ) {
+
+      assets.loadImage( prop.alphaMap, textureConfig, texture => { 
+        
+        let renderer = this.world.three.renderer
+
+        if ( !!prop.repeat )
+        
+          this._setTextureRepeat( texture, prop.repeat )
+        
+        texture.anisotropy = renderer.getMaxAnisotropy()
+        material.alphaMap = texture
+        material.needsUpdate = true 
+        callback()
+
+      })
 
     }
 
@@ -243,6 +282,9 @@ export default class MaterialSystem {
               break
               case "terrain2":
                 
+              break
+              case "tree":
+                mat.transparent = !mobile
               break
               case "metal":
                 if ( shading == 'physical' ) {
@@ -347,6 +389,24 @@ export default class MaterialSystem {
 
             }
 
+            prop.repeat = [ 'wrapping', 6, 6 ]
+
+            break
+            case "tree":
+            if ( !simpleShading ) {
+
+              prop.roughnessMap = "/data/images/textures/tiles-light.png"
+              prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
+              prop.alphaMap = "/data/images/textures/tiles-light.png"
+
+            } else {
+
+              prop.map = '/data/images/textures/tiles-light.png' // /data/images/textures/gplaypattern_@2X-2.png'
+              prop.specularMap = '/data/images/textures/shattered_@2X-2.png'
+              prop.envMap = 'none'
+
+            }
+            
             prop.repeat = [ 'wrapping', 6, 6 ]
 
             break

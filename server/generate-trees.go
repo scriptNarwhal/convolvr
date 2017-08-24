@@ -58,7 +58,7 @@ func makeBranches(d int) []*Component {
 	treeGeom["size"] = []float64{structureSize, structureSize, structureSize}
 	treeGeom["shape"] = "sphere"
 	treeGeom["merge"] = true
-	treeMat["name"] = "organic"
+	treeMat["name"] = "tree"
 	treeMat["color"] = 0x20ff00
 	treeProps["geometry"] = treeGeom
 	treeProps["material"] = treeMat
