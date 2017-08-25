@@ -51,6 +51,11 @@ export default class EntityTool extends Tool  {
                         type: "entity", // component, prop
                         // propName: "userEntities", // toggle to user's entities
                         dataSource: this.world.systems.assets.entities
+                      },
+                      layout: {
+                        type: "grid",
+                        mode: "factory", // child components will ignore layout
+                        columns: 3
                       }
                     }
                   }

@@ -36,6 +36,11 @@ export default class GeometryTool extends Tool {
                         type: "prop", // entity, prop
                         propName: "geometry",
                         dataSource: this.world.systems.assets.props.geometry
+                      },
+                      layout: {
+                        type: "grid",
+                        mode: "factory", // child components will ignore layout
+                        columns: 3
                       }
                     }
                   }

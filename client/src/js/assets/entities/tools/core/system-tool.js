@@ -41,6 +41,11 @@ export default class SystemTool extends Tool {
                         type: "prop", // entity, prop
                         propName: "vehicles",
                         dataSource: this.world.systems.assets.props.systems
+                      },
+                      layout: {
+                        type: "grid",
+                        mode: "factory", // child components will ignore layout
+                        columns: 3
                       }
                     }
                   }

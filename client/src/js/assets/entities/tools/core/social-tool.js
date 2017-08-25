@@ -37,6 +37,11 @@ export default class SocialTool extends Tool {
                         type: "social", // entity, prop, place, world, user, file, directory
                         //propName: "geometry",
                         dataSource: this.world.systems.socialMedia.friends
+                      },
+                      layout: {
+                        type: "grid",
+                        mode: "factory", // child components will ignore layout
+                        columns: 3
                       }
                     }
                   }

@@ -24,6 +24,7 @@ export default class MetaFactorySystem {
             presets = [],
             factories = [],
             keys = {},
+            index = 0,
             x = 0,
             y = 0
 
@@ -56,7 +57,7 @@ export default class MetaFactorySystem {
                 preset = assetType == "entity" ? item.name : preset
                 preset = assetType == "component" ? presets[ i ] : preset
 
-                this._addComponent( component, item, assetType, category, preset, x, y, gridSize, vOffset)
+                this._addComponent( component, item, assetType, category, preset, x, y, index, gridSize, vOffset)
 
                 x ++
 
@@ -67,6 +68,8 @@ export default class MetaFactorySystem {
 
                 } 
 
+                index += 1
+
             })
             
         } else { // map through system categories
@@ -74,7 +77,7 @@ export default class MetaFactorySystem {
             sourceCategory = source[ category ]
             keys = Object.keys( sourceCategory ) // structures, vehicles, media, interactivity
             
-            keys.map( key => {
+            keys.map( ( key, i ) => {
                 
                 x ++
 
@@ -85,7 +88,7 @@ export default class MetaFactorySystem {
 
                 } 
 
-                this._addComponent( component, sourceCategory[ key ], assetType, "systems", preset,  x, y, gridSize, vOffset)
+                this._addComponent( component, sourceCategory[ key ], assetType, "systems", preset,  x, y, i, gridSize, vOffset)
 
 
             })
@@ -94,9 +97,20 @@ export default class MetaFactorySystem {
 
     }
 
-    _addComponent ( component, factoryItem, assetType, assetCategory, preset, x, y, gridSize, vOffset ) {
+    _addComponent ( component, factoryItem, assetType, assetCategory, preset, x, y, i, gridSize, vOffset ) {
 
-        let addTo = null
+        let addTo = null,
+            layout = {},
+            systems = this.world.systems,
+            pos = [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 24000 ]
+
+        if ( component.props.layout ) {
+
+            pos = [ 0, -14000, 0 ]
+            layout = component.props.layout
+            pos = systems.layout.useLayout( layout.type, component, pos, i, layout.axis, layout.columns || 3, layout.gridSize || gridSize, layout.isometric )
+
+        }
 
         if ( !!component.state.tool ) {
 
@@ -126,7 +140,7 @@ export default class MetaFactorySystem {
                         color: 0x000000
                     }
                 },
-                position:  [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 24000 ],
+                position:  pos,
                 quaternion: null
         })
 

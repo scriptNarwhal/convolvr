@@ -39,6 +39,11 @@ export default class MaterialTool extends Tool {
                       type: "prop", // entity, prop
                       propName: "material",
                       dataSource: this.world.systems.assets.props.material
+                    },
+                    layout: {
+                      type: "grid",
+                      mode: "factory", // child components will ignore layout
+                      columns: 3
                     }
                   }
                 }

@@ -37,6 +37,11 @@ export default class AssetTool extends Tool {
                         type: "prop", // entity, prop
                         propName: "assets",
                         dataSource: this.world.systems.assets.props.assets
+                      },
+                      layout: {
+                        type: "grid",
+                        mode: "factory", // child components will ignore layout
+                        columns: 3
                       }
                     }
                   }

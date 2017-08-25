@@ -45,6 +45,11 @@ export default class ComponentTool extends Tool {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "component", // component, entity, prop
                         dataSource: this.world.systems.assets.componentsByName
+                      },
+                      layout: {
+                        type: "grid",
+                        mode: "factory", // child components will ignore layout
+                        columns: 3
                       }
                     }
                   }

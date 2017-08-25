@@ -11,79 +11,110 @@ export default class LayoutSystem {
         let ownProp = component.props.layout,
             prop = component.parent && component.parent.props.layout ? component.parent.props.layout : false,
             siblings = component.parent && component.parent.components.length,
-            position = [ 0, 0, 0 ] // use parent layout to position child
+            position = [ 0, 0, 0 ], // use parent layout to position child
             index = component.index
-       
-        switch ( prop.type ) {
 
-        case "list":
-            position = this.listLayout( component, position, index, prop.isometric )
-        break
-        case "grid":
-            position = this.gridLayout( component, position, index, prop.isometric )
-        break
-        case "radial":
-            position = this.radialLayout( component, position, index, prop.isometric )
-        break
-        case "tube":
-            position = this.tubeLayout( component, position, index, prop.isometric )
-        break
-        case "fibonacci":
-            position = this.fibonacciLayout( component, position, index )
-        break
-        
+        if ( (prop && !!!prop.mode) && ownProp.mode != "factory" ) {
+
+            prop.gridSize = prop.gridSize == null ? 3 : 0
+            
+            position = this.useLayout( prop.type, component, position, index, prop.axis, prop.columns, prop.gridSize, prop.isometric)
+            
+            component.mesh.position.fromArray( position )
+            component.mesh.updateMatrix()
+
         }
-
-        component.mesh.position.fromArray( position )
-        component.mesh.updateMatrix()
+        
 
         return {
             type: prop.type
         }
     }
 
-    listLayout ( component, position, index, isometric ) {
+    useLayout ( name, component, position = [0,0,0], index, axis, columns = 3, gridSize = 14000, isometric = false ) {
 
-        
-        return position
+        let pos = [ 0, 0, 0 ]
+
+        switch ( name ) {
+            
+            case "list":
+                pos = this._listLayout( component, position, index, axis, gridSize)
+            break
+            case "grid":
+                pos = this._gridLayout( component, position, index, axis, columns, gridSize, isometric )
+            break
+            case "radial":
+                pos = this._radialLayout( component, position, index, axis, columns, gridSize, isometric )
+            break
+            case "tube":
+                pos = this._tubeLayout( component, position, index, axis, columns, gridSize, isometric )
+            break
+            case "fibonacci":
+                pos = this._fibonacciLayout( component, position, index, axis, columns, gridSize )
+            break
+                    
+        }
+
+        return [ pos[0] + position[0], pos[1] + position[1], pos[2] + position[2] ]
+
     }
 
-    gridLayout ( component, position, index, plane, isometric ) {
+    _listLayout ( component, position, index, axis, gridSize ) {
 
-        if ( plane == 'xy' ) {
+        let pos = [ 0, index * gridSize, 0 ]
 
-            
+        return pos
 
-        } else if ( plane == 'zy' ) {
+    }
 
+    _gridLayout ( component, position, index, axis = "xy", columns, gridSize, isometric ) {
 
+        let x = index % columns,
+            z = Math.max( 0, Math.floor( (index) / columns ) ),
+            margin = -gridSize,
+            marginZ = 2 * margin / 3,
+            pos = [ 0, 0, 0 ]
 
-        } else if ( plane == 'xz') {
+        if ( axis == 'xy' ) {
 
-            
+            pos = [ margin + (x * gridSize), z * gridSize, -marginZ ]
+
+        } else if ( axis == 'zy' ) {
+
+            pos = [ margin, z * gridSize, x * gridSize -marginZ ]
+
+        } else if ( axis == 'xz') {
+
+            pos = [ margin + (x * gridSize), 0, z * gridSize -marginZ ]
 
         }
 
-        return position
+        return pos
 
     }
 
-    radialLayout ( component, position, index,  axis, isometric ) {
+    _radialLayout ( component, position, index, axis, columns, gridSize, isometric ) {
 
         //TODO: Implement P2
-        return position
+        let pos = [ 0, index * gridSize, 0 ]
+        
+        return pos
     }
 
-    tubeLayout ( component, position, index,  axis, isometric ) {
+    _tubeLayout ( component, position, index, axis, columns, gridSize, isometric ) {
 
         //TODO: Implement P2
-        return position
+        let pos = [ 0, index * gridSize, 0 ]
+        
+        return pos
     }
 
-    fibonacciLayout ( component, position, index ) {
+    _fibonacciLayout ( component, position, index, columns, gridSize ) {
 
         //TODO: Implement P3
-        return position
+        let pos = [ 0, index * gridSize, 0 ]
+        
+        return pos
 
     }
 }
