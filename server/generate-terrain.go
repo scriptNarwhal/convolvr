@@ -29,7 +29,7 @@ func generateTerrain(world string, x int, y int, z int, altitude float32, flatAr
 	geometry["faceNormals"] = false
 	r, g = colorConvert(color)
 	if flatArea {
-		if g > r {
+		if g > r-32 {
 			material["name"] = "terrain2"
 		} else {
 			color = 0xffffff

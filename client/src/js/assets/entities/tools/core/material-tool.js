@@ -79,6 +79,8 @@ export default class MaterialTool extends Tool {
           entityId      = -1,
           entity        = null
 
+
+          
       return {
         coords,
         component,
@@ -96,12 +98,14 @@ export default class MaterialTool extends Tool {
     
     configure ( config ) {
 
-      if ( config.color )
+      if ( config.color ) {
 
         this.options.color = config.color
         this.entity.mesh.material.color = config.color
         this.entity.mesh.material.needsUpdate = true
-    
+
+      }
+
       if ( config.name ) 
 
         this.options.name = config.name
