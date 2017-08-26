@@ -68,7 +68,7 @@ func generatePylonSegment(w int, i int, floors int, width float64, structureSize
 	geometry["merge"] = true
 	wallHeight := 0.0
 	if w < 2 {
-		wallHeight = (-structureSize / 2.65) + float64(i)*structureSize*2.0
+		wallHeight = (-structureSize / 2.65) + float64(i)*structureSize*3.0
 		wallPos = []float64{0.0, wallHeight, structureSize/2.65 + structureSize/2.0 + float64(w-1)*structureSize}
 		geometry["size"] = []float64{structureSize * width, structureSize, 5000}
 	} else if w < 4 {
