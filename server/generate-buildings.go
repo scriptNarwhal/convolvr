@@ -11,7 +11,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 		structureComponents []*Component
 	)
 	floors := 1 + rand.Intn(3)*rand.Intn(3)*rand.Intn(3)
-	width := 1.0 + float64(rand.Intn(2))
+	width := 2.0 + float64(rand.Intn(2))
 	structureSize := 300000.0
 	// create components for each floor & long / windowed wall
 	for i := 0; i < floors; i++ {
@@ -32,7 +32,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 			light["color"] = 0xffffff
 			floorProps["light"] = light
 		}
-		floorGeometry["size"] = []float64{structureSize * width, 5000, structureSize}
+		floorGeometry["size"] = []float64{structureSize * width, 5000, structureSize * width * (2.0 / 3.0)}
 		floorGeometry["shape"] = "box"
 		floorGeometry["merge"] = true
 		floorMaterial["name"] = "terrain"
@@ -51,9 +51,9 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 		wall := generateBuildingWall(w, 0, floors, width, structureSize)
 		structureComponents = append(structureComponents, wall)
 	}
-	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) + 10000, float64(z) * 807360.0} //  + (structureSize * width)
+	structurePos := []float64{structureSize + (float64(x) * 928000.0), float64(altitude) + 10000, structureSize + float64(z)*807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
-	structure = NewEntity(id+1, "Vacant Building", world, []int{ x, 0, z }, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
+	structure = NewEntity(id+1, "Vacant Building", world, []int{x, 0, z}, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure
 }
 

@@ -18,7 +18,7 @@ let chatScreen = {
                     },
                     text: {
                         lines: [ 
-                            "Welcome To Convolvr", 
+                            "Welcome To Convolvr 0.4a",
                         ],
                         color: "#ffffff",
                         background: "#000000"

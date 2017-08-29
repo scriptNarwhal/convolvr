@@ -123,34 +123,14 @@ export default class SocketHandlers {
 				case "Voxel Tool":
 
 				break
-				case "System Tool":
+				case "Update Tool":
 					voxel.entities.map( voxelEnt => { // find & re-init entity.. also probably look up the right component to modify by id *******************
 
 						if ( voxelEnt.id == data.entityId ) {
-							console.log("got system tool message", data.entity.components) // concat with existing components array
-							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
+							console.log("Update Tool message", data.entity.components) // concat with existing components array
+							voxelEnt.update( false, false,  voxelEnt.components, data.components[0], data.componentPath )
 						}
 
-					})
-				break
-				case "Geometry Tool":
-					voxel.entities.map( voxelEnt => { // find & re-init entity ^^^^^^
-
-						if ( voxelEnt.id == data.entityId ) {
-							console.log("got geometry tool message", data.entity.components) // concat with existing components array
-							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
-						}
-
-					})
-				break
-				case "Material Tool":
-					voxel.entities.map( voxelEnt => { // find & re-init entity ^^^^^^
-
-						if ( voxelEnt.id == data.entityId ) {
-							console.log("got material tool message", data.entity.components) // concat with existing components array
-							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
-						}
-						
 					})
 				break
 				case "Delete Tool":

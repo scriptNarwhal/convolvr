@@ -12,9 +12,17 @@ func generateRoad(id int, world string, x int, z int, altitude float32) *Entity 
 	floors := 1
 	width := 2.8
 	structureSize := 285000.0
+	floorQuat := []float64{0.0, 0.0, 0.0, 0.0}
+	// xOffset := int(math.Abs(float64(x % 4)))
+	zOffset := int(math.Abs(float64(z % 5)))
 
 	floorPos := []float64{0.0, 0.0, 0.0}
-	floorQuat := []float64{0.0, 0.0, 0.0, 0.0}
+
+	if zOffset == 2 {
+		floorQuat = []float64{0, 0.7071067811865475, 0.0, 0.7071067811865476}
+		width *= 1.25
+	}
+
 	floorProps := make(map[string]interface{})
 	floorGeometry := make(map[string]interface{})
 	floorMaterial := make(map[string]interface{})
@@ -40,16 +48,13 @@ func generateRoad(id int, world string, x int, z int, altitude float32) *Entity 
 func canPlaceRoadAt(x int, y int, z int) bool {
 
 	xOffset := int(math.Abs(float64(x % 4)))
-	//zOffset := int(math.Abs(float64(z % 5)))
+	zOffset := int(math.Abs(float64(z % 5)))
 	placeStructure := false
+	city := ((int(math.Abs(float64(x%30))) < 8) && (int(math.Abs(float64(z%30)))) < 8)
 
-	if (int(math.Abs(float64(x%30))) < 8) && (int(math.Abs(float64(z%30))) < 8) {
+	if (city && xOffset == 3) || zOffset == 2 {
 
-		if xOffset == 3 {
-
-			placeStructure = true
-
-		}
+		placeStructure = true
 
 	}
 

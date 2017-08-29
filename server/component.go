@@ -23,27 +23,63 @@ func NewComponent(name string, pos []float64, quat []float64, props map[string]i
 }
 
 func getComponents(c echo.Context) error { // component types
+
 	var components []Component
 	err := db.All(&components)
+
 	if err != nil {
 		log.Println(err)
 		return err
 	}
+
 	return c.JSON(http.StatusOK, components)
+
 }
 
 func postComponents(c echo.Context) error {
+
 	var (
 		component *Component
 	)
+
 	component = new(Component)
+
 	if err := c.Bind(&component); err != nil {
 		return err
 	}
+
 	dbErr := db.Save(&component)
 	if dbErr != nil {
 		log.Println(dbErr)
 		return dbErr
 	}
+
 	return c.JSON(http.StatusOK, nil)
+
+}
+
+func getComponentByPath(components []*Component, path []int, pathIndex int) *Component {
+
+	var (
+		foundComponent *Component
+	)
+
+	if pathIndex < len(path) {
+		foundComponent = getComponentByPath(components[path[pathIndex]].Components, path, pathIndex+1)
+	} else {
+		foundComponent = components[path[pathIndex]]
+	}
+
+	return foundComponent
+
+}
+
+func updateComponentAtPath(component *Component, components []*Component, path []int, pathIndex int) {
+
+	if pathIndex < len(path) {
+		updateComponentAtPath(component, components[path[pathIndex]].Components, path, pathIndex+1)
+	} else {
+		components[path[pathIndex]] = component
+	}
+
 }

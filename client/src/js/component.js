@@ -19,6 +19,7 @@ export default class Component {
       this.lastFace = 0
       this.detached = false
       this.merged = false
+      this.isComponent = true
       this._compPos = new THREE.Vector3()
 
       if ( parent ) {

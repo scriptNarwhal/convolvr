@@ -310,7 +310,7 @@ export default class MaterialSystem {
 
                 }
                 mat.transparent = true
-                mat.opacity = 0.5
+                mat.opacity = 0.9
               break
               case "plastic":
                 if ( shading == 'physical' ) {
@@ -364,7 +364,6 @@ export default class MaterialSystem {
             if ( !simpleShading ) {
 
               prop.map = !!!prop.map ? '/data/images/textures/terrain1.jpg' : prop.map
-              prop.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
 
             } else {
 
@@ -396,12 +395,12 @@ export default class MaterialSystem {
             
               if ( !simpleShading ) {
   
-                prop.specularMap = "/data/images/textures/terrain3.jpg" 
+                prop.metalnessMap = "/data/images/textures/terrain3.jpg" 
                 prop.map = !!!prop.map ? '/data/images/textures/terrain3.jpg' : prop.map
   
               } else {
                         
-                prop.map = '/data/images/textures/terrain3.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
+                prop.map = '/data/images/textures/terrain3.jpg'
                 prop.envMap = 'none'
             
               }
@@ -448,7 +447,7 @@ export default class MaterialSystem {
                 
                 if ( !simpleShading ) {
                   
-                  prop.roughnessMap = "/data/images/textures/gplaypattern_@2X-2.png" 
+                  prop.metalnessMap = "/data/images/textures/gplaypattern_@2X-2.png" 
                 
                 }
 
@@ -457,12 +456,16 @@ export default class MaterialSystem {
             break
             case "glass":
 
-              prop.specularMap = '/data/images/textures/tiles.png'
-              prop.repeat = [ 'wrapping', 2, 2 ]
+              
+              prop.repeat = [ 'wrapping', 18, 18 ]
 
               if ( !simpleShading ) {
 
-                  prop.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
+                  prop.metalnessMap = '/data/images/textures/shattered_@2X-2.png'
+
+              } else {
+
+                prop.specularMap = '/data/images/textures/tiles.png'
 
               }
 

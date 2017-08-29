@@ -21,17 +21,17 @@ func generateColumn(id int, world string, x int, z int, altitude float32) *Entit
 	floorProps["floor"] = map[string]int{
 		"level": 0,
 	}
-	floorGeometry["size"] = []float64{structureSize, structureSize * 4, structureSize}
+	floorGeometry["size"] = []float64{structureSize / 4.0, structureSize * 4, structureSize}
 	floorGeometry["shape"] = "cylinder"
 	floorGeometry["merge"] = true
-	floorMaterial["name"] = "plastic"
+	floorMaterial["name"] = "glass"
 	floorMaterial["color"] = 0x303030
 	floorProps["geometry"] = floorGeometry
 	floorProps["material"] = floorMaterial
 	wallState := make(map[string]interface{})
 	structureComponents = append(structureComponents, NewComponent("", floorPos, floorQuat, floorProps, wallState, []*Component{}, nil))
 
-	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) - 89000, float64(z) * 807360.0} //  + (structureSize * width)
+	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) + 179000, float64(z) * 807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
 	structure = NewEntity(id+1, "Ancient Column", world, []int{x, 0, z}, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure

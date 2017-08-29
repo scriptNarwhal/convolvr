@@ -17,8 +17,7 @@ func update(c *nexus.Client, p *nexus.Packet) { // broadcast user telemetry to a
 func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you're trying to change the world
 
 	var (
-		action ToolAction
-		//chunkData []Chunk
+		action    ToolAction
 		entity    Entity
 		entityOut []byte
 	)
@@ -79,20 +78,11 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 					entity.Components = append(entity.Components, newComps...)
 				}
 
-			} else if action.Tool == "System Tool" || action.Tool == "Geometry Tool" || action.Tool == "Material Tool" || action.Tool == "Asset Tool" {
+			} else if action.Tool == "Update Tool" {
 
-				// implement
-				//for _, v in range entity.Components {
+				updateComponentAtPath(&action.Components[0], entity.Components, action.ComponentPath, 0)
 
-				// check ComponentPath
-
-				//}
 				log.Printf(`tool action: "%s"`, action.Tool)
-
-			} else if action.Tool == "World Tool" || action.Tool == "Place Tool" {
-
-				// implement / notifying users of which world / place was created / switched to,
-				// trigger creating world / saving it
 
 			} else if action.Tool == "File Tool" || action.Tool == "Directory Tool" {
 
@@ -117,7 +107,12 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 			log.Println(readErr)
 		}
 
-	}
+	} //else if action.Tool == "World Tool" || action.Tool == "Place Tool" {
+
+	// implement / notifying users of which world / place was created / switched to,
+	// trigger creating world / saving it
+
+	//}
 
 	hub.All().Broadcast(p)
 }

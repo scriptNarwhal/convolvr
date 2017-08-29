@@ -29,27 +29,12 @@ export default class Entity {
       
   }
 
-  update ( position, quaternion = false, components, componentIndex, props, state ) {
+  update ( position, quaternion = false, components, component, componentPath ) {
 
-    let component = null
+    if ( !! componentPath )
 
-    if ( !! componentIndex ) {
-
-      component = this.components[ componentIndex ]
-
-      if ( !! props ) {
-
-        component.props = Object.assign({}, component.props, props)
-
-      }
-
-      if ( !! state ) {
-
-        component.props = Object.assign({}, component.props, props)
-
-      }
-
-    }
+      this.updateComponentAtPath( component, componentPath, 0, components )
+     
 
     if ( !! components ) {
 
@@ -137,11 +122,6 @@ export default class Entity {
     while ( c < ncomps ) {
 
         comp = new Component( this.components[ c ], this, systems, { mobile, index: c } ) // use simpler shading for mobile gpus
-        
-        if ( comp.props.noRaycast === true ) { // this should be checked in a system
-          addToOctree = false
-        }
-
         compMesh = comp.mesh
         compMesh.geometry.computeBoundingSphere() // check bounding radius
         compRadius = compMesh.geometry.boundingSphere.radius 
@@ -192,57 +172,10 @@ export default class Entity {
 
     }
 
-    if ( this.componentsByProp.terrain ) { //  console.log("terrain; not adding to octree / for raycasting", this.componentsByProp)
-     
-      addToOctree = false
-
-    }
-
+    addToOctree = this.componentsByProp.terrain != true && this.componentsByProp.noRaycast != true
     this.boundingRadius = Math.max( dimensions[0], dimensions[1], dimensions[2] )
     this.boundingBox = dimensions
-
-    if ( !! workerUpdate ) {
-
-      let entityData = {
-            id: this.id,
-            components: this.components,
-            position: this.position,
-            quaternion: this.quaternion,
-            boundingRadius: this.boundingRadius,
-            boundingBox: this.boundingBox
-          },
-          message = ""
-
-      if ( workerUpdate == "add" ) {
-
-        message = JSON.stringify({
-          command: "add entity",
-          data: {
-            coords: this.voxel,
-            entity: entityData
-          }
-        })
-
-        systems.staticCollisions.worker.postMessage( message )
-        //systems.oimo.worker.postMessage( message )
-
-      } else if ( workerUpdate == "update") {
-        
-        message = JSON.stringify({
-          command: "update entity",
-          data: { 
-            entityId: this.id,
-            coords: this.voxel,
-            entity: entityData
-          }
-        })
-
-        systems.staticCollisions.worker.postMessage( message )
-        //systems.oimo.worker.postMessage( message )
-
-      }
-
-    }
+    !! workerUpdate && this.updateWorkers( workerUpdate, systems )
 
     if ( s > 0 ) {
 
@@ -350,6 +283,87 @@ export default class Entity {
     }
 
     return voxel
+
+  }
+
+  getComponentByPath ( path, pathIndex, components = false ) {
+
+    let foundComponent = null
+
+    if ( components == false )
+
+      components = this.components
+
+    if ( pathIndex < path.length ) {
+      
+      foundComponent = this.getComponentByPath( components[ path[ pathIndex ] ].components, path, pathIndex + 1 )
+
+    } else {
+            
+      foundComponent = components[ path[ pathIndex ] ]
+
+    }
+
+  }
+
+  updateComponentAtPath ( component, path, pathIndex, components = false ) {
+    
+    if ( components == false )
+      
+      components = this.components
+
+    if ( pathIndex < path.length ) {
+
+      this.updateComponentAtPath( component, components[ path[ pathIndex ] ].components, path, pathIndex + 1 )
+
+    } else {
+
+      components[ path[ pathIndex ] ] = component
+
+    }   
+    
+  }
+
+  updateWorkers ( mode, systems ) {
+
+    let entityData = {
+        id: this.id,
+        components: this.components,
+        position: this.position,
+        quaternion: this.quaternion,
+        boundingRadius: this.boundingRadius,
+        boundingBox: this.boundingBox
+      },
+      message = ""
+
+    if ( mode == "add" ) {
+
+      message = JSON.stringify({
+        command: "add entity",
+        data: {
+          coords: this.voxel,
+          entity: entityData
+        }
+      })
+
+      systems.staticCollisions.worker.postMessage( message )
+      //systems.oimo.worker.postMessage( message )
+
+    } else if ( mode == "update") {
+      
+      message = JSON.stringify({
+        command: "update entity",
+        data: { 
+          entityId: this.id,
+          coords: this.voxel,
+          entity: entityData
+        }
+      })
+
+      systems.staticCollisions.worker.postMessage( message )
+      //systems.oimo.worker.postMessage( message )
+
+    }
 
   }
 
