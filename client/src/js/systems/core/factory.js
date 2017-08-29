@@ -78,7 +78,7 @@ export default class FactorySystem {
                     created = this._generateAsset( data, voxel, entityPos, quat )
                 break
                 case "systems":
-                    created = this._generateSystem( data, voxel, entityPos, quat )
+                    created = this._generateSystem( data, voxel, entityPos, quat, preset )
                 break
 
             }
@@ -180,18 +180,25 @@ export default class FactorySystem {
 
     }
 
-    _generateSystem ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateSystem ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+
+        console.warn("system ", preset)
 
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
                     material: {
-                        name: "wireframe",
+                        name: "metal",
                         color: 0xffffff
                     },
                     geometry: {
-                        shape: "sphere",
-                        size: [4500, 4500, 4500]
+                        shape: "box",
+                        size: [12500, 12500, 4500]
+                    },
+                    text: {
+                        lines: [preset],
+                        color: 0xff0000,
+                        label: false
                     },
                     toolUI: {
                         configureTool: {
@@ -229,7 +236,7 @@ export default class FactorySystem {
     _generateAsset ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
         return new Entity(-1, [{
-                props: Object.assign({}, {material: data}, {
+                props: Object.assign({}, {material: {diffuse: data}}, {
                     mixin: true,
                     assets: {
                         images: [data] 
@@ -242,6 +249,12 @@ export default class FactorySystem {
                     geometry: {
                         shape: "sphere",
                         size: [4500, 4500, 4500]
+                    },
+                    toolUI: {
+                        configureTool: {
+                            tool: 7,
+                            data
+                        }
                     }
                 }
             )}

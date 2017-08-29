@@ -74,22 +74,27 @@ export default class MetaFactorySystem {
             
         } else { // map through system categories
             
-            sourceCategory = source[ category ]
-            keys = Object.keys( sourceCategory ) // structures, vehicles, media, interactivity
-            
-            keys.map( ( key, i ) => {
-                
-                x ++
+            sourceCategory = source[ category ] // structures, vehicles, media, interactivity
+        
+            Object.keys( sourceCategory ).map( ( key, a ) => { // vehicle, propulsion, control, etc
 
-                if ( x > gridWidth ) {
+                let categorySystems = sourceCategory[ key ]
+                console.log("***", sourceCategory, key)
+                console.log( categorySystems )
+                Object.keys( categorySystems ).map( systemPreset => {
 
-                    x = 0
-                    y += 1
+                        this._addComponent( component, systemPreset, assetType, "systems", key,  x, y, index, gridSize, vOffset)
+                        x += 1
+                        index += 1
+    
+                        if ( x > gridWidth ) {
+        
+                            x = 0
+                            y += 1
+        
+                        }
 
-                } 
-
-                this._addComponent( component, sourceCategory[ key ], assetType, "systems", preset,  x, y, i, gridSize, vOffset)
-
+                }) 
 
             })
 
