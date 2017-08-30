@@ -18,7 +18,7 @@ func generateNPC(id int, world string, x int, z int, altitude float32) *Entity {
 	npcProps := make(map[string]interface{})
 	npcGeometry := make(map[string]interface{})
 	npcMaterial := make(map[string]interface{})
-	npcProps["npc"] = map[string]int{
+	npcProps["npc"] = map[string]string{
 		"name": "Testerson",
 	}
 	npcGeometry["size"] = []float64{structureSize, structureSize * 1.7, structureSize}
