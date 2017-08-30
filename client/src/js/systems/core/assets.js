@@ -29,7 +29,7 @@ export default class AssetSystem {
         this.materials = {}
         this.textures = {}
         this.envMaps = {
-            default: '/data/images/textures/sky-reflection.jpg'
+            default: '/data/images/photospheres/sky-reflection.jpg'
         }
         this.audioBuffers = {}
         this.models = {}
@@ -69,9 +69,19 @@ export default class AssetSystem {
             ],
             assets: [ 
                 { path: "/data/images/textures/tiles.png" },
-                { path: "/data/images/textures/sky-reflection.jpg" }, 
                 { path: "/data/images/textures/gplaypattern_@2X.png" }, 
-                { path: "/data/images/textures/shattered_@2X.png" } 
+                { path: "/data/images/textures/shattered_@2X.png" },
+                { path: "/data/images/textures/terrain1.jpg" }, 
+                { path: "/data/images/textures/terrain2.jpg" }, 
+                { path: "/data/images/textures/terrain3.jpg" },
+                { path: "/data/images/textures/organic.jpg" },
+                { path: "/data/images/photospheres/sky-reflection.jpg" }, 
+                { path: "/data/images/photospheres/sky-reflection-c.jpg" },
+                { path: "/data/images/photospheres/sky-reflection-b.jpg" }, 
+                { path: "/data/images/photospheres/sky-reflection-p.jpg" }, 
+                { path: "/data/images/photospheres/sky-reflection-g.jpg" }, 
+                { path: "/data/images/photospheres/sky-reflection-r.jpg" },  
+                { path: "/data/images/photospheres/sky-reflection-o.jpg" }
             ],
             systems: { // load these from ../assets/props eventually
                 structures: {
@@ -228,6 +238,40 @@ export default class AssetSystem {
         // check format from file extension
         // use appropriate loader..
         // fire callback
+    }
+
+    getEnvMapFromColor ( r, g, b ) {
+
+        let envURL = '/data/images/photospheres/sky-reflection.jpg'
+
+        if ( r !== g && g !== b ) {
+            
+            if ( g > b ) {
+                
+                if ( r > b ) {
+                    envURL = '/data/images/photospheres/sky-reflection-o.jpg'
+                } else if (red < 0.2 && blue < 0.2) {
+                    envURL = '/data/images/photospheres/sky-reflection-g.jpg'
+                } else {
+                    envURL = '/data/images/photospheres/sky-reflection-r.jpg'
+                }
+                                        
+            } else if ( b > r ) {
+
+                if ( r < (b / 6.0) && g >= b-0.5 ) {
+                    envURL = '/data/images/photospheres/sky-reflection-c.jpg'
+                } else if ( r > (b / 6.0) ) {
+                    envURL = '/data/images/photospheres/sky-reflection-p.jpg'
+                } else {
+                    envURL = '/data/images/photospheres/sky-reflection-b.jpg'
+                }
+
+            }
+
+        }
+
+        return envURL
+
     }
 
     setWorlds ( worlds ) {

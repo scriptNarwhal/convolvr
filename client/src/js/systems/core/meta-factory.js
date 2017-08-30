@@ -79,8 +79,7 @@ export default class MetaFactorySystem {
             Object.keys( sourceCategory ).map( ( key, a ) => { // vehicle, propulsion, control, etc
 
                 let categorySystems = sourceCategory[ key ]
-                console.log("***", sourceCategory, key)
-                console.log( categorySystems )
+             
                 Object.keys( categorySystems ).map( systemPreset => {
 
                         this._addComponent( component, systemPreset, assetType, "systems", key,  x, y, index, gridSize, vOffset)

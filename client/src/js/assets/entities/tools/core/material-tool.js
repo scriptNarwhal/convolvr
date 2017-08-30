@@ -75,7 +75,7 @@ export default class MaterialTool extends Tool {
           props         = {},
           components    = [],
           component     = null,
-          componentPath = []
+          componentPath = [],
           entityId      = -1,
           entity        = null
 
@@ -92,7 +92,7 @@ export default class MaterialTool extends Tool {
 
     }
 
-    secondaryAction (telemetry, value) {
+    secondaryAction ( telemetry, value ) {
     
     }
     

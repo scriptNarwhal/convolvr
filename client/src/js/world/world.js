@@ -153,7 +153,11 @@ export default class Convolvr {
 			skyTexture = null,
 			skybox = this.skybox,
 			rotateSky = false,
-			shadowRes = 1024
+			shadowRes = 1024,
+			envURL = '/data/images/photospheres/sky-reflection.jpg',
+			r = config.sky.red,
+			g = config.sky.green,
+			b = config.sky.blue
 
 		this.config = config; console.log(config)
 		this.terrain.initTerrain(config.terrain)
@@ -167,7 +171,8 @@ export default class Convolvr {
 
 		} else {
 
-			this.systems.assets.envMaps.default = '/data/images/textures/sky-reflection.jpg'
+			envURL = this.systems.assets.getEnvMapFromColor( r, g, b )
+			this.systems.assets.envMaps.default = envURL
 
 		}
 

@@ -283,6 +283,10 @@ export default class MaterialSystem {
               case "terrain2":
                 
               break
+              case "terrain4":
+                  mat.metalness = 0.5
+                  mat.shininess = 0.5
+              break
               case "tree":
                 mat.transparent = !mobile
               break
@@ -395,7 +399,7 @@ export default class MaterialSystem {
             
               if ( !simpleShading ) {
   
-                prop.metalnessMap = "/data/images/textures/terrain3.jpg" 
+                prop.roughnessMap = "/data/images/textures/terrain3.jpg" 
                 prop.map = !!!prop.map ? '/data/images/textures/terrain3.jpg' : prop.map
   
               } else {

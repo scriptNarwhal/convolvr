@@ -2,10 +2,10 @@ package convolvr
 
 func colorConvert(hexValue int) (int, int) {
 
-	r := ((hexValue >> 16) & 0xFF) / 255.0 // Extract the RR byte
-	g := ((hexValue >> 8) & 0xFF) / 255.0  // Extract the GG byte
+	r := ((hexValue >> 16) & 0xFF) // Extract the RR byte
+	b := ((hexValue) & 0xFF)       // Extract the GG byte
 
-	return r, g
+	return r, b
 }
 
 func generateTerrain(world string, x int, y int, z int, altitude float32, flatArea bool, color int, terrainType string) *Entity {
@@ -13,7 +13,7 @@ func generateTerrain(world string, x int, y int, z int, altitude float32, flatAr
 	var (
 		components []*Component
 		r          int
-		g          int
+		b          int
 	)
 
 	compPos := []float64{0.0, 0.0, 0.0}
@@ -27,16 +27,16 @@ func generateTerrain(world string, x int, y int, z int, altitude float32, flatAr
 	geometry["size"] = []float64{536000, 536000, 835664}
 	geometry["shape"] = "hexagon"
 	geometry["faceNormals"] = false
-	r, g = colorConvert(color)
+	r, b = colorConvert(color)
 	if flatArea {
-		if g > (r - 16) {
+		if b > r {
 			material["name"] = "terrain2"
 		} else {
 			color = 0xffffff
 			material["name"] = "terrain4"
 		}
 	} else {
-		if g > r {
+		if b > r {
 			material["name"] = "terrain"
 		} else {
 			material["name"] = "terrain3"
