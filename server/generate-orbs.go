@@ -24,7 +24,7 @@ func generateOrb(id int, world string, x int, z int, altitude float32) *Entity {
 	floorGeometry["size"] = []float64{structureSize, 5000, structureSize * width}
 	floorGeometry["shape"] = "sphere"
 	floorGeometry["merge"] = true
-	floorMaterial["name"] = "terrarin2"
+	floorMaterial["name"] = "terrarin3"
 	floorMaterial["color"] = 0xff0530
 	floorProps["geometry"] = floorGeometry
 	floorProps["material"] = floorMaterial
@@ -45,7 +45,7 @@ func canPlaceOrbAt(x int, y int, z int) bool {
 
 	if (int(math.Abs(float64(x%30))) < 16) || (int(math.Abs(float64(z%30))) < 16) {
 
-		if xOffset == 2 {
+		if xOffset == 1 {
 
 			placeStructure = true
 
