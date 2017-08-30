@@ -214,7 +214,8 @@ export default class CursorSystem {
                 mesh: obj.object,
                 point: obj.point,
                 faceIndex: obj.faceIndex,
-                component
+                component,
+                componentPath: component ? component.path : []
             }
 
         } else {
@@ -224,21 +225,14 @@ export default class CursorSystem {
                 mesh: null,
                 point: null,
                 faceIndex: -1,
+                componentPath: [],
             }
 
         }
 
-        //entity && console.warn(cursorSystem.entityCoolDown, entity)
-
-        if ( !!entity || !!!entity ) {
-            
-            newCursorState.entity = entity
-
-        } else {
-
-            newCursorState.entity = cursorState.cursor.entity
-
-        }
+        newCursorState.entity = entity
+        
+       // newCursorState.entity = cursorState.cursor.entity
 
         newCursorState.lookingAtEntity = entity
 
@@ -256,7 +250,7 @@ export default class CursorSystem {
 
         }
 
-        cursorState.cursor = Object.assign( { faceIndex: -1 }, newCursorState )
+        cursorState.cursor = Object.assign( {}, newCursorState )
 
         if ( !!entity && !!component ) 
 

@@ -9,30 +9,30 @@ func generateNPC(id int, world string, x int, z int, altitude float32) *Entity {
 		structure           *Entity
 		structureComponents []*Component
 	)
-	floors := 1
+	npcs := 1
 	width := 2.8
-	structureSize := 4000.0
+	structureSize := 14000.0
 
-	floorPos := []float64{0.0, 0.0, 0.0}
-	floorQuat := []float64{0.0, 0.0, 0.0, 0.0}
-	floorProps := make(map[string]interface{})
-	floorGeometry := make(map[string]interface{})
-	floorMaterial := make(map[string]interface{})
-	floorProps["floor"] = map[string]int{
-		"level": 0,
+	npcPos := []float64{0.0, 0.0, 0.0}
+	npcQuat := []float64{0.0, 0.0, 0.0, 0.0}
+	npcProps := make(map[string]interface{})
+	npcGeometry := make(map[string]interface{})
+	npcMaterial := make(map[string]interface{})
+	npcProps["npc"] = map[string]int{
+		"name": "Testerson",
 	}
-	floorGeometry["size"] = []float64{structureSize, 10000, structureSize * width}
-	floorGeometry["shape"] = "box"
-	floorGeometry["merge"] = true
-	floorMaterial["name"] = "metal"
-	floorMaterial["color"] = 0xf0f0f0
-	floorProps["geometry"] = floorGeometry
-	floorProps["material"] = floorMaterial
+	npcGeometry["size"] = []float64{structureSize, structureSize * 1.7, structureSize}
+	npcGeometry["shape"] = "box"
+	npcGeometry["merge"] = true
+	npcMaterial["name"] = "metal"
+	npcMaterial["color"] = 0xf0f0f0
+	npcProps["geometry"] = npcGeometry
+	npcProps["material"] = npcMaterial
 	wallState := make(map[string]interface{})
-	structureComponents = append(structureComponents, NewComponent("", floorPos, floorQuat, floorProps, wallState, []*Component{}, nil))
+	structureComponents = append(structureComponents, NewComponent("", npcPos, npcQuat, npcProps, wallState, []*Component{}, nil))
 
 	structurePos := []float64{(float64(x) * 928000.0), float64(altitude) - 80000, float64(z) * 807360.0} //  + (structureSize * width)
-	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
+	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(npcs)*structureSize*0.5, 2))
 	structure = NewEntity(id+1, "Convolvr Bot 0"+string(id+1), world, []int{x, 0, z}, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure
 }

@@ -68,6 +68,7 @@ export default class MaterialTool extends Tool {
           assetSystem   = systems.assets,
           cursorSystem  = systems.cursor,
           cursorState   = cursor.state.cursor || {},
+          componentPath = cursorState.componentPath,
           position      = telemetry.position,
           quat          = telemetry.quaternion,
           selected      = !!cursorState.entity ? cursorState.entity : false,
@@ -75,7 +76,6 @@ export default class MaterialTool extends Tool {
           props         = {},
           components    = [],
           component     = null,
-          componentPath = [],
           entityId      = -1,
           entity        = null
 

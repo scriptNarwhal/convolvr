@@ -15,6 +15,7 @@ import DoorSystem from './environment/door'
 import EmoteSystem from './chat/emote'
 import FBXPluginSystem from './importers/fbx-plugin'
 import FileSystem from './information/file'
+import FactionSystem from './game/faction'
 import FactorySystem from './core/factory'
 import FloorSystem from './environment/floor'
 import GeometrySystem from './core/geometry'
@@ -40,6 +41,7 @@ import MetaFactorySystem from './core/meta-factory'
 import ParticleSystem from './environment/particle'
 import PortalSystem from './environment/portal'
 import ProjectileSystem from './environment/projectile'
+import QuestSystem from './game/quest'
 import LookAwaySystem from './core/look-away'
 import LoopSystem from './information/loop'
 import MaterialSystem from './core/material'
@@ -62,7 +64,7 @@ import UserSystem from './core/user'
 import VehicleSystem from './vehicle/vehicle'
 import WallSystem from './environment/wall'
 import WebRTCSystem from './video/webrtc'
-import NPCSystem from './core/npc'
+import NPCSystem from './game/npc'
 
 export default class Systems {
 
@@ -93,6 +95,7 @@ export default class Systems {
 			drawing: new DrawingSystem( world ),
 			driveController: new DriveControllerSystem( world ),
 			emote: new EmoteSystem( world ),
+			faction: new FactionSystem( world ),
 			factory: new FactorySystem( world ),
 			fbx: new FBXPluginSystem( world ),
 			file: new FileSystem( world ),
@@ -121,6 +124,7 @@ export default class Systems {
 			powerSupply: new PowerSupplySystem( world ),
 			portal: new PortalSystem( world ),
 			projectile: new ProjectileSystem( world ),
+			quest: new QuestSystem( world ),
 			rest: new RESTSystem( world ),
 			signal: new SignalSystem( world ),
 			screenshot: new ScreenshotSystem( world ),

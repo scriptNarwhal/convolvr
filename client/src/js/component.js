@@ -1,13 +1,26 @@
 export default class Component {
 
-  constructor ( data, entity, systems, appConfig = false, parent = false ) {
+  constructor ( data, entity, systems, config = false, parent = false ) {
 
-      var mesh = null,
+      var quaternion = data.quaternion ? data.quaternion : false,
+          position = data.position ? data.position : [ 0, 0, 0 ],
+          path = config && config.path ? config.path : [0],
           props = data.props,
-          quaternion = data.quaternion ? data.quaternion : false,
-          position = data.position ? data.position : [ 0, 0, 0 ]
+          mesh = null,
+          pl = path.length,
+          p = 0
+          
+      this.index = config.index ? config.index : -1
+      this.path = []
+
+      while ( p < pl ) {
+
+        this.path.push( path[ p ] )
+        p += 1
+
+      }
       
-      this.index = appConfig.index ? appConfig.index : -1
+      this.path.push( this.index )
       this.entity = entity
       this.data = data
       this.props = data.props || {}
@@ -21,42 +34,35 @@ export default class Component {
       this.merged = false
       this.isComponent = true
       this._compPos = new THREE.Vector3()
-
-      if ( parent ) {
-
-        this.parent = parent
-
-      }
+      this.parent = parent ? parent : null
 
       if ( !!! props ) {
-
+        
+        this.props = props = {} 
         console.warn("Component must have props")
-        this.props = props = {}
 
       }
 
       if ( props.geometry == undefined ) {
+
         props.geometry = {
           shape: "box",
           size: [ 8000, 8000, 8000 ]
         }
-      } else {
 
-        if ( props.geometry.merge === true ) {
+      } else if ( props.geometry.merge === true ) {
 
           this.merged = true
 
-        }
-
       }
 
-      if ( props.material == undefined ) {
+      if ( props.material == undefined )
+        
         props.material = {
           name: 'wireframe',
           color: 0xffffff
         }
-      }
-
+    
       mesh = systems.registerComponent( this )
       this.mesh = mesh
       mesh.userData = { 
@@ -69,21 +75,20 @@ export default class Component {
       mesh.position.set( position[0], position[1], position[2] )
       mesh.updateMatrix()
 
-      if ( this.props.hand != undefined ) {
+      if ( this.props.hand != undefined )
 
         this.detached = true
 
-      }
 
-      this.components.length > 0 && this.initSubComponents( this.components, entity, systems, appConfig )
+      this.components.length > 0 && this.initSubComponents( this.components, entity, systems, config )
 
   }
 
-  initSubComponents( components, entity, systems, appConfig ) {
+  initSubComponents( components, entity, systems, config ) {
 
     var base = new THREE.Geometry(),
         three = window.three,
-        mobile = !!appConfig ? appConfig.mobile : three.world.mobile,
+        mobile = !!config ? config.mobile : three.world.mobile,
         ncomps = components.length,
         nonMerged = [],
         compMesh = null,
@@ -99,14 +104,14 @@ export default class Component {
 
     this.lastFace = 0
         
-   while ( c < ncomps ) {
+    while ( c < ncomps ) {
 
         comp = new Component( components[ c ], entity, systems, { mobile, index: c }, this ) // use simpler shading for mobile gpus
 
-        if ( comp.props.noRaycast === true ) {
-          addToOctree = false
-        }
+        if ( comp.props.noRaycast === true )
 
+          addToOctree = false
+      
         compMesh = comp.mesh
 
         if ( comp.props.geometry ) { // this keeps happening.. arrays are geometrically filling up too quickly
@@ -187,11 +192,7 @@ export default class Component {
     parentMesh && parentMesh.updateMatrixWorld()
     this.allComponents.map( component => {
 
-      if ( !! component.merged ) {
-
-        return false
-
-      }
+      if ( !! component.merged ) return false
 
       compPos.setFromMatrixPosition( component.mesh.matrixWorld ) // get world position
       newDist = compPos.distanceTo( position )
@@ -240,11 +241,10 @@ export default class Component {
 
     this.compsByFaceIndex.forEach(( comp ) => {
 
-      if ( face >= comp.from && face <= comp.to ) {
+      if ( face >= comp.from && face <= comp.to )
 
         component = comp.component
 
-      } 
 
     })
 
