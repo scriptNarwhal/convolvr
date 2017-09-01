@@ -153,7 +153,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
           quaternion: [0, 0, 0, 1],
           position: [(n - 1) * 1500, 0, 0],
           components: [
-            Object.assign({}, cursorComponent(n==1))
+            Object.assign({}, cursorComponent(false)) //n==1))
           ]
         }))
         ++n
