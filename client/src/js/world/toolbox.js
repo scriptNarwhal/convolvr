@@ -65,6 +65,8 @@ export default class Toolbox {
 
       while ( hand < 2) {
 
+        this.currentTools[ hand ] += direction
+
         if ( this.currentTools[ hand ] < 0 ) {
 
           this.currentTools[ hand ] = this.tools.length - 1
@@ -75,11 +77,11 @@ export default class Toolbox {
 
         }
 
-        hand ++
+        hand += 1
 
       }
 
-      this.currentTools[hand] += direction
+      
       
     }
 
