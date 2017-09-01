@@ -85,13 +85,12 @@ export default class Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 8000, 3000, 2000 ]
+                size: [ 8000, 2000, 1000 ]
               },
               material: {
                 name: "plastic"
               },
               text: {
-                label: true,
                 background: "#000000",
                 color: "#ffffff",
                 lines: [
@@ -99,7 +98,8 @@ export default class Tool {
                 ]
               }
             },
-            position: [ 6000, 3000, 3000 ]
+            position: [ 6000, 3000, 3000 ],
+            quaternion: [0, 0, 0, 1]
         }
         
     }

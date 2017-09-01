@@ -220,7 +220,7 @@ export default class Toolbox {
         tool.equip(hand)
         
 
-      action = tool.primaryAction(telemetry)
+      action = tool.primaryAction( telemetry )
 
       if ( !!action ) {
 

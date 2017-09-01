@@ -63,7 +63,7 @@ export default class EntityTool extends Tool  {
               }
             },
             components: [
-              this.initLabel( false, "Entity")
+              this.initLabel( false, "Entity" )
             ]
           }
         ], [0,0,0], [0,0,0,1], coords)
@@ -89,13 +89,13 @@ export default class EntityTool extends Tool  {
 
       if ( ! tooManyComponents ) {
 
-        if ( cursorSystem.entityCoolDown > 0 ) return
+        if ( cursorSystem.entityCoolDown > 0 ) return false
 
         if ( selected && (cursorState.distance < 200000) ) { // switch to component tool
             
-            user.toolbox.useTool( 1, telemetry.hand )
+            user.toolbox.useTool( 1, telemetry.hand, false )
             user.hud.componentsByProp.toolUI[0].state.toolUI.show()
-            user.toolbox.usePrimary( telemetry.hand )
+            //user.toolbox.usePrimary( telemetry.hand )
             return false
 
         }
@@ -104,7 +104,7 @@ export default class EntityTool extends Tool  {
       
       if ( entity && cursorSystem.entityCoolDown <= 0 ) {
 
-        cursorSystem.entityCoolDown = 100
+        cursorSystem.entityCoolDown = 80
         return {
           entity
         }
