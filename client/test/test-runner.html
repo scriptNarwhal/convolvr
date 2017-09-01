@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Client Tests | Convolvr</title>
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    
+    <script>mocha.setup('bdd')</script>
+
+    <script src="../src/js/world/world.js"></script>
+    <script src="../src/js/world/entity.js"></script>
+    <script src="../src/js/world/component.js"></script>
+    <script src="../src/js/world/voxel.js"></script>
+    <script src="../src/js/systems/core/geometry.js"></script>
+    <script src="../src/js/systems/core/material.js"></script>
+    <script src="../src/js/input/user-input.js"></script>
+    <script src="../src/js/input/gamepad.js"></script>
+    <script src="../src/js/network/handlers.js"></script>
+    <!-- load code you want to test here -->
+    <script src="componentTest.js"></script>
+    <script src="entityTest.js"></script>
+    <script src="voxelTest.js"></script>
+    <script src="worldTest.js"></script>
+    <script src="cameraControlTest.js"></script>
+    <script src="gamepadTest.js"></script>
+    <script src="mouseTest.js"></script>
+    <script src="socketTest.js"></script>
+    <script src="userTest.js"></script>
+    <script src="chatTest.js"></script>
+    <script src="worldsTest.js"></script>
+    <script src="geometryTest.js"></script>
+    <script src="materialTest.js"></script>
+    <script src="cursorTest.js"></script>
+    <script src="terrainTest.js"></script>
+    <script>
+      mocha.run();
+    </script>
+  </body>
+</html>
