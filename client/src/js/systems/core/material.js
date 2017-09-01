@@ -449,11 +449,10 @@ export default class MaterialSystem {
 
                 prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
                 
-                if ( !simpleShading ) {
+                if ( !simpleShading )
                   
                   prop.metalnessMap = "/data/images/textures/gplaypattern_@2X-2.png" 
                 
-                }
 
                 prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
 
@@ -477,24 +476,21 @@ export default class MaterialSystem {
             case "plastic":
 
                 prop.repeat = [ 'wrapping', 2, 2 ]
-                prop.map = '/data/images/textures/gplaypattern_@2X-2.png'
+                prop.map = !!!prop.map ? '/data/images/textures/gplaypattern_@2X-2.png' : prop.map
 
-                if ( !simpleShading ) {
+                if ( !simpleShading )
 
                   prop.metalnessMap = "/data/images/textures/tiles.png" 
-
-                }
 
             default:
             break
 
           }
 
-          if ( simpleShading ) {
+          if ( simpleShading )
 
              prop.envMap = 'none'
 
-          }
 
           return basic
 

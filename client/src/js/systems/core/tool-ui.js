@@ -21,7 +21,7 @@ export default class ToolUISystem {
 
             activate && state.activate.callbacks.push( () => {
  
-                    this.switchTool( component, prop.toolIndex, prop.toolHand )
+                this.switchTool( component, prop.toolIndex, prop.toolHand )
 
             } )
 

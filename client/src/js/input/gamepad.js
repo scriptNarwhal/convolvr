@@ -226,7 +226,7 @@ export default class GamePad {
 		clearTimeout(this.cooldownTimeout)
 		this.cooldownTimeout = setTimeout(()=>{
 			this.cooldown = false
-		}, 250)
+		}, 100)
 
 	}
 
@@ -236,7 +236,7 @@ export default class GamePad {
 		clearTimeout(this.bumperCooldownTimeout)
 		this.bumperCooldownTimeout = setTimeout(()=>{
 			this.bumperCooldown = false
-		}, 250)
+		}, 400)
 
 	}
 

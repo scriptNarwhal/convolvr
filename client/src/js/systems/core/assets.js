@@ -465,20 +465,22 @@ export default class AssetSystem {
 
         let material = {
             name: "metal",
-            color
+            color,
+            config: {
+                emissive: color,
+                emissiveIntensity: 0.5
+            }
         }
 
-        if ( !!texture ) {
+        if ( !!texture )
 
             material.map = texture
-
-        }
 
         return {
             material,
             geometry: {
                 shape: "box",
-                faceNormals: false,
+                faceNormals: true,
                 size: [ 7000, 7000, 7000 ]
             }
         }

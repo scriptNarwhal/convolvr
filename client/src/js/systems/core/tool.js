@@ -36,7 +36,7 @@ export default class ToolSystem {
                         },
                         components: [
                             {
-                                position: [ 0, 2000, 7000 ],
+                                position: [ 0, 2000, -14000 ],
                                 props: { // title for top bar
                                     text: {
                                         label: true,
@@ -49,11 +49,12 @@ export default class ToolSystem {
                                         size: [ 60000, 10000, 2000 ]
                                     },
                                     material: {
-                                        name: "metal",
+                                        name: "plastic",
                                         color: 0xffffff
                                     }
                                 },
-                                components: []
+                                components: [],
+                                quaternion: [ 0, 0, 0, 1 ]
                             }
                         ]
                         
@@ -64,7 +65,7 @@ export default class ToolSystem {
                     props: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel
                         geometry: {
                             shape: "box",
-                            size: [60000, 80000, 2000]
+                            size: [ 60000, 80000, 2000 ]
                         },
                         material: {
                             name: "metal",
@@ -73,8 +74,8 @@ export default class ToolSystem {
                     }),
                     components: []
                 }
-            ], [0, 0, 0], false, component.entity.voxel)
-            this.panels.push(panel)
+            ], [0, 0, 0], [0,0,0,1], component.entity.voxel)
+            this.panels.push( panel )
             
         }
 
@@ -110,21 +111,20 @@ export default class ToolSystem {
       if ( !input.trackedControls && !input.leapMotion ) {
 
           this.world.user.mesh.add( toolMesh )
-          toolMesh.position.set(1500-(3000*hand), -800, -1550)
+          toolMesh.position.set( 1500-( 3000 * hand ), -800, -1550 )
 
       } else {
 
-          hands[hand].mesh.add( toolMesh ) // add to respective hand 
+          hands[ hand ].mesh.add( toolMesh ) // add to respective hand 
 
       }
 
       if ( toolPanel ) {
         
-        if ( toolPanel.mesh == null ) {
+        if ( toolPanel.mesh == null )
             
             toolPanel.init( three.scene )
 
-        }
 
         let userPos = this.world.user.avatar.mesh.position.toArray()
         userPos[1] += 42000
@@ -140,6 +140,7 @@ export default class ToolSystem {
 
                 panel.mesh.translateX(100000)
                 panel.mesh.translateZ(100000)
+                panel.mesh.updateMatrix()
 
             }
 
@@ -153,11 +154,9 @@ export default class ToolSystem {
 
         let compMesh = component.mesh
 
-        if ( compMesh != null && compMesh.parent != null ) {
+        if ( compMesh != null && compMesh.parent != null )
             
             compMesh.parent.remove( compMesh )
-
-        }
 
 
     }

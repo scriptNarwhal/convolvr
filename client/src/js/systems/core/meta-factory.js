@@ -11,22 +11,22 @@ export default class MetaFactorySystem {
 
     init ( component ) { 
         
-        let components = component.components,
-            prop = component.props.metaFactory,
-            assetType = prop.type,
-            source = [],
-            category = prop.propName,
-            gridWidth = prop.gridWidth || 3,
-            gridSize = prop.gridSize || 22000,
-            vOffset = prop.vOffset || -12000,
+        let components     = component.components,
+            prop           = component.props.metaFactory,
+            assetType      = prop.type,
+            category       = prop.propName,
+            gridWidth      = prop.gridWidth || 3,
+            gridSize       = prop.gridSize || 22000,
+            vOffset        = prop.vOffset || -14000,
             sourceCategory = "none",
-            preset = "",
-            presets = [],
-            factories = [],
-            keys = {},
-            index = 0,
-            x = 0,
-            y = 0
+            factories      = [],
+            presets        = [],
+            preset         = "",
+            source         = [],
+            index          = 0,
+            keys           = {},
+            x              = 0,
+            y              = 0
 
         if ( assetType == "component" ) {
 
@@ -36,8 +36,6 @@ export default class MetaFactorySystem {
                 source.push( prop.dataSource[ name ] )  
 
             })
-
-            console.log( "presets", presets )
 
         } else { 
 
@@ -110,7 +108,7 @@ export default class MetaFactorySystem {
 
         if ( component.props.layout ) {
 
-            pos = [ 0, -14000, 0 ]
+            pos = [ 0, vOffset, 2500 ]
             layout = component.props.layout
             pos = systems.layout.useLayout( layout.type, component, pos, i, layout.axis, layout.columns || 3, layout.gridSize || gridSize, layout.isometric )
 

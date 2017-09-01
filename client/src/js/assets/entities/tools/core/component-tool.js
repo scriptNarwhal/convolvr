@@ -94,11 +94,10 @@ export default class ComponentTool extends Tool {
       entity = new Entity( 0, [ component ], [ 0, 0, 0 ], quat, coords )
 
       //console.warn( `Component Tool Type ${componentType} Selected`, selected )
-      if ( cursorSystem.entityCoolDown > 10 )
+      if ( cursorSystem.entityCoolDown > 5 )
 
         return false // stop spamming lol.. // console.log("too many components; waiting for entity cooldown; aborting")
       
-      console.log("pointingAtTerrain too many comps, distance", pointingAtTerrain, tooManyComponents, cursorState.distance)
       if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
         console.warn(" Problem ")
         user.toolbox.useTool( 0, telemetry.hand )
