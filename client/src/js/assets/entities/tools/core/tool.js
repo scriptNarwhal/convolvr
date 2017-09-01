@@ -91,6 +91,7 @@ export default class Tool {
                 name: "plastic"
               },
               text: {
+                label: true,
                 background: "#000000",
                 color: "#ffffff",
                 lines: [

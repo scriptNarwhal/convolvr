@@ -32,14 +32,14 @@ let toolMenu = (assetSystem, config, voxel) => {
             }),
             components: [],
             position: [ 0, 0, 0 ],
-            quaternion: null
+            quaternion: [ 0, 0, 0, 1 ]
         },
             button = assetSystem._initButton(iconCube),
             row = Math.floor( i / 5 ) * 12000
 
         toolMenuIcons.push(Object.assign({}, button, {
             position: [ -24000 + (i % 5) * 12000, row - 1000, 6000 ],
-            quaternion: null
+            quaternion: [ 0, 0, 0, 1 ]
         }))
 
     })
@@ -69,16 +69,16 @@ let toolMenu = (assetSystem, config, voxel) => {
                         type: "point",
                         intensity: 0.9,
                         color: 0xffffff,
-                        distance: 12000
+                        distance: 32000
                     }
                 },
-                position: [ 0, -2000, -8000 ],
-                quaternion: null
+                position: [ 0, -6000, -12000 ],
+                quaternion: [ 0, 0, 0, 1 ]
 
             }
         ],
         position: [ 0, 0, 0 ],
-        quaternion: null
+        quaternion: [ 0, 0, 0, 1 ]
     }
 
     return {
