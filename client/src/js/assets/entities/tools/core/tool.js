@@ -47,11 +47,9 @@ export default class Tool {
 
       if ( toolPanel ) {
         
-        if ( toolPanel.mesh == null ) {
+        if ( toolPanel.mesh == null )
             
             toolPanel.init(three.scene)
-
-        }
 
         let userPos = this.world.user.avatar.mesh.position.toArray()
         userPos[1] += 40000
@@ -67,15 +65,10 @@ export default class Tool {
 
     unequip ( hand ) {
 
-      if (this.mesh != null) {
-        
-        if (this.mesh.parent != null) {
-          
-          this.mesh.parent.remove(this.mesh)
+      if ( this.mesh != null && this.mesh.parent != null )
+       
+          this.mesh.parent.remove( this.mesh )
 
-        }
-
-      }
 
     }
 
