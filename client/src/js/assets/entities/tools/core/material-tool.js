@@ -43,7 +43,8 @@ export default class MaterialTool extends Tool {
                     layout: {
                       type: "grid",
                       mode: "factory", // child components will ignore layout
-                      columns: 3
+                      columns: 3,
+                      gridSize: 18000
                     }
                   }
                 }
@@ -74,13 +75,21 @@ export default class MaterialTool extends Tool {
           selected      = !!cursorState.entity ? cursorState.entity : false,
           coords        = telemetry.voxel,
           props         = {},
-          components    = [],
-          component     = null,
+          components    = [ ],
+          component     = telemetry.component,
           entityId      = -1,
-          entity        = null
+          entity        = telemetry.entity
 
+      console.log(" ( Material Tool ) ", componentPath )
+      
+      if ( component != null ) {
 
-          
+        console.log("set material")
+        component.props.material = this.options
+        components = [ component ]
+
+      }
+
       return {
         coords,
         component,

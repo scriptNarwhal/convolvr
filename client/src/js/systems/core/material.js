@@ -22,6 +22,8 @@ export default class MaterialSystem {
             textureConfig = { },
             diffuse = !!prop.map ? prop.map.replace(path, '') : "",
             specular = !!prop.specularMap ? prop.specularMap.replace(path, '') : "",
+            alpha = !!prop.alphaMap ? prop.alphaMap : "",
+            bump = !!prop.bumpMap ? prop.bumpMap : "",
             envMapUrl = !! prop.envMap ? prop.envMap : assets.envMaps.default,
             reflection = !!envMapUrl ? envMapUrl.replace(path, '') : "",
             materialCode = '',
@@ -29,21 +31,19 @@ export default class MaterialSystem {
             simpleShading = this.world.lighting != 'high'
             
         basic = this._initMaterialProp( prop, simpleShading )
-        materialCode = `${prop.repeat ? prop.repeat.join(",") : ""}:${prop.name}:${prop.color}:${diffuse}:${specular}:${reflection}`
+        materialCode = `${prop.repeat ? prop.repeat.join(",") : ""}:${prop.name}:${prop.color}:${prop.map}:${prop.specular}:${reflection}:${prop.alpha}:${prop.bump}`
 
         if ( assets.materials[ materialCode ] == null ) {
 
-          if ( !! prop.config ) { // raw, three.js material properties, to override things
+          if ( !! prop.config ) // raw, three.js material properties, to override things
 
             mat = Object.assign({}, mat, prop.config)
 
-          }
          
-          if ( !!prop.repeat ) {
+          if ( !!prop.repeat )
 
             textureConfig.repeat = prop.repeat
 
-          }
 
           if ( envMapUrl && envMapUrl != "none" && (prop.roughnessMap || prop.metalnessMap) || shading == 'physical' ) {
 
@@ -147,9 +147,13 @@ export default class MaterialSystem {
 
                 }
 
-                if ( prop.alphaMap ) {
+                if ( prop.alphaMap || prop.bumpMap ) {
 
                   this._loadAlphaMap( prop, textureConfig, material, assets, () => {
+                    if ( !!!prop.bumpMap ) { assets.materials[ materialCode ] = material } // cache material for later
+                  })
+
+                  this._loadBumpMap( prop, textureConfig, material, assets, () => {
                     assets.materials[ materialCode ] = material // cache material for later
                   })
 
@@ -178,11 +182,9 @@ export default class MaterialSystem {
 
             !!prop.map && assets.loadImage( prop.map, textureConfig, texture => { 
 
-              if ( !!prop.repeat ) {
+              if ( !!prop.repeat )
 
                 this._setTextureRepeat( texture, prop.repeat )
-
-              }
 
               texture.anisotropy = renderer.getMaxAnisotropy()
               material.map = texture
@@ -190,9 +192,13 @@ export default class MaterialSystem {
 
             })
 
-            if ( prop.alphaMap ) {
+            if ( prop.alphaMap || prop.bumpMap ) {
               
               this._loadAlphaMap( prop, textureConfig, material, assets, () => {
+                if ( !!!prop.bumpMap ) { assets.materials[ materialCode ] = material } // cache material for later
+              })
+
+              this._loadBumpMap( prop, textureConfig, material, assets, () => {
                 assets.materials[ materialCode ] = material // cache material for later
               })
 
@@ -235,6 +241,25 @@ export default class MaterialSystem {
       })
 
     }
+
+    _loadBumpMap ( prop, textureConfig, material, assets, callback ) {
+      
+            assets.loadImage( prop.bumpMap, textureConfig, texture => { 
+              
+              let renderer = this.world.three.renderer
+      
+              if ( !!prop.repeat )
+              
+                this._setTextureRepeat( texture, prop.repeat )
+              
+              texture.anisotropy = renderer.getMaxAnisotropy()
+              material.bumpMap = texture
+              material.needsUpdate = true 
+              callback()
+      
+            })
+      
+      }
 
     _initMaterial( prop, config, shading, basic, mobile ) {
 
@@ -285,7 +310,8 @@ export default class MaterialSystem {
               break
               case "terrain4":
                   mat.metalness = 0.5
-                  mat.shininess = 0.5
+                  mat.roughness = 1.0
+                  mat.shininess = 0.05
               break
               case "tree":
                 mat.transparent = !mobile
@@ -300,6 +326,16 @@ export default class MaterialSystem {
                   mat.specular = 0xffffff
                   mat.shininess = 7.4
 
+                }
+              break
+              case "hard-light":
+                if (!mobile && prop.bumpMap ) {
+                  mat = Object.assign({}, mat, {
+                    color: 0x0040ff,
+                    specular: 0x0242ff,
+                    shininess: 45,
+                    bumpScale: 440
+                  } );
                 }
               break
               case "glass":
@@ -347,7 +383,6 @@ export default class MaterialSystem {
                 basic = true
             break
             case "terrain":
-
             if ( !simpleShading ) {
 
               //prop.metalnessMap = "/data/images/textures/tiles.png" 
@@ -364,7 +399,6 @@ export default class MaterialSystem {
             prop.repeat = [ 'wrapping', 12, 12 ]
             break
             case "terrain2":
-
             if ( !simpleShading ) {
 
               prop.map = !!!prop.map ? '/data/images/textures/terrain1.jpg' : prop.map
@@ -375,11 +409,9 @@ export default class MaterialSystem {
               prop.envMap = 'none'
 
             }
-          
             prop.repeat = [ 'wrapping', 8, 8 ]
             break
             case "terrain3":
-            
               if ( !simpleShading ) {
   
                 prop.map = !!!prop.map ? '/data/images/textures/terrain2.jpg' : prop.map
@@ -393,27 +425,23 @@ export default class MaterialSystem {
               }
                       
               prop.repeat = [ 'wrapping', 10, 10 ]
-              
             break
             case "terrain4":
-            
               if ( !simpleShading ) {
-  
-                prop.roughnessMap = "/data/images/textures/terrain3.jpg" 
+
+               prop.metalnessMap = "/data/images/textures/terrain3.jpg" 
                 prop.map = !!!prop.map ? '/data/images/textures/terrain3.jpg' : prop.map
-  
+
               } else {
-                        
+
                 prop.map = '/data/images/textures/terrain3.jpg'
                 prop.envMap = 'none'
             
               }
                       
               prop.repeat = [ 'wrapping', 10, 10 ]
-              
             break
             case "organic":
-
             if ( !simpleShading ) {
 
               prop.roughnessMap = "/data/images/textures/tiles-light.png" 
@@ -429,7 +457,6 @@ export default class MaterialSystem {
             prop.repeat = [ 'wrapping', 6, 6 ]
             break
             case "tree":
-
             if ( !simpleShading ) {
 
               //prop.roughnessMap = "/data/images/textures/tiles-light.png"
@@ -459,7 +486,6 @@ export default class MaterialSystem {
             break
             case "glass":
 
-              
               prop.repeat = [ 'wrapping', 18, 18 ]
 
               if ( !simpleShading ) {
@@ -473,6 +499,15 @@ export default class MaterialSystem {
               }
 
             break
+            case "hard-light":
+
+            prop.map = '/data/images/textures/surface03.jpg'
+
+            if ( !simpleShading )
+              
+                prop.metalnessMap = '/data/images/textures/surface03.jpg'
+
+            break
             case "plastic":
 
                 prop.repeat = [ 'wrapping', 2, 2 ]
@@ -481,6 +516,7 @@ export default class MaterialSystem {
                 if ( !simpleShading )
 
                   prop.metalnessMap = "/data/images/textures/tiles.png" 
+
 
             default:
             break

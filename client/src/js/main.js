@@ -27,6 +27,7 @@ import Chat from './2d-ui/containers/chat'
 import Profile from './2d-ui/containers/profile'
 import HUD from './2d-ui/containers/hud'
 // 3D World
+import { THREE } from 'three' 
 import Convolvr from './world/world'
 import Systems from './systems/index'
 import { events } from './network/socket'
@@ -34,6 +35,7 @@ import UserInput from './input/user-input'
 import User from './world/user'
 import Toolbox from './world/toolbox'
 import Entity from './entity'
+import { GRID_SIZE } from './config'
 
 let socket:       Object   = events,
     token:        string   = "",
@@ -54,15 +56,19 @@ userInput = new UserInput()
 loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) => {
 
   let systems: Systems = world.systems,
-      three: Object = world.three
+      three: Object = world.three,  
+      pos: THREE.Vector3 = three.camera.position,
+      coords: Array<number> = [Math.floor(pos.x /GRID_SIZE[0]), 0, Math.floor(pos.z /GRID_SIZE[2])],
+      voxelKey: string = coords.join("."),
+      altitude: number = systems.terrain.voxels[ voxelKey ].data.altitude
 
-  avatar = systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) // entity id can be passed into config object
+  avatar = systems.assets.makeEntity( "default-avatar", true, { wholeBody: false }, coords ) // entity id can be passed into config object
   avatar.init( three.scene )
   user.useAvatar( avatar )
   world.user = user
   user.toolbox = new Toolbox( user, world )
   
-  toolMenu = systems.assets.makeEntity( "tool-menu", true ) // the new way of spawning built in entities
+  toolMenu = systems.assets.makeEntity( "tool-menu", true, {}, coords ) // the new way of spawning built in entities
   user.hud = toolMenu
   toolMenu.init( three.scene, {}, (menu: Entity) => { 
     menu.componentsByProp.toolUI[0].state.toolUI.updatePosition()
@@ -73,18 +79,19 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
 
   if ( world.user == "convolvr" && world.name == "overworld" ) {
 
-    let pos = three.camera.position
+    
     pos.set( pos.x -60000+Math.random()*30000, pos.y + 50000, pos.z -60000+Math.random()*30000 )
     
   }
     
 
-  chatScreen = systems.assets.makeEntity( "chat-screen", true ) //; chatScreen.components[0].props.speech = {}
+  chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( three.scene )
-  chatScreen.update( [ 0, 50000, 0 ] )  
+  chatScreen.update( [ 0, altitude + 50000, 0 ] )  
+
   world.chat = chatScreen
 
-  helpScreen = systems.assets.makeEntity( "help-screen", true )
+  helpScreen = systems.assets.makeEntity( "help-screen", true, {}, coords )
   helpScreen.components[0].props.text.lines = [
       "#💻 Desktop users",
       "- ⌨️ WASD, RF, space keys: movement",
@@ -105,10 +112,10 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       "- Swiping & dragging move you"
     ]
   helpScreen.init(three.scene, {}, (help: Entity) => { 
-    //_initHTTPClientTest( world, help ) 
-    _initVideoChat( world, help ) 
+    //_initHTTPClientTest( world, help, coords ) 
+    _initVideoChat( world, help, coords ) 
   })
-  helpScreen.update( [ -80000, 50000, 0 ] )
+  helpScreen.update( [ -80000, altitude + 50000, 0 ] )
   world.help = helpScreen
 
 })
@@ -141,18 +148,18 @@ ReactDOM.render(
   document.getElementsByTagName('main')[0]
 )
 
-function _initVideoChat ( world, helpScreen: Entity ) {
+function _initVideoChat ( world, helpScreen: Entity, voxel: Array<number> ) {
 
-  let videoChat = world.systems.assets.makeEntity( "video-chat", true ) // simple example of displaying GET response from server
+  let videoChat = world.systems.assets.makeEntity( "video-chat", true, {}, voxel ) // simple example of displaying GET response from server
   // videoChat.components[0].props.particles = {}
   videoChat.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
   videoChat.update( [ -160000, 0, 0 ] )
 
 }
 
-function _initHTTPClientTest ( world, helpScreen: Entity ) {
+function _initHTTPClientTest ( world, helpScreen: Entity, voxel: Array<number> ) {
 
-  httpClient = world.systems.assets.makeEntity( "help-screen", true ) // simple example of displaying GET response from server
+  httpClient = world.systems.assets.makeEntity( "help-screen", true, voxel ) // simple example of displaying GET response from server
     let compProps = httpClient.components[0].props
     compProps.rest = {
       get: {

@@ -10,7 +10,7 @@ let block = {
                 },
                 material: {
                     color: 0x808080,
-                    name: "plastic"
+                    name: "hard-light"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],

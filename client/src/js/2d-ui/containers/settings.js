@@ -347,17 +347,6 @@ class Settings extends Component {
               </select>
             </div>
           </div>
-          <div>
-            <h3 style={styles.h3}>Profile Picture</h3>
-            <div style={styles.col}>
-              <span style={{paddingLeft: '1em'}}>
-                <input onChange={ (e)=> this.upload(e) }
-                            style={styles.fileUpload} 
-                            type='file' 
-                />
-              </span>
-            </div>
-          </div>
           <input style={styles.save}
                  type='submit'
                  value="Save Settings"

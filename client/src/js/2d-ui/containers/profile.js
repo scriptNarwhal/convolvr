@@ -62,49 +62,23 @@ class Profile extends Component {
 
   constructor () {
     this.state = {
-      camera: 'fps',
-      lighting: 'high',
-      aa: 'on',
-      postProcessing: 'on',
-      defaultWorld: 'overworld',
-      welcomeMessage: 'Welcome to Convolvr!',
-      leapMode: "hybrid",
-      floorHeight: 0,
-      viewDistance: 0,
       profilePicture: '',
-      manualLensDistance: 0,
-      network: [],
-      IOTMode: false
     }
   }
 
   componentWillMount () {
 
-    this.setState({
-      camera: localStorage.getItem("camera") || 'fps',
-      lighting: localStorage.getItem("lighting") || 'high',
-      postProcessing: localStorage.getItem("postProcessing") || 'off',
-      vrMovement: localStorage.getItem("vrMovement") || 'stick',
-      aa: localStorage.getItem("aa") || "on",
-      floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
-      IOTMode: localStorage.getItem("IOTMode") || 'off',
-      leapMode: localStorage.getItem("leapMode") || "hybrid",
-      viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0,
-      manualLensDistance: localStorage.getItem("manualLensDistance") != null ? localStorage.getItem("manualLensDistance") : 0
-    })
     this.props.fetchUniverseSettings()
 
   }
 
   componentWillReceiveProps ( nextProps, nextState ) {
 
-    if (this.props.fetchingSettings == true && nextProps.fetchingSettings == false && nextProps.settings != null) {
+    if (this.props.fetchingSettings == true && nextProps.fetchingSettings == false && nextProps.userSettings != null) {
 
-      console.log("Done Loading Universe Settings")
+      console.log("Done Loading User Settings")
       this.setState({
-        defaultWorld: nextProps.settings.defaultWorld,
-        welcomeMessage: nextProps.settings.welcomeMessage,
-        network: nextProps.settings.network || []
+        profilePicture: nextProps.userSettings.profilePicture,
       })
 
     }
@@ -119,28 +93,23 @@ class Profile extends Component {
 
   save () {
 
-    localStorage.setItem('camera', this.state.camera)
-    localStorage.setItem('lighting', this.state.lighting)
-    localStorage.setItem('aa', this.state.aa)
-    localStorage.setItem('postProcessing', this.state.postProcessing)
-    localStorage.setItem('vrMovement', this.state.vrMovement) 
-    localStorage.setItem('IOTMode', this.state.IOTMode)
-    localStorage.setItem('floorHeight', this.state.floorHeight)
-    localStorage.setItem( 'leapMode', this.state.leapMode )
-    localStorage.setItem('viewDistance', this.state.viewDistance)
-    localStorage.setItem('manualLensDistance', this.state.manualLensDistance)
+    
     this.reload()
     
   }
 
   upload (e) {
+
     let data = new FormData(),
         username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
+
     data.append('file', e.target.files[0])
     this.setState({
       profilePicture: username+"/"+e.target.files[0].name.replace(/\s/g, '-')
     })
+
     this.props.uploadFile(data, username, "")
+
   }
   
   render() {
@@ -153,6 +122,17 @@ class Profile extends Component {
             <div>
               <h1>Profile Settings</h1>
             </div>
+            <div>
+            <h3 style={styles.h3}>Profile Picture</h3>
+            <div style={styles.col}>
+              <span style={{paddingLeft: '1em'}}>
+                <input onChange={ (e)=> this.upload(e) }
+                       style={styles.fileUpload} 
+                       type='file' 
+                />
+              </span>
+            </div>
+          </div>
             <input style={styles.save}
                  type='submit'
                  value="Save Settings"

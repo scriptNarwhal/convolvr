@@ -87,15 +87,15 @@ class App extends Component {
     setTimeout( ()=> { console.log("world & worldUser ", worldDetails[0], worldDetails[1] )
 
 
-      let init3DUI = () => {
+      let respawnCamera = () => {
 
         let cameraPos = world.three.camera.position,
             voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
             altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
 
-        world.chat.update( [ -80000, altitude, -5000 ] )
-        world.help.update( [ -160000, altitude, -5000 ] )
-        world.user.hud.update( [ 2500, altitude + 52000, 0 ], null )
+        // world.chat.update( [ -80000, altitude, -5000 ] )
+        // world.help.update( [ -160000, altitude, -5000 ] )
+        // world.user.hud.update( [ 2500, altitude + 52000, 0 ], null )
 
         //if ( three.camera.position.y < altitude ) {
 
@@ -110,7 +110,7 @@ class App extends Component {
       world.load( worldDetails[ 0 ], worldDetails[ 1 ], () => { /* systems online */ }, ()=> { /* terrain finished loading */
 
         console.log("init 3d UI / terrain loaded")
-        init3DUI()
+        respawnCamera()
 
       })
 

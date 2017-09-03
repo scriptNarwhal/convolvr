@@ -27,7 +27,7 @@ let panel3 = {
                         },
                         material: {
                             color: 0x808080,
-                            name: "plastic"
+                            name: "hard-light"
                         }
                     },
                     quaternion: null,
@@ -43,7 +43,7 @@ let panel3 = {
                         },
                         material: {
                             color: 0x808080,
-                            name: "plastic"
+                            name: "hard-light"
                         }
                     },
                     quaternion: null,
@@ -59,7 +59,7 @@ let panel3 = {
                         },
                         material: {
                             color: 0x808080,
-                            name: "plastic"
+                            name: "hard-light"
                         }
                     },
                     quaternion: null,

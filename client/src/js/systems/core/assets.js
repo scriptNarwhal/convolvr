@@ -327,7 +327,7 @@ export default class AssetSystem {
 
         } else {
 
-            return ent
+            return Object.assign({}, ent, { voxel })
 
         }
 
