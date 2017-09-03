@@ -12,7 +12,7 @@ export default class WorldTool extends Tool {
         coords =  [ cameraPos[0], 0, cameraPos[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
 
       this.mesh = null
-      this.name = "Geometry Tool"
+      this.name = "World Tool"
       this.options = {
 
       }

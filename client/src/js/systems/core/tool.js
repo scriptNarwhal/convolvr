@@ -15,7 +15,7 @@ export default class ToolSystem {
     init ( component ) { 
 
         let prop = component.props.tool,
-            contentProps = prop.panel.content ? prop.panel.content.props : {},
+            contentProps = prop.panel && prop.panel.content ? prop.panel.content.props : {},
             factories = null,
             panel = null
 

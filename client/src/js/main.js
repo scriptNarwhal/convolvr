@@ -87,7 +87,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
 
   chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( three.scene )
-  chatScreen.update( [ 0, altitude + 50000, 0 ] )  
+  chatScreen.update( [ 0, altitude + 5000, 0 ] )  
 
   world.chat = chatScreen
 
@@ -115,7 +115,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
     //_initHTTPClientTest( world, help, coords ) 
     _initVideoChat( world, help, coords ) 
   })
-  helpScreen.update( [ -80000, altitude + 50000, 0 ] )
+  helpScreen.update( [ -80000, altitude + 5000, 0 ] )
   world.help = helpScreen
 
 })
