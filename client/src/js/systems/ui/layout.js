@@ -103,10 +103,40 @@ export default class LayoutSystem {
 
     _tubeLayout ( component, position, index, axis, columns, gridSize, isometric ) {
 
-        //TODO: Implement P2
-        let pos = [ 0, index * gridSize, 0 ]
-        
+        let x = index % columns,
+        z = Math.max( 0, Math.floor( (index) / columns ) ),
+        margin = gridSize,
+        marginZ = 2 * margin,
+        columnWidth = 2*Math.PI / columns,
+        pos = [ 0, 0, 0 ],
+        xPos = 0,
+        zPos = 0,
+        yPos = 0
+
+        if ( axis == 'x' ) {
+
+            xPos = z * gridSize
+            yPos = Math.sin(x * columnWidth) * gridSize
+            zPos = Math.cos(z * columnWidth) * gridSize
+            
+        } else if ( axis == 'y' ) {
+
+            yPos = z * gridSize
+            xPos = Math.sin(x * columnWidth) * gridSize
+            zPos = Math.cos(x * columnWidth) * gridSize
+
+        } else if ( axis == 'z') {
+
+            zPos =z * gridSize
+            xPos = Math.sin(x * columnWidth) * gridSize
+            yPos = Math.cos(z * columnWidth) * gridSize
+
+        }
+
+        pos = [ xPos, yPos, zPos +marginZ ]
+
         return pos
+    
     }
 
     _fibonacciLayout ( component, position, index, columns, gridSize ) {

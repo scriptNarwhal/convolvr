@@ -43,7 +43,8 @@ export default class SystemTool extends Tool {
                         dataSource: this.world.systems.assets.props.systems
                       },
                       layout: {
-                        type: "grid",
+                        type: "tube",
+                        axis: "y",
                         mode: "factory", // child components will ignore layout
                         columns: 3
                       }

@@ -3,47 +3,49 @@ let column1 = {
             name: "column1",
             components: [
                 {
-                props: {
-                    geometry: {
-                    merge: true,
-                        shape: "box",
-                        size: [ 10000, 22000, 1000 ]
-                    },
-                    material: {
-                        color: 0x808080,
-                        name: "plastic"
-                    }
-                },
-                quaternion: null,
-                position: [ 0, 0, 0 ]
-                },{
-                props: {
-                    geometry: {
+                    props: {
+                        geometry: {
                         merge: true,
-                        shape: "hexagon",
-                        size: [ 16000, 18000, 1000 ]
+                            shape: "box",
+                            size: [ 10000, 22000, 1000 ]
+                        },
+                        material: {
+                            color: 0x808080,
+                            name: "plastic"
+                        }
                     },
-                    material: {
-                        color: 0x808080,
-                        name: "hard-light"
-                    }
+                    quaternion: [ 0, 0, 0, 1 ],
+                    position: [ 0, 0, 0 ]
                 },
-                quaternion: null,
-                position: [ 0, -16000, 0 ]
-                },{
-                props: {
-                    geometry: {
-                        merge: true,
-                        shape: "hexagon",
-                        size: [ 18000, 18000, 1000 ]
+                {
+                    props: {
+                        geometry: {
+                            merge: true,
+                            shape: "hexagon",
+                            size: [ 16000, 18000, 1000 ]
+                        },
+                        material: {
+                            color: 0x808080,
+                            name: "hard-light"
+                        }
                     },
-                    material: {
-                        color: 0x808080,
-                        name: "plastic"
-                    }
+                    quaternion: [ 0, 0, 0, 1 ],
+                    position: [ 0, -16000, 0 ]
                 },
-                quaternion: null,
-                position: [ 0, 16000, 0 ]
+                {
+                    props: {
+                        geometry: {
+                            merge: true,
+                            shape: "hexagon",
+                            size: [ 18000, 18000, 1000 ]
+                        },
+                        material: {
+                            color: 0x808080,
+                            name: "plastic"
+                        }
+                    },
+                    quaternion: [ 0, 0, 0, 1 ],
+                    position: [ 0, 16000, 0 ]
                 }
             ],
             position: [ 0, 0, 0 ],
