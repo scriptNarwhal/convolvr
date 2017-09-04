@@ -9,7 +9,10 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 	var (
 		structure           *Entity
 		structureComponents []*Component
+		titles              []string
 	)
+	titles = []string{"Vacant Building", "Office Tower", "Rename This", "Factory", "Armory", "Residence", "Generated Building", "Building", " HQ", "Venue", "Cafe"}
+	title := titles[rand.Intn(10)]
 	floors := 1 + rand.Intn(3)*rand.Intn(3)*rand.Intn(3)
 	width := 2.0 + float64(rand.Intn(2))
 	structureSize := 300000.0
@@ -42,32 +45,43 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 		wallState := make(map[string]interface{})
 		structureComponents = append(structureComponents, NewComponent("", floorPos, floorQuat, floorProps, wallState, []*Component{}, nil))
 		for w := 0; w < 2; w++ {
-			wall := generateBuildingWall(w, i, floors, width, structureSize)
+			wall := generateBuildingWall(title, w, i, floors, width, structureSize)
 			structureComponents = append(structureComponents, wall)
 		}
 	}
 	// add long walls
 	for w := 2; w < 4; w++ {
-		wall := generateBuildingWall(w, 0, floors, width, structureSize)
+		wall := generateBuildingWall(title, w, 0, floors, width, structureSize)
 		structureComponents = append(structureComponents, wall)
 	}
 	structurePos := []float64{structureSize + (float64(x) * 928000.0), float64(altitude) + 10000, structureSize + float64(z)*807360.0} //  + (structureSize * width)
 	structureRadius := math.Sqrt(math.Pow(width, 2) + math.Pow(float64(floors)*structureSize*0.5, 2))
-	structure = NewEntity(id+1, "Vacant Building", world, []int{x, 0, z}, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
+	structure = NewEntity(id+1, title, world, []int{x, 0, z}, structureComponents, structurePos, []float64{0.0, 0.0, 0.0, 0.0}, structureRadius, nil)
 	return structure
 }
 
-func generateBuildingWall(w int, i int, floors int, width float64, structureSize float64) *Component {
+func generateBuildingWall(title string, w int, i int, floors int, width float64, structureSize float64) *Component {
 	wallPos := []float64{}
 	geometry := make(map[string]interface{})
 	material := make(map[string]interface{})
 	geometry["shape"] = "box"
 	geometry["merge"] = true
+	wallProps := make(map[string]interface{})
 	wallHeight := 0.0
+	text := make(map[string]interface{})
 	if w < 2 {
 		wallHeight = (-structureSize / 2.65) + float64(i)*structureSize/2
-		wallPos = []float64{0.0, wallHeight, structureSize/2.0 + float64(w-1)*structureSize}
+		wallPos = []float64{0.0, wallHeight + 0.5*structureSize, structureSize/2.0 + (float64(w)-1)*structureSize}
 		geometry["size"] = []float64{structureSize * width, structureSize / 3.8, 5000}
+		if i == floors-1 {
+			geometry["merge"] = false
+
+			text["lines"] = []string{title}
+			text["color"] = "#00ff00"
+			text["background"] = "#000000"
+			text["label"] = true
+			wallProps["text"] = text
+		}
 	} else if w < 4 {
 		wallHeight = structureSize * float64(floors)
 		wallPos = []float64{((float64(w-2) - 0.5) * width) * structureSize, wallHeight/4.0 - structureSize/2.0, 0.0}
@@ -75,7 +89,7 @@ func generateBuildingWall(w int, i int, floors int, width float64, structureSize
 	}
 
 	wallQuat := []float64{0.0, 0.0, 0.0, 0.0}
-	wallProps := make(map[string]interface{})
+
 	wallProps["wall"] = map[string]int{
 		"index": w,
 	}

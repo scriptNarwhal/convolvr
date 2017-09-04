@@ -49,26 +49,26 @@ void main( void ) {
         newColor = vec3( luminance * red, luminance * green, luminance * blue );
 
         if ( luminance * green > 1.0 ) {
-             newColor.x += ((luminance * green) -1.0) / 1.85;
+             newColor.x += ((luminance * green) -1.0) / 2.1;
         } 
         if ( luminance * blue > 1.0 ) {
-             newColor.x += ((luminance * blue) -1.0) / 1.75;
+             newColor.x += ((luminance * blue) -1.0) / 2.1;
         } 
         if ( luminance * red > 1.0 ) {
-             newColor.y += ((luminance * red) -1.0) / 1.75;
+             newColor.y += ((luminance * red) -1.0) / 2.1;
         } 
         if ( luminance * blue > 1.0 ) {
-             newColor.y += ((luminance * blue) -1.0) / 1.75;
+             newColor.y += ((luminance * blue) -1.0) / 2.1;
         } 
         if ( luminance * green > 1.0 ) {
-             newColor.z += ((luminance * green) -1.0) / 1.85;
+             newColor.z += ((luminance * green) -1.0) / 2.1;
         } 
         if ( luminance * red > 1.0 ) {
-             newColor.z += ((luminance * red) -1.0) / 1.75;
+             newColor.z += ((luminance * red) -1.0) / 2.1;
         } 
 
         color = vec4( newColor, 1.0 );
-        glow += sin( abs( ((vUv.x * PI) -lightYaw/2.0) ) )/ 2.0;
+        glow += sin( abs( ((vUv.x * PI) -lightYaw/2.0) ) )/ 1.5;
 
     } else if ( vUv.y < 0.5 && vUv.y > 0.49 ) {
 

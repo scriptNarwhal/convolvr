@@ -88,12 +88,7 @@ export default class EntityTool extends Tool  {
       console.log( "( Entity Tool )", telemetry, params )
 
       if ( ! tooManyComponents ) {
-        console.log(" (Not too many components ) ")
-        if ( cursorSystem.entityCoolDown > 0 ) return false
-          console.log(" ( cooldown OK ) ")
-        if ( selected && selected.componentsByProp && selected.componentsByProp.miniature) {
-          console.warn( "clicked miniature; don't switch to component tool")
-        }
+  
         if ( selected && selected.componentsByProp && !!!selected.componentsByProp.miniature && (cursorState.distance < 200000) ) { // switch to component tool
             
             user.toolbox.useTool( 1, telemetry.hand, false )
