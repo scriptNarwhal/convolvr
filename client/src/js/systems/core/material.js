@@ -550,17 +550,120 @@ export default class MaterialSystem {
           textureCode = "implement:This", // serialize the parameters in some _fairly_ concise way to build this string
           texture = null // probably using size... and.. some data from the rendering
         
-      if (assets.proceduralTextures[textureCode] == null) {  // reference TextSystem for canvas code here..
+      if ( assets.proceduralTextures[ textureCode ] == null ) {  // reference TextSystem for canvas code here..
        
+        texture = this._renderTexture( params )
+
       } else { // use cached version if available
 
-        texture = assets.proceduralTextures[textureCode]
+        texture = assets.proceduralTextures[ textureCode ]
 
       }
 
       return texture
 
     }
+
+    _renderTexture( params ) {
+
+      let prop         = component.props.text,
+          newTex       = null,
+          textMaterial = null,
+          canvas       = document.createElement("canvas"),
+          canvasSize   = !!prop.label ? [512, 128] : [1024, 1024],
+          context      = null,
+          config       = { label: !!prop.label }
+
+      canvas.setAttribute("style", "display:none")
+      canvas.width = canvasSize[0]
+      canvas.height = canvasSize[1]
+      
+      document.body.appendChild(canvas)
+      context = canvas.getContext("2d")
+      newTex = new THREE.Texture( canvas )
+      newTex.anisotropy = three.renderer.getMaxAnisotropy()
+      textMaterial.map.needsUpdate = true
+   
+      this._renderInstructions( context, params.calls )
+
+      return newTex
+
+    }
+
+    _renderInstructions ( context, calls, i =0 ) {
+
+      const DCS  = calls.length
+      let   draw = null,
+            params = [],
+            c = 0
+
+      while ( c < DCS ) {
+
+        draw = calls[ c ]
+        params = draw.params
+
+        switch ( draw.call ) {
+          case "fillStyle":
+            context.fillStyle = draw.params[0]
+          break
+          case "strokeStyle":
+            context.fillStyle = draw.params[0]
+          break
+          case "beginPath":
+            context.beginPath()
+          break
+          case "moveTo":
+            context.moveTo( params[0], params[1] )
+          case "lineTo":
+            context.lineTo( params[0], params[1] )
+          break
+          case "stroke":
+            context.stroke()
+          break
+          case "fillRect":
+            context.fillRect( params[ 0 ], params[ 1 ], params[ 2 ], params[ 3 ] )
+          break
+          case "arc":
+            context.arc( params[ 0 ], params[ 1 ], params[ 2 ], params[ 3 ] )
+          break
+          case "text":
+            context.fillText( params[ 0 ], params[ 1 ], params[ 2 ] )
+          break
+          case "loop":
+            this.renderLoop ( draw.params[0 ], draw.params[ 1 ], draw.params[ 2 ], draw.params[ 3 ] )
+          break
+        }
+        c += 1
+
+      }
+
+    }
+
+    _renderLoop ( start, dir, cond, limit ) {
+
+      const MAX = 10000
+
+      let i = start
+
+        if ( cond == "<" ) {
+          while ( i < limit && Math.abs(i) < MAX ) {
+            
+            this._renderInstructions(context, draw.calls, i )
+            i += dir == "+" ? 1 : -1
+            
+          }
+        } else {
+          while ( i > limit && Math.abs(i) < MAX) {
+            
+            this._renderInstructions(context, draw.calls, i )
+            i += dir == "+" ? 1 : -1
+            
+          }
+        }
+      
+
+    }
+
 }
 
          

@@ -14,6 +14,10 @@ class HUD extends Component {
         this.props.toggleMenu(force);
     }
 
+  componentDidMount( ) {
+
+  }
+
   render() {
     return (
         <div className="hud">

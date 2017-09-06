@@ -1,17 +1,23 @@
 export default class TextSystem {
 
+    constructor ( ) {
+
+        this.mappedColors = ["#000000", "#ffffff", "#ffff00", "#ff0040", "#0080ff", "#ff4000", "#ffa000", "#4000ff", "#00a0ff", "#400000" ]
+
+    }
+
     init ( component ) {
 
-        let prop = component.props.text,
-            text = prop.lines,
-            color = prop.color,
-            background = prop.background,
-            textTexture = null,
-            textMaterial = null,
-            textCanvas = document.createElement("canvas"),
-            canvasSize = !!prop.label ? [512, 128] : [1024, 1024],
-            context = null,
-            config = { label: !!prop.label }
+            let prop = component.props.text,
+                text = prop.lines,
+                color = prop.color,
+                background = prop.background,
+                textTexture = null,
+                textMaterial = null,
+                textCanvas = document.createElement("canvas"),
+                canvasSize = !!prop.label ? [512, 128] : [1024, 1024],
+                context = null,
+                config = { label: !!prop.label }
 
         textCanvas.setAttribute("style", "display:none")
         textCanvas.width = canvasSize[0]
@@ -27,7 +33,7 @@ export default class TextSystem {
             map: textTexture,
             side: 0
         })
-        let matTest = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+      
         textMaterial.map.needsUpdate = true
         component.mesh.material = textMaterial
 
@@ -41,11 +47,9 @@ export default class TextSystem {
             config,
             update: ( textProp ) => {
 
-                if ( !!textProp ) {
+                if ( !!textProp )
 
                     component.props.text = Object.assign( {}, component.props.text, textProp )
-
-                }
 
                 this._update( component )
 
@@ -67,17 +71,17 @@ export default class TextSystem {
 
     _update ( component ) {
 
-        let prop = component.props.text,
-            state = component.state.text,
-            text = prop.lines,
-            color = prop.color,
-            background = prop.background,
-            textTexture = state.textTexture,
+        let prop         = component.props.text,
+            state        = component.state.text,
+            text         = prop.lines,
+            color        = prop.color,
+            background   = prop.background,
+            textTexture  = state.textTexture,
             textMaterial = null,
-            textCanvas = state.textCanvas,
-            canvasSize = state.canvasSize,
-            context = state.context,
-            config = state.config
+            textCanvas   = state.textCanvas,
+            canvasSize   = state.canvasSize,
+            context      = state.context,
+            config       = state.config
         
         this._renderText( context, text, color, background, canvasSize, config )
         textTexture.needsUpdate = true   
@@ -135,11 +139,40 @@ export default class TextSystem {
             text.map(( line, l ) => { 
             
                 this._highlightMarkdown( l, line, lines, context, textRenderState ) // markdown
+                this._highlightSynesthesia( l, line, lines, context, textRenderState )
                 context.fillText( line, 16, 960-(1 + (lines-l)*fontSize*1.35) )
 
             })
 
         }
+
+    }
+
+    _highlightSynesthesia ( l, line, lines, context, textState ) {
+
+        let xSize = textState.canvasSize[0],
+        lineHeight = textState.fontSize,
+        height = 960-(1 + (lines-l)*lineHeight),
+        letters = [],
+        len = 0
+      
+        if ( line[0] == '%' ) { // markdown heading
+
+            letters = line.split("")
+            len = letters.length
+
+            line.split("").map( (letter,l) => {
+
+                if ( parseInt( letter ) ) {
+                    
+                    context.fillStyle = this.mappedColors[ parseInt( letter ) ]
+                    context.fillRect(0, height+10, xSize* (l/lines), lineHeight+10)
+
+                }
+
+            })
+
+        } 
 
     }
 

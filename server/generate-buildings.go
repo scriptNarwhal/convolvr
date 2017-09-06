@@ -11,7 +11,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 		structureComponents []*Component
 		titles              []string
 	)
-	titles = []string{"Vacant Building", "Office Tower", "Rename This", "Factory", "Armory", "Residence", "Generated Building", "Building", " HQ", "Venue", "Cafe"}
+	titles = []string{"Vacant Building", "Office Tower", "Rename This", "Factory", "Armory", "Residence", "Generated Building", "Building", world + " HQ", "Venue", "Cafe"}
 	title := titles[rand.Intn(10)]
 	floors := 1 + rand.Intn(3)*rand.Intn(3)*rand.Intn(3)
 	width := 2.0 + float64(rand.Intn(2))

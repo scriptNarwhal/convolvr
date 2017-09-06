@@ -24,25 +24,26 @@ export default class AssetSystem {
 
     constructor ( world: Convolvr ) {
 
-        this.world = world
-        this.geometries = {}
-        this.materials = {}
-        this.textures = {}
-        this.envMaps = {
+        this.world               = world
+        this.geometries          = {}
+        this.materials           = {}
+        this.textures            = {}
+        this.proceduralTextures  = {}
+        this.envMaps             = {
             default: '/data/images/photospheres/sky-reflection.jpg'
         }
-        this.audioBuffers = {}
-        this.models = {}
-        this.entities = []
+        this.audioBuffers        = {}
+        this.models              = {}
+        this.entities            = []
         this.autoDecrementEntity = -1 // entities loaded from network / db have positive ids
-        this.components = []
-        this.entitiesByName = {}
-        this.componentsByName = {}
-        this.userEntities = []
-        this.userComponents = []
-        this.places = []
-        this.worlds = []
-        this.props = {
+        this.components          = []
+        this.entitiesByName      = {}
+        this.componentsByName    = {}
+        this.userEntities        = []
+        this.userComponents      = []
+        this.places              = []
+        this.worlds              = []
+        this.props               = {
             geometry: [
                 { shape: 'node', size:          [1, 1, 1] },
                 { shape: 'box', size:           [28000, 28000, 28000] },
