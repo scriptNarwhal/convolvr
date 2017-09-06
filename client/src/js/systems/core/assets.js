@@ -63,7 +63,20 @@ export default class AssetSystem {
                 { name: "metal", color: 0xffffff },
                 { name: "glass", color: 0xffffff },
                 { name: "wireframe", color: 0xffffff },
-                { name: "custom-texture", color: 0xffffff },
+                { name: "stars", basic: true, color: 0xffffff,
+                    procedural: {
+                        name: "stars",
+                        calls: [
+                            { call: 'fillStyle', params: [ '#000000' ] },
+                            { call: 'fillRect', params: [ 0, 0, 1024, 1024 ] },
+                            { call: 'fillStyle', params: [ '#ffffff' ] },
+                            { call: 'noise', params: [ 5, 1024, 1024, 5, 5 ] },
+                            { call: 'loop', params: [ 0, '+', '<', 1000 ], calls : [
+                                { call: 'fillRect', params: [ 512, 512, 1, 1 ] },
+                            ]}
+                        ]
+                    } 
+                },
                 { mixin: true, color: 0xff0707 },
                 { mixin: true, color: 0x07ff07 },
                 { mixin: true, color: 0x0707ff }

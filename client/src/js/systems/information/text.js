@@ -8,16 +8,16 @@ export default class TextSystem {
 
     init ( component ) {
 
-            let prop = component.props.text,
-                text = prop.lines,
-                color = prop.color,
-                background = prop.background,
-                textTexture = null,
-                textMaterial = null,
-                textCanvas = document.createElement("canvas"),
-                canvasSize = !!prop.label ? [512, 128] : [1024, 1024],
-                context = null,
-                config = { label: !!prop.label }
+        let prop = component.props.text,
+            text = prop.lines,
+            color = prop.color,
+            background = prop.background,
+            textTexture = null,
+            textMaterial = null,
+            textCanvas = document.createElement("canvas"),
+            canvasSize = !!prop.label ? [512, 128] : [1024, 1024],
+            context = null,
+            config = { label: !!prop.label }
 
         textCanvas.setAttribute("style", "display:none")
         textCanvas.width = canvasSize[0]

@@ -26,12 +26,24 @@ export default class MaterialSystem {
             bump = !!prop.bumpMap ? prop.bumpMap : "",
             envMapUrl = !! prop.envMap ? prop.envMap : assets.envMaps.default,
             reflection = !!envMapUrl ? envMapUrl.replace(path, '') : "",
+            pattern = !!prop.procedural ? prop.procedural.name : "",
             materialCode = '',
             shading = !!prop.shading ? prop.shading : 'default',
             simpleShading = this.world.lighting != 'high'
             
         basic = this._initMaterialProp( prop, simpleShading )
-        materialCode = `${prop.repeat ? prop.repeat.join(",") : ""}:${prop.name}:${prop.color}:${prop.map}:${prop.specular}:${reflection}:${prop.alpha}:${prop.bump}`
+        materialCode = `${prop.repeat ? prop.repeat.join(",") : ""}:${prop.name}:${prop.color}:${prop.map}:${prop.specular}:${reflection}:${prop.alpha}:${prop.bump}:${pattern}`
+
+        let onMapsLoaded = loadedMat => {
+
+          if ( prop.procedural )
+
+            loadedMat.map = this.generateTexture( prop.procedural )
+          
+
+          assets.materials[ materialCode ] = loadedMat
+
+        }
 
         if ( assets.materials[ materialCode ] == null ) {
 
@@ -150,16 +162,16 @@ export default class MaterialSystem {
                 if ( prop.alphaMap || prop.bumpMap ) {
 
                   this._loadAlphaMap( prop, textureConfig, material, assets, () => {
-                    if ( !!!prop.bumpMap ) { assets.materials[ materialCode ] = material } // cache material for later
+                    if ( !!!prop.bumpMap ) { onMapsLoaded( material ) } // cache material for later
                   })
 
                   this._loadBumpMap( prop, textureConfig, material, assets, () => {
-                    assets.materials[ materialCode ] = material // cache material for later
+                    onMapsLoaded( material ) // cache material for later
                   })
 
                 } else {
                   
-                  assets.materials[ materialCode ] = material 
+                  onMapsLoaded( material ) 
 
                 }
 
@@ -199,12 +211,12 @@ export default class MaterialSystem {
               })
 
               this._loadBumpMap( prop, textureConfig, material, assets, () => {
-                assets.materials[ materialCode ] = material // cache material for later
+                onMapsLoaded( material )  // cache material for later
               })
 
             } else {
               
-              assets.materials[ materialCode ] = material 
+              onMapsLoaded( material ) 
 
             }
 
@@ -536,9 +548,9 @@ export default class MaterialSystem {
 
       if ( repeat[0] == "wrapping" ) {
 
-            texture.wrapS = texture.wrapT = THREE.RepeatWrapping
-			      texture.repeat.set(repeat[1], repeat[2])
-            texture.needsUpdate = true
+          texture.wrapS = texture.wrapT = THREE.RepeatWrapping
+			    texture.repeat.set(repeat[1], repeat[2])
+          texture.needsUpdate = true
 
       }
 
@@ -547,7 +559,7 @@ export default class MaterialSystem {
     generateTexture ( params ) { // would be useful for tiling / random patterns
 
       let assets = this.world.systems.assets,
-          textureCode = "implement:This", // serialize the parameters in some _fairly_ concise way to build this string
+          textureCode = params.name, 
           texture = null // probably using size... and.. some data from the rendering
         
       if ( assets.proceduralTextures[ textureCode ] == null ) {  // reference TextSystem for canvas code here..
@@ -566,13 +578,10 @@ export default class MaterialSystem {
 
     _renderTexture( params ) {
 
-      let prop         = component.props.text,
-          newTex       = null,
-          textMaterial = null,
+      let newTex       = null,
           canvas       = document.createElement("canvas"),
-          canvasSize   = !!prop.label ? [512, 128] : [1024, 1024],
-          context      = null,
-          config       = { label: !!prop.label }
+          canvasSize   = [1024, 1024],
+          context      = null
 
       canvas.setAttribute("style", "display:none")
       canvas.width = canvasSize[0]
@@ -582,7 +591,6 @@ export default class MaterialSystem {
       context = canvas.getContext("2d")
       newTex = new THREE.Texture( canvas )
       newTex.anisotropy = three.renderer.getMaxAnisotropy()
-      textMaterial.map.needsUpdate = true
    
       this._renderInstructions( context, params.calls )
 
@@ -590,11 +598,13 @@ export default class MaterialSystem {
 
     }
 
-    _renderInstructions ( context, calls, i =0 ) {
+    _renderInstructions ( context, calls, i = 0 ) {
 
       const DCS  = calls.length
       let   draw = null,
             params = [],
+            randoms = [false, false, false, false],
+            noise = false,
             c = 0
 
       while ( c < DCS ) {
@@ -602,7 +612,23 @@ export default class MaterialSystem {
         draw = calls[ c ]
         params = draw.params
 
+        if ( noise ) {
+
+          params.map( (p,i) => {
+
+            if ( randoms[i] )
+
+              params[ i ] = randoms[ i ]
+             
+          })
+
+        }
+
         switch ( draw.call ) {
+          case "noise":
+            randoms = [ params[1] * params[0], params[2]* params[0], params[3]* params[0], params[4]* params[0] ]
+            noise = Math.abs(params[0]) > 0
+          break
           case "fillStyle":
             context.fillStyle = draw.params[0]
           break
@@ -630,7 +656,7 @@ export default class MaterialSystem {
             context.fillText( params[ 0 ], params[ 1 ], params[ 2 ] )
           break
           case "loop":
-            this.renderLoop ( draw.params[0 ], draw.params[ 1 ], draw.params[ 2 ], draw.params[ 3 ] )
+            this._renderLoop ( context, draw.calls, draw.params[0 ], draw.params[ 1 ], draw.params[ 2 ], draw.params[ 3 ] )
           break
         }
         c += 1
@@ -639,7 +665,7 @@ export default class MaterialSystem {
 
     }
 
-    _renderLoop ( start, dir, cond, limit ) {
+    _renderLoop ( context, calls, start, dir, cond, limit ) {
 
       const MAX = 10000
 
@@ -648,14 +674,14 @@ export default class MaterialSystem {
         if ( cond == "<" ) {
           while ( i < limit && Math.abs(i) < MAX ) {
             
-            this._renderInstructions(context, draw.calls, i )
+            this._renderInstructions(context, calls, i )
             i += dir == "+" ? 1 : -1
             
           }
         } else {
           while ( i > limit && Math.abs(i) < MAX) {
             
-            this._renderInstructions(context, draw.calls, i )
+            this._renderInstructions(context, calls, i )
             i += dir == "+" ? 1 : -1
             
           }
