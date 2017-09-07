@@ -4,13 +4,13 @@ export default class Component {
 
       var quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : [ 0, 0, 0 ],
-          path = config && config.path ? config.path : [0],
+          path = config && config.path ? config.path : [],
           props = data.props,
           mesh = null,
           pl = path.length,
           p = 0
           
-      this.index = config.index ? config.index : -1
+      this.index = config.index ? config.index : 0
       this.path = []
 
       while ( p < pl ) {
@@ -106,7 +106,7 @@ export default class Component {
         
     while ( c < ncomps ) {
 
-        comp = new Component( components[ c ], entity, systems, { mobile, index: c }, this ) // use simpler shading for mobile gpus
+        comp = new Component( components[ c ], entity, systems, { mobile, path: this.path, index: c }, this ) // use simpler shading for mobile gpus
 
         if ( comp.props.noRaycast === true )
 

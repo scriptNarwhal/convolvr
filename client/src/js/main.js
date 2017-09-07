@@ -1,20 +1,17 @@
 // @flow
 console.log('Convolvr Client Initializing')
-// React
-import ReactDOM from 'react-dom'
+import ReactDOM from 'react-dom' // React
 import React, { Component, PropTypes } from 'react'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
-// Redux
-import { render } from 'react-dom'
+import { render } from 'react-dom' // Redux
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import makeStore from './redux/makeStore'
 let store: Object = makeStore(routerReducer)
 const history: Object = syncHistoryWithStore(browserHistory, store)
-import { clearOldData } from './config'
-// 2D UI
-import App from './2d-ui/containers/app'
+import { clearOldData, GRID_SIZE } from './config'
+import App from './2d-ui/containers/app' // 2D UI
 import Data from './2d-ui/containers/data'
 import Worlds from './2d-ui/containers/worlds'
 import Places from './2d-ui/containers/places'
@@ -26,8 +23,7 @@ import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
 import Profile from './2d-ui/containers/profile'
 import HUD from './2d-ui/containers/hud'
-// 3D World
-import { THREE } from 'three' 
+import { THREE } from 'three' // 3D World
 import Convolvr from './world/world'
 import Systems from './systems/index'
 import { events } from './network/socket'
@@ -35,7 +31,6 @@ import UserInput from './input/user-input'
 import User from './world/user'
 import Toolbox from './world/toolbox'
 import Entity from './entity'
-import { GRID_SIZE } from './config'
 
 let socket:       Object   = events,
     token:        string   = "",
@@ -55,12 +50,12 @@ userInput = new UserInput()
 
 loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) => {
 
-  let systems: Systems = world.systems,
-      three: Object = world.three,  
-      pos: THREE.Vector3 = three.camera.position,
-      coords: Array<number> = [Math.floor(pos.x /GRID_SIZE[0]), 0, Math.floor(pos.z /GRID_SIZE[2])],
-      voxelKey: string = coords.join("."),
-      altitude: number = systems.terrain.voxels[ voxelKey ].data.altitude
+  let systems:   Systems       = world.systems,
+      three:     Object        = world.three,  
+      pos:       THREE.Vector3 = three.camera.position,
+      coords:    Array<number> = [Math.floor(pos.x /GRID_SIZE[0]), 0, Math.floor(pos.z /GRID_SIZE[2])],
+      voxelKey:  string        = coords.join("."),
+      altitude:  number        = systems.terrain.voxels[ voxelKey ].data.altitude
 
   avatar = systems.assets.makeEntity( "default-avatar", true, { wholeBody: false }, coords ) // entity id can be passed into config object
   avatar.init( three.scene )
@@ -77,17 +72,14 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
   userInput.init( world, world.camera, user )
   userInput.rotationVector = { x: 0, y: 2.5, z: 0 }
 
-  if ( world.user == "convolvr" && world.name == "overworld" ) {
+  if ( world.user == "convolvr" && world.name == "overworld" )
 
-    
     pos.set( pos.x -60000+Math.random()*30000, pos.y + 50000, pos.z -60000+Math.random()*30000 )
-    
-  }
     
 
   chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( three.scene )
-  chatScreen.update( [ 0, altitude + 5000, 0 ] )  
+  chatScreen.update( [ 0, altitude - 15000, 0 ] )  
 
   world.chat = chatScreen
 
@@ -109,18 +101,17 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       "",
       "#📱 Mobile users (2d or with VR viewer)",
       "- Device orientation controls the camera",
-      "- Swiping & dragging move you"
+      "- Swiping, dragging & gamepads move you"
     ]
   helpScreen.init(three.scene, {}, (help: Entity) => { 
-    //_initHTTPClientTest( world, help, coords ) 
+    _initHTTPClientTest( world, help, coords ) 
+    _initFileSystemTest( world, help, coords ) 
     _initVideoChat( world, help, coords ) 
   })
-  helpScreen.update( [ -80000, altitude + 5000, 0 ] )
+  helpScreen.update( [ -80000, altitude - 15000, 0 ] )
   world.help = helpScreen
 
 })
-
-
 
 ReactDOM.render(
   (<Provider store={store}>
@@ -148,7 +139,7 @@ ReactDOM.render(
   document.getElementsByTagName('main')[0]
 )
 
-function _initVideoChat ( world, helpScreen: Entity, voxel: Array<number> ) {
+function _initVideoChat ( world: Convolvr, helpScreen: Entity, voxel: Array<number> ) {
 
   let videoChat = world.systems.assets.makeEntity( "video-chat", true, {}, voxel ) // simple example of displaying GET response from server
   // videoChat.components[0].props.particles = {}
@@ -157,9 +148,9 @@ function _initVideoChat ( world, helpScreen: Entity, voxel: Array<number> ) {
 
 }
 
-function _initHTTPClientTest ( world, helpScreen: Entity, voxel: Array<number> ) {
+function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: Array<number> ) {
 
-  httpClient = world.systems.assets.makeEntity( "help-screen", true, voxel ) // simple example of displaying GET response from server
+  httpClient = world.systems.assets.makeEntity( "help-screen", true, {}, voxel ) // simple example of displaying GET response from server
     let compProps = httpClient.components[0].props
     compProps.rest = {
       get: {
@@ -170,5 +161,11 @@ function _initHTTPClientTest ( world, helpScreen: Entity, voxel: Array<number> )
     compProps.text.color = "#f0f0f0"
     httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
     httpClient.update( [ -80000, 0, 0 ] )
+
+}
+
+function _initFileSystemTest ( world: Convolvr, helpScreen: Entity, voxel: Array<number> ) {
+
+  // implement
 
 }

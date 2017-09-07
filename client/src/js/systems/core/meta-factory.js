@@ -51,10 +51,7 @@ export default class MetaFactorySystem {
                 
                     return
                 
-
-                preset = assetType == "entity" ? item.name : preset
-                preset = assetType == "component" ? presets[ i ] : preset
-
+                preset = this._getPreset( assetType, item, i, presets ) 
                 this._addComponent( component, item, assetType, category, preset, x, y, index, gridSize, vOffset)
 
                 x ++
@@ -94,6 +91,29 @@ export default class MetaFactorySystem {
                 }) 
 
             })
+
+        }
+
+    }
+
+    _getPreset ( assetType, item, i, presets ) {
+
+        //preset = assetType == "entity" ? item.name : preset
+        //preset = assetType == "component" ? presets[ i ] : preset
+        switch ( assetType ) {
+
+            case "world":
+            case "place":
+            case "entity":
+            case "material":
+                return item.name
+            break
+            case "component":
+                return presets[ i ]
+            break
+            case "geometry":
+                return item.shape
+            break
 
         }
 

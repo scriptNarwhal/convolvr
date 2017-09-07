@@ -77,7 +77,7 @@ export default class TerrainSystem {
 
            mesh.rotation.x = -Math.PI/2
 
-            if (type == 'plane' ) {
+            if ( type == 'plane' ) {
 
                 mesh.position.y = -120500
 
@@ -225,9 +225,9 @@ export default class TerrainSystem {
 
       c = 0
       
-      while ( x <= endCoords[0] ) { // load new terrain voxels
+      while ( x <= endCoords[ 0 ] ) { // load new terrain voxels
 
-        while ( y <= endCoords[1] ) {
+        while ( y <= endCoords[ 1 ] ) {
 
             if ( c < 6 && voxels[x+".0."+y] == null ) { // only if its not already loaded
               

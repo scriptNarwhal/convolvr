@@ -69,10 +69,10 @@ export default class FactorySystem {
             switch ( propName ) {
 
                 case "geometry":
-                    created = this._generateGeometry( data, voxel, entityPos, quat )
+                    created = this._generateGeometry( data, voxel, entityPos, quat, preset  )
                 break
                 case "material":
-                    created = this._generateMaterial( data, voxel, entityPos, quat )
+                    created = this._generateMaterial( data, voxel, entityPos, quat, preset  )
                 break
                 case "assets":
                     created = this._generateAsset( data, voxel, entityPos, quat )
@@ -158,7 +158,7 @@ export default class FactorySystem {
         return new Entity( -1, [ data ], position, quaternion, voxel )
     }
 
-    _generateGeometry ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateGeometry ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         return new Entity(-1, [{ 
                 props: Object.assign({}, {geometry: data}, {
@@ -212,7 +212,7 @@ export default class FactorySystem {
 
     }
 
-    _generateMaterial ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateMaterial ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         return new Entity(-1, [{
                 props: Object.assign({}, {material: data}, {
