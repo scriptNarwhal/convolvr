@@ -63,6 +63,14 @@ export default class PlaceTool extends Tool {
     }
     
     configure ( config ) {
+      
+      if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
 
-    }
+        this.options = Object.assign( {}, config.data )
+        console.log("Configuring tool ", this.options)
+
+      }
+      
+  }
+
 }

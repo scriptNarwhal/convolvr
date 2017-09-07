@@ -22,13 +22,12 @@ export default class Toolbox {
       this.user = user
       this.hands = []
       console.warn(this.user.avatar)
-      this.user.avatar.componentsByProp.hand.map(( m, i )=>{
+      this.user.avatar.componentsByProp.hand.map(( m, i ) => {
 
-        if ( i < 3 ) {
+        if ( i < 3 )
 
           this.hands.push( m )
 
-        }
 
       })
 
@@ -122,15 +121,15 @@ export default class Toolbox {
 
     initActionTelemetry ( camera, useCursor, hand ) {
 
-      let input = this.world.userInput,
-          position = camera.position.toArray(),
-          voxel = [ position[0], 0, position[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) ),
+      let input      = this.world.userInput,
+          position   = camera.position.toArray(),
+          voxel      = [ position[0], 0, position[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) ),
           quaternion = camera.quaternion.toArray(),
-          user = this.world.user,
-          cursors = user.avatar.componentsByProp.cursor,
-          cursor = null,
-          cursorPos = null,
-          handMesh = null
+          user       = this.world.user,
+          cursors    = user.avatar.componentsByProp.cursor,
+          cursor     = null,
+          cursorPos  = null,
+          handMesh   = null
           
       if ( useCursor ) {
 
@@ -150,11 +149,10 @@ export default class Toolbox {
         cursorPos = cursor.mesh.localToWorld( new THREE.Vector3() )
         position = cursorPos.toArray()
 
-        if ( handMesh != null ) {
+        if ( handMesh != null )
 
           quaternion = handMesh.quaternion.toArray()
 
-        }
 
       }
 
@@ -171,22 +169,24 @@ export default class Toolbox {
     
     usePrimary ( hand ) {
 
-      let toolIndex = this.currentTools[ hand ],
-          tool = this.tools[ toolIndex ],
-          camera = this.world.camera,
-          telemetry = this.initActionTelemetry(camera, true, hand),
+      let toolIndex                       = this.currentTools[ hand ],
+          tool                            = this.tools[ toolIndex ],
+          camera                          = this.world.camera,
+          telemetry                       = this.initActionTelemetry(camera, true, hand),
           { position, quaternion, voxel } = telemetry,
-          cursorEntity = !!telemetry.cursor ? telemetry.cursor.state.cursor.entity : false,
-          cursorState = !!telemetry.cursor ? telemetry.cursor.state : false,
-          componentsByProp =  !!cursorEntity ? cursorEntity.componentsByProp : {},
-          configureTool = null,
-          action = null
+          cursorEntity                    = !!telemetry.cursor ? telemetry.cursor.state.cursor.entity : false,
+          cursorComponent                 = !!cursorEntity ? telemetry.cursor.state.cursor.component: false,
+          cursorState                     = !!telemetry.cursor ? telemetry.cursor.state : false,
+          componentsByProp                = !!cursorEntity ? cursorEntity.componentsByProp : {},
+          configureTool                   = null,
+          action                          = null,
+          miniature                       = null
       
       if ( telemetry.cursor && cursorEntity ) { // check telemetry here to see if activate callbacks should fire instead of tool action
 
         if ( cursorEntity.componentsByProp.activate ) { 
 
-          !!cursorState.component && console.log("*** usePrimary ", cursorState.component )
+          !!cursorState.component && console.log("*** Activate ", cursorState.component )
           !!cursorState.component && cursorState.component.state.activate.callbacks.map( (callback) => {
               callback() // action is handled by checking component props ( besides .activate )
           })
@@ -194,9 +194,10 @@ export default class Toolbox {
           return // cursor system has found the component ( provided all has gone according to plan.. )
 
         }
-
-        if ( componentsByProp.miniature && componentsByProp.toolUI ) {
-
+        console.log("use Primary ", componentsByProp)
+        miniature = cursorEntity.componentsByProp.miniature
+        if ( miniature && cursorComponent.props.toolUI ) {
+          console.log("ToolUI!")
           configureTool = componentsByProp.toolUI[ 0 ].props.toolUI.configureTool 
 
             if ( configureTool ) {
@@ -222,11 +223,10 @@ export default class Toolbox {
 
       action = tool.primaryAction( telemetry )
 
-      if ( !!action ) {
+      if ( !!action )
 
         this.sendToolAction( true, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.coords )
 
-      }
 
     }
 
@@ -238,28 +238,26 @@ export default class Toolbox {
         { position, quaternion } = telemetry,
           action = false
           
-      if ( tool.mesh == null ) {
+      if ( tool.mesh == null )
 
-          tool.equip(hand)
+          tool.equip( hand )
 
-      }
 
       action = tool.secondaryAction(telemetry, value)
       
-      if (!!action) {
+      if ( !!action )
 
         this.sendToolAction( false, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.coords )
 
-      }
 
     }
 
     grip ( handIndex, value ) {
 
-      let hand = this.hands[handIndex].mesh,
+      let hand   = this.hands[ handIndex ].mesh,
           entity = null, //hand.children[0].userData.component.props.,
           cursor = null,
-          pos = [0,0,0], //entity.mesh.position,
+          pos    = [0,0,0], //entity.mesh.position,
           coords = [0,0,0],
           voxels = this.world.terrain.voxels
      
@@ -270,14 +268,14 @@ export default class Toolbox {
         pos = !!entity ? entity.mesh.position.toArray() : pos
 
       }
-
+      console.warn( "grab", value)
       if ( !! entity ) {
         
         if ( value == -1 ) {
 
-          hand.remove(entity.mesh)
-          three.scene.add(entity.mesh)
-          entity.update([hand.position.x, hand.position.y, hand.position.z])
+          hand.remove( entity.mesh )
+          three.scene.add( entity.mesh )
+          entity.update( [hand.position.x, hand.position.y, hand.position.z] )
           hand.userData.grabbedEntity = false
           // probably use haptic system for state ^^^
           //coords = [Math.floor(pos.x / 928000), 0, Math.floor(pos.z / 807360)],
@@ -301,9 +299,10 @@ export default class Toolbox {
 
     setHandOrientation ( hand, position, orientation ) {
 
-      let userHand = !!this.hands[hand] ? this.hands[hand].mesh : false
+      let userHand = !!this.hands[ hand ] ? this.hands[ hand ].mesh : false
 
       if ( userHand ) {
+
         userHand.autoUpdateMatrix = false
         userHand.position.fromArray(position).multiplyScalar(22000).add(this.world.camera.position)
         userHand.translateX(725+ hand*-1250)
@@ -324,7 +323,7 @@ export default class Toolbox {
 
         coords = [ Math.floor(cPos.x / 928000), 0, Math.floor(cPos.z / 807360) ]
 
-     entity.voxel = coords
+     if ( entity )  { entity.voxel = coords }
 
       let actionData = {
         tool: toolName,

@@ -93,15 +93,7 @@ class App extends Component {
             voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
             altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
 
-        // world.chat.update( [ -80000, altitude, -5000 ] )
-        // world.help.update( [ -160000, altitude, -5000 ] )
-        // world.user.hud.update( [ 2500, altitude + 52000, 0 ], null )
-
-        //if ( three.camera.position.y < altitude ) {
-
           three.camera.position.set( cameraPos.x+Math.random()*50000, world.terrain.voxels[ voxelKey ].data.altitude, cameraPos.z+Math.random()*50000) + 150000
-
-        //}
 
         three.world.user.velocity.y = -1000
 

@@ -115,13 +115,12 @@ export default class MaterialTool extends Tool {
 
       }
 
-      if ( config.name ) 
+      if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
 
-        this.options.name = config.name
+        this.options = Object.assign( {}, config )
+        console.log("Configuring tool ", this.options)
 
-      if ( config.basic )
-
-        this.options.basic = config.basic
+      }
 
 
     }

@@ -20,7 +20,7 @@ export default class MiniatureSystem {
             
             setTimeout(()=>{
                 
-                this.miniaturize(component)
+                this.miniaturize( component, false, prop.scale )
                 
             }, 500)
             
@@ -30,16 +30,16 @@ export default class MiniatureSystem {
 
         return {
             fullSize: false,
-            miniaturize: ( component ) => {
+            miniaturize: ( component, revert, scale ) => {
 
-                this.miniaturize( component )
+                this.miniaturize( component, revert, scale )
 
             }
         }
         
     }
 
-    miniaturize ( component, revert ) {
+    miniaturize ( component, revert, finalScale ) {
 
             let scale = 1
 
@@ -48,7 +48,7 @@ export default class MiniatureSystem {
                 return
 
 
-            scale = 1 / ( component.entity.boundingRadius / 10000 )
+            scale = 1 / ( component.entity.boundingRadius / ( finalScale || 10000 ) )
 
             if ( !! revert ) {
 
