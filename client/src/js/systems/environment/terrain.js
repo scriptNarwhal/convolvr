@@ -156,6 +156,7 @@ export default class TerrainSystem {
 
     this.chunkCoords = coords
     force = phase == 0
+    if ( this.world.name == "" ) { return }
 
     if ( force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
 

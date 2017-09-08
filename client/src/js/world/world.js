@@ -75,8 +75,8 @@ export default class Convolvr {
 		this.socket = socket
 		this.config = false
 		this.windowFocus = true
-		this.name = "Overworld"
-		this.userName = "convolvr"
+		this.name = ""
+		this.userName = "world"
 		this.mode = "3d" // web, stereo ( IOTmode should be set this way )
 		this.rPos = false
 		this.users = []

@@ -354,6 +354,10 @@ export default class Toolbox {
           cPos = camera.position,
           toolName = tool.name
 
+    if ( toolName == "Geometry Tool" || toolName == "Material Tool" || toolName == "System Tool" )
+
+      toolName = "Update Tool"
+
      if ( !!!coords )
 
         coords = [ Math.floor(cPos.x / 928000), 0, Math.floor(cPos.z / 807360) ]

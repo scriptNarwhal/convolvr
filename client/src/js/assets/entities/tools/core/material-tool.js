@@ -77,8 +77,9 @@ export default class MaterialTool extends Tool {
           props         = {},
           components    = [ ],
           component     = telemetry.component,
-          entityId      = -1,
-          entity        = telemetry.entity
+          entity        = telemetry.entity,
+          entityId      = selected ? selected.id : -1
+          
 
       console.log(" ( Material Tool ) ", componentPath )
       
