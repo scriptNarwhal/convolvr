@@ -148,4 +148,12 @@ export default class EntityTool extends Tool  {
 
     }
 
+    generatePreview( component, preset, data ) {
+      
+      let preview = null
+      
+      return preview
+      
+    }
+
 }

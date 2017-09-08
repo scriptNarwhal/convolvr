@@ -32,4 +32,12 @@ export default class CustomTool extends Tool {
 
     }
 
+    generatePreview( component, preset, data ) {
+      
+      let preview = null
+      
+      return preview
+      
+    }
+
 }

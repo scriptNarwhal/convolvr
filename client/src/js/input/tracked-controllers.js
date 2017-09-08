@@ -1,6 +1,6 @@
 export default class TrackedController {
 
-  constructor (input, world) {
+  constructor ( input, world ) {
 
     this.input = input
     this.world = world
@@ -13,7 +13,7 @@ export default class TrackedController {
 
   }
 
-  coolDown (hand) {
+  coolDown ( hand ) {
 
     this.stickCooldown = true
     clearTimeout(this.stickTimeout)
@@ -31,125 +31,90 @@ export default class TrackedController {
 
   handleOculusTouch ( gamepad )  {
 
-    let axes = gamepad.axes,
-        buttons = gamepad.buttons,
-        b = buttons.length,
-        a = axes.length,
-        i = 0,
-        world = this.world,
-        input = this.input,
+    let axes        = gamepad.axes,
+        buttons     = gamepad.buttons,
+        b           = buttons.length,
+        a           = axes.length,
+        i           = 0,
+        world       = this.world,
+        input       = this.input,
         useTracking = input.trackedControls,
-        rotation = input.rotationVector,
-        tools = world.user.toolbox,
-        lastButtons = this.buttons
+        rotation    = input.rotationVector,
+        tools       = world.user.toolbox
 
     //console.log("oculus touch handler ", a, b, buttons
     if ( gamepad.hand == 'left' ) {
 
-      if (useTracking && gamepad.pose) {
+      if ( useTracking && gamepad.pose )
 
-        tools.setHandOrientation(1, gamepad.pose.position, gamepad.pose.orientation)
+        tools.setHandOrientation( 1, gamepad.pose.position, gamepad.pose.orientation )
 
-      }
 
       if ( world.vrMovement == 'stick' ) {
 
-        if (Math.abs(axes[0]) > 0.1) {
+        if ( Math.abs(axes[0]) > 0.1 )
 
             input.moveVector.x = axes[0] * 32000
 
-        }
 
-        if (Math.abs(axes[1]) > 0.1) {
+        if ( Math.abs(axes[1]) > 0.1 )
 
             input.moveVector.z = axes[1] * 32000
 
-        }
+        
       } else { // teleport mode
 
       }
      
-      buttons.map( ( button, i ) => {
+      if ( this.up( buttons, 1 ) )
 
-        if (lastButtons.left[i] == false && this.buttonPressed(button)) {
+        tools.usePrimary(1)
 
-          lastButtons.left[i] = true
+      if ( this.down( buttons, 2 ) )
 
-          switch (i) {
-            case 1:
-              tools.usePrimary(1) // left hand
-            break
-            case 2:
-              tools.grip(1, this.buttonValue(button))
-            break
-            // find out index for stick click
-          }
+        tools.grip(1, 1)
 
-        } else if (lastButtons.left[i] == true && this.buttonReleased(button)) {
+      if ( this.up( buttons, 2 ) )
 
-          if (i == 2) {
+        tools.grip( 1, -1 )
 
-            tools.grip(1, -1)
-
-          } 
-
-        }
-
-        lastButtons.left[i] = this.buttonPressed(button)
-
-      })
 
     } else { // use right stick to use adjust tool options // right triggers for primary tool
 
       let dir = Math.round(gamepad.axes[0]),
           toolOptionChange = Math.round(gamepad.axes[1])
 
-      if (useTracking && gamepad.pose) {
+      if ( useTracking && gamepad.pose )
 
-        tools.setHandOrientation(0, gamepad.pose.position, gamepad.pose.orientation)
+        tools.setHandOrientation( 0, gamepad.pose.position, gamepad.pose.orientation )
 
-      }
 
       if (dir != 0 && this.stickCooldown == false) {
+
         this.coolDown()
         tools.nextTool(dir)
         tools.showMenu()
+
       }
 
       if (toolOptionChange != 0 && this.stickCooldown == false) { // cycle through tool options
+
         this.coolDown()
         tools.useSecondary(0, toolOptionChange)
+
       }
 
-      buttons.map( ( button, i ) => {
-
-        if (lastButtons.right[i] == false && this.buttonPressed(button)) {
-
-          lastButtons.right[i] = true
-
-          switch ( i ) {
-            case 1:
-              tools.usePrimary(0) // right hand
-            break
-            case 2:
-              tools.grip(0, this.buttonValue(button))
-            break
-            // find out index for stick click
-          }
-
-        } else if ( lastButtons.right[i] == true && this.buttonReleased(button) ) {
-
-          if ( i == 2 ) {
-
-            tools.grip(0, -1)
-
-          }
-
-        }
-
-        lastButtons.right[i] = this.buttonPressed(button)
-
-      })
+      if ( this.up( buttons, 1 ) )
+      
+        tools.usePrimary(0)
+      
+      if ( this.down( buttons, 2 ) )
+      
+        tools.grip( 0, 1 )
+      
+      if ( this.up( buttons, 2 ) )
+      
+        tools.grip( 0, -1 )
 
     }
 
@@ -176,8 +141,6 @@ export default class TrackedController {
 
   }
 
-  
-
   handleDaydreamController ( gamepad ) {
 
     let button = gamepad.buttons[0]
@@ -194,9 +157,26 @@ export default class TrackedController {
 
   }
 
-  
-  
+  down ( hand, buttons, index ) {
+    
+    let current = hand == 0 ? this.buttons.left : this.buttons.right,
+        value = this.buttonPressed( buttons[ index ] ) && current[ index ] == false
 
+    current[ index ] = this.buttonPressed( buttons[ index ] )
+    return value
+    
+  }
+    
+  up ( hand, buttons, index ) {
+    
+    let current = hand == 0 ? this.buttons.left : this.buttons.right,
+        value = !this.buttonPressed( buttons[ index ] ) && current[ index ]
+
+    current[ index ] = this.buttonPressed( buttons[ index ] )
+    return value
+        
+  }
+  
   buttonPressed (b) {
 
     if (typeof(b) == "object") {

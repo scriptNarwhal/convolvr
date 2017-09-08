@@ -191,4 +191,12 @@ export default class ComponentTool extends Tool {
       
     }
 
+    generatePreview( component, preset, data ) {
+      
+      let preview = null
+      
+      return preview
+      
+    }
+
 }

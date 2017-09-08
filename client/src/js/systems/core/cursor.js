@@ -10,6 +10,7 @@ export default class CursorSystem {
         this.world = world
         this.entityCoolDown = -1
         this.resetEntityTimeout = null
+        this.selectAnimTimeout = null
 
     }
     
@@ -231,23 +232,24 @@ export default class CursorSystem {
         }
 
         newCursorState.entity = entity
-        
-       // newCursorState.entity = cursorState.cursor.entity
-
         newCursorState.lookingAtEntity = entity
 
-        if ( !!cursorState.component && !!!component && lookAway ) {
-         
-            callbacks = cursorState.component.state.lookAway.callbacks
-            cb = callbacks.length - 1
+        if ( !!!component && cursorState.cursor.component ) {
+        
+            if ( lookAway ) {
 
-            while ( cb >= 0 ) {
-
-                callbacks[ cb ]()
-                cb --
+                callbacks = cursorState.component.state.lookAway.callbacks
+                cb = callbacks.length - 1
+        
+                while ( cb >= 0 ) {
+        
+                        callbacks[ cb ]()
+                        cb --
+        
+                }
 
             }
-
+            
         }
 
         cursorState.cursor = Object.assign( {}, newCursorState )
@@ -320,12 +322,6 @@ export default class CursorSystem {
             }
 
         }
-
-    }
-
-    _updatePreview ( mesh, type, data ) {
-
-        // implement
 
     }
 

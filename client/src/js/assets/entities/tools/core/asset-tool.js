@@ -4,9 +4,9 @@ import { GRID_SIZE } from '../../../../config'
 
 export default class AssetTool extends Tool {
 
-  constructor (data, world, toolbox) {
+  constructor ( data, world, toolbox ) {
 
-    super(data, world, toolbox)
+    super ( data, world, toolbox )
 
       let cameraPos = world.three.camera.position,
           coords =  [ cameraPos.x, 0, cameraPos.z ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
@@ -52,29 +52,34 @@ export default class AssetTool extends Tool {
               this.initLabel( false, "Asset Tool")
             ]
           }
-        ],
-        null,
-        null,
-        coords)
-    }
+      ], null, null, coords)
+  }
 
-    primaryAction (telemetry) {
+  primaryAction (telemetry) {
       
-    }
+  }
 
-    secondaryAction (telemetry, value) {
+  secondaryAction (telemetry, value) {
     
-    }
+  }
     
-    configure ( config ) {
+  configure ( config ) {
       
-      if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
+    if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
 
-        this.options = Object.assign( {}, config.data )
-        console.log("Configuring tool ", this.options)
+      this.options = Object.assign( {}, config.data )
+      console.log("Configuring tool ", this.options)
 
-      }
-      
     }
+      
+  }
+
+  generatePreview( component, preset, data ) {
+    
+    let preview = null
+    
+    return preview
+    
+  }
 
 }

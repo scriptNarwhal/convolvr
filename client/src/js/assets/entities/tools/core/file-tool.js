@@ -62,5 +62,13 @@ export default class FileTool extends Tool {
     configure ( config ) {
 
     }
+
+    generatePreview( component, preset, data ) {
+      
+      let preview = null
+      
+      return preview
+      
+    }
     
 }

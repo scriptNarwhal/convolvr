@@ -105,12 +105,12 @@ class NewWorld extends Component {
       npcs: false,
       tools: false,
       vehicles: false,
-      orbs: true,
-      blocks: true,
+      orbs: false,
+      blocks: false,
       pyramids: true,
-      columns: true,
-      wheels: true,
-      nets: true
+      columns: false,
+      wheels: false,
+      nets: false
     }
   }
 
@@ -485,8 +485,8 @@ class NewWorld extends Component {
                 <td>Generate Blocks?</td>
                 <td>
                   <select onChange={ e=> { this.onToggle( 'spawn', 'blocks', e) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
                   </select>
                 </td>
               </tr>
@@ -495,8 +495,8 @@ class NewWorld extends Component {
                 <td>Generate Columns?</td>
                 <td>
                   <select onChange={ e=> { this.onToggle( 'spawn', 'columns', e ) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
                   </select>
                 </td>
               </tr>
@@ -505,8 +505,8 @@ class NewWorld extends Component {
                 <td>Generate Wheels?</td>
                 <td>
                   <select onChange={ e=> { this.onToggle( 'spawn', 'wheels', e) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
                   </select>
                 </td>
               </tr>
@@ -525,8 +525,8 @@ class NewWorld extends Component {
                 <td>Generate Indra's Net?</td>
                 <td>
                   <select onChange={ e=> { this.onToggle( 'spawn', 'nets', e) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
+                  <option value="no">No</option>
+                  <option value="yes">Yes</option>
                   </select>
                 </td>
               </tr>

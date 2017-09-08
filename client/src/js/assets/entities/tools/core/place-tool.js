@@ -73,4 +73,12 @@ export default class PlaceTool extends Tool {
       
   }
 
+  generatePreview( component, preset, data ) {
+    
+    let preview = null
+    
+    return preview
+    
+  }
+
 }

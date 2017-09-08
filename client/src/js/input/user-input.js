@@ -84,11 +84,33 @@ export default class UserInput {
 			})
 			setTimeout(()=> {
 
-				document.addEventListener("mousedown", (e) => {
-					
-					if (world.mode != "web") {
+				document.addEventListener("mousedown", e => {
+
+					if ( world.mode != "web" ) {
 						
-						switch (e.which) {
+						switch ( e.which ) {
+							
+							case 1: // left mouse
+								this.user.toolbox.preview(0, 0) // right hand
+							break
+							case 2: // scroll wheel click
+								// tools.selectObject() .. might be handy
+							break
+							case 3: // right click
+								//this.user.toolbox.useSecondary(0, 1) // right hand // change tool option in forward direction
+								// refactor this to grab entity
+							break
+
+						}
+					}
+
+				})
+
+				document.addEventListener("mouseup", (e) => {
+					
+					if ( world.mode != "web" ) {
+						
+						switch ( e.which ) {
 							
 							case 1: // left mouse
 								this.user.toolbox.usePrimary(0, 0) // right hand
@@ -103,7 +125,9 @@ export default class UserInput {
 
 						}
 					}
+
 				}, false)
+
 			}, 250)
 
 		} else {

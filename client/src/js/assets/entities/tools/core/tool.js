@@ -63,6 +63,28 @@ export default class Tool {
 
     }
 
+    preview ( cursor ) {
+
+      let components = this.entity.componentsByProp
+      
+      if ( components && components.tool )
+
+        this.entity.componentsByProp.tool[0].state.tool.preview.show( cursor )
+
+
+    }
+
+    hidePreview (  ) {
+      
+      let components = this.entity.componentsByProp
+
+      if ( components && components.tool )
+      
+        components.tool[0].state.tool.preview.hide()
+      
+      
+    }
+
     unequip ( hand ) {
 
       if ( this.mesh != null && this.mesh.parent != null )

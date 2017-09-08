@@ -1,15 +1,19 @@
 import TrackedControllers from './tracked-controllers'
 
 export default class GamePad {
+
 	constructor ( input ) {
+
     let gamepads = input.gamepads
     
-		this.cooldownTimeout = null
-		this.cooldown = 0
-		this.bumperCooldown = 0
+		this.cooldownTimeout       = null
+		this.cooldown              = 0
+		this.bumperCooldown        = 0
 		this.bumperCooldownTimeout = null
-    this.trackedControllers = new TrackedControllers(input, three.world)
-    
+    this.trackedControllers    = new TrackedControllers( input, three.world )
+    this.buttons               = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+    this.axes                  = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ]
+
     function gamepadHandler ( e, connecting ) {
 
       let gamepad = e.gamepad;
@@ -21,7 +25,7 @@ export default class GamePad {
                   
       if ( connecting ) {
 
-        gamepads[gamepad.index] = gamepad
+        gamepads[ gamepad.index ] = gamepad
 
         if ( gamepad ) {
 
@@ -117,27 +121,23 @@ export default class GamePad {
     // 17 buttons
     // 4 axis
 
-    if ( this.bumperCooldown == false ) {
-        if (this.buttonPressed(buttons[0])) { // top triggers: 4 5
-            tools.nextTool(-1, 0) // previous tool, right hand
-        }
-        if (this.buttonPressed(buttons[1])) {
-          tools.nextTool(1, 0) // next tool, right hand
-        }
-      }
+    if ( this.down( buttons, 0 ) ) { // top triggers: 4 5
+      tools.nextTool(-1, 0) // previous tool, right hand
+    }
+    if ( this.down( buttons, 1 ) ) {
+      tools.nextTool(1, 0) // next tool, right hand
+    }
 
-      if ( this.cooldown == false ) {
-        if (this.buttonPressed(buttons[2])) { // bottom triggers: 6 7
-            tools.usePrimary(0) // right hand
-            this.triggerCooldown()
-        }
-        if (this.buttonPressed(buttons[3])) {
-            tools.useSecondary(0) // right hand
-            this.triggerCooldown()
-        }
-      }
+    if ( this.up( buttons, 2 ) ) { // bottom triggers: 6 7
+        tools.usePrimary(0) // right hand
+        this.triggerCooldown()
+    }
+    if ( this.up( buttons, 3 ) ) {
+        tools.useSecondary(0) // right hand
+        this.triggerCooldown()
+    }
     
-     if ( gamepad.axes[0] == 0 && gamepad.axes[2] == 0 && gamepad.axes[3] == 0) { // some cheap gamepads have fake axis
+    if ( gamepad.axes[0] == 0 && gamepad.axes[2] == 0 && gamepad.axes[3] == 0) { // some cheap gamepads have fake axis
 
       if ( Math.abs(gamepad.axes[1]) > 0.1 ) { // create settings for stick configuration
           input.moveVector.z = gamepad.axes[0] * 20000
@@ -174,25 +174,24 @@ export default class GamePad {
 
     if ( b > 8 ) {
       // face buttons: 0 1 2 3
-      if ( this.bumperCooldown == false ) {
-        if (this.buttonPressed(buttons[4])) { // top triggers: 4 5
-            tools.nextTool(-1, 0) // previous tool, right hand
-        }
-        if (this.buttonPressed(buttons[5])) {
-          tools.nextTool(1, 0) // next tool, right hand
-        }
+      if ( this.down( buttons, 0 ) ) {
+        this.jump( input )
+      }
+      
+      if ( this.down( buttons, 4 ) ) { // top triggers: 4 5
+        tools.nextTool(-1, 0) // previous tool, right hand
+      }
+      if ( this.down( buttons, 5 ) ) {
+        tools.nextTool(1, 0) // next tool, right hand
       }
 
-      if ( this.cooldown == false ) {
-        if (this.buttonPressed(buttons[6])) { // bottom triggers: 6 7
-            tools.usePrimary(0) // right hand
-            this.triggerCooldown()
-        }
-        if (this.buttonPressed(buttons[7])) {
-            tools.useSecondary(0) // right hand
-            this.triggerCooldown()
-        }
+      if ( this.up( buttons, 6 ) ) { // bottom triggers: 6 7
+        tools.useSecondary(0) // right hand
       }
+      if ( this.up( buttons, 7 ) ) {
+        tools.usePrimary(0) // right hand
+      }
+      
     }
 
     if ( b >= 16 ) {
@@ -220,13 +219,40 @@ export default class GamePad {
 
   }
 
+  jump ( input ) {
+
+    if ( !input.device.falling ) {
+      
+      input.device.falling = true;
+      input.device.velocity.y = 2400000
+      
+    }
+
+  }
+
+  down ( buttons, index ) {
+
+    let value = this.buttonPressed( buttons[ index ] ) && this.buttons[ index ] == false
+    this.buttons[ index ] = this.buttonPressed( buttons[ index ] )
+    return value
+
+  }
+
+  up ( buttons, index ) {
+
+    let value = !this.buttonPressed( buttons[ index ] ) && this.buttons[ index ]
+    this.buttons[ index ] = this.buttonPressed( buttons[ index ] )
+    return value
+    
+  }
+
 	triggerCooldown () {
 
 		this.cooldown = true
 		clearTimeout(this.cooldownTimeout)
 		this.cooldownTimeout = setTimeout(()=>{
 			this.cooldown = false
-		}, 100)
+		}, 80)
 
 	}
 

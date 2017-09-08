@@ -67,5 +67,13 @@ export default class SocialTool extends Tool {
     configure ( config ) {
 
     }
+
+    generatePreview( component, preset, data ) {
+      
+      let preview = null
+      
+      return preview
+      
+    }
     
 }

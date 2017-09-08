@@ -119,31 +119,45 @@ export default class Toolbox {
 
     }
 
+    getCursor (  ) {
+
+      let input    = this.world.userInput,
+          user     = this.world.user,
+          cursor   = null, 
+          handMesh = null,
+          cursors  = user.avatar.componentsByProp.cursor
+
+      if ( input.trackedControls || input.leapMotion ) { // set position from tracked controller
+            
+        cursor = cursors[ hand + 1 ]
+        handMesh = this.hands[ hand ].mesh
+            
+      } else {
+            
+        cursor = cursors[ 0 ]
+            
+      }
+
+      return [ cursor, handMesh ]
+      
+    }
+
     initActionTelemetry ( camera, useCursor, hand ) {
 
-      let input      = this.world.userInput,
-          position   = camera.position.toArray(),
+      let position   = camera.position.toArray(),
           voxel      = [ position[0], 0, position[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) ),
           quaternion = camera.quaternion.toArray(),
           user       = this.world.user,
-          cursors    = user.avatar.componentsByProp.cursor,
           cursor     = null,
           cursorPos  = null,
-          handMesh   = null
+          handMesh   = null,
+          cursorHand = []
           
       if ( useCursor ) {
 
-        if ( input.trackedControls || input.leapMotion ) { // set position from tracked controller
-
-          cursor = cursors[ hand + 1 ]
-          handMesh = this.hands[ hand ].mesh
-
-        } else {
-
-          cursor = cursors[ 0 ]
-
-        }
-
+        cursorHand = this.getCursor()
+        cursor = cursorHand[ 0 ]
+        handMesh = cursorHand[ 1 ]
         cursor.mesh.updateMatrixWorld()
         !!cursor.mesh.parent && cursor.mesh.parent.updateMatrix()
         cursorPos = cursor.mesh.localToWorld( new THREE.Vector3() )
@@ -182,11 +196,13 @@ export default class Toolbox {
           action                          = null,
           miniature                       = null
       
+      tool.hidePreview()
+
       if ( telemetry.cursor && cursorEntity ) { // check telemetry here to see if activate callbacks should fire instead of tool action
 
         if ( cursorEntity.componentsByProp.activate ) { 
 
-          !!cursorState.component && console.log("*** Activate ", cursorState.component )
+          !!cursorState.component && console.warn("Activate ", cursorState.component )
           !!cursorState.component && cursorState.component.state.activate.callbacks.map( (callback) => {
               callback() // action is handled by checking component props ( besides .activate )
           })
@@ -196,7 +212,7 @@ export default class Toolbox {
         }
         console.log("use Primary ", componentsByProp)
         miniature = cursorEntity.componentsByProp.miniature
-        if ( miniature && cursorComponent.props.toolUI ) {
+        if ( miniature && cursorComponent && cursorComponent.props.toolUI ) {
           console.log("ToolUI!")
           configureTool = componentsByProp.toolUI[ 0 ].props.toolUI.configureTool 
 
@@ -251,6 +267,25 @@ export default class Toolbox {
 
 
     }
+
+    preview ( handIndex ) {
+
+      let tool   = this.tools[ this.currentTools[ handIndex ] ],
+          cursor = this.getCursor()
+
+      console.log(" tool preview cursor ")
+
+      tool.preview( cursor )
+
+    }
+
+    hidePreview ( handIndex ) {
+
+      let tool = this.tools[ this.currentTools[ handIndex ] ]
+      
+      tool.hidePreview()
+
+    } 
 
     grip ( handIndex, value ) {
 

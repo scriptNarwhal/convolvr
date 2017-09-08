@@ -125,4 +125,12 @@ export default class MaterialTool extends Tool {
 
     }
 
+    generatePreview( component, preset, data ) {
+      
+      let preview = null
+      
+      return preview
+      
+    }
+
 }

@@ -1,6 +1,7 @@
 let column2 = {
-   props: {
-       name: "column2",
+    id: 0,
+    name: "column2",
+    props: {
        geometry: {
            merge: true,
            shape: "box",

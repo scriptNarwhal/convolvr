@@ -106,14 +106,22 @@ export default class GeometryTool extends Tool {
 
     configure ( config ) {
 
-            if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
+      if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
       
-              this.options = Object.assign( {}, config.data )
-              console.log("Configuring tool ", this.options)
+        this.options = Object.assign( {}, config.data )
+        console.log("Configuring tool ", this.options)
 
-            }
+      }
       
       
+    }
+
+    generatePreview( component, preset, data ) {
+
+      let preview = null
+
+      return preview
+
     }
 
 }

@@ -81,6 +81,19 @@ export default class ToolSystem {
 
         return {
             panel,
+            preview: {
+                box: null,
+                show: cursor => {
+
+                    this._showPreview( component, cursor )
+
+                },
+                hide: () => {
+
+                    this._hidePreview( component )
+
+                } 
+            },
             equip: ( hand ) => {
             
                 this._equip( component, hand )
@@ -100,6 +113,38 @@ export default class ToolSystem {
 
     }
 
+    _showPreview ( component, cursor ) {
+
+        let previewBox = component.state.tool.preview ? component.state.tool.preview.box : null,
+            assets = this.world.systems.assets,
+            preview = null
+
+        if ( !previewBox ) {
+
+            preview = assets.makeEntity( "preview-box", true, {}, component.entity.voxel )
+            preview.init( cursor.mesh, {} )
+            component.state.tool.preview.box = preview
+            // preview = this.generatePreview( component, preset, data )
+
+        } else {
+
+            previewBox.mesh.visible = true
+
+        }
+
+    }
+
+    _hidePreview ( component ) {
+
+        let previewBox = component.state.tool.preview ? component.state.tool.preview.box : null
+        
+        if ( previewBox )
+
+            previewBox.mesh.visible = false
+
+
+    }
+
     _equip ( component, hand ) {
 
         let input = this.world.userInput,
@@ -107,7 +152,6 @@ export default class ToolSystem {
             toolPanel = component.entity.componentsByProp.tool ? component.entity.componentsByProp.tool[0].state.tool.panel : false,
             toolMesh = component.entity.mesh
       
-
       if ( !input.trackedControls && !input.leapMotion ) {
 
           this.world.user.mesh.add( toolMesh )
