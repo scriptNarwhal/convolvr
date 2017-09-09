@@ -92,6 +92,10 @@ export default class GamePad {
 
           this._handleMobileGamepad( input, world, gamepad )
 
+        } else {
+
+          this._handleXboxGamepad( input, world, gamepad ) // assume generic dual analog controller
+
         }
 
         if ( trackedControls && input.trackedControls == false && world.mode == "stereo" ) {
@@ -130,13 +134,11 @@ export default class GamePad {
 
     if ( this.up( buttons, 2 ) ) { // bottom triggers: 6 7
         tools.usePrimary(0) // right hand
-        this.triggerCooldown()
     }
     if ( this.up( buttons, 3 ) ) {
         tools.useSecondary(0) // right hand
-        this.triggerCooldown()
     }
-    
+   
     if ( gamepad.axes[0] == 0 && gamepad.axes[2] == 0 && gamepad.axes[3] == 0) { // some cheap gamepads have fake axis
 
       if ( Math.abs(gamepad.axes[1]) > 0.1 ) { // create settings for stick configuration
@@ -191,6 +193,9 @@ export default class GamePad {
       if ( this.up( buttons, 7 ) ) {
         tools.usePrimary(0) // right hand
       }
+      if ( this.down( buttons, 7 ) ) {
+        tools.preview(0, 0) // right hand
+    }
       
     }
 
@@ -233,7 +238,7 @@ export default class GamePad {
   down ( buttons, index ) {
 
     let value = this.buttonPressed( buttons[ index ] ) && this.buttons[ index ] == false
-    this.buttons[ index ] = this.buttonPressed( buttons[ index ] )
+    this.buttons[ index ] =   this.buttonPressed(  )
     return value
 
   }
@@ -270,7 +275,7 @@ export default class GamePad {
     if (typeof(b) == "object") {
       return b.pressed;
     }
-    return b == 1.0 || b > 0.9;
+    return b == 1.0 || b > 0.7;
   }
 
 }

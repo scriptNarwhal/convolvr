@@ -119,7 +119,7 @@ export default class Toolbox {
 
     }
 
-    getCursor (  ) {
+    getCursor ( hand ) {
 
       let input    = this.world.userInput,
           user     = this.world.user,
@@ -155,7 +155,7 @@ export default class Toolbox {
           
       if ( useCursor ) {
 
-        cursorHand = this.getCursor()
+        cursorHand = this.getCursor( hand )
         cursor = cursorHand[ 0 ]
         handMesh = cursorHand[ 1 ]
         cursor.mesh.updateMatrixWorld()
@@ -271,7 +271,7 @@ export default class Toolbox {
     preview ( handIndex ) {
 
       let tool   = this.tools[ this.currentTools[ handIndex ] ],
-          cursor = this.getCursor()
+          cursor = this.getCursor( handIndex )
 
       console.log(" tool preview cursor ")
 

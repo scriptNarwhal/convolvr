@@ -204,6 +204,7 @@ export default class CursorSystem {
             activate = !!props ? props.activate : false,
             cursorSystem = world.systems.cursor,
             newCursorState = null,
+            noRayCast = entity && entity.componentsByProp.noRayCast,
             callbacks = null,
             comp = false,
             cb = 0
@@ -231,8 +232,8 @@ export default class CursorSystem {
 
         }
 
-        newCursorState.entity = entity
-        newCursorState.lookingAtEntity = entity
+        newCursorState.entity = noRayCast ? cursorState.cursor.entity : entity
+        newCursorState.lookingAtEntity = noRayCast ? cursorState.cursor.entity : entity
 
         if ( !!!component && cursorState.cursor.component ) {
         

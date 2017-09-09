@@ -10,7 +10,7 @@ let isVRMode = (mode) => {
 
 export default class UserInput {
 
-	constructor (socket) {
+	constructor ( socket ) {
 
 		this.camera = {
 			rotation: new THREE.Vector3()
@@ -32,7 +32,16 @@ export default class UserInput {
 		this.tmpQuaternion = null
 		this.moveVector = null
 		this.keys = {
-			w: false, a: false, s: false, d: false, r: false, f: false, shift: false, space: false
+			q: false, 
+			w: false, 
+			e: false, 
+			a: false, 
+			s: false, 
+			d: false, 
+			r: false, 
+			f: false, 
+			shift: false, 
+			space: false
 		}
 		this.lastTouch = [[0,0], [0,0]]
 		this.tiltControls = null
@@ -46,12 +55,12 @@ export default class UserInput {
 		
 	}
 
-	init (world, camera, device) {
+	init ( world, camera, device ) {
 
 		let uInput = this,
 			viewport = document.querySelector("#viewport")
 			
-		this.connect(world, camera, device)
+		this.connect( world, camera, device )
 		uInput.rotationVector = {x: 0.2, y: 4.6, z: 0}
 		viewport.requestPointerLock = viewport.requestPointerLock || viewport.mozRequestPointerLock || viewport.webkitRequestPointerLock;
 		viewport.style.pointerEvents = ''
@@ -204,6 +213,7 @@ export default class UserInput {
 					if ( world.cameraMode == 'fps' ) { // fps camera // make configurable
 
 						this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ")
+						//this.camera.rotateZ(this.rotationVector.z)
 
 					} else { // vehicle camera
 

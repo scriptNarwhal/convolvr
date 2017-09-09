@@ -14,7 +14,9 @@ export default class Keyboard {
 
         switch ( event.keyCode ) {
 
+          case 86: keys.q = true; break;
           case 87: keys.w = true; break;
+          case 88: keys.e = true; break;
           case 65: keys.a = true; break;
           case 83: keys.s = true; break;
           case 68: keys.d = true; break;
@@ -43,7 +45,9 @@ export default class Keyboard {
 
       switch ( event.keyCode ) {
 
+        case 86: keys.q = false; break;
         case 87: keys.w = false; break;
+        case 88: keys.e = false; break;
         case 65: keys.a = false; break;
         case 83: keys.s = false; break;
         case 68: keys.d = false; break;
@@ -112,6 +116,16 @@ export default class Keyboard {
       input.moveVector.y = -12800
 
     }
+
+    if ( keys.q ) {
+
+      input.rotationVector.z = -0.5
+
+    } else if ( keys.e ) {
+
+      input.rotationVector.z = 0.5
+
+    } 
     // if (keys.shift) {
     //   velocity.x *= 1.02;
     //   velocity.z *= 1.02;

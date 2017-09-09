@@ -19906,30 +19906,30 @@
 
 		var currentSize, currentPixelRatio;
 
-		// function onVRDisplayPresentChange() {
+		function onVRDisplayPresentChange() {
 
-		// 	if ( device.isPresenting ) {
+			if ( device.isPresenting ) {
 
-		// 		var eyeParameters = device.getEyeParameters( 'left' );
-		// 		var renderWidth = eyeParameters.renderWidth;
-		// 		var renderHeight = eyeParameters.renderHeight;
+				var eyeParameters = device.getEyeParameters( 'left' );
+				var renderWidth = eyeParameters.renderWidth;
+				var renderHeight = eyeParameters.renderHeight;
 
-		// 		currentPixelRatio = renderer.getPixelRatio();
-		// 		currentSize = renderer.getSize();
+				currentPixelRatio = renderer.getPixelRatio();
+				currentSize = renderer.getSize();
 
-		// 		renderer.setDrawingBufferSize( renderWidth * 2, renderHeight, 1 );
+				renderer.setDrawingBufferSize( renderWidth * 2, renderHeight, 1 );
 
-		// 	} else if ( scope.enabled ) {
+			} else if ( scope.enabled ) {
 
-		// 		renderer.setDrawingBufferSize( currentSize.width, currentSize.height, currentPixelRatio );
+				renderer.setDrawingBufferSize( currentSize.width, currentSize.height, currentPixelRatio );
 
-		// 	}
+			}
 
-		// }
+		}
 
-		// window.addEventListener( 'vrdisplaypresentchange', onVRDisplayPresentChange, false );
+		window.addEventListener( 'vrdisplaypresentchange', onVRDisplayPresentChange, false );
 
-		//
+		
 
 		this.enabled = false;
 		this.standing = false;
