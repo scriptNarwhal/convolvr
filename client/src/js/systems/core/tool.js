@@ -115,13 +115,16 @@ export default class ToolSystem {
 
     _showPreview ( component, cursor ) {
 
+        console.warn(" Show Preview ", cursor)
+
         let previewBox = component.state.tool.preview ? component.state.tool.preview.box : null,
             assets = this.world.systems.assets,
             preview = null
 
-        if ( !previewBox ) {
+        if ( !previewBox && cursor ) {
 
             preview = assets.makeEntity( "preview-box", true, {}, component.entity.voxel )
+            preview.components[0].props.noRaycast = {}
             preview.init( cursor.mesh, {} )
             component.state.tool.preview.box = preview
             // preview = this.generatePreview( component, preset, data )

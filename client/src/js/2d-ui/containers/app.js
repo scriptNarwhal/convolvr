@@ -162,7 +162,7 @@ class App extends Component {
       console.log('Display activated.', e)
       //three.vrDisplay = e.display
       //this.initiateVRMode()
-      if (three.world.mode != "stereo") {
+      if ( true ) { //three.world.mode != "stereo") {
 
         navigator.getVRDisplays().then( displays => { console.log("displays", displays)
 				
@@ -171,6 +171,9 @@ class App extends Component {
             console.log("vrdisplayactivate: found display: ", displays[0])
             three.vrDisplay = displays[0]
             this.initiateVRMode()
+            displays[0].requestAnimationFrame(()=> { // Request animation frame loop function
+              vrAnimate( displays[0], Date.now(), [0,0,0], 0)
+            })
 
           }
           
@@ -202,7 +205,7 @@ class App extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    let newWorld = ["convolvr", "Overworld"],
+    let newWorld = ["world", "Overworld"],
         pathChange = nextProps.url.pathname.indexOf("/at") > -1 ? false : nextProps.url.pathname != this.props.url.pathname
 
     if ( pathChange ) {
@@ -319,63 +322,51 @@ class App extends Component {
             let ratio = window.devicePixelRatio || 1
             effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
           }
-          function onVRDisplayPresentChange() {
-            console.log('onVRDisplayPresentChange')
+          function onVRDisplayPresentChange(e) {
+            console.log('onVRDisplayPresentChange', e)
             onResize()
+            
           }
           // Resize the WebGL canvas when we resize and also when we change modes.
           window.addEventListener('resize', onResize);
           window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
           console.log("vrDisplay", three.vrDisplay)
           if (three.vrDisplay != null) {
-            three.vrDisplay.requestPresent([{source: renderer.domElement}]);
-            
-            if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
-              setTimeout(()=>{
-                console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
-                three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
+            three.vrDisplay.requestPresent([{source: renderer.domElement}]).then( ()=> {
+
+              // if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
+              //   setTimeout(()=>{
+              //     console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
+              //     three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
+                
+              //   }, 2000)
+              // }
+
+            }).catch( err => {
               
-              }, 2000)
-            }
-            
-            three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
-              vrAnimate(Date.now(), [0,0,0], 0)
+              console.error( err )
+
             })
+            
+            
           } else {
             alert("Connect VR Display and then reload page.")
           }
          
-      } else {
-         if ( three.world.mode == "stereo" ) {
-          window.location.href = window.location.href
-        }
-      }
+          this.props.toggleVRMode()
+          three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
+          three.world.onWindowResize()
 
-      this.props.toggleVRMode()
-      three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
-      three.world.onWindowResize()
+      } 
 
-     
+      
 
   }
 
   renderVRButtons () {
 
     return this.props.stereoMode ?
-        [<Button title="Reset Pose"
-                id="reset-pose"
-                style={{
-                  position: 'fixed',
-                  right: '10vh',
-                  bottom: 0
-                }}
-                key='1'
-                image="/data/images/x.png"
-                onClick={ (evt, title) => {
-
-                } }
-        />,
-        <Button title="Exit VR"
+        [<Button title="Exit VR"
                 style={{
                   position: "fixed",
                   right: 0,

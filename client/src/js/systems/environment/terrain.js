@@ -76,16 +76,7 @@ export default class TerrainSystem {
           }
 
            mesh.rotation.x = -Math.PI/2
-
-            if ( type == 'plane' ) {
-
-                mesh.position.y = -120500
-
-            } else {
-
-                mesh.position.y = -( 5400000 / this.config.flatness ) + 6000
-            
-            }
+           mesh.position.y =  type == 'plane' ? -120500 : -( 5400000 / this.config.flatness ) + 6000
 
         }
 

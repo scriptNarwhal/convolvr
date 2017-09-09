@@ -275,7 +275,7 @@ export default class Toolbox {
 
       console.log(" tool preview cursor ")
 
-      tool.preview( cursor )
+      tool.preview( cursor[ 0 ] )
 
     }
 

@@ -123,7 +123,7 @@ export default class Convolvr {
 			// oimo: this.systems.oimo.worker
 		}
 
-		camera.add(this.systems.audio.listener)
+		//camera.add(this.systems.audio.listener)
 		this.socketHandlers = new SocketHandlers( this, socket )
 		window.addEventListener('resize', e => this.onWindowResize( e ), true)
 		this.onWindowResize()	

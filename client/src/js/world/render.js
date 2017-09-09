@@ -51,11 +51,11 @@ export let animate = ( world, last, cursorIndex ) => {
 
 }
 
-export let vrAnimate = ( time, oldPos, cursorIndex ) => {
+export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
 
   let now = Date.now(),
       delta = Math.min(now - time, 500) / 16000,
-      t = three,
+      t = window.three,
       world = t.world,
       camera = t.camera,
       cPos = camera.position,
@@ -67,34 +67,47 @@ export let vrAnimate = ( time, oldPos, cursorIndex ) => {
       hands = !!user && !!user.avatar ? user.avatar.componentsByProp.hand : false,
       vrPos = [],
       vrWorldPos = []
-      
 
-    if ( world.HMDMode != "flymode" ) {  // room scale + gamepad movement
+    if ( display.getFrameData ) {
 
-      camera.position.set(cPos.x - oldPos[0], cPos.y - oldPos[1], cPos.z -oldPos[2])
+      if ( world.HMDMode != "flymode" ) {  // room scale + gamepad movement
+        
+        camera.position.set(cPos.x - oldPos[0], cPos.y - oldPos[1], cPos.z -oldPos[2])
+        
+      } else {
+        
+        camera.position.set(cPos.x - oldPos[0]*0.8, cPos.y - oldPos[1]*0.8, cPos.z -oldPos[2]*0.8)
+        
+      }
 
-    } else {
+      display.getFrameData( frame )
+      if ( frame && frame.pose ) {
 
-      camera.position.set(cPos.x - oldPos[0]*0.8, cPos.y - oldPos[1]*0.8, cPos.z -oldPos[2]*0.8)
+        vrPos = !!frame && !!frame.pose && !!frame.pose.position ? frame.pose.position : [ 0,0,0 ]
+        vrWorldPos =  [ 22000 * vrPos[0], -22000 + (22000 * vrPos[1]+floorHeight*6), 22000 * vrPos[2] ]
+        camera.quaternion.fromArray( frame.pose.orientation )
+        world.userInput.update(delta)
+    
+        user.mesh.quaternion.fromArray( frame.pose.orientation )
+        user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+        user.mesh.updateMatrix()
+        camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+  
+      } else {
+  
+        console.warn("FrameData Error ", frame)
+  
+      }
 
     }
-
-    t.vrDisplay.getFrameData(frame)
-    vrPos = !!frame && !!frame.pose && !!frame.pose.position ? frame.pose.position : [ 0,0,0 ]
-    vrWorldPos =  [ 22000 * vrPos[0], -22000 + (22000 * vrPos[1]+floorHeight*6), 22000 * vrPos[2] ]
-    camera.quaternion.fromArray(frame.pose.orientation)
-    world.userInput.update(delta)
-
-    user.mesh.quaternion.fromArray(frame.pose.orientation)
-    user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
-    user.mesh.updateMatrix()
-    camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+    
+    
     cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
     world.sendUserData()
     world.updateSkybox(delta)
     world.systems.tick( delta, time )
     t.vrEffect.render(t.scene, t.camera) // Render the scene.
     world.octree.update()
-    t.vrDisplay.requestAnimationFrame(()=> { vrAnimate(now, vrWorldPos, cursorIndex) }) // Keep looping.
+    display.requestAnimationFrame(()=> { vrAnimate( display, now, vrWorldPos, cursorIndex) }) // Keep looping.
 
 }
