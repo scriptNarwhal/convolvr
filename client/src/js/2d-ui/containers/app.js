@@ -169,11 +169,9 @@ class App extends Component {
           if ( displays.length > 0 ) {
 
             console.log("vrdisplayactivate: found display: ", displays[0])
-            three.vrDisplay = displays[0]
-            this.initiateVRMode()
-            displays[0].requestAnimationFrame(()=> { // Request animation frame loop function
-              vrAnimate( displays[0], Date.now(), [0,0,0], 0)
-            })
+            //three.vrDisplay = displays[0]
+            //this.initiateVRMode()
+            
 
           }
           
@@ -341,7 +339,9 @@ class App extends Component {
                 
               //   }, 2000)
               // }
-
+              three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
+                vrAnimate( three.vrDisplay, Date.now(), [0,0,0], 0)
+              })
             }).catch( err => {
               
               console.error( err )

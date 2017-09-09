@@ -68,38 +68,28 @@ export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
       vrPos = [],
       vrWorldPos = []
 
-    if ( display.getFrameData ) {
-
-      if ( world.HMDMode != "flymode" ) {  // room scale + gamepad movement
+    if ( world.HMDMode != "flymode" ) {  // room scale + gamepad movement
         
         camera.position.set(cPos.x - oldPos[0], cPos.y - oldPos[1], cPos.z -oldPos[2])
         
-      } else {
+    } else {
         
         camera.position.set(cPos.x - oldPos[0]*0.8, cPos.y - oldPos[1]*0.8, cPos.z -oldPos[2]*0.8)
         
-      }
-
-      display.getFrameData( frame )
-      if ( frame && frame.pose ) {
-
-        vrPos = !!frame && !!frame.pose && !!frame.pose.position ? frame.pose.position : [ 0,0,0 ]
-        vrWorldPos =  [ 22000 * vrPos[0], -22000 + (22000 * vrPos[1]+floorHeight*6), 22000 * vrPos[2] ]
-        camera.quaternion.fromArray( frame.pose.orientation )
-        world.userInput.update(delta)
-    
-        user.mesh.quaternion.fromArray( frame.pose.orientation )
-        user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
-        user.mesh.updateMatrix()
-        camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
-  
-      } else {
-  
-        console.warn("FrameData Error ", frame)
-  
-      }
-
     }
+
+    display.getFrameData( frame )
+      
+
+    vrPos = !!frame && !!frame.pose && !!frame.pose.position ? frame.pose.position : [ 0,0,0 ]
+    vrWorldPos =  [ 22000 * vrPos[0], -22000 + (22000 * vrPos[1]+floorHeight*6), 22000 * vrPos[2] ]
+    camera.quaternion.fromArray( frame.pose.orientation )
+    world.userInput.update(delta)
+    
+    user.mesh.quaternion.fromArray( frame.pose.orientation )
+    user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+    user.mesh.updateMatrix()
+    camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     
     
     cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
