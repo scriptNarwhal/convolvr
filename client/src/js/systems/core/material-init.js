@@ -40,36 +40,36 @@ export let _initMaterialProp = ( prop, simpleShading ) => { // material presets 
             prop.repeat = [ 'wrapping', 8, 8 ]
             break
             case "terrain3":
-                if ( !simpleShading ) {
+              if ( !simpleShading ) {
       
-                    prop.map = !!!prop.map ? '/data/images/textures/terrain2.jpg' : prop.map
-                    //prop.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
+                prop.map = !!!prop.map ? '/data/images/textures/terrain2.jpg' : prop.map
+                //prop.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
       
-                } else {
+              } else {
                             
-                    prop.map = '/data/images/textures/terrain2.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
-                    prop.envMap = 'none'
+                prop.map = '/data/images/textures/terrain2.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
+                prop.envMap = 'none'
                 
-                  }
+              }
                           
-                  prop.repeat = [ 'wrapping', 10, 10 ]
-                break
-                case "terrain4":
-                  if ( !simpleShading ) {
+              prop.repeat = [ 'wrapping', 10, 10 ]
+            break
+            case "terrain4":
+              if ( !simpleShading ) {
     
-                   prop.metalnessMap = "/data/images/textures/terrain3.jpg" 
-                    prop.map = !!!prop.map ? '/data/images/textures/terrain3.jpg' : prop.map
+                prop.metalnessMap = "/data/images/textures/terrain3.jpg" 
+                prop.map = !!!prop.map ? '/data/images/textures/terrain3.jpg' : prop.map
     
-                  } else {
+              } else {
     
-                    prop.map = '/data/images/textures/terrain3.jpg'
-                    prop.envMap = 'none'
+                prop.map = '/data/images/textures/terrain3.jpg'
+                prop.envMap = 'none'
                 
-                  }
+              }
                           
-                  prop.repeat = [ 'wrapping', 10, 10 ]
-                break
-                case "organic":
+              prop.repeat = [ 'wrapping', 10, 10 ]
+            break
+            case "organic":
                 if ( !simpleShading ) {
     
                   prop.roughnessMap = "/data/images/textures/tiles-light.png" 
@@ -101,7 +101,6 @@ export let _initMaterialProp = ( prop, simpleShading ) => { // material presets 
                 prop.repeat = [ 'wrapping', 6, 6 ]
                 break
                 case "metal":
-    
                     prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
                     
                     if ( !simpleShading )
@@ -110,10 +109,8 @@ export let _initMaterialProp = ( prop, simpleShading ) => { // material presets 
                     
     
                     prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
-    
                 break
                 case "metal2":
-                
                   prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
                                 
                   if ( !simpleShading ) {
@@ -125,11 +122,9 @@ export let _initMaterialProp = ( prop, simpleShading ) => { // material presets 
 
                     prop.map = !!!prop.map ? '/data/images/textures/metal3.png' : prop.map
 
-                  }
-                                
+                  }        
                 break
                 case "glass":
-    
                   prop.repeat = [ 'wrapping', 18, 18 ]
     
                   if ( !simpleShading ) {
@@ -141,10 +136,8 @@ export let _initMaterialProp = ( prop, simpleShading ) => { // material presets 
                     prop.specularMap = '/data/images/textures/tiles.png'
     
                   }
-    
                 break
                 case "hard-light":
-    
                 prop.map = '/data/images/textures/surface03.jpg'
     
                 if ( !simpleShading )
@@ -153,14 +146,12 @@ export let _initMaterialProp = ( prop, simpleShading ) => { // material presets 
     
                 break
                 case "plastic":
-    
                     prop.repeat = [ 'wrapping', 2, 2 ]
                     prop.map = !!!prop.map ? '/data/images/textures/gplaypattern_@2X-2.png' : prop.map
     
                     if ( !simpleShading )
     
                       prop.metalnessMap = "/data/images/textures/tiles.png" 
-    
     
                 default:
                 break
@@ -201,9 +192,16 @@ export let _initMaterialConfig = ( prop, mat, shading, basic, mobile  ) => {
                     
                   break
                   case "terrain4":
+                  if ( shading == 'physical' ) {
+
                       mat.metalness = 0.5
                       mat.roughness = 1.0
-                      mat.shininess = 0.05
+
+                  } else {
+
+                    mat.shininess = 0.05
+
+                  }
                   break
                   case "tree":
                     mat.transparent = !mobile

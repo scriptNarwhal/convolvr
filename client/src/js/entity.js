@@ -87,6 +87,7 @@ export default class Entity {
         s = 0
 
     this.lastFace = 0
+    this.componentsByProp = {} // reset before (re)registering components 
     
     if ( this.mesh != null ) {
 
