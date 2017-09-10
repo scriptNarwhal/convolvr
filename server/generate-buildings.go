@@ -35,7 +35,7 @@ func generateBuilding(id int, world string, x int, z int, altitude float32) *Ent
 			light["color"] = 0xffffff
 			floorProps["light"] = light
 		}
-		floorGeometry["size"] = []float64{structureSize * width, 5000, structureSize * width * (2.0 / 3.0)}
+		floorGeometry["size"] = []float64{structureSize * width, 10000, structureSize * width * (2.0 / 3.0)}
 		floorGeometry["shape"] = "box"
 		floorGeometry["merge"] = true
 		floorMaterial["name"] = "terrain"
@@ -75,7 +75,6 @@ func generateBuildingWall(title string, w int, i int, floors int, width float64,
 		geometry["size"] = []float64{structureSize * width, structureSize / 3.8, 5000}
 		if i == floors-1 {
 			geometry["merge"] = false
-
 			text["lines"] = []string{title}
 			text["color"] = "#00ff00"
 			text["background"] = "#000000"

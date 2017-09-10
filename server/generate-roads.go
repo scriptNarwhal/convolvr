@@ -11,7 +11,7 @@ func generateRoad(id int, world string, x int, z int, altitude float32) *Entity 
 	)
 	floors := 1
 	width := 2.8
-	structureSize := 285000.0
+	structureSize := 284000.0
 	floorQuat := []float64{0.0, 0.0, 0.0, 0.0}
 	// xOffset := int(math.Abs(float64(x % 4)))
 	zOffset := int(math.Abs(float64(z % 5)))
@@ -20,7 +20,7 @@ func generateRoad(id int, world string, x int, z int, altitude float32) *Entity 
 
 	if zOffset == 2 {
 		floorQuat = []float64{0, 0.7071067811865475, 0.0, 0.7071067811865476}
-		width *= 1.25
+		width *= 1.17
 	}
 
 	floorProps := make(map[string]interface{})

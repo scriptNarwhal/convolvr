@@ -112,6 +112,22 @@ export let _initMaterialProp = ( prop, simpleShading ) => { // material presets 
                     prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
     
                 break
+                case "metal2":
+                
+                  prop.repeat = !!!prop.map ? [ 'wrapping', 3, 3 ] : [ 'wrapping', 1, 1 ]
+                                
+                  if ( !simpleShading ) {
+                                  
+                    prop.alphaMap = "/data/images/textures/metal2.png"
+                    prop.map = !!!prop.map ? '/data/images/textures/tiles-light.png' : prop.map
+
+                  } else {
+
+                    prop.map = !!!prop.map ? '/data/images/textures/metal3.png' : prop.map
+
+                  }
+                                
+                break
                 case "glass":
     
                   prop.repeat = [ 'wrapping', 18, 18 ]
@@ -203,6 +219,9 @@ export let _initMaterialConfig = ( prop, mat, shading, basic, mobile  ) => {
                       mat.shininess = 7.4
     
                     }
+                  break
+                  case "metal2":
+                    mat.transparent = !mobile
                   break
                   case "hard-light":
                     if (!mobile && prop.bumpMap ) {
