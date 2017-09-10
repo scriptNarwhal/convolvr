@@ -210,7 +210,7 @@ class App extends Component {
 
       newWorld = detectWorldDetailsFromURL()
       
-      if ( newWorld[ 2 ] == true ) { // not navigating to built in ui / page
+      if ( newWorld[ 2 ] == true && !!newWorld[ 0 ] && !!newWorld[ 1 ] ) { // not navigating to built in ui / page
 
           if ( newWorld[ 0 ] != nextProps.worldUser || newWorld[ 1 ] != nextProps.world ) {
           
@@ -254,7 +254,9 @@ class App extends Component {
 
   goBack () {
 
-    browserHistory.push(`/${this.props.worldUser}/${this.props.world}`)
+    let worldURL = detectWorldDetailsFromURL()
+
+    browserHistory.push(`/${worldURL[0]}/${worldURL[1]}`)
 
   }
 
