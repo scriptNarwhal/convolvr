@@ -238,7 +238,7 @@ export default class GamePad {
   down ( buttons, index ) {
 
     let value = this.buttonPressed( buttons[ index ] ) && this.buttons[ index ] == false
-    this.buttons[ index ] =   this.buttonPressed(  )
+    this.buttons[ index ] =   this.buttonPressed( buttons[ index ] )
     return value
 
   }

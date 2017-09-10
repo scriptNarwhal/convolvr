@@ -43,7 +43,7 @@ export let _initMaterialProp = ( prop, simpleShading ) => { // material presets 
                 if ( !simpleShading ) {
       
                     prop.map = !!!prop.map ? '/data/images/textures/terrain2.jpg' : prop.map
-                    prop.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
+                    //prop.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
       
                 } else {
                             

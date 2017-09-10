@@ -49,7 +49,6 @@ export default class StaticCollisions {
 			if ( distance < 20000) { // debug
 
 				user.velocity.sub( direction.multiplyScalar(100) )
-				//three.camera.position.add(direction)
 
 			}
 
@@ -57,10 +56,11 @@ export default class StaticCollisions {
 
 	      if ( message.data.type == "top" ) {
 
-				three.camera.position.set( three.camera.position.x, message.data.position[1]+452000 +vrHeight, three.camera.position.z )
+				three.camera.position.set( three.camera.position.x, message.data.position[1]+450000 +vrHeight, three.camera.position.z )	
 
 				if ( Math.abs( user.velocity.y ) > 350000 ) {
 
+					window.navigator.vibrate && window.navigator.vibrate(50)
 					user.velocity.y *= -0.56
 					user.falling = true
 
@@ -70,7 +70,7 @@ export default class StaticCollisions {
 					user.velocity.y = 0
 
 				}
-
+				
 			} else if ( message.data.type == "bottom" ) {
 
 				three.camera.position.set( three.camera.position.x, message.data.position[1]-85000 +vrHeight, three.camera.position.z )

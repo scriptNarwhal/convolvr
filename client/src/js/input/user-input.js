@@ -204,7 +204,7 @@ export default class UserInput {
 		}
 			if ( world.mode != "stereo" ) {
 
-				if (this.tiltControls != null) {
+				if ( this.tiltControls != null ) {
 
 					this.tiltControls.update()
 
@@ -229,11 +229,10 @@ export default class UserInput {
 
 			if (this.leapMotion && this.moveVector.length() > 0) {
 
-				if (velocity.y < 0) {
+				if ( velocity.y < 0 )
 
 					velocity.y *= 0.95
 
-				}
 			}
 
 			if ( Math.abs(velocity.y) > 6000 ) {
@@ -273,22 +272,14 @@ export default class UserInput {
 
 			if ( this.camera.position.y < bottom + 70000 ) {
 
-				if ( this.keys.shift ) {
-
-					velocity.y *= -0.70
-
-				} else {
-
-					velocity.y *= -0.20
-
-				}
-
+				velocity.y *= this.keys.shift ? -0.70 : -0.20
 				this.device.falling = false
 				this.camera.position.y = bottom + 70000
 				
-				if (velocity.y > 1000) {
-					//world.vibrate(50);
-				}
+				if ( velocity.y > 1000 )
+
+					window.navigator.vibrate && window.navigator.vibrate(50) // replace with haptics system
+				
 			}
 			
 			if ( this.device.falling == false ) { // (velocity.x * velocity.x) + (velocity.z * velocity.z) > 20000 

@@ -25,7 +25,7 @@ export default class Convolvr {
 	
 	constructor( user, userInput = false, socket, store, loadedCallback ) {
 
-		let mobile = (window.innerWidth <= 720),
+		let mobile = window.innerWidth < 480 || window.devicePixelRatio >= 1.5,
 			scene = new THREE.Scene(),
 			camera = null,
 			screenResX = window.devicePixelRatio * window.innerWidth,

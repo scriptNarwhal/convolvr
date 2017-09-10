@@ -113,12 +113,15 @@ export default class CursorSystem {
             while ( z < 2 ) {
 
                 key = [ coords[ 0 ] + x, 0, coords[ 2 ] + z ].join(".")
+
                 if ( typeof voxels[ key ] == 'object' ) { //console.warn("Empty Voxel! ", key, voxels[ key ] ) }
                     castObjects = castObjects.concat( !!voxels[ key ] ? voxels[ key ].meshes : [] )
                 } else {
                     //console.warn(key, 'notloaded')
                 }
+
                 z ++
+
             }
 
             z = -1
@@ -174,7 +177,6 @@ export default class CursorSystem {
                 cursorSystem.rayCast( world, camera, cursor, i -1, handMesh, cursorSystem._cursorCallback )
 
             
-
         })
 
 
@@ -197,7 +199,7 @@ export default class CursorSystem {
     _cursorCallback ( cursor, hand, world, obj, entity, component ) {
 
         let cursorState = cursor.state,
-            distance = !!cursorState.cursor ? cursorState.cursor.distance : 28000,
+            distance = !!cursorState.cursor ? cursorState.cursor.distance : 48000,
             props = !!component ? component.props : false,
             hover = !!props ? props.hover : false,
             lookAway = !!props ? props.lookAway : false,
@@ -210,6 +212,10 @@ export default class CursorSystem {
             cb = 0
 
         if ( !!obj ) {
+
+            if ( !!!cursorState.cursor.entity && !!! noRayCast )
+
+                window.navigator.vibrate && window.navigator.vibrate(35)
 
             newCursorState = {
                 distance: obj.distance || 48000,

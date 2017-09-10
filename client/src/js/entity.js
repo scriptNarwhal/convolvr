@@ -253,11 +253,12 @@ export default class Entity {
   }
 
   addToVoxel ( coords, mesh ) {
-
-    let addTo = this.getVoxelForUpdate( coords )
-        
-    addTo.meshes.push( mesh )
     
+        this.getVoxelForUpdate( coords, addTo => { 
+    
+          addTo.meshes.push( mesh )
+    
+        })
   }
 
   removeFromVoxel ( coords, mesh ) {
@@ -268,16 +269,39 @@ export default class Entity {
 
   }
 
-  getVoxelForUpdate ( coords ) {
+  getVoxelForUpdate ( coords, callback ) {
 
     let world = window.three.world,
+        thisEnt = this,
         systems = world.systems,
         terrain = systems.terrain,
         voxel = terrain.voxels[ coords.join(".") ]
 
     if ( !!! voxel) { console.warn("voxel not loaded")
     
-     // voxel = terrain.loadVoxel( coords )
+     voxel = terrain.loadVoxel( coords, callback )
+
+    } else if (typeof voxel != 'boolean' ) {
+
+      callback && callback( voxel )
+
+    } else {
+
+      setTimeout( ()=> {
+
+        let voxel = terrain.voxels[ coords.join(".") ]
+
+        if ( voxel && typeof voxel != 'boolean' ) {
+
+          callback( voxel )
+
+        } else {
+
+          terrain.loadVoxel( coords, callback )
+
+        }
+
+      }, 600)
 
     }
 

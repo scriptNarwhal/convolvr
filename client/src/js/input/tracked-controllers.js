@@ -5,8 +5,8 @@ export default class TrackedController {
     this.input = input
     this.world = world
     this.buttons = {
-      left: [false, false, false, false, false, false],
-      right: [false, false, false, false, false, false],
+      left: [false, false, false, false, false, false, false, false],
+      right: [false, false, false, false, false, false, false, false],
     }
     this.stickCooldown = false
     this.stickTimeout = null
@@ -43,12 +43,12 @@ export default class TrackedController {
         tools       = world.user.toolbox
 
     //console.log("oculus touch handler ", a, b, buttons
+
+    if ( useTracking && gamepad.pose )
+    
+      tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
+
     if ( gamepad.hand == 'left' ) {
-
-      if ( useTracking && gamepad.pose )
-
-        tools.setHandOrientation( 1, gamepad.pose.position, gamepad.pose.orientation )
-
 
       if ( world.vrMovement == 'stick' ) {
 
@@ -66,15 +66,15 @@ export default class TrackedController {
 
       }
      
-      if ( this.up( buttons, 1 ) )
+      if ( this.up( buttons, 1, 1 ) )
 
         tools.usePrimary(1)
 
-      if ( this.down( buttons, 2 ) )
+      if ( this.down( buttons, 1, 2 ) )
 
         tools.grip(1, 1)
 
-      if ( this.up( buttons, 2 ) )
+      if ( this.up( buttons, 1, 2 ) )
 
         tools.grip( 1, -1 )
 
@@ -83,11 +83,6 @@ export default class TrackedController {
 
       let dir = Math.round(gamepad.axes[0]),
           toolOptionChange = Math.round(gamepad.axes[1])
-
-      if ( useTracking && gamepad.pose )
-
-        tools.setHandOrientation( 0, gamepad.pose.position, gamepad.pose.orientation )
-
 
       if (dir != 0 && this.stickCooldown == false) {
 
@@ -104,15 +99,15 @@ export default class TrackedController {
 
       }
 
-      if ( this.up( buttons, 1 ) )
+      if ( this.up( buttons, 0, 1 ) )
       
         tools.usePrimary(0)
       
-      if ( this.down( buttons, 2 ) )
+      if ( this.down( buttons, 0, 2 ) )
       
         tools.grip( 0, 1 )
       
-      if ( this.up( buttons, 2 ) )
+      if ( this.up( buttons, 0, 2 ) )
       
         tools.grip( 0, -1 )
 
@@ -157,7 +152,7 @@ export default class TrackedController {
 
   }
 
-  down ( hand, buttons, index ) {
+  down ( buttons, hand, index ) {
     
     let current = hand == 0 ? this.buttons.left : this.buttons.right,
         value = this.buttonPressed( buttons[ index ] ) && current[ index ] == false
@@ -167,7 +162,7 @@ export default class TrackedController {
     
   }
     
-  up ( hand, buttons, index ) {
+  up ( buttons, hand, index ) {
     
     let current = hand == 0 ? this.buttons.left : this.buttons.right,
         value = !this.buttonPressed( buttons[ index ] ) && current[ index ]

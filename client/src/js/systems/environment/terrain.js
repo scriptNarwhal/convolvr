@@ -82,7 +82,7 @@ export default class TerrainSystem {
 
   }
 
-  loadVoxel ( coords ) {
+  loadVoxel ( coords, callback ) {
 
     let voxels     = this.voxels,
         voxelList  = this.voxelList,
@@ -100,6 +100,7 @@ export default class TerrainSystem {
         typeof response.data.map == 'function' && response.data.map( c => {
 
           v.preLoadEntities()
+          callback && callback( v )
           collisions.worker.postMessage(JSON.stringify({
             command: "add voxels",
             data: [ v.data ]
@@ -185,7 +186,7 @@ export default class TerrainSystem {
 
       this.cleanUpChunks.map(( cleanUp, i ) => {
 
-        if ( c < 2  && cleanUp ) {
+        if ( c < 3  && cleanUp ) {
 
           terrainChunk = voxels[ cleanUp.cell ]
 
@@ -221,7 +222,7 @@ export default class TerrainSystem {
 
         while ( y <= endCoords[ 1 ] ) {
 
-            if ( c < 6 && voxels[x+".0."+y] == null ) { // only if its not already loaded
+            if ( c < 3 && voxels[x+".0."+y] == null ) { // only if its not already loaded
               
                 voxels[ x+".0."+y ] = true
                 c += 1

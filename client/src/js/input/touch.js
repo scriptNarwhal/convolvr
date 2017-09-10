@@ -76,8 +76,8 @@ export default class Touch { // based on example here https://developer.mozilla.
 					newTouch = this.copyTouch( touches[ i ] )
 					ongoingTouches.splice(idx, 1, newTouch)  // swap in the new touch record
 					if ( idx < 2 ) {
-						input.moveVector.x -= (newTouch.pageX - input.lastTouch[idx][0]) * 2800
-						input.moveVector.z -= (newTouch.pageY - input.lastTouch[idx][1]) * 2800
+						input.moveVector.x -= (newTouch.pageX - input.lastTouch[idx][0]) * 3600
+						input.moveVector.z -= (newTouch.pageY - input.lastTouch[idx][1]) * 3600
 						input.lastTouch[ idx ] = [ newTouch.pageX, newTouch.pageY ]
 					}
 				} 
