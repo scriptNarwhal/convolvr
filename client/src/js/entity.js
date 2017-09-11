@@ -31,10 +31,12 @@ export default class Entity {
 
   update ( position, quaternion = false, components, component, componentPath ) {
 
-    if ( !! componentPath )
+    if ( !! componentPath ) {
 
-      this.updateComponentAtPath( component, componentPath, 0, components )
-     
+      this.updateComponentAtPath( component, componentPath )
+      this.init( this.anchor, { updateWorkers: true } )
+    
+    }
 
     if ( !! components ) {
 
@@ -318,7 +320,7 @@ export default class Entity {
 
       components = this.components
 
-    if ( pathIndex < path.length ) {
+    if ( pathIndex + 1 < path.length ) {
       
       foundComponent = this.getComponentByPath( components[ path[ pathIndex ] ].components, path, pathIndex + 1 )
 
@@ -330,13 +332,15 @@ export default class Entity {
 
   }
 
-  updateComponentAtPath ( component, path, pathIndex, components = false ) {
+  updateComponentAtPath ( component, path, pathIndex = 0, components = false ) {
     
+    console.log( "update component at path", component, path, pathIndex, components )
+
     if ( components == false )
       
       components = this.components
 
-    if ( pathIndex < path.length ) {
+    if ( pathIndex + 1 < path.length ) {
 
       this.updateComponentAtPath( component, components[ path[ pathIndex ] ].components, path, pathIndex + 1 )
 
@@ -428,17 +432,21 @@ export default class Entity {
       newDist = 0
       this.combinedComponents.map( component => {
 
-        compPos.fromArray( component.data.position )
-        worldCompPos = entMesh.localToWorld( compPos )
-        newDist = worldCompPos.distanceTo( position ) //console.log("compPos", compPos, "worldCompPos", worldCompPos, "newDist", newDist)
-        
-        if ( newDist < distance ) {  
+        if ( component.data ) {
 
-          distance = newDist
-          closest = component
+          compPos.fromArray( component.data.position )
+          worldCompPos = entMesh.localToWorld( compPos )
+          newDist = worldCompPos.distanceTo( position ) //console.log("compPos", compPos, "worldCompPos", worldCompPos, "newDist", newDist)
+          
+          if ( newDist < distance ) {  
+  
+            distance = newDist
+            closest = component
+  
+          }
 
         }
-
+      
       })
 
     }

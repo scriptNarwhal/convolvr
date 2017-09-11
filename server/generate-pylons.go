@@ -71,10 +71,12 @@ func generatePylonSegment(w int, i int, floors int, width float64, structureSize
 		wallHeight = (-structureSize / 2.65) + float64(i)*structureSize*3.0
 		wallPos = []float64{0.0, wallHeight, structureSize/2.0 + float64(w-1)*structureSize}
 		geometry["size"] = []float64{structureSize * width, structureSize, 5000}
+		material["name"] = "metal2"
 	} else if w < 4 {
 		wallHeight = structureSize * float64(floors) * 2.0
 		wallPos = []float64{-structureSize/2.0 + (structureSize * float64(w%2)), wallHeight / 2.0, 0}
-		geometry["size"] = []float64{5000, wallHeight, structureSize}
+		geometry["size"] = []float64{5000, 10000 + wallHeight, structureSize / 2.0}
+		material["name"] = "metal"
 	}
 
 	wallQuat := []float64{0.0, 0.0, 0.0, 0.0}
@@ -82,7 +84,7 @@ func generatePylonSegment(w int, i int, floors int, width float64, structureSize
 	wallProps["wall"] = map[string]int{
 		"index": w,
 	}
-	material["name"] = "metal2"
+
 	material["color"] = 0x404040
 	wallProps["geometry"] = geometry
 	wallProps["material"] = material

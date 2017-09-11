@@ -64,7 +64,7 @@ func getComponentByPath(components []*Component, path []int, pathIndex int) *Com
 		foundComponent *Component
 	)
 
-	if pathIndex < len(path) {
+	if pathIndex+1 < len(path) {
 		foundComponent = getComponentByPath(components[path[pathIndex]].Components, path, pathIndex+1)
 	} else {
 		foundComponent = components[path[pathIndex]]
@@ -76,7 +76,7 @@ func getComponentByPath(components []*Component, path []int, pathIndex int) *Com
 
 func updateComponentAtPath(component *Component, components []*Component, path []int, pathIndex int) {
 
-	if pathIndex < len(path) {
+	if pathIndex+1 < len(path) {
 		updateComponentAtPath(component, components[path[pathIndex]].Components, path, pathIndex+1)
 	} else {
 		components[path[pathIndex]] = component

@@ -80,9 +80,16 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 
 			} else if action.Tool == "Update Tool" {
 
-				updateComponentAtPath(&action.Components[0], entity.Components, action.ComponentPath, 0)
+				if len(action.Components) > 0 {
 
-				log.Printf(`tool action: "%s"`, action.Tool)
+					updateComponentAtPath(&action.Components[0], entity.Components, action.ComponentPath, 0)
+					log.Printf(`tool action: "%s"`, action.Tool)
+
+				} else {
+
+					log.Printf("Update must contain at least 1 component")
+
+				}
 
 			} else if action.Tool == "File Tool" || action.Tool == "Directory Tool" {
 

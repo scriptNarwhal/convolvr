@@ -144,20 +144,31 @@ export default class Toolbox {
 
     initActionTelemetry ( camera, useCursor, hand ) {
 
-      let position   = camera.position.toArray(),
-          voxel      = [ position[0], 0, position[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) ),
-          quaternion = camera.quaternion.toArray(),
-          user       = this.world.user,
-          cursor     = null,
-          cursorPos  = null,
-          handMesh   = null,
-          cursorHand = []
+      let position        = camera.position.toArray(),
+          voxel           = [ position[0], 0, position[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) ),
+          quaternion      = camera.quaternion.toArray(),
+          user            = this.world.user,
+          cursor          = null,
+          cursorPos       = null,
+          cursorEntity    = null,
+          cursorComponent = null,
+          handMesh        = null,
+          componentPath   = [],
+          cursorHand      = []
           
       if ( useCursor ) {
 
         cursorHand = this.getCursor( hand )
         cursor = cursorHand[ 0 ]
         handMesh = cursorHand[ 1 ]
+
+        cursorEntity = cursor.state.cursor.entity
+        cursorComponent = cursor.state.cursor.component
+
+        if ( cursorComponent ) 
+
+          componentPath = cursorComponent.path
+
         cursor.mesh.updateMatrixWorld()
         !!cursor.mesh.parent && cursor.mesh.parent.updateMatrix()
         cursorPos = cursor.mesh.localToWorld( new THREE.Vector3() )
@@ -175,6 +186,7 @@ export default class Toolbox {
         position,
         quaternion,
         cursor,
+        componentPath,
         handMesh,
         hand
       }
@@ -187,7 +199,12 @@ export default class Toolbox {
           tool                            = this.tools[ toolIndex ],
           camera                          = this.world.camera,
           telemetry                       = this.initActionTelemetry(camera, true, hand),
-          { position, quaternion, voxel } = telemetry,
+          { 
+            position, 
+            quaternion, 
+            voxel, 
+            componentPath 
+          }                               = telemetry,
           cursorEntity                    = !!telemetry.cursor ? telemetry.cursor.state.cursor.entity : false,
           cursorComponent                 = !!cursorEntity ? telemetry.cursor.state.cursor.component: false,
           cursorState                     = !!telemetry.cursor ? telemetry.cursor.state : false,
@@ -241,17 +258,21 @@ export default class Toolbox {
 
       if ( !!action )
 
-        this.sendToolAction( true, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.coords )
+        this.sendToolAction( true, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.componentPath || componentPath, action.coords )
 
 
     }
 
     useSecondary( hand, value ) {
 
-      let tool = this.tools[this.currentTools[hand]],
-          camera = this.world.camera,
-          telemetry = this.initActionTelemetry(camera, true, hand),
-        { position, quaternion } = telemetry,
+      let tool            = this.tools[this.currentTools[hand]],
+          camera          = this.world.camera,
+          telemetry       = this.initActionTelemetry(camera, true, hand),
+          { 
+            position, 
+            quaternion, 
+            componentPath 
+          }               = telemetry,
           action = false
           
       if ( tool.mesh == null )
@@ -263,7 +284,7 @@ export default class Toolbox {
       
       if ( !!action )
 
-        this.sendToolAction( false, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.coords )
+        this.sendToolAction( false, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.componentPath || componentPath, action.coords )
 
 
     }
@@ -348,7 +369,7 @@ export default class Toolbox {
 
     }
 
-    sendToolAction ( primary, tool, hand, position, quaternion, entity, entityId = -1, components = [], coords ) {
+    sendToolAction ( primary, tool, hand, position, quaternion, entity, entityId = -1, components = [], componentPath = [], coords ) {
 
       let camera = this.world.camera,
           cPos = camera.position,
@@ -374,6 +395,7 @@ export default class Toolbox {
         quaternion,
         options: tool.options,
         coords,
+        componentPath,
         components,
         entity,
         entityId,

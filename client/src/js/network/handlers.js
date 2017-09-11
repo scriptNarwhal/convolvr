@@ -67,13 +67,13 @@ export default class SocketHandlers {
 
 						hands = user.avatar.componentsByProp.hand
 
-						while ( h > -1 ) {
+						while ( h < hands.length ) {
 
 							hand = hands[ h ]
 							hand.mesh.position.fromArray( data.entity.hands[ h ].pos )
 							hand.mesh.quaternion.fromArray( data.entity.hands[ h ].quat )
 							hand.mesh.updateMatrix()
-							h --
+							h += 1
 
 						}
 					}
@@ -101,7 +101,7 @@ export default class SocketHandlers {
 			switch (data.tool) {
 				case "Entity Tool":
 					let ent = data.entity,
-						entity = new Entity(ent.id, ent.components, data.position, data.quaternion, coords )
+						entity = new Entity( ent.id, ent.components, data.position, data.quaternion, coords )
 
 					voxel.entities.push(entity)
 					entity.init(three.scene)
@@ -111,7 +111,7 @@ export default class SocketHandlers {
 
 						if ( voxelEnt.id == data.entityId ) { // console.log("got component tool message", data.entity.components); // concat with existing components array
 						
-							voxelEnt.update( false, false,  voxelEnt.components.concat(data.entity.components))
+							voxelEnt.update( false, false, voxelEnt.components.concat(data.entity.components))
 						
 						}
 
@@ -127,8 +127,8 @@ export default class SocketHandlers {
 					voxel.entities.map( voxelEnt => { // find & re-init entity.. also probably look up the right component to modify by id *******************
 
 						if ( voxelEnt.id == data.entityId ) {
-							console.log("Update Tool message", data.entity.components) // concat with existing components array
-							voxelEnt.update( false, false,  voxelEnt.components, data.components[0], data.componentPath )
+							//console.log("Update Tool message", data.components[0]) // concat with existing components array
+							voxelEnt.update( false, false,  false, data.components[0], data.componentPath )
 						}
 
 					})
@@ -137,10 +137,12 @@ export default class SocketHandlers {
 					voxel.entities.map( ( voxelEnt, i ) => { // find & re-init entity ^^^^^^
 
 						if ( voxelEnt.id == data.entityId ) {
+
 							console.log("got delete tool message", data.entityId) // concat with existing components array
 							world.octree.remove( voxelEnt.mesh )
 							three.scene.remove( voxelEnt.mesh )
 							voxel.entities.splice( i, 1 )
+							
 						}
 						
 					})

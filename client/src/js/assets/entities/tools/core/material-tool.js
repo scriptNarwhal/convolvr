@@ -60,33 +60,41 @@ export default class MaterialTool extends Tool {
 
     primaryAction ( telemetry ) {
       
-      let color         = this.options.color,
-          material      = this.options.material,
-          basic         = this.options.basic,
-          cursor        = telemetry.cursor,
-          user          = this.world.user,
-          systems       = this.world.systems,
-          assetSystem   = systems.assets,
-          cursorSystem  = systems.cursor,
-          cursorState   = cursor.state.cursor || {},
-          componentPath = cursorState.componentPath,
-          position      = telemetry.position,
-          quat          = telemetry.quaternion,
-          selected      = !!cursorState.entity ? cursorState.entity : false,
-          coords        = telemetry.voxel,
-          props         = {},
-          components    = [ ],
-          component     = telemetry.component,
-          entity        = telemetry.entity,
-          entityId      = selected ? selected.id : -1
+      let color           = this.options.color,
+          material        = this.options.material,
+          basic           = this.options.basic,
+          cursor          = telemetry.cursor,
+          user            = this.world.user,
+          systems         = this.world.systems,
+          assetSystem     = systems.assets,
+          cursorSystem    = systems.cursor,
+          cursorState     = cursor.state.cursor || {},
+          componentPath   = cursorState.componentPath,
+          position        = telemetry.position,
+          quat            = telemetry.quaternion,
+          selected        = !!cursorState.entity ? cursorState.entity : false,
+          coords          = telemetry.voxel,
+          props           = {},
+          components      = [ ],
+          component       = {}, 
+          cursorComponent = cursorState.component,
+          entity          = telemetry.entity,
+          entityId        = selected ? selected.id : -1
           
 
       console.log(" ( Material Tool ) ", componentPath )
       
-      if ( component != null ) {
+      if ( !! cursorComponent ) {
 
-        console.log("set material")
-        component.props.material = this.options
+        componentPath = cursorComponent.path
+        component = Object.assign({}, {
+          position: cursorComponent.data.position,
+          quaternion: cursorComponent.data.quaternion,
+          props: cursorComponent.props,
+          components: cursorComponent.components
+        })
+        console.log("set material", component)
+        component.props.material = Object.assign({}, component.props.material, this.options)
         components = [ component ]
 
       }

@@ -219,6 +219,7 @@ export let _initMaterialConfig = ( prop, mat, shading, basic, mobile  ) => {
                     }
                   break
                   case "metal2":
+                    //mat.side = mobile ? THREE.FrontSide : THREE.DoubleSide
                     mat.transparent = !mobile
                   break
                   case "hard-light":
