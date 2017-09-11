@@ -417,6 +417,14 @@ export default class Convolvr {
 	    }
 	}
 
+	getVoxel ( position ) {
+
+		let pos = position || this.camera.position
+
+		return [Math.floor(pos.x / GRID_SIZE[0]), 0, Math.floor(pos.z / GRID_SIZE[2])]
+
+	}
+
 	updateSkybox ( delta ) {
 
 		let camera = three.camera,

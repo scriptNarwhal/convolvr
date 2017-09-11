@@ -28,7 +28,6 @@ let observer = {
 self.update = ( ) => {
 
 	var distance = 0,
-		objPos = [],
 		position 	 = observer.position,
 		innerBox 	 = [false, false],
 		velocity 	 = observer.velocity,
@@ -38,7 +37,7 @@ self.update = ( ) => {
 		cKey 		 = "",
 		yPos 		 = 0,
 		size 		 = 50000,
-		obj 		 = null,
+		voxel 		 = null,
 		ent 		 = null,
 		structure 	 = null,
 		bounds 		 = [0, 0],
@@ -52,39 +51,41 @@ self.update = ( ) => {
 
 	for ( i = 0; i < voxelList.length; i ++ ) {
 
-		obj = voxelList[ i ]
-		if ( !!!obj ) continue
-		if ( !!obj  && distance2dCompare( position, obj.position, 2500000 ) ) { 	// do collisions on voxels & structures... just walls at first..
+		voxel = voxelList[ i ]
+
+		if ( !!!voxel || !!!voxel.position) continue
+
+		if ( !!voxel && distance2dCompare( position, voxel.position, 2500000 ) ) { 	// do collisions on voxels & structures... just walls at first..
 					
-			if ( obj.loaded == undefined ) {
+			if ( voxel.loaded == undefined ) {
 				
-				obj.loaded = true
-				self.postMessage('{"command": "load entities", "data":{"coords":"'+obj.cell[0]+'.'+obj.cell[1]+'.'+obj.cell[2]+'"}}');
+				voxel.loaded = true
+				self.postMessage('{"command": "load entities", "data":{"coords":"'+voxel.cell[0]+'.'+voxel.cell[1]+'.'+voxel.cell[2]+'"}}');
 						
 			}
 
-			if ( distance2dCompare( position, obj.position, 900000 ) ) {
+			if ( distance2dCompare( position, voxel.position, 900000 ) ) {
 					
-				let alt = obj.altitude || 0
+				let alt = voxel.altitude || 0
 				
-				yPos = obj.position[1]
+				yPos = voxel.position[1]
 				
-				if ( distance2dCompare( position, obj.position, 528000 ) ) {
+				if ( distance2dCompare( position, voxel.position, 528000 ) ) {
 						
 					if ( position[1] > yPos - 400000 + vrHeight  && position[1] < yPos + 450000 + vrHeight ) {
 
 						collision = true
-						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + obj.position[0] + ',' + (yPos ) + ',' + obj.position[2] + '] }}');
+						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
 					
 					}
 
-					if ( !!obj.entities && obj.entities.length > 0 ) {
+					if ( !!voxel.entities && voxel.entities.length > 0 ) {
 
-						e = obj.entities.length - 1
+						e = voxel.entities.length - 1
 
 						while ( e >= 0 ) {
 
-							ent = obj.entities[ e ]
+							ent = voxel.entities[ e ]
 
 							if ( !!! ent || !!!ent.components ) { console.warn("Problem with entity! ",e ,ent); continue }
 
@@ -115,7 +116,7 @@ self.update = ( ) => {
 
 							}
 
-							e --
+							e -= 1
 
 						}
 
@@ -129,14 +130,16 @@ self.update = ( ) => {
 
 	}
 
-	if ( !collision ) {
-		observer.prevPos = [ observer.position[0], observer.position[1], observer.position[2] ]
-	}
+	if ( !collision )
 
-	self.postMessage('{"command": "update"}');
+		observer.prevPos = [ observer.position[0], observer.position[1], observer.position[2] ]
+	
+
+	self.postMessage('{"command": "update"}')
 	self.updateLoop = setTimeout( () => {
-		self.update();
-	}, 15);
+		self.update()
+	}, 15)
+
 }
 
 self.onmessage = function ( event ) { 

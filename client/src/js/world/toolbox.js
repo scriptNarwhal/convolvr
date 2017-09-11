@@ -28,7 +28,6 @@ export default class Toolbox {
 
           this.hands.push( m )
 
-
       })
 
       this.fadeTimeout = 0
@@ -177,7 +176,6 @@ export default class Toolbox {
         if ( handMesh != null )
 
           quaternion = handMesh.quaternion.toArray()
-
 
       }
 
@@ -388,7 +386,7 @@ export default class Toolbox {
       let actionData = {
         tool: toolName,
         world: this.world.name,
-        user: this.user.username,
+        user: this.user.name,
         userId: this.user.id,
         hand,
         position,

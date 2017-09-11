@@ -51,21 +51,21 @@ userInput = new UserInput()
 loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) => {
 
   let systems:   Systems       = world.systems,
-      three:     Object        = world.three,  
-      pos:       THREE.Vector3 = three.camera.position,
-      coords:    Array<number> = [Math.floor(pos.x /GRID_SIZE[0]), 0, Math.floor(pos.z /GRID_SIZE[2])],
+      scene:     Object        = world.three.scene,  
+      pos:       THREE.Vector3 = world.camera.position,
+      coords:    Array<number> = world.getVoxel( pos ),
       voxelKey:  string        = coords.join("."),
       altitude:  number        = systems.terrain.voxels[ voxelKey ].data.altitude
 
   avatar = systems.assets.makeEntity( "default-avatar", true, { wholeBody: false }, coords ) // entity id can be passed into config object
-  avatar.init( three.scene )
+  avatar.init( scene )
   user.useAvatar( avatar )
   world.user = user
   user.toolbox = new Toolbox( user, world )
   
   toolMenu = systems.assets.makeEntity( "tool-menu", true, {}, coords ) // the new way of spawning built in entities
   user.hud = toolMenu
-  toolMenu.init( three.scene, {}, (menu: Entity) => { 
+  toolMenu.init( scene, {}, (menu: Entity) => { 
     menu.componentsByProp.toolUI[0].state.toolUI.updatePosition()
   }) 
   
@@ -78,7 +78,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
     
 
   chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].props.speech = {}
-  chatScreen.init( three.scene )
+  chatScreen.init( scene )
   chatScreen.update( [ 0, altitude - 15000, 0 ] )  
 
   world.chat = chatScreen
@@ -103,7 +103,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       "- Device orientation controls the camera",
       "- Swiping, dragging & gamepads move you"
     ]
-  helpScreen.init(three.scene, {}, (help: Entity) => { 
+  helpScreen.init(scene, {}, (help: Entity) => { 
     _initHTTPClientTest( world, help, coords ) 
     _initFileSystemTest( world, help, coords ) 
     _initVideoChat( world, help, coords ) 

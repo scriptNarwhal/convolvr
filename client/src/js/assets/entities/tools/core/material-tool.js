@@ -84,7 +84,7 @@ export default class MaterialTool extends Tool {
 
       console.log(" ( Material Tool ) ", componentPath )
       
-      if ( !! cursorComponent ) {
+      if ( !! cursorComponent && !! selected && !!!selected.componentsByProp.miniature ) {
 
         componentPath = cursorComponent.path
         component = Object.assign({}, {
@@ -94,7 +94,7 @@ export default class MaterialTool extends Tool {
           components: cursorComponent.components
         })
         console.log("set material", component)
-        component.props.material = Object.assign({}, component.props.material, this.options)
+        component.props.material = Object.assign( {}, component.props.material, this.options )
         components = [ component ]
 
       }
@@ -116,11 +116,16 @@ export default class MaterialTool extends Tool {
     
     configure ( config ) {
 
-      if ( config.color ) {
+      let newComp = null
 
-        this.options.color = config.color
-        this.entity.mesh.material.color = config.color
-        this.entity.mesh.material.needsUpdate = true
+      if ( !!config && Object.keys(config).length > 0 ) {
+
+        newComp = Object.assign({}, this.entity.components[0], {
+          props: Object.assign({}, this.entity.components[0].props, {
+              material: config
+          })
+        })
+        this.entity.update(false, false, false, newComp, [0] )
 
       }
 

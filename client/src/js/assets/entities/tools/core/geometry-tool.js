@@ -58,36 +58,45 @@ export default class GeometryTool extends Tool {
 
     primaryAction ( telemetry ) {
       
-      let color         = this.options.color,
-          material      = this.options.material,
-          basic         = this.options.basic,
-          cursor        = telemetry.cursor,
-          user          = this.world.user,
-          systems       = this.world.systems,
-          assetSystem   = systems.assets,
-          cursorSystem  = systems.cursor,
-          cursorState   = cursor.state.cursor || {},
-          componentPath = cursorState.componentPath,
-          position      = telemetry.position,
-          quat          = telemetry.quaternion,
-          selected      = !!cursorState.entity ? cursorState.entity : false,
-          coords        = telemetry.voxel,
-          props         = {},
-          components    = [ ],
-          component     = telemetry.component,
-          entityId      = -1,
-          entity        = telemetry.entity
+      let color           = this.options.color,
+          material        = this.options.material,
+          basic           = this.options.basic,
+          cursor          = telemetry.cursor,
+          user            = this.world.user,
+          systems         = this.world.systems,
+          assetSystem     = systems.assets,
+          cursorSystem    = systems.cursor,
+          cursorState     = cursor.state.cursor || {},
+          componentPath   = cursorState.componentPath,
+          position        = telemetry.position,
+          quat            = telemetry.quaternion,
+          selected        = !!cursorState.entity ? cursorState.entity : false,
+          coords          = telemetry.voxel,
+          props           = {},
+          components      = [ ],
+          component       = {}, 
+          cursorComponent = cursorState.component,
+          entity          = telemetry.entity,
+          entityId        = selected ? selected.id : -1
+          
 
       console.log(" ( Geometry Tool ) ", componentPath )
-          
-      if ( component != null ) {
-    
-        console.log("set geometry")
-        component.props.geometry = this.options
+      
+      if ( !! cursorComponent && !! selected && !!!selected.componentsByProp.miniature ) {
+
+        componentPath = cursorComponent.path
+        component = Object.assign({}, {
+          position: cursorComponent.data.position,
+          quaternion: cursorComponent.data.quaternion,
+          props: cursorComponent.props,
+          components: cursorComponent.components
+        })
+        console.log("set geometry", component)
+        component.props.geometry = Object.assign( {}, component.props.geometry, this.options )
         components = [ component ]
-    
+
       }
-    
+
       return {
         coords,
         component,
@@ -97,7 +106,6 @@ export default class GeometryTool extends Tool {
         components
       }
 
-
     }
 
     secondaryAction ( telemetry, value ) {
@@ -105,6 +113,17 @@ export default class GeometryTool extends Tool {
     }
 
     configure ( config ) {
+
+      if ( !!config && Object.keys(config).length > 0 ) {
+        
+          newComp = Object.assign({}, this.entity.components[0], {
+            props: Object.assign({}, this.entity.components[0].props, {
+              geometry: config
+            })
+          })
+          this.entity.update(false, false, false, newComp, [0] )
+                
+      }
 
       if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
       
