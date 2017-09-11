@@ -3,7 +3,7 @@ let panel2Comp = {
             geometry: {
                 merge: true,
                 shape: "cylinder",
-                size: [12000, 18000, 1500]
+                size: [10000, 25000, 1500]
             },
             material: {
                 color: 0x808080,

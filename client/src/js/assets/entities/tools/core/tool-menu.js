@@ -86,12 +86,11 @@ let toolMenu = (assetSystem, config, voxel) => {
         name: "tool-menu",
         components: [
             //currentIndicator,
-            //...toolMenuIcons
             {
                 props: {
                     geometry: {
                         shape: "box",
-                        size: [ 64000, 12000, 4000 ]
+                        size: [ 64000, 2000, 4000 ]
                     },
                     material: {
                         color: 0x404040,
@@ -102,10 +101,11 @@ let toolMenu = (assetSystem, config, voxel) => {
                     },
                     captureEvents: true // pass them to child components
                 },
-                components: [ ...toolMenuIcons ],
+                components: [ ],
                 quaternion: null,
                 position: [ 0, 0, 8000 ]
-            }
+            },
+            ...toolMenuIcons
         ],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ],

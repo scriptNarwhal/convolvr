@@ -1,3 +1,4 @@
+import AbilitySystem from './game/ability'
 import ActivateSystem from './core/activate'
 import AudioSystem from './audio/audio'
 import AssetSystem from './core/assets'
@@ -44,15 +45,18 @@ import ProjectileSystem from './environment/projectile'
 import QuestSystem from './game/quest'
 import LookAwaySystem from './core/look-away'
 import LoopSystem from './information/loop'
+import MagicSystem from './game/magic'
 import MaterialSystem from './core/material'
 import MiniatureSystem from './core/miniature'
 import ObjPluginSystem from './importers/obj-plugin'
-import OimoPluginSystem from './oimo-plugin'
+import OimoPluginSystem from './environment/oimo-plugin'
 import RESTSystem from './information/rest'
 import ScreenshotSystem from './environment/screenshot'
 import SignalSystem from './information/signal'
+import SkillSystem from './game/skill'
 import SocialMediaSystem from './chat/social-media'
 import SpeechSystem from './audio/speech'
+import StatSystem from './game/stat'
 import StaticCollisions  from './core/static-collisions'
 import SwitchSystem from './information/switch'
 import TerrainSystem from './environment/terrain'
@@ -75,6 +79,7 @@ export default class Systems {
     constructor ( world )  {
 
         let systems = {
+			ability: new AbilitySystem( world ),
 			activate: new ActivateSystem( world ),
 			audio: new AudioSystem( world ),
 			assets: new AssetSystem( world ),
@@ -110,6 +115,7 @@ export default class Systems {
 			light: new LightSystem( world ),
 			layout: new LayoutSystem( world ),
 			lookAway: new LookAwaySystem( world ),
+			magic: new MagicSystem( world ),
 			material: new MaterialSystem( world ),
 			memory: new MemorySystem( world ),
 			media: new MediaSystem( world ),
@@ -127,9 +133,11 @@ export default class Systems {
 			quest: new QuestSystem( world ),
 			rest: new RESTSystem( world ),
 			signal: new SignalSystem( world ),
+			skill: new SkillSystem( world ),
 			screenshot: new ScreenshotSystem( world ),
 			socialMedia: new SocialMediaSystem( world ),
 			speech: new SpeechSystem( world ),
+			stat: new StatSystem( world ),
 			staticCollisions: new StaticCollisions( world ),
 			switch: new SwitchSystem( world ),
 			terrain: new TerrainSystem( world ),

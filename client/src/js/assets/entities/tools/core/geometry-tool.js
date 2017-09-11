@@ -114,6 +114,8 @@ export default class GeometryTool extends Tool {
 
     configure ( config ) {
 
+      let newComp = null
+
       if ( !!config && Object.keys(config).length > 0 ) {
         
           newComp = Object.assign({}, this.entity.components[0], {

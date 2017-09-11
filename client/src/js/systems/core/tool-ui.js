@@ -18,10 +18,10 @@ export default class ToolUISystem {
         if ( prop.menu ) {
 
         } else if ( prop.toolIndex != undefined ) {
-
+            console.log( "adding switch tool callback", activate)
             activate && state.activate.callbacks.push( () => {
  
-                this.switchTool( component, prop.toolIndex, prop.toolHand )
+                this.switchTool( component, prop.toolIndex, typeof prop.toolHand == 'number' ? prop.toolHand : 0 )
 
             } )
 
@@ -82,7 +82,7 @@ export default class ToolUISystem {
 
         })
 
-        toolbox.useTool( tool, hand, component, true )
+        toolbox.useTool( tool, hand, true )
 
     }
 

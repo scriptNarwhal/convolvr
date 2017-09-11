@@ -209,7 +209,8 @@ export default class Toolbox {
           componentsByProp                = !!cursorEntity ? cursorEntity.componentsByProp : {},
           configureTool                   = null,
           action                          = null,
-          miniature                       = null
+          miniature                       = null,
+          activate                        = null
       
       tool.hidePreview()
 
@@ -227,6 +228,7 @@ export default class Toolbox {
         }
         console.log("use Primary ", componentsByProp)
         miniature = cursorEntity.componentsByProp.miniature
+      
         if ( miniature && cursorComponent && cursorComponent.props.toolUI ) {
           console.log("ToolUI!")
           configureTool = componentsByProp.toolUI[ 0 ].props.toolUI.configureTool 
