@@ -1,5 +1,5 @@
 let block = {
-        id: 0,
+        id: -1,
         name: "block",
         components: [{
             props: {

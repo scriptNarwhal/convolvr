@@ -97,6 +97,10 @@ export default class MaterialTool extends Tool {
         component.props.material = Object.assign( {}, component.props.material, this.options )
         components = [ component ]
 
+      } else {
+        
+        return false
+        
       }
 
       return {
@@ -118,21 +122,16 @@ export default class MaterialTool extends Tool {
 
       let newComp = null
 
-      if ( !!config && Object.keys(config).length > 0 ) {
+      if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
 
+        this.options = Object.assign( {}, this.options, config.data )
+        console.log("Configuring tool ", this.options)
         newComp = Object.assign({}, this.entity.components[0], {
           props: Object.assign({}, this.entity.components[0].props, {
-              material: config
+              material: this.options
           })
         })
         this.entity.update(false, false, false, newComp, [0] )
-
-      }
-
-      if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
-
-        this.options = Object.assign( {}, config )
-        console.log("Configuring tool ", this.options)
 
       }
 

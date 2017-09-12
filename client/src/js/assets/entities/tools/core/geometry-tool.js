@@ -95,6 +95,10 @@ export default class GeometryTool extends Tool {
         component.props.geometry = Object.assign( {}, component.props.geometry, this.options )
         components = [ component ]
 
+      } else {
+
+        return false
+
       }
 
       return {
@@ -116,24 +120,18 @@ export default class GeometryTool extends Tool {
 
       let newComp = null
 
-      if ( !!config && Object.keys(config).length > 0 ) {
-        
-          newComp = Object.assign({}, this.entity.components[0], {
-            props: Object.assign({}, this.entity.components[0].props, {
-              geometry: config
-            })
-          })
-          this.entity.update(false, false, false, newComp, [0] )
-                
-      }
-
       if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
       
-        this.options = Object.assign( {}, config.data )
+        this.options = Object.assign( {}, this.options, config.data )
         console.log("Configuring tool ", this.options)
+        newComp = Object.assign({}, this.entity.components[0], {
+          props: Object.assign({}, this.entity.components[0].props, {
+            geometry: this.options
+          })
+        })
+        this.entity.update(false, false, false, newComp, [0] )
 
       }
-      
       
     }
 

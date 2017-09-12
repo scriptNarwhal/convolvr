@@ -11,6 +11,7 @@ import panel3 from '../../assets/entities/misc/panel-3'
 import block from '../../assets/entities/misc/block'
 import column1 from '../../assets/entities/misc/column-1'
 import wirebox from '../../assets/entities/misc/wirebox'
+import fileBrowser from '../../assets/entities/information/file-browser'
 
 import panel1Comp from '../../assets/components/misc/panel-1'
 import column1Comp from '../../assets/components/misc/column-1'
@@ -398,6 +399,7 @@ export default class AssetSystem {
         this._addBuiltInEntity( "help-screen", helpScreen )
         this._addBuiltInEntity( "chat-screen", chatScreen )
         this._addBuiltInEntity( "video-chat", videoChat )
+        this._addBuiltInEntity( "file-browser", fileBrowser )
         this._addBuiltInEntity( "panel", panel1 )
         this._addBuiltInEntity( "preview-box", previewBox )
         this._addBuiltInEntity( "panel3", panel3 )
