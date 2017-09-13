@@ -100,7 +100,7 @@ export default class FileSystem {
 
     createFile ( component, username, dir ) {
 
-     dir = !!dir && dir != "" ? "/"+dir : ""
+     let dir = !!dir && dir != "" ? "/"+dir : ""
 
      return axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+dir : ''}`, {}).then(response => {
            
@@ -116,7 +116,7 @@ export default class FileSystem {
 
     uploadFile ( component, file, username, dir ) {
 
-    dir = !!dir ? "?dir="+dir : ""
+    let dir = !!dir ? "?dir="+dir : ""
 
      axios.post(API_SERVER+"/api/files/upload/"+username+dir, file).then(response => {
            

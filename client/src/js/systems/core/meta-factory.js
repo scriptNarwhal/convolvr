@@ -43,6 +43,14 @@ export default class MetaFactorySystem {
 
         }
 
+        if ( typeof source == 'string' && source == 'self' ) {
+            
+            if ( assetType == "file" )
+                            
+                source = component.state.file.res.listFiles.data || []
+            // This will have to happen async, in a callback                
+        }
+
         if ( typeof source.map == 'function') { // array of geometries / materials, components, entities, worlds, places, files, (directories could use source[category])
 
             source.map( (item, i) => {

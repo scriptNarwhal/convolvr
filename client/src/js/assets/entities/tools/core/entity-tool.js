@@ -16,14 +16,13 @@ export default class EntityTool extends Tool  {
 
       Object.keys( allEntities ).map( name => {
     
-        if ( name != "default-avatar" && name != "tool-menu" && name != "help-screen" && name != "chat-screen" ) {
+        if ( name != "default-avatar" && name != "tool-menu" && name != "help-screen" && name != "chat-screen" )
 
           allOptions.push( name ) 
 
-        }
         
       })
-      console.log( "all entities", allEntities )
+
       this.mesh = null
       this.name = "Entity Tool"
       this.options = {

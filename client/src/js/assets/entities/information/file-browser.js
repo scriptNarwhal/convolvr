@@ -20,6 +20,16 @@ let block = {
                     username: "public",
                     dir: ""
                 }
+            },
+            metaFactory: {
+                type: "file",
+                dataSource: "self" // implement self source
+            },
+            layout: {
+                type: "grid",
+                mode: "factory",
+                columns: 6,
+                axis: "xz"
             }
         },
         quaternion: [ 0, 0, 0, 1 ],
