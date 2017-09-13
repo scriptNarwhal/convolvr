@@ -150,22 +150,25 @@ function _initVideoChat ( world: Convolvr, helpScreen: Entity, voxel: Array<numb
 
 function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: Array<number> ) {
 
-  httpClient = world.systems.assets.makeEntity( "help-screen", true, {}, voxel ) // simple example of displaying GET response from server
-    let compProps = httpClient.components[0].props
-    compProps.rest = {
-      get: {
-        url: "http://localhost:3007/api/chunks/"+world.name+"/0x0x0,-1x0x0"
-      }
+  let httpClient = world.systems.assets.makeEntity( "help-screen", true, {}, voxel ), // simple example of displaying GET response from server
+      compProps = httpClient.components[0].props
+
+  compProps.rest = {
+    get: {
+      url: "http://localhost:3007/api/chunks/"+world.name+"/0x0x0,-1x0x0"
     }
-    compProps.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0,-1x0x0"] // really just clearing the default text until something loads
-    compProps.text.color = "#f0f0f0"
-    httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
-    httpClient.update( [ -80000, 0, 0 ] )
+  }
+  compProps.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0,-1x0x0"] // really just clearing the default text until something loads
+  compProps.text.color = "#f0f0f0"
+  httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
+  httpClient.update( [ -80000, 0, 0 ] )
 
 }
 
 function _initFileSystemTest ( world: Convolvr, helpScreen: Entity, voxel: Array<number> ) {
 
-  // implement
+  let fileBrowser = world.systems.assets.makeEntity( "file-browser", true, {}, voxel ) // show public files in 3d
+  fileBrowser.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
+  fileBrowser.update( [ -240000, 0, 0 ] )
 
 }

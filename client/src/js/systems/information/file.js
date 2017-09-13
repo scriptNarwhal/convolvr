@@ -40,6 +40,36 @@ export default class FileSystem {
         return {
             workingPath: [],
             workingDirectory: "/",
+            res: {
+                createFile: {
+                    data: null,
+                    error: null
+                },
+                uploadFile: {
+                    data: null,
+                    error: null
+                },
+                listFiles: {
+                    data: null,
+                    error: null
+                },
+                listDirectories: {
+                    data: null,
+                    error: null
+                },
+                readText: {
+                    data: null,
+                    error: null
+                },
+                writeText: {
+                    data: null,
+                    error: null
+                },
+                deleteFile: {
+                    data: null,
+                    error: null
+                },
+            },
             setWorkingDirectory: ( username, dir ) => {
                 this.setWorkingDirectory( component, username, dir )
             },
@@ -74,11 +104,11 @@ export default class FileSystem {
 
      return axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+dir : ''}`, {}).then(response => {
            
-           component.state.file.createFileResponse = response.data
+           component.state.file.res.createFile.data = response.data
           
         }).catch(err => {
            
-           component.state.file.createFileError = err
+           component.state.file.res.createFile.error = err
            
         })
 
@@ -90,11 +120,11 @@ export default class FileSystem {
 
      axios.post(API_SERVER+"/api/files/upload/"+username+dir, file).then(response => {
            
-           component.state.file.uploadFileResponse = response.data
+           component.state.file.res.uploadFile.data = response.data
           
         }).catch(err => {
            
-            component.state.file.uploadFileError = err
+            component.state.file.res.uploadFile.error = err
            
         })
 
@@ -106,11 +136,11 @@ export default class FileSystem {
 
         return axios.post(`${API_SERVER}/api/directories/${username}/${dir != null ? "?dir="+dir : ''}`, {}).then(response => {
            
-           component.state.file.createDirectoryResponse = response.data
+           component.state.file.res.createDirectory.data = response.data
           
         }).catch(err => {
            
-           component.state.file.createDirectoryError = err
+           component.state.file.res.createDirectory.error = err
            
         })
 
@@ -120,11 +150,11 @@ export default class FileSystem {
 
         axios.get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir="+dir : ''}`).then(response => {
              
-            component.state.file.listFilesResponse.data
+            component.state.file.res.listFiles.data = response.data
           
         }).catch(err => {
            
-           component.state.file.listFilesError = err
+           component.state.file.res.listFiles.error = err
           
         })
 
@@ -134,11 +164,11 @@ export default class FileSystem {
 
         axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir="+dir : ''}`).then(response => {
            
-          component.state.file.listDirectoriesResponse = response.data
+          component.state.file.res.listDirectories.data = response.data
           
         }).catch(err => {
            
-          component.state.file.listDirectoriesError = err
+          component.state.file.res.listDirectories.error = err
            
         })
 
@@ -161,11 +191,11 @@ export default class FileSystem {
 
         axios.get(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`).then(response => {
            
-           component.state.file.readTextResponse = response.data
+           component.state.file.res.readText.data = response.data
           
         }).catch(err => {
            
-          component.state.file.readTextError = err
+          component.state.file.res.readText.error = err
             
         })
 
@@ -176,11 +206,11 @@ export default class FileSystem {
         dir = !!dir && dir != "" ? "/"+dir : ""
         axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`, {text: text}).then(response => {
            
-           component.state.file.writeTextResponse = response.data
+           component.state.file.res.writeText.data = response.data
           
         }).catch(err => {
 
-           component.state.file.writeTextError = err
+           component.state.file.res.writeText.error = err
           
         })
 

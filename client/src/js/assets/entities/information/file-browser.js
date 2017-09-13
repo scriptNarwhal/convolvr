@@ -4,17 +4,26 @@ let block = {
     components: [{
         props: {
             geometry: {
-            merge: true,
                 shape: "box",
-                size: [42000, 42000, 1000]
+                size: [ 42000, 42000, 42000 ]
             },
             material: {
-                color: 0x808080,
-                name: "hard-light"
+                color: 0xffffff,
+                name: "metal"
+            },
+            file: {
+                listFiles: {
+                    username: "public",
+                    dir: ""
+                },
+                listDirectories: {
+                    username: "public",
+                    dir: ""
+                }
             }
         },
         quaternion: [ 0, 0, 0, 1 ],
-        position: [0, 0, 0],
+        position: [ 0, 0, 0 ],
         components: []
     }],
     position: [ 0, 0, 0 ],
