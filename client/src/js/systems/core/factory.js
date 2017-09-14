@@ -13,14 +13,14 @@ export default class FactorySystem {
         this.world = world
 
     }
-  
 
-    init ( component: Component ) { //console.log("factory component init ", component) 
-        
+
+    init ( component: Component ) { //console.log("factory component init ", component)
+
         let prop = component.props.factory
-        
+
         if ( prop.autoGenerate !== false ) {
-            
+
             setTimeout(()=>{
 
                 this.generate( component )
@@ -55,9 +55,9 @@ export default class FactorySystem {
             quat:       Array<number>    = data.quaternion,
             components: Array<Component> = data.components,
             created:    Entity           = null
-            
+
         if ( type == 'entity' ) {
- 
+
             created = this._generateEntity( components, voxel, entityPos, quat, preset )
 
         } else if (type == 'component') {
@@ -119,7 +119,7 @@ export default class FactorySystem {
                 created.update(created.mesh.position.toArray())
 
             }
-            
+
         } else {
 
             console.error( "error generating entity", created, prop )
@@ -128,10 +128,10 @@ export default class FactorySystem {
 
     }
 
-    _generateEntity ( components: Array<Component>, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) { 
+    _generateEntity ( components: Array<Component>, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         if ( !! components && components.length > 0 ) { // debugging this..
-            
+
             components[0].props.miniature = { }
             components[0].props.toolUI = {
                 configureTool: {
@@ -139,7 +139,7 @@ export default class FactorySystem {
                     preset
                 }
             }
-        
+
         }
 
         return  new Entity( -1, components, position, quaternion, voxel )
@@ -160,7 +160,7 @@ export default class FactorySystem {
 
     _generateGeometry ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
-        return new Entity(-1, [{ 
+        return new Entity(-1, [{
                 props: Object.assign({}, {geometry: data}, {
                     mixin: true,
                     miniature: { scale: 8000 },
@@ -243,7 +243,7 @@ export default class FactorySystem {
                     mixin: true,
                     miniature: {},
                     assets: {
-                        images: [data] 
+                        images: [data]
                     },
                     material: {
                         name: "wireframe",
@@ -275,7 +275,7 @@ export default class FactorySystem {
                     portal: {
                         username: data.username,
                         world: data.name
-                    }, 
+                    },
                     material: {
                         name: "metal",
                         color: 0x00ffff // get actual world color here..
@@ -300,10 +300,10 @@ export default class FactorySystem {
                         username: data.username,
                         world: data.world,
                         place: data.name
-                    }, 
+                    },
                     material: {
                         name: "metal",
-                        color: 0xff8000 
+                        color: 0xff8000
                     },
                     geometry: {
                         shape: "sphere",
@@ -334,7 +334,7 @@ export default class FactorySystem {
                     },
                     material: {
                         name: "metal",
-                        color: 0x0080ff 
+                        color: 0x0080ff
                     },
                     geometry: {
                         shape: "sphere",
@@ -365,7 +365,7 @@ export default class FactorySystem {
                     },
                     material: {
                         name: "wireframe",
-                        color: 0x000000 
+                        color: 0x000000
                     },
                     geometry: {
                         shape: "sphere",
@@ -378,4 +378,3 @@ export default class FactorySystem {
     }
 
 }
-
