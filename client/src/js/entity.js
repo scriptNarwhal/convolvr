@@ -63,6 +63,12 @@ export default class Entity {
 
   }
 
+  reInit( ) {
+
+    this.init( this.parent, { updateWorkers: true } )
+
+  }
+
   init ( parent, config, callback ) {
 
     let mesh = new THREE.Object3D(),
@@ -90,6 +96,7 @@ export default class Entity {
 
     this.lastFace = 0
     this.componentsByProp = {} // reset before (re)registering components 
+    this.allComponents = []
     
     if ( this.mesh != null ) {
 
@@ -151,7 +158,7 @@ export default class Entity {
         if ( comp.merged ) {
           
           this.combinedComponents.push( comp )
-          materials.push(compMesh.material)
+          materials.push( compMesh.material )
           compMesh.updateMatrix()
 
           while ( face > -1 ) {
@@ -257,11 +264,8 @@ export default class Entity {
 
   addToVoxel ( coords, mesh ) {
     
-        this.getVoxelForUpdate( coords, addTo => { 
-    
-          addTo.meshes.push( mesh )
-    
-        })
+    this.getVoxelForUpdate( coords, addTo => { addTo.meshes.push( mesh ) })
+
   }
 
   removeFromVoxel ( coords, mesh ) {
@@ -312,6 +316,7 @@ export default class Entity {
 
   }
 
+  // refactor to return instantiated component
   getComponentByPath ( path, pathIndex, components = false ) {
 
     let foundComponent = null
@@ -332,8 +337,11 @@ export default class Entity {
 
   }
 
-  updateComponentAtPath ( component, path, pathIndex = 0, components = false ) {
-    
+  updateComponentAtPath ( component, path, pathIndex = 0, components = false, resetState = false ) {
+
+    let oldState = {},
+        sanitizedState = {}
+
     console.log( "update component at path", component, path, pathIndex, components )
 
     if ( components == false )
@@ -346,8 +354,29 @@ export default class Entity {
 
     } else {
 
-      components[ path[ pathIndex ] ] = component
+      if ( resetState == false ) {
 
+        console.warn( path, pathIndex, path[ pathIndex ], this.allComponents )
+        oldState = this.allComponents[ path[ pathIndex ] ].state
+
+        if ( oldState.tool || oldState.toolUI )
+
+          sanitizedState = { tool: {}, toolUI: {} }
+        
+        component.state = Object.assign({}, oldState, component.state || {}, sanitizedState )
+
+      }
+
+      if ( component.data ) {
+
+        components[ path[ pathIndex ] ] = component.data
+
+      } else {
+
+        components[ path[ pathIndex ] ] = component
+
+      }
+    
     }   
     
   }

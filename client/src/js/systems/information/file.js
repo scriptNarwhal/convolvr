@@ -14,7 +14,9 @@ export default class FileSystem {
     init ( component: Component ) { 
 
         let prop = component.props.file,
-            params = {}
+            defaultCallbacks = [],
+            params = {},
+            res = {}
 
         if ( prop.listFiles ) { // init logic here... only read methods; (write logic triggered by events)
 
@@ -37,46 +39,56 @@ export default class FileSystem {
 
         }
 
+        if ( prop.refresh !== false )
+
+            defaultCallbacks.push( () => {
+
+                component.entity.updateComponentAtPath( component, component.path )
+                    
+            })
+
+        res = {
+            createFile: {
+                data: null,
+                error: null,
+                callbacks: defaultCallbacks
+            },
+            uploadFile: {
+                data: null,
+                error: null,
+                callbacks: defaultCallbacks
+            },
+            listFiles: {
+                data: null,
+                error: null,
+                callbacks: defaultCallbacks
+            },
+            listDirectories: {
+                data: null,
+                error: null,
+                callbacks: defaultCallbacks
+            },
+            readText: {
+                data: null,
+                error: null,
+                callbacks: defaultCallbacks
+            },
+            writeText: {
+                data: null,
+                error: null,
+                callbacks: defaultCallbacks
+            },
+            deleteFile: {
+                data: null,
+                error: null,
+                callbacks: defaultCallbacks
+            }
+        }
+
         return {
             workingPath: [],
             workingDirectory: "/",
-            res: {
-                createFile: {
-                    data: null,
-                    error: null,
-                    callbacks: []
-                },
-                uploadFile: {
-                    data: null,
-                    error: null,
-                    callbacks: []
-                },
-                listFiles: {
-                    data: null,
-                    error: null,
-                    callbacks: []
-                },
-                listDirectories: {
-                    data: null,
-                    error: null,
-                    callbacks: []
-                },
-                readText: {
-                    data: null,
-                    error: null,
-                    callbacks: []
-                },
-                writeText: {
-                    data: null,
-                    error: null,
-                    callbacks: []
-                },
-                deleteFile: {
-                    data: null,
-                    error: null,
-                    callbacks: []
-                },
-            },
+            res,
             setWorkingDirectory: ( username, dir ) => {
                 this.setWorkingDirectory( component, username, dir )
             },

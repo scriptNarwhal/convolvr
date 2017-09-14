@@ -3,10 +3,9 @@ export default class MetaFactorySystem {
     constructor ( world ) {
 
         this.world = world
-        // this should only support a limited subset of things.. as not to cuase insanity :P
-        // Ideally just entities & components (geometry, material, generic system) by category.. 
-        // ** Making it easy to create tool option panels 
-
+        // This system will add factory components for sets of entities, components, systems by category.. 
+        // Alternately a prop.source of "self" can be specified, in which case data is pulled from system prop.type if it exists in the component. 
+        // TODO: implement prop.source == "component" and prop.componentPath = [1, 0... ]
     }
 
     init ( component ) { 
@@ -48,7 +47,7 @@ export default class MetaFactorySystem {
             if ( assetType == "file" )
                             
                 source = component.state.file.res.listFiles.data || []
-            // This will have to happen async, in a callback                
+                // entity will re-init after files load              
         }
 
         if ( typeof source.map == 'function') { // array of geometries / materials, components, entities, worlds, places, files, (directories could use source[category])
