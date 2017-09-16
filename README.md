@@ -72,8 +72,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 ```shell
   git clone https://github.com/convolvr/convolvr
   go get github.com/convolvr/convolvr/server
-  cd convolvr/client && npm install
-  ./build.sh # or ./auto-build.sh to build continuously
+  cd convolvr/client && npm install && npm start &
   cd ../cmd && go build && ./cmd # starts http on :3007 by default
 ```
 ![infinite procedural worlds](https://spacehexagon.com/misc/Screenshot_921.png)
