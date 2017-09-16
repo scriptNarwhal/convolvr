@@ -1,12 +1,20 @@
 [![npm version](https://badge.fury.io/js/convolvr.svg)](https://badge.fury.io/js/convolvr)
 ## Overview
-- [Component](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/component.js) [Entity](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/entity.js) [System](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/systems/index.js) [Framework](https://github.com/Convolvr/convolvr/wiki)
+- [Component](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/component.js) [Entity](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/entity.js) [System](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/systems/index.js) [Framework](https://github.com/Convolvr/convolvr/wiki) built on [Three.js](https://github.com/mrdoob/three.js)
 - Multiplayer telemetry, chat, action & asset persistence provided by server using [Nexus](https://github.com/ds0nt/nexus)
 - Built in tools to build world entities from components
 - Tools to visually build components from props (geometries, materials & other systems)
 - Handles user input from keyboard/mouse, touch, tracked controllers
 - Supports infinite, configurable, procedural worlds 
 - Mesh based VR UI; Multiline text rendering
+
+## Installation
+```shell
+  git clone https://github.com/convolvr/convolvr
+  go get github.com/convolvr/convolvr/server
+  cd convolvr/client && npm install && npm start &
+  cd ../cmd && go build && ./cmd # starts http on :3007 by default
+```
 
 ## Client Example [full code here](https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
 ```js
@@ -69,11 +77,4 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 - [Generating Buildings](https://github.com/convolvr/convolvr/blob/dev/server/generated-buildings.go)
 - [Handling User Actions](https://github.com/convolvr/convolvr/blob/dev/server/socket.go#L17)
 
-## Installation
-```shell
-  git clone https://github.com/convolvr/convolvr
-  go get github.com/convolvr/convolvr/server
-  cd convolvr/client && npm install && npm start &
-  cd ../cmd && go build && ./cmd # starts http on :3007 by default
-```
 ![infinite procedural worlds](https://spacehexagon.com/misc/Screenshot_921.png)
