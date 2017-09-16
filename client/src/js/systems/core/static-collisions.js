@@ -81,8 +81,8 @@ export default class StaticCollisions {
 			user.velocity.z *= 0.98
 			user.falling = false
 
-			} else if ( message.command == "floor collision" ) { console.log("floor collision", message.data.position, message.data)
-				// 
+			} else if ( message.command == "floor collision" ) { 
+				// console.log("floor collision", message.data.position, message.data)
 				three.camera.position.set(three.camera.position.x, message.data.position[1]+vrHeight, three.camera.position.z)
 
 				if ( Math.abs(user.velocity.y) > 250000 ) {

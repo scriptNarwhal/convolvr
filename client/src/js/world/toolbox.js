@@ -313,44 +313,40 @@ export default class Toolbox {
       let hand   = this.hands[ handIndex ].mesh,
           entity = null, //hand.children[0].userData.component.props.,
           cursor = null,
-          pos    = [0,0,0], //entity.mesh.position,
-          coords = [0,0,0],
+          pos    = [ 0, 0, 0 ], //entity.mesh.position,
+          coords = [ 0, 0, 0 ],
           voxels = this.world.terrain.voxels
      
       if ( this.user.avatar ) {
 
-        cursor = this.user.avatar.componentsByProp.cursor[1+hand]
+        cursor = this.user.avatar.componentsByProp.cursor[ 1 + handIndex ]
         entity = !!cursor ? cursor.state.cursor.entity : false
         pos = !!entity ? entity.mesh.position.toArray() : pos
 
       }
+      
       console.warn( "grab", value)
-      if ( !! entity ) {
-        
-        if ( value == -1 ) {
+       
+      if ( value == -1 && hand.userData.grabbedEntity ) {
 
-          hand.remove( entity.mesh )
-          three.scene.add( entity.mesh )
-          entity.update( [hand.position.x, hand.position.y, hand.position.z] )
-          hand.userData.grabbedEntity = false
-          // probably use haptic system for state ^^^
-          //coords = [Math.floor(pos.x / 928000), 0, Math.floor(pos.z / 807360)],
-        } else {
-
-          if (!!! hand.userData.grabbedEntity) {
-
-            three.scene.remove(entity.mesh)
-            hand.userData.grabbedEntity = entity
-            hand.add(entity.mesh)
-            //entity.update( [0, 0, 0] )
-            entity.mesh.position.fromArray([0,0,0])
-
-          }
+        console.warn("Let Go")
+        hand.remove( entity.mesh )
+        three.scene.add( entity.mesh )
+        entity.update( [hand.position.x, hand.position.y, hand.position.z] )
+        hand.userData.grabbedEntity = false
+        // should be using hand system for state ^^^
+       
+        } else if ( !! entity && false == hand.userData.grabbedEntity ) {
+          //console.log( this.hands[ handIndex ].componentsByProp.hand[0].state.hand )
+          console.warn("Pick Up")
+          three.scene.remove( entity.mesh )
+          hand.userData.grabbedEntity = entity
+          hand.add(entity.mesh)
+          entity.mesh.position.fromArray([0,0,0])
+          entity.mesh.updateMatrix()
 
         }
-        
-      }
-      // show feedback
+
     }
 
     setHandOrientation ( hand, position, orientation ) {

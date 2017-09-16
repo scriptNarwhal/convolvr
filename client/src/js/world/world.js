@@ -349,18 +349,19 @@ export default class Convolvr {
 
 	generateFullLOD ( coords ) {
 
-			let voxel = this.terrain.voxels[coords],
-				scene = three.scene
+		let voxel = this.terrain.voxels[coords],
+			scene = three.scene
 
-			if ( voxel != null && voxel.cleanUp == false ) {
+		if ( voxel != null && voxel.cleanUp == false ) {
 
-				voxel.entities.map( ( entity, i )=>{
+			voxel.entities.map( ( entity, i )=>{
 
-					i > 2 && entity.init(scene)
+				i > 2 && entity.init(scene)
 
-				})
+			})
 
-			}
+		}
+
 	}
 
 	sendUserData () {
@@ -421,7 +422,7 @@ export default class Convolvr {
 
 		let pos = position || this.camera.position
 
-		return [Math.floor(pos.x / GRID_SIZE[0]), 0, Math.floor(pos.z / GRID_SIZE[2])]
+		return [ Math.floor( pos.x / GRID_SIZE[ 0 ] ), 0, Math.floor( pos.z / GRID_SIZE[ 2 ] ) ]
 
 	}
 
