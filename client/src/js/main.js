@@ -33,11 +33,11 @@ import Toolbox from './world/toolbox'
 import Entity from './entity'
 
 let socket:       Object   = events,
-    token:        string   = "",
-		userInput:    UserInput,
-		user:         User     = new User(),
-	  loadingWorld: Convolvr = null,
-	  avatar:       Entity   = null, 
+    token:        string   = "", 
+    userInput:    UserInput,
+    user:         User     = new User(),
+    loadingWorld: Convolvr = null,
+    avatar:       Entity   = null, 
     toolMenu:     Entity   = null, // built in ui entities
     helpScreen:   Entity   = null, 
     chatScreen:   Entity   = null,
