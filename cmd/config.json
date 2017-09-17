@@ -12,6 +12,6 @@
       }
     },
     "logging": {
-      "actions": false
+      "actions": true
     }
 }

@@ -41,7 +41,7 @@ class App extends Component {
       })
 
       this.notify(chatMessage.message, chatMessage.from)
-      worldName = this.props.world == "overworld" ? "Convolvr" : this.props.world
+      worldName = this.props.world.toLowerCase() == "overworld" ? "Convolvr" : this.props.world
 
       if (this.props.focus == false) {
 

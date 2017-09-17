@@ -255,7 +255,7 @@ export default class Convolvr {
 
 		}
 
-		document.title = config.name == 'Overworld' && config.userName == 'convolvr' ? `Convolvr` : config.name // make "Convolvr" default configurable via admin settings
+		document.title = config.name.toLowerCase() == 'overworld' && config.userName == 'convolvr' ? `Convolvr` : config.name // make "Convolvr" default configurable via admin settings
 		false == deferWorldLoading && rebuildWorld()
 
 	}

@@ -7,6 +7,7 @@
 - Handles user input from keyboard/mouse, touch, tracked controllers
 - Supports infinite, configurable, procedural worlds 
 - Mesh based VR UI; Multiline text rendering
+- [Developer Documentation](https://github.com/Convolvr/convolvr/wiki/Development)
 
 ## Installation
 ```shell
@@ -77,4 +78,4 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 - [Generating Buildings](https://github.com/convolvr/convolvr/blob/dev/server/generated-buildings.go)
 - [Handling User Actions](https://github.com/convolvr/convolvr/blob/dev/server/socket.go#L17)
 
-![infinite procedural worlds](https://spacehexagon.com/misc/Screenshot_921.png)
+![infinite procedural worlds](web/images/Screenshot_157.png)
