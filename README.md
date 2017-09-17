@@ -7,7 +7,6 @@
 - Handles user input from keyboard/mouse, touch, tracked controllers
 - Supports infinite, configurable, procedural worlds 
 - Mesh based VR UI; Multiline text rendering
-- [Developer Documentation](https://github.com/Convolvr/convolvr/wiki/Development)
 
 ## Installation
 ```shell
@@ -19,7 +18,9 @@
   cd ../cmd && go build && ./cmd # starts http on :3007 by default
 ```
 
-## Client Example [full code here](https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
+## Development [Wiki](https://github.com/Convolvr/convolvr/wiki/Development)
+
+### Client Example [full code here](https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
 ```js
 loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
