@@ -20,6 +20,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 		action    ToolAction
 		entity    Entity
 		entityOut []byte
+		voxelKey  string
 	)
 
 	if err := json.Unmarshal([]byte(p.Data), &action); err != nil {
@@ -29,6 +30,8 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 	x := strconv.Itoa(action.Coords[0])
 	y := strconv.Itoa(action.Coords[1])
 	z := strconv.Itoa(action.Coords[2])
+
+	voxelKey = x + "." + y + "." + z
 	voxel := db.From("World_" + action.World).From("X_" + x).From("Y_" + y).From("Z_" + z)
 	voxelEntities := voxel.From("entities")
 
@@ -52,7 +55,6 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 			}
 
 		}
-		log.Printf(`tool action: "%s"`, action.Tool) // modify chunk where this tool was used...
 
 	} else { // doing something with an entity
 
@@ -83,7 +85,6 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 				if len(action.Components) > 0 {
 
 					updateComponentAtPath(&action.Components[0], entity.Components, action.ComponentPath, 0)
-					log.Printf(`tool action: "%s"`, action.Tool)
 
 				} else {
 
@@ -102,6 +103,10 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 					log.Println(deleteErr)
 				}
 
+			}
+
+			if logActions {
+				log.Printf(`World: "%s":"%s" User: "%s", Action: "%s"`, action.World, voxelKey, action.User, action.Tool)
 			}
 
 			saveErr := voxelEntities.Save(&entity)

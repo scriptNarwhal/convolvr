@@ -356,8 +356,15 @@ export default class Entity {
 
       if ( resetState == false ) {
 
-        console.warn( path, pathIndex, path[ pathIndex ], this.allComponents )
-        oldState = this.allComponents[ path[ pathIndex ] ].state
+        if ( this.allComponents[ path[ pathIndex ] ]) {
+        
+          oldState = this.allComponents[ path[ pathIndex ] ].state
+        
+        } else {
+
+          console.warn( "Error finding component state", path, pathIndex, path[ pathIndex ], this.allComponents )
+
+        }
 
         if ( oldState.tool || oldState.toolUI )
 

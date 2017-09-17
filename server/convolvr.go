@@ -15,8 +15,9 @@ import (
 )
 
 var (
-	hub *nexus.Nexus
-	db  *storm.DB
+	hub        *nexus.Nexus
+	db         *storm.DB
+	logActions bool
 )
 
 // TemplateRenderer is a custom html/template renderer for Echo framework
@@ -43,6 +44,7 @@ func Start(configName string) {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 	port := fmt.Sprintf(":%d", viper.GetInt("host.port"))
+	logActions = viper.GetBool("logging.actions")
 
 	e := echo.New()
 	e.Use(middleware.CORS())

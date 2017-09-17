@@ -63,7 +63,7 @@ export default class SystemTool extends Tool {
 
     primaryAction ( telemetry) {
       
-      let system = this.props.system,
+      let system = this.options.system,
           cursor = telemetry.cursor,
           user = this.world.user,
           systems = this.world.systems,

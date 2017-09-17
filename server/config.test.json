@@ -10,5 +10,8 @@
       "spark": {
         "db": "world.test.db"
       }
+    },
+    "logging": {
+      "actions": true
     }
 }
