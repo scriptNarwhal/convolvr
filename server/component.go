@@ -2,25 +2,10 @@ package convolvr
 
 import (
 	"net/http"
-
+	"github.com/Convolvr/core"
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 )
-
-type Component struct {
-	ID         int                    `storm:"id,increment" json:"id"`
-	Name       string                 `json:"name"`
-	Position   []float64              `json:"position"`
-	Quaternion []float64              `json:"quaternion",omitempty`
-	Props      map[string]interface{} `json:"props"`
-	State      map[string]interface{} `json:"state"`
-	Components []*Component           `json:"components"`
-	Tags       []string               `json:"tags",omitempty`
-}
-
-func NewComponent(name string, pos []float64, quat []float64, props map[string]interface{}, state map[string]interface{}, components []*Component, tags []string) *Component {
-	return &Component{Name: name, Position: pos, Quaternion: quat, Props: props, State: state, Components: components, Tags: tags}
-}
 
 func getComponents(c echo.Context) error { // component types
 
@@ -55,42 +40,5 @@ func postComponents(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, nil)
-
-}
-
-func getComponentByPath(components []*Component, path []int, pathIndex int) *Component {
-
-	var (
-		foundComponent *Component
-	)
-
-	if pathIndex+1 < len(path) {
-
-		foundComponent = getComponentByPath(components[path[pathIndex]].Components, path, pathIndex+1)
-
-	} else {
-
-		foundComponent = components[path[pathIndex]]
-
-	}
-
-	return foundComponent
-
-}
-
-func updateComponentAtPath(component *Component, components []*Component, path []int, pathIndex int) {
-
-	if pathIndex+1 < len(path) {
-
-		updateComponentAtPath(component, components[path[pathIndex]].Components, path, pathIndex+1)
-
-	} else {
-
-		if pathIndex < len(path) && path[pathIndex] < len(components) {
-
-			components[path[pathIndex]] = component
-
-		}
-	}
 
 }

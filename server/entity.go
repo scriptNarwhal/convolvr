@@ -3,36 +3,10 @@ package convolvr
 import (
 	"net/http"
 	"strings"
-
+	"github.com/Convolvr/core"
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 )
-
-type Entity struct {
-	ID             int          `storm:"id,increment" json:"id"`
-	Name           string       `storm:"index" json:"name"`
-	World          string       `json:"world"`
-	Voxel          []int        `json:"voxel"`
-	Components     []*Component `storm:"inline" json:"components"`
-	Position       []float64    `json:"position"`
-	Quaternion     []float64    `json:"quaternion",omitempty`
-	BoundingRadius float64      `json:"boundingRadius",omitempty`
-	Tags           []string     `json:"tags",omitempty`
-}
-
-func NewEntity(id int, name string, world string, voxel []int, components []*Component, pos []float64, quat []float64, boundingRadius float64, tags []string) *Entity {
-
-	if id == -1 {
-
-		return &Entity{Name: name, World: world, Voxel: voxel, Components: components, Position: pos, Quaternion: quat, BoundingRadius: boundingRadius, Tags: tags}
-
-	} else {
-
-		return &Entity{ID: id, Name: name, World: world, Components: components, Position: pos, Quaternion: quat, BoundingRadius: boundingRadius, Tags: tags}
-
-	}
-
-}
 
 func getEntities(c echo.Context) error { // entities from and for everyone
 	var entities []Entity
