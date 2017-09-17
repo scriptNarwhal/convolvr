@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"io"
 	"net/http"
-
+	core "github.com/Convolvr/core"
 	log "github.com/Sirupsen/logrus"
 	"github.com/asdine/storm"
 	"github.com/ds0nt/nexus"
@@ -58,8 +58,8 @@ func Start(configName string) {
 	worldErr := db.Init(&World{})
 	placeErr := db.Init(&Place{})
 	chunkErr := db.Init(&Voxel{})
-	componentErr := db.Init(&Component{})
-	entityErr := db.Init(&Entity{})
+	componentErr := db.Init(&core.Component{})
+	entityErr := db.Init(&core.Entity{})
 	chatHistory := db.From("chathistory")
 	historyErr := chatHistory.Init(&ChatMessage{})
 	// indexErr := db.ReIndex(&World{})

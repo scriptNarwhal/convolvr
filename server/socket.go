@@ -3,7 +3,7 @@ package convolvr
 import (
 	"encoding/json"
 	"strconv"
-
+	core "github.com/Convolvr/core"
 	log "github.com/Sirupsen/logrus"
 	"github.com/ds0nt/nexus"
 )
@@ -18,7 +18,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 
 	var (
 		action    ToolAction
-		entity    Entity
+		entity    core.Entity
 		entityOut []byte
 		voxelKey  string
 	)
@@ -42,7 +42,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 			if len(action.Entity.Components) == 0 {
 				log.Println("Can't save entity with 0 components")
 			} else {
-				entity = *NewEntity(-1, "", action.World, action.Entity.Voxel, action.Entity.Components, action.Position, action.Quaternion, action.Entity.BoundingRadius, nil)
+				entity = *core.NewEntity(-1, "", action.World, action.Entity.Voxel, action.Entity.Components, action.Position, action.Quaternion, action.Entity.BoundingRadius, nil)
 				saveErr := voxelEntities.Save(&entity)
 				if saveErr != nil {
 					log.Println(saveErr)
@@ -66,11 +66,11 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 
 				if len(entity.Components) < 48 { // will increase this limit once re-initialization uses more caching || magic, client-side
 
-					newComps := []*Component{}
+					newComps := []*core.Component{}
 					for _, v := range action.Components {
 						if len(v.Position) > 0 {
 
-							newComp := *NewComponent(v.Name, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props, v.State, v.Components, nil)
+							newComp := *core.NewComponent(v.Name, []float64{v.Position[0], v.Position[1], v.Position[2]}, v.Quaternion, v.Props, v.State, v.Components, nil)
 							newComps = append(newComps, &newComp)
 
 						}
@@ -84,7 +84,7 @@ func toolAction(c *nexus.Client, p *nexus.Packet) { // 📎💬 looks like you'r
 
 				if len(action.Components) > 0 {
 
-					updateComponentAtPath(&action.Components[0], entity.Components, action.ComponentPath, 0)
+					core.UpdateComponentAtPath(&action.Components[0], entity.Components, action.ComponentPath, 0)
 
 				} else {
 

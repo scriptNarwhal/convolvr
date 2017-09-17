@@ -2,7 +2,7 @@ package convolvr
 
 import (
 	"net/http"
-
+	core "github.com/Convolvr/core"
 	log "github.com/Sirupsen/logrus"
 	"github.com/asdine/storm/q"
 	"github.com/labstack/echo"
@@ -87,7 +87,7 @@ func postUsers(c echo.Context) (err error) {
 func getUserInventory(c echo.Context) (err error) {
 
 	var (
-		itemsFound []*Entity
+		itemsFound []*core.Entity
 	)
 	userId := c.Param("userId")
 	inventoryId := c.Param("inventoryId")
@@ -112,14 +112,14 @@ func getUserInventory(c echo.Context) (err error) {
 func saveItemToInventory(c echo.Context) (err error) {
 
 	var (
-		item *Entity
+		item *core.Entity
 	)
 	userId := c.Param("userId")
 	inventoryId := c.Param("inventoryId")
 	inventories := db.From("inventories")
 	userInventories := inventories.From(userId)
 	userInventory := userInventories.From(inventoryId)
-	item = new(Entity)
+	item = new(core.Entity)
 	err = c.Bind(item)
 	if err != nil {
 		log.Println(err)

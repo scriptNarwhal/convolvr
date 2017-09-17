@@ -2,14 +2,14 @@ package convolvr
 
 import (
 	"net/http"
-	"github.com/Convolvr/core"
+	core "github.com/Convolvr/core"
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 )
 
 func getComponents(c echo.Context) error { // component types
 
-	var components []Component
+	var components []core.Component
 	err := db.All(&components)
 
 	if err != nil {
@@ -24,10 +24,10 @@ func getComponents(c echo.Context) error { // component types
 func postComponents(c echo.Context) error {
 
 	var (
-		component *Component
+		component *core.Component
 	)
 
-	component = new(Component)
+	component = new(core.Component)
 
 	if err := c.Bind(&component); err != nil {
 		return err

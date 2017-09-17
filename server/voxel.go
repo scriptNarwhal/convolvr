@@ -5,7 +5,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"github.com/Convolvr/generate"
+	core "github.com/Convolvr/core"
+	gen "github.com/Convolvr/generate"
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 )
@@ -18,10 +19,10 @@ type Voxel struct {
 	Altitude float32   `json:"altitude"`
 	World    string    `storm:"id" json:"world"`
 	Name     string    `json:"name"`
-	Entities []*Entity `json:"entities"`
+	Entities []*core.Entity `json:"entities"`
 }
 
-func NewVoxel(id int, x int, y int, z int, alt float32, world string, name string, entities []*Entity) *Voxel {
+func NewVoxel(id int, x int, y int, z int, alt float32, world string, name string, entities []*core.Entity) *Voxel {
 	return &Voxel{id, x, y, z, alt, world, name, entities}
 }
 
@@ -31,7 +32,7 @@ func getWorldChunks(c echo.Context) error {
 		generatedChunk Voxel
 		chunksData     []Voxel
 		foundChunks    []Voxel
-		entities       []*Entity
+		entities       []*core.Entity
 	)
 	generatedBuildings := 0
 	chunk := c.Param("chunks")
@@ -78,9 +79,9 @@ func getWorldChunks(c echo.Context) error {
 			}
 
 			// create terrain as entity.. the 1st entity, or ideally, one with the largeset bounding radius should have higher LOD priority
-			entities = append(entities, generateTerrain(world, x, y, z, altitude, flatArea, worldData.Terrain.Color, "default"))
+			entities = append(entities, gen.GenerateTerrain(world, x, y, z, altitude, flatArea, worldData.Terrain.Color, "default"))
 
-			initErr := voxelEntities.Init(&Entity{})
+			initErr := voxelEntities.Init(&core.Entity{})
 			if initErr != nil {
 				log.Println(initErr)
 			}
@@ -89,8 +90,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.NPCS {
 
-				if canPlaceNPCAt(x, 0, z) {
-					entities = append(entities, generateNPC(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceNPCAt(x, 0, z) {
+					entities = append(entities, gen.GenerateNPC(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -98,8 +99,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Trees {
 
-				if canPlaceTreeAt(x, 0, z) {
-					entities = append(entities, generateTree(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceTreeAt(x, 0, z) {
+					entities = append(entities, gen.GenerateTree(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -107,8 +108,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Structures {
 
-				if canPlaceStructureAt(x, 0, z) {
-					entities = append(entities, generateBuilding(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceStructureAt(x, 0, z) {
+					entities = append(entities, gen.GenerateBuilding(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -116,8 +117,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Roads {
 
-				if canPlaceRoadAt(x, 0, z) {
-					entities = append(entities, generateRoad(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceRoadAt(x, 0, z) {
+					entities = append(entities, gen.GenerateRoad(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -125,8 +126,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Walls {
 
-				if canPlaceWallAt(x, 0, z) {
-					entities = append(entities, generateWall(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceWallAt(x, 0, z) {
+					entities = append(entities, gen.GenerateWall(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -134,8 +135,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Vehicles {
 
-				if canPlaceVehicleAt(x, 0, z) {
-					entities = append(entities, generateVehicle(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceVehicleAt(x, 0, z) {
+					entities = append(entities, gen.GenerateVehicle(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -143,16 +144,16 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Tools {
 
-				if canPlaceToolAt(x, 0, z) {
-					entities = append(entities, generateTool(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceToolAt(x, 0, z) {
+					entities = append(entities, gen.GenerateTool(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
 			}
 			if worldData.Spawn.Pylons {
 
-				if canPlacePylonAt(x, 0, z) {
-					entities = append(entities, generatePylon(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlacePylonAt(x, 0, z) {
+					entities = append(entities, gen.GeneratePylon(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -161,8 +162,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Blocks {
 
-				if canPlaceBlockAt(x, 0, z) {
-					entities = append(entities, generateBlock(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceBlockAt(x, 0, z) {
+					entities = append(entities, gen.GenerateBlock(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -170,8 +171,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Orbs {
 
-				if canPlaceOrbAt(x, 0, z) {
-					entities = append(entities, generateOrb(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceOrbAt(x, 0, z) {
+					entities = append(entities, gen.GenerateOrb(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -179,8 +180,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Columns {
 
-				if canPlaceColumnAt(x, 0, z) {
-					entities = append(entities, generateColumn(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceColumnAt(x, 0, z) {
+					entities = append(entities, gen.GenerateColumn(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -188,8 +189,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Wheels {
 
-				if canPlaceWheelAt(x, 0, z) {
-					entities = append(entities, generateWheel(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceWheelAt(x, 0, z) {
+					entities = append(entities, gen.GenerateWheel(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -197,8 +198,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Pyramids {
 
-				if canPlacePyramidAt(x, 0, z) {
-					entities = append(entities, generatePyramid(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlacePyramidAt(x, 0, z) {
+					entities = append(entities, gen.GeneratePyramid(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -206,8 +207,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Nets {
 
-				if canPlaceNetAt(x, 0, z) {
-					entities = append(entities, generateNet(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceNetAt(x, 0, z) {
+					entities = append(entities, gen.GenerateNet(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 
@@ -215,8 +216,8 @@ func getWorldChunks(c echo.Context) error {
 
 			if worldData.Spawn.Curtains {
 
-				if canPlaceCurtainAt(x, 0, z) {
-					entities = append(entities, generateCurtain(generatedBuildings+1, world, x, z, altitude))
+				if gen.CanPlaceCurtainAt(x, 0, z) {
+					entities = append(entities, gen.GenerateCurtain(generatedBuildings+1, world, x, z, altitude))
 					generatedBuildings++
 				}
 

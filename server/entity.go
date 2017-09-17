@@ -3,13 +3,13 @@ package convolvr
 import (
 	"net/http"
 	"strings"
-	"github.com/Convolvr/core"
+	core "github.com/Convolvr/core"
 	log "github.com/Sirupsen/logrus"
 	"github.com/labstack/echo"
 )
 
 func getEntities(c echo.Context) error { // entities from and for everyone
-	var entities []Entity
+	var entities []core.Entity
 	err := db.All(&entities)
 	if err != nil {
 		log.Println(err)
@@ -20,9 +20,9 @@ func getEntities(c echo.Context) error { // entities from and for everyone
 
 func postEntities(c echo.Context) error { // save entity publicly / server-wide
 	var (
-		entity *Entity
+		entity *core.Entity
 	)
-	entity = new(Entity)
+	entity = new(core.Entity)
 	if err := c.Bind(&entity); err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func getEntitiesByUser(c echo.Context) error { // entities from someone, for eve
 
 func importAsEntityToWorld(c echo.Context) error {
 	var (
-		entity *Entity
+		entity *core.Entity
 	)
 	coordStr := c.Param("coords")
 	world := c.Param("worldName")
@@ -49,7 +49,7 @@ func importAsEntityToWorld(c echo.Context) error {
 	voxel := voxels.From("X_" + coords[0]).From("Y_" + coords[1]).From("Z_" + coords[2])
 	voxelEntities := voxel.From("entities")
 
-	entity = new(Entity)
+	entity = new(core.Entity)
 	if err := c.Bind(&entity); err != nil {
 		return err
 	}
