@@ -61,9 +61,13 @@ const styles = {
 class Profile extends Component {
 
   constructor () {
+
+    super()
+
     this.state = {
       profilePicture: '',
     }
+
   }
 
   componentWillMount () {

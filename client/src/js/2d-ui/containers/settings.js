@@ -61,30 +61,17 @@ const styles = {
 class Settings extends Component {
 
   constructor () {
-    
-    this.state = {
-      camera: 'fps',
-      lighting: 'high',
-      aa: 'on',
-      geometry: 2,
-      postProcessing: 'on',
-      defaultWorld: 'overworld',
-      welcomeMessage: 'Welcome to Convolvr!',
-      leapMode: "hybrid",
-      floorHeight: 0,
-      viewDistance: 0,
-      shadows: 1,
-      profilePicture: '',
-      manualLensDistance: 0,
-      network: [],
-      IOTMode: false
-    }
+
+    super()
 
   }
 
   componentWillMount () {
-    
+
     this.setState({
+      defaultWorld: 'overworld',
+      welcomeMessage: 'Welcome to Convolvr!',
+      network: [],
       camera: localStorage.getItem("camera") || 'fps',
       lighting: localStorage.getItem("lighting") || 'high',
       postProcessing: localStorage.getItem("postProcessing") || 'off',

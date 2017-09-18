@@ -76,11 +76,7 @@ class TextEditor extends Component {
 
   constructor () {
 
-    this.state = {
-      activated: false,
-      text: "",
-      name: ""
-    }
+    super()
 
   }
 
@@ -88,7 +84,9 @@ class TextEditor extends Component {
 
     this.setState({
       activated: false,
-      editMode: false
+      editMode: false,
+      text: "",
+      name: ""
     })
 
     if ( !!this.props.fileURL ) {

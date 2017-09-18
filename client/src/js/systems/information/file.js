@@ -128,9 +128,9 @@ export default class FileSystem {
 
     createFile ( component, username, dir ) {
 
-        let dir = !!dir && dir != "" ? "/"+dir : ""
+        let outDir = !!dir && dir != "" ? "/"+dir : ""
 
-        axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+dir : ''}`, {}).then(response => {
+        axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+outDir : ''}`, {}).then(response => {
            
            this._handleResponse( 'createFile', response.data )
           
@@ -144,9 +144,9 @@ export default class FileSystem {
 
     uploadFile ( component, file, username, dir ) {
 
-        let dir = !!dir ? "?dir="+dir : ""
+        let outDir = !!dir ? "?dir="+dir : ""
 
-        axios.post(`${API_SERVER}/api/files/upload/${username}${dir}`, file).then(response => {
+        axios.post(`${API_SERVER}/api/files/upload/${username}${outDir}`, file).then(response => {
            
             this._handleResponse( 'uploadFile', response.data )
           
@@ -160,9 +160,9 @@ export default class FileSystem {
 
     createDirectory () {
 
-        dir = !!dir && dir != "" ? "/"+dir : ""
+        let outDir = !!dir && dir != "" ? "/"+dir : ""
 
-        axios.post(`${API_SERVER}/api/directories/${username}/${dir != null ? "?dir="+dir : ''}`, {}).then(response => {
+        axios.post(`${API_SERVER}/api/directories/${username}/${dir != null ? "?dir="+outDir : ''}`, {}).then(response => {
            
             this._handleResponse( 'createDirectory', response.data )
           
@@ -231,9 +231,9 @@ export default class FileSystem {
 
     writeText ( component, text, filename, username, dir ) {
 
-        let dir = !!dir && dir != "" ? "/"+dir : ""
+        let outDir = !!dir && dir != "" ? "/"+dir : ""
 
-        axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`, {text: text}).then(response => {
+        axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+outDir : ''}`, {text: text}).then(response => {
            
             this._handleResponse( 'writeText', response.data )
           

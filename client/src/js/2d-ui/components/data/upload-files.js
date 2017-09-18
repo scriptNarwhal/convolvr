@@ -30,9 +30,7 @@ class UploadFiles extends Component {
 
   constructor () {
 
-    this.state = {
-      activated: false
-    }
+    super()
 
   }
 

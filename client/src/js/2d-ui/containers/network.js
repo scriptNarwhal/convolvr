@@ -13,18 +13,24 @@ const styles = {
 }
 
 class Network extends Component {
+
   constructor () {
 
+    super()
+
   }
+
   componentWillMount () {
     console.log("init network view !!!")
     if (!!!this.props.settings) {
       this.props.fetchUniverseSettings()
     }
   }
+
   switchDomain (name) {
     window.location.href = name // workaround
   }
+
   render() {
     return (
         <Shell className="worlds">

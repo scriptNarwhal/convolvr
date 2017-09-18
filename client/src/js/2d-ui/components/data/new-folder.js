@@ -66,18 +66,16 @@ class NewFolder extends Component {
 
   constructor () {
 
-    this.state = {
-      activated: false,
-      resultingPath: "",
-      name: ""
-    }
-
+    super()
+    
   }
 
   componentWillMount () {
 
     this.setState({
-      activated: false
+      activated: false,
+      resultingPath: "",
+      name: ""
     })
 
   }

@@ -79,8 +79,6 @@ export default class Toolbox {
 
       }
 
-      
-      
     }
 
     useTool ( index, hand, noHUDUpdate ) {
