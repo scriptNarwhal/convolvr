@@ -1,6 +1,6 @@
 package main
 
-import convolvr "github.com/convolvr/convolvr/server"
+import convolvr "github.com/convolvr/server"
 
 const configName = "config"
 
