@@ -12,7 +12,7 @@
 ```shell
   git clone https://github.com/convolvr/convolvr
   go get github.com/Convolvr/core
-  go get github.com/Convolvr/convolvr/server
+  go get github.com/Convolvr/server
   go get github.com/Convolvr/generate
   cd convolvr/client && npm install && npm start &
   cd ../cmd && go build && ./cmd # starts http on :3007 by default
