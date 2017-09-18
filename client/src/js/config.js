@@ -9,7 +9,7 @@ export let detectWorldDetailsFromURL = () => {
         coords = [0,0,0],
         nonWorlds = ["login", "network", "chat", "files", "settings", "worlds", "new-world"],
         isWorld = true,
-        worldDetails = [ "convolvr", "Overworld" ]
+        worldDetails = [ "world", "Convolvr" ]
 
     nonWorlds.map( nWorld => {
         if ( url.indexOf(`/${nWorld}`) == 0 ) {

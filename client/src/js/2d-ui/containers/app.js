@@ -203,7 +203,7 @@ class App extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    let newWorld = ["world", "Overworld"],
+    let newWorld = ["world", "Convolvr"],
         pathChange = nextProps.url.pathname.indexOf("/at") > -1 ? false : nextProps.url.pathname != this.props.url.pathname
 
     if ( pathChange ) {
