@@ -12,6 +12,6 @@
       }
     },
     "logging": {
-      "actions": true
+      "level": 2
     }
 }
