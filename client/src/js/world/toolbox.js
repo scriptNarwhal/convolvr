@@ -191,24 +191,24 @@ export default class Toolbox {
     
     usePrimary ( hand ) {
 
-      let toolIndex                       = this.currentTools[ hand ],
-          tool                            = this.tools[ toolIndex ],
-          camera                          = this.world.camera,
-          telemetry                       = this.initActionTelemetry(camera, true, hand),
+      let toolIndex        = this.currentTools[ hand ],
+          tool             = this.tools[ toolIndex ],
+          camera           = this.world.camera,
+          telemetry        = this.initActionTelemetry(camera, true, hand),
           { 
             position, 
             quaternion, 
             voxel, 
             componentPath 
-          }                               = telemetry,
-          cursorEntity                    = !!telemetry.cursor ? telemetry.cursor.state.cursor.entity : false,
-          cursorComponent                 = !!cursorEntity ? telemetry.cursor.state.cursor.component: false,
-          cursorState                     = !!telemetry.cursor ? telemetry.cursor.state : false,
-          componentsByProp                = !!cursorEntity ? cursorEntity.componentsByProp : {},
-          configureTool                   = null,
-          action                          = null,
-          miniature                       = null,
-          activate                        = null
+          }                = telemetry,
+          cursorEntity     = !!telemetry.cursor ? telemetry.cursor.state.cursor.entity : false,
+          cursorComponent  = !!cursorEntity ? telemetry.cursor.state.cursor.component: false,
+          cursorState      = !!telemetry.cursor ? telemetry.cursor.state : false,
+          componentsByProp = !!cursorEntity ? cursorEntity.componentsByProp : {},
+          configureTool    = null,
+          action           = null,
+          miniature        = null,
+          activate         = null
       
       tool.hidePreview()
 

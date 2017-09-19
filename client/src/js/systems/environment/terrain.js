@@ -89,12 +89,13 @@ export default class TerrainSystem {
         collisions = this.world.systems.staticCollisions ? this.world.systems.staticCollisions : {},
         voxelKey   = coords[0]+".0."+coords[2], // debugging this.. 
         voxelData  = { cell: [coords[0], 0, coords[2]], name: "generated space", visible: true, altitude: 0, entities: [] },
-        v          = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world )
+        v          = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world ),
+        worldName  = this.world.name != "" ? this.world.name : "Overworld"
                 
         voxels[ voxelKey ] = v
         voxelList.push( v )
 
-     axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${coords.join("x")}`).then( response => {
+     axios.get(`${API_SERVER}/api/chunks/${worldName}/${coords.join("x")}`).then( response => {
 
         let physicsVoxels = []
         typeof response.data.map == 'function' && response.data.map( c => {
