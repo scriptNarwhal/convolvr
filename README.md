@@ -78,7 +78,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 }
 ```
 ## Server Examples
-- [Generating Buildings](https://github.com/convolvr/convolvr/blob/dev/server/generated-buildings.go)
-- [Handling User Actions](https://github.com/convolvr/convolvr/blob/dev/server/socket.go#L17)
+- [Generating Buildings](https://github.com/Convolvr/generate/blob/dev/generate-buildings.go)
+- [Handling User Actions](https://github.com/convolvr/server/blob/dev/socket.go#L17)
 
 ![infinite procedural worlds](web/images/Screenshot_157.png)
