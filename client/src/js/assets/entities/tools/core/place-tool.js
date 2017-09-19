@@ -17,7 +17,7 @@ export default class PlaceTool extends Tool {
 
     }
 
-      this.entity = new Entity(-1, coords, [
+      this.entity = new Entity(-1, [
           {
             props: {
               geometry: {

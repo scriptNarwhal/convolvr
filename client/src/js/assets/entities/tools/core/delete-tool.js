@@ -48,6 +48,7 @@ export default class DeleteTool extends Tool  {
           cursorSystem = three.world.systems.cursor,
           cursorState = cursor.state.cursor || {},
           position = telemetry.position,
+          coords = [ 0, 0, 0 ],
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false
       
