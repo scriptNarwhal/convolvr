@@ -1,5 +1,5 @@
 export const API_SERVER = window.location.protocol+"//"+window.location.host
-export const GRID_SIZE =  [ 928000, 928000, 807360 ]
+export const GRID_SIZE =  [ 42.18181818181818, 42.18181818181818, 36.698181818181816 ]
 
 export let detectWorldDetailsFromURL = () => {
 

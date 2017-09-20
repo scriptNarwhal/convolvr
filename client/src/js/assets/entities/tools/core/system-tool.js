@@ -26,7 +26,7 @@ export default class SystemTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [1600, 4200, 6000]
+                size: [0.08, 4200, 6000]
               },
               material: {
                 name: "metal"

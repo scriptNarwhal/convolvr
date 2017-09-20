@@ -48,7 +48,7 @@ export default class MiniatureSystem {
                 return
 
 
-            scale = 1 / ( component.entity.boundingRadius / ( finalScale || 10000 ) )
+            scale = 1 / ( component.entity.boundingRadius / ( finalScale || 0.5 ) )
 
             if ( !! revert ) {
 

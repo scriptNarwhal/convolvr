@@ -427,7 +427,7 @@ export default class MaterialSystem {
 
     _renderLoop ( context, calls, start, dir, cond, limit ) {
 
-      const MAX = 10000
+      const MAX = 1000
 
       let i = start
 

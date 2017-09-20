@@ -7,7 +7,7 @@ let column1 = {
                 geometry: {
                 merge: true,
                     shape: "box",
-                    size: [ 10000, 22000, 1000 ]
+                    size: [ 0.5,, 1, 1000 ]
                 },
                 material: {
                     color: 0x808080,
@@ -22,7 +22,7 @@ let column1 = {
                 geometry: {
                     merge: true,
                     shape: "hexagon",
-                    size: [ 16000, 18000, 1000 ]
+                    size: [ 0.080, 0.8, 1000 ]
                 },
                 material: {
                     color: 0x808080,
@@ -30,14 +30,14 @@ let column1 = {
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
-            position: [ 0, -16000, 0 ]
+            position: [ 0, -0.080, 0 ]
         },
         {
             props: {
                 geometry: {
                     merge: true,
                     shape: "hexagon",
-                    size: [ 18000, 18000, 1000 ]
+                    size: [ 0.8, 0.8, 1000 ]
                 },
                 material: {
                     color: 0x808080,
@@ -45,7 +45,7 @@ let column1 = {
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
-            position: [ 0, 16000, 0 ]
+            position: [ 0, 0.080, 0 ]
         }
     ],
     position: [ 0, 0, 0 ],

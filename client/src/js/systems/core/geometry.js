@@ -2,7 +2,7 @@ export default class GeometrySystem {
 
     constructor (world) {
       this.world = world
-      this.nodeGeom = new THREE.PlaneGeometry(1 / 10000, 1 / 10000)
+      this.nodeGeom = new THREE.PlaneGeometry( 0.001, 0.001, 0.001)
       this.detail = world.geometry
     }
 
@@ -148,11 +148,11 @@ export default class GeometrySystem {
       if ( !!! propPoints ) {
 
         propPoints = [
-          [15000, 500], 
-          [5000, 500],
-          [1000, 5000],
-          [1000, 2000],
-          [5000, 15000],
+          [0.75, 0.01], 
+          [0.05, 0.01],
+          [0.05, 0.5],
+          [0.05, 0.09],
+          [0.05, 0.75],
         ]
 
       }

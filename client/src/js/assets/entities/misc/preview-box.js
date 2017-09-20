@@ -22,7 +22,7 @@ let previewBox = {
                     props: {
                         geometry: {
                             shape: "box",
-                            size: [1200, 12000, 12000]
+                            size: [0.05, 0.050, 0.050]
                         },
                         material: {
                             color: 0xffffff,
@@ -37,7 +37,7 @@ let previewBox = {
                     props: {
                         geometry: {
                             shape: "box",
-                            size: [1200, 12000, 12000]
+                            size: [0.05, 0.050, 0.050]
                         },
                         material: {
                             color: 0xffffff,

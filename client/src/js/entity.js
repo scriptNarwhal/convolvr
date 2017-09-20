@@ -18,7 +18,7 @@ export default class Entity {
       this.position = position ? position : false
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
-      this.boundingRadius = 10000 // set in init()
+      this.boundingRadius = 0.5, // set in init()
       this.componentsByProp = {} // arrays are defined here with key of prop
       this.compsByFaceIndex = [] // possibly deprecated
       this.allComponents = []
@@ -82,7 +82,7 @@ export default class Entity {
         dimensions = [0, 0, 0],
         compMesh = null,
         compGeom = null,
-        compRadius = 10000,
+        compRadius = 0.5,
         materials = [],
         addToOctree = true,
         workerUpdate = "",
@@ -436,7 +436,7 @@ export default class Entity {
     let compPos = this._compPos, 
         entMesh = this.mesh,
         worldCompPos = null,
-        distance = 200000,
+        distance = 0.0900,
         newDist = 0,
         closest = null,
         closestSubComp = null;
@@ -464,7 +464,7 @@ export default class Entity {
 
     if ( !!!closest ) {
 
-      distance = 200000
+      distance = 0.0900
       newDist = 0
       this.combinedComponents.map( component => {
 

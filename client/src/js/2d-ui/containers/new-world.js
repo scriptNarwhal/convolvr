@@ -132,7 +132,7 @@ class NewWorld extends Component {
             photosphere: this.state.photosphere
           },
           light: {
-            color: 0x1000000 + (Math.floor(lightColor[0] * 255) << 16) + (Math.floor(lightColor[1] * 255) << 8) + Math.floor(lightColor[2] * 255),
+            color: (Math.floor(lightColor[0] * 255) << 16) + (Math.floor(lightColor[1] * 255) << 8) + Math.floor(lightColor[2] * 255),
             intensity: parseFloat(this.state.intensity),
             pitch: parseFloat(this.state.lightPitch),
             yaw: parseFloat(this.state.lightYaw),
@@ -140,7 +140,7 @@ class NewWorld extends Component {
           },
           terrain: {
             type: this.state.terrainType,
-            height: 20000,
+            height: 10,
             color: this.state.terrainColor,
             turbulent: this.state.turbulentTerrain,
             flatness: parseFloat(this.state.flatness),

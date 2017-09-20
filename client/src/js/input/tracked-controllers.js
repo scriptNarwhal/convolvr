@@ -54,12 +54,12 @@ export default class TrackedController {
 
         if ( Math.abs(axes[0]) > 0.1 )
 
-            input.moveVector.x = axes[0] * 32000
+            input.moveVector.x = axes[0] * 2
 
 
         if ( Math.abs(axes[1]) > 0.1 )
 
-            input.moveVector.z = axes[1] * 32000
+            input.moveVector.z = axes[1] * 2
 
         
       } else { // teleport mode
@@ -131,8 +131,8 @@ export default class TrackedController {
           tools.usePrimary(0) // right hand
 
         this.buttons.right[0] = button
-        input.moveVector.x += gamepad.buttons[5].pressed * 12500 - gamepad.buttons[4].pressed * 12500
-        input.moveVector.z += gamepad.buttons[3].pressed * 12500 - gamepad.buttons[2].pressed * 12500
+        input.moveVector.x += gamepad.buttons[5].pressed * 10.1 - gamepad.buttons[4].pressed * 10.1
+        input.moveVector.z += gamepad.buttons[3].pressed * 10.1 - gamepad.buttons[2].pressed * 10.1
 
   }
 
@@ -142,7 +142,7 @@ export default class TrackedController {
 
     if ( gamepad.pose )
 
-      tools.setHandOrientation(0, [ 0, -5000, 5000 ], gamepad.pose.orientation)
+      tools.setHandOrientation(0, [ 0, -0.5, 0.5 ], gamepad.pose.orientation)
   
     if ( this.buttonReleased( this.buttons.right[0] ) && this.buttonPressed( button ) )
 

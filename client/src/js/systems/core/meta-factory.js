@@ -15,8 +15,8 @@ export default class MetaFactorySystem {
             assetType      = prop.type,
             category       = prop.propName,
             gridWidth      = prop.gridWidth || 3,
-            gridSize       = prop.gridSize || 22000,
-            vOffset        = prop.vOffset || -14000,
+            gridSize       = prop.gridSize || 1,
+            vOffset        = prop.vOffset || -0.66,
             sourceCategory = "none",
             factories      = [],
             presets        = [],
@@ -131,11 +131,11 @@ export default class MetaFactorySystem {
         let addTo = null,
             layout = {},
             systems = this.world.systems,
-            pos = [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 24000 ]
+            pos = [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 0.120 ]
 
         if ( component.props.layout ) {
 
-            pos = [ 0, vOffset, 2500 ]
+            pos = [ 0, vOffset, 0.1 ]
             layout = component.props.layout
             pos = systems.layout.useLayout( layout.type, component, pos, i, layout.axis, layout.columns || 3, layout.gridSize || gridSize, layout.isometric )
 

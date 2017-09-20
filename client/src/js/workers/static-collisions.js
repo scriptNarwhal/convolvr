@@ -55,7 +55,7 @@ self.update = ( ) => {
 
 		if ( !!!voxel || !!!voxel.position) continue
 
-		if ( !!voxel && distance2dCompare( position, voxel.position, 2500000 ) ) { 	// do collisions on voxels & structures... just walls at first..
+		if ( !!voxel && distance2dCompare( position, voxel.position, 180 ) ) { 	// do collisions on voxels & structures... just walls at first..
 					
 			if ( voxel.loaded == undefined ) {
 				
@@ -64,18 +64,18 @@ self.update = ( ) => {
 						
 			}
 
-			if ( distance2dCompare( position, voxel.position, 900000 ) ) {
+			if ( distance2dCompare( position, voxel.position, 60 ) ) {
 					
 				let alt = voxel.altitude || 0
 				
 				yPos = voxel.position[1]
 				
-				if ( distance2dCompare( position, voxel.position, 528000 ) ) {
+				if ( distance2dCompare( position, voxel.position, 50.110 ) ) {
 						
-					if ( position[1] > yPos - 400000 + vrHeight  && position[1] < yPos + 450000 + vrHeight ) {
+					if ( position[1] > yPos - 400000 + vrHeight  && position[1] < yPos + 20.4545454545 + vrHeight ) {
 
 						collision = true
-						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
+						//self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
 					
 					}
 
@@ -89,24 +89,24 @@ self.update = ( ) => {
 
 							if ( !!! ent || !!!ent.components ) { console.warn("Problem with entity! ",e ,ent); continue }
 
-							if ( distance3dCompare( position, ent.position, (ent.boundingRadius||100000)+10000) ) { 
+							if ( distance3dCompare( position, ent.position, (ent.boundingRadius||0.5,0)+0.5,) ) { 
 
 								ent.components.map( entComp => {
 
-									if ( distance3dCompare( position, entComp.position, entComp.boundingRadius || 28000) ) {
+									if ( distance3dCompare( position, entComp.position, entComp.boundingRadius || 0.110) ) {
 
 										collision = true
 
 										if ( !! entComp.props.floor ) { 
 
-											self.postMessage( JSON.stringify( {command: "floor collision", data: { 
-												position: entComp.position, 
-												floorData: entComp.props.floor
-											}}))
+											// self.postMessage( JSON.stringify( {command: "floor collision", data: { 
+											// 	position: entComp.position, 
+											// 	floorData: entComp.props.floor
+											// }}))
 
 										} else {
 
-											self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: entComp.position }} ) )
+											//self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: entComp.position }} ) )
 
 										}
 

@@ -7,7 +7,7 @@ let wirebox = {
                 geometry: {
                     merge: true,
                     shape: "hexagon",
-                    size: [16000, 16000, 1000]
+                    size: [0.080, 0.080, 1000]
                 },
                 material: {
                     color: 0x808080,
@@ -22,7 +22,7 @@ let wirebox = {
                 geometry: {
                     merge: true,
                     shape: "torus",
-                    size: [16000, 16000, 1000]
+                    size: [0.080, 0.080, 1000]
                 },
                 material: {
                     color: 0x808080,

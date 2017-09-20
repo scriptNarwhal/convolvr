@@ -20,7 +20,7 @@ export default class StaticCollisions {
 
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
 
-				vrHeight = 22000 * vrFrame.pose.position[1]
+				vrHeight = 1 * vrFrame.pose.position[1]
 				world.vrHeight = vrHeight
 
 			}
@@ -46,9 +46,9 @@ export default class StaticCollisions {
 			let distance = entPos.distanceTo( userPos ),
 				direction = entPos.sub(userPos)	
 
-			if ( distance < 20000) { // debug
+			if ( distance < 0.090) { // debug
 
-				user.velocity.sub( direction.multiplyScalar(100) )
+				//user.velocity.sub( direction.multiplyScalar(100) )
 
 			}
 
@@ -56,9 +56,9 @@ export default class StaticCollisions {
 
 	      if ( message.data.type == "top" ) {
 
-				three.camera.position.set( three.camera.position.x, message.data.position[1]+450000 +vrHeight, three.camera.position.z )	
+				three.camera.position.set( three.camera.position.x, message.data.position[1]+20.4545454545 +vrHeight, three.camera.position.z )	
 
-				if ( Math.abs( user.velocity.y ) > 350000 ) {
+				if ( Math.abs( user.velocity.y ) > 40 ) {
 
 					window.navigator.vibrate && window.navigator.vibrate(50)
 					user.velocity.y *= -0.56
@@ -73,7 +73,7 @@ export default class StaticCollisions {
 				
 			} else if ( message.data.type == "bottom" ) {
 
-				three.camera.position.set( three.camera.position.x, message.data.position[1]-85000 +vrHeight, three.camera.position.z )
+				three.camera.position.set( three.camera.position.x, message.data.position[1]-4 +vrHeight, three.camera.position.z )
 				user.velocity.y *= -0.45
 			}
 
@@ -85,7 +85,7 @@ export default class StaticCollisions {
 				// console.log("floor collision", message.data.position, message.data)
 				three.camera.position.set(three.camera.position.x, message.data.position[1]+vrHeight, three.camera.position.z)
 
-				if ( Math.abs(user.velocity.y) > 250000 ) {
+				if ( Math.abs(user.velocity.y) > 0.100 ) {
 
 					user.velocity.y *= 0.55
 					user.velocity.x *= 0.96

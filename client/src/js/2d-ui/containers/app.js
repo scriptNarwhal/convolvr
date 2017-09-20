@@ -93,7 +93,7 @@ class App extends Component {
             voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
             altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
 
-          three.camera.position.set( cameraPos.x+Math.random()*50000, world.terrain.voxels[ voxelKey ].data.altitude, cameraPos.z+Math.random()*50000) + 150000
+          three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
 
         three.world.user.velocity.y = -1000
 
@@ -313,7 +313,7 @@ class App extends Component {
           }
 
           effect = new THREE.VREffect(renderer, world.postProcessing)
-          effect.scale = 22000
+          effect.scale = 1
           effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
           three.vrEffect = effect
           three.vrControls = controls
@@ -339,7 +339,7 @@ class App extends Component {
               //     console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
               //     three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
                 
-              //   }, 2000)
+              //   }, 0.09)
               // }
               three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
                 vrAnimate( three.vrDisplay, Date.now(), [0,0,0], 0)

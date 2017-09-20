@@ -37,7 +37,7 @@ export default class Tool {
       if ( !input.trackedControls && !input.leapMotion ) {
 
           this.world.user.mesh.add(toolMesh)
-          toolMesh.position.set(1500-(3000*hand), -800, -1550)
+          toolMesh.position.set(0.1-(0.08*hand), -800, -1550)
 
       } else {
 
@@ -55,8 +55,8 @@ export default class Tool {
         userPos[1] += 40000
         toolPanel.update(userPos)
         toolPanel.mesh.rotation.y = three.camera.rotation.y + Math.PI / 6
-        toolPanel.mesh.translateZ( -76000 )
-        toolPanel.mesh.translateX( -34000 )
+        toolPanel.mesh.translateZ( -3 )
+        toolPanel.mesh.translateX( -1.5 )
         toolPanel.mesh.updateMatrix()
 
       }
@@ -100,7 +100,7 @@ export default class Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 8000, 2000, 1000 ]
+                size: [ 0.333, 0.09, 0.05 ]
               },
               material: {
                 name: "plastic"
@@ -114,7 +114,7 @@ export default class Tool {
                 ]
               }
             },
-            position: [ 6000, 3000, 3000 ],
+            position: [ 0.05, 0.08, 0.08 ],
             quaternion: [0, 0, 0, 1]
         }
         

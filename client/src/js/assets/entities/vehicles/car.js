@@ -33,7 +33,7 @@ let car = ( assetSystem, config, voxel ) => {  // implement
                 type: "point",
                 intensity: 0.9,
                 color: 0xffffff,
-                distance: 20000
+                distance: 0.090
               }
             },
             position: [ 0, 0, 0 ],
@@ -44,7 +44,7 @@ let car = ( assetSystem, config, voxel ) => {  // implement
           props: {
             geometry: {
                 shape: "box",
-                size: [ 15000, 2000, 25000 ],
+                size: [ 15000, 0.09, 0.10 ],
             },
             material: {
               color: 0xffffff,

@@ -46,41 +46,28 @@ export default class AssetSystem {
         this.worlds              = []
         this.props               = {
             geometry: [
-                { shape: 'node', size:          [1, 1, 1] },
-                { shape: 'box', size:           [28000, 28000, 28000] },
-                { shape: 'plane', size:         [28000, 10000, 28000] },
-                { shape: 'octahedron', size:    [28000, 10000, 10000] },
-                { shape: 'sphere', size:        [28000, 10000, 10000] },
-                { shape: 'cylinder', size:      [28000, 28000, 10000] },
-                { shape: 'torus', size:         [28000, 28000, 10000] },
-                { shape: 'hexagon', size:       [28000, 28000, 10000] },
-                { shape: 'open-box', size:      [28000, 28000, 10000] },
-                { shape: 'open-clyinder', size: [22000, 22000, 22000] },
-                { shape: 'frustum', size:       [8000, 8000, 8000] }
+                { shape: 'node', size:          [0.0001, 0.0001, 0.0001]             },
+                { shape: 'box', size:           [1, 1, 1 ] },
+                { shape: 'plane', size:         [1, 0.5, 1] },
+                { shape: 'octahedron', size:    [1.1, 0.5, 0.5,] },
+                { shape: 'sphere', size:        [1.1, 0.5,, 0.5,] },
+                { shape: 'cylinder', size:      [1.1, 1.1, 0.5,] },
+                { shape: 'torus', size:         [1.1, 1.1, 0.5,] },
+                { shape: 'hexagon', size:       [1.1, 1.1, 0.5,] },
+                { shape: 'open-box', size:      [1.1, 1.1, 0.5,] },
+                { shape: 'open-clyinder', size: [1, 1, 1] },
+                { shape: 'frustum', size:       [0.4, 0.4, 0.4]    }
             ],
             material: [
-                { name: "basic", color: 0xffffff },
-                { name: "plastic", color: 0xffffff },
-                { name: "metal", color: 0xffffff },
-                { name: "glass", color: 0xffffff },
+                { name: "basic",     color: 0xffffff },
+                { name: "plastic",   color: 0xffffff },
+                { name: "metal",     color: 0xffffff },
+                { name: "glass",     color: 0xffffff },
                 { name: "wireframe", color: 0xffffff },
-                { name: "stars", basic: true, color: 0xffffff,
-                    procedural: {
-                        name: "stars",
-                        calls: [
-                            { call: 'fillStyle', params: [ '#000000' ] },
-                            { call: 'fillRect', params: [ 0, 0, 1024, 1024 ] },
-                            { call: 'fillStyle', params: [ '#ffffff' ] },
-                            { call: 'noise', params: [ 5, 1024, 1024, 5, 5 ] },
-                            { call: 'loop', params: [ 0, '+', '<', 1000 ], calls : [
-                                { call: 'fillRect', params: [ 512, 512, 1, 1 ] },
-                            ]}
-                        ]
-                    } 
-                },
-                { mixin: true, color: 0xff0707 },
-                { mixin: true, color: 0x07ff07 },
-                { mixin: true, color: 0x0707ff }
+                { name: "stars",     color: 0xffffff, basic: true },
+                { mixin: true,       color: 0xff0707 },
+                { mixin: true,       color: 0x07ff07 },
+                { mixin: true,       color: 0x0707ff }
             ],
             assets: [ 
                 { path: "/data/images/textures/tiles.png" },
@@ -126,12 +113,12 @@ export default class AssetSystem {
                     vehicle: [{}],
                     control: [{}],
                     propulsion: [
-                        { thrust: 2000 },
+                        { thrust: 0.09 },
                         { thrust: 8000 }
                     ],
                     projectile: [
                         { type: 'instant' },
-                        { type: 'slow', thrust: 12000 }
+                        { type: 'slow', thrust: 0.050 }
                     ],
                     portal: [
                         { newPlace: true },
@@ -462,7 +449,7 @@ export default class AssetSystem {
         //         props: {
         //             geometry: {
         //                 merge: false,
-        //                 size: [ 9000, 9000, 2000 ],
+        //                 size: [ 0.4, 0.4, 0.09 ],
         //                 shape: "box"
         //             },
         //             material: {
@@ -497,7 +484,7 @@ export default class AssetSystem {
             geometry: {
                 shape: "box",
                 faceNormals: true,
-                size: [ 7000, 7000, 7000 ]
+                size: [ 0.333, 0.333, 0.333 ]
             }
         }
     }

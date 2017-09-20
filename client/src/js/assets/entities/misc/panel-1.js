@@ -7,7 +7,7 @@ let panel1 = {
                     geometry: {
                         merge: true,
                         shape: "box",
-                        size: [ 28000, 28000, 1500 ]
+                        size: [ 1.1, 1.1, 0.06 ]
                     },
                     material: {
                         color: 0x808080,
@@ -23,7 +23,7 @@ let panel1 = {
                     geometry: {
                         merge: true,
                         shape: "box",
-                        size: [ 32000, 32000, 15000 ]
+                        size: [ 1.2, 1.2, 0.5 ]
                     },
                     material: {
                         color: 0x808080,
@@ -31,7 +31,7 @@ let panel1 = {
                     }
                 },
                 quaternion: [ 0, 0, 0, 1 ],
-                position: [ 4625, 0, 0 ],
+                position: [ 0.333, 0, 0 ],
                 components: []
             },
             

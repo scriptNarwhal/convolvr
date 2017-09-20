@@ -74,7 +74,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
 
   if ( world.user == "convolvr" && world.name == "overworld" )
 
-    pos.set( pos.x -60000+Math.random()*30000, pos.y + 50000, pos.z -60000+Math.random()*30000 )
+    pos.set( pos.x -60000+Math.random()*0.080, pos.y + 50000, pos.z -60000+Math.random()*0.080 )
     
 
   chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].props.speech = {}
@@ -144,7 +144,7 @@ function _initVideoChat ( world: Convolvr, helpScreen: Entity, voxel: Array<numb
   let videoChat = world.systems.assets.makeEntity( "video-chat", true, {}, voxel ) // simple example of displaying GET response from server
   // videoChat.components[0].props.particles = {}
   videoChat.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
-  videoChat.update( [ -160000, 0, 0 ] )
+  videoChat.update( [ -0.0800, 0, 0 ] )
 
 }
 
@@ -169,6 +169,6 @@ function _initFileSystemTest ( world: Convolvr, helpScreen: Entity, voxel: Array
 
   let fileBrowser = world.systems.assets.makeEntity( "file-browser", true, {}, voxel ) // show public files in 3d
   fileBrowser.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
-  fileBrowser.update( [ -240000, 0, 0 ] )
+  fileBrowser.update( [ -0.05, 0, 0 ] )
 
 }

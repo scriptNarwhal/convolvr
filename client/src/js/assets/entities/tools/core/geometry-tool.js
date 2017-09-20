@@ -14,7 +14,7 @@ export default class GeometryTool extends Tool {
       this.name = "Geometry Tool"
       this.options = {
         shape: 'box', 
-        size: [28000, 28000, 28000]
+        size: [1.1, 1.1, 0.110]
       }
 
       this.entity = new Entity(-1, [
@@ -22,7 +22,7 @@ export default class GeometryTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 2200, 2200, 9000 ]
+                size: [ 0.1, 0.1, 0.4 ]
               },
               material: {
                 name: "metal"
@@ -82,7 +82,19 @@ export default class GeometryTool extends Tool {
 
       console.log(" ( Geometry Tool ) ", componentPath )
       
-      if ( !! cursorComponent && !! selected && !!!selected.componentsByProp.miniature ) {
+      props = selected.componentsByProp
+      
+      if ( !!!selected || props.miniature || props.activate ) {
+          console.warn("no tool action, calling activation callbacks")
+          return false 
+      
+      } else {
+      
+          coords = selected.voxel
+      
+      }
+
+      if ( !! cursorComponent && !! selected ) {
 
         componentPath = cursorComponent.path
         component = Object.assign({}, {
@@ -92,7 +104,7 @@ export default class GeometryTool extends Tool {
           components: cursorComponent.components
         })
         console.log("set geometry", component)
-        component.props.geometry = Object.assign( {}, component.props.geometry, this.options )
+        component.props.geometry = Object.assign( {}, cursorComponent.props.geometry, this.options )
         components = [ component ]
 
       } else {
@@ -118,18 +130,20 @@ export default class GeometryTool extends Tool {
 
     configure ( config ) {
 
-      let newComp = null
+      let newComp = null,
+          oldComp = null
 
       if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
       
-        this.options = Object.assign( {}, this.options, config.data )
+        this.options = Object.assign( {}, this.options, { shape: config.data.shape } )
         console.log("Configuring tool ", this.options)
-        newComp = Object.assign({}, this.entity.components[0], {
-          props: Object.assign({}, this.entity.components[0].props, {
-            geometry: this.options
+        oldComp = this.entity.components[0]
+        newComp = Object.assign( {}, oldComp, {
+          props: Object.assign( {}, oldComp.props, {
+            geometry: Object.assign( {}, oldComp.props.geometry, this.options )
           })
         })
-        this.entity.update(false, false, false, newComp, [0] )
+        this.entity.update( false, false, false, newComp, [0] )
 
       }
       

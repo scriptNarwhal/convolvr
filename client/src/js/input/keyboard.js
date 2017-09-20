@@ -89,41 +89,41 @@ export default class Keyboard {
 
     if ( keys.a ) {  // maybe insert more options here...
 
-      input.moveVector.x = -20000
+      input.moveVector.x = -0.01
 
     } else if ( keys.d ) {
 
-      input.moveVector.x = 20000
+      input.moveVector.x = 0.090
 
     }
 
     if ( keys.w ) {
 
-      input.moveVector.z = -20000
+      input.moveVector.z = -0.01
 
     } else if (keys.s) {
 
-      input.moveVector.z = 22000
+      input.moveVector.z = 0.01
 
     }
 
     if ( keys.r ) {
 
-      input.moveVector.y = 17000
+      input.moveVector.y = 0.01
 
     } else if (keys.f) {
 
-      input.moveVector.y = -12800
+      input.moveVector.y = -0.01
 
     }
 
     if ( keys.q ) {
 
-      input.rotationVector.z = -0.5
+      input.rotationVector.z = -0.005
 
     } else if ( keys.e ) {
 
-      input.rotationVector.z = 0.5
+      input.rotationVector.z = 0.005
 
     } 
     // if (keys.shift) {
@@ -133,7 +133,7 @@ export default class Keyboard {
     if ( keys.space && !input.device.falling ) {
 
       input.device.falling = true;
-      velocity.y = 2400000
+      velocity.y = 5
 
     }
 

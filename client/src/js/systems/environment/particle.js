@@ -8,11 +8,11 @@ export default class ParticleSystem {
 
         let prop = component.props.particles, 
             ps = new THREE.GPUParticleSystem( {
-                    maxParticles: prop.maxParticles  || 9000
+                    maxParticles: prop.maxParticles  || 0.4
             }),
             options = {
                     position: new THREE.Vector3(),
-                    positionRandomness: prop.positionRandomness || 3000,
+                    positionRandomness: prop.positionRandomness || 0.08,
                     velocity: new THREE.Vector3(),
                     velocityRandomness: .5,
                     color: prop.color || 0xffffff,

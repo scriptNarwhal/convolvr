@@ -142,16 +142,16 @@ export default class GamePad {
     if ( gamepad.axes[0] == 0 && gamepad.axes[2] == 0 && gamepad.axes[3] == 0) { // some cheap gamepads have fake axis
 
       if ( Math.abs(gamepad.axes[1]) > 0.1 ) { // create settings for stick configuration
-          input.moveVector.z = gamepad.axes[0] * 20000
+          input.moveVector.z = gamepad.axes[0] * 0.090
       }
 
      } else {
 
         if (Math.abs(gamepad.axes[0]) > 0.1) {
-          input.moveVector.x = gamepad.axes[0] * 20000
+          input.moveVector.x = gamepad.axes[0] * 0.090
         }
         if (Math.abs(gamepad.axes[1]) > 0.1) {
-          input.moveVector.z = gamepad.axes[1] * 20000
+          input.moveVector.z = gamepad.axes[1] * 0.090
         }
         if (Math.abs(gamepad.axes[2]) > 0.10) { // 10 percent deadzone
           rotation.y += -gamepad.axes[2] / 20.0
@@ -208,10 +208,10 @@ export default class GamePad {
     if ( a >= 4 ) { // standard dual analogue controller
 
         if (Math.abs(gamepad.axes[0]) > 0.1) {
-          input.moveVector.x = gamepad.axes[0] * 20000
+          input.moveVector.x = gamepad.axes[0] * 0.090
         }
         if (Math.abs(gamepad.axes[1]) > 0.1) {
-          input.moveVector.z = gamepad.axes[1] * 20000
+          input.moveVector.z = gamepad.axes[1] * 0.090
         }
         if (Math.abs(gamepad.axes[2]) > 0.10) { // 10 percent deadzone
           rotation.y += -gamepad.axes[2] / 20.0
@@ -229,7 +229,7 @@ export default class GamePad {
     if ( !input.device.falling ) {
       
       input.device.falling = true;
-      input.device.velocity.y = 2400000
+      input.device.velocity.y = 5
       
     }
 

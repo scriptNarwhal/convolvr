@@ -22,7 +22,7 @@ export default class AssetTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [3000, 1200, 8000]
+                size: [0.08, 0.05, 8000]
               },
               material: {
                 name: "metal"

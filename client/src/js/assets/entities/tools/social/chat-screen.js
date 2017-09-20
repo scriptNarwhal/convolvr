@@ -6,7 +6,7 @@ let chatScreen = {
                 props: {
                     geometry: {
                         shape: "box",
-                        size: [ 72000, 72000, 1000 ]
+                        size: [ 72000, 70.09, 1000 ]
                     },
                         material: {
                         color: 0x808080,

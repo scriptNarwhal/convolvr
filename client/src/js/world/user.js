@@ -9,7 +9,7 @@ export default class User {
     this.name = "Human"
     this.toolbox = null
     this.mesh = new THREE.Object3D()
-    this.velocity = new THREE.Vector3(0, -10, 0)
+    this.velocity = new THREE.Vector3(0, -0.0001, 0)
     this.gravity = 1
     this.falling = true
     this.avatar = false

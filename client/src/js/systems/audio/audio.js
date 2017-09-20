@@ -23,7 +23,7 @@ export default class AudioSystem {
             assets.loadSound(prop.asset, sound, ()=>{
                 component.mesh.add(sound)
                 sound.setRefDistance( 5000 )
-                sound.setMaxDistance(300000)
+                sound.setMaxDistance(0.0800)
                 prop.autoPlay !== false && sound.play()
             })
         }

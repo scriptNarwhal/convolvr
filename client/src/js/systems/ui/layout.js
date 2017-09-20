@@ -31,7 +31,7 @@ export default class LayoutSystem {
         }
     }
 
-    useLayout ( name, component, position = [0,0,0], index, axis, columns = 3, gridSize = 14000, isometric = false ) {
+    useLayout ( name, component, position = [0,0,0], index, axis, columns = 3, gridSize = 0.66, isometric = false ) {
 
         let pos = [ 0, 0, 0 ]
 

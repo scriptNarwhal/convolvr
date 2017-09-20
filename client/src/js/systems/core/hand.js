@@ -49,7 +49,7 @@ export default class HandSystem {
             //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
             hand.parent.remove(hand)
             scene.add(hand)
-            hand.position.set(position.x -6000+ i*12000, position.y -12000, position.z -6000)
+            hand.position.set(position.x -6000+ i*0.050, position.y -0.050, position.z -6000)
             
             if ( i > 0 ) {
 
@@ -75,7 +75,7 @@ export default class HandSystem {
 
             }
 
-            hand.position.set(-6000+ i*12000, -6000, -6000)
+            hand.position.set(-6000+ i*0.050, -6000, -6000)
 
         }
 

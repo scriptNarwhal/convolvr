@@ -115,7 +115,7 @@ export default class FactorySystem {
 
             if ( created.mesh != null ) {
 
-                created.mesh.translateZ(-10000)
+                created.mesh.translateZ(-0.5,)
                 created.update(created.mesh.position.toArray())
 
             }
@@ -165,7 +165,7 @@ export default class FactorySystem {
                     mixin: true,
                     miniature: { scale: 8000 },
                     material: {
-                        name: "wireframe",
+                        name: "metal",
                         color: 0xffffff
                     },
                     toolUI: {
@@ -195,7 +195,7 @@ export default class FactorySystem {
                     },
                     geometry: {
                         shape: "box",
-                        size: [12500, 12500, 4500]
+                        size: [0.5, 0.5, 0.05]
                     },
                     text: {
                         lines: [preset],
@@ -222,7 +222,7 @@ export default class FactorySystem {
                     miniature: { scale: 6000 },
                     geometry: {
                         shape: "sphere",
-                        size: [4500, 4500, 4500]
+                        size: [0.05, 0.05, 0.05]
                     },
                     toolUI: {
                         configureTool: {
@@ -252,7 +252,7 @@ export default class FactorySystem {
                     },
                     geometry: {
                         shape: "sphere",
-                        size: [4500, 4500, 4500]
+                        size: [0.05, 0.05, 0.05]
                     },
                     toolUI: {
                         configureTool: {
@@ -282,7 +282,7 @@ export default class FactorySystem {
                     },
                     geometry: {
                         shape: "sphere",
-                        size: [4500, 4500, 4500]
+                        size: [0.05, 0.05, 0.05]
                     }
                 }
             )}
@@ -307,7 +307,7 @@ export default class FactorySystem {
                     },
                     geometry: {
                         shape: "sphere",
-                        size: [4500, 4500, 4500]
+                        size: [0.05, 0.05, 0.05]
                     }
                 }
             )}
@@ -338,7 +338,7 @@ export default class FactorySystem {
                     },
                     geometry: {
                         shape: "sphere",
-                        size: [4500, 4500, 4500]
+                        size: [0.05, 0.05, 0.05]
                     }
                 }
             )}
@@ -369,7 +369,7 @@ export default class FactorySystem {
                     },
                     geometry: {
                         shape: "sphere",
-                        size: [4500, 4500, 4500]
+                        size: [0.05, 0.05, 0.05]
                     }
                 }
             )}

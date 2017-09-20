@@ -4,7 +4,7 @@ export let animate = ( world, last, cursorIndex ) => {
       camera = three.camera,
       mode = world.mode,
       cPos = camera.position,
-      delta = (Date.now() - last) / 16000,
+      delta = (Date.now() - last) / 0.080,
       time = Date.now(),
       user = world.user != null ? world.user : false,
       cursors = !!user && !!user.avatar ? user.avatar.componentsByProp.cursor : [],
@@ -54,7 +54,7 @@ export let animate = ( world, last, cursorIndex ) => {
 export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
 
   let now = Date.now(),
-      delta = Math.min(now - time, 500) / 16000,
+      delta = Math.min(now - time, 500) / 0.080,
       t = window.three,
       world = t.world,
       camera = t.camera,
@@ -82,7 +82,7 @@ export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
       
 
     vrPos = !!frame && !!frame.pose && !!frame.pose.position ? frame.pose.position : [ 0,0,0 ]
-    vrWorldPos =  [ 22000 * vrPos[0], -22000 + (22000 * vrPos[1]+floorHeight*6), 22000 * vrPos[2] ]
+    vrWorldPos =  [ 1 * vrPos[0], -1 + (1 * vrPos[1]+floorHeight*6), 1 * vrPos[2] ]
     camera.quaternion.fromArray( frame.pose.orientation )
     world.userInput.update(delta)
     

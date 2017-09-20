@@ -23,7 +23,7 @@ let panel3 = {
                         geometry: {
                         merge: true,
                             shape: "hexagon",
-                            size: [18000, 28000, 1000]
+                            size: [0.8, 1.1, 1000]
                         },
                         material: {
                             color: 0x808080,
@@ -39,7 +39,7 @@ let panel3 = {
                         geometry: {
                         merge: true,
                             shape: "box",
-                            size: [10000, 22000, 1000]
+                            size: [0.5,, 1, 1000]
                         },
                         material: {
                             color: 0x808080,
@@ -55,7 +55,7 @@ let panel3 = {
                         geometry: {
                         merge: true,
                             shape: "hexagon",
-                            size: [28000, 18000, 1000]
+                            size: [1.1, 0.8, 1000]
                         },
                         material: {
                             color: 0x808080,

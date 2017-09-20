@@ -176,7 +176,14 @@ class Settings extends Component {
     this.props.uploadFile(data, username, "")
 
   }
-  
+
+  resetToDefault () {
+
+    window.localStorage.clear()
+    window.location.href = window.location.href
+
+  }
+
   render() {
 
     let isAdmin = this.props.user.name == 'admin'
@@ -194,7 +201,7 @@ class Settings extends Component {
                       step={1}
                       type='range'
                       min='-4'
-                      max='6'
+                      max='8'
                 />
                 <span style={styles.numericLabel}>
                   {(this.state.viewDistance >= 0 ?'+ ':'')+this.state.viewDistance} Voxels 
@@ -277,8 +284,8 @@ class Settings extends Component {
                    defaultValue={this.state.floorHeight}
                    step={1}
                    type='range'
-                   min='-30000'
-                   max='20000'
+                   min='-2'
+                   max='2'
               />
               <span style={styles.numericLabel}>
                 {this.state.floorHeight} Units
@@ -336,9 +343,14 @@ class Settings extends Component {
           </div>
           <input style={styles.save}
                  type='submit'
+                 value="Reset To Defaults"
+                 onClick={ e=> this.resetToDefault()}
+          />
+          <input style={styles.save}
+                 type='submit'
                  value="Save Settings"
                  onClick={ e=> this.save()}
-          />
+          /> 
           <br />
           { isAdmin ? (
             <div style={styles.admin}>

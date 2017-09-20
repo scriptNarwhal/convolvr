@@ -76,7 +76,7 @@ export default class ToolUISystem {
 
             if ( ui.props.toolUI.currentTool ) {
 
-                ui.mesh.position.set( -12000 + 8000 * currentTools[ hand ], 0, -4000 )
+                ui.mesh.position.set( -0.050 + 0.3333 * currentTools[ hand ], 0, -0.3333 )
                 //ui.mesh.updateMatrix()
             }
 
@@ -96,8 +96,8 @@ export default class ToolUISystem {
       mesh.position.set( userPos.x, userPos.y, userPos.z )
       mesh.rotation.y = three.camera.rotation.y
       mesh.updateMatrix()
-      mesh.translateZ( -70000 )
-      mesh.translateX(  2500 )
+      mesh.translateZ( -0.3330 )
+      mesh.translateX(  0.1 )
       mesh.translateY(  32000 )
       mesh.updateMatrix()
 

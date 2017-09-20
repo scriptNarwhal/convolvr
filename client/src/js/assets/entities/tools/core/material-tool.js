@@ -24,7 +24,7 @@ export default class MaterialTool extends Tool {
           props: {
             geometry: {
               shape: "box",
-              size: [3000, 1200, 8000]
+              size: [0.08, 0.05, 8000]
             },
             material: {
               name: "metal"
@@ -44,7 +44,7 @@ export default class MaterialTool extends Tool {
                       type: "grid",
                       mode: "factory", // child components will ignore layout
                       columns: 3,
-                      gridSize: 18000
+                      gridSize: 0.8
                     }
                   }
                 }
@@ -83,8 +83,19 @@ export default class MaterialTool extends Tool {
           
 
       console.log(" ( Material Tool ) ", componentPath )
+      props = selected.componentsByProp
       
-      if ( !! cursorComponent && !! selected && !!!selected.componentsByProp.miniature ) {
+      if ( !!!selected || props.miniature || props.activate ) {
+          console.warn("no tool action, calling activation callbacks")
+          return false 
+      
+      } else {
+      
+          coords = selected.voxel
+      
+      }
+      
+      if ( !! cursorComponent && !! selected) {
 
         componentPath = cursorComponent.path
         component = Object.assign({}, {

@@ -33,7 +33,7 @@ self.onmessage = ( e: Object ) => {
         // Load oimo.js
         importScripts( e.data.oimoUrl )
         // Init physics
-        world = new OIMO.World( { timestep:e.data.dt, iterations:8, broadphase:2, worldscale:22000, random:true, info:false } )
+        world = new OIMO.World( { timestep:e.data.dt, iterations:8, broadphase:2, worldscale:1, random:true, info:false } )
         // Ground plane // make configurable
         
         let ground = world.add({size:[200, 20, 200], pos:[0,-10,0]}),

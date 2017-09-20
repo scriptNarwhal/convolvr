@@ -185,7 +185,7 @@ export default class Component {
         entMesh = this.mesh,
         parentMesh = this.parent ? this.parent.mesh : false,
         worldCompPos = null,
-        distance = 200000,
+        distance = 0.0900,
         newDist = 0,
         closest = null;
 
@@ -208,7 +208,7 @@ export default class Component {
 
     if ( !!!closest ) {
 
-      distance = 200000
+      distance = 0.0900
       newDist = 0
       this.combinedComponents.map( component => {
         console.log("Finding Combined Component: ")

@@ -27,7 +27,7 @@ export default class ToolSystem {
                     props: { // colored top bar                      
                         geometry: {
                             shape: "box",
-                            size: [60000, 10000, 2000],
+                            size: [3, 0.5, 0.1],
                             faceNormals: false
                         },
                         material: {
@@ -36,7 +36,7 @@ export default class ToolSystem {
                         },
                         components: [
                             {
-                                position: [ 0, 2000, -14000 ],
+                                position: [ 0, 0.1, -0.66 ],
                                 props: { // title for top bar
                                     text: {
                                         label: true,
@@ -46,7 +46,7 @@ export default class ToolSystem {
                                     },
                                     geometry: {
                                         shape: "box",
-                                        size: [ 60000, 10000, 2000 ]
+                                        size: [ 3, 0.5,, 0.1 ]
                                     },
                                     material: {
                                         name: "plastic",
@@ -65,7 +65,7 @@ export default class ToolSystem {
                     props: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel
                         geometry: {
                             shape: "box",
-                            size: [ 60000, 80000, 2000 ]
+                            size: [ 3, 4, 0.1 ]
                         },
                         material: {
                             name: "metal",
@@ -158,7 +158,7 @@ export default class ToolSystem {
       if ( !input.trackedControls && !input.leapMotion ) {
 
           this.world.user.mesh.add( toolMesh )
-          toolMesh.position.set( 1500-( 3000 * hand ), -800, -1550 )
+          toolMesh.position.set( 0.05-( 0.08 * hand ), -0.025, -0.05 )
 
       } else {
 
@@ -177,16 +177,16 @@ export default class ToolSystem {
         userPos[1] += 42000
         toolPanel.update(userPos)
         toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
-        toolPanel.mesh.translateZ(-72000)
-        toolPanel.mesh.translateX(35000)
+        toolPanel.mesh.translateZ(-3)
+        toolPanel.mesh.translateX(1.5)
         toolPanel.mesh.updateMatrix()
 
         this.panels.map( panel => {
             console.log("panel distance ", toolPanel.mesh.position.sub( panel.mesh.position ).length())
-            if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 40000 ) {
+            if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 4 ) {
 
-                panel.mesh.translateX(100000)
-                panel.mesh.translateZ(100000)
+                panel.mesh.translateX(0.5,0)
+                panel.mesh.translateZ(0.5,0)
                 panel.mesh.updateMatrix()
 
             }
@@ -214,7 +214,7 @@ export default class ToolSystem {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 8000, 3000, 2000 ]
+                size: [ 8000, 0.08, 2000 ]
               },
               material: {
                 name: "glass"
@@ -228,7 +228,7 @@ export default class ToolSystem {
                 ]
               }
             },
-            position: [ 6000, 3000, 3000 ]
+            position: [ 6000, 0.08, 0.08 ]
         }
 
     }

@@ -35,7 +35,7 @@ export default class EntityTool extends Tool  {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 1600, 1200, 7000 ]
+                size: [ 0.08, 0.05, 0.333 ]
               },
               material: {
                 name: "metal"
@@ -88,7 +88,7 @@ export default class EntityTool extends Tool  {
 
       if ( ! tooManyComponents ) {
   
-        if ( selected && selected.componentsByProp && !!!selected.componentsByProp.miniature && (cursorState.distance < 200000) ) { // switch to component tool
+        if ( selected && selected.componentsByProp && !!!selected.componentsByProp.miniature && (cursorState.distance < 0.0900) ) { // switch to component tool
             
             user.toolbox.useTool( 1, telemetry.hand, false )
             user.hud.componentsByProp.toolUI[0].state.toolUI.show()

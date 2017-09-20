@@ -354,9 +354,9 @@ export default class Toolbox {
       if ( userHand ) {
 
         userHand.autoUpdateMatrix = false
-        userHand.position.fromArray(position).multiplyScalar(22000).add(this.world.camera.position)
+        userHand.position.fromArray(position).multiplyScalar(1).add(this.world.camera.position)
         userHand.translateX(725+ hand*-1250)
-        userHand.position.y += -22000+this.world.floorHeight*6
+        userHand.position.y += -1+this.world.floorHeight*6
         userHand.quaternion.fromArray(orientation)
 
       }
@@ -375,7 +375,7 @@ export default class Toolbox {
 
      if ( !!!coords )
 
-        coords = [ Math.floor(cPos.x / 928000), 0, Math.floor(cPos.z / 807360) ]
+        coords = [ Math.floor(cPos.x / 42.18181818), 0, Math.floor(cPos.z / 36.698181818181816) ]
 
      if ( entity )  { entity.voxel = coords }
 

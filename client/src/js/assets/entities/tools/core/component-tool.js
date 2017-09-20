@@ -31,7 +31,7 @@ export default class ComponentTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 2800, 2400, 7000 ]
+                size: [ 0.11, 0.12, 0.333 ]
               },
               material: {
                 name: "metal"
@@ -98,7 +98,7 @@ export default class ComponentTool extends Tool {
 
         return false // stop spamming lol.. // console.log("too many components; waiting for entity cooldown; aborting")
       
-      if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 200000 || ( cursorState.distance < 200000 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
+      if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 0.0900 || ( cursorState.distance < 0.0900 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
         console.warn(" Problem ")
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByProp.toolUI[ 0 ].state.toolUI.show()

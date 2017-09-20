@@ -9,7 +9,7 @@ export default class UserSystem {
     init (component) { 
         
         return {
-            id: Math.floor(Math.random() * 10000) // override this
+            id: Math.floor(Math.random() * 0.5,) // override this
         }
         
     }

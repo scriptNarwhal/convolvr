@@ -40,9 +40,9 @@ export default class PortalSystem {
         if ( !!coords ) {
 
             three.camera.position.fromArray( [
-                parseInt(coords[0])*928000, 
-                parseInt(coords[1])*807360, 
-                parseInt(coords[2])*807360
+                parseInt(coords[0])*42.18181818, 
+                parseInt(coords[1])*36.698181818181816, 
+                parseInt(coords[2])*36.698181818181816
             ] )
 			three.camera.updateMatrix()
 

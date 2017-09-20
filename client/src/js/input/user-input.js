@@ -178,7 +178,7 @@ export default class UserInput {
 			terrainMesh = terrain.mesh,
 			terrainConfig = terrain.config,
 			terrainMode = '',
-			bottom = -600000,
+			bottom = -24,
 			velocity = this.device.velocity //world.getElevation(this.camera.position);
 
 		if ( terrainConfig ) {
@@ -187,11 +187,11 @@ export default class UserInput {
 
 			if (terrainMode == "plane" || terrainMode == "both") {
 
-				bottom = terrainMesh.position.y + 28000 + world.vrHeight
+				bottom = terrainMesh.position.y + 0.110 + world.vrHeight
 
 			} else {
 
-				bottom = -(6000000 / terrainConfig.flatness) + 28000 + world.vrHeight
+				bottom = -(27.27 / terrainConfig.flatness) + 0.110 + world.vrHeight
 
 			}
 
@@ -225,7 +225,7 @@ export default class UserInput {
 				}
 			}
 			
-			velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*3000))
+			velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*0.08))
 
 			if (this.leapMotion && this.moveVector.length() > 0) {
 
@@ -235,7 +235,7 @@ export default class UserInput {
 
 			}
 
-			if ( Math.abs(velocity.y) > 6000 ) {
+			if ( Math.abs(velocity.y) > 0.2 ) {
 
 				this.device.falling = true
 
@@ -247,17 +247,17 @@ export default class UserInput {
 
 					if (world.highAltitudeGravity) {
 
-							velocity.y -= (2500 * (delta*16000))
+							velocity.y -= (0.1 * (delta*0.080))
 
 					} else {
 
-						if (this.camera.position.y > 2400000) {
+						if (this.camera.position.y > 40.00 ) {
 
 							velocity.y *= 0.99
 
 						} else {
 
-							velocity.y -= (2500 * (delta*16000))  // apply gravity
+							//velocity.y -= (0.00001 * (delta*0.080))  // apply gravity
 						}
 					}
 				} 	
@@ -265,24 +265,24 @@ export default class UserInput {
 			
 			this.moveVector.set( 0, 0, 0 )
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
-			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
+			//this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
 			this.camera.matrixWorldNeedsUpdate = true
 			
 			let friction = 0
 
-			if ( this.camera.position.y < bottom + 70000 ) {
+			if ( this.camera.position.y < bottom + 0.3330 ) {
 
 				velocity.y *= this.keys.shift ? -0.70 : -0.20
 				this.device.falling = false
-				this.camera.position.y = bottom + 70000
+				this.camera.position.y = bottom + 0.3330
 				
-				if ( velocity.y > 1000 )
+				if ( velocity.y > 0.1 )
 
 					window.navigator.vibrate && window.navigator.vibrate(50) // replace with haptics system
 				
 			}
 			
-			if ( this.device.falling == false ) { // (velocity.x * velocity.x) + (velocity.z * velocity.z) > 20000 
+			if ( this.device.falling == false ) { // (velocity.x * velocity.x) + (velocity.z * velocity.z) > 0.090 
 
 				friction = 0.03
 
@@ -298,8 +298,8 @@ export default class UserInput {
 
 			}
 
-			velocity.x *=  (1 - (friction * delta * 1000))
-			velocity.z *= (1 - (friction * delta * 1000))
+			velocity.x *=  (1 - (friction * delta * 0.05))
+			velocity.z *= (1 - (friction * delta * 0.05))
 
 			if ( !!world.user.mesh ) {
 
@@ -341,52 +341,52 @@ export default class UserInput {
 
 	}
 
-	toggleFullscreen ( elem ) {
+	toggleFullscreen(elem) {
 
-		if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {
-				
-				this.fullscreen = true
-				
-				if (document.documentElement.requestFullscreen) {
+		if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
 
-					document.documentElement.requestFullscreen()
+			this.fullscreen = true
 
-				} else if (document.documentElement.msRequestFullscreen) {
+			if (document.documentElement.requestFullscreen) {
 
-					document.documentElement.msRequestFullscreen()
+				document.documentElement.requestFullscreen()
 
-				} else if (document.documentElement.mozRequestFullScreen) {
+			} else if (document.documentElement.msRequestFullscreen) {
 
-					document.documentElement.mozRequestFullScreen()
+				document.documentElement.msRequestFullscreen()
 
-				} else if (document.documentElement.webkitRequestFullscreen) {
+			} else if (document.documentElement.mozRequestFullScreen) {
 
-					document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT)
+				document.documentElement.mozRequestFullScreen()
 
-				}
-			} else {
+			} else if (document.documentElement.webkitRequestFullscreen) {
 
-				this.fullscreen = false
+				document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT)
 
-				if (document.exitFullscreen) {
+			}
+		} else {
 
-					document.exitFullscreen()
+			this.fullscreen = false
 
-				} else if (document.msExitFullscreen) {
+			if (document.exitFullscreen) {
 
-					document.msExitFullscreen()
+				document.exitFullscreen()
 
-				} else if (document.mozCancelFullScreen) {
+			} else if (document.msExitFullscreen) {
 
-					document.mozCancelFullScreen()
+				document.msExitFullscreen()
 
-				} else if (document.webkitExitFullscreen) {
+			} else if (document.mozCancelFullScreen) {
 
-					document.webkitExitFullscreen()
+				document.mozCancelFullScreen()
 
-				}
+			} else if (document.webkitExitFullscreen) {
+
+				document.webkitExitFullscreen()
+
 			}
 		}
+	}
 
 	teleport ( position ) {
 		// implement

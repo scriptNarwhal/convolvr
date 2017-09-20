@@ -22,7 +22,7 @@ export default class PlaceTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 2200, 2200, 9000 ]
+                size: [ 0.1, 0.1, 0.4 ]
               },
               material: {
                 name: "metal"

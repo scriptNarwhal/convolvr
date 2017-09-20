@@ -19,7 +19,7 @@ export default class LeapMotion {
             let position = hand.screenPosition()
             input.moveVector.x = (((-window.innerWidth / 2) + position[0])) * 30
             input.moveVector.z = (((-window.innerWidth / 2) + position[2])) * 30
-            input.rotationVector.y -= 0.025 * hand.yaw() //((-window.innerWidth / 2) + position[0]) / 3000;
+            input.rotationVector.y -= 0.025 * hand.yaw() //((-window.innerWidth / 2) + position[0]) / 0.08;
             input.rotationVector.x += 0.015 * hand.pitch()
 
           })
@@ -38,7 +38,7 @@ export default class LeapMotion {
                 handMesh = toolbox.hands[ index ].mesh
                 handMesh.visible = true
                 handMesh.rotation.set( hand.pitch(), -hand.yaw(), 0 )
-                handMesh.position.set( -8000+(((-window.innerWidth / 2) )+ position[0]* 10), 0, -2550 - position[2]* 10 )
+                handMesh.position.set( -0.333+(((-window.innerWidth / 2) )+ position[0]* 10), 0, -0.222 - position[2]* 10 )
                 handMesh.updateMatrix()
                 // refactor this..
                 // include logic for moving by grabbing..
@@ -58,7 +58,7 @@ export default class LeapMotion {
               if ( index == 0 ) { // if its the first hand, control the camera
                 input.moveVector.x = (((-window.innerWidth / 2) + position[0])) * 30
                 input.moveVector.z = (((-window.innerWidth / 2) + position[2])) * 30
-                input.rotationVector.y -= 0.025 * hand.yaw() //((-window.innerWidth / 2) + position[0]) / 3000;
+                input.rotationVector.y -= 0.025 * hand.yaw() //((-window.innerWidth / 2) + position[0]) / 0.08;
                 input.rotationVector.x += 0.015 * hand.pitch()
               } else { // if its the second hand, control the hands/hands
 
@@ -69,7 +69,7 @@ export default class LeapMotion {
                     handMesh = toolbox.hands[ handIndex ].mesh
                     handMesh.visible = true
                     handMesh.rotation.set( hand.pitch(), -hand.yaw(), 0 )
-                    handMesh.position.set( -8000+((10000*handIndex)+((-window.innerWidth / 2) + position[0]) * 10), -2500, -1150 + position[2] * 10 )
+                    handMesh.position.set( -0.333+((0.5*handIndex)+((-window.innerWidth / 20000) + position[0]) * 10), -0.1, -0.05 + position[2] * 10 )
                     handMesh.updateMatrix()
                     handIndex ++
 

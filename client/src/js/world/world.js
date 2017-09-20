@@ -34,18 +34,18 @@ export default class Convolvr {
 			three = {},
 			postProcessing = false,
 			usePostProcessing = false,
-			viewDist = [ 1, 1000000 ]
+			viewDist = [ 0.5, 10 ]
 
-		//scene.scale.setScalar( 1 / 22000 ) 
+		//scene.scale.setScalar( 1 / 1 ) 
 		this.mobile = mobile
 		this.floorHeight = 0
 		this.highAltitudeGravity = false
 		this.viewDistance = 0 // default
 		this.userInput = userInput
 		initLocalSettings( this )
-		viewDist = [ 1000+this.viewDistance*200, 15000000 + (3+this.viewDistance)*600000 ]
+		viewDist = [ 0.1, 681.81 + (3+this.viewDistance)*GRID_SIZE[0]*4 ]
 		usePostProcessing = this.enablePostProcessing == 'on'
-		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
+		camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
 
 		let rendererOptions = { antialias: this.aa != 'off' && !usePostProcessing }
 
@@ -178,7 +178,7 @@ export default class Convolvr {
 
 		if ( !!! skybox ) {
 
-			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 12000000+((this.viewDistance+3.5)*1.4)*600000, 4), skyMaterial )
+			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 0.050000+((this.viewDistance+3.5)*1.4)*20, 4), skyMaterial )
 		
 		} else {
 
@@ -197,7 +197,7 @@ export default class Convolvr {
 
 				world.skyLight = skyLight
 				three.scene.add(skyLight)
-				skyLight.position.set( Math.sin(yaw)*3000000, Math.sin(config.light.pitch)*3000000, Math.cos(yaw)*3000000)
+				skyLight.position.set( Math.sin(yaw)*0.08000, Math.sin(config.light.pitch)*0.08000, Math.cos(yaw)*0.08000)
 				skyLight.lookAt(new THREE.Vector3(0,0,0))
 				three.scene.add(this.skybox)
 				//rotateSky && this.skybox.rotation.set(0, Math.PI * 1, 0)
@@ -447,7 +447,7 @@ export default class Convolvr {
 					skyMat.uniforms.time.value += delta
 
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
-				//skyLight.position.set( camera.position.x+Math.sin(yaw)*3000000, camera.position.y+ Math.sin(pitch)*3000000, camera.position.z+Math.cos(yaw)*3000000)
+				//skyLight.position.set( camera.position.x+Math.sin(yaw)*0.08000, camera.position.y+ Math.sin(pitch)*0.08000, camera.position.z+Math.cos(yaw)*0.08000)
 				//skyLight.lookAt( camera.position )
 			}
     	}
