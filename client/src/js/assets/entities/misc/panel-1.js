@@ -15,7 +15,7 @@ let panel1 = {
                     }
                 },
                 quaternion: [ 0, 0, 0, 1 ],
-                position: [ -4625, 0, 0 ],
+                position: [ -0.05, 0, 0 ],
                 components: []
             },
             {

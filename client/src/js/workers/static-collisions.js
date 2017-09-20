@@ -72,10 +72,10 @@ self.update = ( ) => {
 				
 				if ( distance2dCompare( position, voxel.position, 50.110 ) ) {
 						
-					if ( position[1] > yPos - 400000 + vrHeight  && position[1] < yPos + 20.4545454545 + vrHeight ) {
+					if ( position[1] > yPos - 400000 + vrHeight  && position[1] < yPos + 14 + vrHeight ) {
 
 						collision = true
-						//self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
+						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
 					
 					}
 
@@ -93,20 +93,20 @@ self.update = ( ) => {
 
 								ent.components.map( entComp => {
 
-									if ( distance3dCompare( position, entComp.position, entComp.boundingRadius || 0.110) ) {
+									if ( distance3dCompare( position, entComp.position, entComp.boundingRadius || 3) ) {
 
 										collision = true
 
 										if ( !! entComp.props.floor ) { 
 
-											// self.postMessage( JSON.stringify( {command: "floor collision", data: { 
-											// 	position: entComp.position, 
-											// 	floorData: entComp.props.floor
-											// }}))
+											self.postMessage( JSON.stringify( {command: "floor collision", data: { 
+												position: entComp.position, 
+												floorData: entComp.props.floor
+											}}))
 
 										} else {
 
-											//self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: entComp.position }} ) )
+											self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: entComp.position }} ) )
 
 										}
 

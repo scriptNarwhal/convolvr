@@ -6,7 +6,7 @@ let block = {
                 geometry: {
                 merge: true,
                     shape: "box",
-                    size: [42000, 42000, 1000]
+                    size: [2, 2, 0.05]
                 },
                 material: {
                     color: 0x808080,

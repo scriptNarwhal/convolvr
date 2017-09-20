@@ -30,7 +30,7 @@ let previewBox = {
                         }
                     },
                     quaternion: null,
-                    position: [ 6000, -10250, 0 ],
+                    position: [ 0.25, -0.5, 0 ],
                     components: []
                 },
                 {
@@ -45,7 +45,7 @@ let previewBox = {
                         }
                     },
                     quaternion: null,
-                    position: [ -6000, -10250, 0 ],
+                    position: [ -0.25, -0.5, 0 ],
                     components: []
                 },
             ],

@@ -5,7 +5,7 @@ let column2 = {
        geometry: {
            merge: true,
            shape: "box",
-           size: [ 8000, 72000, 8000 ]
+           size: [ 0.33, 3, 0.33 ]
        },
        material: {
            color: 0x404040,

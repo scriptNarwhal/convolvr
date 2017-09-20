@@ -43,7 +43,7 @@ export default class Convolvr {
 		this.viewDistance = 0 // default
 		this.userInput = userInput
 		initLocalSettings( this )
-		viewDist = [ 0.1, 681.81 + (3+this.viewDistance)*GRID_SIZE[0]*4 ]
+		viewDist = [ 0.1, 681.81 + (3+this.viewDistance)*GRID_SIZE[0]*150 ]
 		usePostProcessing = this.enablePostProcessing == 'on'
 		camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
 
@@ -178,7 +178,7 @@ export default class Convolvr {
 
 		if ( !!! skybox ) {
 
-			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 0.050000+((this.viewDistance+3.5)*1.4)*200, 4), skyMaterial )
+			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 0.050000+((this.viewDistance+3.5)*1.4)*120, 4), skyMaterial )
 		
 		} else {
 

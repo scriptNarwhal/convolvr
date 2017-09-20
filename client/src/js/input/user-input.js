@@ -191,7 +191,7 @@ export default class UserInput {
 
 			} else {
 
-				bottom = -(27.27 / terrainConfig.flatness) + 0.110 + world.vrHeight
+				bottom = 0.110 + world.vrHeight
 
 			}
 
@@ -247,11 +247,11 @@ export default class UserInput {
 
 					if (world.highAltitudeGravity) {
 
-							velocity.y -= (0.1 * (delta*0.080))
+						velocity.y -= (0.1 * (delta*0.0080))
 
 					} else {
 
-						if (this.camera.position.y > 40.00 ) {
+						if (this.camera.position.y < 40.00 ) {
 
 							velocity.y *= 0.99
 
@@ -265,7 +265,7 @@ export default class UserInput {
 			
 			this.moveVector.set( 0, 0, 0 )
 			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
-			//this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta, velocity.y*delta, velocity.z*delta)) );
+			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta*0.0005, velocity.y*delta*0.0005, velocity.z*delta*0.0005)) );
 			this.camera.matrixWorldNeedsUpdate = true
 			
 			let friction = 0

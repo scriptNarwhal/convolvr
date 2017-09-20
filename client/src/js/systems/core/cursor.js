@@ -50,7 +50,7 @@ export default class CursorSystem {
         }
 
         coords = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), 0, Math.floor( position.z / GRID_SIZE[ 2 ] ) ]
-        raycaster.ray.far = 0.330
+        raycaster.ray.far = 100000
         castObjects = this.getSurroundingVoxels( voxels, coords )
 
         //octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
@@ -322,7 +322,7 @@ export default class CursorSystem {
 
                 cursorPos.z += cursorSpeed
 
-            } else if ( state.distance-0.33 > (-cursorPos.z) && (cursorPos.z > -0.33 + cursorSpeed) ) { // far bound of allowed movement
+            } else if ( state.distance-0.33 > (-cursorPos.z) && (cursorPos.z > -3 + cursorSpeed) ) { // far bound of allowed movement
                 
                 cursorPos.z -= cursorSpeed
                 
