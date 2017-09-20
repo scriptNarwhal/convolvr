@@ -64,8 +64,8 @@ export default class TerrainSystem {
 
             geom = new THREE.PlaneGeometry( 10909.0909090+(3.5+world.viewDistance)*72.72727272, 10909.0909090+(3.5+world.viewDistance)*72.72727272, 2, 2 )
             mesh = new THREE.Mesh( geom, mat )
-            three.scene.add(mesh)
-            this.world.octree.add(mesh)
+            three.scene.add( mesh )
+            this.world.octree.add( mesh )
             this.mesh = mesh
 
           } else {
@@ -76,7 +76,7 @@ export default class TerrainSystem {
           }
 
            mesh.rotation.x = -Math.PI/2
-           mesh.position.y = type == 'plane' || type == "both" ? -100 : 0
+           mesh.position.y = type == 'plane' || type == "both" ? -1500 : 0
 
         }
 

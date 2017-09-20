@@ -89,41 +89,41 @@ export default class Keyboard {
 
     if ( keys.a ) {  // maybe insert more options here...
 
-      input.moveVector.x = -0.04
+      input.moveVector.x = -1
 
     } else if ( keys.d ) {
 
-      input.moveVector.x = 0.04
+      input.moveVector.x = 1
 
     }
 
     if ( keys.w ) {
 
-      input.moveVector.z = -0.04
+      input.moveVector.z = -1
 
     } else if (keys.s) {
 
-      input.moveVector.z = 0.04
+      input.moveVector.z = 1
 
     }
 
     if ( keys.r ) {
 
-      input.moveVector.y = 0.04
+      input.moveVector.y = 1
 
     } else if (keys.f) {
 
-      input.moveVector.y = -0.04
+      input.moveVector.y = -1
 
     }
 
     if ( keys.q ) {
 
-      input.rotationVector.z = -0.005
+      input.rotationVector.z = -0.5
 
     } else if ( keys.e ) {
 
-      input.rotationVector.z = 0.005
+      input.rotationVector.z = 0.5
 
     } 
     // if (keys.shift) {
