@@ -50,7 +50,7 @@ export default class CursorSystem {
         }
 
         coords = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), 0, Math.floor( position.z / GRID_SIZE[ 2 ] ) ]
-        raycaster.ray.far = 80000
+        raycaster.ray.far = 0.330
         castObjects = this.getSurroundingVoxels( voxels, coords )
 
         //octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
@@ -199,7 +199,7 @@ export default class CursorSystem {
     _cursorCallback ( cursor, hand, world, obj, entity, component ) {
 
         let cursorState = cursor.state,
-            distance = !!cursorState.cursor ? cursorState.cursor.distance : 48000,
+            distance = !!cursorState.cursor ? cursorState.cursor.distance : 2,
             props = !!component ? component.props : false,
             hover = !!props ? props.hover : false,
             lookAway = !!props ? props.lookAway : false,
@@ -218,7 +218,7 @@ export default class CursorSystem {
                 window.navigator.vibrate && window.navigator.vibrate(35)
 
             newCursorState = {
-                distance: obj.distance || 48000,
+                distance: obj.distance || 2,
                 mesh: obj.object,
                 point: obj.point,
                 faceIndex: obj.faceIndex,
@@ -229,7 +229,7 @@ export default class CursorSystem {
         } else {
 
             newCursorState = {
-                distance: 48000,
+                distance: 2,
                 mesh: null,
                 point: null,
                 faceIndex: -1,
@@ -318,11 +318,11 @@ export default class CursorSystem {
 
         if ( !!state ) { // animate cursor (in / out)
 
-            if ( state.distance-8000 < (-cursorPos.z) && (cursorPos.z < 88000 - cursorSpeed) ) { // near bound of allowed movement
+            if ( state.distance-0.33 < (-cursorPos.z) && (cursorPos.z < 4 - cursorSpeed) ) { // near bound of allowed movement
 
                 cursorPos.z += cursorSpeed
 
-            } else if ( state.distance-8000 > (-cursorPos.z) && (cursorPos.z > -88000 + cursorSpeed) ) { // far bound of allowed movement
+            } else if ( state.distance-0.33 > (-cursorPos.z) && (cursorPos.z > -0.33 + cursorSpeed) ) { // far bound of allowed movement
                 
                 cursorPos.z -= cursorSpeed
                 

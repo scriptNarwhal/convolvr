@@ -34,7 +34,7 @@ export default class Convolvr {
 			three = {},
 			postProcessing = false,
 			usePostProcessing = false,
-			viewDist = [ 0.5, 10 ]
+			viewDist = [ 0.1, 10000 ]
 
 		//scene.scale.setScalar( 1 / 1 ) 
 		this.mobile = mobile
@@ -178,7 +178,7 @@ export default class Convolvr {
 
 		if ( !!! skybox ) {
 
-			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 0.050000+((this.viewDistance+3.5)*1.4)*20, 4), skyMaterial )
+			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 0.050000+((this.viewDistance+3.5)*1.4)*200, 4), skyMaterial )
 		
 		} else {
 
