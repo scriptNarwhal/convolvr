@@ -61,7 +61,7 @@ export default class ToolSystem {
                     }
                 },
                 {
-                    position: [0, -45000, 0], // position & init the panel once the tool is equipped
+                    position: [0, -2, 0], // position & init the panel once the tool is equipped
                     props: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel
                         geometry: {
                             shape: "box",
@@ -214,7 +214,7 @@ export default class ToolSystem {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 8000, 0.08, 2000 ]
+                size: [ 0.333, 0.08, 0.1 ]
               },
               material: {
                 name: "glass"
@@ -228,7 +228,7 @@ export default class ToolSystem {
                 ]
               }
             },
-            position: [ 6000, 0.08, 0.08 ]
+            position: [ 0.2, 0.08, 0.08 ]
         }
 
     }

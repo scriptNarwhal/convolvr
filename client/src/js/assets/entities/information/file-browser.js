@@ -5,7 +5,7 @@ let block = {
         props: {
             geometry: {
                 shape: "box",
-                size: [ 42000, 42000, 42000 ]
+                size: [ 2, 2, 2 ]
             },
             material: {
                 color: 0xffffff,

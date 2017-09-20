@@ -88,7 +88,7 @@ export default class EntityTool extends Tool  {
 
       if ( ! tooManyComponents ) {
   
-        if ( selected && selected.componentsByProp && !!!selected.componentsByProp.miniature && (cursorState.distance < 0.0900) ) { // switch to component tool
+        if ( selected && selected.componentsByProp && !!!selected.componentsByProp.miniature && (cursorState.distance < 100) ) { // switch to component tool
             
             user.toolbox.useTool( 1, telemetry.hand, false )
             user.hud.componentsByProp.toolUI[0].state.toolUI.show()

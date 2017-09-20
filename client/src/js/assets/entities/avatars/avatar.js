@@ -93,7 +93,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
             props: {
               noRaycast: true,
               geometry: {
-                size: [ 3000, 6000, 9200 ],
+                size: [ 0.11, 0.22, 0.33 ],
                 shape: "box"
               },
               material: {

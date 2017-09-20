@@ -72,7 +72,7 @@ self.update = ( ) => {
 				
 				if ( distance2dCompare( position, voxel.position, 50.110 ) ) {
 						
-					if ( position[1] > yPos - 400000 + vrHeight  && position[1] < yPos + 14 + vrHeight ) {
+					if ( position[1] > yPos - 400000 + vrHeight  && position[1] < yPos + 13 + vrHeight ) {
 
 						collision = true
 						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
@@ -89,7 +89,7 @@ self.update = ( ) => {
 
 							if ( !!! ent || !!!ent.components ) { console.warn("Problem with entity! ",e ,ent); continue }
 
-							if ( distance3dCompare( position, ent.position, (ent.boundingRadius||0.5,0)+0.5,) ) { 
+							if ( distance3dCompare( position, ent.position, (ent.boundingRadius||5)+0.5,) ) { 
 
 								ent.components.map( entComp => {
 

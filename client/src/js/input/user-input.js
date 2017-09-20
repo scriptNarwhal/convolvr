@@ -162,6 +162,7 @@ export default class UserInput {
 		this.device = device
 		this.user = this.world.user
 		device.userInput = this
+		this.cameraPos = new THREE.Vector3(0,0,0)
 
 	}
 
@@ -179,6 +180,7 @@ export default class UserInput {
 			terrainConfig = terrain.config,
 			terrainMode = '',
 			bottom = -24,
+			friction = 0,
 			velocity = this.device.velocity //world.getElevation(this.camera.position);
 
 		if ( terrainConfig ) {
@@ -235,44 +237,28 @@ export default class UserInput {
 
 			}
 
-			if ( Math.abs(velocity.y) < 0.2 ) {
+			if ( Math.abs(velocity.y) < 0.2 )
 
 				this.device.falling = true
 
-			}
-
 			if ( world.gravity > 0 ) {
 
-				if (this.device.falling) { //if not standing on something..
+				if ( this.device.falling ) { //if not standing on something..
 
-					if (world.highAltitudeGravity) {
+					if ( world.highAltitudeGravity || this.camera.position.y < 220.00 ) {
 
-						velocity.y -= (0.1 * (delta*0.040))
+						velocity.y -= (0.0001 * (delta*0.040))  // apply gravity
 
-					} else {
-
-						if (this.camera.position.y < 40.00 ) {
-
-							velocity.y *= 0.99
-
-						} else {
-
-							velocity.y -= (0.00001 * (delta*0.040))  // apply gravity
-						}
 					}
-				} 	
+				}
+					
 			}
 
-			if ( velocity.y > 80 ) 
-
-				velocity.y = 80
-			
 			this.moveVector.set( 0, 0, 0 )
-			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion);
-			this.camera.matrix.setPosition(this.camera.position.add(new THREE.Vector3(velocity.x*delta*0.00001, velocity.y*delta*0.00001, velocity.z*delta*0.00001)) );
+			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion)
+			this.cameraPos.set( velocity.x*delta*0.00001, velocity.y*delta*0.00001, velocity.z*delta*0.00001 )
+			this.camera.matrix.setPosition(this.camera.position.add( this.cameraPos ) );
 			this.camera.matrixWorldNeedsUpdate = true
-			
-			let friction = 0
 
 			if ( this.camera.position.y < bottom + 0.3330 ) {
 
@@ -304,6 +290,10 @@ export default class UserInput {
 
 			velocity.x *=  (1 - (friction * delta * 0.04))
 			velocity.z *= (1 - (friction * delta * 0.04))
+
+			if ( velocity.y > 0 )
+
+				velocity.y *= (1 - (friction * delta * 0.04))
 
 			if ( !!world.user.mesh ) {
 

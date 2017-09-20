@@ -15,7 +15,7 @@ let panel3 = {
                         }
                     },
                     quaternion: null,
-                    position: [-0, 10250, 0],
+                    position: [-0, 0.5, 0],
                     components: []
                 },
                 {
@@ -39,7 +39,7 @@ let panel3 = {
                         geometry: {
                         merge: true,
                             shape: "box",
-                            size: [0.5,, 1, 0.05]
+                            size: [0.5, 1, 0.05]
                         },
                         material: {
                             color: 0x808080,
@@ -63,7 +63,7 @@ let panel3 = {
                         }
                     },
                     quaternion: null,
-                    position: [0, -4625, 0],
+                    position: [0, -0.14, 0],
                     components: []
                 },
             ],

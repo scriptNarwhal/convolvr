@@ -22,7 +22,7 @@ export default class GeometryTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 0.1, 0.1, 0.4 ]
+                size: [ 0.5, 0.5, 0.4 ]
               },
               material: {
                 name: "metal"

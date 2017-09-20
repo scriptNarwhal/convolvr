@@ -355,7 +355,7 @@ export default class Toolbox {
 
         userHand.autoUpdateMatrix = false
         userHand.position.fromArray(position).multiplyScalar(1).add(this.world.camera.position)
-        userHand.translateX(725+ hand*-1250)
+        userHand.translateX(0.03+ hand*-0.05)
         userHand.position.y += -1+this.world.floorHeight*6
         userHand.quaternion.fromArray(orientation)
 

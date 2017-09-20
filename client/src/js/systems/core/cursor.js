@@ -73,7 +73,7 @@ export default class CursorSystem {
 
                 }
 
-                if ( !!entity && obj.distance < 0.40 ) {
+                if ( !!entity && obj.distance < 40 ) {
 
                     if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
 
