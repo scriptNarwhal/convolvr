@@ -70,9 +70,9 @@ self.update = ( ) => {
 				
 				yPos = voxel.position[1]
 				
-				if ( distance2dCompare( position, voxel.position, 50.110 ) ) {
+				if ( distance2dCompare( position, voxel.position, 25 ) ) {
 						
-					if ( position[1] > yPos - 400000 + vrHeight  && position[1] < yPos + 13 + vrHeight ) {
+					if ( position[1] > yPos - 150 + vrHeight  && position[1] < yPos + 13.5 + vrHeight ) {
 
 						collision = true
 						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
