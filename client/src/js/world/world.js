@@ -104,7 +104,7 @@ export default class Convolvr {
 
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
-		this.raycaster.near = 4000
+		this.raycaster.near = 0.75
 
 		three = this.three = {
 			world: this,
@@ -197,7 +197,7 @@ export default class Convolvr {
 
 				world.skyLight = skyLight
 				three.scene.add(skyLight)
-				skyLight.position.set( Math.sin(yaw)*0.08000, Math.sin(config.light.pitch)*0.08000, Math.cos(yaw)*0.08000)
+				skyLight.position.set( Math.sin(yaw)*1000, Math.sin(config.light.pitch)*1000, Math.cos(yaw)*1000)
 				skyLight.lookAt(new THREE.Vector3(0,0,0))
 				three.scene.add(this.skybox)
 				//rotateSky && this.skybox.rotation.set(0, Math.PI * 1, 0)

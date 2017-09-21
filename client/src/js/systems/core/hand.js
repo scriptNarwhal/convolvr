@@ -75,7 +75,7 @@ export default class HandSystem {
 
             }
 
-            hand.position.set(-0.25+ i*1.25, -0.25, -0.25)
+            hand.position.set(-0.35+ i*0.7, -0.25, -0.25)
 
         }
 

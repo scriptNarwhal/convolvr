@@ -174,7 +174,7 @@ export default class ToolSystem {
 
 
         let userPos = this.world.user.avatar.mesh.position.toArray()
-        userPos[1] += 1.8
+        userPos[1] += 1.2
         toolPanel.update(userPos)
         toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
         toolPanel.mesh.translateZ(-3)

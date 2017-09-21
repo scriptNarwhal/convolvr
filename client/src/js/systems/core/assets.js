@@ -114,7 +114,7 @@ export default class AssetSystem {
                     control: [{}],
                     propulsion: [
                         { thrust: 0.09 },
-                        { thrust: 8000 }
+                        { thrust: 0.333 }
                     ],
                     projectile: [
                         { type: 'instant' },

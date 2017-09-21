@@ -89,7 +89,7 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
 
         //prop.roughnessMap = "/data/images/textures/tiles-light.png"
         prop.map = !!!prop.map ? '/data/images/textures/foliage1.jpg' : prop.map
-        prop.alphaMap = !!!prop.map ? "/data/images/textures/gplaypattern_@2X-2.png" : prop.map
+       // prop.alphaMap = !!!prop.map ? "/data/images/textures/surface03.jpg" : prop.map
 
       } else {
 

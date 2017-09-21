@@ -24,7 +24,7 @@ export default class MaterialTool extends Tool {
           props: {
             geometry: {
               shape: "box",
-              size: [0.08, 0.05, 8000]
+              size: [0.08, 0.05, 0.333]
             },
             material: {
               name: "metal"

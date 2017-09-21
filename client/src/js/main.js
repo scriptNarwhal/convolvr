@@ -108,7 +108,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
     _initFileSystemTest( world, help, coords ) 
     _initVideoChat( world, help, coords ) 
   })
-  helpScreen.update( [ -80000, altitude - 15000, 0 ] )
+  helpScreen.update( [ -0.3330, altitude - 15000, 0 ] )
   world.help = helpScreen
 
 })
@@ -161,7 +161,7 @@ function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: Array
   compProps.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0,-1x0x0"] // really just clearing the default text until something loads
   compProps.text.color = "#f0f0f0"
   httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
-  httpClient.update( [ -80000, 0, 0 ] )
+  httpClient.update( [ -0.3330, 0, 0 ] )
 
 }
 

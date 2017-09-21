@@ -47,7 +47,7 @@ export default class Component {
 
         props.geometry = {
           shape: "box",
-          size: [ 8000, 8000, 8000 ]
+          size: [ 0.333, 0.333, 0.333 ]
         }
 
       } else if ( props.geometry.merge === true ) {

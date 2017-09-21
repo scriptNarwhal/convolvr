@@ -96,9 +96,9 @@ export default class ToolUISystem {
       mesh.position.set( userPos.x, userPos.y, userPos.z )
       mesh.rotation.y = three.camera.rotation.y
       mesh.updateMatrix()
-      mesh.translateZ( -0.3330 )
+      mesh.translateZ( -1.5 )
       mesh.translateX(  0.1 )
-      mesh.translateY(  1.5 )
+      mesh.translateY(  1.0 )
       mesh.updateMatrix()
 
     }
