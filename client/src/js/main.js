@@ -10,7 +10,11 @@ import { createStore } from 'redux'
 import makeStore from './redux/makeStore'
 let store: Object = makeStore(routerReducer)
 const history: Object = syncHistoryWithStore(browserHistory, store)
-import { clearOldData, GRID_SIZE } from './config'
+import { 
+  clearOldData, 
+  APP_ROOT,
+  GRID_SIZE 
+} from './config'
 import App from './2d-ui/containers/app' // 2D UI
 import Data from './2d-ui/containers/data'
 import Worlds from './2d-ui/containers/worlds'
@@ -47,7 +51,6 @@ token = localStorage.getItem("token") || ""
 clearOldData()
 userInput = new UserInput()
 
-
 loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) => {
 
   let systems:   Systems       = world.systems,
@@ -74,12 +77,12 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
 
   if ( world.user == "convolvr" && world.name == "overworld" )
 
-    pos.set( pos.x -60000+Math.random()*0.080, pos.y + 50000, pos.z -60000+Math.random()*0.080 )
+    pos.set( pos.x -25+Math.random()*50, pos.y + 25, pos.z -25+Math.random()*50 )
     
 
   chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( scene )
-  chatScreen.update( [ 0, altitude - 15000, 0 ] )  
+  chatScreen.update( [ 0, altitude + 22, 0 ] )  
 
   world.chat = chatScreen
 
@@ -108,7 +111,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
     _initFileSystemTest( world, help, coords ) 
     _initVideoChat( world, help, coords ) 
   })
-  helpScreen.update( [ -0.3330, altitude - 15000, 0 ] )
+  helpScreen.update( [ -4, altitude + 22, 0 ] )
   world.help = helpScreen
 
 })
@@ -116,23 +119,22 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
 ReactDOM.render(
   (<Provider store={store}>
 		<Router history={history}>
-	  		<Route path="/" component={App} >
+	  		<Route path={APP_ROOT+"/"} component={App} >
 				<IndexRoute component={HUD}/>
-        <Route path="/:userName/:worldName" component={HUD} />
-        <Route path="/:userName/:worldName/at/:coords" component={HUD} />
-        <Route path="/:userName/:worldName/:placeName" component={HUD} />
-        <Route path="/login" component={Login} />
-        <Route path="/chat" component={Chat} />
-        <Route path="/files" component={Data} />
-        <Route path="/files/:username" component={Data} />
-        <Route path="/worlds" component={Worlds} />
-        <Route path="/places" component={Places} />
-        <Route path="/new-world" component={NewWorld} />
-        <Route path="/settings" component={Settings} />
-        <Route path="/import" component={ImportUI} />
-        <Route path="/network" component={Network} />
-        <Route path="/profile" component={Profile} />
-				
+        <Route path={APP_ROOT+"/:userName/:worldName"} component={HUD} />
+        <Route path={APP_ROOT+"/:userName/:worldName/at/:coords"} component={HUD} />
+        <Route path={APP_ROOT+"/:userName/:worldName/:placeName"} component={HUD} />
+        <Route path={APP_ROOT+"/login"} component={Login} />
+        <Route path={APP_ROOT+"/chat"} component={Chat} />
+        <Route path={APP_ROOT+"/files"} component={Data} />
+        <Route path={APP_ROOT+"/files/:username"} component={Data} />
+        <Route path={APP_ROOT+"/worlds"} component={Worlds} />
+        <Route path={APP_ROOT+"/places"} component={Places} />
+        <Route path={APP_ROOT+"/new-world"} component={NewWorld} />
+        <Route path={APP_ROOT+"/settings"} component={Settings} />
+        <Route path={APP_ROOT+"/import"} component={ImportUI} />
+        <Route path={APP_ROOT+"/network"} component={Network} />
+        <Route path={APP_ROOT+"/profile"} component={Profile} />
 			</Route>
 		</Router>
   </Provider>),
@@ -144,7 +146,7 @@ function _initVideoChat ( world: Convolvr, helpScreen: Entity, voxel: Array<numb
   let videoChat = world.systems.assets.makeEntity( "video-chat", true, {}, voxel ) // simple example of displaying GET response from server
   // videoChat.components[0].props.particles = {}
   videoChat.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
-  videoChat.update( [ -0.0800, 0, 0 ] )
+  videoChat.update( [ -8, 0, 0 ] )
 
 }
 
@@ -161,7 +163,7 @@ function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: Array
   compProps.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0,-1x0x0"] // really just clearing the default text until something loads
   compProps.text.color = "#f0f0f0"
   httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
-  httpClient.update( [ -0.3330, 0, 0 ] )
+  httpClient.update( [ -12, 0, 0 ] )
 
 }
 
@@ -169,6 +171,6 @@ function _initFileSystemTest ( world: Convolvr, helpScreen: Entity, voxel: Array
 
   let fileBrowser = world.systems.assets.makeEntity( "file-browser", true, {}, voxel ) // show public files in 3d
   fileBrowser.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
-  fileBrowser.update( [ -0.05, 0, 0 ] )
+  fileBrowser.update( [ -16, 0, 0 ] )
 
 }

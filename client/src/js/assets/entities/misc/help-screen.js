@@ -6,7 +6,7 @@ let helpScreen = {
             props: {
                 geometry: {
                     shape: "box",
-                    size: [0.3330, 0.3330, 0.05]
+                    size: [ 3, 3, 0.25 ]
                 },
                     material: {
                     color: 0x808080,

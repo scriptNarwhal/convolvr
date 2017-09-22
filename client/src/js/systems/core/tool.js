@@ -158,7 +158,7 @@ export default class ToolSystem {
       if ( !input.trackedControls && !input.leapMotion ) {
 
           this.world.user.mesh.add( toolMesh )
-          toolMesh.position.set( 0.05-( 0.08 * hand ), -0.025, -0.05 )
+          toolMesh.position.set( 0.05-( 0.08 * hand ), -0.333, -0.05 )
 
       } else {
 
@@ -178,7 +178,7 @@ export default class ToolSystem {
         toolPanel.update(userPos)
         toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
         toolPanel.mesh.translateZ(-3)
-        toolPanel.mesh.translateX(1.5)
+        toolPanel.mesh.translateX(1.25)
         toolPanel.mesh.updateMatrix()
 
         this.panels.map( panel => {
@@ -214,7 +214,7 @@ export default class ToolSystem {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 0.333, 0.08, 0.1 ]
+                size: [ 0.6, 0.2, 0.2 ]
               },
               material: {
                 name: "glass"
