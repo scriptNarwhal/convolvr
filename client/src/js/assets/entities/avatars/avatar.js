@@ -74,7 +74,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
              props: { 
                 geometry: {
                   shape: "frustum",
-                  size: [ 5200, 5200, 4200 ],
+                  size: [ 0.2, 0.2, 0.2 ],
                 },
                 material: {
                   color: 0xf0f0f0,

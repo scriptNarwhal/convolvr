@@ -31,7 +31,7 @@ export default class ComponentTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 0.11, 0.12, 0.333 ]
+                size: [ 0.5, 0.5, 0.333 ]
               },
               material: {
                 name: "metal"

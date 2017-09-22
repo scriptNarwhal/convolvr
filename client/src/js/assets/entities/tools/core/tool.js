@@ -37,7 +37,7 @@ export default class Tool {
       if ( !input.trackedControls && !input.leapMotion ) {
 
           this.world.user.mesh.add(toolMesh)
-          toolMesh.position.set(0.1-(0.08*hand), -800, -1550)
+          toolMesh.position.set(0.1-(0.08*hand), -0.08, -0.15)
 
       } else {
 
@@ -52,7 +52,7 @@ export default class Tool {
             toolPanel.init(three.scene)
 
         let userPos = this.world.user.avatar.mesh.position.toArray()
-        userPos[1] += 40000
+        userPos[1] += 2
         toolPanel.update(userPos)
         toolPanel.mesh.rotation.y = three.camera.rotation.y + Math.PI / 6
         toolPanel.mesh.translateZ( -3 )

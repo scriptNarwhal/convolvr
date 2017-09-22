@@ -3,7 +3,7 @@ let panel2Comp = {
             geometry: {
                 merge: true,
                 shape: "cylinder",
-                size: [0.5, 0.10, 0.05]
+                size: [0.4, 0.90, 0.05]
             },
             material: {
                 color: 0x808080,
@@ -11,7 +11,7 @@ let panel2Comp = {
             }
         },
         quaternion: [ 0, 0, 0, 1 ],
-        position: [10250, 0, 0]
+        position: [0.5, 0, 0]
     }
 
 export default panel2Comp

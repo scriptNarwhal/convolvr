@@ -22,7 +22,7 @@ export default class DebugTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 3600, 3600, 600 ]
+                size: [ 0.35, 0.35, 0.1 ]
               },
               material: {
                 name: "metal"

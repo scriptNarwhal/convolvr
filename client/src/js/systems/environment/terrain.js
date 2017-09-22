@@ -187,7 +187,7 @@ export default class TerrainSystem {
 
       this.cleanUpChunks.map(( cleanUp, i ) => {
 
-        if ( c < 3  && cleanUp ) {
+        if ( c < 6  && cleanUp ) {
 
           terrainChunk = voxels[ cleanUp.cell ]
 
