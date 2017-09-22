@@ -48,7 +48,7 @@ let toolMenu = (assetSystem, config, voxel) => {
         props: {
             geometry: {
                 shape: "box",
-                size: [ 0.5,, 0.5,, 4000 ]
+                size: [ 0.75, 0.25, 0.75 ]
             },
             material: {
                 color: 0xffffff,

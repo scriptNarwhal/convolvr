@@ -50,7 +50,7 @@ export default class AssetSystem {
                 { shape: 'box', size:           [1, 1, 1 ] },
                 { shape: 'plane', size:         [1, 0.5, 1] },
                 { shape: 'octahedron', size:    [1.1, 0.5, 0.5,] },
-                { shape: 'sphere', size:        [1.1, 0.5,, 0.5,] },
+                { shape: 'sphere', size:        [1.1, 0.5, 0.5,] },
                 { shape: 'cylinder', size:      [1.1, 1.1, 0.5,] },
                 { shape: 'torus', size:         [1.1, 1.1, 0.5,] },
                 { shape: 'hexagon', size:       [1.1, 1.1, 0.5,] },
