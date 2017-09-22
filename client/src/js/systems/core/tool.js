@@ -23,7 +23,7 @@ export default class ToolSystem {
            
             panel = new Entity(-1, [ // move panels to asset system perhaps.. or define below*
                 {
-                    position: [0, 0, 0],
+                    position: [0, 0.5, 0],
                     props: { // colored top bar                      
                         geometry: {
                             shape: "box",

@@ -163,7 +163,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
                 props: Object.assign({}, {geometry: data}, {
                     mixin: true,
-                    miniature: { scale: 8000 },
+                    miniature: { scale: 0.4 },
                     material: {
                         name: "metal",
                         color: 0xffffff
@@ -219,7 +219,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
                 props: Object.assign({}, {material: data}, {
                     mixin: true,
-                    miniature: { scale: 6000 },
+                    miniature: { scale: 0.4 },
                     geometry: {
                         shape: "sphere",
                         size: [0.05, 0.05, 0.05]
