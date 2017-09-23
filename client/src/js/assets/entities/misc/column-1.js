@@ -22,7 +22,7 @@ let column1 = {
                 geometry: {
                     merge: true,
                     shape: "hexagon",
-                    size: [ 0.080, 0.8, 1000 ]
+                    size: [ 0.080, 0.8, 1 ]
                 },
                 material: {
                     color: 0x808080,
@@ -37,7 +37,7 @@ let column1 = {
                 geometry: {
                     merge: true,
                     shape: "hexagon",
-                    size: [ 0.8, 0.8, 1000 ]
+                    size: [ 0.8, 0.8, 1 ]
                 },
                 material: {
                     color: 0x808080,

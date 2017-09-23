@@ -45,7 +45,7 @@ export default class Convolvr {
 		initLocalSettings( this )
 		viewDist = [ 0.1, 2000 + (3+this.viewDistance)*GRID_SIZE[0]*150 ]
 		usePostProcessing = this.enablePostProcessing == 'on'
-		camera = new THREE.PerspectiveCamera( 80, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
+		camera = new THREE.PerspectiveCamera( this.fov, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
 
 		let rendererOptions = { antialias: this.aa != 'off' && !usePostProcessing }
 

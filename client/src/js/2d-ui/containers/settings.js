@@ -83,6 +83,7 @@ class Settings extends Component {
       IOTMode: localStorage.getItem("IOTMode") || 'off',
       leapMode: localStorage.getItem("leapMode") || "hybrid",
       viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0,
+      fov: localStorage.getItem("fov") != null ? localStorage.getItem("fov") : 75,
       manualLensDistance: localStorage.getItem("manualLensDistance") != null ? localStorage.getItem("manualLensDistance") : 0
     })
 
@@ -104,23 +105,26 @@ class Settings extends Component {
   }
 
   reload () {
+
     window.location.href = window.location.href
+  
   }
 
   save () {
 
-    localStorage.setItem('camera', this.state.camera)
-    localStorage.setItem('lighting', this.state.lighting)
-    localStorage.setItem('aa', this.state.aa)
-    localStorage.setItem('geometry', this.state.geometry)
-    localStorage.setItem('shadows', this.state.shadows)
-    localStorage.setItem('postProcessing', this.state.postProcessing)
-    localStorage.setItem('vrMovement', this.state.vrMovement) 
-    localStorage.setItem('IOTMode', this.state.IOTMode)
-    localStorage.setItem('floorHeight', this.state.floorHeight)
-    localStorage.setItem('leapMode', this.state.leapMode )
-    localStorage.setItem('viewDistance', this.state.viewDistance)
-    localStorage.setItem('manualLensDistance', this.state.manualLensDistance)
+    localStorage.setItem( 'camera', this.state.camera )
+    localStorage.setItem( 'lighting', this.state.lighting )
+    localStorage.setItem( 'aa', this.state.aa)
+    localStorage.setItem( 'geometry', this.state.geometry )
+    localStorage.setItem( 'shadows', this.state.shadows )
+    localStorage.setItem( 'postProcessing', this.state.postProcessing )
+    localStorage.setItem( 'vrMovement', this.state.vrMovement ) 
+    localStorage.setItem( 'IOTMode', this.state.IOTMode )
+    localStorage.setItem( 'floorHeight', this.state.floorHeight )
+    localStorage.setItem( 'leapMode', this.state.leapMode )
+    localStorage.setItem( 'viewDistance', this.state.viewDistance )
+    localStorage.setItem( 'manualLensDistance', this.state.manualLensDistance )
+    localStorage.setItem( 'fov', this.state.fov )
     this.reload()
 
   }
@@ -145,7 +149,7 @@ class Settings extends Component {
 
   }
 
-  removeServer(index) {
+  removeServer( index ) {
 
     let network = this.state.network
     network.splice(index, 1)
@@ -153,7 +157,7 @@ class Settings extends Component {
 
   }
 
-  updateServer (index, name, image = '') {
+  updateServer ( index, name, image = '' ) {
 
     let network = this.state.network
     network[index].name = name
@@ -162,7 +166,7 @@ class Settings extends Component {
 
   }
 
-  upload (e) {
+  upload ( e ) {
 
     let data = new FormData(),
         username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
@@ -205,6 +209,20 @@ class Settings extends Component {
                 />
                 <span style={styles.numericLabel}>
                   {(this.state.viewDistance >= 0 ?'+ ':'')+this.state.viewDistance} Voxels 
+                </span>
+              </div>
+              <h3 style={styles.h3}>Field Of View</h3>
+              <div style={styles.col}>
+                <input onChange={e=> {this.setState({fov: parseInt(e.target.value)})}}
+                      style={styles.range}
+                      defaultValue={this.state.fov}
+                      step={1}
+                      type='range'
+                      min='70'
+                      max='110'
+                />
+                <span style={styles.numericLabel}>
+                  {this.state.fov} degrees 
                 </span>
               </div>
             </div>

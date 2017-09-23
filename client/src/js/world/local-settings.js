@@ -11,7 +11,8 @@ export default function initLocalSettings ( world ) {
 			floorHeight = localStorage.getItem("floorHeight"),
 			viewDistance = localStorage.getItem("viewDistance"),
 			leapMode = localStorage.getItem("leapMode"),
-			manualLensDistance = localStorage.getItem("manualLensDistance")
+			manualLensDistance = localStorage.getItem("manualLensDistance"),
+			fov = localStorage.getItem("fov")
 
 		if ( cameraMode == null ) {
 
@@ -97,7 +98,18 @@ export default function initLocalSettings ( world ) {
 
 		} else {
 
-			viewDistance = parseInt(viewDistance)
+			viewDistance = parseInt( viewDistance )
+
+		}
+
+		if ( fov == null ) {
+			
+			fov = 75
+			localStorage.setItem("fov", fov)
+
+		} else {
+
+			fov = parseInt( fov )
 
 		}
 
@@ -107,10 +119,11 @@ export default function initLocalSettings ( world ) {
 
 		} else {
 
-			manualLensDistance = parseFloat(manualLensDistance)
+			manualLensDistance = parseFloat( manualLensDistance )
 
 		}
 
+		world.fov = fov
 		world.aa = aa
 		world.shadows = shadows
 		world.geometry = geometry
