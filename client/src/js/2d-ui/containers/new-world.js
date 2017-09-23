@@ -75,16 +75,20 @@ const styles = {
 }
 
 class NewWorld extends Component {
+
   constructor () {
     super()
   }
+
   componentWillMount() {
+
     this.state = {
       name: "",
       userName: "space",
       skyType: "shader",
       layers: [],
       photosphere: '',
+      protected: false,
       red: 1.0,
       green: 1.0,
       blue: 1.0,
@@ -112,6 +116,7 @@ class NewWorld extends Component {
       wheels: false,
       nets: false
     }
+
   }
 
   createWorld() {
@@ -120,6 +125,7 @@ class NewWorld extends Component {
           id: 0,
           name: this.state.name,
           description: this.state.description,
+          protected: this.state.protected,
           tags: [],
           gravity: this.state.gravity,
           highAltitudeGravity: this.state.highAltitudeGravity,
@@ -216,6 +222,12 @@ class NewWorld extends Component {
       gravity: value == 'yes' ? 1.0 : 0.0
     })
   }
+  onToggleProtected (e) {
+    let value= e.target.value
+    this.setState({
+      protected: value == 'yes' ? true : false
+    })
+  }
   onToggleHighAltitudeGravity (e) {
     let value = e.target.value
     this.setState({
@@ -263,6 +275,15 @@ class NewWorld extends Component {
                          onBlur={(e)=>{ this.setState({description: e.target.value }) }}
                          style={ Object.assign({}, styles.input, styles.textInput) }
                   />
+                  </td>
+              </tr>
+              <tr>
+                  <td>Write Protected?</td>
+                  <td>
+                  <select onChange={ e=> { this.onToggleProtected(e) }}>
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                  </select>
                   </td>
               </tr>
               <tr>
