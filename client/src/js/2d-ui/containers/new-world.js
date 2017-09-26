@@ -171,6 +171,7 @@ class NewWorld extends Component {
       }
 
     data.userName = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'space' // mark as public / not tied to user if no userName
+    data.userId = this.props.loggedInUser != false ? this.props.loggedInUser.id : -1
     if ( this.state.name != "" || this.state.description == "" ) {
 
       this.props.createWorld( data )
