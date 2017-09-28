@@ -51,6 +51,7 @@ import MiniatureSystem from './core/miniature'
 import ObjPluginSystem from './importers/obj-plugin'
 import OimoPluginSystem from './environment/oimo-plugin'
 import RESTSystem from './information/rest'
+import RPGRaceSystem from './game/rpg-race'
 import ScreenshotSystem from './environment/screenshot'
 import SignalSystem from './information/signal'
 import SkillSystem from './game/skill'
@@ -68,6 +69,7 @@ import UserSystem from './core/user'
 import VehicleSystem from './vehicle/vehicle'
 import WallSystem from './environment/wall'
 import WebRTCSystem from './video/webrtc'
+import WeaponSystem from './game/weapon'
 import NPCSystem from './game/npc'
 
 export default class Systems {
@@ -132,6 +134,7 @@ export default class Systems {
 			projectile: 	  new ProjectileSystem( world ),
 			quest: 			  new QuestSystem( world ),
 			rest: 			  new RESTSystem( world ),
+			rpgRace:		  new RPGRaceSystem( world ),
 			signal: 		  new SignalSystem( world ),
 			skill: 			  new SkillSystem( world ),
 			screenshot: 	  new ScreenshotSystem( world ),
@@ -150,6 +153,7 @@ export default class Systems {
 			video: 			  new VideoSystem( world ),
 			wall: 			  new WallSystem( world ),
 			webrtc: 		  new WebRTCSystem( world ),
+			weapon:			  new WeaponSystem( world )
 		}
 
         this.systems = systems
@@ -219,6 +223,11 @@ export default class Systems {
         return mesh
     }
 
+	/**
+	*  Fires once per frame, passing the delta and total time passed
+	*  @param {delta} number
+	*  @param {time}  number 
+	**/
 	tick ( delta, time ) {
 
 		this.particles.tick( delta, time )

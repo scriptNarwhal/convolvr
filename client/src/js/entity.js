@@ -298,7 +298,7 @@ export default class Entity {
 
         let voxel = terrain.voxels[ coords.join(".") ]
 
-        if ( voxel && typeof voxel != 'boolean' ) {
+        if ( typeof voxel === 'object' ) {
 
           callback( voxel )
 

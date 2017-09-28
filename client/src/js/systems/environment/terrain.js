@@ -282,6 +282,7 @@ export default class TerrainSystem {
                 if ( initialLoad == false && cameraKey == voxelKey ) {
 
                   terrain.world.initialLoad = true
+                  terrain.loaded = true
                   terrain.world.loadedCallback()
                   terrain.readyCallback()
 

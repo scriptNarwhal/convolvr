@@ -14,7 +14,7 @@ export default class SocketHandlers {
 
 			let data   = JSON.parse( packet.data ),
 				world  = this.world,
-				voxel  = [0, 0, 0],
+				voxel  = data.coords, //[0, 0, 0],
 				entity = null,
 				avatar = null,
 				user   = null,
@@ -37,29 +37,44 @@ export default class SocketHandlers {
 					
 					if ( user == null ) {
 
-						// voxel = [ Math.floor( pos.x / GRID_SIZE[ 0 ] ), 0, Math.floor( pos.z / GRID_SIZE[ 2 ] ) ]
+						let initPlayerAvatar = () => {
 
-						// if ( typeof world.systems.terrain.voxels[ voxel[0]+'.0.'+voxel[2]] != 'object' ) {
+							avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id }, voxel )
+							avatar.init( window.three.scene )
+							user = world.users[ "user"+entity.id ] = {
+								id: entity.id,
+								avatar,
+								mesh: avatar.mesh
+							}
 
-						// 	world.systems.terrain.loadVoxel( voxel )
+							if ( data.entity.hands.length > 0 )
+							
+								setTimeout( () => {
 
-						// }
+									user.avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands( true )
+									
+								}, 1000 )
 
-						avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id }, voxel )
-						avatar.init( window.three.scene )
-						user = world.users[ "user"+entity.id ] = {
-							id: entity.id,
-							avatar,
-							mesh: avatar.mesh
 						}
+
+						if ( typeof world.systems.terrain.voxels[ coords[0]+'.0.'+coords[2]] != 'object' ) {
+
+							world.systems.terrain.loadVoxel( coords, (loadedVoxel) => {
+
+								initPlayerAvatar( )
+
+							})
+
+						} else {
+
+							initPlayerAvatar( )
+
+						}
+
+	
 						
-						if ( data.entity.hands.length > 0 ) {
+						
 
-							setTimeout( () => {
-								user.avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands( true )
-							}, 1000 )
-
-						}
 
 					}
 
@@ -109,11 +124,10 @@ export default class SocketHandlers {
 				case "Component Tool":
 					voxel.entities.map( voxelEnt => { // find & re-init entity
 
-						if ( voxelEnt.id == data.entityId ) { // console.log("got component tool message", data.entity.components); // concat with existing components array
+						if ( voxelEnt.id == data.entityId ) // console.log("got component tool message", data.entity.components); // concat with existing components array
 						
 							voxelEnt.update( false, false, voxelEnt.components.concat(data.entity.components))
 						
-						}
 
 					})
 				break;
@@ -153,11 +167,10 @@ export default class SocketHandlers {
 				break
 			}
 
-			if ( world.IOTMode ) {
+			if ( world.IOTMode )
 
 				animate( world, Date.now(), 0 )
 				
-			}
 
 		})
 
