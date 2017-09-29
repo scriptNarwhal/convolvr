@@ -62,7 +62,7 @@ export default class TerrainSystem {
          
           if ( !!!this.mesh ) {
 
-            geom = new THREE.PlaneGeometry( 10909.0909090+(3.5+world.viewDistance)*72.72727272, 10909.0909090+(3.5+world.viewDistance)*72.72727272, 2, 2 )
+            geom = new THREE.PlaneGeometry( (48+world.viewDistance)*72.72727272, (48+world.viewDistance)*72.72727272, 2, 2 )
             mesh = new THREE.Mesh( geom, mat )
             three.scene.add( mesh )
             this.world.octree.add( mesh )
@@ -76,7 +76,7 @@ export default class TerrainSystem {
           }
 
            mesh.rotation.x = -Math.PI/2
-           mesh.position.y = type == 'plane' || type == "both" ? -1500 : 0
+           mesh.position.y = type == 'plane' || type == "both" ? -20 : 0
 
         }
 
@@ -142,11 +142,12 @@ export default class TerrainSystem {
         moveDir             = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
         viewDistance        = (this.world.mobile ? 4 : 7) + this.world.viewDistance,
         removeDistance      = viewDistance + (window.innerWidth > 2100 ?  2 : 1),
-        endCoords           = [coords[0]+viewDistance, coords[2]+viewDistance],
         x                   = coords[ 0 ] - phase,
         y                   = coords[ 2 ] - phase,
         c                   = 0
 
+        const endCoords = [coords[0]+viewDistance, coords[2]+viewDistance]
+        
     this.chunkCoords = coords
     force = phase == 0
     if ( this.world.name == "" ) { return }
