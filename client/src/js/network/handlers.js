@@ -14,7 +14,7 @@ export default class SocketHandlers {
 
 			let data   = JSON.parse( packet.data ),
 				world  = this.world,
-				voxel  = data.coords, //[0, 0, 0],
+				coords  = world.getVoxel( data.position ),
 				entity = null,
 				avatar = null,
 				user   = null,
@@ -39,7 +39,7 @@ export default class SocketHandlers {
 
 						let initPlayerAvatar = () => {
 
-							avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id }, voxel )
+							avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id }, coords )
 							avatar.init( window.three.scene )
 							user = world.users[ "user"+entity.id ] = {
 								id: entity.id,
@@ -70,10 +70,6 @@ export default class SocketHandlers {
 							initPlayerAvatar( )
 
 						}
-
-	
-						
-						
 
 
 					}
@@ -110,8 +106,6 @@ export default class SocketHandlers {
 				coords = data.coords,
 				voxel = world.terrain.voxels[ coords[0]+".0."+coords[2] ],
 				quat = data.quaternion	
-
-			//console.log("Tool Action", data )
 
 			switch (data.tool) {
 				case "Entity Tool":
