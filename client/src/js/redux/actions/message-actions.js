@@ -49,26 +49,37 @@ export function getChatHistory (skip) {
             let chatUI = three.world.chat,
                 chatUIText = null,
                 newMessages = [],
-                lastSender = ''
+                lastSender = '',
+                populateVRChat = (data) => {
+                    data.map((msg) =>{
 
-            response.data.map((msg) =>{
-              let newMessage = JSON.parse(msg.message),
-                  sender = ''
-
-              newMessages.push(newMessage)
-
-              if (chatUI != false) {
-                  chatUIText = chatUI.componentsByProp.text[0].state.text
-                if (newMessage.from != lastSender || (newMessage.files!=null && newMessage.files.length > 0)) {
-                  sender = `${newMessage.from}: `
+                        let newMessage = JSON.parse(msg.message),
+                            sender = ''
+          
+                        newMessages.push(newMessage)
+          
+                        if (chatUI) {
+                            chatUIText = chatUI.componentsByProp.text[0].state.text
+                            
+                            if ( newMessage.from != lastSender || (newMessage.files!=null && newMessage.files.length > 0) )
+                                sender = `${newMessage.from}: `
+                            
+          
+                          lastSender = newMessage.from
+                          chatUIText.write(`${sender}${newMessage.message}`)
+          
+                        }
+          
+                      })
                 }
 
-                lastSender = newMessage.from
-                chatUIText.write(`${sender}${newMessage.message}`)
+            console.warn("Chat History: ", chatUI)
 
-              }
-
-            })
+            if ( chatUI ) {
+                populateVRChat( response.data )
+            } else {
+                setTimeout(()=> { populateVRChat( response.data) }, 5000)
+            }
 
             chatUIText.write("[ Press Enter To Chat ]")
             chatUIText.update()
@@ -81,7 +92,7 @@ export function getChatHistory (skip) {
         }).catch(response => {
             dispatch({
                 type: CHAT_HISTORY_FAIL,
-                error: response.data
+                error: response.error
             })
         })
 

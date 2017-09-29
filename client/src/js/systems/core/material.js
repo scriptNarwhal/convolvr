@@ -282,7 +282,10 @@ export default class MaterialSystem {
 
       let material = null
 
+      shading = mobile ? "lambert" : shading
+
       _initMaterialConfig( prop, config, shading, basic, mobile)
+
 
       if ( basic ) {
 

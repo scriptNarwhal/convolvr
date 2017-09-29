@@ -140,10 +140,16 @@ class Chat extends Component {
 
   scrollToBottom() {
 
-    const scrollHeight = this.messageBody.scrollHeight,
-          height = this.messageBody.clientHeight,
-          maxScrollTop = scrollHeight - height
-    this.messageBody.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0
+    if ( this.messageBody ) {
+
+      const scrollHeight = this.messageBody.scrollHeight,
+      height = this.messageBody.clientHeight,
+      maxScrollTop = scrollHeight - height
+
+      this.messageBody.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0
+
+    }
+    
 
   }
 

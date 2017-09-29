@@ -37,21 +37,23 @@ export default class SocketHandlers {
 					
 					if ( user == null ) {
 
-						let initPlayerAvatar = () => {
+						avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id }, coords )
+						user = world.users[ "user"+entity.id ] = {
+							id: entity.id,
+							avatar,
+							mesh: null
+						}
 
-							avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id }, coords )
+						let initPlayerAvatar = (newUser, newData) => {
+
 							avatar.init( window.three.scene )
-							user = world.users[ "user"+entity.id ] = {
-								id: entity.id,
-								avatar,
-								mesh: avatar.mesh
-							}
-
-							if ( data.entity.hands.length > 0 )
+							newUser.mesh = avatar.mesh
+							
+							if ( newData.entity.hands.length > 0 )
 							
 								setTimeout( () => {
 
-									user.avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands( true )
+									avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands( true )
 									
 								}, 1000 )
 
@@ -59,37 +61,35 @@ export default class SocketHandlers {
 
 						if ( typeof world.systems.terrain.voxels[ coords[0]+'.0.'+coords[2]] != 'object' ) {
 
-							world.systems.terrain.loadVoxel( coords, (loadedVoxel) => {
-
-								initPlayerAvatar( )
-
-							})
+							world.systems.terrain.loadVoxel( coords, loadedVoxel => { initPlayerAvatar( user, data ) })
 
 						} else {
 
-							initPlayerAvatar( )
+							initPlayerAvatar( user, data )
 
 						}
 
+					} else if ( user && user.mesh ) {
 
-					}
-
-					if ( data.entity.hands.length > 0 ) {
-
-						hands = user.avatar.componentsByProp.hand
-
-						while ( h < hands.length ) {
-
-							hand = hands[ h ]
-							hand.mesh.position.fromArray( data.entity.hands[ h ].pos )
-							hand.mesh.quaternion.fromArray( data.entity.hands[ h ].quat )
-							hand.mesh.updateMatrix()
-							h += 1
+						if ( data.entity.hands.length > 0 ) {
+							
+							hands = user.avatar.componentsByProp.hand
+							
+							while ( h < hands.length ) {
+							
+								hand = hands[ h ]
+								hand.mesh.position.fromArray( data.entity.hands[ h ].pos )
+								hand.mesh.quaternion.fromArray( data.entity.hands[ h ].quat )
+								hand.mesh.updateMatrix()
+								h += 1
+							
+							}
 
 						}
+						
+						user.avatar.update( [ pos.x, pos.y, pos.z ], [ quat.x, quat.y, quat.z, quat.w ] )
+
 					}
-					
-					user.avatar.update( [ pos.x, pos.y, pos.z ], [ quat.x, quat.y, quat.z, quat.w ] )
 
 				}
 
@@ -107,6 +107,17 @@ export default class SocketHandlers {
 				voxel = world.terrain.voxels[ coords[0]+".0."+coords[2] ],
 				quat = data.quaternion	
 
+			if ( typeof voxel != "object" ) {
+
+				if ( typeof voxel != "boolean" ) 
+					
+					world.systems.terrain.loadVoxel( coords )
+
+				console.warn("[Remote] Voxel not loaded", coords)
+				return
+
+			}
+
 			switch (data.tool) {
 				case "Entity Tool":
 					let ent = data.entity,
@@ -120,7 +131,7 @@ export default class SocketHandlers {
 
 						if ( voxelEnt.id == data.entityId ) // console.log("got component tool message", data.entity.components); // concat with existing components array
 						
-							voxelEnt.update( false, false, voxelEnt.components.concat(data.entity.components))
+							voxelEnt.update( false, false, voxelEnt.components.concat(data.entity.components) )
 						
 
 					})
