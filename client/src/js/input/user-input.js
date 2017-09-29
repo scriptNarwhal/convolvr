@@ -179,11 +179,11 @@ export default class UserInput {
 			terrainMesh = terrain.mesh,
 			terrainConfig = terrain.config,
 			terrainMode = '',
-			bottom = -24,
+			bottom = -20,
 			friction = 0,
 			velocity = this.device.velocity //world.getElevation(this.camera.position);
 
-		if ( terrainConfig ) {
+		if ( terrainConfig && terrainMesh ) {
 
 			terrainMode = terrainConfig.type
 
@@ -198,108 +198,110 @@ export default class UserInput {
 			}
 
 		}
+
 		if ( isVRMode(world.mode) ) {
 
-				this.keyboard.handleKeys(this)
-				this.gamepad.update(this, world)
+			this.keyboard.handleKeys(this)
+			this.gamepad.update(this, world)
 
 		}
-			if ( world.mode != "stereo" ) {
+		
+		if ( world.mode != "stereo" ) {
 
-				if ( this.tiltControls != null ) {
+			if ( this.tiltControls != null ) {
 
-					this.tiltControls.update()
-
-				} else {
-
-					if ( world.cameraMode == 'fps' ) { // fps camera // make configurable
-
-						this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ")
-						//this.camera.rotateZ(this.rotationVector.z)
-
-					} else { // vehicle camera
-
-						this.tmpQuaternion.set( this.rotationVector.x, this.rotationVector.y, this.rotationVector.z, 1 ).normalize()
-						this.rotationVector = {x: 0, y: 0, z: 0}
-						this.camera.quaternion.multiply(this.tmpQuaternion)
-
-					}
-				}
-			}
-			
-			velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*0.08))
-
-			if (this.leapMotion && this.moveVector.length() > 0) {
-
-				if ( velocity.y < 0 )
-
-					velocity.y *= 0.95
-
-			}
-
-			if ( Math.abs(velocity.y) < 0.2 )
-
-				this.device.falling = true
-
-			if ( world.gravity > 0 ) {
-
-				if ( this.device.falling ) { //if not standing on something..
-
-					if ( world.highAltitudeGravity || this.camera.position.y < 220.00 ) {
-
-						velocity.y -= (0.0001 * (delta*0.040))  // apply gravity
-
-					}
-				}
-					
-			}
-
-			this.moveVector.set( 0, 0, 0 )
-			this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion)
-			this.cameraPos.set( velocity.x*delta*0.00001, velocity.y*delta*0.00001, velocity.z*delta*0.00001 )
-			this.camera.matrix.setPosition(this.camera.position.add( this.cameraPos ) );
-			this.camera.matrixWorldNeedsUpdate = true
-
-			if ( this.camera.position.y < bottom + 0.3330 ) {
-
-				velocity.y *= this.keys.shift ? -0.70 : -0.20
-				this.device.falling = false
-				this.camera.position.y = bottom + 0.3330
-				
-				if ( velocity.y > 0.1 )
-
-					window.navigator.vibrate && window.navigator.vibrate(50) // replace with haptics system
-				
-			}
-			
-			if ( this.device.falling == false ) { // (velocity.x * velocity.x) + (velocity.z * velocity.z) > 0.090 
-
-				friction = 0.03
+				this.tiltControls.update()
 
 			} else {
 
-				friction = 0.013
+				if ( world.cameraMode == 'fps' ) { // fps camera // make configurable
 
+					this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ")
+					//this.camera.rotateZ(this.rotationVector.z)
+
+				} else { // vehicle camera
+
+					this.tmpQuaternion.set( this.rotationVector.x, this.rotationVector.y, this.rotationVector.z, 1 ).normalize()
+					this.rotationVector = {x: 0, y: 0, z: 0}
+					this.camera.quaternion.multiply(this.tmpQuaternion)
+
+				}
 			}
+		}
+			
+		velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*0.08))
 
-			if ( this.keys.shift == true) {
+		if (this.leapMotion && this.moveVector.length() > 0) {
+
+			if ( velocity.y < 0 )
+
+				velocity.y *= 0.95
+
+		}
+
+		if ( Math.abs(velocity.y) < 0.2 )
+
+			this.device.falling = true
+
+		if ( world.gravity > 0 ) {
+
+			if ( this.device.falling ) { //if not standing on something..
+
+				if ( world.highAltitudeGravity || this.camera.position.y < 220.00 ) {
+
+						velocity.y -= (0.0001 * (delta*0.040))  // apply gravity
+
+				}
+			}
 					
-				friction = 0.01
+		}
 
-			}
+		this.moveVector.set( 0, 0, 0 )
+		this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion)
+		this.cameraPos.set( velocity.x*delta*0.00001, velocity.y*delta*0.00001, velocity.z*delta*0.00001 )
+		this.camera.matrix.setPosition(this.camera.position.add( this.cameraPos ) );
+		this.camera.matrixWorldNeedsUpdate = true
 
-			velocity.x *=  (1 - (friction * delta * 0.04))
-			velocity.z *= (1 - (friction * delta * 0.04))
+		if ( this.camera.position.y < bottom + 0.3330 ) {
 
-			if ( velocity.y > 0 )
+			velocity.y *= this.keys.shift ? -0.70 : -0.20
+			this.device.falling = false
+			this.camera.position.y = bottom + 0.3330
+				
+			if ( velocity.y > 0.1 )
 
-				velocity.y *= (1 - (friction * delta * 0.04))
+				window.navigator.vibrate && window.navigator.vibrate(50) // replace with haptics system
+				
+		}
+			
+		if ( this.device.falling == false ) { // (velocity.x * velocity.x) + (velocity.z * velocity.z) > 0.090 
 
-			if ( !!world.user.mesh ) {
+			friction = 0.03
 
-				world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z)
+		} else {
 
-			}
+			friction = 0.013
+
+		}
+
+		if ( this.keys.shift == true) {
+					
+			friction = 0.01
+
+		}
+
+		velocity.x *=  (1 - (friction * delta * 0.04))
+		velocity.z *= (1 - (friction * delta * 0.04))
+
+		if ( velocity.y > 0 )
+
+			velocity.y *= (1 - (friction * delta * 0.04))
+
+		if ( !!world.user.mesh ) {
+
+			world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z)
+
+		}
 	}
 
 	lockChangeAlert ( canvas ) {

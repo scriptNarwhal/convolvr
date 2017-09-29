@@ -6,6 +6,7 @@ import {
   API_SERVER,
   GRID_SIZE
 } from '../../config'
+import Entity from '../../entity'
 
 export default class TerrainSystem {
 
@@ -15,6 +16,8 @@ export default class TerrainSystem {
         this.config           = world.config.terrain
         this.octree           = world.octree
         this.phase            = 0
+        this.mesh             = null
+        this.distantTerrain   = null
         this.StaticCollisions = null
         this.voxels           = []
         this.voxelList        = [] // map of coord strings to voxels
@@ -43,42 +46,62 @@ export default class TerrainSystem {
 
     initTerrain ( config ) {
 
-        let world = this.world
+      let world = this.world,
+          terrainSystem = this,
+          materials = world.systems.material
 
-        this.StaticCollisions = world.systems.staticCollisions
-        this.config = config
+      this.StaticCollisions = world.systems.staticCollisions
+      this.config = config
 
-        let type  = this.config.type,
-            red   = this.config.red,
-            green = this.config.green,
-            blue  = this.config.blue,
-            geom  = null,
-            mesh  = null,
-            mat   = null
+      let type           = this.config.type,
+          red            = this.config.red,
+          green          = this.config.green,
+          blue           = this.config.blue,
+          distantTerrain = null,
+          yPosition      = 0,
+          geom           = null,
+          mesh           = null,
+          mat            = null
 
-        if ( type != 'empty' ) {
+      if ( type != 'empty' ) {
 
-          mat = this.world.mobile ? new THREE.MeshLambertMaterial({color: config.color }) : new THREE.MeshPhongMaterial({color: config.color})
-         
-          if ( !!!this.mesh ) {
+        if ( !!this.mesh ) {
 
-            geom = new THREE.PlaneGeometry( (48+world.viewDistance)*72.72727272, (48+world.viewDistance)*72.72727272, 2, 2 )
-            mesh = new THREE.Mesh( geom, mat )
-            three.scene.add( mesh )
-            this.world.octree.add( mesh )
-            this.mesh = mesh
-
-          } else {
-            
-            this.mesh.material = mat
-            mesh = this.mesh
-
-          }
-
-           mesh.rotation.x = -Math.PI/2
-           mesh.position.y = type == 'plane' || type == "both" ? -20 : 0
+          world.octree.remove( this.mesh )
+          three.scene.remove( this.mesh )
+          this.distantTerrain = null
 
         }
+
+        yPosition = type == 'plane' || type == "both" ? -120 / this.config.flatness : 0
+
+        distantTerrain = new Entity( -1, [{
+            props: {
+              geometry: {
+                shape: "plane",
+                size: [ (48+world.viewDistance)*72.7272, (48+world.viewDistance)*72.7272, 0 ]
+              },
+              material: {
+                color: config.color,
+                envMap: world.systems.assets.envMaps.default,
+                shading: "physical"
+              }
+            },
+            components: [],
+            position: [0,0,0],
+            quaternion: [0,0,0]
+          }], [0, yPosition, 0], [0,0,0,1], world.getVoxel())
+
+        distantTerrain.init( three.scene, {}, (terrainEnt) => {
+
+          terrainSystem.mesh = terrainEnt.mesh
+           terrainEnt.mesh.rotation.x = -Math.PI/2
+           terrainEnt.mesh.updateMatrix()
+
+        })
+        this.distantTerrain = distantTerrain
+
+      }
 
   }
 

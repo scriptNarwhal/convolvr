@@ -430,6 +430,7 @@ export default class Convolvr {
 
 		let camera = three.camera,
 			terrainMesh = this.terrain.mesh,
+			terrainEnt = this.terrainMesh,
 			config = this.config,
 			skyLight = this.skyLight,
 			yaw = config ? config.light.yaw : 0,
@@ -452,37 +453,35 @@ export default class Convolvr {
 			}
     	}
 
-		if ( terrainMesh ) {
+		if ( terrainEnt )
 
-			terrainMesh.position.x = camera.position.x
-			terrainMesh.position.z = camera.position.z
-
-		}
+			terrainEnt.update( [ camera.position.x, terrainEnt.mesh.position.y, camera.position.z ] )
+			
 	}
 
 	onWindowResize () {
 
-			this.screenResX = window.devicePixelRatio * window.innerWidth
+		this.screenResX = window.devicePixelRatio * window.innerWidth
 			
-			if ( this.mode != "stereo" )
+		if ( this.mode != "stereo" )
 
-				three.renderer.setSize(window.innerWidth, window.innerHeight)
+			three.renderer.setSize(window.innerWidth, window.innerHeight)
 
 
-			if ( this.postProcessing.enabled )
+		if ( this.postProcessing.enabled )
 
-				this.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
-			
-
-			three.camera.aspect = innerWidth / innerHeight
-			three.camera.updateProjectionMatrix()
-
-			if ( this.IOTMode ) 
-
-				animate( this, Date.now(), 0 )
+			this.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
 			
 
-		}
+		three.camera.aspect = innerWidth / innerHeight
+		three.camera.updateProjectionMatrix()
+
+		if ( this.IOTMode ) 
+
+			animate( this, Date.now(), 0 )
+			
+
+	}
 
 	sendVideoFrame () { // probably going to remove this now that webrtc is in place
 
