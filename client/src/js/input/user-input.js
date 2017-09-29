@@ -249,7 +249,7 @@ export default class UserInput {
 
 				if ( world.highAltitudeGravity || this.camera.position.y < 220.00 ) {
 
-						velocity.y -= (0.0001 * (delta*0.040))  // apply gravity
+					velocity.y -= (0.0001 * (delta*0.40))  // apply gravity
 
 				}
 			}

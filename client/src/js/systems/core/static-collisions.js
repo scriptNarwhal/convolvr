@@ -87,7 +87,7 @@ export default class StaticCollisions {
 
 				if ( Math.abs(user.velocity.y) > 0.100 ) {
 
-					user.velocity.y *= 0.55
+					user.velocity.y *= 0.66
 					user.velocity.x *= 0.96
 					user.velocity.z *= 0.96
 					user.falling = true

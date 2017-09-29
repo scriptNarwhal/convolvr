@@ -270,15 +270,16 @@ export function readText (filename, username, dir) {
 
 export function writeText (text, filename, username, dir) {
     return dispatch => {
-     dispatch({
+     
+    dispatch({
          type: TEXT_WRITE_FETCH,
          username,
          dir
      })
-     let dir = !!dir && dir != "" ? "?dir="+dir : "",
-         data = { text, username, name: filename }
 
-     return axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir}`, data )
+     let data = { text, username, name: filename, path: dir }
+
+     return axios.post(`${API_SERVER}/api/documents/${username}/${filename}`, data )
         .then(response => {
             dispatch({
                 type: TEXT_WRITE_DONE,
