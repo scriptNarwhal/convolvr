@@ -47,33 +47,38 @@ export function getChatHistory (skip) {
         .then(response => {
 
             let chatUI = three.world.chat,
-                chatUIText = null,
                 newMessages = [],
                 lastSender = '',
-                populateVRChat = (data) => {
-                    data.map((msg) =>{
+                populateVRChat = data => {
 
-                        let newMessage = JSON.parse(msg.message),
-                            sender = ''
-          
-                        newMessages.push(newMessage)
-          
-                        if (chatUI) {
-                            chatUIText = chatUI.componentsByProp.text[0].state.text
-                            
-                            if ( newMessage.from != lastSender || (newMessage.files!=null && newMessage.files.length > 0) )
-                                sender = `${newMessage.from}: `
-                            
-          
-                          lastSender = newMessage.from
-                          chatUIText.write(`${sender}${newMessage.message}`)
-          
-                        }
-          
-                      })
+                    let chatUIText = null
+                    console.warn("Chat History: ", chatUI)
+                    if ( chatUI ) {
+
+                        chatUIText = chatUI.componentsByProp.text[0].state.text
+                        data.map( msg =>{
+
+                            let newMessage = JSON.parse(msg.message),
+                                sender = ''
+            
+                            newMessages.push( newMessage )
+            
+                                if ( newMessage.from != lastSender || (newMessage.files!=null && newMessage.files.length > 0) )
+
+                                    sender = `${newMessage.from}: `
+                                
+                            lastSender = newMessage.from
+                            chatUIText.write(`${sender}${newMessage.message}`)
+            
+                        })
+
+                        chatUIText.write("[ Press Enter To Chat ]")
+                        chatUIText.update()
+
+                    }
                 }
 
-            console.warn("Chat History: ", chatUI)
+            
 
             if ( chatUI ) {
                 populateVRChat( response.data )
@@ -81,15 +86,12 @@ export function getChatHistory (skip) {
                 setTimeout(()=> { populateVRChat( response.data) }, 5000)
             }
 
-            chatUIText.write("[ Press Enter To Chat ]")
-            chatUIText.update()
-
             dispatch({
                 type: CHAT_HISTORY_DONE,
                 data: newMessages
             })
 
-        }).catch(response => {
+        }).catch( response => {
             dispatch({
                 type: CHAT_HISTORY_FAIL,
                 error: response.error

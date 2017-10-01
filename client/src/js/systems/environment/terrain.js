@@ -79,7 +79,7 @@ export default class TerrainSystem {
             props: {
               geometry: {
                 shape: "plane",
-                size: [ (48+world.viewDistance)*72.7272, (48+world.viewDistance)*72.7272, 0 ]
+                size: [ (64+world.viewDistance)*GRID_SIZE[0], (64+world.viewDistance)*GRID_SIZE[0], 0 ]
               },
               material: {
                 color: config.color,
@@ -109,35 +109,26 @@ export default class TerrainSystem {
 
     let voxels     = this.voxels,
         voxelList  = this.voxelList,
-        collisions = this.world.systems.staticCollisions ? this.world.systems.staticCollisions : {},
         voxelKey   = coords[0]+".0."+coords[2], // debugging this.. 
-        voxelData  = { cell: [coords[0], 0, coords[2]], name: "generated space", visible: true, altitude: 0, entities: [] },
-        v          = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world ),
-        worldName  = this.world.name != "" ? this.world.name : "Overworld"
-                
+        voxelData  = { cell: [coords[0], 0, coords[2]], name: "unloaded voxel", visible: true, altitude: 0, entities: [] },
+        v          = null
+    
+    if ( voxels[ voxelKey ] == null ) {
+
+        v = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world )
         voxels[ voxelKey ] = v
         voxelList.push( v )
 
-     axios.get(`${API_SERVER}/api/chunks/${worldName}/${coords.join("x")}`).then( response => {
+    } else {
 
-        let physicsVoxels = []
-        typeof response.data.map == 'function' && response.data.map( c => {
+      v = voxels[ voxelKey ]
 
-          v.preLoadEntities()
-          callback && callback( v )
-          collisions.worker.postMessage(JSON.stringify({
-            command: "add voxels",
-            data: [ v.data ]
-          }))
-          // systems.oimo.worker.postMessage(JSON.stringify({
-                //     command: "add voxels",
-                //     data: physicsVoxels
-                // }))
-      })
+    }
 
-    }).catch(response => {
-        console.log("Load Voxel Error", response)
-    })
+    if ( v.loaded == false )
+
+      v.fetchData( callback )
+
 
     return v
 
@@ -169,7 +160,7 @@ export default class TerrainSystem {
         y                   = coords[ 2 ] - phase,
         c                   = 0
 
-        const endCoords = [coords[0]+viewDistance, coords[2]+viewDistance]
+  const endCoords = [coords[0]+viewDistance, coords[2]+viewDistance]
         
     this.chunkCoords = coords
     force = phase == 0
@@ -221,15 +212,15 @@ export default class TerrainSystem {
 
               if ( !!e && !!e.mesh ) {
 
-                octree.remove(e.mesh)
-                three.scene.remove(e.mesh)
+                octree.remove( e.mesh )
+                three.scene.remove( e.mesh )
 
               } 
 
-              removePhysicsChunks.push(cleanUp.physics)
-              voxelList.splice(voxelList.indexOf(terrainChunk), 1)
-              delete voxels[cleanUp.cell]
-              cleanUpVoxels.splice(i, 1)
+              removePhysicsChunks.push( cleanUp.physics )
+              voxelList.splice( voxelList.indexOf( terrainChunk ), 1)
+              delete voxels[ cleanUp.cell ]
+              cleanUpVoxels.splice( i, 1 )
 
             })
 
@@ -247,15 +238,25 @@ export default class TerrainSystem {
 
         while ( y <= endCoords[ 1 ] ) {
 
-            if ( c < 3 && voxels[x+".0."+y] == null ) { // only if its not already loaded
+          if ( c < 3 && voxels[x+".0."+y] == null ) { // only if its not already loaded
               
-                voxels[ x+".0."+y ] = true
-                c += 1
-                this.reqChunks.push( x+"x0x"+y )
-      
-            }
 
-            y += 1
+              let emptyVoxel = new Voxel( { 
+                cell: [ x, 0, y ], 
+                name: "empty voxel", 
+                visible: true, 
+                altitude: 0, 
+                entities: [] 
+              }, [ x, 0, y ], this.world )
+
+              voxelList.push( emptyVoxel )
+              voxels[ x+".0."+y ] = emptyVoxel
+              c += 1
+              this.reqChunks.push( x+"x0x"+y )
+      
+          }
+
+          y += 1
 
         }
 
@@ -295,13 +296,12 @@ export default class TerrainSystem {
                     cameraKey = Math.floor( cam.position.x / GRID_SIZE[0] )+".0."+Math.floor( cam.position.z / GRID_SIZE[2] ),
                     voxelKey = c.x+".0."+c.z, // debugging this.. 
                     voxelData = { coords: [c.x, 0, c.z], name: c.name, visible: showVoxels, altitude: c.altitude, entities: c.entities },
-                    v = new Voxel( voxelData, [c.x, 0, c.z], this.world ),
+                    v = voxels[ voxelKey ],
                     initialLoad = terrain.world.initialLoad
                 
-                voxels[ voxelKey ] = v
-                voxelList.push( v )
+                v.setData( c )
                 physicsVoxels.push( v.data )
-                v.preLoadEntities()
+                v.loadDistantEntities()
         
                 if ( initialLoad == false && cameraKey == voxelKey ) {
 

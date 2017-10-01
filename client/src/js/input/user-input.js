@@ -168,11 +168,9 @@ export default class UserInput {
 
 	update ( delta ) {
 
-		if ( !this.initDone ) {
+		if ( !this.initDone )
 
 			return
-
-		}
 
 		let world = this.world,
 			terrain = world.terrain,
@@ -247,11 +245,10 @@ export default class UserInput {
 
 			if ( this.device.falling ) { //if not standing on something..
 
-				if ( world.highAltitudeGravity || this.camera.position.y < 220.00 ) {
+				if ( world.highAltitudeGravity || this.camera.position.y < 220.00 )
 
-					velocity.y -= (0.0001 * (delta*0.40))  // apply gravity
+					velocity.y -= (0.001 * (delta*0.40))  // apply gravity
 
-				}
 			}
 					
 		}
@@ -264,7 +261,7 @@ export default class UserInput {
 
 		if ( this.camera.position.y < bottom + 0.3330 ) {
 
-			velocity.y *= this.keys.shift ? -0.70 : -0.20
+			velocity.y *= this.keys.shift ? -0.80 : -0.25
 			this.device.falling = false
 			this.camera.position.y = bottom + 0.3330
 				
@@ -284,24 +281,22 @@ export default class UserInput {
 
 		}
 
-		if ( this.keys.shift == true) {
+		if ( this.keys.shift == true)
 					
 			friction = 0.01
 
-		}
 
-		velocity.x *=  (1 - (friction * delta * 0.04))
+		velocity.x *= (1 - (friction * delta * 0.04))
 		velocity.z *= (1 - (friction * delta * 0.04))
 
 		if ( velocity.y > 0 )
 
 			velocity.y *= (1 - (friction * delta * 0.04))
 
-		if ( !!world.user.mesh ) {
+		if ( !!world.user.mesh )
 
 			world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z)
 
-		}
 	}
 
 	lockChangeAlert ( canvas ) {
@@ -323,11 +318,10 @@ export default class UserInput {
 
 			if (world.user.username != "") {
 
-				if (world.mode != "stereo") {
+				if (world.mode != "stereo")
 
 					world.mode = "3d"
 
-				}
 	
 				document.body.setAttribute("class", "3d")
 

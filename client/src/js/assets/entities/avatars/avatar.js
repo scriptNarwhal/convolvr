@@ -2,8 +2,6 @@ import Entity from '../../../entity'
 import Component from '../../../component'
 // default avatar
 
-let cursorAxis = new THREE.Vector3( 1, 0, 0 )
-
 let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 'vr hands'
     
   console.log("init avatar, assetSystem ", assetSystem )
@@ -13,9 +11,9 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
             component = null,
             componentB = null,
             components = [],
-            userInput = three.world.userInput,
             cursorRot = new THREE.Quaternion(),
             cursorComponent = null,
+            cursorAxis = new THREE.Vector3( 1, 0, 0 ),
             wholeBody = !!config ? config.wholeBody : false,
             id = !!config && !!config.id ? config.id : assetSystem.autoEntityID(),
             userData = { id },
@@ -40,7 +38,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
                 type: spotLight ? "spot" : "point",
                 intensity: 0.86,
                 color: 0xffffff,
-                distance: 0.33300
+                distance: 1.500
               }
             },
             position: [ 0, 0, 0 ],
@@ -55,7 +53,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
              props: { 
                 geometry: {
                   shape: "box",
-                  size: [ 0.06, 0.05, 0.06 ]
+                  size: [ 0.12, 0.18, 0.26 ]
                 },
                 material: {
                   color: 0xffffff,
@@ -63,7 +61,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
                 },
                 user: userData
              },
-             position: [ 0, (n - 1)*0.025, 0 ],
+             position: [ 0, 0.05+(n - 1)*0.04, 0 ],
              quaternion: [ 0, 0, 0, 1 ]
         }
        components.push(component)
@@ -102,7 +100,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
               }
             },
             quaternion: [0, 0, 0, 1],
-            position: [ 0.09+(n - 1) * 0.05, 0, 0],
+            position: [ 0.1+(n - 1) * 0.2, 0, 0],
             components: []
           }))
           ++n

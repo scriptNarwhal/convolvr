@@ -1,8 +1,11 @@
 //@flow
-
+import axios from 'axios'
+import { THREE } from 'three'
 import Entity from '../entity'
 import Convolvr from './world'
-import { THREE } from 'three'
+import { 
+    API_SERVER
+} from '../config'
 
 export default class Voxel {
 
@@ -12,6 +15,8 @@ export default class Voxel {
     meshes:   Array<THREE.Mesh>
     coords:   Array<number>
     cleanUp:  boolean
+    loaded:   boolean
+    fetching: boolean
 
     constructor ( data: Object, cell: Array<number>, world: Convolvr ) {
 
@@ -38,10 +43,66 @@ export default class Voxel {
 
         this.data = data
         this.cleanUp = false
+        this.loaded = false
+        this.fetching = false
 
     }
 
-    preLoadEntities () {
+    setData ( data: Object ) {
+
+        data.cell = this.coords
+        this.data = data
+        this.loaded = true
+        this.fetching = false
+
+    }
+
+    fetchData ( callback: Function ) {
+
+        let v = this,
+            coords = this.coords,
+            system = this.world.systems,
+            collisions = system.staticCollisions ? system.staticCollisions : {},
+            oimo = system.oimo ? system.oimo : {},
+            worldName  = this.world.name != "" ? this.world.name : "Overworld"
+
+        if ( this.fetching ) {
+
+            setTimeout( ()=> { callback( v )}, 2000 )
+            return 
+
+        }
+
+        this.fetching = true
+
+        axios.get(`${API_SERVER}/api/chunks/${worldName}/${coords.join("x")}`).then(response => {
+
+            let physicsVoxels = []
+            typeof response.data.map == 'function' && response.data.map(c => {
+
+                v.setData(c)
+                v.loadDistantEntities()
+                callback && callback(v)
+                collisions.worker.postMessage(JSON.stringify({
+                    command: "add voxels",
+                    data: [ v.data ]
+                }))
+                // oimo.worker.postMessage(JSON.stringify({
+                //     command: "add voxels",
+                //     data: physicsVoxels
+                // }))
+            })
+
+        }).catch(response => {
+
+            v.fetching = false
+            console.log("Load Voxel Error", response)
+
+        })
+
+    }
+
+    loadDistantEntities () {
 
         let scene:  Object        = this.world.three.scene,
             coords: Array<number> = this.coords

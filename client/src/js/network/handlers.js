@@ -12,22 +12,25 @@ export default class SocketHandlers {
 
         socket.on( "update", packet => {
 
-			let data   = JSON.parse( packet.data ),
-				world  = this.world,
-				coords  = world.getVoxel( data.position ),
-				entity = null,
-				avatar = null,
-				user   = null,
-				pos    = null,
-				quat   =  null,
-				mesh   = null,
-				hands  = [],
-				hand   = null,
-				h      = 0
+			let data   	  = JSON.parse( packet.data ),
+				world  	  = this.world,
+				voxels 	  = world.systems.terrain.voxels,
+				coords    = world.getVoxel( data.position ),
+				userVoxel = null,
+				entity 	  = null,
+				avatar 	  = null,
+				user   	  = null,
+				pos    	  = null,
+				quat   	  =  null,
+				mesh   	  = null,
+				hands  	  = [],
+				hand   	  = null,
+				h      	  = 0
 
 			if ( !! data.entity ) {
 
 				entity = data.entity
+				userVoxel = voxels[ coords[0]+'.0.'+coords[2]] 
 
 				if ( entity.id != world.user.id ) {
 
@@ -35,6 +38,7 @@ export default class SocketHandlers {
 					quat = entity.quaternion
 					user = world.users[ "user"+entity.id ]
 					
+				
 					if ( user == null ) {
 
 						avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id }, coords )
@@ -46,25 +50,40 @@ export default class SocketHandlers {
 
 						let initPlayerAvatar = (newUser, newData) => {
 
+							console.info("[Remote] User avatar init")
 							avatar.init( window.three.scene )
 							newUser.mesh = avatar.mesh
 							
 							if ( newData.entity.hands.length > 0 )
 							
 								setTimeout( () => {
-
+									
 									avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands( true )
 									
 								}, 1000 )
 
 						}
 
-						if ( typeof world.systems.terrain.voxels[ coords[0]+'.0.'+coords[2]] != 'object' ) {
+						if ( userVoxel == null ) {
 
+							console.warn("[Remote] Voxel not loaded", coords)
 							world.systems.terrain.loadVoxel( coords, loadedVoxel => { initPlayerAvatar( user, data ) })
 
-						} else {
+						} else if ( userVoxel.loaded == false && userVoxel.fetching == false) {
 
+							console.info("[Remote] Voxel being loaded...", coords)
+							userVoxel.fetchData( loadedVoxel => { initPlayerAvatar( user, data ) } )
+
+						} else if ( userVoxel.fetching ) {
+
+							console.info("[Remote] Voxel already fetching...", coords)
+							setTimeout( ()=> {
+
+								initPlayerAvatar( user, data )
+
+							}, 1000)
+
+						} else {
 							initPlayerAvatar( user, data )
 
 						}
@@ -107,9 +126,9 @@ export default class SocketHandlers {
 				voxel = world.terrain.voxels[ coords[0]+".0."+coords[2] ],
 				quat = data.quaternion	
 
-			if ( typeof voxel != "object" ) {
+			if ( voxel == null || voxel.loaded == false ) {
 
-				if ( typeof voxel != "boolean" ) 
+				if ( voxel ) 
 					
 					world.systems.terrain.loadVoxel( coords )
 
