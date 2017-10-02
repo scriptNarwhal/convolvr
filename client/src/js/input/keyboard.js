@@ -106,11 +106,11 @@ export default class Keyboard {
 
     if ( keys.up ) {
 
-      rotateVec.x += 0.05
+      rotateVec.x += 0.033
 
     } else if ( keys.down ) {
 
-      rotateVec.x -= 0.05
+      rotateVec.x -= 0.033
 
     }
 

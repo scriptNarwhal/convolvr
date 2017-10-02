@@ -31,7 +31,7 @@ export default class UserInput {
 			z: 0
 		}
 		this.tmpQuaternion = null
-		this.moveVector = null
+		this.moveVector = new THREE.Vector3(0, 0, 0)
 		this.keys = {
 			q: false, 
 			w: false, 
@@ -59,10 +59,11 @@ export default class UserInput {
 	init ( world, camera, device ) {
 
 		let uInput = this,
-			mouse = new Mouse( this, world )
+			mouse = null
 			
 		this.rotationVector = {x: 0.2, y: 4.6, z: 0}	
 		this.connect( world, camera, device )
+		mouse = new Mouse( this, world )
 
 		if ( !world.mobile || world.IOTMode ) {
 
@@ -70,7 +71,7 @@ export default class UserInput {
 
 		} else {
 
-			this.tiltControls = new DeviceOrientationControls(camera) // call disconnect once mobile vr mode starts
+			this.tiltControls = new DeviceOrientationControls( camera ) // call disconnect once mobile vr mode starts
 			
 		}
 
@@ -80,7 +81,6 @@ export default class UserInput {
 		this.gamepad = new GamePad(this)
 		this.leapControls = new LeapMotion(this, this.world)
 		this.tmpQuaternion = new THREE.Quaternion()
-		this.moveVector = new THREE.Vector3(0, 0, 0)
 		this.initDone = true
 
 	}

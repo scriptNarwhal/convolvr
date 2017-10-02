@@ -104,7 +104,7 @@ export default class Mouse {
         this.input.fullscreen = this.focus
         console.log("focus", this.focus)
 
-        if ( !this.input.fullscreen && world.user.username != "" ) {
+        if ( !this.input.focus && !this.input.fullscreen && world.user.username != "" ) {
 
             //world.showChat();
             world.mode = "web"
