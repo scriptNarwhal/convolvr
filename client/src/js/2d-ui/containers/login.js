@@ -1,88 +1,6 @@
 import React, { Component } from 'react'
 import Shell from '../components/shell'
 
-const styles = {
-  innerLogin: {
-    width: '100%',
-    minHeight: '291px',
-    minWidth: '252px',
-    maxWidth: '530px',
-    borderRadius: '4px',
-    margin: 'auto',
-    display: 'block',
-    position: 'relative',
-    top: '6vh',
-    left: '0px',
-    right: '0px',
-    bottom: '5vh'
-  },
-  title: {
-    fontSize: '2em',
-    paddingTop: '0.5em',
-    paddingBottom: '0.66em'
-  },
-  subtitle: {
-    fontSize: '0.5em',
-    display: 'inline-block',
-    maxWidth: '360px',
-    background: 'rgba(0,0,0,0.1)',
-    padding: '0.5em',
-    paddingBottom: '0.5em',
-    paddingLeft: '2em',
-    paddingRight: '2em',
-    marginTop: '1em',
-    marginBottom: '1em'
-  },
-  form: {
-    background: 'rgba(0,0,0,0.1)',
-    maxWidth: '530px',
-    margin: 'auto',
-    paddingTop: '1em'
-  },
-  label: {
-    marginRight: "1em"
-  },
-  input: {
-    background: 'transparent',
-    color: 'white',
-    padding: '0.5em',
-    border: '2px solid rgba(255,255,255,0.25)'
-  },
-  username: {
-    marginBottom: "1em"
-  },
-  password: {
-    marginBottom: "1em"
-  },
-  go: {
-
-  },
-  submit: {
-    fontSize: "5vh",
-    color: "#929292",
-    background: "rgb(255, 255, 255)",
-    borderRadius: "0.2vh",
-    border: "rgb(107, 104, 104) 0.4vh solid",
-    cursor: "pointer"
-  },
-  signInButton: {
-    fontSize: '1em',
-    marginRight: '1em',
-    color: 'white',
-    border: '0',
-    marginBottom: '0.5em',
-    background: 'rgba(63, 0, 255, 0.37)',
-    borderRadius: '2px',
-    padding: '0.2em'
-  },
-  remember: {
-
-  },
-  rememberLabel: {
-
-  }
-}
-
 class Login extends Component {
   componentDidMount() {
     this.state = {
@@ -193,3 +111,85 @@ export default connect(
     }
   }
 )(Login)
+
+const styles = {
+  innerLogin: {
+    width: '100%',
+    minHeight: '291px',
+    minWidth: '252px',
+    maxWidth: '530px',
+    borderRadius: '4px',
+    margin: 'auto',
+    display: 'block',
+    position: 'relative',
+    top: '6vh',
+    left: '0px',
+    right: '0px',
+    bottom: '5vh'
+  },
+  title: {
+    fontSize: '2em',
+    paddingTop: '0.5em',
+    paddingBottom: '0.66em'
+  },
+  subtitle: {
+    fontSize: '0.5em',
+    display: 'inline-block',
+    maxWidth: '360px',
+    background: 'rgba(0,0,0,0.1)',
+    padding: '0.5em',
+    paddingBottom: '0.5em',
+    paddingLeft: '2em',
+    paddingRight: '2em',
+    marginTop: '1em',
+    marginBottom: '1em'
+  },
+  form: {
+    background: 'rgba(0,0,0,0.1)',
+    maxWidth: '530px',
+    margin: 'auto',
+    paddingTop: '1em'
+  },
+  label: {
+    marginRight: "1em"
+  },
+  input: {
+    background: 'transparent',
+    color: 'white',
+    padding: '0.5em',
+    border: '2px solid rgba(255,255,255,0.25)'
+  },
+  username: {
+    marginBottom: "1em"
+  },
+  password: {
+    marginBottom: "1em"
+  },
+  go: {
+
+  },
+  submit: {
+    fontSize: "5vh",
+    color: "#929292",
+    background: "rgb(255, 255, 255)",
+    borderRadius: "0.2vh",
+    border: "rgb(107, 104, 104) 0.4vh solid",
+    cursor: "pointer"
+  },
+  signInButton: {
+    fontSize: '1em',
+    marginRight: '1em',
+    color: 'white',
+    border: '0',
+    marginBottom: '0.5em',
+    background: 'rgba(63, 0, 255, 0.37)',
+    borderRadius: '2px',
+    padding: '0.2em'
+  },
+  remember: {
+
+  },
+  rememberLabel: {
+
+  }
+}

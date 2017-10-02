@@ -4,15 +4,8 @@ import Card from '../components/card'
 import Shell from '../components/shell'
 import LocationBar from '../components/location-bar'
 
-const styles = {
-  worlds: {
-    width: "100%",
-    minWidth: "320px",
-    margin: "auto"
-  }
-}
-
 class Places extends Component {
+
   setCurrentPlace (userName, world, name) {
     if (userName == '') {
       userName = 'space'
@@ -22,6 +15,7 @@ class Places extends Component {
     // this.props.setCurrentWorld(name)
     // three.world.reload(name)
   }
+
   render() {
     return (
         <Shell className="worlds">
@@ -74,6 +68,7 @@ class Places extends Component {
         </Shell>
     )
   }
+  
 }
 
 Places.defaultProps = {

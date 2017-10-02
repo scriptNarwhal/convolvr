@@ -3,13 +3,6 @@ import Shell from '../components/shell'
 import Card from '../components/card'
 import LocationBar from '../components/location-bar'
 
-let styles = {
-  hr: {
-    visibility: 'hidden'
-  },
-
-}
-
 class ImportUI extends Component {
 
   componentWillMount () {
@@ -238,3 +231,11 @@ export default connect(
     }
   }
 )(ImportUI)
+
+
+let styles = {
+  hr: {
+    visibility: 'hidden'
+  },
+
+}

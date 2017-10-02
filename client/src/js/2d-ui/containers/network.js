@@ -4,14 +4,6 @@ import Card from '../components/card'
 import Shell from '../components/shell'
 import LocationBar from '../components/location-bar'
 
-const styles = {
-  worlds: {
-    width: "100%",
-    minWidth: "320px",
-    margin: "auto"
-  }
-}
-
 class Network extends Component {
 
   constructor () {
@@ -87,3 +79,11 @@ export default connect(
     }
   }
 )(Network)
+
+const styles = {
+  worlds: {
+    width: "100%",
+    minWidth: "320px",
+    margin: "auto"
+  }
+}

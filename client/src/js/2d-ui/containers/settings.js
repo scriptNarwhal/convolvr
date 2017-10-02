@@ -1,63 +1,6 @@
 import React, { Component } from 'react'
 import Shell from '../components/shell'
 
-const styles = {
-  modal: {
-    width: '100%',
-    maxWidth: '800px',
-    height: '100%',
-    minWidth: '360px',
-    margin: 'auto',
-    display: 'block',
-    position: 'relative',
-    top: '2vh',
-    left: '0px',
-    right: '0px',
-    borderTop: '0.8vh solid rgb(43, 43, 43)',
-    background: 'rgb(27, 27, 27)'
-  },
-  save: {
-    float: 'right',
-    marginRight: '2em',
-    marginTop: '1em',
-    marginBottom: '3em',
-    fontSize: '1.25em',
-    background: '#2b2b2b',
-    color: 'white',
-    border: 'none',
-    padding: '0.5em',
-    borderRadius: '3px',
-    boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.54)'
-  },
-  h3: {
-    textAlign: 'left',
-    width: '42%',
-    fontSize: '14px',
-    display: 'inline-block',
-    marginLeft: '3%'
-  },
-  col: {
-    width: '55%',
-    display: 'inline-block',
-  },
-  textInput: {
-
-  },
-  select: {
-    padding: '0.5em'
-  },
-  range: {
-    padding: '0.5em'
-  },
-  admin: {
-    marginTop: '3em'
-  },
-  table: {
-    marginLeft: '3em'
-  },
-  numericLabel: {paddingLeft: '1em', width: '100px', display: 'inline-block'}
-}
-
 class Settings extends Component {
 
   constructor () {
@@ -504,3 +447,60 @@ export default connect(
     }
   }
 )(Settings)
+
+const styles = {
+  modal: {
+    width: '100%',
+    maxWidth: '800px',
+    height: '100%',
+    minWidth: '360px',
+    margin: 'auto',
+    display: 'block',
+    position: 'relative',
+    top: '2vh',
+    left: '0px',
+    right: '0px',
+    borderTop: '0.8vh solid rgb(43, 43, 43)',
+    background: 'rgb(27, 27, 27)'
+  },
+  save: {
+    float: 'right',
+    marginRight: '2em',
+    marginTop: '1em',
+    marginBottom: '3em',
+    fontSize: '1.25em',
+    background: '#2b2b2b',
+    color: 'white',
+    border: 'none',
+    padding: '0.5em',
+    borderRadius: '3px',
+    boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.54)'
+  },
+  h3: {
+    textAlign: 'left',
+    width: '42%',
+    fontSize: '14px',
+    display: 'inline-block',
+    marginLeft: '3%'
+  },
+  col: {
+    width: '55%',
+    display: 'inline-block',
+  },
+  textInput: {
+
+  },
+  select: {
+    padding: '0.5em'
+  },
+  range: {
+    padding: '0.5em'
+  },
+  admin: {
+    marginTop: '3em'
+  },
+  table: {
+    marginLeft: '3em'
+  },
+  numericLabel: {paddingLeft: '1em', width: '100px', display: 'inline-block'}
+}

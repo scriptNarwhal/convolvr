@@ -1,79 +1,6 @@
 import React, { Component } from 'react'
 import Shell from '../components/shell'
 
-const styles = {
-  innerLogin: {
-    width: '100%',
-    maxWidth: '800px',
-    height: 'auto',
-    paddingBottom: '2em',
-    minWidth: '360px',
-    margin: 'auto',
-    display: 'block',
-    position: 'relative',
-    top: '6vh',
-    left: '0px',
-    right: '0px',
-    borderTop: '0.8vh solid rgb(43, 43, 43)',
-    background: 'rgb(27, 27, 27)'
-  },
-  title: {
-    fontSize: "2em",
-    paddingTop: "1.5vh",
-    paddingBottom: "1vh"
-  },
-  form: {
-    overflowY: 'auto',
-    height: '90%',
-    overflowX: 'hidden'
-  },
-  label: {
-    marginRight: "1em",
-    width: '33.3%',
-    display: 'inline-block',
-    color: 'rgba(255, 255, 255, 0.85)',
-    textAlign: "left"
-  },
-  setting: {
-    width: '66.6%'
-  },
-  input: {
-    background: 'transparent',
-    color: 'white',
-    padding: '0.5em',
-    border: '2px solid rgba(255,255,255,0.25)'
-  },
-  textInput: {
-    width: '100%'
-  },
-  username: {
-    marginBottom: "1em"
-  },
-  option: {
-    marginBottom: "0.75em",
-    width: '100%',
-    display: 'inline-block'
-  },
-  go: {
-
-  },
-  submit: {
-    fontSize: "5vh",
-    color: "#929292",
-    background: "rgb(255, 255, 255)",
-    borderRadius: "0.2vh",
-    border: "rgb(107, 104, 104) 0.4vh solid",
-    cursor: "pointer"
-  },
-  signInButton: {
-    fontSize: '1em',
-    marginRight: '1em'
-  },
-  fileUpload: {
-    marginRight: '1em'
-  }
-}
-
 class NewWorld extends Component {
 
   constructor () {
@@ -601,3 +528,76 @@ export default connect(
     }
   }
 )(NewWorld)
+
+const styles = {
+  innerLogin: {
+    width: '100%',
+    maxWidth: '800px',
+    height: 'auto',
+    paddingBottom: '2em',
+    minWidth: '360px',
+    margin: 'auto',
+    display: 'block',
+    position: 'relative',
+    top: '6vh',
+    left: '0px',
+    right: '0px',
+    borderTop: '0.8vh solid rgb(43, 43, 43)',
+    background: 'rgb(27, 27, 27)'
+  },
+  title: {
+    fontSize: "2em",
+    paddingTop: "1.5vh",
+    paddingBottom: "1vh"
+  },
+  form: {
+    overflowY: 'auto',
+    height: '90%',
+    overflowX: 'hidden'
+  },
+  label: {
+    marginRight: "1em",
+    width: '33.3%',
+    display: 'inline-block',
+    color: 'rgba(255, 255, 255, 0.85)',
+    textAlign: "left"
+  },
+  setting: {
+    width: '66.6%'
+  },
+  input: {
+    background: 'transparent',
+    color: 'white',
+    padding: '0.5em',
+    border: '2px solid rgba(255,255,255,0.25)'
+  },
+  textInput: {
+    width: '100%'
+  },
+  username: {
+    marginBottom: "1em"
+  },
+  option: {
+    marginBottom: "0.75em",
+    width: '100%',
+    display: 'inline-block'
+  },
+  go: {
+
+  },
+  submit: {
+    fontSize: "5vh",
+    color: "#929292",
+    background: "rgb(255, 255, 255)",
+    borderRadius: "0.2vh",
+    border: "rgb(107, 104, 104) 0.4vh solid",
+    cursor: "pointer"
+  },
+  signInButton: {
+    fontSize: '1em',
+    marginRight: '1em'
+  },
+  fileUpload: {
+    marginRight: '1em'
+  }
+}

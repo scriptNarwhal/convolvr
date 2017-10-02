@@ -8,7 +8,9 @@ import {
     USERS_FETCH,
     USERS_FETCH_DONE,
     USERS_FETCH_FAIL,
-    UPDATE_USER,
+    UPDATE_USER_FETCH,
+    UPDATE_USER_DONE,
+    UPDATE_USER_FAIL,
     DELETE_USER,
     LOGIN_FETCH,
     LOGIN_DONE,
@@ -59,11 +61,41 @@ export function failedFetchUsers (err) {
         err: err
     }
 }
-export function updateUser (id, data) {
+export function updateUser (user, pass, email, data) {
+
+    return dispatch => {
+        dispatch({
+            type: LOGIN_FETCH
+        })
+        return axios.put(API_SERVER+"/api/users", {
+            id: 0,
+            name: user,
+            password: pass,
+            email: email,
+            data: data
+        })
+        .then(response => {
+            dispatch(updateUserDone(response))
+         }).catch(response => {
+            dispatch(updateUserFailed(response))
+       });
+  }
+
+}
+export function updateUserFailed ( resp ) {
+    
+    return {
+        type: UPDATE_USER_FAILED,
+        data: false,
+        error: resp.error
+    }
+}
+export function updateUserDone ( resp ) {
+    
     return {
         type: UPDATE_USER,
-        data: data,
-        id: id
+        data: resp.data,
+        id: resp.data.id
     }
 }
 export function deleteUser (id) {
@@ -71,7 +103,6 @@ export function deleteUser (id) {
         type: DELETE_USER
     }
 }
-
 
 export function login (user, pass, email, data) {
     return dispatch => {
