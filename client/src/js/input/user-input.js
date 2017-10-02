@@ -1,5 +1,6 @@
 import Touch from './touch'
 import Keyboard from './keyboard'
+import Mouse from './mouse'
 import GamePad from './gamepad'
 import LeapMotion from './leap-motion'
 import DeviceOrientationControls from './lib/device-orientation'
@@ -58,86 +59,14 @@ export default class UserInput {
 	init ( world, camera, device ) {
 
 		let uInput = this,
-			viewport = document.querySelector("#viewport")
+			mouse = new Mouse( this, world )
 			
+		this.rotationVector = {x: 0.2, y: 4.6, z: 0}	
 		this.connect( world, camera, device )
-		uInput.rotationVector = {x: 0.2, y: 4.6, z: 0}
-		viewport.requestPointerLock = viewport.requestPointerLock || viewport.mozRequestPointerLock || viewport.webkitRequestPointerLock;
-		viewport.style.pointerEvents = ''
 
-		if ("onpointerlockchange" in document) {
+		if ( !world.mobile || world.IOTMode ) {
 
-			document.addEventListener('pointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
-
-		} else if ("onmozpointerlockchange" in document) {
-
-			document.addEventListener('mozpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
-
-		} else if ("onwebkitpointerlockchange" in document) {
-			
-			document.addEventListener('webkitpointerlockchange', ()=>{ uInput.lockChangeAlert(viewport)}, false)
-
-		}
-
-		if (!world.mobile || world.IOTMode) {
-
-			document.addEventListener("mousemove", function (e) {
-
-				if (uInput.focus) {
-
-					uInput.rotationVector.y  -=(e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 600.0
-					uInput.rotationVector.x  -=(e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 600.0
-				
-				}
-
-			})
-			setTimeout(()=> {
-
-				document.addEventListener("mousedown", e => {
-
-					if ( world.mode != "web" ) {
-						
-						switch ( e.which ) {
-							
-							case 1: // left mouse
-								this.user.toolbox.preview(0, 0) // right hand
-							break
-							case 2: // scroll wheel click
-								// tools.selectObject() .. might be handy
-							break
-							case 3: // right click
-								//this.user.toolbox.useSecondary(0, 1) // right hand // change tool option in forward direction
-								// refactor this to grab entity
-							break
-
-						}
-					}
-
-				})
-
-				document.addEventListener("mouseup", (e) => {
-					
-					if ( world.mode != "web" ) {
-						
-						switch ( e.which ) {
-							
-							case 1: // left mouse
-								this.user.toolbox.usePrimary(0, 0) // right hand
-							break
-							case 2: // scroll wheel click
-								// tools.selectObject() .. might be handy
-							break
-							case 3: // right click
-								//this.user.toolbox.useSecondary(0, 1) // right hand // change tool option in forward direction
-								// refactor this to grab entity
-							break
-
-						}
-					}
-
-				}, false)
-
-			}, 250)
+			mouse.init()
 
 		} else {
 
@@ -145,6 +74,7 @@ export default class UserInput {
 			
 		}
 
+		this.mouse = mouse
 		this.touchControls = new Touch(this)
 		this.keyboard = new Keyboard(this, this.world)
 		this.gamepad = new GamePad(this)
@@ -296,38 +226,6 @@ export default class UserInput {
 		if ( !!world.user.mesh )
 
 			world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z)
-
-	}
-
-	lockChangeAlert ( canvas ) {
-
-		var world = this.world,
-			a = 0
-
-		this.focus = (document.pointerLockElement===canvas||document.mozPointerLockElement===canvas||document.webkitPointerLockElement===canvas);
-		this.fullscreen = this.focus
-		console.log("focus", this.focus)
-
-		if ( !this.fullscreen && world.user.username != "" ) {
-
-			//world.showChat();
-			world.mode = "web"
-			document.body.setAttribute("class", "desktop")
-
-		} else {
-
-			if (world.user.username != "") {
-
-				if (world.mode != "stereo")
-
-					world.mode = "3d"
-
-	
-				document.body.setAttribute("class", "3d")
-
-			}
-
-		}
 
 	}
 

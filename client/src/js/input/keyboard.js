@@ -8,59 +8,65 @@ export default class Keyboard {
 
     let keys = input.keys
 
-    document.addEventListener("keydown", ( event ) => {
+    document.addEventListener("keydown", event => {
 
       if ( isVRMode( world.mode ) ) { // 0 = chat, 1 = vr
 
         switch ( event.keyCode ) {
 
-          case 86: keys.q = true; break;
-          case 87: keys.w = true; break;
-          case 88: keys.e = true; break;
-          case 65: keys.a = true; break;
-          case 83: keys.s = true; break;
-          case 68: keys.d = true; break;
-          case 82: keys.r = true; break;
-          case 70: keys.f = true; break;
-          case 16: keys.shift = true; break;
-          case 32: keys.space = true; break;
+          case 86: keys.q = true; break
+          case 87: keys.w = true; break
+          case 88: keys.e = true; break
+          case 65: keys.a = true; break
+          case 83: keys.s = true; break
+          case 68: keys.d = true; break
+          case 82: keys.r = true; break
+          case 70: keys.f = true; break
+          case 16: keys.shift = true; break
+          case 32: keys.space = true; break
           case 27: // escape key
           world.mode = "web"
 
-          if (world.user.username != "") {
+          if ( world.user.username != "" )
            
             document.body.setAttribute("class", "desktop")
-           
-          }
-
+          
           break;
-
+          case 37: keys.left = true; break
+          case 38: keys.up = true; break
+          case 39: keys.right = true; break
+          case 40: keys.down = true; break
+          
         }
 
       }
 
     }, true);
 
-    document.addEventListener( "keyup" , function (event) {
+    document.addEventListener( "keyup" ,  event => {
 
       switch ( event.keyCode ) {
 
-        case 86: keys.q = false; break;
-        case 87: keys.w = false; break;
-        case 88: keys.e = false; break;
-        case 65: keys.a = false; break;
-        case 83: keys.s = false; break;
-        case 68: keys.d = false; break;
-        case 82: keys.r = false; break;
-        case 70: keys.f = false; break;
-        case 16: keys.shift = false; break;
-        case 32: keys.space = false; break;
+        case 86: keys.q = false; break
+        case 87: keys.w = false; break
+        case 88: keys.e = false; break
+        case 65: keys.a = false; break
+        case 83: keys.s = false; break
+        case 68: keys.d = false; break
+        case 82: keys.r = false; break
+        case 70: keys.f = false; break
+        case 16: keys.shift = false; break
+        case 32: keys.space = false; break
+        case 37: keys.left = false; break
+        case 38: keys.up = false; break
+        case 39: keys.right = false; break
+        case 40: keys.down = false; break
 
       }
 
     }, true);
 
-    document.addEventListener( "keypress" , (e) => {
+    document.addEventListener( "keypress" , e => {
 
       let tools = world.user.toolbox;
 
@@ -71,11 +77,10 @@ export default class Keyboard {
 
       }
 
-      if ( e.which == 192 ) { // debugging tool
+      if ( e.which == 192 ) // debugging tool
 
         tools.useTool( 10, 0 )
 
-      }
 
     }, true)
 
@@ -85,45 +90,67 @@ export default class Keyboard {
   handleKeys ( input ) {
 
     let velocity = input.device.velocity,
-        keys = input.keys;
+        keys = input.keys,
+        moveVec = input.moveVector,
+        rotateVec = input.rotationVector
+
+    if ( keys.right ) {
+
+      rotateVec.y -= 0.05
+
+    } else if ( keys.left ) {
+
+      rotateVec.y += 0.05
+
+    }
+
+    if ( keys.up ) {
+
+      rotateVec.x += 0.05
+
+    } else if ( keys.down ) {
+
+      rotateVec.x -= 0.05
+
+    }
 
     if ( keys.a ) {  // maybe insert more options here...
 
-      input.moveVector.x = -1
+      moveVec.x = -1
 
     } else if ( keys.d ) {
 
-      input.moveVector.x = 1
+      moveVec.x = 1
 
     }
 
     if ( keys.w ) {
 
-      input.moveVector.z = -1
+      moveVec.z = -1
 
     } else if (keys.s) {
 
-      input.moveVector.z = 1
+      moveVec.z = 1
 
     }
 
     if ( keys.r ) {
 
-      input.moveVector.y = 1
+      moveVec.y = 1
 
     } else if (keys.f) {
 
-      input.moveVector.y = -1
+      moveVec.y = -1
 
     }
 
     if ( keys.q ) {
 
-      input.rotationVector.z = -0.5
+      rotateVec.z = -0.5
 
     } else if ( keys.e ) {
 
-      input.rotationVector.z = 0.5
+      rotateVec.z = 0.5
 
     } 
     // if (keys.shift) {
