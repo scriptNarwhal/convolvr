@@ -231,7 +231,11 @@ export default class Entity {
 
     parent.add( mesh )
     this.mesh = mesh
-    addToOctree && this.addToVoxel( this.voxel, mesh )
+
+    if ( (!!!config || !!!config.noVoxel) && addToOctree )
+
+      this.addToVoxel( this.voxel, mesh )
+
     
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()

@@ -159,7 +159,7 @@ export default class Convolvr {
 			g = config.sky.green,
 			b = config.sky.blue
 
-		this.config = config; console.log(config)
+		this.config = config; console.info("World config: ", config)
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
 		three.scene.add(this.ambientLight)
@@ -429,8 +429,7 @@ export default class Convolvr {
 	updateSkybox ( delta ) {
 
 		let camera = three.camera,
-			terrainMesh = this.terrain.mesh,
-			terrainEnt = this.terrainMesh,
+			terrainEnt = this.terrain.distantTerrain,
 			config = this.config,
 			skyLight = this.skyLight,
 			yaw = config ? config.light.yaw : 0,

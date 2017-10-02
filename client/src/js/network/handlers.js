@@ -12,33 +12,34 @@ export default class SocketHandlers {
 
         socket.on( "update", packet => {
 
-			let data   	  = JSON.parse( packet.data ),
-				world  	  = this.world,
-				voxels 	  = world.systems.terrain.voxels,
-				coords    = world.getVoxel( data.position ),
-				userVoxel = null,
-				entity 	  = null,
-				avatar 	  = null,
-				user   	  = null,
-				pos    	  = null,
-				quat   	  =  null,
-				mesh   	  = null,
-				hands  	  = [],
-				hand   	  = null,
-				h      	  = 0
+			let data   	  	  = JSON.parse( packet.data ),
+				world  	  	  = this.world,
+				voxels 	  	  = world.systems.terrain.voxels,
+				coords    	  = world.getVoxel( data.position ),
+				cameraCoords  = world.getVoxel( ),
+				closeToCamera = Math.abs(cameraCoords[0] - coords[0]) < 3 && Math.abs(cameraCoords[2] - coords[2]) < 3,
+				userVoxel 	  = null,
+				entity 	  	  = null,
+				avatar 	  	  = null,
+				user   	  	  = null,
+				pos    	  	  = null,
+				quat   	  	  = null,
+				mesh   	  	  = null,
+				hands  	  	  = [],
+				hand   	  	  = null,
+				h      	  	  = 0
 
-			if ( !! data.entity ) {
+			if ( !! data.entity && world.terrain.loaded ) {
 
 				entity = data.entity
 				userVoxel = voxels[ coords[0]+'.0.'+coords[2]] 
 
-				if ( entity.id != world.user.id ) {
+				if ( entity.id != world.user.id) { //  && closeToCamera == false 
 
 					pos = entity.position
 					quat = entity.quaternion
 					user = world.users[ "user"+entity.id ]
-					
-				
+
 					if ( user == null ) {
 
 						avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: true, id: entity.id }, coords )

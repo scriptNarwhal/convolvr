@@ -92,7 +92,7 @@ export default class TerrainSystem {
             quaternion: [0,0,0]
           }], [0, yPosition, 0], [0,0,0,1], world.getVoxel())
 
-        distantTerrain.init( three.scene, {}, (terrainEnt) => {
+        distantTerrain.init( three.scene, { noVoxel: true }, (terrainEnt) => {
 
           terrainSystem.mesh = terrainEnt.mesh
            terrainEnt.mesh.rotation.x = -Math.PI/2
@@ -202,7 +202,7 @@ export default class TerrainSystem {
 
       this.cleanUpChunks.map(( cleanUp, i ) => {
 
-        if ( c < 6  && cleanUp ) {
+        if ( c < 12  && cleanUp ) {
 
           terrainChunk = voxels[ cleanUp.cell ]
 
