@@ -134,7 +134,7 @@ class App extends Component {
       if (username != null && username != '') {
 
         autoSignIn = true
-        this.props.login(username, password, "", "")
+        this.props.login(username, password, "", {})
 
       }
     }

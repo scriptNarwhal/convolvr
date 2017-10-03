@@ -11,11 +11,29 @@ class Profile extends Component {
 
   componentWillMount () {
 
+    let user = this.props.user,
+        email = "",
+        pass = "",
+        name = "",
+        data = {},
+        id = -1
+
+    if ( user ) {
+
+      email = user.email
+      pass = user.password
+      name = user.name
+      data = user.data || {} 
+      id = user.id
+
+    }
+
     this.setState({
-      email: "",
-      pass: "",
-      name: "",
-      data: {}
+      email,
+      pass,
+      name,
+      data,
+      id
     })
 
   }
@@ -35,19 +53,52 @@ class Profile extends Component {
 
   save ( ) {
 
-    let data = this.state.data
+    let data = this.state.data,
+        error = null
 
     data.profilePicture = this.state.profilePicture
+    this.validate( this.state )
 
-    this.props.updateUser( this.state.name, this.state.pass, this.state.email, data)
-    
+    if ( error === null ) {
+
+      if ( this.state.id == -1 ) {
+
+        this.props.login( this.state.name, this.state.pass, this.state.email, data )
+
+      } else {
+        
+        this.props.updateUser( this.state.name, this.state.pass, this.state.email, data )
+
+      }
+
+    } else {
+
+      alert( error )
+
+    }
   }
 
-  updateEmail( e ) {
+  updateField( field, e ) {
 
     this.setState({
-      email: e.target.value
+      [field]: e.target.value
     })
+
+  }
+
+  validate ( data ) {
+
+    let error = null
+
+    if ( data.name == "" )
+
+      error = "Username is required."
+
+    if ( data.email != "" && data.email.indexOf("@") < 0 )
+
+      error = "Email must be valid or left blank."
+
+    return error
 
   }
 
@@ -82,11 +133,23 @@ class Profile extends Component {
               <h1>Profile</h1>
             </div>
             <div>
+            <h3 style={styles.h3}>User Name</h3>
+            <div style={styles.col}>
+              <span style={{paddingLeft: '1em'}}>
+               <input onBlur={ (e)=> this.updateField( "name", e) }
+                      defaultValue={ this.state.name }
+                      style={styles.textInput} 
+                      type='text' 
+                      disabled={ this.state.id != -1 }
+                />
+              </span>
+            </div>
             <h3 style={styles.h3}>Email Address</h3>
             <div style={styles.col}>
               <span style={{paddingLeft: '1em'}}>
-                <input onBlur={ (e)=> this.updateEmail(e) }
-                       style={styles.fileUpload} 
+                <input onBlur={ (e)=> this.updateField( "email", e) }
+                       defaultValue={ this.state.email }
+                       style={styles.textInput} 
                        type='text' 
                 />
               </span>
@@ -94,8 +157,9 @@ class Profile extends Component {
             <h3 style={styles.h3}>Update Password</h3>
             <div style={styles.col}>
               <span style={{paddingLeft: '1em'}}>
-                <input onBlur={ (e)=> this.updateEmail(e) }
-                       style={styles.fileUpload} 
+                <input onBlur={ (e)=> this.updateField( "pass", e) }
+                       defaultValue={ this.state.password }
+                       style={styles.textInput} 
                        type='text' 
                 />
               </span>
@@ -114,7 +178,7 @@ class Profile extends Component {
           </div>
             <input style={styles.save}
                  type='submit'
-                 value="Save Settings"
+                 value={ this.state.id == -1 ? "Create Account" : "Save Settings" }
                  onClick={ e=> this.save()}
             />
           </div>
@@ -126,11 +190,12 @@ class Profile extends Component {
 }
 
 import { connect } from 'react-redux';
-import {
-    sendMessage
-} from '../../redux/actions/message-actions'
+import { sendMessage } from '../../redux/actions/message-actions'
 import { uploadFile } from '../../redux/actions/file-actions'
-import { updateUser } from '../../redux/actions/user-actions'
+import { 
+  updateUser,
+  login 
+} from '../../redux/actions/user-actions'
 import {
   fetchWorlds,
   setCurrentWorld,
@@ -149,14 +214,17 @@ export default connect(
   },
   dispatch => {
     return {
+      login: (user, pass, email, data) => {
+        dispatch(login(user, pass, email, data))
+      },
+      updateUser: ( name, pass, email, data ) => {
+        dispatch( updateUser(name, pass, email, data) )
+      },
       sendMessage: (message, from) => {
           dispatch(sendMessage(message, from))
       },
       setCurrentWorld: (world) => {
           dispatch(setCurrentWorld(world))
-      },
-      updateUser: ( name, pass, email, data ) => {
-        dispatch( name, pass, email, data )
       },
       uploadFile: (file, username, dir) => {
         dispatch(uploadFile(file, username, dir))

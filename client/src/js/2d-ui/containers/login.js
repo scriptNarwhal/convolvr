@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import Shell from '../components/shell'
 
 class Login extends Component {
@@ -7,31 +8,45 @@ class Login extends Component {
       username: "",
       password: "",
       email: "",
-      data: "",
+      data: {},
       world: "overworld",
       loginError: "",
       remember: false
     }
   }
-  signIn() {
+
+  logIn () {
+
     this.props.login(this.state.username, this.state.password, this.state.email, this.state.data)
-    if (this.state.remember) {
+
+    if (this.state.remember) { // replace password with token before beta release
       localStorage.setItem("username", this.state.username)
       localStorage.setItem("password", this.state.password)
     }
+
   }
+
+  signUp () {
+
+    browserHistory.push("/profile")
+
+  }
+
   handleKeyDown (e) {
     if (e.which == 13) {
       this.signIn()
     }
   }
+
   rememberUser (e) {
     localStorage.setItem("rememberUser", !this.state.remember)
     this.setState({
       remember: !this.state.remember
     })
   }
+
   render() {
+
     return (
         <Shell className="login" noBackground={true}>
           <div style={styles.innerLogin}>
@@ -68,28 +83,36 @@ class Login extends Component {
               </div>
               <div style={styles.go}>
                 <input type="button"
-                        value="Sign In"
+                        value="Sign Up"
+                        style={styles.signUpButton}
+                        onClick={e=> { this.signUp() } } 
+                />
+                <input type="button"
+                        value="Log In"
                         style={styles.signInButton}
-                        onClick={e=> { this.signIn() } } />
+                        onClick={e=> { this.logIn() } } 
+                />        
                 <input type="checkbox"
                         name='remember'
                         style={styles.remember}
-                        onClick={e=> this.rememberUser(e) } />
+                        onClick={e=> this.rememberUser(e) } 
+                />
                 <label htmlFor='remember'
                        style={styles.rememberLabel}
                 >
-                  Stay Signed In
+                  Remember Me
                 </label>
               </div>
             </div>
           </div>
         </Shell>
     )
+
   }
+
 }
 
-Login.defaultProps = {
-}
+Login.defaultProps = {}
 
 import { connect } from 'react-redux'
 import { login } from '../../redux/actions/user-actions'
@@ -186,8 +209,21 @@ const styles = {
     borderRadius: '2px',
     padding: '0.2em'
   },
+  signUpButton: {
+    fontSize: '1em',
+    marginRight: '1em',
+    color: 'white',
+    border: '0',
+    marginBottom: '0.5em',
+    background: 'rgba(255, 0, 63, 0.37)',
+    borderRadius: '2px',
+    padding: '0.2em'
+  },
   remember: {
-
+    width: '1.5em',
+    height: '1.5em',
+    display: 'inline-block',
+    marginRight: '0.5em'
   },
   rememberLabel: {
 

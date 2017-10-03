@@ -65,7 +65,7 @@ export function updateUser (user, pass, email, data) {
 
     return dispatch => {
         dispatch({
-            type: LOGIN_FETCH
+            type: UPDATE_USER_FETCH
         })
         return axios.put(API_SERVER+"/api/users", {
             id: 0,
@@ -85,7 +85,7 @@ export function updateUser (user, pass, email, data) {
 export function updateUserFailed ( resp ) {
     
     return {
-        type: UPDATE_USER_FAILED,
+        type: UPDATE_USER_FAIL,
         data: false,
         error: resp.error
     }
@@ -93,7 +93,7 @@ export function updateUserFailed ( resp ) {
 export function updateUserDone ( resp ) {
     
     return {
-        type: UPDATE_USER,
+        type: UPDATE_USER_DONE,
         data: resp.data,
         id: resp.data.id
     }
