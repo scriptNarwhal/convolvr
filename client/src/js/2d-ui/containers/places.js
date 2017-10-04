@@ -93,3 +93,11 @@ export default connect(
     }
   }
 )(Places)
+
+const styles = {
+  worlds: {
+    width: "100%",
+    minWidth: "320px",
+    margin: "auto"
+  }
+}

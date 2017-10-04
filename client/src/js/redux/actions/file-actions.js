@@ -29,10 +29,10 @@ import {
 
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
-
 import { sendMessage } from './message-actions'
 
 export function listFiles (username, dir) {
+
     return dispatch => {
      dispatch({
          type: FILES_LIST_FETCH,
@@ -52,9 +52,11 @@ export function listFiles (username, dir) {
             })
         })
    }
+
 }
 
 export function uploadFile ( file, username, dir ) {
+
     return dispatch => {
      dispatch({
          type: FILE_UPLOAD_FETCH,
@@ -77,6 +79,7 @@ export function uploadFile ( file, username, dir ) {
             })
         })
    }
+
 }
 
 export function uploadFiles ( files, username, dir ) {

@@ -4,14 +4,6 @@ import Card from '../components/card'
 import Shell from '../components/shell'
 import LocationBar from '../components/location-bar'
 
-const styles = {
-  worlds: {
-    width: "100%",
-    minWidth: "320px",
-    margin: "auto"
-  }
-}
-
 class Worlds extends Component {
 
   switchWorlds ( userName, name ) {
@@ -150,3 +142,11 @@ export default connect(
     }
   }
 )(Worlds)
+
+const styles = {
+  worlds: {
+    width: "100%",
+    minWidth: "320px",
+    margin: "auto"
+  }
+}

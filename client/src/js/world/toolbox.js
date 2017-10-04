@@ -280,6 +280,8 @@ export default class Toolbox {
 
       action = tool.secondaryAction(telemetry, value)
       
+      console.info( "Network Action: ", action )
+
       if ( !!action )
 
         this.sendToolAction( false, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.componentPath || componentPath, action.coords )

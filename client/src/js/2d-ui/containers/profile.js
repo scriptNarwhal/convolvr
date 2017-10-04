@@ -40,12 +40,26 @@ class Profile extends Component {
 
   componentWillReceiveProps ( nextProps, nextState ) {
 
-    if (this.props.fetchingSettings == true && nextProps.fetchingSettings == false && nextProps.userSettings != null) {
+    let user = null
 
-      console.log("Done Loading User Settings")
+    if ( this.props.user == false && nextProps.user != false ) {
+
+      user = nextProps.user
+
+      console.log("Done Loading User")
       this.setState({
-        profilePicture: nextProps.userSettings.profilePicture,
+        email: user.email,
+        pass: user.password,
+        name: user.name,
+        data: user.data,
+        id: user.id
       })
+
+    }
+
+    if ( this.props.updateFetching && nextProps.updateFetching == false ) {
+
+      alert("Profile Updated.")
 
     }
 
@@ -67,7 +81,7 @@ class Profile extends Component {
 
       } else {
         
-        this.props.updateUser( this.state.name, this.state.pass, this.state.email, data )
+        this.props.updateUser( this.state.id, this.state.name, this.state.pass, this.state.email, data )
 
       }
 
@@ -76,6 +90,7 @@ class Profile extends Component {
       alert( error )
 
     }
+
   }
 
   updateField( field, e ) {
@@ -209,7 +224,8 @@ export default connect(
         fetchingSettings: state.worlds.fetchingSettings,
         settings: state.worlds.universeSettings,
         worlds: state.worlds.all,
-        user: state.users.loggedIn
+        user: state.users.loggedIn,
+        updateFetching: state.users.updateFetching
     }
   },
   dispatch => {
@@ -217,8 +233,8 @@ export default connect(
       login: (user, pass, email, data) => {
         dispatch(login(user, pass, email, data))
       },
-      updateUser: ( name, pass, email, data ) => {
-        dispatch( updateUser(name, pass, email, data) )
+      updateUser: ( id, name, pass, email, data ) => {
+        dispatch( updateUser( id, name, pass, email, data ) )
       },
       sendMessage: (message, from) => {
           dispatch(sendMessage(message, from))
