@@ -116,7 +116,7 @@ class Profile extends Component {
         profilePicture: imageURL
       })
   
-      this.props.uploadFile(data, username, "")
+      this.props.uploadFile(data, username, "profile-images")
 
     }
     

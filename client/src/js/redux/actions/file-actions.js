@@ -54,14 +54,16 @@ export function listFiles (username, dir) {
    }
 }
 
-export function uploadFile (file, username, dir) {
+export function uploadFile ( file, username, dir ) {
     return dispatch => {
      dispatch({
          type: FILE_UPLOAD_FETCH,
          username,
          dir
      })
-     let dir = !!dir ? "?dir="+dir : ""
+
+     dir = !!dir ? "?dir="+dir : ""
+
      return axios.post(API_SERVER+"/api/files/upload/"+username+dir, file)
         .then(response => {
             dispatch({
@@ -78,6 +80,7 @@ export function uploadFile (file, username, dir) {
 }
 
 export function uploadFiles ( files, username, dir ) {
+    
     return (dispatch, getState) => {
 
     let state = getState()
@@ -90,17 +93,17 @@ export function uploadFiles ( files, username, dir ) {
 
      if ( !!state.worlds.current ) {
 
-      if ( (dir == "/" || dir == "") && state.worlds.worldUser == state.users.loggedIn.name ) {
+      if ( (dir == "/" || dir == "") && state.worlds.worldUser == state.users.loggedIn.name )
 
         dir = "/worlds/"+state.worlds.current
 
-      } 
 
     }
 
-    if ( window.location.href.indexOf("/chat") > -1 ) {
-      dir = "chat-uploads"
-    }
+    if ( window.location.href.indexOf("/chat") > -1 )
+    
+        dir = "chat-uploads"
+    
 		
 	let xhr = new XMLHttpRequest(),
 		formData = new FormData(),
@@ -110,17 +113,15 @@ export function uploadFiles ( files, username, dir ) {
         fileNames = [],
         shell = this
 
-    if (username == 'Human') {
+    if ( username == 'Human' )
+
       username = 'public'
-    }
 
 	for (let x = 0; x < ins; x++) {
 
-        if ( images.test(files[x].name) ) {
+        if ( images.test(files[x].name) )
 
             thumbs.push(files[x])
-
-        }
 	
         formData.append("files", files[x])
         fileNames.push(files[x].name.replace(/\s/g, '-'))

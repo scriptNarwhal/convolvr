@@ -109,21 +109,6 @@ class Settings extends Component {
 
   }
 
-  upload ( e ) {
-
-    let data = new FormData(),
-        username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
-
-    data.append('file', e.target.files[0])
-
-    this.setState({
-      profilePicture: username+"/"+e.target.files[0].name.replace(/\s/g, '-')
-    })
-
-    this.props.uploadFile(data, username, "")
-
-  }
-
   resetToDefault () {
 
     window.localStorage.clear()
@@ -410,7 +395,6 @@ import { connect } from 'react-redux';
 import {
     sendMessage
 } from '../../redux/actions/message-actions'
-import { uploadFile } from '../../redux/actions/file-actions'
 import {
   fetchWorlds,
   setCurrentWorld,
@@ -440,9 +424,6 @@ export default connect(
       },
       fetchUniverseSettings: () => {
         dispatch(fetchUniverseSettings())
-      },
-      uploadFile: (file, username, dir) => {
-        dispatch(uploadFile(file, username, dir))
       }
     }
   }
