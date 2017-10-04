@@ -79,7 +79,7 @@ export default class TerrainSystem {
             props: {
               geometry: {
                 shape: "plane",
-                size: [ (64+world.viewDistance)*GRID_SIZE[0], (64+world.viewDistance)*GRID_SIZE[0], 0 ]
+                size: [ (64+world.viewDistance)*GRID_SIZE[0]*1.25, (64+world.viewDistance)*GRID_SIZE[0]*1.25, 0 ]
               },
               material: {
                 color: config.color,
