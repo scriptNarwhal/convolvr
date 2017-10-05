@@ -1,5 +1,8 @@
 import Entity from '../../entity'
-import { GRID_SIZE } from '../../config'
+import { 
+    GLOBAL_SPACE,
+    GRID_SIZE 
+} from '../../config'
 
 // TODO: hook into user.toolbox interfaces (primaryAction, etc.. )
 
@@ -74,7 +77,7 @@ export default class ToolSystem {
                     }),
                     components: []
                 }
-            ], [0, 1.5, 0], [0,0,0,1], [ 0,1,0 ] ) // component.entity.voxel
+            ], [0, 1.5, 0], [0,0,0,1], GLOBAL_SPACE ) // component.entity.voxel
             this.panels.push( panel )
             
         }
