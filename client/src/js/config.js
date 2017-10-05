@@ -1,6 +1,7 @@
 export const API_SERVER = window.location.protocol+"//"+window.location.host
 export const APP_ROOT = "" // change this if running off of a subdir, eg: "convolvr/" for domain.com/convolvr/user/world
 export const GRID_SIZE =  [ 42.18181818181818, 42.18181818181818, 36.698181818181816 ]
+export const GLOBAL_SPACE = [ 0, 1, 0 ]
 
 export let detectWorldDetailsFromURL = () => {
 

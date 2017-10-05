@@ -74,7 +74,7 @@ export default class ToolSystem {
                     }),
                     components: []
                 }
-            ], [0, 1.5, 0], [0,0,0,1], component.entity.voxel)
+            ], [0, 1.5, 0], [0,0,0,1], [ 0,1,0 ] ) // component.entity.voxel
             this.panels.push( panel )
             
         }

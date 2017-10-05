@@ -8,12 +8,11 @@ import { render } from 'react-dom' // Redux
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import makeStore from './redux/makeStore'
-let store: Object = makeStore(routerReducer)
-const history: Object = syncHistoryWithStore(browserHistory, store)
 import { 
   clearOldData, 
   APP_ROOT,
-  GRID_SIZE 
+  GRID_SIZE,
+  GLOBAL_SPACE 
 } from './config'
 import App from './2d-ui/containers/app' // 2D UI
 import Data from './2d-ui/containers/data'
@@ -36,7 +35,8 @@ import User from './world/user'
 import Toolbox from './world/toolbox'
 import Entity from './entity'
 
-let socket:       Object   = events,
+let store:        Object = makeStore(routerReducer),
+    socket:       Object   = events,
     token:        string   = "", 
     userInput:    UserInput,
     user:         User     = new User(),
@@ -46,6 +46,8 @@ let socket:       Object   = events,
     helpScreen:   Entity   = null, 
     chatScreen:   Entity   = null,
     httpClient:   Entity   = null
+
+const history: Object = syncHistoryWithStore(browserHistory, store)
 
 token = localStorage.getItem("token") || ""
 clearOldData()
@@ -66,7 +68,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
   world.user = user
   user.toolbox = new Toolbox( user, world )
   
-  toolMenu = systems.assets.makeEntity( "tool-menu", true, {}, coords ) // the new way of spawning built in entities
+  toolMenu = systems.assets.makeEntity( "tool-menu", true, {}, GLOBAL_SPACE ) // method for spawning built in entities
   user.hud = toolMenu
   toolMenu.init( scene, {}, (menu: Entity) => { 
     menu.componentsByProp.toolUI[0].state.toolUI.updatePosition()

@@ -129,9 +129,9 @@ export default class CursorSystem {
 
         }
         
-        if ( voxels[ "0.0.0" ] != null )
+        if ( voxels[ "0.1.0" ] != null )
 
-            castObjects = castObjects.concat(voxels[ "0.0.0" ].meshes )
+            castObjects = castObjects.concat(voxels[ "0.1.0" ].meshes )
 
             
         while ( i < castObjects.length ) {

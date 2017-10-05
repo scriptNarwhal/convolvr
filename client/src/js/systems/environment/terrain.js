@@ -2,11 +2,12 @@ import { browserHistory } from 'react-router'
 import axios from 'axios'
 import Voxel from '../../world/voxel'
 import { animate } from '../../world/render'
-import { 
-  API_SERVER,
-  GRID_SIZE
-} from '../../config'
 import Entity from '../../entity'
+import { 
+  GLOBAL_SPACE,
+  GRID_SIZE,
+  API_SERVER
+} from '../../config'
 
 export default class TerrainSystem {
 
@@ -27,6 +28,16 @@ export default class TerrainSystem {
         this.reqChunks        = []
         this.loaded           = false
         this.readyCallback    = () => {}
+
+        let globalVoxel = new Voxel( { 
+          cell: GLOBAL_SPACE, 
+          name: "empty voxel", 
+          visible: true, 
+          altitude: 0, 
+          entities: [] 
+        }, GLOBAL_SPACE, this.world )
+
+        this.voxels[ GLOBAL_SPACE.join(".") ] = globalVoxel
 
     }
 
@@ -240,7 +251,6 @@ export default class TerrainSystem {
 
           if ( c < 3 && voxels[x+".0."+y] == null ) { // only if its not already loaded
               
-
               let emptyVoxel = new Voxel( { 
                 cell: [ x, 0, y ], 
                 name: "empty voxel", 
