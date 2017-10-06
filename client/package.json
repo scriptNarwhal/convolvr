@@ -15,7 +15,7 @@
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
+    "babel-core": "^7.0.0-beta.2",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-preset-env": "^1.6.0",
@@ -23,6 +23,7 @@
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
     "chai": "^4.1.2",
+    "flow-bin": "^0.37.4",
     "mocha": "^3.5.0",
     "three": "^0.86.0",
     "watchman": "^0.1.8",
