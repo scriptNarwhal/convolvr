@@ -1,42 +1,19 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import Tab from './tab'
-
-let isMobile = () => {
-    return  window.innerWidth <= 720
-  }
-
-let styles = {
-    sideMenu: () => {
-      let mobile = isMobile()
-      return {
-        width: mobile ? '100vw' : '72px',
-        //maxWidth: mobile ? '100vw' : '72px',
-        height: mobile ? '72px' : '100vh',
-        backgroundColor: 'rgb(2, 0, 3)',
-        overflow: 'hidden'
-      }
-    },
-    inner: () => {
-      let mobile = isMobile()
-      return {
-        height: mobile ? '72px' : '100vh',
-        bottom: 0,
-        width: mobile ? '100vw' : '72px',
-        paddingTop: '7px'
-      }
-    },
-    mobileHidden: () => {
-      let mobile = isMobile()
-      return {
-        display: mobile ? 'none' : 'inline-block'
-      }
-    }
-  }
+import { isMobile } from '../../config'
 
 class SideMenu extends Component {
 
-  toggleMenu (force) {
+  componentWillMount () {
+
+    this.setState({
+      menuHover: false
+    })
+
+  }
+
+  toggleMenu ( force ) {
 
       this.props.toggleMenu(force)
 
@@ -48,65 +25,92 @@ class SideMenu extends Component {
 
   }
 
-  navigate (evt, url) {
+  navigate ( evt, url ) {
     
-    browserHistory.push( `${url}` )
+    browserHistory.push( url )
+
+  }
+
+  onMouseOver ( evt ) {
+
+    this.setState({
+      menuHover: true
+    })
+
+  }
+
+  onMouseOut ( evt ) {
+
+    this.setState({
+      menuHover: false
+    })
 
   }
 
   render() {
+
     return (
         <div style={styles.sideMenu()} >
-          <div style={styles.inner()}>
-            <Tab image="/data/images/convolvr2.png"
-                 title="Home"
+          <div style={styles.inner()} onMouseOver={ e=> this.onMouseOver(e) } onMouseOut={ e=> this.onMouseOut(e) }>
+            <Tab clickHandler={ e => { this.toggleMenu(); this.navigate(e, "");  } }
+                 image="/data/images/convolvr2.png"
                  buttonStyle={{ backgroundSize: "100%" }}
-                 clickHandler={ e => { this.toggleMenu(); this.navigate(e, "");  } }
+                 showTitle={ false }
+                 title="Home"
             /> 
-            <Tab image="/data/images/circle-a.png"
-                 title="Switch Worlds"
-                 clickHandler={ e => { this.navigate(e, "/worlds") }}
+            <Tab clickHandler={ e => { this.navigate(e, "/worlds") }}
+                 image="/data/images/circle-a.png"
+                 showTitle={ this.state.menuHover }
+                 title="Worlds"
             />
             <Tab clickHandler={ e => { this.navigate(e, "/places") }}
+                 showTitle={ this.state.menuHover }
                  image="/data/images/places-s.png"
                  style={ styles.mobileHidden() }
                  title="Places"
             />
-            <Tab image="/data/images/plus.png"
-                 title="Create New World"
-                 clickHandler={ e => { this.navigate(e, "/new-world") } }
+            <Tab clickHandler={ e => { this.navigate(e, "/new-world") } }
+                 showTitle={ this.state.menuHover }
+                 image="/data/images/plus.png"
+                 title="New"
             />
-            <Tab image="/data/images/chat.png"
+            <Tab clickHandler={ e => { this.navigate(e, "/chat") } }
+                 showTitle={ this.state.menuHover }
+                 image="/data/images/chat.png"
                  title="Chat"
-                 clickHandler={ e => { this.navigate(e, "/chat") } }
             />
-            <Tab image="/data/images/profile.png"
-                 title="Profile Settings"
+            <Tab clickHandler={ e => { this.navigate(e, "/profile") } }
+                 showTitle={ this.state.menuHover }
+                 image="/data/images/profile.png"
                  style={ styles.mobileHidden() }
-                 clickHandler={ e => { this.navigate(e, "/profile") } }
+                 title="Profile"
             />
-            <Tab image="/data/images/voxel-white.png"
-                 title="Manage Files"
-                 clickHandler={ e => { this.navigate(e, "/files") }}
+            <Tab clickHandler={ e => { this.navigate(e, "/files") }}
+                 showTitle={ this.state.menuHover }
+                 image="/data/images/voxel-white.png"
+                 title="Data"
             />
             <Tab clickHandler={ e => { this.navigate(e, "/network") }}
+                 showTitle={ this.state.menuHover }
                  image="/data/images/network.png"
                  style={ styles.mobileHidden() }
-                 title="View Network"
+                 title="Network"
             />
-            <Tab image="/data/images/logout.png"
-                 title="Sign In / Switch Accounts"
+            <Tab clickHandler={ e => { this.navigate(e, "/login") } }
+                 showTitle={ this.state.menuHover }
+                 title="Sign In"
                  style={ styles.mobileHidden() }
-                 clickHandler={ e => { this.navigate(e, "/login") } }
+                 image="/data/images/logout.png"
             />
-            <Tab image="/data/images/obj.png"
-                 title="Import *.OBJ Files"
+            <Tab clickHandler={ e => { this.navigate(e, "/import") } }
                  style={ styles.mobileHidden() }
-                 clickHandler={ e => { this.navigate(e, "/import") } }
+                 image="/data/images/obj.png"
+                 title="Import"
             />
-            <Tab image="/data/images/configure-h.png"
+            <Tab clickHandler={ e => { this.navigate(e, "/settings") } }
+                 image="/data/images/configure-h.png"
                  title="Settings"
-                 clickHandler={ e => { this.navigate(e, "/settings") } }
+                 
             />
           </div>
         </div>
@@ -146,3 +150,31 @@ export default connect(
     }
   }
 )(SideMenu)
+
+let styles = {
+  sideMenu: () => {
+    let mobile = isMobile()
+    return {
+      width: mobile ? '100vw' : '72px',
+      //maxWidth: mobile ? '100vw' : '72px',
+      height: mobile ? '72px' : '100vh',
+      backgroundColor: 'rgb(2, 0, 3)',
+      overflow: 'hidden'
+    }
+  },
+  inner: () => {
+    let mobile = isMobile()
+    return {
+      height: mobile ? '72px' : '100vh',
+      bottom: 0,
+      width: mobile ? '100vw' : '72px',
+      paddingTop: '7px'
+    }
+  },
+  mobileHidden: () => {
+    let mobile = isMobile()
+    return {
+      display: mobile ? 'none' : 'inline-block'
+    }
+  }
+}

@@ -31,7 +31,7 @@ export default class TerrainSystem {
 
         let globalVoxel = new Voxel( { 
           cell: GLOBAL_SPACE, 
-          name: "empty voxel", 
+          name: "Global Voxel", 
           visible: true, 
           altitude: 0, 
           entities: [] 
@@ -106,8 +106,8 @@ export default class TerrainSystem {
         distantTerrain.init( three.scene, { noVoxel: true }, (terrainEnt) => {
 
           terrainSystem.mesh = terrainEnt.mesh
-           terrainEnt.mesh.rotation.x = -Math.PI/2
-           terrainEnt.mesh.updateMatrix()
+          terrainEnt.mesh.rotation.x = -Math.PI/2
+          terrainEnt.mesh.updateMatrix()
 
         })
         this.distantTerrain = distantTerrain

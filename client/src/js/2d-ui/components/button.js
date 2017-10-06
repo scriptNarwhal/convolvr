@@ -36,7 +36,7 @@ export default class Button extends Component {
     return (
         <div style={style}>
             <div style={innerStyle}
-                title={this.props.title }
+                 title={this.props.title }
                  onClick={ (evt) => {
                    this.props.onClick && this.props.onClick(evt, this.props.title)
                  } }
