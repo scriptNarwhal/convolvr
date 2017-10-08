@@ -3,56 +3,7 @@ import Button from './button'
 import NewFolder from './data/new-folder'
 import TextEditor from './data/text-editor'
 import UploadFiles from './data/upload-files'
-
-let styles = {
-  bar: () => {
-    return {
-      cursor: 'pointer',
-      width: '100%',
-      left: '0',
-      top: '0',
-      position: 'fixed',
-      paddingLeft: '74px',
-      marginTop: '0.2em',
-      height: '48px',
-      display: 'inline-block',
-      marginRight: '0.5em',
-      marginBottom: '1em'
-    }
-  },
-  title: {
-    width: '100%',
-    height: '40px',
-    display: 'block',
-    backgroundColor: 'rgba(0,0,0,0.2)'
-  },
-  option: {
-    fontSize: "20pt",
-    display: 'inline-block',
-    float: 'left',
-    marginRight: '0.5em'
-  },
-  home: {
-    fontSize: "20pt",
-    display: 'inline-block',
-    float: 'left',
-    marginLeft: '1em'
-  },
-  fileOption: {
-    padding: '1em',
-    paddingBottom: 0,
-    height: '48px',
-    display: 'inline-block',
-    width: 'auto'
-  },
-  fileOptions: {
-    position: 'fixed',
-    right: '60px',
-    top: '14px',
-    height: '60px',
-    display: 'inline-block'
-  }
-}
+import { isMobile } from '../../config'
 
 export default class LocationBar extends Component {
   componentWillMount () {
@@ -62,7 +13,7 @@ export default class LocationBar extends Component {
   }
   render() {
     return (
-        <div style={ Object.assign({}, styles.bar(), this.props.style) }>
+        <div style={ Object.assign({}, styles.bar(), styles.mobile(), this.props.style) }>
           <div onClick={ e=> { this.props.onItemSelect(this.props.label, 0) } }
                style={styles.home}
           >
@@ -102,5 +53,62 @@ LocationBar.defaultProps = {
   showFileOptions: false,
   onOptionClick: (e, option) => {
 
+  }
+}
+
+
+let styles = {
+  bar: () => {
+    return {
+      cursor: 'pointer',
+      width: '100%',
+      left: '0',
+      top: '0',
+      position: 'fixed',
+      paddingLeft: '74px',
+      marginTop: '0.2em',
+      height: '48px',
+      display: 'inline-block',
+      marginRight: '0.5em',
+      marginBottom: '1em'
+    }
+  },
+  mobile: () => {
+    return isMobile() ? {
+      marginTop: '4em',
+      paddingLeft: '0'
+    } : { }
+  },
+  title: {
+    width: '100%',
+    height: '40px',
+    display: 'block',
+    backgroundColor: 'rgba(0,0,0,0.2)'
+  },
+  option: {
+    fontSize: "20pt",
+    display: 'inline-block',
+    float: 'left',
+    marginRight: '0.5em'
+  },
+  home: {
+    fontSize: "20pt",
+    display: 'inline-block',
+    float: 'left',
+    marginLeft: '1em'
+  },
+  fileOption: {
+    padding: '1em',
+    paddingBottom: 0,
+    height: '48px',
+    display: 'inline-block',
+    width: 'auto'
+  },
+  fileOptions: {
+    position: 'fixed',
+    right: '60px',
+    top: '14px',
+    height: '60px',
+    display: 'inline-block'
   }
 }

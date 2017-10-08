@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import SideMenu from './side-menu'
 import Button from './button'
 import { browserHistory } from 'react-router'
+import { isMobile } from '../../config'
 
 let styles = {
   shell: ( hasMenu, menuOpen, menuOnly, noBackground, droppingFile ) => {
@@ -26,9 +27,9 @@ let styles = {
     }
   },
   inner: () => {
-    let mobile = window.innerWidth <= 640
+    let mobile = isMobile()
     return {
-      paddingTop: mobile ? '86px' : '56px',
+      paddingTop: mobile ? '134px' : '56px',
       paddingLeft: mobile ? '0px' : '72px'
     }
   }

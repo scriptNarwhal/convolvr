@@ -11,7 +11,7 @@
     "type": "git",
     "url": "https://github.com/convolvr/convolvr"
   },
-  "author": "Jeremy Evans <jeremy@spacehexagon.com>",
+  "author": "Jeremy Evans <openspacehexagon@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.26.0",

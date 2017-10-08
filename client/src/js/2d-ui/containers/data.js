@@ -132,7 +132,7 @@ class Data extends Component {
       })
 
     return (
-        <Shell className="data-view" style={ mobile ? { paddingTop: '60px' } : {} }>
+        <Shell className="data-view" style={ mobile ? { paddingTop: '100px' } : {} }>
           <LocationBar path={this.state.workingPath}
                        label="Data"
                        username={this.props.username}
