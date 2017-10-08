@@ -71,7 +71,7 @@ export default class Mouse {
 
                 let user = this.input.user
 
-                if ( world.mode != "web" ) {
+                if ( world.mode != "web" && this.input.focus && e.target.tagName.toLowerCase() == "canvas" ) {
 
                     switch ( e.which ) {
 
@@ -101,8 +101,7 @@ export default class Mouse {
             a = 0
 
         this.input.focus = (document.pointerLockElement === canvas || document.mozPointerLockElement === canvas || document.webkitPointerLockElement === canvas);
-        this.input.fullscreen = this.focus
-        console.log("focus", this.focus)
+        this.input.fullscreen = this.input.focus
 
         if ( !this.input.focus && !this.input.fullscreen && world.user.username != "" ) {
 
