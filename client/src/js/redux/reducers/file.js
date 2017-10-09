@@ -23,6 +23,21 @@ import {
     DIRECTORY_MAKE_FETCH,
     DIRECTORY_MAKE_FAIL,
     DIRECTORY_MAKE_DONE,
+    SHARE_CREATE_FETCH,
+    SHARE_CREATE_DONE,
+    SHARE_CREATE_FAIL,
+    SHARE_UPDATE_FETCH,
+    SHARE_UPDATE_DONE,
+    SHARE_UPDATE_FAIL,
+    SHARE_DELETE_FETCH,
+    SHARE_DELETE_DONE,
+    SHARE_DELETE_FAIL,
+    SHARE_GET_FETCH,
+    SHARE_GET_DONE,
+    SHARE_GET_FAIL,
+    SHARES_LIST_FETCH,
+    SHARES_LIST_DONE,
+    SHARES_LIST_FAIL,
     CHANGE_DIRECTORY
 } from '../constants/action-types';
 
@@ -64,6 +79,31 @@ module.exports = function files (state = {
     error: false
   },
   writeText: {
+    data: false,
+    fetching: false,
+    error: false
+  },
+  getShare: {
+    data: false,
+    fetching: false,
+    error: false
+  },
+  listShares: {
+    data: false,
+    fetching: false,
+    error: false
+  },
+  createShare: {
+    data: false,
+    fetching: false,
+    error: false
+  },
+  updateShare: {
+    data: false,
+    fetching: false,
+    error: false
+  },
+  deleteShare: {
     data: false,
     fetching: false,
     error: false
@@ -267,6 +307,126 @@ module.exports = function files (state = {
     case TEXT_WRITE_FAIL:
       return Object.assign({}, state, {
         writeText: Object.assign({}, state.writeText, {
+          fetching: false,
+          data: false,
+          error: action.error
+        })
+      })
+    case SHARE_GET_FETCH:
+      return Object.assign({}, state, {
+        getShare: Object.assign({}, state.getShare, {
+          fetching: true,
+          data: false,
+          error: false
+        })
+      })
+    case SHARE_GET_DONE:
+      return Object.assign({}, state, {
+        getShare: Object.assign({}, state.getShare, {
+          fetching: false,
+          data: action.data,
+          error: false
+        })
+      })
+    case SHARE_GET_FAIL:
+      return Object.assign({}, state, {
+        getShare: Object.assign({}, state.getShare, {
+          fetching: false,
+          data: false,
+          error: action.error
+        })
+      })
+    case SHARES_LIST_FETCH:
+      return Object.assign({}, state, {
+        listShares: Object.assign({}, state.listShares, {
+          fetching: true,
+          data: false,
+          error: false
+        })
+      })
+    case SHARES_LIST_DONE:
+      return Object.assign({}, state, {
+        listShares: Object.assign({}, state.listShares, {
+          fetching: false,
+          data: action.data,
+          error: false
+        })
+      })
+    case SHARES_LIST_FAIL:
+      return Object.assign({}, state, {
+        listShares: Object.assign({}, state.listShares, {
+          fetching: false,
+          data: false,
+          error: action.error
+        })
+      })
+    case SHARE_CREATE_FETCH:
+      return Object.assign({}, state, {
+        createShare: Object.assign({}, state.createShare, {
+          fetching: true,
+          data: false,
+          error: false
+        })
+      })
+    case SHARE_CREATE_DONE:
+      return Object.assign({}, state, {
+        createShare: Object.assign({}, state.createShare, {
+          fetching: false,
+          data: action.data,
+          error: false
+        })
+      })
+    case SHARE_CREATE_FAIL:
+      return Object.assign({}, state, {
+        createShare: Object.assign({}, state.createShare, {
+          fetching: false,
+          data: false,
+          error: action.error
+        })
+      })
+    case SHARE_DELETE_FETCH:
+      return Object.assign({}, state, {
+        deleteShare: Object.assign({}, state.deleteShare, {
+          fetching: true,
+          data: false,
+          error: false
+        })
+      })
+    case SHARE_DELETE_DONE:
+      return Object.assign({}, state, {
+        deleteShare: Object.assign({}, state.deleteShare, {
+          fetching: false,
+          data: action.data,
+          error: false
+        })
+      })
+    case SHARE_DELETE_FAIL:
+      return Object.assign({}, state, {
+        deleteShare: Object.assign({}, state.deleteShare, {
+          fetching: false,
+          data: false,
+          error: action.error
+        })
+      })
+    case SHARE_UPDATE_FETCH:
+      return Object.assign({}, state, {
+        updateShare: Object.assign({}, state.updateShare, {
+          fetching: true,
+          data: false,
+          error: false
+        })
+      })
+    case SHARE_UPDATE_DONE:
+      return Object.assign({}, state, {
+        updateShare: Object.assign({}, state.updateShare, {
+          fetching: false,
+          data: action.data,
+          error: false
+        })
+      })
+    case SHARE_UPDATE_FAIL:
+      return Object.assign({}, state, {
+        updateShare: Object.assign({}, state.updateShare, {
           fetching: false,
           data: false,
           error: action.error

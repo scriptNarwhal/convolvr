@@ -23,6 +23,21 @@ import {
     DIRECTORY_MAKE_FETCH,
     DIRECTORY_MAKE_FAIL,
     DIRECTORY_MAKE_DONE,
+    SHARE_CREATE_FETCH,
+    SHARE_CREATE_DONE,
+    SHARE_CREATE_FAIL,
+    SHARE_UPDATE_FETCH,
+    SHARE_UPDATE_DONE,
+    SHARE_UPDATE_FAIL,
+    SHARE_DELETE_FETCH,
+    SHARE_DELETE_DONE,
+    SHARE_DELETE_FAIL,
+    SHARE_GET_FETCH,
+    SHARE_GET_DONE,
+    SHARE_GET_FAIL,
+    SHARES_LIST_FETCH,
+    SHARES_LIST_DONE,
+    SHARES_LIST_FAIL,
     CHANGE_DIRECTORY,
     MESSAGE_SEND
 } from '../constants/action-types'
@@ -292,6 +307,123 @@ export function writeText (text, filename, username, dir) {
         }).catch(response => {
             dispatch({
                 type: TEXT_WRITE_FAIL,
+                error: response.data
+            })
+        })
+   }
+}
+
+export function getShare (shareName, username) {
+    return dispatch => {
+     dispatch({
+         type: SHARE_GET_FETCH,
+         username,
+         dir
+     })
+     return axios.get(`${API_SERVER}/api/shares/${username}/${shareName}`)
+        .then(response => {
+            dispatch({
+                type: SHARE_GET_DONE,
+                data: response.data,
+                dir
+            })
+        }).catch(response => {
+            dispatch({
+                type: SHARE_GET_FAIL,
+                error: response,
+                dir
+            })
+        })
+   }
+}
+
+export function listShares (username) {
+    return dispatch => {
+     dispatch({
+         type: SHARES_LIST_FETCH,
+         username,
+         dir
+     })
+     return axios.get(`${API_SERVER}/api/shares/${shareName}`)
+        .then(response => {
+            dispatch({
+                type: SHARES_LIST_DONE,
+                data: response.data,
+                dir
+            })
+        }).catch(response => {
+            dispatch({
+                type: SHARES_LIST_FAIL,
+                error: response,
+                dir
+            })
+        })
+   }
+}
+
+export function createShare (username, data) {
+    return dispatch => {
+     
+    dispatch({
+         type: SHARE_CREATE_FETCH,
+         username
+     })
+
+     return axios.post(`${API_SERVER}/api/shares/${username}`, data )
+        .then(response => {
+            dispatch({
+                type: SHARE_CREATE_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: SHARE_CREATE_FAIL,
+                error: response.data
+            })
+        })
+   }
+}
+
+export function updateShare (username, id, data) {
+    return dispatch => {
+     
+    dispatch({
+         type: SHARE_UPDATE_FETCH,
+         username
+     })
+
+     return axios.post(`${API_SERVER}/api/shares/${username}/${id}`, data )
+        .then(response => {
+            dispatch({
+                type: SHARE_UPDATE_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: SHARE_UPDATE_FAIL,
+                error: response.data
+            })
+        })
+   }
+}
+
+export function deleteShare (username, id) {
+    return dispatch => {
+     
+    dispatch({
+         type: SHARE_DELETE_FETCH,
+         username
+     })
+
+     return axios.put(`${API_SERVER}/api/shares/${username}/${id}` )
+        .then(response => {
+            dispatch({
+                type: SHARE_DELETE_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: SHARE_DELETE_FAIL,
                 error: response.data
             })
         })
