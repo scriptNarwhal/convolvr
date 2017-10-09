@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Shell from '../components/shell'
+import { browserHistory } from 'react-router'
 
 class Profile extends Component {
 
@@ -60,6 +61,13 @@ class Profile extends Component {
     if ( this.props.updateFetching && nextProps.updateFetching == false ) {
 
       alert("Profile Updated.")
+      this.props.login( this.state.name, this.state.pass )
+
+    }
+
+    if ( this.props.loginFetching && nextProps.loginFetching == false ) {
+
+      browserHistory.push("/")
 
     }
 
@@ -209,7 +217,8 @@ import { sendMessage } from '../../redux/actions/message-actions'
 import { uploadFile } from '../../redux/actions/file-actions'
 import { 
   updateUser,
-  login 
+  login,
+  logOut 
 } from '../../redux/actions/user-actions'
 import {
   fetchWorlds,
@@ -225,6 +234,7 @@ export default connect(
         settings: state.worlds.universeSettings,
         worlds: state.worlds.all,
         user: state.users.loggedIn,
+        loginFetching: state.users.fetching,
         updateFetching: state.users.updateFetching
     }
   },
@@ -232,6 +242,9 @@ export default connect(
     return {
       login: (user, pass, email, data) => {
         dispatch(login(user, pass, email, data))
+      },
+      logOut: () => {
+        dispatch( logOut( ) )
       },
       updateUser: ( id, name, pass, email, data ) => {
         dispatch( updateUser( id, name, pass, email, data ) )
@@ -265,6 +278,11 @@ const styles = {
     borderTop: '0.8vh solid rgb(43, 43, 43)',
     background: 'rgb(27, 27, 27)'
   },
+  textInput: {
+    background: "#404040",
+    padding: '1em',
+    color: "white"
+  },
   save: {
     float: 'right',
     marginRight: '2em',
@@ -288,9 +306,6 @@ const styles = {
   col: {
     width: '55%',
     display: 'inline-block',
-  },
-  textInput: {
-
   },
   select: {
     padding: '0.5em'

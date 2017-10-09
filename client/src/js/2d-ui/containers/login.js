@@ -28,6 +28,7 @@ class Login extends Component {
 
   signUp () {
 
+    this.props.logout()
     browserHistory.push("/profile")
 
   }
@@ -83,15 +84,15 @@ class Login extends Component {
               </div>
               <div style={styles.go}>
                 <input type="button"
-                        value="Sign Up"
-                        style={styles.signUpButton}
-                        onClick={e=> { this.signUp() } } 
-                />
-                <input type="button"
                         value="Log In"
                         style={styles.signInButton}
                         onClick={e=> { this.logIn() } } 
-                />        
+                /> 
+                <input type="button"
+                        value="Sign Up"
+                        style={styles.signUpButton}
+                        onClick={e=> { this.signUp() } } 
+                />     
                 <input type="checkbox"
                         name='remember'
                         style={styles.remember}
@@ -115,7 +116,10 @@ class Login extends Component {
 Login.defaultProps = {}
 
 import { connect } from 'react-redux'
-import { login } from '../../redux/actions/user-actions'
+import { 
+  logOut,
+  login 
+} from '../../redux/actions/user-actions'
 
 export default connect(
   state => {
@@ -128,6 +132,9 @@ export default connect(
   },
   dispatch => {
     return {
+      logout: () => {
+        dispatch( logOut() )
+      },
       login: (user, pass, email, data) => {
         dispatch(login(user, pass, email, data))
       }
@@ -215,7 +222,7 @@ const styles = {
     color: 'white',
     border: '0',
     marginBottom: '0.5em',
-    background: 'rgba(255, 0, 63, 0.37)',
+    background: 'rgba(0, 255, 63, 0.37)',
     borderRadius: '2px',
     padding: '0.2em'
   },

@@ -11,6 +11,7 @@ import {
     UPDATE_USER_FETCH,
     UPDATE_USER_DONE,
     UPDATE_USER_FAIL,
+    USER_LOG_OUT,
     DELETE_USER,
     LOGIN_FETCH,
     LOGIN_DONE,
@@ -33,6 +34,13 @@ export function userDisconnect (id) {
     return {
         type: USER_DISCONNECT,
         id
+    }
+}
+export function logOut () {
+    localStorage.removeItem("username")
+    localStorage.removeItem("password")
+    return {
+        type: USER_LOG_OUT
     }
 }
 export function fetchUsers (id) {

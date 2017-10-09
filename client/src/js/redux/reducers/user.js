@@ -8,6 +8,7 @@ import {
     UPDATE_USER_FETCH,
     UPDATE_USER_DONE,
     UPDATE_USER_FAIL,
+    USER_LOG_OUT,
     DELETE_USER,
     LOGIN_FETCH,
     LOGIN_DONE,
@@ -42,7 +43,12 @@ module.exports = function users (state = {
     case USER_DISCONNECT:
 
     case DELETE_USER:
-
+    break
+    case USER_LOG_OUT:  
+        return Object.assign({}, state, {
+            loggedIn: false
+        })
+    break
     case USERS_FETCH:
         return Object.assign({}, state, {
             fetching: true
