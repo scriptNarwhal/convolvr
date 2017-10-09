@@ -74,15 +74,15 @@ export default class TerrainSystem {
           mesh           = null,
           mat            = null
 
+      if (!!this.mesh) {
+
+        world.octree.remove(this.mesh)
+        three.scene.remove(this.mesh)
+        this.distantTerrain = null
+
+      }
+
       if ( type != 'empty' ) {
-
-        if ( !!this.mesh ) {
-
-          world.octree.remove( this.mesh )
-          three.scene.remove( this.mesh )
-          this.distantTerrain = null
-
-        }
 
         yPosition = type == 'plane' || type == "both" ? -120 / this.config.flatness : 0
 
@@ -90,7 +90,7 @@ export default class TerrainSystem {
             props: {
               geometry: {
                 shape: "plane",
-                size: [ (64+world.viewDistance)*GRID_SIZE[0]*1.25, (64+world.viewDistance)*GRID_SIZE[0]*1.25, 0 ]
+                size: [ (64+world.viewDistance)*GRID_SIZE[0]*2, (64+world.viewDistance)*GRID_SIZE[0]*2, 0 ]
               },
               material: {
                 color: config.color,
@@ -166,7 +166,7 @@ export default class TerrainSystem {
         lastCoords          = this.lastChunkCoords,
         moveDir             = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
         viewDistance        = (this.world.mobile ? 4 : 7) + this.world.viewDistance,
-        removeDistance      = viewDistance + (window.innerWidth > 2100 ?  2 : 1),
+        removeDistance      = viewDistance + 2,
         x                   = coords[ 0 ] - phase,
         y                   = coords[ 2 ] - phase,
         c                   = 0
@@ -186,25 +186,25 @@ export default class TerrainSystem {
 
         force = false 	// remove old chunks
 
-        for ( c in voxelList ) {
+        for (var v in voxelList) {
 
-            voxel = voxelList[ c ]
-            pCell = voxel.data.cell
+          voxel = voxelList[v]
+          pCell = voxel.data.cell
 
-            if (!!!voxel.cleanUp && (pCell[0] < coords[0] - removeDistance || pCell[0] > coords[0] + removeDistance ||
-                                    pCell[2] < coords[2] - removeDistance || pCell[2] > coords[2] + removeDistance) ) { 	// mark voxels for removal
+          if (!!!voxel.cleanUp && (pCell[0] <= coords[0] - removeDistance || pCell[0] >= coords[0] + removeDistance ||
+            pCell[2] <= coords[2] - removeDistance || pCell[2] >= coords[2] + removeDistance)) { 	// mark voxels for removal
 
-                voxel.cleanUp = true
-                this.cleanUpChunks.push({
-                  physics: {
-                    cell: [ pCell[0], 0, pCell[2] ]
-                  }, 
-                  cell: pCell[0]+".0."+pCell[2]
-                })
-
-            }
+            voxel.cleanUp = true
+            this.cleanUpChunks.push({
+              physics: {
+                cell: [pCell[0], 0, pCell[2]]
+              },
+              cell: pCell[0] + ".0." + pCell[2]
+            })
 
           }
+
+        }
 
       }
 
@@ -213,12 +213,12 @@ export default class TerrainSystem {
 
       this.cleanUpChunks.map(( cleanUp, i ) => {
 
-        if ( c < 12  && cleanUp ) {
+        if ( c < 6 && cleanUp ) {
 
           terrainChunk = voxels[ cleanUp.cell ]
 
           if ( terrainChunk && terrainChunk.entities ) {
-
+          
             terrainChunk.entities.map( e => {
 
               if ( !!e && !!e.mesh ) {
@@ -228,12 +228,12 @@ export default class TerrainSystem {
 
               } 
 
-              removePhysicsChunks.push( cleanUp.physics )
-              voxelList.splice( voxelList.indexOf( terrainChunk ), 1)
-              delete voxels[ cleanUp.cell ]
-              cleanUpVoxels.splice( i, 1 )
-
             })
+
+            removePhysicsChunks.push( cleanUp.physics )
+            voxelList.splice( voxelList.indexOf( terrainChunk ), 1)
+            delete voxels[ cleanUp.cell ]
+            cleanUpVoxels.splice( i, 1 )
 
           }
               
