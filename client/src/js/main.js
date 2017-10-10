@@ -84,7 +84,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
 
   chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( scene )
-  chatScreen.update( [ 0, altitude + 16, 0 ] )  
+  chatScreen.update( [ pos.x, altitude + 21, pos.z+10] )  
 
   world.chat = chatScreen
 
@@ -113,7 +113,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
     _initFileSystemTest( world, help, coords ) 
     _initVideoChat( world, help, coords ) 
   })
-  helpScreen.update( [ -4, altitude + 22, 0 ] )
+  helpScreen.update( [ pos.x-4, altitude + 21, pos.z+10 ] )
   world.help = helpScreen
 
 })
