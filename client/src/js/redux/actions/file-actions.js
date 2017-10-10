@@ -392,7 +392,7 @@ export function updateShare (username, data) {
          username
      })
 
-     return axios.put(`${API_SERVER}/api/shares/${username}`, data )
+     return axios.post(`${API_SERVER}/api/shares/${username}`, data )
         .then(response => {
             dispatch({
                 type: SHARE_UPDATE_DONE,
