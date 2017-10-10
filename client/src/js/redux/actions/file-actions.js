@@ -384,7 +384,7 @@ export function createShare (username, data) {
    }
 }
 
-export function updateShare (username, id, data) {
+export function updateShare (username, data) {
     return dispatch => {
      
     dispatch({
@@ -392,7 +392,7 @@ export function updateShare (username, id, data) {
          username
      })
 
-     return axios.post(`${API_SERVER}/api/shares/${username}/${id}`, data )
+     return axios.put(`${API_SERVER}/api/shares/${username}`, data )
         .then(response => {
             dispatch({
                 type: SHARE_UPDATE_DONE,
@@ -407,7 +407,7 @@ export function updateShare (username, id, data) {
    }
 }
 
-export function deleteShare (username, id) {
+export function deleteShare (username, data) {
     return dispatch => {
      
     dispatch({
@@ -415,7 +415,7 @@ export function deleteShare (username, id) {
          username
      })
 
-     return axios.put(`${API_SERVER}/api/shares/${username}/${id}` )
+     return axios.put(`${API_SERVER}/api/shares/${username}`, data )
         .then(response => {
             dispatch({
                 type: SHARE_DELETE_DONE,
