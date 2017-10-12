@@ -1,30 +1,5 @@
 import React, { Component } from 'react'
 
-let styles = {
-  button: {
-    display: 'inline-block',
-    width: '60px',
-    height: '60px'
-  },
-  inner: {
-    transition: 'all 0.2s linear',
-    width: '60px',
-    height: '60px',
-    display: 'block',
-    backgroundSize: '60%',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: '50%',
-    cursor: 'pointer'
-  },
-  file: {
-    position: 'relative',
-    bottom: '-1.5em',
-    left: '0.5em',
-    width: '92px',
-    opacity: 0
-  }
-}
-
 export default class Button extends Component {
 
   render() {
@@ -55,4 +30,29 @@ export default class Button extends Component {
 Button.defaultProps = {
     title: "Button",
     style: false
+}
+
+let styles = {
+  button: {
+    display: 'inline-block',
+    width: '60px',
+    height: '60px'
+  },
+  inner: {
+    transition: 'all 0.2s linear',
+    width: '60px',
+    height: '60px',
+    display: 'block',
+    backgroundSize: '60%',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: '50%',
+    cursor: 'pointer'
+  },
+  file: {
+    position: 'relative',
+    bottom: '-1.5em',
+    left: '0.5em',
+    width: '92px',
+    opacity: 0
+  }
 }

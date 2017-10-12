@@ -1,6 +1,76 @@
 import React, { Component } from 'react'
 import Button from './button'
 
+export default class ContextMenu extends Component {
+
+  componentWillMount () {
+
+    this.setState({
+
+    })
+    
+  }
+
+  handleContextAction ( action ) {
+
+    if ( this.props.clickHandler )
+
+      this.props.clickHandler( evt, action )
+
+  }
+
+  render() {
+
+    if ( this.state.activated ) {
+
+      return (
+        <div style={styles.card(this.props.color, this.props.compact)} title={this.props.title }>
+            {(this.props.showTitle ? (
+                <span style={styles.title}>
+                { this.props.title }
+                </span>
+            ) : "")}
+            {
+              this.props.options.map((opt, i) =>{
+                return (
+                  <div style={styles.option}
+                       onTouchTap={ e=> this.handleContextAction( opt.name, e ) }
+                       key={i}
+                  >
+                    { opt.name }
+                  </div>
+                )
+              })
+            }
+        </div>
+    )
+
+    } else {
+      
+      return (
+        <Button />
+      )
+
+    }
+
+  }
+
+}
+
+ContextMenu.defaultProps = {
+    title: "File Options",
+    showTitle: false,
+    color: '#252525',
+    compact: false,
+    options: [
+      { name: "Open" },
+      { name: "Edit" },
+      { name: "Rename" },
+      { name: "Download" },
+      { name: "Delete" },
+    ]
+}
+
 let styles = {
   card: (color, compact) => {
     return {
@@ -22,51 +92,4 @@ let styles = {
     display: 'block',
     backgroundColor: 'rgba(0,0,0,0.2)'
   }
-}
-
-export default class ContextMenu extends Component {
-
-  componentWillMount () {
-
-    this.setState({
-
-    })
-    
-  }
-
-  render() {
-
-    return (
-        <div style={styles.card(this.props.color, this.props.compact)} title={this.props.title }
-             onClick={ (evt) => { this.props.clickHandler(evt, this.props.title) } }
-        >
-            {(this.props.showTitle ? (
-                <span style={styles.title}>
-                { this.props.title }
-                </span>
-            ) : "")}
-            {
-              this.props.options.map((opt, i) =>{
-                return (
-                  <div style={styles.option}
-                       key={i}
-                  >
-                    { opt }
-                  </div>
-                )
-              })
-            }
-        </div>
-    )
-
-  }
-
-}
-
-ContextMenu.defaultProps = {
-    title: "File Options",
-    showTitle: false,
-    color: '#252525',
-    compact: false,
-    options: []
 }
