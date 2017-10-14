@@ -5,6 +5,9 @@ import {
     FILE_DELETE_FETCH,
     FILE_DELETE_DONE,
     FILE_DELETE_FAIL,
+    FILE_MOVE_FETCH,
+    FILE_MOVE_DONE,
+    FILE_MOVE_FAIL,
     FILE_UPLOAD_FETCH,
     FILE_UPLOAD_DONE,
     FILE_UPLOAD_FAIL,
@@ -59,6 +62,11 @@ module.exports = function files (state = {
     error: false
   },
   delete: {
+    data: false,
+    fetching: false,
+    error: false
+  },
+  move: {
     data: false,
     fetching: false,
     error: false
@@ -129,6 +137,30 @@ module.exports = function files (state = {
     case FILE_DELETE_FAIL:
       return Object.assign({}, state, {
         delete: Object.assign({}, state.delete, {
+          fetching: false,
+          data: false,
+          error: action.error
+        })
+      })
+    case FILE_MOVE_FETCH:
+      return Object.assign({}, state, {
+        move: Object.assign({}, state.move, {
+          fetching: true,
+          data: false,
+          error: false
+        })
+      })
+    case FILE_MOVE_DONE:
+      return Object.assign({}, state, {
+        move: Object.assign({}, state.move, {
+          fetching: false,
+          data: action.data,
+          error: false
+        })
+      })
+    case FILE_MOVE_FAIL:
+      return Object.assign({}, state, {
+        move: Object.assign({}, state.move, {
           fetching: false,
           data: false,
           error: action.error

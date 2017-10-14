@@ -13,12 +13,14 @@ import users from './reducers/user'
 import avatars from './reducers/avatar'
 import messages from './reducers/message'
 import files from './reducers/file'
+import util from './reducers/util'
 
 export default function configureStore(router, initialState = {}) {
   return createStore(
         combineReducers({
             routing: router,
                      app,
+                     util,
                      worlds,
                      places,
                      components,

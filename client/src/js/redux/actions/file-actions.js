@@ -5,6 +5,9 @@ import {
     FILE_DELETE_FETCH,
     FILE_DELETE_DONE,
     FILE_DELETE_FAIL,
+    FILE_MOVE_FETCH,
+    FILE_MOVE_DONE,
+    FILE_MOVE_FAIL,
     FILE_UPLOAD_FETCH,
     FILE_UPLOAD_DONE,
     FILE_UPLOAD_FAIL,
@@ -263,7 +266,52 @@ export function createDirectory ( username, dir ) {
    }
 }
 
-export function readText (filename, username, dir) {
+export function moveFile ( username, dir, file, targetDir, targetFile ) {
+    return dispatch => {
+    dispatch({
+        type: FILE_MOVE_FETCH,
+        username
+    })
+
+    return axios.put(`${API_SERVER}/api/files/move/${username}?dir=${dir}&file=${file}&targetDir=${targetDir}&targetFile=${targetFile}`, {} )
+        .then(response => {
+            dispatch({
+                type: FILE_MOVE_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: FILE_MOVE_FAIL,
+                error: response.data
+            })
+        })
+   }
+}
+
+export function deleteFile ( username, dir, filename ) {
+    return dispatch => {
+     
+    dispatch({
+         type: FILE_DELETE_FETCH,
+         username
+     })
+
+     return axios.put(`${API_SERVER}/api/files/delete/${username}?dir=${dir}&file=${filename}`, {} )
+        .then(response => {
+            dispatch({
+                type: FILE_DELETE_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: FILE_DELETE_FAIL,
+                error: response.data
+            })
+        })
+   }
+}
+
+export function readText ( filename, username, dir ) {
     return dispatch => {
      dispatch({
          type: TEXT_READ_FETCH,

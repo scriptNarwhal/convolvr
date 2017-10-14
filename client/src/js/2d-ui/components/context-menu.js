@@ -6,49 +6,73 @@ export default class ContextMenu extends Component {
   componentWillMount () {
 
     this.setState({
-
+      activated: false
     })
     
   }
 
-  handleContextAction ( action ) {
+  toggle () {
 
-    if ( this.props.clickHandler )
+    this.setState({
+      activated: ! this.state.activated
+    })
 
-      this.props.clickHandler( evt, action )
+  }
+
+  handleContextAction ( action, evt ) {
+
+    if ( this.props.onAction )
+
+      this.props.onAction( action, evt )
+
+    this.toggle()
 
   }
 
   render() {
 
+    let username = this.props.username,
+        dir = this.props.dir
+
     if ( this.state.activated ) {
 
       return (
         <div style={styles.card(this.props.color, this.props.compact)} title={this.props.title }>
-            {(this.props.showTitle ? (
-                <span style={styles.title}>
-                { this.props.title }
-                </span>
-            ) : "")}
+          {(this.props.showTitle ? (
+            <span style={styles.title}>{ this.props.title }</span>
+          ) : "")}
+          <Button style={ styles.button( this.props.compact, this.props.isImage, true ) }
+                  image="/data/images/x.png"
+                  onClick={ e=> this.toggle() }
+                  title="Close"
+          />
+          <div style={styles.options}>
             {
               this.props.options.map((opt, i) =>{
                 return (
-                  <div style={styles.option}
-                       onTouchTap={ e=> this.handleContextAction( opt.name, e ) }
+                  <div onClick={ e=> this.handleContextAction( opt.name, e ) }
+                       style={styles.option}
                        key={i}
                   >
-                    { opt.name }
+                    { opt.name == "Download" ? (
+                      <a title={this.props.title} target="_blank" href={`/data/user/${username}${dir}/${this.props.title}`}>Download</a>
+                    ) : opt.name }
                   </div>
                 )
               })
             }
+          </div>
         </div>
-    )
+      )
 
-    } else {
+  } else {
       
       return (
-        <Button />
+        <Button image="/data/images/configure.png"
+                title="File Options"
+                onClick={ e=> this.toggle() }
+                style={ styles.button( this.props.compact, this.props.isImage, false ) }
+        />
       )
 
     }
@@ -59,14 +83,16 @@ export default class ContextMenu extends Component {
 
 ContextMenu.defaultProps = {
     title: "File Options",
+    dir: "",
+    username: "",
     showTitle: false,
     color: '#252525',
     compact: false,
+    isImage: false,
     options: [
-      { name: "Open" },
-      { name: "Edit" },
-      { name: "Rename" },
       { name: "Download" },
+      { name: "Rename" },
+      { name: "Edit" },
       { name: "Delete" },
     ]
 }
@@ -74,16 +100,35 @@ ContextMenu.defaultProps = {
 let styles = {
   card: (color, compact) => {
     return {
+      position: 'relative',
       cursor: 'pointer',
-      width: '240px',
-      height: compact ? '60px' : '240px',
+      width: '224px',
+      height: '178px',
       display: 'inline-block',
       marginRight: '0.5em',
+      marginLeft: '8px',
       marginBottom: '0.5em',
-      backgroundColor: 'rgb(50, 50, 50)',
+      backgroundColor: 'rgb(24, 24, 24)',
       textAlign: "center",
-      borderRadius: '1.5px',
+      borderRadius: '8px',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)'
+    }
+  },
+  option: {
+    textAlign: 'left',
+    paddingLeft: '0.8em',
+    paddingBottom: '0.2em'
+  },
+  options: {
+    paddingTop:'0.4em'
+  },
+  button: ( compact, image, close ) => {
+    return {
+      position: 'relative',
+      top: compact ? '-50px' : close ? '-50px' : '-48px',
+      right: close ? '-16px' : '-104px',
+      opacity: close ? 1 : image ? 0.5 : 0.33,
+      float: close ? 'right' : 'none'
     }
   },
   title: {

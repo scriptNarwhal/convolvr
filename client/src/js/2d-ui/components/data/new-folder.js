@@ -2,65 +2,6 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
 
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-    return `rgb(${r}, ${g}, ${b})`
-  },
-  rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
-    return `rgba(${r}, ${g}, ${b}, ${a})`
-  }
-
-let styles = {
-  modal: {
-    width: '20%',
-    maxWidth: '729px',
-    minWidth: '320px',
-    height: '192px',
-    padding: '0.25em',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    margin: 'auto',
-    background: rgb(38, 38, 38),
-    borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
-  },
-  lightbox: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    background: rgba(0, 0, 0, 0.8)
-  },
-  resultingPath: {
-    marginBottom: '1em'
-  },
-  cancelButton: {
-    borderLeft: 'solid 0.2em magenta'
-  },
-  header: {
-    width: '100%',
-    marginTop: '0.5em',
-    marginBotto: '0.5em'
-  },
-  text: {
-    width: '75%',
-    padding: '0.25em',
-    marginBottom: '0.5em',
-    background: '#212121',
-    border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
-    borderRadius: '2px',
-    fontSize: '1em',
-    color: 'white',
-  },
-  body: {
-
-  },
-  title: {
-
-  }
-}
 
 class NewFolder extends Component {
 
@@ -206,3 +147,63 @@ export default connect(
     }
   }
 )(NewFolder)
+
+let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
+  return `rgb(${r}, ${g}, ${b})`
+},
+rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
+  return `rgba(${r}, ${g}, ${b}, ${a})`
+}
+
+let styles = {
+modal: {
+  width: '20%',
+  maxWidth: '729px',
+  minWidth: '320px',
+  height: '192px',
+  padding: '0.25em',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  margin: 'auto',
+  background: rgb(38, 38, 38),
+  borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+},
+lightbox: {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  background: rgba(0, 0, 0, 0.8)
+},
+resultingPath: {
+  marginBottom: '1em'
+},
+cancelButton: {
+  borderLeft: 'solid 0.2em magenta'
+},
+header: {
+  width: '100%',
+  marginTop: '0.5em',
+  marginBotto: '0.5em'
+},
+text: {
+  width: '75%',
+  padding: '0.25em',
+  marginBottom: '0.5em',
+  background: '#212121',
+  border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
+  borderRadius: '2px',
+  fontSize: '1em',
+  color: 'white',
+},
+body: {
+
+},
+title: {
+
+}
+}

@@ -9,7 +9,7 @@ export default class Button extends Component {
           innerStyle.backgroundImage = 'url('+(this.props.image != null ? this.props.image : "")+')';
 
     return (
-        <div style={style}>
+        <div style={style} className="ui-button">
             <div style={innerStyle}
                  title={this.props.title }
                  onClick={ (evt) => {

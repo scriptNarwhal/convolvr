@@ -69,15 +69,33 @@ class Data extends Component {
     let path = this.state.workingPath
     path.push(dir)
     this.props.changeDirectory(path)
-    //this.update(250)
   }
 
-  update (time) {
-    setTimeout(()=>{
-      this.setState({
-        update: this.state.update+1
-      })
-    }, time)
+  onContextAction ( name, data, e ) {
+
+    let dir = this.props.workingPath.join("/") || "/"
+
+    switch( name ) {
+
+      case "Download":
+
+      break;
+      case "Rename":
+        this.props.launchRenameFile( this.props.username, dir, data.filename )
+        //this.renameFile( this.props.username, this.props.workingPath, data.file, data.targetDir, data.targetFile )
+      break;
+      case "Share":
+        this.props.launchSharingSettings( this.props.username, dir, data.filename )
+      break;
+      case "Edit":
+        this.props.launchTextEdit( this.props.username, dir, data.filename )
+      break;
+      case "Delete":
+        this.props.deleteFile( this.props.username, dir, data.filename )
+      break;
+
+    }
+
   }
 
   _renderFiles ( files, mobile ) {
@@ -94,7 +112,10 @@ class Data extends Component {
                       }}
                       compact={!this.isImage(file)}
                       quarterSize={mobile && this.isImage(file) }
+                      onContextMenu={ (name, data, e) => this.onContextAction(name, data, e) }
                       showTitle={true}
+                      username={this.props.username}
+                      dir={this.props.workingPath.join("/")}
                       title={file}
                       key={i}
                 />
@@ -142,7 +163,6 @@ class Data extends Component {
                           let path = this.state.workingPath
                           path.splice(index+1)
                           this.props.changeDirectory(path)
-                          //this.update(250)
                        }}
           />
           {
@@ -153,7 +173,6 @@ class Data extends Component {
                       clickHandler={ (e, title) => {
                         console.log(e, title, "clicked")
                         this.enterDirectory(title)
-                        //this.update(250)
                       }}
                       compact={true}
                       showTitle={true}
@@ -190,8 +209,15 @@ import {
   listFiles,
   listDirectories,
   changeDirectory,
-  uploadFiles
+  uploadFiles,
+  moveFile,
+  deleteFile
 } from '../../redux/actions/file-actions'
+import {
+  launchTextEdit,
+  launchRenameFile,
+  launchSharingSettings,
+} from '../../redux/actions/util-actions'
 
 export default connect(
   (state, ownProps) => {
@@ -221,6 +247,21 @@ export default connect(
       },
       changeDirectory: (path) => {
         dispatch(changeDirectory(path))
+      },
+      launchTextEdit: ( username, dir, filename ) => {
+        dispatch(launchTextEdit( username, dir, filename ) )
+      },
+      launchRenameFile: ( username, dir, filename ) => {
+        dispatch(launchRenameFile( username, dir, filename ) )
+      },
+      launchSharingSettings: ( username, dir, filename ) => {
+        dispatch(launchSharingSettings( username, dir, filename ) )
+      },
+      moveFile: (username, dir, file, targetDir, targetFile) => {
+        dispatch(moveFile(username, dir, file, targetDir, targetFile))
+      },
+      deleteFile: (username, dir, file) => {
+        dispatch(deleteFile(username, dir, file))
       },
       toggleMenu: (toggle) => {
         dispatch(toggleMenu(toggle))
