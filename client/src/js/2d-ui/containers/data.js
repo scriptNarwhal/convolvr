@@ -88,7 +88,10 @@ class Data extends Component {
         this.props.launchSharingSettings( this.props.username, dir, data.filename )
       break;
       case "Edit":
-        this.props.launchTextEdit( this.props.username, dir, data.filename )
+        if ( !this.isImage( data.filename ) ) 
+
+          this.props.launchTextEdit( this.props.username, dir, data.filename )
+          
       break;
       case "Delete":
         this.props.deleteFile( this.props.username, dir, data.filename )
