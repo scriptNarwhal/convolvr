@@ -9,7 +9,7 @@ export default class Card extends Component {
     this.setState({
       contextMenuOptions: [
         { name: "Download" },
-        { name: "Rename" },
+        // { name: "Rename" }, // until there's time to implement the modal
         { name: "Delete" },
         { name: "Edit" },
       ]

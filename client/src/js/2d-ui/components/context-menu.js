@@ -91,7 +91,7 @@ ContextMenu.defaultProps = {
     isImage: false,
     options: [
       { name: "Download" },
-      { name: "Rename" },
+      // { name: "Rename" },
       { name: "Edit" },
       { name: "Delete" },
     ]

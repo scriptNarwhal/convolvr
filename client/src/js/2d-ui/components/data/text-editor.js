@@ -80,11 +80,12 @@ class TextEditor extends Component {
 
   save () {
 
-    let name = this.state.name
+    let name = this.state.name,
+        dir = this.props.activated ? this.props.dir : this.props.cwd.join("/") 
 
     if ( name != "" ) {
 
-      this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, this.props.dir || this.props.cwd.join("/") )
+      this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir )
       this.toggleModal()
 
     } else {
