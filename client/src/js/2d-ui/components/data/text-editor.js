@@ -14,7 +14,6 @@ class TextEditor extends Component {
 
     this.setState({
       activated: false,
-      editMode: false,
       text: "",
       name: ""
     })
@@ -29,10 +28,30 @@ class TextEditor extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.readText ) {
+    if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData ) {
 
       this.setState({
-        text: nextProps.readText
+        text: nextProps.textData.text
+      })
+
+    }
+
+    if ( this.props.filename != nextProps.filename || this.props.dir != nextProps.dir ) {
+
+      if ( nextProps.dir != "" && nextProps.filename != "" ) {
+
+        this.props.readText( nextProps.filename, nextProps.fileUser, nextProps.dir )
+        this.setState({
+          name: nextProps.filename
+        })
+      }
+
+    }
+
+    if ( this.props.activated == false && nextProps.activated == true ) {
+
+      this.setState({
+        activated: true
       })
 
     }
@@ -65,7 +84,7 @@ class TextEditor extends Component {
 
     if ( name != "" ) {
 
-      this.props.writeText( this.state.text, name, this.props.username, this.props.cwd.join("/") )
+      this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, this.props.dir || this.props.cwd.join("/") )
       this.toggleModal()
 
     } else {
@@ -81,6 +100,7 @@ class TextEditor extends Component {
     this.setState({
       activated: !this.state.activated
     })
+    this.props.closeTextEdit()
 
   }
 
@@ -93,11 +113,13 @@ class TextEditor extends Component {
           <div style={ styles.modal } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
-                <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
+                <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
               </span>
             </div>
             <div style={ styles.body }>
-              <textarea style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
+              { this.props.readTextFetching == false  ? (
+                <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
+              ) : ""}
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
@@ -128,6 +150,9 @@ import {
   readText,
   writeText
 } from '../../../redux/actions/file-actions'
+import {
+  closeTextEdit
+} from '../../../redux/actions/util-actions'
 
 export default connect(
   (state, ownProps) => {
@@ -136,6 +161,14 @@ export default connect(
         section: state.routing.locationBeforeTransitions.pathname,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
+        textData: state.files.readText.data,
+        readTextFetching: state.files.readText.fetching,
+        username: state.users.loggedIn ? state.users.loggedIn.name : "public",
+        activated: state.util.textEdit.activated,
+        filename: state.util.textEdit.filename,
+        fileUser: state.util.textEdit.username,
+        dir: state.util.textEdit.dir,
+        activated: state.util.textEdit.activated,
         vrMode: state.app.vrMode
     }
   },
@@ -145,7 +178,10 @@ export default connect(
         dispatch( readText (filename, username, dir) )
       },
       writeText: (text, filename, username, dir) => {
-        dispatch ( writeText (text, filename, username, dir) )
+        dispatch( writeText (text, filename, username, dir) )
+      },
+      closeTextEdit: () => {
+        dispatch( closeTextEdit() )
       },
       toggleMenu: (force) => {
           dispatch(toggleMenu(force))
