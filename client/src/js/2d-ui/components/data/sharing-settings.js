@@ -154,6 +154,9 @@ import {
   readText,
   writeText
 } from '../../../redux/actions/file-actions'
+import {
+  closeSharingSettings
+} from '../../../redux/actions/util-actions'
 
 export default connect(
   (state, ownProps) => {
@@ -162,7 +165,12 @@ export default connect(
         section: state.routing.locationBeforeTransitions.pathname,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
-        vrMode: state.app.vrMode
+        vrMode: state.app.vrMode,
+        username: state.users.loggedIn ? state.users.loggedIn.name : "public",
+        activated: state.util.sharingSettings.activated,
+        filename: state.util.sharingSettings.filename,
+        fileUser: state.util.sharingSettings.username,
+        dir: state.util.sharingSettings.dir,
     }
   },
   dispatch => {
@@ -178,6 +186,9 @@ export default connect(
       },
       deleteShare: (username, data) => {
           dispatch(toggleMenu(force))
+      },
+      closeSharingSettings: () => {
+        dispatch( closeSharingSettings() )
       }
     }
   }

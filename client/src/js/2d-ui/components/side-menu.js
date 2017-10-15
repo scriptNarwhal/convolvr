@@ -85,6 +85,12 @@ class SideMenu extends Component {
                  style={ styles.mobileHidden() }
                  title="Profile"
             />
+            <Tab clickHandler={ e => { this.navigate(e, "/inventory") } }
+                 style={ styles.mobileHidden() }
+                 showTitle={ this.state.menuHover }
+                 image="/data/images/entities.png"
+                 title="Inventory"
+            />
             <Tab clickHandler={ e => { this.navigate(e, "/files") }}
                  showTitle={ this.state.menuHover }
                  image="/data/images/voxel-white.png"
@@ -102,13 +108,9 @@ class SideMenu extends Component {
                  style={ styles.mobileHidden() }
                  image="/data/images/logout.png"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/import") } }
-                 style={ styles.mobileHidden() }
-                 image="/data/images/obj.png"
-                 title="Import"
-            />
             <Tab clickHandler={ e => { this.navigate(e, "/settings") } }
                  image="/data/images/configure-h.png"
+                 showTitle={ this.state.menuHover }
                  title="Settings"
                  
             />

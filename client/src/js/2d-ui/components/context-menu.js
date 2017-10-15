@@ -32,7 +32,8 @@ export default class ContextMenu extends Component {
   render() {
 
     let username = this.props.username,
-        dir = this.props.dir
+        dir = this.props.dir,
+        nonEntity = this.props.category && this.props.category == "Properties" || this.props.category == "Components"
 
     if ( this.state.activated ) {
 
@@ -49,6 +50,9 @@ export default class ContextMenu extends Component {
           <div style={styles.options}>
             {
               this.props.options.map((opt, i) =>{
+                if ( nonEntity && opt.name =="Add To World")
+                  return ""
+                
                 return (
                   <div onClick={ e=> this.handleContextAction( opt.name, e ) }
                        style={styles.option}

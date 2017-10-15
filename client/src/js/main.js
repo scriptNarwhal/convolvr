@@ -20,7 +20,7 @@ import Worlds from './2d-ui/containers/worlds'
 import Places from './2d-ui/containers/places'
 import NewWorld from './2d-ui/containers/new-world'
 import Settings from './2d-ui/containers/settings'
-import ImportUI from './2d-ui/containers/import'
+import Inventory from './2d-ui/containers/inventory'
 import Network from './2d-ui/containers/network'
 import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
@@ -77,7 +77,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
   userInput.init( world, world.camera, user )
   userInput.rotationVector = { x: 0, y: 2.5, z: 0 }
 
-  if ( world.user == "convolvr" && world.name == "overworld" )
+  if ( Math.abs(coords[0]) < 2 && Math.abs(coords[2]) < 2 )
 
     pos.set( pos.x -25+Math.random()*50, pos.y + 25, pos.z -25+Math.random()*50 )
     
@@ -134,7 +134,7 @@ ReactDOM.render(
         <Route path={APP_ROOT+"/places"} component={Places} />
         <Route path={APP_ROOT+"/new-world"} component={NewWorld} />
         <Route path={APP_ROOT+"/settings"} component={Settings} />
-        <Route path={APP_ROOT+"/import"} component={ImportUI} />
+        <Route path={APP_ROOT+"/inventory"} component={Inventory} />
         <Route path={APP_ROOT+"/network"} component={Network} />
         <Route path={APP_ROOT+"/profile"} component={Profile} />
 			</Route>

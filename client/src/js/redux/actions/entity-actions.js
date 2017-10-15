@@ -1,10 +1,13 @@
 import {
     ENTITY_ADD,
-    ENTITIES_FETCH
+    ENTITIES_FETCH,
     ENTITIES_FETCH_DONE,
     ENTITIES_FETCH_FAILED,
     UPDATE_ENTITY,
-    DELETE_ENTITY
+    DELETE_ENTITY,
+    ENTITY_IMPORT_TO_WORLD_FETCH,
+    ENTITY_IMPORT_TO_WORLD_DONE,
+    ENTITY_IMPORT_TO_WORLD_FAIL
 } from '../constants/action-types';
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
@@ -45,22 +48,26 @@ export function failedFetchEntities (err) {
         err: err
     }
 }
-export function updateEntity (id,  name, components) {
-    return {
-        type: UPDATE_ENTITY,
-        id: id,
-        name: name,
-        components: components
+
+export function importEntityToWorld ( world, coords, data ) {
+    
+        return dispatch => {
+         dispatch({
+            type: INVENTORY_UPDATE_FETCH,
+            id: id
+         })
+         return axios.put(API_SERVER+`/api/import-to-world/${userId}/${category}/${itemId}/${world}/${coords}`, {})
+            .then(response => {
+                dispatch({
+                  type: INVENTORY_UPDATE_DONE,
+                  updated: response.data
+              })
+            }).catch(response => {
+                dispatch({
+                      type: INVENTORY_UPDATE_FAIL,
+                      err: response.err
+                  })
+            });
+       }
+    
     }
-}
-export function deleteEntity (id) {
-    let physicsWorld = three.world.UserPhysics.worker; // until I can find a better way to access this
-    physicsWorld.postMessage(JSON.stringify({
-        command: "remove entity",
-        data: id
-    }))
-    return {
-        type: DELETE_ENTITY,
-        id: id
-    }
-}

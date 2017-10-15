@@ -7,12 +7,7 @@ export default class Card extends Component {
   componentWillMount () {
 
     this.setState({
-      contextMenuOptions: [
-        { name: "Download" },
-        // { name: "Rename" }, // until there's time to implement the modal
-        { name: "Delete" },
-        { name: "Edit" },
-      ]
+     
     })
 
   }
@@ -72,12 +67,13 @@ export default class Card extends Component {
             ) : "")}
             {
               this.props.onContextMenu ? (
-                <ContextMenu options={this.state.contextMenuOptions} 
+                <ContextMenu options={this.props.contextMenuOptions} 
                              onAction={ (name, e) => this.handleContextAction( name, e ) }
                              compact={ this.props.compact }
                              title={ this.props.title }
                              isImage={ this.props.image != "" }
                              username={ this.props.username }
+                             category={ this.props.category }
                              dir={ this.props.dir }
                 />
               ) : ''
@@ -93,12 +89,20 @@ Card.defaultProps = {
     title: "Menu Item",
     username: "",
     dir: "",
+    category: "",
     showTitle: false,
     color: '#252525',
     image: "",
     compact: false,
     quarterSize: false,
-    onContextMenu: false
+    onContextMenu: false,
+    contextMenuOptions: [
+      { name: "Download" },
+      // { name: "Rename" }, // until there's time to implement the modal
+      // { name: "Add To Inventory"},
+      { name: "Delete" },
+      { name: "Edit" },
+    ]
 }
 
 let styles = {

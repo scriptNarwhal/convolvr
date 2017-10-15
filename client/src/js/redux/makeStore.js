@@ -14,6 +14,7 @@ import avatars from './reducers/avatar'
 import messages from './reducers/message'
 import files from './reducers/file'
 import util from './reducers/util'
+import inventory from './reducers/inventory'
 
 export default function configureStore(router, initialState = {}) {
   return createStore(
@@ -28,7 +29,8 @@ export default function configureStore(router, initialState = {}) {
                      avatars,
                      entities,
                      messages,
-                     files
+                     files,
+                     inventory
         }),
         initialState,
         applyMiddleware(

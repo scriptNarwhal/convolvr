@@ -169,7 +169,6 @@ export default connect(
         filename: state.util.textEdit.filename,
         fileUser: state.util.textEdit.username,
         dir: state.util.textEdit.dir,
-        activated: state.util.textEdit.activated,
         vrMode: state.app.vrMode
     }
   },

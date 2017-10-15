@@ -42,16 +42,3 @@ export function failedFetchComponents (err) {
         err: err
     }
 }
-export function updateComponent (id, name, data) {
-    return {
-        type: UPDATE_COMPONENT,
-        name: name,
-        data: data,
-        id: id
-    }
-}
-export function deleteComponent (id) {
-    return {
-        type: DELETE_COMPONENT
-    }
-}
