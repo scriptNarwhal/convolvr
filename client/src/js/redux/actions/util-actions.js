@@ -6,12 +6,14 @@ import {
     UTIL_LAUNCH_IMPORT_TO_INVENTORY,
     UTIL_LAUNCH_IMPORT_TO_WORLD,
     UTIL_LAUNCH_INVENTORY_EDITOR,
+    UTIL_LAUNCH_INVENTORY_EXPORT,
     UTIL_CLOSE_TEXT_EDIT,
     UTIL_CLOSE_RENAME_FILE,
     UTIL_CLOSE_SHARING_SETTINGS,
     UTIL_CLOSE_IMPORT_TO_INVENTORY,
     UTIL_CLOSE_IMPORT_TO_WORLD,
-    UTIL_CLOSE_INVENTORY_EDITOR
+    UTIL_CLOSE_INVENTORY_EDITOR,
+    UTIL_CLOSE_INVENTORY_EXPORT
 } from '../constants/action-types';
 import { API_SERVER } from '../../config.js'
 
@@ -69,6 +71,15 @@ export function launchInventoryEditor ( username, category, itemId ) {
     }
 }
 
+export function launchInventoryExport ( username, category, itemId ) {
+    return {
+        type: UTIL_LAUNCH_INVENTORY_EXPORT,
+        username,
+        category,
+        itemId
+    }
+}
+
 export function closeTextEdit ( ) {
     return {
         type: UTIL_CLOSE_TEXT_EDIT,
@@ -102,5 +113,11 @@ export function closeImportToWorld ( ) {
 export function closeInventoryEditor ( ) {
     return {
         type: UTIL_CLOSE_INVENTORY_EDITOR,
+    }
+}
+
+export function closeInventoryExport ( ) {
+    return {
+        type: UTIL_CLOSE_INVENTORY_EXPORT,
     }
 }

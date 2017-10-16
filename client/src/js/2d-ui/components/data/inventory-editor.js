@@ -36,13 +36,13 @@ class InventoryEditor extends Component {
 
     }
 
-    if ( this.props.filename != nextProps.filename || this.props.dir != nextProps.dir ) {
+    if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
-      if ( nextProps.dir != "" && nextProps.filename != "" ) {
+      if ( nextProps.category != "" && nextProps.itemId != "" ) {
 
-        this.props.readText( nextProps.filename, nextProps.fileUser, nextProps.dir )
+        //this.props.readText( nextProps.filename, nextProps.fileUser, nextProps.dir )
         this.setState({
-          name: nextProps.filename
+          name: nextProps.itemId
         })
       }
 
@@ -78,23 +78,92 @@ class InventoryEditor extends Component {
 
   }
 
-  save () {
+    save () {
 
-    let name = this.state.name,
-        dir = this.props.activated ? this.props.dir : this.props.cwd.join("/") 
+        let name = this.state.name,
+            dir = this.props.activated ? this.props.dir : this.props.cwd.join("/") 
 
-    if ( name != "" ) {
+        if ( name != "" ) {
 
-      this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir )
-      this.toggleModal()
+            //this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir )
+            this.toggleModal()
 
-    } else {
+        } else {
 
-      alert("Name is required.")
+            alert("Name is required.")
+
+        }
 
     }
 
-  }
+    validate() {
+
+        let valid = null
+
+        return valid
+
+    }
+
+    useTemplate(category) {
+
+        let template = ""
+
+        switch (category) {
+            case "Entities":
+                template = {
+                    position: [0, 0, 0],
+                    quaternion: [0, 0, 0, 1],
+                    name: "New Entity",
+                    id: -1,
+                    components: [
+                        {
+                            position: [0, 0, 0],
+                            quaternion: [0, 0, 0, 1],
+                            props: {
+                                geometry: {
+                                    shape: "box",
+                                    size: [1, 1, 1]
+                                },
+                                material: {
+                                    name: "wireframe",
+                                    color: 0xffffff
+                                }
+                            },
+                            components: []
+                        }
+                    ]
+                }
+                break;
+            case "Components":
+                template = {
+                    position: [0, 0, 0],
+                    quaternion: [0, 0, 0, 1],
+                    props: {
+                        geometry: {
+                            shape: "box",
+                            size: [1, 1, 1]
+                        },
+                        material: {
+                            name: "wireframe",
+                            color: 0xffffff
+                        }
+                    },
+                    components: []
+                }
+                break;
+            case "Properties":
+                template = {
+                    geometry: {
+                        shape: "box",
+                        size: [1, 1, 1]
+                    }
+                }
+                break;
+        }
+
+        return JSON.stringify(template)
+
+    }
 
   toggleModal () {
 
@@ -152,7 +221,12 @@ import {
   writeText
 } from '../../../redux/actions/file-actions'
 import {
-  closeTextEdit
+    getInventory,
+    addInventoryItem,
+    updateInventoryItem
+}
+import {
+    closeInventoryEditor
 } from '../../../redux/actions/util-actions'
 
 export default connect(
@@ -165,10 +239,10 @@ export default connect(
         textData: state.files.readText.data,
         readTextFetching: state.files.readText.fetching,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
-        activated: state.util.textEdit.activated,
-        filename: state.util.textEdit.filename,
-        fileUser: state.util.textEdit.username,
-        dir: state.util.textEdit.dir,
+        activated: state.util.inventoryEditor.activated,
+        filename: state.util.inventoryEditor.category,
+        fileUser: state.util.inventoryEditor.username,
+        itemId: state.util.inventoryEditor.itemId,
         vrMode: state.app.vrMode
     }
   },
@@ -180,8 +254,17 @@ export default connect(
       writeText: (text, filename, username, dir) => {
         dispatch( writeText (text, filename, username, dir) )
       },
-      closeTextEdit: () => {
-        dispatch( closeTextEdit() )
+      getInventory: (userId, category) => {
+        dispatch(getInventory(userId, category))
+      },
+      addInventoryItem: (userId, category, data) => {
+          dispatch(addInventoryItem(userId, category, data))
+      },
+      updateInventoryItem: (userId, category, data) => {
+      dispatch(updateInventoryItem(userId, category, data))
+      },
+      closeInventoryEditor: () => {
+        dispatch( closeInventoryEditor() )
       },
       toggleMenu: (force) => {
           dispatch(toggleMenu(force))

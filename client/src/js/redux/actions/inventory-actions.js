@@ -2,9 +2,9 @@ import {
     INVENTORY_ADD_FETCH,
     INVENTORY_ADD_DONE,
     INVENTORY_ADD_FAIL,
-    USER_INVENTORY_FETCH,
-    USER_INVENTORY_FETCH_FAIL,
-    USER_INVENTORY_FETCH_DONE,
+    INVENTORY_FETCH,
+    INVENTORY_FETCH_FAIL,
+    INVENTORY_FETCH_DONE,
     INVENTORY_UPDATE_FETCH,
     INVENTORY_UPDATE_DONE,
     INVENTORY_UPDATE_FAIL,
@@ -20,22 +20,22 @@ import {
   import { API_SERVER } from '../../config.js'
   
   
-  export function getInventory (userId) {
+  export function getInventory (userId, category) {
   
       return dispatch => {
        dispatch({
-          type: USER_INVENTORYS_FETCH,
+          type: INVENTORY_FETCH,
           userId
        })
-       return axios.get(API_SERVER+"/api/places/user/"+userId)
+       return axios.get(API_SERVER+`/api/inventory/${userId}/${category}`)
           .then(res => {
               dispatch({
-                  type: USER_INVENTORYS_FETCH_DONE,
+                  type: INVENTORY_FETCH_DONE,
                   data: res.data
               })
           }).catch(err => {
               dispatch({
-                  type: USER_INVENTORYS_FETCH_FAIL,
+                  type: INVENTORY_FETCH_FAIL,
                   err: err
               })
           });
@@ -56,9 +56,6 @@ import {
                     type: INVENTORY_ADD_DONE,
                     created: response.data
                 })
-              browserHistory.push("/"+data.userName+"/"+data.name)
-              window.location.href = window.location.href  /* work around */
-              // this should.. work differently
           }).catch(response => {
                 dispatch({
                     type: INVENTORY_ADD_FAIL,

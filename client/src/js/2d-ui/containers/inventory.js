@@ -11,12 +11,12 @@ class Inventory extends Component {
 
   componentWillMount () {
 
-    this.props.listFiles(this.props.username, this.props.workingPath.join("/"))
-    this.props.listDirectories(this.props.username, this.props.workingPath.join("/"))
+    this.props.getInventory(this.props.username, "Entities")
+    this.props.getInventory(this.props.username, "Components")
+    this.props.getInventory(this.props.username, "Properties")
 
     this.setState({
-      update: 0,
-      workingPath: []
+      
     })
 
   }
@@ -26,8 +26,6 @@ class Inventory extends Component {
     let userNameChanged = nextProps.username != this.props.username,
         finishedFetchingDirs = this.props.dirsFetching == true && nextProps.dirsFetching == false,
         finishedFetchingFiles = (this.props.filesFetching == true && nextProps.filesFetching == false)
-
-    
 
   }
 
@@ -44,10 +42,10 @@ class Inventory extends Component {
             this.props.launchImportToWorld( this.props.username, data )
           break;
           case "Edit JSON":
-            // implement
+            this.props.launchInventoryEditor( this.props.username, data.category, data.itemId )
           break;
           case "Export JSON":
-            // implement
+            this.props.launchInventoryExport( this.props.username, data.category, data.itemId )
           break;
     
         }
@@ -67,17 +65,14 @@ class Inventory extends Component {
           <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
                          options={ this.props.inventoryEntities }
                          category="Entities" 
-                         
           />
           <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
                          options={ this.props.inventoryComponents }
-                         category="Components" 
-                         
+                         category="Components"   
           />
           <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
                          options={ this.props.inventoryProperties }
                          category="Properties" 
-                         
           />
         </Shell>
     )
@@ -135,14 +130,17 @@ export default connect(
   },
   dispatch => {
     return {
-      listFiles: (username, dir) => {
-          dispatch(listFiles(username, dir))
+      getInventory: (userId, category) => {
+          dispatch(getInventory(userId, category))
       },
-      listDirectories: (username, dir) => {
-          dispatch(listDirectories(username, dir))
+      addInventoryItem: (userId, category, data) => {
+          dispatch(addInventoryItem(userId, category, data))
       },
-      changeDirectory: (path) => {
-        dispatch(changeDirectory(path))
+      updateInventoryItem: (userId, category, data) => {
+        dispatch(updateInventoryItem(userId, category, data))
+      },
+      removeInventoryItem: (userId, category, itemId) => {
+        dispatch(removeInventoryItem(userId, category, itemId))
       },
       toggleMenu: (toggle) => {
         dispatch(toggleMenu(toggle))
