@@ -171,6 +171,7 @@ class NewWorld extends Component {
     })
     this.props.uploadFile(data, username, "")
   }
+
   render() {
     return (
         <Shell className="login">
@@ -539,7 +540,7 @@ const styles = {
     margin: 'auto',
     display: 'block',
     position: 'relative',
-    top: '6vh',
+    top: '0',
     left: '0px',
     right: '0px',
     borderTop: '0.8vh solid rgb(43, 43, 43)',
@@ -594,8 +595,17 @@ const styles = {
     cursor: "pointer"
   },
   signInButton: {
-    fontSize: '1em',
-    marginRight: '1em'
+    float: 'left',
+    marginRight: '2em',
+    marginTop: '1em',
+    marginBottom: '3em',
+    fontSize: '1.25em',
+    background: '#2b2b2b',
+    color: 'white',
+    border: 'none',
+    padding: '0.5em',
+    borderRadius: '3px',
+    boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.54)'
   },
   fileUpload: {
     marginRight: '1em'
