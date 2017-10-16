@@ -2,13 +2,15 @@ import {
     UTIL_LAUNCH_TEXT_EDIT,
     UTIL_LAUNCH_RENAME_FILE,
     UTIL_LAUNCH_SHARING_SETTINGS,
+    UTIL_LAUNCH_IMPORT_TO_INVENTORY,
+    UTIL_LAUNCH_IMPORT_TO_WORLD,
+    UTIL_LAUNCH_INVENTORY_EDITOR,
     UTIL_CLOSE_TEXT_EDIT,
     UTIL_CLOSE_RENAME_FILE,
     UTIL_CLOSE_SHARING_SETTINGS,
-    UTIL_LAUNCH_IMPORT_TO_INVENTORY,
-    UTIL_LAUNCH_IMPORT_TO_WORLD,
     UTIL_CLOSE_IMPORT_TO_INVENTORY,
-    UTIL_CLOSE_IMPORT_TO_WORLD
+    UTIL_CLOSE_IMPORT_TO_WORLD,
+    UTIL_CLOSE_INVENTORY_EDITOR
 } from '../constants/action-types';
 
 module.exports = function app (state = {
@@ -41,6 +43,12 @@ module.exports = function app (state = {
         username: "",
         filename: "",
         dir: ""
+    },
+    inventoryEditor: {
+        activated: false,
+        username: "",
+        category: "",
+        itemId: ""
     }
 }, action) {
   switch ( action.type ) {
@@ -81,7 +89,7 @@ module.exports = function app (state = {
         return {
             ...state,
             importToInventory: {
-                ...state.renameFile,
+                ...state.importToInventory,
                 activated: true,
                 username: action.username,
                 filename: action.filename,
@@ -92,7 +100,18 @@ module.exports = function app (state = {
         return {
             ...state,
             importToWorld: {
-                ...state.sharingSettings,
+                ...state.importToWorld,
+                activated: true,
+                username: action.username,
+                filename: action.filename,
+                dir: action.dir
+            }
+        }
+    case UTIL_LAUNCH_INVENTORY_EDITOR:
+        return {
+            ...state,
+            inventoryEditor: {
+                ...state.inventoryEditor,
                 activated: true,
                 username: action.username,
                 filename: action.filename,
@@ -136,6 +155,14 @@ module.exports = function app (state = {
             ...state,
             importToWorld: {
                 ...state.importToWorld,
+                activated: false
+            }
+        }
+    case UTIL_CLOSE_INVENTORY_EDITOR:
+        return {
+            ...state,
+            inventoryEditor: {
+                ...state.inventoryEditor,
                 activated: false
             }
         }

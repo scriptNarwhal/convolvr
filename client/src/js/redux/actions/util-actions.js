@@ -5,11 +5,13 @@ import {
     UTIL_LAUNCH_SHARING_SETTINGS,
     UTIL_LAUNCH_IMPORT_TO_INVENTORY,
     UTIL_LAUNCH_IMPORT_TO_WORLD,
+    UTIL_LAUNCH_INVENTORY_EDITOR,
     UTIL_CLOSE_TEXT_EDIT,
     UTIL_CLOSE_RENAME_FILE,
     UTIL_CLOSE_SHARING_SETTINGS,
     UTIL_CLOSE_IMPORT_TO_INVENTORY,
-    UTIL_CLOSE_IMPORT_TO_WORLD
+    UTIL_CLOSE_IMPORT_TO_WORLD,
+    UTIL_CLOSE_INVENTORY_EDITOR
 } from '../constants/action-types';
 import { API_SERVER } from '../../config.js'
 
@@ -58,6 +60,15 @@ export function launchImportToWorld ( username, dir, filename ) {
     }
 }
 
+export function launchInventoryEditor ( username, category, itemId ) {
+    return {
+        type: UTIL_LAUNCH_INVENTORY_EDITOR,
+        username,
+        category,
+        itemId
+    }
+}
+
 export function closeTextEdit ( ) {
     return {
         type: UTIL_CLOSE_TEXT_EDIT,
@@ -85,5 +96,11 @@ export function closeImportToInventory ( ) {
 export function closeImportToWorld ( ) {
     return {
         type: UTIL_CLOSE_IMPORT_TO_WORLD,
+    }
+}
+
+export function closeInventoryEditor ( ) {
+    return {
+        type: UTIL_CLOSE_INVENTORY_EDITOR,
     }
 }

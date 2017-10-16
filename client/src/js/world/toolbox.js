@@ -353,7 +353,7 @@ export default class Toolbox {
 
       let userHand = !!this.hands[ hand ] ? this.hands[ hand ].mesh : false
 
-      if ( userHand ) {
+      if ( userHand && position && orientation ) {
 
         userHand.autoUpdateMatrix = false
         userHand.position.fromArray(position).multiplyScalar(1).add(this.world.camera.position)
