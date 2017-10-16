@@ -37,9 +37,7 @@ export default class InventoryList extends Component {
 
     return (
         <div style={styles.list(this.props.color, this.props.compact)} title={this.props.category }>
-          {(this.props.showTitle ? (
-            <span style={styles.title}>{ this.props.category }</span>
-          ) : "")}
+          <span style={styles.title}>{ this.props.category }</span>
           <div style={styles.options}>
             {
               this.props.options.map((opt, i) =>{
@@ -91,10 +89,10 @@ let styles = {
     return {
       position: 'relative',
       backgroundColor: 'rgb(24, 24, 24)',
-      borderRadius: '8px',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)',
       cursor: 'pointer',
-      width: '30%',
+      width: '32%',
+      minWidth: '320px',
       height: '100%',
       display: 'inline-block',
       marginRight: '0.5em',
@@ -125,6 +123,7 @@ let styles = {
     width: '100%',
     height: '40px',
     display: 'block',
+    paddingTop: '0.5em',
     backgroundColor: 'rgba(0,0,0,0.2)'
   }
 }

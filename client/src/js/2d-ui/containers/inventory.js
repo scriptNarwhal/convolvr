@@ -60,7 +60,10 @@ class Inventory extends Component {
         dirs = this.props.dirs
 
     return (
-        <Shell className="data-view" style={ isMobile() ? { paddingTop: '60px' } : { paddingTop: 0 } }>
+        <Shell className="data-view" 
+               style={ isMobile() ? { paddingTop: '60px' } : { paddingTop: '0px' } }
+               innerStyle={ { paddingTop: isMobile() ? '72px' : 0, paddingLeft: isMobile() ? '10px' : '72px' }  }       
+        >
           <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
                          options={ this.props.inventoryEntities }
                          category="Entities" 

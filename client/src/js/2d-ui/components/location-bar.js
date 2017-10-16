@@ -34,7 +34,7 @@ export default class LocationBar extends Component {
               })
             }
             { this.props.showFileOptions ? (
-              <div style={styles.fileOptions}>
+              <div style={styles.fileOptions( isMobile() )}>
                 
                 <TextEditor username={ this.props.username } path={ this.props.path } />
                 <NewFolder username={ this.props.username } path={ this.props.path } />
@@ -75,7 +75,7 @@ let styles = {
   },
   mobile: () => {
     return isMobile() ? {
-      marginTop: '4em',
+      marginTop: '5em',
       paddingLeft: '0'
     } : { }
   },
@@ -104,11 +104,19 @@ let styles = {
     display: 'inline-block',
     width: 'auto'
   },
-  fileOptions: {
-    position: 'fixed',
-    right: '60px',
-    top: '14px',
-    height: '60px',
-    display: 'inline-block'
+  fileOptions: (mobile) => {
+    return mobile ? {
+      position: 'fixed',
+      right: '60px',
+      bottom: '-14px',
+      height: '60px',
+      display: 'inline-block'
+    } : {
+      position: 'fixed',
+      right: '60px',
+      top: '14px',
+      height: '60px',
+      display: 'inline-block'
+    }
   }
 }

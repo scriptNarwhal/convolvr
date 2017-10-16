@@ -5,36 +5,6 @@ import Button from './button'
 import { browserHistory } from 'react-router'
 import { isMobile } from '../../config'
 
-let styles = {
-  shell: ( hasMenu, menuOpen, menuOnly, noBackground, droppingFile ) => {
-    let mobile = window.innerWidth <= 640
-    return {
-      margin: 'auto',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      textAlign: 'center',
-      width: (menuOnly && !mobile ? '72px' : '100%'),
-      height: menuOnly && mobile ? '72px' : '100vh',
-      display: (menuOpen  ? "block" : "none"),
-      zIndex: (hasMenu ? 999999 : 1),
-      cursor: 'pointer',
-      backgroundColor: droppingFile ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0)',
-      backgroundImage: noBackground ? 'none' : 'linear-gradient(to bottom, #0c0c0c, #111111, #212121)',
-      overflowY: 'auto',
-      overflowX: 'hidden',
-      paddingRight: '20px' //scrollbars are ugly (minimap would be nicer)
-    }
-  },
-  inner: () => {
-    let mobile = isMobile()
-    return {
-      paddingTop: mobile ? '134px' : '56px',
-      paddingLeft: mobile ? '0px' : '72px'
-    }
-  }
-}
-
 class Shell extends Component {
 
   componentWillMount () {
@@ -146,7 +116,7 @@ class Shell extends Component {
               <SideMenu />
             ) : ''}
             {menuOnly ? '' : (
-              <div style={styles.inner()}>
+              <div style={Object.assign({}, styles.inner(), this.props.innerStyle)}>
                   {this.props.children}
               </div>
             )}
@@ -158,7 +128,8 @@ class Shell extends Component {
 }
 
 Shell.defaultProps = {
-  noBackground: false
+  noBackground: false,
+  innerStyle: {}
 }
 
 import { connect } from 'react-redux'
@@ -197,3 +168,33 @@ export default connect(
     }
   }
 )(Shell)
+
+let styles = {
+  shell: ( hasMenu, menuOpen, menuOnly, noBackground, droppingFile ) => {
+    let mobile = window.innerWidth <= 640
+    return {
+      margin: 'auto',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      textAlign: 'center',
+      width: (menuOnly && !mobile ? '72px' : '100%'),
+      height: menuOnly && mobile ? '72px' : '100vh',
+      display: (menuOpen  ? "block" : "none"),
+      zIndex: (hasMenu ? 999999 : 1),
+      cursor: 'pointer',
+      backgroundColor: droppingFile ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0)',
+      backgroundImage: noBackground ? 'none' : 'linear-gradient(to bottom, #0c0c0c, #111111, #212121)',
+      overflowY: 'auto',
+      overflowX: 'hidden',
+      paddingRight: '20px' //scrollbars are ugly (minimap would be nicer)
+    }
+  },
+  inner: () => {
+    let mobile = isMobile()
+    return {
+      paddingTop: mobile ? '166px' : '56px',
+      paddingLeft: mobile ? '0px' : '72px'
+    }
+  }
+}
