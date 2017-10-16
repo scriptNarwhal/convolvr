@@ -65,14 +65,14 @@ export default class GamePad {
       if ( gamepad ) {
 
         id = gamepad.id
-        if ( id.indexOf('Oculus Touch') > -1 || id.indexOf('OpenVR Gamepad') > -1 ) { // test with vive then remove second half of this if statement
+        if ( id.indexOf('Oculus Touch') > -1 ) {
 
           this.trackedControllers.handleOculusTouch( gamepad )
           trackedControls = true
 
         } else if ( id.indexOf('OpenVR Gamepad') > -1 ) {
 
-          this.trackedControllers.handleOpenVRGamepad(gamepad)
+          this.trackedControllers.handleOpenVRGamepad( gamepad )
           trackedControls = true
 
         } else if ( id.indexOf('Oculus Remote') > -1 ) {

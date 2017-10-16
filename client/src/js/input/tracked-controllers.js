@@ -23,12 +23,6 @@ export default class TrackedController {
 
   }
 
-  handleOpenVRGamepad ( gamepad ) {
-
-    // implement
-
-  }
-
   handleOculusTouch ( gamepad )  {
 
     let axes        = gamepad.axes,
@@ -114,6 +108,92 @@ export default class TrackedController {
     }
 
   }
+
+  handleOpenVRGamepad ( gamepad )  {
+    
+        let axes        = gamepad.axes,
+            buttons     = gamepad.buttons,
+            b           = buttons.length,
+            a           = axes.length,
+            i           = 0,
+            world       = this.world,
+            input       = this.input,
+            useTracking = input.trackedControls,
+            rotation    = input.rotationVector,
+            tools       = world.user.toolbox
+    
+        //console.log("oculus touch handler ", a, b, buttons
+    
+        if ( useTracking && gamepad.pose )
+        
+          tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
+    
+        if ( gamepad.hand == 'left' ) {
+    
+          if ( world.vrMovement == 'stick' ) {
+    
+            if ( Math.abs(axes[0]) > 0.1 )
+    
+                input.moveVector.x = axes[0] * 2
+    
+    
+            if ( Math.abs(axes[1]) > 0.1 )
+    
+                input.moveVector.z = -axes[1] * 2
+    
+            
+          } else { // teleport mode
+    
+          }
+         
+          if ( this.up( buttons, 1, 1 ) )
+    
+            tools.usePrimary(1)
+    
+          if ( this.down( buttons, 1, 2 ) )
+    
+            tools.grip(1, 1)
+    
+          if ( this.up( buttons, 1, 2 ) )
+    
+            tools.grip( 1, -1 )
+    
+    
+        } else { // use right stick to use adjust tool options // right triggers for primary tool
+    
+          let dir = Math.round(gamepad.axes[0]),
+              toolOptionChange = Math.round(gamepad.axes[1])
+    
+          if (dir != 0 && this.stickCooldown == false) {
+    
+            this.coolDown()
+            tools.nextTool(dir)
+            tools.showMenu()
+    
+          }
+    
+          if (toolOptionChange != 0 && this.stickCooldown == false) { // cycle through tool options
+    
+            this.coolDown()
+            tools.useSecondary(0, toolOptionChange)
+    
+          }
+    
+          if ( this.up( buttons, 0, 1 ) )
+          
+            tools.usePrimary(0)
+          
+          if ( this.down( buttons, 0, 2 ) )
+          
+            tools.grip( 0, 1 )
+          
+          if ( this.up( buttons, 0, 2 ) )
+          
+            tools.grip( 0, -1 )
+    
+        }
+    
+      }
 
   handleOculusRemote ( gamepad ) { // oculus remote
 
