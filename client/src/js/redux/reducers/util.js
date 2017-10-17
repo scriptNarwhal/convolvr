@@ -5,12 +5,14 @@ import {
     UTIL_LAUNCH_IMPORT_TO_INVENTORY,
     UTIL_LAUNCH_IMPORT_TO_WORLD,
     UTIL_LAUNCH_INVENTORY_EDITOR,
+    UTIL_LAUNCH_INVENTORY_EXPORT,
     UTIL_CLOSE_TEXT_EDIT,
     UTIL_CLOSE_RENAME_FILE,
     UTIL_CLOSE_SHARING_SETTINGS,
     UTIL_CLOSE_IMPORT_TO_INVENTORY,
     UTIL_CLOSE_IMPORT_TO_WORLD,
-    UTIL_CLOSE_INVENTORY_EDITOR
+    UTIL_CLOSE_INVENTORY_EDITOR,
+    UTIL_CLOSE_INVENTORY_EXPORT
 } from '../constants/action-types';
 
 module.exports = function app (state = {
@@ -45,6 +47,12 @@ module.exports = function app (state = {
         dir: ""
     },
     inventoryEditor: {
+        activated: false,
+        username: "",
+        category: "",
+        itemId: ""
+    },
+    inventoryExport: {
         activated: false,
         username: "",
         category: "",
@@ -114,8 +122,19 @@ module.exports = function app (state = {
                 ...state.inventoryEditor,
                 activated: true,
                 username: action.username,
-                filename: action.filename,
-                dir: action.dir
+                category: action.category,
+                itemId: action.itemId
+            }
+        }
+    case UTIL_LAUNCH_INVENTORY_EXPORT:
+        return {
+            ...state,
+            inventoryExport: {
+                ...state.inventoryExport,
+                activated: true,
+                username: action.username,
+                category: action.category,
+                itemId: action.itemId
             }
         }
     case UTIL_CLOSE_TEXT_EDIT:
@@ -163,6 +182,14 @@ module.exports = function app (state = {
             ...state,
             inventoryEditor: {
                 ...state.inventoryEditor,
+                activated: false
+            }
+        }
+    case UTIL_CLOSE_INVENTORY_EXPORT:
+        return {
+            ...state,
+            inventoryExport: {
+                ...state.inventoryExport,
                 activated: false
             }
         }

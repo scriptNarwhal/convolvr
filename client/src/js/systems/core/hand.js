@@ -25,8 +25,6 @@ export default class HandSystem {
         }
     }
 
-    // ~probably define grabbing / gesture animations here~ nope, that'll live in it's own module
-
     toggleTrackedHands ( component, toggle = true ) { console.log('toggle hands', toggle)
       
       let scene = window.three.scene,

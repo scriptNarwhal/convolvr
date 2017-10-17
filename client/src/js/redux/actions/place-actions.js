@@ -28,6 +28,7 @@ export function fetchPlaces () {
      })
      return axios.get(API_SERVER+"/api/places")
         .then(res => {
+            three.world.systems.assets.setPlaces( res.data )
             dispatch({
                 type: PLACES_FETCH_DONE,
                 places: res.data
@@ -42,7 +43,7 @@ export function fetchPlaces () {
 
 }
 
-export function fetchUserPlaces (userId) {
+export function fetchUserPlaces( userId ) {
 
     return dispatch => {
      dispatch({
@@ -65,7 +66,7 @@ export function fetchUserPlaces (userId) {
 
 }
 
-export function createPlace (data) {
+export function createPlace( data ) {
 
     return dispatch => {
      dispatch({
@@ -85,7 +86,7 @@ export function createPlace (data) {
 
 }
 
-export function createPlaceDone (res) {
+export function createPlaceDone( res ) {
 
     return {
         type: PLACE_CREATE_DONE,
@@ -93,7 +94,7 @@ export function createPlaceDone (res) {
     }
 
 }
-export function createPlaceFail (err) {
+export function createPlaceFail( err ) {
 
     return {
         type: PLACE_CREATE_FAIL,
@@ -101,7 +102,7 @@ export function createPlaceFail (err) {
     }
 
 }
-export function setCurrentPlace (place) {
+export function setCurrentPlace( place ) {
 
   return {
     type: PLACE_SET_CURRENT,

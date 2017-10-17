@@ -183,7 +183,8 @@ export default class ToolSystem {
         toolPanel.mesh.translateZ(-3)
         toolPanel.mesh.translateX(1.25)
         toolPanel.mesh.updateMatrix()
-
+        console.info("---")
+        console.warn("PANEL COLLISION CHECK")
         this.panels.map( panel => {
             console.log("panel distance ", toolPanel.mesh.position.sub( panel.mesh.position ).length())
             if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 4 ) {

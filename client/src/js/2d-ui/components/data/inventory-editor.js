@@ -5,9 +5,7 @@ import FileButton from './file-button'
 class InventoryEditor extends Component {
 
   constructor () {
-
     super()
-
   }
 
   componentWillMount () {
@@ -18,49 +16,104 @@ class InventoryEditor extends Component {
       name: ""
     })
 
-    if ( !!this.props.fileURL ) {
+    if ( !!this.props.fileURL )
 
       this.props.readText( this.props.fileURL, this.props.username, this.props.cwd.join("/") )
-
-    }
     
   }
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData ) {
+    if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData )
 
       this.setState({
         text: nextProps.textData.text
       })
 
-    }
 
     if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
-      if ( nextProps.category != "" && nextProps.itemId != "" ) {
+      if ( nextProps.category != "" && nextProps.itemId != "" )
 
-        //this.props.readText( nextProps.filename, nextProps.fileUser, nextProps.dir )
         this.setState({
           name: nextProps.itemId
         })
-      }
 
     }
 
-    if ( this.props.activated == false && nextProps.activated == true ) {
+    if ( this.props.activated == false && nextProps.activated == true )
 
       this.setState({
         activated: true
       })
 
-    }
-
+    
   }
 
   componentWillUpdate ( nextProps, nextState ) {
 
   }
+
+  useTemplate(category) {
+    
+            let template = ""
+    
+            switch (category) {
+                case "Entities":
+                    template = {
+                        position: [0, 0, 0],
+                        quaternion: [0, 0, 0, 1],
+                        name: "New Entity",
+                        id: -1,
+                        components: [
+                            {
+                                position: [0, 0, 0],
+                                quaternion: [0, 0, 0, 1],
+                                props: {
+                                    geometry: {
+                                        shape: "box",
+                                        size: [1, 1, 1]
+                                    },
+                                    material: {
+                                        name: "wireframe",
+                                        color: 0xffffff
+                                    }
+                                },
+                                components: []
+                            }
+                        ]
+                    }
+                    break;
+                case "Components":
+                    template = {
+                        position: [0, 0, 0],
+                        quaternion: [0, 0, 0, 1],
+                        props: {
+                            geometry: {
+                                shape: "box",
+                                size: [1, 1, 1]
+                            },
+                            material: {
+                                name: "wireframe",
+                                color: 0xffffff
+                            }
+                        },
+                        components: []
+                    }
+                    break;
+                case "Properties":
+                    template = {
+                        geometry: {
+                            shape: "box",
+                            size: [1, 1, 1]
+                        }
+                    }
+                    break;
+            }
+    
+            return JSON.stringify(template)
+    
+        }
 
   handleTextChange (e) {
 
@@ -101,67 +154,6 @@ class InventoryEditor extends Component {
         let valid = null
 
         return valid
-
-    }
-
-    useTemplate(category) {
-
-        let template = ""
-
-        switch (category) {
-            case "Entities":
-                template = {
-                    position: [0, 0, 0],
-                    quaternion: [0, 0, 0, 1],
-                    name: "New Entity",
-                    id: -1,
-                    components: [
-                        {
-                            position: [0, 0, 0],
-                            quaternion: [0, 0, 0, 1],
-                            props: {
-                                geometry: {
-                                    shape: "box",
-                                    size: [1, 1, 1]
-                                },
-                                material: {
-                                    name: "wireframe",
-                                    color: 0xffffff
-                                }
-                            },
-                            components: []
-                        }
-                    ]
-                }
-                break;
-            case "Components":
-                template = {
-                    position: [0, 0, 0],
-                    quaternion: [0, 0, 0, 1],
-                    props: {
-                        geometry: {
-                            shape: "box",
-                            size: [1, 1, 1]
-                        },
-                        material: {
-                            name: "wireframe",
-                            color: 0xffffff
-                        }
-                    },
-                    components: []
-                }
-                break;
-            case "Properties":
-                template = {
-                    geometry: {
-                        shape: "box",
-                        size: [1, 1, 1]
-                    }
-                }
-                break;
-        }
-
-        return JSON.stringify(template)
 
     }
 

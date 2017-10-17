@@ -123,7 +123,7 @@ export default class Convolvr {
 			// oimo: this.systems.oimo.worker
 		}
 
-		//camera.add(this.systems.audio.listener)
+		camera.add(this.systems.audio.listener)
 		this.socketHandlers = new SocketHandlers( this, socket )
 		window.addEventListener('resize', e => this.onWindowResize( e ), true)
 		this.onWindowResize()	
@@ -210,6 +210,9 @@ export default class Convolvr {
 
 		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
 
+			let starMatProp = this.systems.assets.getMaterialProp("stars"),
+				starSkyTexture = this.systems.material.procedural.generateTexture( starMatProp.procedural ) 
+
 			this.loadShaders( "/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl", (vert, frag) => {
 
 				skyMaterial = new THREE.ShaderMaterial({
@@ -224,7 +227,11 @@ export default class Convolvr {
 						terrainGreen: { type: "f", value: config.terrain.green },
 						terrainBlue: { type: "f", value: config.terrain.blue },
 						lightYaw: { type: "f", value: config.light.yaw },
-						lightPitch: { type: "f", value: config.light.pitch }
+						lightPitch: { type: "f", value: config.light.pitch },
+						starTexture: {
+							type: "t",
+							value: starSkyTexture
+						 }
 					},
 					vertexShader: vert,
 					fragmentShader: frag

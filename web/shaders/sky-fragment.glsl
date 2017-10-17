@@ -11,7 +11,9 @@ uniform float terrainGreen;
 uniform float terrainBlue;
 uniform float lightYaw;
 uniform float lightPitch;
+uniform sampler2D starTexture;
 vec4 color;
+
 
 float hash( float n ) {
     return fract(sin(n)*43758.5453);
@@ -69,7 +71,8 @@ void main( void ) {
 
         color = vec4( newColor, 1.0 );
         glow += sin( abs( ((vUv.x * PI) -lightYaw/2.0) ) )/ 1.5;
-
+        color += texture2D(starTexture, fract(vec2(vUv.x*8.0, vUv.y*4.0)));
+        
     } else if ( vUv.y < 0.5 && vUv.y > 0.49 ) {
 
         luminance += depth * 1.7;
@@ -79,7 +82,7 @@ void main( void ) {
         glow = mix( glow, 0.2, p );
         //color = vec4(terrainRed, terrainGreen, terrainBlue, 1.0);
         color = vec4( luminance*mix( luminance*red, mixedTerrainRed, p), luminance*mix( luminance*green, mixedTerrainGreen, p), luminance*mix(luminance*blue, mixedTerrainBlue, p), 1.0 );
-
+        
     } else {    
 
         glow = 0.55;

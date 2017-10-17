@@ -155,19 +155,6 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
     break
     case "stars":
       prop.repeat = ['wrapping', 4, 2]
-      prop.map = !!!prop.map ? '/data/images/textures/gplaypattern_@2X-2.png' : prop.map
-      prop.procedural = {
-          name: "stars",
-          calls: [
-              { call: 'fillStyle', params: [ '#000000' ] },
-              { call: 'fillRect', params: [ 0, 0, 1024, 1024 ] },
-              { call: 'fillStyle', params: [ '#ffffff' ] },
-              { call: 'noise', params: [ 5, 1024, 1024, 5, 5 ] },
-              { call: 'loop', params: [ 0, '+', '<', 1000 ], calls : [
-                  { call: 'fillRect', params: [ 512, 512, 1, 1 ] },
-              ]}
-          ]
-      }
     break
     default:
       break

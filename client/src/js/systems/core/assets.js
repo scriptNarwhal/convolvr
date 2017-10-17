@@ -46,7 +46,7 @@ export default class AssetSystem {
         this.worlds              = []
         this.props               = {
             geometry: [
-                { shape: 'node', size:          [0.0001, 0.0001, 0.0001]             },
+                { shape: 'node', size:          [0.0001, 0.0001, 0.0001] },
                 { shape: 'box', size:           [1, 1, 1 ] },
                 { shape: 'plane', size:         [1, 0.5, 1] },
                 { shape: 'octahedron', size:    [1.1, 0.5, 0.5,] },
@@ -64,7 +64,19 @@ export default class AssetSystem {
                 { name: "metal",     color: 0xffffff },
                 { name: "glass",     color: 0xffffff },
                 { name: "wireframe", color: 0xffffff },
-                { name: "stars",     color: 0xffffff, basic: true },
+                { name: "stars",     color: 0xffffff, basic: true, procedural: {
+                        name: "stars",
+                        calls: [
+                            { call: 'fillStyle', params: [ '#000000' ] },
+                            { call: 'fillRect', params: [ 0, 0, 1024, 1024 ] },
+                            { call: 'fillStyle', params: [ '#ffffff' ] },
+                            { call: 'noise', params: [ 1024, 1024, 4, 4 ] },
+                            { call: 'loop', params: [ 0, '+', '<', 1000 ], calls : [
+                                { call: 'fillRect', params: [ 512, 512, 1, 1 ] },
+                            ]}
+                        ]
+                    } 
+                },
                 { mixin: true,       color: 0xff0707 },
                 { mixin: true,       color: 0x07ff07 },
                 { mixin: true,       color: 0x0707ff }
@@ -278,7 +290,7 @@ export default class AssetSystem {
 
     setWorlds ( worlds ) {
 
-        this.world = worlds
+        this.worlds = worlds
 
     }
 
@@ -298,6 +310,12 @@ export default class AssetSystem {
 
         this.userComponents = this.userComponents.concat( components )
 
+    }
+
+    addUserProperties ( properties ) {
+        
+        this.userProperties = this.userProperties.concat( properties )
+        
     }
 
     addUserAssets ( assets ) {
@@ -346,6 +364,20 @@ export default class AssetSystem {
             return Object.assign( {}, this.componentsByName[ name ] )
 
         }
+
+    }
+
+    getMaterialProp ( name ) {
+
+        let prop = null
+        
+        this.props.material.map(( mat, i ) => {
+            if ( mat.name == name ) 
+                prop = mat
+            
+        })
+
+        return Object.assign({}, prop)
 
     }
 

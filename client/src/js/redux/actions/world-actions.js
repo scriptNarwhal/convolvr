@@ -33,6 +33,7 @@ export function fetchWorlds () {
      })
      return axios.get(API_SERVER+"/api/worlds")
         .then(res => {
+            three.world.systems.assets.setWorlds( res.data )
             dispatch({
                 type: WORLDS_FETCH_DONE,
                 worlds: res.data

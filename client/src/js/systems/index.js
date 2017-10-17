@@ -20,6 +20,7 @@ import FactionSystem from './game/faction'
 import FactorySystem from './core/factory'
 import FloorSystem from './environment/floor'
 import GeometrySystem from './core/geometry'
+import GrabSystem from './core/grab'
 import HoverSystem from './core/hover'
 import HandSystem from './core/hand'
 import LightSystem from './environment/light'
@@ -108,6 +109,7 @@ export default class Systems {
 			file: 			  new FileSystem( world ),
 			floor: 			  new FloorSystem( world ),
 			geometry: 		  new GeometrySystem( world ),
+			grab:             new GrabSystem( world ),
 			graph: 		      new GraphSystem( world ),
 			hand: 			  new HandSystem( world ),
 			hover: 			  new HoverSystem( world ),

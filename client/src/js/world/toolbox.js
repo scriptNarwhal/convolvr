@@ -325,7 +325,7 @@ export default class Toolbox {
 
       }
       
-      console.warn( "grab", value)
+      console.info( "grab", value, "userData", hand.userData)
        
       if ( value == -1 && hand.userData.grabbedEntity ) {
 
@@ -377,7 +377,7 @@ export default class Toolbox {
 
      if ( !!!coords )
 
-        coords = [ Math.floor(cPos.x / 42.18181818), 0, Math.floor(cPos.z / 36.698181818181816) ]
+        coords = [ Math.floor(cPos.x / GRID_SIZE[ 0 ]), 0, Math.floor(cPos.z / GRID_SIZE[ 2 ]) ]
 
      if ( entity )  { entity.voxel = coords }
 

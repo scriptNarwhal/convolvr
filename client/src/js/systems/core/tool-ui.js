@@ -20,7 +20,7 @@ export default class ToolUISystem {
         } else if ( prop.toolIndex != undefined ) {
             console.log( "adding switch tool callback", activate)
             activate && state.activate.callbacks.push( () => {
- 
+                console.info("Switch tool callback")
                 this.switchTool( component, prop.toolIndex, typeof prop.toolHand == 'number' ? prop.toolHand : 0 )
 
             } )
@@ -76,7 +76,7 @@ export default class ToolUISystem {
 
             if ( ui.props.toolUI.currentTool ) {
 
-                ui.mesh.position.set( -0.050 + 0.3333 * currentTools[ hand ], 0, -0.3333 )
+                ui.mesh.position.set( -0.050 + 0.3333 * hand, 0, -0.3333 )
                 //ui.mesh.updateMatrix()
             }
 
