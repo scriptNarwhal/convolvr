@@ -310,58 +310,19 @@ export default class Toolbox {
 
     grip ( handIndex, value ) {
 
-      let hand   = this.hands[ handIndex ].mesh,
-          entity = null, //hand.children[0].userData.component.props.,
-          cursor = null,
-          pos    = [ 0, 0, 0 ], //entity.mesh.position,
-          coords = [ 0, 0, 0 ],
-          voxels = this.world.terrain.voxels
-     
-      if ( this.user.avatar ) {
-
-        cursor = this.user.avatar.componentsByProp.cursor[ 1 + handIndex ]
-        entity = !!cursor ? cursor.state.cursor.entity : false
-        pos = !!entity ? entity.mesh.position.toArray() : pos
-
-      }
+      let hand   = this.hands[ handIndex ]
       
-      console.info( "grab", value, "userData", hand.userData)
-       
-      if ( value == -1 && hand.userData.grabbedEntity ) {
-
-        console.warn("Let Go")
-        hand.remove( entity.mesh )
-        three.scene.add( entity.mesh )
-        entity.update( [hand.position.x, hand.position.y, hand.position.z] )
-        hand.userData.grabbedEntity = false
-        // should be using hand system for state ^^^
-       
-        } else if ( !! entity && false == hand.userData.grabbedEntity ) {
-          //console.log( this.hands[ handIndex ].componentsByProp.hand[0].state.hand )
-          console.warn("Pick Up")
-          three.scene.remove( entity.mesh )
-          hand.userData.grabbedEntity = entity
-          hand.add(entity.mesh)
-          entity.mesh.position.fromArray([0,0,0])
-          entity.mesh.updateMatrix()
-
-        }
+      hand.state.hand.grip( value )
 
     }
 
     setHandOrientation ( hand, position, orientation ) {
 
-      let userHand = !!this.hands[ hand ] ? this.hands[ hand ].mesh : false
+      let userHand = this.hands[ hand ]
 
-      if ( userHand && position && orientation ) {
+      if ( !!userHand && position && orientation )
 
-        userHand.autoUpdateMatrix = false
-        userHand.position.fromArray(position).multiplyScalar(1).add(this.world.camera.position)
-        userHand.translateX(0.03+ hand*-0.05)
-        userHand.position.y += -1+this.world.floorHeight*6
-        userHand.quaternion.fromArray(orientation)
-
-      }
+        userHand.state.hand.setHandOrientation( position, orientation, hand )
 
     }
 

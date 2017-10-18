@@ -21,11 +21,80 @@ export default class HandSystem {
         return {
             toggleTrackedHands: ( toggle = true ) => {
                 this.toggleTrackedHands( component, toggle )
+            },
+            grip: ( value ) => {
+                this.grip( component, value )
+            },
+            setHandOrientation: ( position, rotation, index ) => {
+                this.setHandOrientation( component, position, rotation, index )
             }
         }
     }
 
-    toggleTrackedHands ( component, toggle = true ) { console.log('toggle hands', toggle)
+    grip( component, value ) {
+
+        let entity = null, //hand.children[0].userData.component.props.,
+            cursor = null,
+            state = null,
+            pos = [0, 0, 0] //entity.mesh.position,
+
+        if ( component ) {
+
+            cursor = component.allComponents[0]
+            state = component.state
+
+        }
+
+        if ( cursor ) {
+
+            entity = cursor.state.cursor.entity
+            pos = !!entity ? entity.mesh.position.toArray() : pos
+            console.info("grab", value, "userData", state.hand)
+
+            if ( entity ) {
+
+                if ( Math.round(value) == -1 && state.hand.grabbedEntity ) {
+
+                    console.info("Let Go")
+                    component.mesh.remove(entity.mesh)
+                    three.scene.add(entity.mesh)
+                    entity.update([component.mesh.position.x, component.mesh.position.y, component.mesh.position.z])
+                    component.state.hand.grabbedEntity = false
+
+                } else if ( !!entity && !!!state.hand.grabbedEntity ) {
+
+                    console.info("Pick Up")
+                    three.scene.remove(entity.mesh)
+                    state.hand.grabbedEntity = entity
+                    component.mesh.add(entity.mesh)
+                    entity.mesh.position.fromArray([0, 0, 0])
+                    entity.mesh.updateMatrix()
+
+                }
+
+            }
+
+        }
+
+    }
+
+    setHandOrientation ( component, position, rotation, index ) {
+
+        let mesh = component.mesh
+
+        if ( mesh ) {
+            console.log("setHandOrientation", mesh)
+            mesh.autoUpdateMatrix = false
+            mesh.position.fromArray(position).multiplyScalar(1).add(this.world.camera.position)
+            mesh.translateX(0.03+ index*-0.05)
+            mesh.position.y += this.world.floorHeight
+            mesh.quaternion.fromArray(rotation)
+            
+        }
+        
+    }
+
+    toggleTrackedHands ( component, toggle = true ) {
       
       let scene = window.three.scene,
           avatar = component.entity,
