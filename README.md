@@ -8,6 +8,8 @@
 - Supports infinite, configurable, procedural worlds 
 - Mesh based VR UI; Multiline text rendering
 
+![infinite procedural worlds](web/images/insta.gif)
+
 ## Installation
 ```shell
   git clone https://github.com/convolvr/convolvr
@@ -80,5 +82,3 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 ## Server Examples
 - [Generating Buildings](https://github.com/Convolvr/generate/blob/dev/building.go)
 - [Handling User Actions](https://github.com/convolvr/server/blob/dev/socket.go#L17)
-
-![infinite procedural worlds](web/images/Screenshot_157.png)
