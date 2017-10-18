@@ -19,6 +19,7 @@ export default class HandSystem {
         }
     
         return {
+            trackedHands: false,
             toggleTrackedHands: ( toggle = true ) => {
                 this.toggleTrackedHands( component, toggle )
             },
@@ -33,28 +34,39 @@ export default class HandSystem {
 
     grip( component, value ) {
 
-        let entity = null, //hand.children[0].userData.component.props.,
+        let avatar = component.entity,
+            cursors = !!avatar ? avatar.componentsByProp.cursor : false,
+            entity = null, //hand.children[0].userData.component.props.,
             cursor = null,
             state = null,
-            pos = [0, 0, 0] //entity.mesh.position,
+            pos = [0, 0, 0]
+             //entity.mesh.position,
 
         if ( component ) {
 
-            cursor = component.allComponents[0]
             state = component.state
+
+            if ( !state.hand.trackedHands && cursors ) {
+            
+                cursor = cursors[ 0 ]
+            
+            } else {
+
+                cursor = component.allComponents[ 0 ]
+            
+            }
 
         }
 
         if ( cursor ) {
 
-            
             console.info("grab", value, "userData", state.hand)
 
                 if ( Math.round(value) == -1 && state.hand.grabbedEntity ) {
 
                     console.info("Let Go")
                     entity = state.hand.grabbedEntity
-                    
+
                     if ( entity ) {
 
                         component.mesh.remove(entity.mesh)
@@ -113,15 +125,16 @@ export default class HandSystem {
           cursors = avatar.componentsByProp.cursor,
           hands = avatar.componentsByProp.hand
 
-      if ( cursors ) {
+      if ( cursors )
 
        cursors[0].mesh.visible = !toggle
 
-      } 
 
       hands.map( ( handComponent, i ) => {
 
         let hand = handComponent.mesh
+
+        handComponent.state.hand.trackedHands = toggle
 
         if ( toggle ) { 
             //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
