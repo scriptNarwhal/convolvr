@@ -47,21 +47,32 @@ export default class HandSystem {
 
         if ( cursor ) {
 
-            entity = cursor.state.cursor.entity
-            pos = !!entity ? entity.mesh.position.toArray() : pos
+            
             console.info("grab", value, "userData", state.hand)
-
-            if ( entity ) {
 
                 if ( Math.round(value) == -1 && state.hand.grabbedEntity ) {
 
                     console.info("Let Go")
-                    component.mesh.remove(entity.mesh)
-                    three.scene.add(entity.mesh)
-                    entity.update([component.mesh.position.x, component.mesh.position.y, component.mesh.position.z])
-                    component.state.hand.grabbedEntity = false
+                    entity = state.hand.grabbedEntity
+                    
+                    if ( entity ) {
 
-                } else if ( !!entity && !!!state.hand.grabbedEntity ) {
+                        component.mesh.remove(entity.mesh)
+                        three.scene.add(entity.mesh)
+                        entity.update([component.mesh.position.x, component.mesh.position.y, component.mesh.position.z])
+                        state.hand = Object.assign({}, state.hand, {grabbedEntity: false})
+
+                    }
+
+                } else {
+
+                    entity = cursor.state.cursor.entity
+
+                }
+                
+                pos = !!entity ? entity.mesh.position.toArray() : pos
+
+                if ( !!entity && !!!state.hand.grabbedEntity ) {
 
                     console.info("Pick Up")
                     three.scene.remove(entity.mesh)
@@ -72,7 +83,7 @@ export default class HandSystem {
 
                 }
 
-            }
+            
 
         }
 
@@ -83,7 +94,7 @@ export default class HandSystem {
         let mesh = component.mesh
 
         if ( mesh ) {
-            console.log("setHandOrientation", mesh)
+    
             mesh.autoUpdateMatrix = false
             mesh.position.fromArray(position).multiplyScalar(1).add(this.world.camera.position)
             mesh.translateX(0.03+ index*-0.05)
