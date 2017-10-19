@@ -30,7 +30,7 @@ export default class MiniatureSystem {
 
         return {
             fullSize: false,
-            miniaturize: ( component, revert, scale ) => {
+            miniaturize: ( revert, scale ) => {
 
                 this.miniaturize( component, revert, scale )
 
