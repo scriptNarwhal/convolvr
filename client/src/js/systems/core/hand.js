@@ -39,6 +39,9 @@ export default class HandSystem {
             entity = null, //hand.children[0].userData.component.props.,
             cursor = null,
             state = null,
+            handPos = [0, 0, 0],
+            avatarPos = [0, 0, 0],
+            oldVoxel = [0, 0, 0],
             pos = [0, 0, 0]
              //entity.mesh.position,
 
@@ -60,29 +63,40 @@ export default class HandSystem {
 
         if ( cursor ) {
 
-            console.info("grab", value, "userData", state.hand)
-
             if ( Math.round(value) == -1 ) {
 
                 if ( state.hand.grabbedEntity ) {
 
                     console.info("Let Go")
                     entity = state.hand.grabbedEntity
-    
+        
                     if ( entity ) {
     
                         component.mesh.remove(entity.mesh)
                         three.scene.add(entity.mesh)
+                        oldVoxel = [...entity.voxel]
                         //console.warn("Let go position ", [component.mesh.position.x, component.mesh.position.y, component.mesh.position.z])
                         if ( state.hand.trackedHands ) {
-                            entity.mesh.position.fromArray([component.mesh.position.x, component.mesh.position.y, component.mesh.position.z])
+
+                            handPos = component.mesh.position
+                            entity.mesh.position.fromArray(handPos.toArray())
+                            entity.mesh.updateMatrix()
+                            
                         } else {
-                            entity.mesh.position.fromArray([component.entity.mesh.position.x, component.entity.mesh.position.y, component.entity.mesh.position.z])
-                            entity.mesh.quaternion.fromArray(component.entity.mesh.quaternion.toArray())
+
+                            avatarPos = component.entity.mesh.position
+                            // entity.mesh.position.fromArray(avatarPos.toArray())
+                            // entity.mesh.quaternion.fromArray(avatar.mesh.quaternion.toArray())
+                            entity.update(avatarPos.toArray(), avatar.mesh.quaternion.toArray())
                             entity.mesh.translateZ( -entity.boundingRadius )
+                            entity.mesh.updateMatrix()
+   
                         }
                         
-                        entity.mesh.updateMatrix()
+                        entity.position = entity.mesh.position.toArray()
+                        entity.getVoxel()
+                        entity.save( oldVoxel )
+
                         state.hand = Object.assign({}, state.hand, { grabbedEntity: false })
     
                     }

@@ -1,5 +1,9 @@
-import { GRID_SIZE } from './config'
+import { 
+  GRID_SIZE,
+  API_SERVER
+ } from './config'
 import Component from './component'
+import axios from 'axios'
 
 export default class Entity {
 
@@ -27,6 +31,18 @@ export default class Entity {
       this.lastFace = 0
       this._compPos = new THREE.Vector3()
       
+  }
+
+  serialize ( ) {
+
+    return {
+      id: this.id,
+      components: this.components,
+      position: this.position,
+      quaternion: this.quaternion,
+      voxel: this.voxel
+    }
+
   }
 
   update ( position, quaternion = false, components, component, componentPath ) {
@@ -242,6 +258,44 @@ export default class Entity {
     !! callback && callback( this )
     return this
 
+  }
+
+  save ( oldVoxel = false ) {
+    
+    if ( oldVoxel !== false ) {
+        
+      this.saveUpdatedEntity( oldVoxel )
+        
+    } else {
+    
+      this.saveNewEntity()
+        
+    }
+    
+  }
+    
+  saveNewEntity () {
+    
+    let data = this.serialize()
+
+    axios.put(`${API_SERVER}/api/import-to-world/${three.world.name}/${this.voxel.join("x")}`, data).then( response => {
+      console.info("Entity Saved", this)
+    }).catch(response => {
+      console.error("Entity failed to save", response)
+    })
+    
+  }
+    
+  saveUpdatedEntity ( oldVoxel ) {
+    
+    let data = this.serialize()
+
+    axios.put(`${API_SERVER}/api/update-world-entity/${three.world.name}/${oldVoxel.join("x")}/${this.voxel.join("x")}`, data).then( response => {
+      console.info("Entity Updated", this)
+    }).catch(response => {
+      console.error("Entity failed to send update", response)
+    })   
+    
   }
 
   getVoxel ( initial ) {
