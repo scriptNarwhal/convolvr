@@ -62,40 +62,50 @@ export default class HandSystem {
 
             console.info("grab", value, "userData", state.hand)
 
-                if ( Math.round(value) == -1 && state.hand.grabbedEntity ) {
+            if ( Math.round(value) == -1 ) {
+
+                if ( state.hand.grabbedEntity ) {
 
                     console.info("Let Go")
                     entity = state.hand.grabbedEntity
-
+    
                     if ( entity ) {
-
+    
                         component.mesh.remove(entity.mesh)
                         three.scene.add(entity.mesh)
-                        entity.update([component.mesh.position.x, component.mesh.position.y, component.mesh.position.z])
-                        state.hand = Object.assign({}, state.hand, {grabbedEntity: false})
-
+                        //console.warn("Let go position ", [component.mesh.position.x, component.mesh.position.y, component.mesh.position.z])
+                        if ( state.hand.trackedHands ) {
+                            entity.mesh.position.fromArray([component.mesh.position.x, component.mesh.position.y, component.mesh.position.z])
+                        } else {
+                            entity.mesh.position.fromArray([component.entity.mesh.position.x, component.entity.mesh.position.y, component.entity.mesh.position.z])
+                            entity.mesh.quaternion.fromArray(component.entity.mesh.quaternion.toArray())
+                            entity.mesh.translateZ( -entity.boundingRadius )
+                        }
+                        
+                        entity.mesh.updateMatrix()
+                        state.hand = Object.assign({}, state.hand, { grabbedEntity: false })
+    
                     }
-
-                } else {
-
-                    entity = cursor.state.cursor.entity
 
                 }
                 
-                pos = !!entity ? entity.mesh.position.toArray() : pos
+            } else {
 
-                if ( !!entity && !!!state.hand.grabbedEntity ) {
+                entity = cursor.state.cursor.entity
 
+                if (!!entity && !!!state.hand.grabbedEntity) {
+                    
                     console.info("Pick Up")
-                    three.scene.remove(entity.mesh)
+                    three.scene.remove( entity.mesh )
                     state.hand.grabbedEntity = entity
-                    component.mesh.add(entity.mesh)
-                    entity.mesh.position.fromArray([0, 0, 0])
+                    component.mesh.add( entity.mesh )
+                    entity.mesh.position.fromArray( [0, 0, -entity.boundingRadius] )
+                    entity.mesh.quaternion.fromArray([0, 0, 0, 1])
                     entity.mesh.updateMatrix()
-
+                    
                 }
 
-            
+            }
 
         }
 
@@ -108,7 +118,7 @@ export default class HandSystem {
         if ( mesh ) {
     
             mesh.autoUpdateMatrix = false
-            mesh.position.fromArray(position).multiplyScalar(1).add(this.world.camera.position)
+            mesh.position.fromArray(position).add(this.world.camera.position)
             mesh.translateX(0.03+ index*-0.05)
             mesh.position.y += this.world.floorHeight
             mesh.quaternion.fromArray(rotation)
