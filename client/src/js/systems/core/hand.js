@@ -75,19 +75,17 @@ export default class HandSystem {
                         component.mesh.remove(entity.mesh)
                         three.scene.add(entity.mesh)
                         oldVoxel = [...entity.voxel]
-                        //console.warn("Let go position ", [component.mesh.position.x, component.mesh.position.y, component.mesh.position.z])
+                        
                         if ( state.hand.trackedHands ) {
 
                             handPos = component.mesh.position
-                            entity.mesh.position.fromArray(handPos.toArray())
+                            entity.update( handPos.toArray() )
                             entity.mesh.updateMatrix()
                             
                         } else {
 
                             avatarPos = component.entity.mesh.position
-                            // entity.mesh.position.fromArray(avatarPos.toArray())
-                            // entity.mesh.quaternion.fromArray(avatar.mesh.quaternion.toArray())
-                            entity.update(avatarPos.toArray(), avatar.mesh.quaternion.toArray())
+                            entity.update( avatarPos.toArray(), avatar.mesh.quaternion.toArray() )
                             entity.mesh.translateZ( -entity.boundingRadius )
                             entity.mesh.updateMatrix()
    
