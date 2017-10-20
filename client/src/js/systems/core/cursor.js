@@ -73,15 +73,15 @@ export default class CursorSystem {
 
                 }
 
-                if ( !!entity && obj.distance < 40 ) {
+                if ( !!entity && obj.distance < 50 ) {
 
                     if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
 
                         component = entity.allComponents[ 0 ]; //console.log("one component: ", component ? Object.keys(component.props).join("-") : "")
 
                     } else { 
-
-                        component = entity.getClosestComponent( obj.point ); //console.log("closest", component ? Object.keys(component.props).join("-") : "")
+                    
+                        component = entity.getComponentByFace( obj.faceIndex ); //console.log("closest", component ? Object.keys(component.props).join("-") : "")
 
                     }
 

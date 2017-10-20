@@ -147,7 +147,7 @@ export default class Entity {
 
     while ( c < ncomps ) {
 
-        comp = new Component( this.components[ c ], this, systems, { mobile, index: c } ) // use simpler shading for mobile gpus
+        comp = new Component( this.components[ c ], this, systems, { mobile, index: c, path: [ c ] } ) // use simpler shading for mobile gpus
         compMesh = comp.mesh
         compMesh.geometry.computeBoundingSphere() // check bounding radius
         compRadius = compMesh.geometry.boundingSphere.radius 
@@ -558,6 +558,7 @@ export default class Entity {
 
   getComponentByFace ( face ) {
     
+    console.warn("Get component by face", face)
     let component = false
 
     this.compsByFaceIndex.forEach((comp) => {
