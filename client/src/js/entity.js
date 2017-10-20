@@ -558,7 +558,6 @@ export default class Entity {
 
   getComponentByFace ( face ) {
     
-    console.warn("Get component by face", face)
     let component = false
 
     this.compsByFaceIndex.forEach((comp) => {
