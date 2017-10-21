@@ -168,7 +168,7 @@ export default class TerrainSystem {
         coords              = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), Math.floor( position.y / GRID_SIZE[ 1 ] ), Math.floor( position.z / GRID_SIZE[ 2 ] ) ],
         lastCoords          = this.lastChunkCoords,
         moveDir             = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
-        viewDistance        = (this.world.mobile ? 4 : 7) + this.world.viewDistance,
+        viewDistance        = (this.world.mobile ? 5 : 7) + this.world.viewDistance,
         removeDistance      = viewDistance + 2,
         x                   = coords[ 0 ] - phase,
         y                   = coords[ 2 ] - phase,

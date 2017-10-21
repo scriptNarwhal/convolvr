@@ -11,9 +11,8 @@ export default class GamePad {
 		this.bumperCooldown        = 0
 		this.bumperCooldownTimeout = null
     this.trackedControllers    = new TrackedControllers( input, three.world )
-    this.buttons               = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-    this.axes                  = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ]
-
+    this.buttons               = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+    this.axes                  = [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
     function gamepadHandler ( e, connecting ) {
 
       let gamepad = e.gamepad;
@@ -92,11 +91,12 @@ export default class GamePad {
 
           this._handleMobileGamepad( input, world, gamepad )
 
-        } else {
-
-          this._handleXboxGamepad( input, world, gamepad ) // assume generic dual analog controller
-
         }
+        // } else {
+
+        //   this._handleXboxGamepad( input, world, gamepad ) // assume generic dual analog controller
+
+        // }
 
         if ( trackedControls && input.trackedControls == false && world.mode == "stereo" ) {
 
@@ -108,7 +108,7 @@ export default class GamePad {
       }
 
       g ++
-
+      
     }
 
   }
@@ -161,7 +161,11 @@ export default class GamePad {
         }
 
      }
-     
+
+     let buttonState = this.buttons = []
+     gamepad.buttons.map(button=> {
+       buttonState.push( typeof button == 'object' ? button.value : button )
+     })
 
   }
 
@@ -186,16 +190,19 @@ export default class GamePad {
       if ( this.down( buttons, 5 ) ) {
         tools.nextTool(1, 0) // next tool, right hand
       }
+      if ( this.down( buttons, 6 ) ) {
+        tools.grip(0, 1) // right hand
+      }
 
       if ( this.up( buttons, 6 ) ) { // bottom triggers: 6 7
-        tools.useSecondary(0) // right hand
+        tools.grip(0, -1) // right hand
       }
       if ( this.up( buttons, 7 ) ) {
         tools.usePrimary(0) // right hand
       }
       if ( this.down( buttons, 7 ) ) {
-        tools.preview(0, 0) // right hand
-    }
+          tools.preview(0, 0) // right hand
+      }
       
     }
 
@@ -208,10 +215,10 @@ export default class GamePad {
     if ( a >= 4 ) { // standard dual analogue controller
 
         if (Math.abs(gamepad.axes[0]) > 0.1) {
-          input.moveVector.x = gamepad.axes[0] * 0.090
+          input.moveVector.x = gamepad.axes[0] * 0.60
         }
         if (Math.abs(gamepad.axes[1]) > 0.1) {
-          input.moveVector.z = gamepad.axes[1] * 0.090
+          input.moveVector.z = gamepad.axes[1] * 0.60
         }
         if (Math.abs(gamepad.axes[2]) > 0.10) { // 10 percent deadzone
           rotation.y += -gamepad.axes[2] / 20.0
@@ -222,6 +229,11 @@ export default class GamePad {
 
     }
 
+    let buttonState = this.buttons = []
+    gamepad.buttons.map(button=> {
+      buttonState.push( typeof button == 'object' ? button.value : button )
+    })
+
   }
 
   jump ( input ) {
@@ -229,7 +241,7 @@ export default class GamePad {
     if ( !input.device.falling ) {
       
       input.device.falling = true;
-      input.device.velocity.y = 5
+      input.device.velocity.y = 400
       
     }
 
@@ -237,8 +249,8 @@ export default class GamePad {
 
   down ( buttons, index ) {
 
-    let value = this.buttonPressed( buttons[ index ] ) && this.buttons[ index ] == false
-    this.buttons[ index ] =   this.buttonPressed( buttons[ index ] )
+    let value = this.buttonPressed( buttons[ index ] ) && !this.buttons[ index ]
+   // this.buttons[ index ]  = this.buttonPressed( buttons[ index ] )
     return value
 
   }
@@ -246,7 +258,7 @@ export default class GamePad {
   up ( buttons, index ) {
 
     let value = !this.buttonPressed( buttons[ index ] ) && this.buttons[ index ]
-    this.buttons[ index ] = this.buttonPressed( buttons[ index ] )
+    //this.buttons[ index ] = this.buttonPressed( buttons[ index ] )
     return value
     
   }
@@ -257,7 +269,7 @@ export default class GamePad {
 		clearTimeout(this.cooldownTimeout)
 		this.cooldownTimeout = setTimeout(()=>{
 			this.cooldown = false
-		}, 80)
+		}, 40)
 
 	}
 
@@ -267,7 +279,7 @@ export default class GamePad {
 		clearTimeout(this.bumperCooldownTimeout)
 		this.bumperCooldownTimeout = setTimeout(()=>{
 			this.bumperCooldown = false
-		}, 400)
+		}, 300)
 
 	}
 
@@ -275,7 +287,7 @@ export default class GamePad {
     if (typeof(b) == "object") {
       return b.pressed;
     }
-    return b == 1.0 || b > 0.7;
+    return b > 0.8;
   }
 
 }

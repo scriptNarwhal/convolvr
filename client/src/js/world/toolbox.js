@@ -310,9 +310,11 @@ export default class Toolbox {
 
     grip ( handIndex, value ) {
 
-      let hand   = this.hands[ handIndex ]
+      let hand   = this.hands[ handIndex ],
+          entityId = hand.state.hand.grip( value ),
+          avatar = this.user.avatar.mesh
       
-      hand.state.hand.grip( value )
+      this.sendToolAction(true, value < 0 ? "Replace Entity" : "Grab Entity", handIndex, avatar.position.toArray(), avatar.quaternion.toArray(), null, entityId, null, null, this.user.avatar.voxel )
 
     }
 

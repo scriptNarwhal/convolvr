@@ -1,9 +1,13 @@
-import { GRID_SIZE } from './config'
+import { 
+  GRID_SIZE,
+  API_SERVER
+ } from './config'
 import Component from './component'
+import axios from 'axios'
 
 export default class Entity {
 
-  constructor ( id, components, position, quaternion, voxel ) {
+  constructor ( id, components, position, quaternion, voxel, name, tags ) {
 
       let world = window.three.world
 
@@ -24,24 +28,41 @@ export default class Entity {
       this.allComponents = []
       this.combinedComponents = []
       this.voxel = voxel ? voxel : this.getVoxel( true )
+      this.name = name || `entity${this.id}:${this.voxel.join("x")}`
       this.lastFace = 0
       this._compPos = new THREE.Vector3()
       
   }
 
-  update ( position, quaternion = false, components, component, componentPath ) {
+  serialize ( ) {
+
+    return {
+      id: this.id,
+      name: this.name,
+      components: this.components,
+      position: this.position,
+      quaternion: this.quaternion,
+      voxel: this.voxel,
+      boundingRadius: this.boundingRadius
+    }
+
+  }
+
+  update ( position, quaternion = false, components, component, componentPath, config = {} ) {
+
+    let entityConfig = Object.assign({}, config, { updateWorkers: true } )
 
     if ( !! componentPath ) {
 
       this.updateComponentAtPath( component, componentPath )
-      this.init( this.anchor, { updateWorkers: true } )
+      this.init( this.anchor, entityConfig )
     
     }
 
     if ( !! components ) {
 
       this.components = components
-      this.init( this.anchor, { updateWorkers: true } )
+      this.init( this.anchor, entityConfig )
 
     }
 
@@ -69,7 +90,7 @@ export default class Entity {
 
   }
 
-  init ( parent, config, callback ) {
+  init ( parent, config = {}, callback ) {
 
     let mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
@@ -131,7 +152,7 @@ export default class Entity {
 
     while ( c < ncomps ) {
 
-        comp = new Component( this.components[ c ], this, systems, { mobile, index: c } ) // use simpler shading for mobile gpus
+        comp = new Component( this.components[ c ], this, systems, { mobile, index: c, path: [ c ] } ) // use simpler shading for mobile gpus
         compMesh = comp.mesh
         compMesh.geometry.computeBoundingSphere() // check bounding radius
         compRadius = compMesh.geometry.boundingSphere.radius 
@@ -213,7 +234,7 @@ export default class Entity {
 
     }
 
-    if ( !! this.quaternion && this.components.length == 1 )
+    if ( !! this.quaternion && (!config.ignoreRotation || this.components.length == 1) )
 
         mesh.quaternion.fromArray( this.quaternion )
 
@@ -242,6 +263,44 @@ export default class Entity {
     !! callback && callback( this )
     return this
 
+  }
+
+  save ( oldVoxel = false ) {
+    
+    if ( oldVoxel !== false ) {
+        
+      this.saveUpdatedEntity( oldVoxel )
+        
+    } else {
+    
+      this.saveNewEntity()
+        
+    }
+    
+  }
+    
+  saveNewEntity () {
+    
+    let data = this.serialize()
+
+    axios.put(`${API_SERVER}/api/import-to-world/${three.world.name}/${this.voxel.join("x")}`, data).then( response => {
+      console.info("Entity Saved", this)
+    }).catch(response => {
+      console.error("Entity failed to save", response)
+    })
+    
+  }
+    
+  saveUpdatedEntity ( oldVoxel ) {
+    
+    let data = this.serialize()
+
+    axios.put(`${API_SERVER}/api/update-world-entity/${three.world.name}/${oldVoxel.join("x")}/${this.voxel.join("x")}`, data).then( response => {
+      console.info("Entity Updated", this)
+    }).catch(response => {
+      console.error("Entity failed to send update", response)
+    })   
+    
   }
 
   getVoxel ( initial ) {

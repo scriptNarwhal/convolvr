@@ -58,7 +58,7 @@ export default class StaticCollisions {
 
 				three.camera.position.set( three.camera.position.x, message.data.position[1]+13.5 +vrHeight, three.camera.position.z )	
 
-				if ( Math.abs( user.velocity.y ) > 40 ) {
+				if ( Math.abs( user.velocity.y ) > 400 ) {
 
 					window.navigator.vibrate && window.navigator.vibrate(50)
 					user.velocity.y *= -0.56

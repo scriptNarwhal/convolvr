@@ -157,7 +157,7 @@ export default class UserInput {
 			}
 		}
 			
-		velocity.add(this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*0.08))
+		velocity.add( this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*0.08) )
 
 		if (this.leapMotion && this.moveVector.length() > 0) {
 
@@ -167,7 +167,7 @@ export default class UserInput {
 
 		}
 
-		if ( Math.abs(velocity.y) < 0.2 )
+		if ( Math.abs(velocity.y) > 0.2 )
 
 			this.device.falling = true
 
@@ -177,16 +177,16 @@ export default class UserInput {
 
 				if ( world.highAltitudeGravity || this.camera.position.y < 220.00 )
 
-					velocity.y -= (0.001 * (delta*0.40))  // apply gravity
+					velocity.y -= 0.016 * delta  // apply gravity
 
 			}
 					
 		}
 
 		this.moveVector.set( 0, 0, 0 )
-		this.camera.matrix.makeRotationFromQuaternion(this.camera.quaternion)
+		this.camera.matrix.makeRotationFromQuaternion( this.camera.quaternion )
 		this.cameraPos.set( velocity.x*delta*0.00001, velocity.y*delta*0.00001, velocity.z*delta*0.00001 )
-		this.camera.matrix.setPosition(this.camera.position.add( this.cameraPos ) );
+		this.camera.matrix.setPosition( this.camera.position.add( this.cameraPos ) );
 		this.camera.matrixWorldNeedsUpdate = true
 
 		if ( this.camera.position.y < bottom + 0.3330 ) {
@@ -211,7 +211,7 @@ export default class UserInput {
 
 		}
 
-		if ( this.keys.shift == true)
+		if ( this.keys.shift == true )
 					
 			friction = 0.01
 
@@ -221,33 +221,33 @@ export default class UserInput {
 
 		if ( velocity.y > 0 )
 
-			velocity.y *= (1 - (friction * delta * 0.04))
+			velocity.y *= ( 1 - (friction * delta * 0.04) )
 
 		if ( !!world.user.mesh )
 
-			world.user.mesh.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z)
+			world.user.mesh.position.set( this.camera.position.x, this.camera.position.y, this.camera.position.z )
 
 	}
 
-	toggleFullscreen(elem) {
+	toggleFullscreen( elem ) {
 
-		if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+		if ( !document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {
 
 			this.fullscreen = true
 
-			if (document.documentElement.requestFullscreen) {
+			if ( document.documentElement.requestFullscreen ) {
 
 				document.documentElement.requestFullscreen()
 
-			} else if (document.documentElement.msRequestFullscreen) {
+			} else if ( document.documentElement.msRequestFullscreen ) {
 
 				document.documentElement.msRequestFullscreen()
 
-			} else if (document.documentElement.mozRequestFullScreen) {
+			} else if ( document.documentElement.mozRequestFullScreen ) {
 
 				document.documentElement.mozRequestFullScreen()
 
-			} else if (document.documentElement.webkitRequestFullscreen) {
+			} else if ( document.documentElement.webkitRequestFullscreen ) {
 
 				document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT)
 
@@ -256,19 +256,19 @@ export default class UserInput {
 
 			this.fullscreen = false
 
-			if (document.exitFullscreen) {
+			if ( document.exitFullscreen ) {
 
 				document.exitFullscreen()
 
-			} else if (document.msExitFullscreen) {
+			} else if ( document.msExitFullscreen ) {
 
 				document.msExitFullscreen()
 
-			} else if (document.mozCancelFullScreen) {
+			} else if ( document.mozCancelFullScreen ) {
 
 				document.mozCancelFullScreen()
 
-			} else if (document.webkitExitFullscreen) {
+			} else if ( document.webkitExitFullscreen ) {
 
 				document.webkitExitFullscreen()
 

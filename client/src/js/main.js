@@ -95,7 +95,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       "- Mouselook (click screen)",
       "- Left click: use tool Right click: grab",
       "- Keys 0-9: switch tool",
-      "- 🎮 Gamepads are supported",
+      "- 🎮 Left Trigger: Grab, Right: Use Tool",
       "",
       "#👓 Desktop VR users ",
       "- Enter VR button in bottom right corner",

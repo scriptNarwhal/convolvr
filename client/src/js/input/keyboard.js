@@ -126,11 +126,11 @@ export default class Keyboard {
 
     if ( keys.w ) {
 
-      moveVec.z = -1
+      moveVec.z = -1.3
 
     } else if (keys.s) {
 
-      moveVec.z = 1
+      moveVec.z = 1.3
 
     }
 

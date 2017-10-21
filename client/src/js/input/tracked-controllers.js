@@ -19,7 +19,7 @@ export default class TrackedController {
     clearTimeout(this.stickTimeout)
     this.stickTimeout = setTimeout(()=>{
       this.stickCooldown = false
-    }, 250)
+    }, 50)
 
   }
 
@@ -32,6 +32,7 @@ export default class TrackedController {
         i           = 0,
         world       = this.world,
         input       = this.input,
+        btnState = [],
         useTracking = input.trackedControls,
         rotation    = input.rotationVector,
         tools       = world.user.toolbox
@@ -72,6 +73,7 @@ export default class TrackedController {
 
         tools.grip( 1, -1 )
 
+      btnState = this.buttons.left = []
 
     } else { // use right stick to use adjust tool options // right triggers for primary tool
 
@@ -105,7 +107,13 @@ export default class TrackedController {
       
         tools.grip( 0, -1 )
 
+      btnState = this.buttons.right = []
+
     }
+
+    gamepad.buttons.map(button=> {
+      btnState.push( typeof button == 'object' ? button.pressed : button )
+    })
 
   }
 
@@ -118,6 +126,7 @@ export default class TrackedController {
             i           = 0,
             world       = this.world,
             input       = this.input,
+            btnState    = [],
             useTracking = input.trackedControls,
             rotation    = input.rotationVector,
             tools       = world.user.toolbox
@@ -158,6 +167,7 @@ export default class TrackedController {
     
             tools.grip( 1, -1 )
     
+          btnState = this.buttons.left = []
     
         } else { // use right stick to use adjust tool options // right triggers for primary tool
     
@@ -191,8 +201,14 @@ export default class TrackedController {
           
             tools.grip( 0, -1 )
     
+          btnState = this.buttons.right = []
+
         }
     
+        gamepad.buttons.map(button=> {
+          btnState.push( typeof button == 'object' ? button.value : button )
+        })
+
       }
 
   handleOculusRemote ( gamepad ) { // oculus remote
@@ -234,20 +250,20 @@ export default class TrackedController {
 
   down ( buttons, hand, index ) {
     
-    let current = hand == 0 ? this.buttons.left : this.buttons.right,
+    let current = hand == 0 ? this.buttons.right : this.buttons.left,
         value = this.buttonPressed( buttons[ index ] ) && current[ index ] == false
 
-    current[ index ] = this.buttonPressed( buttons[ index ] )
+    //current[ index ] = this.buttonPressed( buttons[ index ] )
     return value
     
   }
     
   up ( buttons, hand, index ) {
     
-    let current = hand == 0 ? this.buttons.left : this.buttons.right,
+    let current = hand == 0 ? this.buttons.right : this.buttons.left,
         value = !this.buttonPressed( buttons[ index ] ) && current[ index ]
 
-    current[ index ] = this.buttonPressed( buttons[ index ] )
+    //current[ index ] = this.buttonPressed( buttons[ index ] )
     return value
         
   }
