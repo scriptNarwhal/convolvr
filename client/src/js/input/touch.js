@@ -7,7 +7,9 @@ export default class Touch { // based on example here https://developer.mozilla.
 	constructor ( input ) {
     
 		this.ongoingTouches = []
-		this.firstTouch = [ [0,0], [0,0] ]
+		this.firstTouch = [ [0,0], [0,0], [0,0], [0, 0], [0, 0] ]
+		this.lastTouch = [ [0,0], [0,0], [0,0], [0, 0], [0, 0] ]
+		this.grabbing = false
 		this.input = input
 		this.world = input.world
 
@@ -34,6 +36,8 @@ export default class Touch { // based on example here https://developer.mozilla.
 
 	onTouchStart ( event ) {
 
+		let tools = this.input.world.user.toolbox
+
 		this.world.mode != "web" && event.preventDefault()
 
 		let touches = event.changedTouches,
@@ -51,7 +55,12 @@ export default class Touch { // based on example here https://developer.mozilla.
 				input.lastTouch[i] = [ newTouch.pageX, newTouch.pageY ]
 			}
 
-			nTouches = touches.length
+			if ( ongoingTouches.length === 3 ) {
+
+				tools.grip( 0, 1 )
+				this.grabbing = true
+
+			}
 
 		}
 
@@ -75,10 +84,21 @@ export default class Touch { // based on example here https://developer.mozilla.
 				if ( idx >= 0 ) {
 					newTouch = this.copyTouch( touches[ i ] )
 					ongoingTouches.splice(idx, 1, newTouch)  // swap in the new touch record
-					if ( idx < 2 ) {
-						input.moveVector.x -= (newTouch.pageX - input.lastTouch[idx][0]) * 0.2
-						input.moveVector.z -= (newTouch.pageY - input.lastTouch[idx][1]) * 0.2
-						input.lastTouch[ idx ] = [ newTouch.pageX, newTouch.pageY ]
+					if ( idx < 3 ) {
+
+						if ( ongoingTouches.length >= 3 ) {
+
+							input.moveVector.x -= (newTouch.pageX - input.lastTouch[i][0]) * 0.05
+							input.moveVector.z -= (newTouch.pageY - input.lastTouch[i][1]) * 0.05
+
+						} else {
+
+							input.moveVector.x -= (newTouch.pageX - input.lastTouch[i][0]) * 0.2
+							input.moveVector.z -= (newTouch.pageY - input.lastTouch[i][1]) * 0.2
+
+						}
+						
+						input.lastTouch[ i ] = [ newTouch.pageX, newTouch.pageY ]
 					}
 				} 
 			}
@@ -100,21 +120,28 @@ export default class Touch { // based on example here https://developer.mozilla.
 			first = this.firstTouch,
 			last = input.lastTouch
 
+		if ( this.grabbing ) {
+
+			this.grabbing = false		
+			tools.grip( 0, -1 )
+
+		}
+
 		for (let i = 0; i < touches.length; i++) {
 
 			let idx = this.ongoingTouchIndexById( touches[ i ].identifier )
 
 			if ( idx > -1 && idx < 2 ) {
-
-				if ( Math.abs(first[ idx ][0] - ongoingTouches[idx].pageX) < 28 && Math.abs(first[ idx ][1] - ongoingTouches[idx].pageY) < 28 ) {
-
+					
+				if ( Math.abs(first[ idx ][0] - ongoingTouches[idx].pageX) < 20 && Math.abs(first[ idx ][1] - ongoingTouches[idx].pageY) < 20 )
+					
 					tools.usePrimary(0, 0)
-
-				}
-
+					
+					
 			} 
 
-			ongoingTouches.splice(idx, 1)
+			ongoingTouches.splice(i, 1)
+			
 
 		}
   	}

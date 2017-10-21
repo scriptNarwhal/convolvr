@@ -71,7 +71,7 @@ export default class TrackedController {
 
       if ( this.up( buttons, 1, 2 ) )
 
-        tools.grip( 0, -1 )
+        tools.grip( 1, -1 )
 
       btnState = this.buttons.left = []
 
@@ -105,7 +105,7 @@ export default class TrackedController {
       
       if ( this.up( buttons, 0, 2 ) )
       
-        tools.grip( 1, -1 )
+        tools.grip( 0, -1 )
 
       btnState = this.buttons.right = []
 
@@ -250,7 +250,7 @@ export default class TrackedController {
 
   down ( buttons, hand, index ) {
     
-    let current = hand == 0 ? this.buttons.left : this.buttons.right,
+    let current = hand == 0 ? this.buttons.right : this.buttons.left,
         value = this.buttonPressed( buttons[ index ] ) && current[ index ] == false
 
     //current[ index ] = this.buttonPressed( buttons[ index ] )
@@ -260,7 +260,7 @@ export default class TrackedController {
     
   up ( buttons, hand, index ) {
     
-    let current = hand == 0 ? this.buttons.left : this.buttons.right,
+    let current = hand == 0 ? this.buttons.right : this.buttons.left,
         value = !this.buttonPressed( buttons[ index ] ) && current[ index ]
 
     //current[ index ] = this.buttonPressed( buttons[ index ] )
