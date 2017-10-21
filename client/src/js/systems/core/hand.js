@@ -79,18 +79,17 @@ export default class HandSystem {
                         if ( state.hand.trackedHands ) {
 
                             handPos = component.mesh.position
-                            entity.update( handPos.toArray() )
-                            entity.mesh.updateMatrix()
+                            entity.update( handPos.toArray(), component.mesh.quaternion.toArray() )
                             
                         } else {
 
                             avatarPos = component.entity.mesh.position
                             entity.update( avatarPos.toArray(), avatar.mesh.quaternion.toArray() )
-                            entity.mesh.translateZ( -entity.boundingRadius )
-                            entity.mesh.updateMatrix()
-   
+                            
                         }
                         
+                        entity.mesh.translateZ( -entity.boundingRadius )
+                        entity.mesh.updateMatrix()
                         entity.position = entity.mesh.position.toArray()
                         entity.getVoxel()
                         entity.save( oldVoxel )

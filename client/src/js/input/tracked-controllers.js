@@ -19,7 +19,7 @@ export default class TrackedController {
     clearTimeout(this.stickTimeout)
     this.stickTimeout = setTimeout(()=>{
       this.stickCooldown = false
-    }, 120)
+    }, 50)
 
   }
 
@@ -71,7 +71,7 @@ export default class TrackedController {
 
       if ( this.up( buttons, 1, 2 ) )
 
-        tools.grip( 1, -1 )
+        tools.grip( 0, -1 )
 
       btnState = this.buttons.left = []
 
@@ -105,7 +105,7 @@ export default class TrackedController {
       
       if ( this.up( buttons, 0, 2 ) )
       
-        tools.grip( 0, -1 )
+        tools.grip( 1, -1 )
 
       btnState = this.buttons.right = []
 
