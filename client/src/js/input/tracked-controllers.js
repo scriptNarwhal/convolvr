@@ -107,7 +107,7 @@ export default class TrackedController {
       
         tools.grip( 0, -1 )
 
-        btnState = this.buttons.right = []
+      btnState = this.buttons.right = []
 
     }
 

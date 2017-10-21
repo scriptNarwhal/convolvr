@@ -7,7 +7,7 @@ import axios from 'axios'
 
 export default class Entity {
 
-  constructor ( id, components, position, quaternion, voxel ) {
+  constructor ( id, components, position, quaternion, voxel, name, tags ) {
 
       let world = window.three.world
 
@@ -28,6 +28,7 @@ export default class Entity {
       this.allComponents = []
       this.combinedComponents = []
       this.voxel = voxel ? voxel : this.getVoxel( true )
+      this.name = name || `entity${this.id}:${this.voxel.join("x")}`
       this.lastFace = 0
       this._compPos = new THREE.Vector3()
       
@@ -37,10 +38,12 @@ export default class Entity {
 
     return {
       id: this.id,
+      name: this.name,
       components: this.components,
       position: this.position,
       quaternion: this.quaternion,
-      voxel: this.voxel
+      voxel: this.voxel,
+      boundingRadius: this.boundingRadius
     }
 
   }
