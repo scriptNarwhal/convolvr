@@ -48,19 +48,21 @@ export default class Entity {
 
   }
 
-  update ( position, quaternion = false, components, component, componentPath ) {
+  update ( position, quaternion = false, components, component, componentPath, config = {} ) {
+
+    let entityConfig = Object.assign({}, config, { updateWorkers: true } )
 
     if ( !! componentPath ) {
 
       this.updateComponentAtPath( component, componentPath )
-      this.init( this.anchor, { updateWorkers: true } )
+      this.init( this.anchor, entityConfig )
     
     }
 
     if ( !! components ) {
 
       this.components = components
-      this.init( this.anchor, { updateWorkers: true } )
+      this.init( this.anchor, entityConfig )
 
     }
 
@@ -88,7 +90,7 @@ export default class Entity {
 
   }
 
-  init ( parent, config, callback ) {
+  init ( parent, config = {}, callback ) {
 
     let mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
@@ -232,7 +234,7 @@ export default class Entity {
 
     }
 
-    if ( !! this.quaternion && this.components.length == 1 )
+    if ( !! this.quaternion && (!config.ignoreRotation || this.components.length == 1) )
 
         mesh.quaternion.fromArray( this.quaternion )
 

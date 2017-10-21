@@ -151,7 +151,7 @@ export default class SocketHandlers {
 
 						if ( voxelEnt.id == data.entityId ) // console.log("got component tool message", data.entity.components); // concat with existing components array
 						
-							voxelEnt.update( false, false, voxelEnt.components.concat(data.entity.components) )
+							voxelEnt.update( false, false, voxelEnt.components.concat(data.entity.components), false, false, { ignoreRotation: true } )
 						
 
 					})
@@ -167,7 +167,7 @@ export default class SocketHandlers {
 
 						if ( voxelEnt.id == data.entityId ) {
 							//console.log("Update Tool message", data.components[0]) // concat with existing components array
-							voxelEnt.update( false, false,  false, data.components[0], data.componentPath )
+							voxelEnt.update( false, false,  false, data.components[0], data.componentPath, { ignoreRotation: true } )
 						}
 
 					})
