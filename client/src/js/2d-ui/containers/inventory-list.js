@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Button from '../components/button'
-import Card from '../components/Card'
+import Button from '../components/button.js'
+import Card from '../components/card.js'
 
 export default class InventoryList extends Component {
 
