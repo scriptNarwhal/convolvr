@@ -108,7 +108,7 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
         prop.metalnessMap = "/data/images/textures/gplaypattern_@2X-2.png"
 
 
-      prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
+      prop.map = !!!prop.map ? '/data/images/textures/metal4.jpg' : prop.map
       break
     case "metal2":
       prop.repeat = !!!prop.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]

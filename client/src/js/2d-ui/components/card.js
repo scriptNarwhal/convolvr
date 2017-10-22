@@ -78,6 +78,13 @@ export default class Card extends Component {
                 />
               ) : ''
             }
+            {
+              this.props.description != "" ? (
+                <div style={styles.description(this.props.compact)}>
+                  { this.props.description }
+                </div>
+              ) : ""
+            }
         </div>
     )
 
@@ -87,6 +94,7 @@ export default class Card extends Component {
 
 Card.defaultProps = {
     title: "Menu Item",
+    description: "",
     username: "",
     dir: "",
     category: "",
@@ -121,6 +129,11 @@ let styles = {
       backgroundImage: `url(${image})`,
       textAlign: "center",
       verticalAlign: "top",
+    }
+  },
+  description: ( compact ) => {
+    return {
+      opacity: 0.8
     }
   },
   title: (image, quarterSize) => {

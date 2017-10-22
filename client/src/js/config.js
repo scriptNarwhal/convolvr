@@ -54,4 +54,3 @@ export let clearOldData = () => {
 }
 
 export let isMobile = () => window.innerWidth < 480 || window.devicePixelRatio >= 1.5 && window.innerWidth < 1280
-

@@ -6,13 +6,19 @@ import {
     UTIL_LAUNCH_IMPORT_TO_WORLD,
     UTIL_LAUNCH_INVENTORY_EDITOR,
     UTIL_LAUNCH_INVENTORY_EXPORT,
+    UTIL_LAUNCH_COMPONENT_EDITOR,
+    UTIL_LAUNCH_PROPERTY_EDITOR,
     UTIL_CLOSE_TEXT_EDIT,
     UTIL_CLOSE_RENAME_FILE,
     UTIL_CLOSE_SHARING_SETTINGS,
     UTIL_CLOSE_IMPORT_TO_INVENTORY,
     UTIL_CLOSE_IMPORT_TO_WORLD,
     UTIL_CLOSE_INVENTORY_EDITOR,
-    UTIL_CLOSE_INVENTORY_EXPORT
+    UTIL_CLOSE_INVENTORY_EXPORT,
+    UTIL_CLOSE_COMPONENT_EDITOR,
+    UTIL_CLOSE_PROPERTY_EDITOR
+
+
 } from '../constants/action-types';
 
 module.exports = function app (state = {
@@ -57,7 +63,17 @@ module.exports = function app (state = {
         username: "",
         category: "",
         itemId: ""
-    }
+    },
+    componentEdit: {
+        activated: false,
+        username: "",
+        itemId: ""
+    },
+    propertyEdit: {
+        activated: false,
+        username: "",
+        itemId: ""
+    },
 }, action) {
   switch ( action.type ) {
     case UTIL_LAUNCH_TEXT_EDIT:
@@ -137,6 +153,26 @@ module.exports = function app (state = {
                 itemId: action.itemId
             }
         }
+     case UTIL_LAUNCH_COMPONENT_EDITOR:
+        return {
+            ...state,
+            componentEdit: {
+                ...state.componentEdit,
+                activated: true,
+                username: action.username,
+                itemId: action.itemId
+            }
+        }
+    case UTIL_LAUNCH_PROPERTY_EDITOR:
+        return {
+            ...state,
+            propertyEdit: {
+                ...state.propertyEdit,
+                activated: true,
+                username: action.username,
+                itemId: action.itemId
+            }
+        }
     case UTIL_CLOSE_TEXT_EDIT:
         return {
             ...state,
@@ -190,6 +226,22 @@ module.exports = function app (state = {
             ...state,
             inventoryExport: {
                 ...state.inventoryExport,
+                activated: false
+            }
+        }
+    case UTIL_CLOSE_COMPONENT_EDITOR:
+        return {
+            ...state,
+            componentEdit: {
+                ...state.componentEdit,
+                activated: false
+            }
+        }
+    case UTIL_CLOSE_PROPERTY_EDITOR:
+        return {
+            ...state,
+            propertyEdit: {
+                ...state.propertyEdit,
                 activated: false
             }
         }

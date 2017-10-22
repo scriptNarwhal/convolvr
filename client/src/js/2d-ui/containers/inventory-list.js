@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import Button from '../components/button'
 import Card from '../components/Card'
+import EntityEditor from '../components/data/entity-editor'
+import ComponentEditor from '../components/data/component-editor'
+import PropertyEditor from '../components/data/property-editor'
 
 export default class InventoryList extends Component {
 

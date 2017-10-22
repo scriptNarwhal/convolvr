@@ -7,13 +7,17 @@ import {
     UTIL_LAUNCH_IMPORT_TO_WORLD,
     UTIL_LAUNCH_INVENTORY_EDITOR,
     UTIL_LAUNCH_INVENTORY_EXPORT,
+    UTIL_LAUNCH_COMPONENT_EDITOR,
+    UTIL_LAUNCH_PROPERTY_EDITOR,
     UTIL_CLOSE_TEXT_EDIT,
     UTIL_CLOSE_RENAME_FILE,
     UTIL_CLOSE_SHARING_SETTINGS,
     UTIL_CLOSE_IMPORT_TO_INVENTORY,
     UTIL_CLOSE_IMPORT_TO_WORLD,
     UTIL_CLOSE_INVENTORY_EDITOR,
-    UTIL_CLOSE_INVENTORY_EXPORT
+    UTIL_CLOSE_INVENTORY_EXPORT,
+    UTIL_CLOSE_COMPONENT_EDITOR,
+    UTIL_CLOSE_PROPERTY_EDITOR
 } from '../constants/action-types';
 import { API_SERVER } from '../../config.js'
 
@@ -80,6 +84,22 @@ export function launchInventoryExport ( username, category, itemId ) {
     }
 }
 
+export function launchComponentEditor ( username, category, itemId ) {
+    return {
+        type: UTIL_LAUNCH_COMPONENT_EDITOR,
+        username,
+        itemId
+    }
+}
+
+export function launchPropertyEditor ( username, category, itemId ) {
+    return {
+        type: UTIL_LAUNCH_PROPERTY_EDITOR,
+        username,
+        itemId
+    }
+}
+
 export function closeTextEdit ( ) {
     return {
         type: UTIL_CLOSE_TEXT_EDIT,
@@ -119,5 +139,17 @@ export function closeInventoryEditor ( ) {
 export function closeInventoryExport ( ) {
     return {
         type: UTIL_CLOSE_INVENTORY_EXPORT,
+    }
+}
+
+export function closeComponentEditor ( ) {
+    return {
+        type: UTIL_CLOSE_COMPONENT_EDITOR,
+    }
+}
+
+export function closePropertyEditor ( ) {
+    return {
+        type: UTIL_CLOSE_PROPERTY_EDITOR,
     }
 }
