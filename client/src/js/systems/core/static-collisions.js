@@ -56,7 +56,7 @@ export default class StaticCollisions {
 
 	      if ( message.data.type == "top" ) {
 
-				three.camera.position.set( three.camera.position.x, message.data.position[1]+13.5 +vrHeight, three.camera.position.z )	
+				three.camera.position.set( three.camera.position.x, message.data.position[1]+14.25 +(vrHeight != 0 ? vrHeight-1 : 0), three.camera.position.z )	
 
 				if ( Math.abs( user.velocity.y ) > 400 ) {
 
@@ -85,7 +85,7 @@ export default class StaticCollisions {
 				// console.log("floor collision", message.data.position, message.data)
 				three.camera.position.set(three.camera.position.x, message.data.position[1]+vrHeight, three.camera.position.z)
 
-				if ( Math.abs(user.velocity.y) > 0.100 ) {
+				if ( Math.abs(user.velocity.y) > 1 ) {
 
 					user.velocity.y *= 0.66
 					user.velocity.x *= 0.96
