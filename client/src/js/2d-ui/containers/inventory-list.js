@@ -39,7 +39,7 @@ export default class InventoryList extends Component {
         dir = this.props.dir
 
     return (
-        <div style={styles.list(this.props.color, this.props.compact)} title={this.props.category }>
+        <div style={Object.assign({}, styles.list(this.props.color, this.props.compact), this.props.style )} title={this.props.category }>
           <span style={styles.title}>
             { this.props.category }
             <span style={styles.new}>
@@ -96,6 +96,7 @@ InventoryList.defaultProps = {
     username: "",
     category: "entities",
     showTitle: false,
+    style: {},
     color: '#252525',
     compact: false,
     isImage: false,
@@ -110,7 +111,6 @@ InventoryList.defaultProps = {
 let styles = {
   list: (color, compact) => {
     return {
-      position: 'relative',
       backgroundColor: 'rgb(24, 24, 24)',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)',
       cursor: 'pointer',

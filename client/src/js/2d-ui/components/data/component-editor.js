@@ -211,6 +211,7 @@ class ComponentEditor extends Component {
                         <span style={styles.basicInput} title='ID'>
                             ID <input type="text" style={styles.textInput} defaultValue={this.state.name} onChange={ e=> { this.onIdChange(e) }} />
                         </span>
+                        <br/>
                         <span style={styles.basicInput} title='Position'>
                             Position <VectorInput axis={3} decimalPlaces={3} onChange={ (value, event) => { this.onPositionChange( value, event) }} />
                         </span>
