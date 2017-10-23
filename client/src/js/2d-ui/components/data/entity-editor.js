@@ -166,7 +166,7 @@ class EntityEditor extends Component {
     this.setState({
       activated: !this.state.activated
     })
-    this.props.closeTextEdit()
+    this.props.closeEntityEditor()
 
   }
 
@@ -196,7 +196,7 @@ class EntityEditor extends Component {
     } else {
 
       return (
-        <FileButton title="New File" onClick={ () => { this.toggleModal() } } />
+        <FileButton title="New Entity" onClick={ () => { this.toggleModal() } } />
       )
 
     }

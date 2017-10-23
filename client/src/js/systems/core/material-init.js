@@ -14,17 +14,17 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
       if (!simpleShading) {
 
         //prop.metalnessMap = "/data/images/textures/tiles.png" 
-        prop.roughnessMap = '/data/images/textures/gplaypattern_@2X-2.png'
-        prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
+        prop.roughnessMap = '/data/images/textures/terrain4.jpg'
+        prop.map = !!!prop.map ? '/data/images/textures/terrain4.jpg' : prop.map
 
       } else {
 
-        prop.map = '/data/images/textures/gplaypattern_@2X-2.png'
+        prop.map = '/data/images/textures/terrain4.jpg'
         prop.envMap = 'none'
 
       }
 
-      prop.repeat = ['wrapping', 12, 12]
+      prop.repeat = ['wrapping', 10, 10]
       break
     case "terrain2":
       if (!simpleShading) {
@@ -105,7 +105,7 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
 
       if (!simpleShading)
 
-        prop.metalnessMap = "/data/images/textures/gplaypattern_@2X-2.png"
+        prop.metalnessMap = "/data/images/textures/metal4.jpg"
 
 
       prop.map = !!!prop.map ? '/data/images/textures/metal4.jpg' : prop.map

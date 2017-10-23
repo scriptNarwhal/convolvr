@@ -43,7 +43,7 @@ class ComponentEditor extends Component {
                 name: nextProps.itemId
             })
 
-            
+
     }
 
     if ( this.props.activated == false && nextProps.activated == true )
@@ -153,7 +153,7 @@ class ComponentEditor extends Component {
     this.setState({
       activated: !this.state.activated
     })
-    this.props.closeTextEdit()
+    this.props.closeComponentEditor()
 
   }
 
@@ -183,7 +183,7 @@ class ComponentEditor extends Component {
     } else {
 
       return (
-        <FileButton title="New File" onClick={ () => { this.toggleModal() } } />
+        <FileButton title="New Component" onClick={ () => { this.toggleModal() } } />
       )
 
     }

@@ -142,7 +142,7 @@ class PropertyEditor extends Component {
     this.setState({
       activated: !this.state.activated
     })
-    this.props.closeTextEdit()
+    this.props.closePropertyEditor()
 
   }
 
@@ -172,7 +172,7 @@ class PropertyEditor extends Component {
     } else {
 
       return (
-        <FileButton title="New File" onClick={ () => { this.toggleModal() } } />
+        <FileButton title="New Property" onClick={ () => { this.toggleModal() } } />
       )
 
     }
