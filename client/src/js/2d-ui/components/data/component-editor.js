@@ -5,122 +5,128 @@ import {
     rgba,
     rgb
 } from '../../../util'
+import PropertyEditor from './property-editor'
+import VectorInput from '../vector-input'
 
 class ComponentEditor extends Component {
 
-  constructor () {
-    super()
-  }
-
-  componentWillMount () {
-
-    this.setState({
-      activated: false,
-      text: "",
-      name: ""
-    })
-
-    if ( !!this.props.fileURL )
-
-      this.props.readText( this.props.fileURL, this.props.username, this.props.cwd.join("/") )
-    
-  }
-
-  componentWillReceiveProps ( nextProps ) {
-
-    if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData )
-
-        this.setState({
-            text: nextProps.textData.text
-        })    
-
-
-    if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
-
-        if ( nextProps.category != "" && nextProps.itemId != "" )
-
-            this.setState({
-                name: nextProps.itemId
-            })
-
-
+    constructor () {
+        super()
     }
 
-    if ( this.props.activated == false && nextProps.activated == true )
+    componentWillMount () {
 
         this.setState({
-            activated: true
+            activated: false,
+            text: "",
+            name: "",
+            components: [],
+            properties: []
         })
 
-    
-  }
+        if ( !!this.props.fileURL )
 
-  componentWillUpdate ( nextProps, nextState ) {
+        this.props.readText( this.props.fileURL, this.props.username, this.props.cwd.join("/") )
+        
+    }
 
-  }
+    componentWillReceiveProps ( nextProps ) {
 
-  useTemplate( name ) {
+        if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData )
 
-    let template = ""
+            this.setState({
+                text: nextProps.textData.text
+            })    
 
-    switch ( name ) {
 
-        case "Wireframe Box":
-            template = {
-                position: [0, 0, 0],
-                quaternion: [0, 0, 0, 1],
-                props: {
-                    geometry: {
-                        shape: "box",
-                        size: [1, 1, 1]
-                    },
-                    material: {
-                        name: "wireframe",
-                        color: 0xffffff
-                    }
-                },
-                components: []
-            }
-        break;
-        case "Box2":
-            template = {
-                position: [0, 0, 0],
-                quaternion: [0, 0, 0, 1],
-                props: {
-                    geometry: {
-                        shape: "box",
-                        size: [1, 1, 1]
-                    },
-                    material: {
-                        name: "wireframe",
-                        color: 0xffffff
-                    }
-                },
-                components: []
-            }
-        break;
+        if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
+
+            if ( nextProps.category != "" && nextProps.itemId != "" )
+
+                this.setState({
+                    name: nextProps.itemId
+                })
+
+
+        }
+
+        if ( this.props.activated == false && nextProps.activated == true )
+
+            this.setState({
+                activated: true
+            })
+
+        
+    }
+
+    componentWillUpdate ( nextProps, nextState ) {
 
     }
 
-    return JSON.stringify(template)
+    useTemplate( name ) {
 
-  }
+        let template = ""
 
-  handleTextChange (e) {
+        switch ( name ) {
 
-    this.setState({
-      name: e.target.value
-    })
+            case "Wireframe Box":
+                template = {
+                    position: [0, 0, 0],
+                    quaternion: [0, 0, 0, 1],
+                    props: {
+                        geometry: {
+                            shape: "box",
+                            size: [1, 1, 1]
+                        },
+                        material: {
+                            name: "wireframe",
+                            color: 0xffffff
+                        }
+                    },
+                    components: []
+                }
+            break;
+            case "Box2":
+                template = {
+                    position: [0, 0, 0],
+                    quaternion: [0, 0, 0, 1],
+                    props: {
+                        geometry: {
+                            shape: "box",
+                            size: [1, 1, 1]
+                        },
+                        material: {
+                            name: "wireframe",
+                            color: 0xffffff
+                        }
+                    },
+                    components: []
+                }
+            break;
 
-  }
+        }
 
-  handleTextArea (e) {
+        this.setState( template )
 
-    this.setState({
-      text: e.target.value
-    })
+        return JSON.stringify(template)
 
-  }
+    }
+
+    handleContextAction ( action, data, e ) {
+    
+        let index = data.componentIndex
+
+        if ( action == "Delete" ) {
+
+
+
+        } else if ( action == "Edit" ) {
+
+
+
+        }
+    
+    }
 
     save () {
 
@@ -129,7 +135,7 @@ class ComponentEditor extends Component {
 
         if ( name != "" ) {
 
-            //this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir )
+            //this
             this.toggleModal()
 
         } else {
@@ -156,39 +162,129 @@ class ComponentEditor extends Component {
     this.props.closeComponentEditor()
 
   }
-
-  render() {
-
-    if ( this.state.activated ) {
-
-      return (
-       <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
-            <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
-                <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
-              </span>
-            </div>
-            <div style={ styles.body }>
-              { this.props.readTextFetching == false  ? (
-                <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
-              ) : ""}
-              <FileButton title="Save" onClick={ () => { this.save() } } />
-              <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
-            </div>
-          </div>
-        </div>
-      )
-
-    } else {
-
-      return (
-        <FileButton title="New Component" onClick={ () => { this.toggleModal() } } />
-      )
-
+  
+  onPositionChange ( value, event ) {
+    
+        this.setState({
+          position: value
+        })
+    
     }
     
-  }
+    onRotationChange ( value, event ) {
+    
+        this.setState({
+          quaternion: value
+        })
+    
+    }
+
+    onNameChange( e ) {
+
+        this.setState({
+            name: e.target.value
+        })
+
+    }
+
+    onIdChange( e ) {
+        
+        this.setState({
+            id: e.target.value
+        })
+
+    }
+
+    render() {
+
+        if ( this.state.activated ) {
+
+            return (
+            <div style={ styles.lightbox }>
+                <div style={ styles.modal } >
+                    <div style={ styles.header }>
+                    <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Component Edit</span> 
+                        <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.onNameChange(e) }} style={ styles.text } /> 
+                    </span>
+                    </div>
+                    <div style={ styles.body }>
+                        <span style={styles.basicInput} title='ID'>
+                            ID <input type="text" style={styles.textInput} defaultValue={this.state.name} onChange={ e=> { this.onIdChange(e) }} />
+                        </span>
+                        <span style={styles.basicInput} title='Position'>
+                            Position <VectorInput axis={3} decimalPlaces={3} onChange={ (value, event) => { this.onPositionChange( value, event) }} />
+                        </span>
+                        <span style={styles.basicInput} title='Rotation'>
+                            Rotation <VectorInput axis={4} decimalPlaces={5} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
+                        </span>
+                        <h4>Properties</h4>
+                        <PropertyEditor 
+                        
+                        />
+                        <div style={ styles.components }>
+                            {
+                            this.state.properties.map( (property, i) => {
+                                return (
+                                <Card clickHandler={ (e) => {
+                                        console.log(e, opt.name, "clicked")
+                                        
+                                        }}
+                                        onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
+                                        contextMenuOptions={ this.props.contextMenuOptions }
+                                        showTitle={true}
+                                        username={this.props.username}
+                                        dir={this.props.dir}
+                                        category={"Properties"}
+                                        title={opt.name}
+                                        image=''
+                                        key={i}
+                                />
+                                )
+                            })
+                            }
+                        </div>
+                        <h4>Components</h4>
+                        <ComponentEditor 
+                        
+                        />
+                        <div style={ styles.components }>
+                            {
+                            this.state.components.map( (component, i) => {
+                                return (
+                                <Card clickHandler={ (e) => {
+                                        console.log(e, opt.name, "clicked")
+                                        
+                                        }}
+                                        onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
+                                        contextMenuOptions={ this.props.contextMenuOptions }
+                                        showTitle={true}
+                                        username={this.props.username}
+                                        dir={this.props.dir}
+                                        category={"Properties"}
+                                        title={opt.name}
+                                        image=''
+                                        key={i+'.2'}
+                                />
+                                )
+                            })
+                            }
+                        </div>
+                    <FileButton title="Save" onClick={ () => { this.save() } } />
+                    <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
+                    </div>
+                </div>
+                </div>
+            )
+
+        } else {
+
+            return (
+                <FileButton title="New Component" onClick={ () => { this.toggleModal() } } />
+            )
+
+        }
+        
+    }
 }
 
 ComponentEditor.defaultProps = {
@@ -272,12 +368,19 @@ let styles = {
         background: rgb(38, 38, 38),
         borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
     },
+    basicInput: {
+        display: 'block'
+    },
+    components: {
+
+    },
     lightbox: {
         position: 'fixed',
         top: 0,
         left: 0,
         width: '100%',
         height: '100%',
+        zIndex: 9999999999,
         background: rgba(0, 0, 0, 0.8)
     },
     resultingPath: {

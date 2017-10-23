@@ -14,7 +14,7 @@ import {
     UTIL_CLOSE_SHARING_SETTINGS,
     UTIL_CLOSE_IMPORT_TO_INVENTORY,
     UTIL_CLOSE_IMPORT_TO_WORLD,
-    UTIL_CLOSE_INVENTORY_EDITOR,
+    UTIL_CLOSE_ENTITY_EDITOR,
     UTIL_CLOSE_INVENTORY_EXPORT,
     UTIL_CLOSE_COMPONENT_EDITOR,
     UTIL_CLOSE_PROPERTY_EDITOR
@@ -130,9 +130,9 @@ export function closeImportToWorld ( ) {
     }
 }
 
-export function closeInventoryEditor ( ) {
+export function closeEntityEditor ( ) {
     return {
-        type: UTIL_CLOSE_INVENTORY_EDITOR,
+        type: UTIL_CLOSE_ENTITY_EDITOR,
     }
 }
 

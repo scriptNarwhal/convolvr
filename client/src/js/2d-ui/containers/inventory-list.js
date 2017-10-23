@@ -40,24 +40,27 @@ export default class InventoryList extends Component {
 
     return (
         <div style={styles.list(this.props.color, this.props.compact)} title={this.props.category }>
-          <span style={styles.title}>{ this.props.category }</span>
-          <span style={styles.new}>
-            {
-              this.props.category == "Entities" ? (
-                <EntityEditor 
+          <span style={styles.title}>
+            { this.props.category }
+            <span style={styles.new}>
+              {
+                this.props.category == "Entities" ? (
+                  <EntityEditor 
+                    
+                  />
+                ) : this.props.category == "Components" ? (
+                  <ComponentEditor 
                   
-                />
-              ) : this.props.category == "Components" ? (
-                <ComponentEditor 
-                 
-                />
-              ) : (
-                <PropertyEditor 
-                
-                />
-              )
-            }
+                  />
+                ) : (
+                  <PropertyEditor 
+                  
+                  />
+                )
+              }
+            </span>
           </span>
+      
           <div style={styles.options}>
             {
               this.props.options.map((opt, i) =>{
@@ -140,16 +143,19 @@ let styles = {
     }
   },
   title: {
-    width: '90%',
+    width: '100%',
     height: '40px',
     display: 'block',
+    textAlign: 'left',
+    paddingLeft: '1em',
     paddingTop: '0.5em',
     backgroundColor: 'rgba(0,0,0,0.2)'
   },
   new: {
-    width: '10%',
+    width: '40%',
     height: '40px',
-    paddingTop: '0.5em',
+    paddingTop: '0em',
+    marginRight: '1em',
     backgroundColor: 'rgba(0,0,0,0.2)'
   }
 }

@@ -5,6 +5,8 @@ import {
   rgba,
   rgb
 } from '../../../util'
+import ComponentEditor from './component-editor'
+import VectorInput from '../vector-input'
 
 class EntityEditor extends Component {
 
@@ -16,6 +18,10 @@ class EntityEditor extends Component {
 
     this.setState({
       activated: false,
+      position: [0,0,0],
+      quaternion: [0,0,0,1],
+      id: -1,
+      components: [],
       text: "",
       name: ""
     })
@@ -115,53 +121,55 @@ class EntityEditor extends Component {
       break
     }
 
+    this.setState( template )
+
     return JSON.stringify( template )
 
   }
 
-  handleTextChange (e) {
+  handleContextAction ( action, data, e ) {
+    
+    let index = data.componentIndex
 
-    this.setState({
-      name: e.target.value
-    })
+    if ( action == "Delete" ) {
 
-  }
 
-  handleTextArea (e) {
 
-    this.setState({
-      text: e.target.value
-    })
+    } else if ( action == "Edit" ) {
 
+
+
+    }
+    
   }
 
   save () {
 
-        let name = this.state.name,
-            dir = this.props.activated ? this.props.dir : this.props.cwd.join("/") 
+    let name = this.state.name,
+      dir = this.props.activated ? this.props.dir : this.props.cwd.join("/")
 
-        if ( name != "" ) {
+    if ( name != "" ) {
 
-            //this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir )
-            this.toggleModal()
+      //this.props
+      this.toggleModal()
 
-        } else {
+    } else {
 
-            alert("Name is required.")
-
-        }
+      alert("Name is required.")
 
     }
 
-  validate() {
+  }
 
-        let valid = null
+  validate ( ) {
 
-        return valid
+    let valid = null
+
+    return valid
 
   }
 
-  toggleModal () {
+  toggleModal ( ) {
 
     this.setState({
       activated: !this.state.activated
@@ -170,7 +178,39 @@ class EntityEditor extends Component {
 
   }
 
-  render() {
+  onPositionChange ( value, event ) {
+
+    this.setState({
+      position: value
+    })
+
+  }
+
+  onRotationChange ( value, event ) {
+
+    this.setState({
+      quaternion: value
+    })
+
+  }
+
+  onNameChange(e) {
+
+    this.setState({
+      name: e.target.value
+    })
+
+  }
+
+  onIdChange(e) {
+
+    this.setState({
+      id: e.target.value
+    })
+
+  }
+
+  render ( ) {
 
     if ( this.state.activated ) {
 
@@ -178,14 +218,45 @@ class EntityEditor extends Component {
        <div style={ styles.lightbox }>
           <div style={ styles.modal } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Entity Edit</span> 
                 <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
               </span>
             </div>
             <div style={ styles.body }>
-              { this.props.readTextFetching == false  ? (
-                <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
-              ) : ""}
+              <span style={styles.basicInput} title='ID'>
+                ID <input type="text" style={styles.textInput} defaultValue={this.state.id} onChange={ e=> { this.onIdChange(e) }} />
+              </span>
+              <span style={styles.basicInput} title='Position'>
+                Position <VectorInput axis={3} decimalPlaces={3} onChange={ (value, event) => { this.onPositionChange( value, event) }} />
+              </span>
+              <span style={styles.basicInput} title='Rotation'>
+                Rotation <VectorInput axis={4} decimalPlaces={5} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
+              </span>
+              <ComponentEditor 
+                  
+              />
+              <div style={ styles.components }>
+                {
+                  this.state.components.map( (component, i) => {
+                    return (
+                      <Card clickHandler={ (e) => {
+                              console.log(e, opt.name, "clicked")
+                            
+                            }}
+                            onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
+                            contextMenuOptions={ this.props.contextMenuOptions }
+                            showTitle={true}
+                            username={this.props.username}
+                            dir={this.props.dir}
+                            category={"Components"}
+                            title={opt.name}
+                            image=''
+                            key={i}
+                      />
+                    )
+                  })
+                }
+              </div>
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
@@ -205,7 +276,10 @@ class EntityEditor extends Component {
 }
 
 EntityEditor.defaultProps = {
-
+  contextMenuOptions: [
+    { name: "Edit" },
+    { name: "Delete"}
+  ]
 }
 
 import { connect } from 'react-redux'
@@ -284,6 +358,9 @@ let styles = {
         background: rgb(38, 38, 38),
         borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
     },
+    basicInput: {
+        display: 'inline-block'
+    },
     lightbox: {
         position: 'fixed',
         top: 0,
@@ -302,6 +379,9 @@ let styles = {
         width: '100%',
         marginTop: '0.5em',
         marginBotto: '0.5em'
+    },
+    textInput: {
+
     },
     text: {
         width: '75%',

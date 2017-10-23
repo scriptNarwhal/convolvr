@@ -154,7 +154,7 @@ class PropertyEditor extends Component {
        <div style={ styles.lightbox }>
           <div style={ styles.modal } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Property Edit</span> 
                 <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
               </span>
             </div>
