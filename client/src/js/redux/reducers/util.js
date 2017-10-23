@@ -52,7 +52,7 @@ module.exports = function app (state = {
         filename: "",
         dir: ""
     },
-    inventoryEditor: {
+    entityEdit: {
         activated: false,
         username: "",
         category: "",
@@ -134,8 +134,8 @@ module.exports = function app (state = {
     case UTIL_LAUNCH_INVENTORY_EDITOR:
         return {
             ...state,
-            inventoryEditor: {
-                ...state.inventoryEditor,
+            entityEdit: {
+                ...state.entityEdit,
                 activated: true,
                 username: action.username,
                 category: action.category,
@@ -216,8 +216,8 @@ module.exports = function app (state = {
     case UTIL_CLOSE_INVENTORY_EDITOR:
         return {
             ...state,
-            inventoryEditor: {
-                ...state.inventoryEditor,
+            entityEdit: {
+                ...state.entityEdit,
                 activated: false
             }
         }

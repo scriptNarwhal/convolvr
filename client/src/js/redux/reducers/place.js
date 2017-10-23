@@ -14,7 +14,10 @@ import {
     PLACE_UPDATE_FAIL,
     PLACE_DELETE_FETCH,
     PLACE_DELETE_DONE,
-    PLACE_DELETE_FAI
+    PLACE_DELETE_FAIL,
+    PLACE_FETCH,
+    PLACE_FETCH_DONE,
+    PLACE_FETCH_FAIL
 } from '../constants/action-types'
 import { detectWorldDetailsFromURL } from '../../config'
 
@@ -22,6 +25,7 @@ module.exports = function places (state = {
     current: detectWorldDetailsFromURL()[1],
     placeUser: detectWorldDetailsFromURL()[0],
     all: [],
+    data: false,
     userPlaces: [],
     updated: false,
     created: false,
@@ -59,6 +63,20 @@ module.exports = function places (state = {
     case PLACES_FETCH_DONE:
       return Object.assign({}, state, {
           all: action.places,
+          fetching: false
+      })
+    case PLACE_FETCH:
+      return Object.assign({}, state, {
+          fetching: true
+      })
+    case PLACE_FETCH_FAIL:
+      return Object.assign({}, state, {
+          fetching: false,
+          error: action.err
+      })
+    case PLACE_FETCH_DONE:
+      return Object.assign({}, state, {
+          data: action.data,
           fetching: false
       })
     case USER_PLACES_FETCH:
