@@ -35,6 +35,14 @@ class SharingSettings extends Component {
 
     }
 
+    if ( this.props.activated == false && nextProps.activated == true ) {
+      
+      this.setState({
+        activated: true
+      })
+      
+    }
+
   }
 
   componentWillUpdate ( nextProps, nextState ) {
@@ -101,17 +109,18 @@ class SharingSettings extends Component {
                 
               </span>
               <table>
-                <th>
-                    <td>id</td>
-                    <td>name</td>
-                    <td>directory</td>
-                    <td></td>
-                </th>
+                <tbody>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>directory</th>
+                  <th></th>
+                </tr>
                 {
-                    this.props.shares.map( s => {
+                    this.props.shares.map( (s,i) => {
                         return (
                             
-                            <tr>
+                            <tr key={i}>
                                 <td>{s.id}</td>
                                 <td>{s.name}</td>
                                 <td>{s.directory}</td>
@@ -120,10 +129,10 @@ class SharingSettings extends Component {
                         )
                     })
                 }
-                </table>
+                </tbody>
+              </table>
             </div>
             <div style={ styles.body }>
-              <textarea style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Close" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
@@ -134,7 +143,7 @@ class SharingSettings extends Component {
     } else {
 
       return (
-        <FileButton title="Sharing" onClick={ () => { this.toggleModal() } } />
+        <span></span>
       )
 
     }
@@ -151,8 +160,10 @@ import {
     toggleMenu
 } from '../../../redux/actions/app-actions'
 import {
-  readText,
-  writeText
+  listShares,
+  updateShare,
+  createShare,
+  deleteShare
 } from '../../../redux/actions/file-actions'
 import {
   closeSharingSettings
@@ -166,6 +177,7 @@ export default connect(
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         vrMode: state.app.vrMode,
+        shares: state.files.listShares.data ? state.files.listShares.data : [],
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.sharingSettings.activated,
         filename: state.util.sharingSettings.filename,
@@ -175,8 +187,8 @@ export default connect(
   },
   dispatch => {
     return {
-      listShares: (username) => {
-        dispatch( readText (filename, username, dir) )
+      listShares: (filename, username, dir) => {
+        dispatch( listShares (filename, username, dir) )
       },
       updateShare: (username, data) => {
         dispatch ( writeText (username, data) )
@@ -185,7 +197,7 @@ export default connect(
         dispatch ( writeText (username, data) )
       },
       deleteShare: (username, data) => {
-          dispatch(toggleMenu(force))
+          dispatch(deleteShare(username, data))
       },
       closeSharingSettings: () => {
         dispatch( closeSharingSettings() )

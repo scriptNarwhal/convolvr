@@ -32,6 +32,7 @@ module.exports = function app (state = {
         activated: false,
         username: "",
         filename: "",
+        target: "",
         dir: ""
     },
     sharingSettings: {

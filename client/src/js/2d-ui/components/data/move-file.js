@@ -29,6 +29,12 @@ class MoveFile extends Component {
 
     }
 
+    if ( this.props.activated == false && nextProps.activated == true )
+    
+      this.setState({
+        activated: true
+      })
+
   }
 
   componentWillUpdate ( nextProps, nextState ) {
@@ -100,7 +106,7 @@ class MoveFile extends Component {
     } else {
 
       return (
-        <FileButton title="Rename" onClick={ () => { this.toggleModal() } } />
+        <span></span>
       )
 
     }
@@ -108,7 +114,7 @@ class MoveFile extends Component {
   }
 }
 
-NewFolder.defaultProps = {
+MoveFile.defaultProps = {
 
 }
 
@@ -117,26 +123,30 @@ import {
     toggleMenu
 } from '../../../redux/actions/app-actions'
 import {
-  createDirectory,
+  moveFile,
   listDirectories
 } from '../../../redux/actions/file-actions'
 
 export default connect(
   (state, ownProps) => {
     return {
-        creatingDir: state.files.createDirectory.fetching,
+        creatingDir: state.files.move.fetching,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         cwd: state.files.listDirectories.workingPath,
         section: state.routing.locationBeforeTransitions.pathname,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
-        vrMode: state.app.vrMode
+        vrMode: state.app.vrMode,
+        activated: state.util.renameFile.activated,
+        filename: state.util.renameFile.filename,
+        fileUser: state.util.renameFile.username,
+        dir: state.util.renameFile.dir,
     }
   },
   dispatch => {
     return {
       moveFile: ( username, dir, filename, targetFile, targetDir ) => {
-        dispatch( createDirectory( username, dir, filename, targetFile, targetDir ) )
+        dispatch( moveFile( username, dir, filename, targetFile, targetDir ) )
       },
       listDirectories: (username, dir) => {
           dispatch(listDirectories(username, dir))

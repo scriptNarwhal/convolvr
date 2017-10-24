@@ -361,25 +361,22 @@ export function writeText (text, filename, username, dir) {
    }
 }
 
-export function getShare (shareName, username) {
+export function getShare (id, username) {
     return dispatch => {
      dispatch({
          type: SHARE_GET_FETCH,
-         username,
-         dir
+         username
      })
-     return axios.get(`${API_SERVER}/api/shares/${username}/${shareName}`)
+     return axios.get(`${API_SERVER}/api/shares/${username}/${id}`)
         .then(response => {
             dispatch({
                 type: SHARE_GET_DONE,
-                data: response.data,
-                dir
+                data: response.data
             })
         }).catch(response => {
             dispatch({
                 type: SHARE_GET_FAIL,
-                error: response,
-                dir
+                error: response
             })
         })
    }
@@ -389,21 +386,18 @@ export function listShares (username) {
     return dispatch => {
      dispatch({
          type: SHARES_LIST_FETCH,
-         username,
-         dir
+         username
      })
-     return axios.get(`${API_SERVER}/api/shares/${shareName}`)
+     return axios.get(`${API_SERVER}/api/shares/${username}`)
         .then(response => {
             dispatch({
                 type: SHARES_LIST_DONE,
-                data: response.data,
-                dir
+                data: response.data
             })
         }).catch(response => {
             dispatch({
                 type: SHARES_LIST_FAIL,
-                error: response,
-                dir
+                error: response
             })
         })
    }

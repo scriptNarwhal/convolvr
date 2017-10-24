@@ -209,14 +209,17 @@ class ComponentEditor extends Component {
                     </div>
                     <div style={ styles.body }>
                         <span style={styles.basicInput} title='ID'>
-                            ID <input type="text" style={styles.textInput} defaultValue={this.state.name} onChange={ e=> { this.onIdChange(e) }} />
+                            <span>ID</span>
+                            <input type="text" style={styles.textInput} defaultValue={this.state.name} onChange={ e=> { this.onIdChange(e) }} />
                         </span>
                         <br/>
                         <span style={styles.basicInput} title='Position'>
-                            Position <VectorInput axis={3} decimalPlaces={2} onChange={ (value, event) => { this.onPositionChange( value, event) }} />
+                            <span>Position</span>
+                            <VectorInput axis={3} decimalPlaces={2} onChange={ (value, event) => { this.onPositionChange( value, event) }} />
                         </span>
                         <span style={styles.basicInput} title='Rotation'>
-                            Rotation <VectorInput axis={4} decimalPlaces={4} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
+                            <span>Rotation</span>
+                            <VectorInput axis={4} decimalPlaces={4} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
                         </span>
                         <h4>Properties</h4>
                         <PropertyEditor 

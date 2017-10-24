@@ -26,12 +26,12 @@ class ImportToWorld extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.sharesFetching && nextProps.sharesFetching == false && !!nextProps.readText ) {
-
+    if ( this.props.activated == false && nextProps.activated == true ) {
+      
       this.setState({
-        text: nextProps.readText
+        activated: true
       })
-
+      
     }
 
   }

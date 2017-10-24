@@ -3,6 +3,8 @@ import Button from './button'
 import NewFolder from './data/new-folder'
 import TextEditor from './data/text-editor'
 import UploadFiles from './data/upload-files'
+import SharingSettings from './data/sharing-settings'
+import MoveFile from './data/move-file'
 import ImportToInventory from './data/import-to-inventory'
 import { isMobile } from '../../config'
 
@@ -39,13 +41,15 @@ export default class LocationBar extends Component {
                 
                 <TextEditor username={ this.props.username } path={ this.props.path } />
                 <NewFolder username={ this.props.username } path={ this.props.path } />
+                <MoveFile username={ this.props.username } path={ this.props.path } />
+                <SharingSettings username={ this.props.username } path={ this.props.path } />
                 {! isMobile() ? 
                   <ImportToInventory 
                     filename=""
                     username={this.props.username}
                   /> 
                 : "" } 
-                
+
               </div>) : ""
             }
         </div>

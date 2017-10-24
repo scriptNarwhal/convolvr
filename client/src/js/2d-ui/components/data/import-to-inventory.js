@@ -34,6 +34,14 @@ class ImportToInventory extends Component {
 
     }
 
+    if ( this.props.activated == false && nextProps.activated == true ) {
+      
+      this.setState({
+        activated: true
+      })
+      
+    }
+
   }
 
   componentWillUpdate ( nextProps, nextState ) {
@@ -79,7 +87,7 @@ class ImportToInventory extends Component {
        <div style={ styles.lightbox }>
           <div style={ styles.modal } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Import To Inventory</span> 
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Import To Inventory As Entity</span> 
 
                 <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
                 
