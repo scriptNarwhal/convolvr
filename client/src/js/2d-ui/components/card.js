@@ -106,9 +106,10 @@ Card.defaultProps = {
     onContextMenu: false,
     contextMenuOptions: [
       { name: "Download" },
-      // { name: "Rename" }, // until there's time to implement the modal
-      // { name: "Add To Inventory"},
+      { name: "Add To Inventory"},
       { name: "Delete" },
+      { name: "Rename" },
+      { name: "Share" },
       { name: "Edit" },
     ]
 }

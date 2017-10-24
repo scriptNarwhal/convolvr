@@ -4,6 +4,7 @@ import Card from '../components/Card'
 import EntityEditor from '../components/data/entity-editor'
 import ComponentEditor from '../components/data/component-editor'
 import PropertyEditor from '../components/data/property-editor'
+import ImportToWorld from '../components/data/import-to-world'
 
 export default class InventoryList extends Component {
 
@@ -45,9 +46,12 @@ export default class InventoryList extends Component {
             <span style={styles.new}>
               {
                 this.props.category == "Entities" ? (
-                  <EntityEditor 
-                    
-                  />
+                  [
+                    <EntityEditor 
+                      
+                    />,
+                    <ImportToWorld />
+                  ]
                 ) : this.props.category == "Components" ? (
                   <ComponentEditor 
                   
@@ -58,6 +62,7 @@ export default class InventoryList extends Component {
                   />
                 )
               }
+              
             </span>
           </span>
       

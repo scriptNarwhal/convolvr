@@ -213,10 +213,10 @@ class ComponentEditor extends Component {
                         </span>
                         <br/>
                         <span style={styles.basicInput} title='Position'>
-                            Position <VectorInput axis={3} decimalPlaces={3} onChange={ (value, event) => { this.onPositionChange( value, event) }} />
+                            Position <VectorInput axis={3} decimalPlaces={2} onChange={ (value, event) => { this.onPositionChange( value, event) }} />
                         </span>
                         <span style={styles.basicInput} title='Rotation'>
-                            Rotation <VectorInput axis={4} decimalPlaces={5} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
+                            Rotation <VectorInput axis={4} decimalPlaces={4} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
                         </span>
                         <h4>Properties</h4>
                         <PropertyEditor 

@@ -21,7 +21,6 @@ class ImportToWorld extends Component {
       id: 0
     })
 
-    this.props.listShares( this.props.username )
     
   }
 
@@ -62,20 +61,6 @@ class ImportToWorld extends Component {
     let name = this.state.name,
         data = {}
 
-    if ( id ) {
-
-        this.props.shares.map( s => { 
-          if ( s.id == id ) 
-            data = s
-        })
-        data = Object.assign({}, data, this.state.data )
-        this.props.updateShare(  this.props.username, data )
-     
-    } else {
-
-        this.props.createShare(  this.props.username, this.state.data )
-
-    }
 
   }
 
@@ -100,27 +85,6 @@ class ImportToWorld extends Component {
                 <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
                 
               </span>
-              <table>
-                <th>
-                    <td>id</td>
-                    <td>name</td>
-                    <td>directory</td>
-                    <td></td>
-                </th>
-                {
-                    this.props.shares.map( s => {
-                        return (
-                            
-                            <tr>
-                                <td>{s.id}</td>
-                                <td>{s.name}</td>
-                                <td>{s.directory}</td>
-                                <td></td>
-                            </tr>
-                        )
-                    })
-                }
-                </table>
             </div>
             <div style={ styles.body }>
               <textarea style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
@@ -134,7 +98,7 @@ class ImportToWorld extends Component {
     } else {
 
       return (
-        <FileButton title="Sharing" onClick={ () => { this.toggleModal() } } />
+        <FileButton title="Import To World" onClick={ () => { this.toggleModal() } } />
       )
 
     }
@@ -175,18 +139,6 @@ export default connect(
   },
   dispatch => {
     return {
-      listShares: (username) => {
-        dispatch( readText (filename, username, dir) )
-      },
-      updateShare: (username, data) => {
-        dispatch ( writeText (username, data) )
-      },
-      createShare: (username, data) => {
-        dispatch ( writeText (username, data) )
-      },
-      deleteShare: (username, data) => {
-          dispatch(toggleMenu(force))
-      },
       closeImportToWorld: () => {
         dispatch( closeImportToWorld() )
       }

@@ -107,7 +107,7 @@ let styles = {
       position: 'relative',
       cursor: 'pointer',
       width: '224px',
-      height: '178px',
+      height: '192px',
       display: 'inline-block',
       marginRight: '0.5em',
       marginLeft: '8px',
@@ -124,7 +124,8 @@ let styles = {
     paddingBottom: '0.2em'
   },
   options: {
-    paddingTop:'0.4em'
+    paddingTop:'0.4em',
+    fontSize: '19px'
   },
   button: ( compact, image, close ) => {
     return {

@@ -96,7 +96,7 @@ class Data extends Component {
       case "Delete":
         this.props.deleteFile( this.props.username, dir, data.filename )
       break;
-      case "Import":
+      case "Add To Inventory":
         this.props.launchImportToInventory( this.props.username, dir, data.filename )
       break;
 
