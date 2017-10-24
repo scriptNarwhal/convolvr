@@ -19,10 +19,6 @@ class PropertyEditor extends Component {
       text: "",
       name: ""
     })
-
-    if ( !!this.props.fileURL )
-
-      this.props.readText( this.props.fileURL, this.props.username, this.props.cwd.join("/") )
     
   }
 
@@ -131,7 +127,17 @@ class PropertyEditor extends Component {
 
     validate() {
 
-        let valid = null
+        let valid = null,
+            output = null
+
+        try {
+          output = JSON.parse(this.state.text)
+        } catch (e) {
+          console.warn("invalid json ", e)
+          return true
+        }
+    
+        valid = typeof output != 'object'
 
         return valid
 
@@ -219,12 +225,6 @@ export default connect(
   },
   dispatch => {
     return {
-      readText: (filename, username, dir) => {
-        dispatch( readText (filename, username, dir) )
-      },
-      writeText: (text, filename, username, dir) => {
-        dispatch( writeText (text, filename, username, dir) )
-      },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
       },

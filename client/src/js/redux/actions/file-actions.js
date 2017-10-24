@@ -273,7 +273,7 @@ export function moveFile ( username, dir, file, targetDir, targetFile ) {
         username
     })
 
-    return axios.put(`${API_SERVER}/api/files/move/${username}?dir=${dir}&file=${file}&targetDir=${targetDir}&targetFile=${targetFile}`, {} )
+    return axios.put(`${API_SERVER}/api/files/move/${username}?dir=${dir}&file=${file}&dstDir=${targetDir}&dstFile=${targetFile}`, {} )
         .then(response => {
             dispatch({
                 type: FILE_MOVE_DONE,

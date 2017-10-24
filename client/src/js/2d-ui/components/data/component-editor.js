@@ -23,10 +23,6 @@ class ComponentEditor extends Component {
             components: [],
             properties: []
         })
-
-        if ( !!this.props.fileURL )
-
-        this.props.readText( this.props.fileURL, this.props.username, this.props.cwd.join("/") )
         
     }
 
@@ -300,10 +296,6 @@ import {
     toggleMenu
 } from '../../../redux/actions/app-actions'
 import {
-  readText,
-  writeText
-} from '../../../redux/actions/file-actions'
-import {
     getInventory,
     addInventoryItem,
     updateInventoryItem
@@ -331,12 +323,6 @@ export default connect(
   },
   dispatch => {
     return {
-      readText: (filename, username, dir) => {
-        dispatch( readText (filename, username, dir) )
-      },
-      writeText: (text, filename, username, dir) => {
-        dispatch( writeText (text, filename, username, dir) )
-      },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
       },

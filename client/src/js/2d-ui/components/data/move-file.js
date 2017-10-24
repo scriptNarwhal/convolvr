@@ -67,7 +67,7 @@ class MoveFile extends Component {
 
     if ( name != "" ) {
 
-      this.props.moveFile( this.props.username, `${cwd}/${dirName}` )
+      this.props.moveFile( this.props.username, cwd, this.props.filename, name, cwd )
       this.toggleModal()
 
     } else {
@@ -145,7 +145,7 @@ export default connect(
   },
   dispatch => {
     return {
-      moveFile: ( username, dir, filename, targetFile, targetDir ) => {
+      moveFile: ( username, dir, filename, targetDir, targetFile ) => {
         dispatch( moveFile( username, dir, filename, targetFile, targetDir ) )
       },
       listDirectories: (username, dir) => {

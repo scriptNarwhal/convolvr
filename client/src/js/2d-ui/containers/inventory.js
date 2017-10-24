@@ -38,7 +38,7 @@ class Inventory extends Component {
     
         switch ( name ) {
     
-          case "Import":
+          case "Add To World":
             this.props.launchImportToWorld( this.props.username, data )
           break;
           case "Edit JSON":

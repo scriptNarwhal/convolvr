@@ -321,12 +321,6 @@ export default connect(
   },
   dispatch => {
     return {
-      readText: (filename, username, dir) => {
-        dispatch( readText (filename, username, dir) )
-      },
-      writeText: (text, filename, username, dir) => {
-        dispatch( writeText (text, filename, username, dir) )
-      },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
       },
