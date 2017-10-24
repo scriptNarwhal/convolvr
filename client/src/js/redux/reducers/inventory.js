@@ -6,6 +6,9 @@ import {
     INVENTORY_FETCH,
     INVENTORY_FETCH_DONE,
     INVENTORY_FETCH_FAIL,
+    INVENTORY_ITEM_FETCH,
+    INVENTORY_ITEM_FETCH_DONE,
+    INVENTORY_ITEM_FETCH_FAIL,
     INVENTORY_UPDATE_FETCH,
     INVENTORY_UPDATE_DONE,
     INVENTORY_UPDATE_FAIL,
@@ -23,6 +26,11 @@ module.exports = function places (state = {
         entities: [],
         components: [],
         properties: []
+    },
+    item: {
+        component: false,
+        entity: false,
+        property: false
     },
     updated: false,
     created: false,
@@ -85,7 +93,45 @@ module.exports = function places (state = {
             })
           break
       }
-     
+    case INVENTORY_ITEM_FETCH:
+      return Object.assign({}, state, {
+          fetching: true
+      })
+    case INVENTORY_ITEM_FETCH_FAIL:
+      return Object.assign({}, state, {
+          fetching: false,
+          error: action.err
+      })
+    case INVENTORY_ITEM_FETCH_DONE:
+      switch( action.category ) {
+          case "Entities":
+            return Object.assign({}, state, {
+                item: {
+                    ...state.item,
+                    entitie: action.data
+                },
+                fetching: false
+            })
+          break
+          case "Components":
+            return Object.assign({}, state, {
+                item: {
+                    ...state.item,
+                    component: action.data
+                },
+                fetching: false
+            })
+          break
+          case "Properties":
+            return Object.assign({}, state, {
+                item: {
+                    ...state.item,
+                    propertie: action.data
+                },
+                fetching: false
+            })
+          break
+      }
     case INVENTORY_UPDATE_FETCH:
       return Object.assign({}, state, {
           fetching: true,

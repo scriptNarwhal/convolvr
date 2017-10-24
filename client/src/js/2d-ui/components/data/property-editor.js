@@ -20,6 +20,10 @@ class PropertyEditor extends Component {
       name: ""
     })
     
+    if ( !this.props.itemId )
+    
+      this.useTemplate("Text Area")
+
   }
 
   componentWillReceiveProps ( nextProps ) {
@@ -112,16 +116,28 @@ class PropertyEditor extends Component {
         let name = this.state.name,
             dir = this.props.activated ? this.props.dir : this.props.cwd.join("/") 
 
-        if ( name != "" ) {
+        if ( name == "" ) {
 
-            //this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir )
-            this.toggleModal()
+            alert("Name is required.")
+            return
+        }
+
+        if (this.validate() != null) {
+          alert("Property must be valid JSON.")
+          return
+        }
+
+        if ( this.props.onSave ) {
+
+          this.props.onSave( JSON.parse(this.state.text) )
 
         } else {
 
-            alert("Name is required.")
+          this.props.addInventoryItem( this.props.username, "Properties", JSON.parse(this.state.text) )
 
         }
+
+        this.toggleModal()
 
     }
 
@@ -136,8 +152,6 @@ class PropertyEditor extends Component {
           console.warn("invalid json ", e)
           return true
         }
-    
-        valid = typeof output != 'object'
 
         return valid
 
@@ -148,6 +162,7 @@ class PropertyEditor extends Component {
     this.setState({
       activated: !this.state.activated
     })
+    
     this.props.closePropertyEditor()
 
   }
@@ -246,19 +261,18 @@ export default connect(
 
 let styles = {
     modal: {
-        width: '50%',
-        maxWidth: '729px',
-        minWidth: '320px',
-        height: '480px',
-        padding: '0.25em',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        margin: 'auto',
-        background: rgb(38, 38, 38),
-        borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+      width: '100%',
+      maxWidth: '960px',
+      minWidth: '320px',
+      height: '92%',
+      padding: '1em',
+      position: 'absolute',
+      top: '0px',
+      left: '0px',
+      right: '0px',
+      bottom: '0px',
+      margin: 'auto',
+      background: rgb(38, 38, 38)
     },
     lightbox: {
         position: 'fixed',
@@ -266,7 +280,7 @@ let styles = {
         left: 0,
         width: '100%',
         height: '100%',
-        background: rgba(0, 0, 0, 0.8)
+        background: rgba(0, 0, 0, 0.5)
     },
     resultingPath: {
         marginBottom: '1em'

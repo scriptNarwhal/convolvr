@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import Card from '../card'
 import {
   rgba,
   rgb
@@ -26,9 +27,9 @@ class EntityEditor extends Component {
       name: ""
     })
 
-    if ( !!this.props.fileURL )
-
-      this.props.readText( this.props.fileURL, this.props.username, this.props.cwd.join("/") )
+    if ( !this.props.itemId )
+    
+      this.useTemplate("Wireframe Box")
     
   }
 
@@ -148,16 +149,32 @@ class EntityEditor extends Component {
     let name = this.state.name,
       dir = this.props.activated ? this.props.dir : this.props.cwd.join("/")
 
-    if ( name != "" ) {
-
-      //this.props
-      this.toggleModal()
-
-    } else {
-
+    if ( name == "" )  {
+        
       alert("Name is required.")
-
+      return
+        
     }
+
+    data = {
+      id: this.state.id,
+      name: this.state.name,
+      position: this.state.position,
+      quaternion: this.state.quaternion,
+      components: this.state.components
+    }
+
+    if ( this.props.onSave ) {
+        
+        this.props.onSave( data )
+        
+    } else {
+        
+        this.props.addInventoryItem( this.props.username, "Entities", data )
+        
+    }
+
+    this.toggleModal()
 
   }
 
@@ -210,6 +227,29 @@ class EntityEditor extends Component {
 
   }
 
+  onSaveComponent( data ) {
+
+    let components = []
+
+    components = this.state.components
+
+    if ( data.id <= -1 ) {
+
+      data.id = this.state.components.length
+      components.push( data )
+
+    } else {
+
+      components.splice( data.id, 1, data)
+
+    }
+
+    this.setState({
+      components
+    })
+
+  }
+
   render ( ) {
 
     if ( this.state.activated ) {
@@ -236,15 +276,15 @@ class EntityEditor extends Component {
                 <span>Rotation</span> 
                 <VectorInput axis={4} decimalPlaces={4} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
               </span>
-              <ComponentEditor 
-                  
+              <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
+                               username={ this.props.username }
               />
               <div style={ styles.components }>
                 {
                   this.state.components.map( (component, i) => {
                     return (
                       <Card clickHandler={ (e) => {
-                              console.log(e, opt.name, "clicked")
+                              console.log(e, component.name, "clicked")
                             
                             }}
                             onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
@@ -253,7 +293,7 @@ class EntityEditor extends Component {
                             username={this.props.username}
                             dir={this.props.dir}
                             category={"Components"}
-                            title={opt.name}
+                            title={component.name}
                             image=''
                             key={i}
                       />
@@ -297,6 +337,7 @@ import {
 import {
     getInventory,
     addInventoryItem,
+    getInventoryItem,
     updateInventoryItem
 } from '../../../redux/actions/inventory-actions'
 import {
@@ -310,6 +351,8 @@ export default connect(
         section: state.routing.locationBeforeTransitions.pathname,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
+        inventoryItem: state.inventory.item.entity,
+        inventoryFetching: state.inventory.fetching,
         textData: state.files.readText.data,
         readTextFetching: state.files.readText.fetching,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
@@ -323,6 +366,9 @@ export default connect(
     return {
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
+      },
+      getInventoryItem: (userId, category, itemId ) => {
+        dispatch(getInventoryItem( userId, category, itemId ))
       },
       addInventoryItem: (userId, category, data) => {
           dispatch(addInventoryItem(userId, category, data))
@@ -342,22 +388,21 @@ export default connect(
 
 let styles = {
     modal: {
-        width: '50%',
-        maxWidth: '729px',
-        minWidth: '320px',
-        height: '480px',
-        padding: '0.25em',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        margin: 'auto',
-        background: rgb(38, 38, 38),
-        borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+      width: '100%',
+      maxWidth: '1280px',
+      minWidth: '320px',
+      height: '92%',
+      padding: '1em',
+      position: 'absolute',
+      top: '0px',
+      left: '0px',
+      right: '0px',
+      bottom: '0px',
+      margin: 'auto',
+      background: rgb(38, 38, 38)
     },
     basicInput: {
-        display: 'inline-block'
+        display: 'block'
     },
     lightbox: {
         position: 'fixed',
@@ -365,7 +410,7 @@ let styles = {
         left: 0,
         width: '100%',
         height: '100%',
-        background: rgba(0, 0, 0, 0.8)
+        background: rgba(0, 0, 0, 0.5)
     },
     resultingPath: {
         marginBottom: '1em'

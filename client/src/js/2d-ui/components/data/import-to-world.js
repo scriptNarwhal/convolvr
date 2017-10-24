@@ -48,11 +48,15 @@ class ImportToWorld extends Component {
 
   }
 
-  handleTextArea (e) {
+  onCoordChange ( value, event ) {
 
-    this.setState({
-      text: e.target.value
-    })
+
+
+  }
+
+  handleWorldChange ( event ) {
+
+    let value = event.target.value
 
   }
 
@@ -81,10 +85,26 @@ class ImportToWorld extends Component {
           <div style={ styles.modal } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Import To World</span> 
-
-                <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
-                
+                <input type="text" disabled onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
               </span>
+              <span>
+                Select world to import into
+                <select onChange={ e=> this.handleWorldChange(e) }>
+                  {
+                    this.props.worlds.map( (world, w) => {
+                       
+                      return (
+                        <option key={w}value={world.name}>{world.name}</option>
+                      )
+
+                    })
+                  }
+                </select>
+              </span>
+              <span>
+                Specify coordinates: <VectorInput axis={3} decimalPlaces={0} onChange={ (value, event) => { this.onCoordChange( value, event) }} />
+              </span>
+              
             </div>
             <div style={ styles.body }>
               <textarea style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
@@ -130,6 +150,7 @@ export default connect(
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         vrMode: state.app.vrMode,
+        worlds: state.worlds.all,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.importToWorld.activated,
         filename: state.util.importToWorld.filename,
@@ -177,7 +198,7 @@ let styles = {
     left: 0,
     width: '100%',
     height: '100%',
-    background: rgba(0, 0, 0, 0.8)
+    background: rgba(0, 0, 0, 0.5)
   },
   resultingPath: {
     marginBottom: '1em'

@@ -47,19 +47,13 @@ export default class InventoryList extends Component {
               {
                 this.props.category == "Entities" ? (
                   [
-                    <EntityEditor 
-                      
-                    />,
-                    <ImportToWorld />
+                    <EntityEditor username={this.props.username} key="1" />,
+                    <ImportToWorld key="2" />
                   ]
                 ) : this.props.category == "Components" ? (
-                  <ComponentEditor 
-                  
-                  />
+                  <ComponentEditor username={this.props.username}/>
                 ) : (
-                  <PropertyEditor 
-                  
-                  />
+                  <PropertyEditor username={this.props.username}/>
                 )
               }
               
@@ -99,7 +93,7 @@ InventoryList.defaultProps = {
     title: "File Options",
     dir: "",
     username: "",
-    category: "entities",
+    category: "Entities",
     showTitle: false,
     style: {},
     color: '#252525',
@@ -109,7 +103,7 @@ InventoryList.defaultProps = {
     contextMenuOptions: [
         { name: "Add To World" },
         { name: "Export JSON"},
-        { name: "Edit JSON" }
+        { name: "Edit" }
     ]
 }
 

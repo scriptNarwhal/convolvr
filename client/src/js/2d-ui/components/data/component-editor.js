@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import Card from '../card'
 import {
     rgba,
     rgb
@@ -19,11 +20,17 @@ class ComponentEditor extends Component {
         this.setState({
             activated: false,
             text: "",
+            id: -1,
             name: "",
             components: [],
-            properties: []
+            properties: [],
+            position: [0,0,0],
+            quaternion: [0,0,0,1]
         })
         
+        if ( !this.props.itemId )
+
+            this.useTemplate("Wireframe Box")
     }
 
     componentWillReceiveProps ( nextProps ) {
@@ -127,18 +134,36 @@ class ComponentEditor extends Component {
     save () {
 
         let name = this.state.name,
-            dir = this.props.activated ? this.props.dir : this.props.cwd.join("/") 
+            dir = this.props.activated ? this.props.dir : this.props.cwd.join("/"),
+            data = {} 
 
-        if ( name != "" ) {
-
-            //this
-            this.toggleModal()
-
-        } else {
+        if ( name == "" )  {
 
             alert("Name is required.")
+            return
 
         }
+
+        data = {
+            id: this.state.id,
+            name: this.state.name,
+            position: this.state.position,
+            quaternion: this.state.quaternion,
+            components: this.state.components,
+            properties: this.state.properties
+        }
+
+        if ( this.props.onSave ) {
+            
+            this.props.onSave( data )
+            
+        } else {
+            
+            this.props.addInventoryItem( this.props.username, "Components", data )
+            
+        }
+
+        this.toggleModal()
 
     }
 
@@ -150,16 +175,16 @@ class ComponentEditor extends Component {
 
     }
 
-  toggleModal () {
+    toggleModal () {
 
-    this.setState({
-      activated: !this.state.activated
-    })
-    this.props.closeComponentEditor()
+        this.setState({
+          activated: !this.state.activated
+        })
+        this.props.closeComponentEditor()
 
-  }
+    }
   
-  onPositionChange ( value, event ) {
+    onPositionChange ( value, event ) {
     
         this.setState({
           position: value
@@ -191,6 +216,52 @@ class ComponentEditor extends Component {
 
     }
 
+    onSaveProperty( data ) {
+
+        let properties = []
+
+        properties = this.state.properties
+
+        if (data.id <= -1) {
+
+            data.id = this.state.properties.length
+            properties.push(data)
+
+        } else {
+
+            properties.splice(data.id, 1, data)
+
+        }
+
+        this.setState({
+            properties
+        })
+
+    }
+
+    onSaveComponent( data ) {
+
+        let components = []
+
+        components = this.state.components
+
+        if (data.id <= -1) {
+
+            data.id = this.state.components.length
+            components.push(data)
+
+        } else {
+
+            components.splice(data.id, 1, data)
+
+        }
+
+        this.setState({
+            components
+        })
+
+    }
+
     render() {
 
         if ( this.state.activated ) {
@@ -206,7 +277,7 @@ class ComponentEditor extends Component {
                     <div style={ styles.body }>
                         <span style={styles.basicInput} title='ID'>
                             <span>ID</span>
-                            <input type="text" style={styles.textInput} defaultValue={this.state.name} onChange={ e=> { this.onIdChange(e) }} />
+                            <input type="text" style={styles.textInput} defaultValue={this.state.id} disabled />
                         </span>
                         <br/>
                         <span style={styles.basicInput} title='Position'>
@@ -218,15 +289,15 @@ class ComponentEditor extends Component {
                             <VectorInput axis={4} decimalPlaces={4} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
                         </span>
                         <h4>Properties</h4>
-                        <PropertyEditor 
-                        
+                        <PropertyEditor onSave={ data => this.onSaveProperty( data ) } 
+                                        username={ this.props.username }
                         />
                         <div style={ styles.components }>
                             {
                             this.state.properties.map( (property, i) => {
                                 return (
                                 <Card clickHandler={ (e) => {
-                                        console.log(e, opt.name, "clicked")
+                                        console.log(e, Object.keys(property)[0], "clicked")
                                         
                                         }}
                                         onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
@@ -235,7 +306,7 @@ class ComponentEditor extends Component {
                                         username={this.props.username}
                                         dir={this.props.dir}
                                         category={"Properties"}
-                                        title={opt.name}
+                                        title={Object.keys(property)[0]}
                                         image=''
                                         key={i}
                                 />
@@ -244,15 +315,16 @@ class ComponentEditor extends Component {
                             }
                         </div>
                         <h4>Components</h4>
-                        <ComponentEditor 
-                        
+                        <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
+                                         username={ this.props.username }
                         />
+            
                         <div style={ styles.components }>
                             {
                             this.state.components.map( (component, i) => {
                                 return (
                                 <Card clickHandler={ (e) => {
-                                        console.log(e, opt.name, "clicked")
+                                        console.log(e, component.name, "clicked")
                                         
                                         }}
                                         onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
@@ -261,7 +333,7 @@ class ComponentEditor extends Component {
                                         username={this.props.username}
                                         dir={this.props.dir}
                                         category={"Properties"}
-                                        title={opt.name}
+                                        title={component.name}
                                         image=''
                                         key={i+'.2'}
                                 />
@@ -344,19 +416,18 @@ export default connect(
 
 let styles = {
     modal: {
-        width: '50%',
-        maxWidth: '729px',
+        width: '100%',
+        maxWidth: '1080px',
         minWidth: '320px',
-        height: '480px',
-        padding: '0.25em',
+        height: '92%',
+        padding: '1em',
         position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        top: '0px',
+        left: '0px',
+        right: '0px',
+        bottom: '0px',
         margin: 'auto',
-        background: rgb(38, 38, 38),
-        borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+        background: rgb(38, 38, 38)
     },
     basicInput: {
         display: 'block'
@@ -371,7 +442,7 @@ let styles = {
         width: '100%',
         height: '100%',
         zIndex: 9999999999,
-        background: rgba(0, 0, 0, 0.8)
+        background: rgba(0, 0, 0, 0.5)
     },
     resultingPath: {
         marginBottom: '1em'

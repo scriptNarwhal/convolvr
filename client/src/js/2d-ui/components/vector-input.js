@@ -76,9 +76,9 @@ let styles = {
   },
   vectorInput: {
     display: 'inline-block',
-    width: '100%',
     height: '20px',
-    paddingBottom: '0.5em'
+    paddingBottom: '0.5em',
+    paddingLeft: '0.75em'
   },
   numeric: {
     display: 'inline-block',

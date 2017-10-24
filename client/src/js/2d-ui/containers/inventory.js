@@ -41,7 +41,7 @@ class Inventory extends Component {
           case "Add To World":
             this.props.launchImportToWorld( this.props.username, data )
           break;
-          case "Edit JSON":
+          case "Edit":
             this.props.launchInventoryEditor( this.props.username, data.category, data.itemId )
           break;
           case "Export JSON":
@@ -64,16 +64,19 @@ class Inventory extends Component {
         >
           <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
                          options={ this.props.inventoryEntities }
+                         username={ this.props.username }
                          style={{zIndex: 9999}}
                          category="Entities" 
           />
           <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
                          options={ this.props.inventoryComponents }
+                         username={ this.props.username }
                          style={{zIndex: 99999}}
                          category="Components"   
           />
           <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
                          options={ this.props.inventoryProperties }
+                         username={ this.props.username }
                          style={{zIndex: 999999}}
                          category="Properties" 
           />
