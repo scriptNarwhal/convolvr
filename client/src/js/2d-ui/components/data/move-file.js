@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
-
+import { rgba, rgb } from '../../../util'
 
 class MoveFile extends Component {
 
@@ -32,8 +32,11 @@ class MoveFile extends Component {
     if ( this.props.activated == false && nextProps.activated == true )
     
       this.setState({
-        activated: true
+        activated: true,
+        name: nextProps.filename
       })
+
+    
 
   }
 
@@ -44,6 +47,7 @@ class MoveFile extends Component {
 
   toggleModal () {
 
+    this.props.closeRenameFile()
     this.setState({
       name: "",
       activated: !this.state.activated
@@ -92,7 +96,7 @@ class MoveFile extends Component {
               <span style={ styles.title }> Rename File </span>
             </div>
             <div style={ styles.body }>
-              <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } />
+              <input type="text" defaultValue={this.state.name} onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } />
               <div style={ styles.resultingPath }>
                 { resultingPath }
               </div>
@@ -120,8 +124,8 @@ MoveFile.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
+  closeRenameFile
+} from '../../../redux/actions/util-actions'
 import {
   moveFile,
   listDirectories
@@ -148,22 +152,15 @@ export default connect(
       moveFile: ( username, dir, filename, targetDir, targetFile ) => {
         dispatch( moveFile( username, dir, filename, targetFile, targetDir ) )
       },
+      closeRenameFile: () => {
+        dispatch(closeRenameFile())
+      },
       listDirectories: (username, dir) => {
           dispatch(listDirectories(username, dir))
-      },
-      toggleMenu: ( force ) => {
-          dispatch( toggleMenu( force ) )
       }
     }
   }
 )(MoveFile)
-
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-  return `rgb(${r}, ${g}, ${b})`
-},
-rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
-  return `rgba(${r}, ${g}, ${b}, ${a})`
-}
 
 let styles = {
 modal: {

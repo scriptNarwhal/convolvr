@@ -5,10 +5,11 @@ import {
     UTIL_LAUNCH_SHARING_SETTINGS,
     UTIL_LAUNCH_IMPORT_TO_INVENTORY,
     UTIL_LAUNCH_IMPORT_TO_WORLD,
-    UTIL_LAUNCH_INVENTORY_EDITOR,
+    UTIL_LAUNCH_ENTITY_EDITOR,
     UTIL_LAUNCH_INVENTORY_EXPORT,
     UTIL_LAUNCH_COMPONENT_EDITOR,
     UTIL_LAUNCH_PROPERTY_EDITOR,
+    UTIL_LAUNCH_EDIT_LOADED_ITEM,
     UTIL_CLOSE_TEXT_EDIT,
     UTIL_CLOSE_RENAME_FILE,
     UTIL_CLOSE_SHARING_SETTINGS,
@@ -66,15 +67,6 @@ export function launchImportToWorld ( username, dir, filename ) {
     }
 }
 
-export function launchInventoryEditor ( username, category, itemId ) {
-    return {
-        type: UTIL_LAUNCH_INVENTORY_EDITOR,
-        username,
-        category,
-        itemId
-    }
-}
-
 export function launchInventoryExport ( username, category, itemId ) {
     return {
         type: UTIL_LAUNCH_INVENTORY_EXPORT,
@@ -84,20 +76,59 @@ export function launchInventoryExport ( username, category, itemId ) {
     }
 }
 
-export function launchComponentEditor ( username, category, itemId ) {
+export function launchEntityEditor ( username, itemId ) {
     return {
-        type: UTIL_LAUNCH_COMPONENT_EDITOR,
+        type: UTIL_LAUNCH_ENTITY_EDITOR,
         username,
+        category: "Entities",
         itemId
     }
 }
 
-export function launchPropertyEditor ( username, category, itemId ) {
+export function launchComponentEditor ( username, itemId ) {
+    return {
+        type: UTIL_LAUNCH_COMPONENT_EDITOR,
+        username,
+        category: "Components",
+        itemId
+    }
+}
+
+export function launchPropertyEditor ( username, itemId ) {
     return {
         type: UTIL_LAUNCH_PROPERTY_EDITOR,
         username,
+        category: "Properties",
         itemId
     }
+}
+
+export function launchEditLoadedItem ( username, category, itemId ) {
+
+    return dispatch => {
+
+        if (category == "Components") {
+
+            dispatch(launchComponentEditor(username, itemId))
+
+        } else if (category == "Entities") {
+
+            dispatch(launchEntityEditor(username, itemId))
+
+        } else if (category == "Properties") {
+
+            dispatch(launchComponentEditor(username, itemId))
+
+        }
+
+        return {
+            type: UTIL_LAUNCH_EDIT_LOADED_ITEM,
+            category,
+            itemId
+        }
+
+    }
+    
 }
 
 export function closeTextEdit ( ) {

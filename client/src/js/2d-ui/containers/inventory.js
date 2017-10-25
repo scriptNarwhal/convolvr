@@ -42,7 +42,7 @@ class Inventory extends Component {
             this.props.launchImportToWorld( this.props.username, data )
           break;
           case "Edit":
-            this.props.launchInventoryEditor( this.props.username, data.category, data.itemId )
+            this.props.launchEntityEditor( this.props.username, data.category, data.itemId )
           break;
           case "Export JSON":
             this.props.launchInventoryExport( this.props.username, data.category, data.itemId )

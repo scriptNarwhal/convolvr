@@ -4,7 +4,7 @@ import {
     UTIL_LAUNCH_SHARING_SETTINGS,
     UTIL_LAUNCH_IMPORT_TO_INVENTORY,
     UTIL_LAUNCH_IMPORT_TO_WORLD,
-    UTIL_LAUNCH_INVENTORY_EDITOR,
+    UTIL_LAUNCH_ENTITY_EDITOR,
     UTIL_LAUNCH_INVENTORY_EXPORT,
     UTIL_LAUNCH_COMPONENT_EDITOR,
     UTIL_LAUNCH_PROPERTY_EDITOR,
@@ -132,7 +132,7 @@ module.exports = function app (state = {
                 dir: action.dir
             }
         }
-    case UTIL_LAUNCH_INVENTORY_EDITOR:
+    case UTIL_LAUNCH_ENTITY_EDITOR:
         return {
             ...state,
             entityEdit: {

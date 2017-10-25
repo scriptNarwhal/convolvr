@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import {
+  rgba,
+  rgb
+} from '../../../util'
 
 class SharingSettings extends Component {
 
@@ -57,11 +61,24 @@ class SharingSettings extends Component {
 
   }
 
-  handleTextArea (e) {
+  remove ( index ) {
 
-    this.setState({
-      text: e.target.value
-    })
+    let data = {
+      id: this.props.shares[ index ].id
+    }
+
+    this.props.deleteShare( this.props.username, data )
+
+  }
+
+  shareFolder () {
+
+    let data = {
+      username: this.props.username,
+      directory: this.props.cwd.join("/")
+    }
+
+    this.props.createShare( this.props.username, data )
 
   }
 
@@ -103,11 +120,7 @@ class SharingSettings extends Component {
        <div style={ styles.lightbox }>
           <div style={ styles.modal } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Shared Folders</span> 
-
-                <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
-                
-              </span>
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Shared Folders</span> </span>
               <table>
                 <tbody>
                 <tr>
@@ -124,7 +137,7 @@ class SharingSettings extends Component {
                                 <td>{s.id}</td>
                                 <td>{s.name}</td>
                                 <td>{s.directory}</td>
-                                <td></td>
+                                <td> <FileButton title="Remove" onClick={ () => { this.remove(i) } } /></td>
                             </tr>
                         )
                     })
@@ -133,7 +146,7 @@ class SharingSettings extends Component {
               </table>
             </div>
             <div style={ styles.body }>
-              <FileButton title="Save" onClick={ () => { this.save() } } />
+              <FileButton title="Share Current Folder" onClick={ () => { this.shareFolder() } } />
               <FileButton title="Close" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
           </div>
@@ -178,6 +191,7 @@ export default connect(
         menuOpen: state.app.menuOpen,
         vrMode: state.app.vrMode,
         shares: state.files.listShares.data ? state.files.listShares.data : [],
+        sharesFetching: state.files.listShares.fetching || state.files.createShare.fetching,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.sharingSettings.activated,
         filename: state.util.sharingSettings.filename,
@@ -205,15 +219,6 @@ export default connect(
     }
   }
 )(SharingSettings)
-
-
-
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-    return `rgb(${r}, ${g}, ${b})`
-  },
-  rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
-    return `rgba(${r}, ${g}, ${b}, ${a})`
-  }
 
 let styles = {
   modal: {

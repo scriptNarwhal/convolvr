@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
 import Card from '../card'
+import ComponentEditor from './component-editor'
+import VectorInput from '../vector-input'
 import {
   rgba,
   rgb
 } from '../../../util'
-import ComponentEditor from './component-editor'
-import VectorInput from '../vector-input'
 
 class EntityEditor extends Component {
 
@@ -130,15 +130,17 @@ class EntityEditor extends Component {
 
   handleContextAction ( action, data, e ) {
     
-    let index = data.componentIndex
+    let index = data.componentIndex,
+    components = this.state.components
 
     if ( action == "Delete" ) {
+            
+        components.splice( index, 1 )
+        this.setState({ components })
+            
+    } else if (action == "Edit") {
 
-
-
-    } else if ( action == "Edit" ) {
-
-
+        this.props.editLoadedItem("component", data, index)
 
     }
     
@@ -276,9 +278,6 @@ class EntityEditor extends Component {
                 <span>Rotation</span> 
                 <VectorInput axis={4} decimalPlaces={4} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
               </span>
-              <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
-                               username={ this.props.username }
-              />
               <div style={ styles.components }>
                 {
                   this.state.components.map( (component, i) => {
@@ -301,6 +300,9 @@ class EntityEditor extends Component {
                   })
                 }
               </div>
+              <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
+                               username={ this.props.username }
+              />
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
@@ -328,9 +330,6 @@ EntityEditor.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
-import {
   readText,
   writeText
 } from '../../../redux/actions/file-actions'
@@ -341,7 +340,8 @@ import {
     updateInventoryItem
 } from '../../../redux/actions/inventory-actions'
 import {
-    closeEntityEditor
+    closeEntityEditor,
+    launchEditLoadedItem
 } from '../../../redux/actions/util-actions'
 
 export default connect(
@@ -364,6 +364,9 @@ export default connect(
   },
   dispatch => {
     return {
+      editLoadedItem: ( category, itemId ) => {
+        dispatch(launchEditLoadedItem( category, itemId ))
+      },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
       },
@@ -378,9 +381,6 @@ export default connect(
       },
       closeEntityEditor: () => {
         dispatch( closeEntityEditor() )
-      },
-      toggleMenu: (force) => {
-          dispatch(toggleMenu(force))
       }
     }
   }

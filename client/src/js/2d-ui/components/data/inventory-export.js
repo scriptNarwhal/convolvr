@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import { rgba, rgb } from '../../../util'
 
 class InventoryExport extends Component {
 
@@ -145,13 +146,6 @@ InventoryExport.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
-import {
-  readText,
-  writeText
-} from '../../../redux/actions/file-actions'
-import {
     getInventory,
     addInventoryItem,
     updateInventoryItem
@@ -179,12 +173,6 @@ export default connect(
   },
   dispatch => {
     return {
-      readText: (filename, username, dir) => {
-        dispatch( readText (filename, username, dir) )
-      },
-      writeText: (text, filename, username, dir) => {
-        dispatch( writeText (text, filename, username, dir) )
-      },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
       },
@@ -196,20 +184,10 @@ export default connect(
       },
       closeInventoryExport: () => {
         dispatch( closeInventoryExport() )
-      },
-      toggleMenu: (force) => {
-          dispatch(toggleMenu(force))
       }
     }
   }
 )(InventoryExport)
-
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-  return `rgb(${r}, ${g}, ${b})`
-},
-rgba = ( r, g, b, a ) => { 
-  return `rgba(${r}, ${g}, ${b}, ${a})`
-}
 
 let styles = {
     modal: {

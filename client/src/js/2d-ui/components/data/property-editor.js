@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
-import {
-    rgba,
-    rgb
-} from '../../../util'
+import { rgba, rgb } from '../../../util'
+import BuiltinProps from '../../../assets/props'
+import { getPropsList } from '../../../assets/props'
 
 class PropertyEditor extends Component {
 
@@ -17,12 +16,13 @@ class PropertyEditor extends Component {
     this.setState({
       activated: false,
       text: "",
-      name: ""
+      name: "",
+      refreshing: false
     })
-    
+
     if ( !this.props.itemId )
     
-      this.useTemplate("Text Area")
+      this.useTemplate("geometry.0")
 
   }
 
@@ -62,36 +62,17 @@ class PropertyEditor extends Component {
 
     let template = ""
 
-    switch ( name ) {
+    template = this.props.convolvrProps.find( (prop) => { return prop.name == name} )
 
-        case "Box Shape":
-            template = {
-                geometry: {
-                    shape: "box",
-                    size: [1, 1, 1]
-                }
-            }
-        break
-        case "Text Area":
-            template = {
-                text: {
-                    color: "#000000",
-                    background: "#ffffff",
-                    lines: ["Hello World"]
-                }
-            }
-        break
-        case "The Color Red":
-            template = {
-                material: {
-                    color: 0xff0000
-                }
-            }
-        break
-
-    }
-
-    return JSON.stringify(template)
+    this.setState({
+      name: template.name.split(".")[0],
+      text: JSON.stringify(template.data),
+      refreshing: true
+    }, ()=>{
+      this.setState({
+        refreshing: false
+      })
+    })
 
   }
 
@@ -129,11 +110,11 @@ class PropertyEditor extends Component {
 
         if ( this.props.onSave ) {
 
-          this.props.onSave( JSON.parse(this.state.text) )
+          this.props.onSave( { [this.state.name]: JSON.parse(this.state.text) } )
 
         } else {
 
-          this.props.addInventoryItem( this.props.username, "Properties", JSON.parse(this.state.text) )
+          this.props.addInventoryItem( this.props.username, "Properties", { [this.state.name]: JSON.parse(this.state.text) } )
 
         }
 
@@ -159,11 +140,10 @@ class PropertyEditor extends Component {
 
   toggleModal () {
 
+    this.props.closePropertyEditor()
     this.setState({
       activated: !this.state.activated
     })
-    
-    this.props.closePropertyEditor()
 
   }
 
@@ -176,11 +156,26 @@ class PropertyEditor extends Component {
           <div style={ styles.modal } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Property Edit</span> 
-                <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
+                { !this.state.refreshing ? 
+                  <input type="text" defaultValue={ this.state.name }  style={ styles.text } 
+                         onChange={ (e) => { this.handleTextChange(e) }} 
+                  /> 
+                  : ""
+                } 
+                <select onChange={ e=> { this.useTemplate( e.target.value ) } } >
+                  {
+                    this.props.convolvrProps.map( (prop, p) => {
+                      let propName = `${prop.name}`
+                      return (
+                        <option key={p} value={propName}>{propName}</option>
+                      )
+                    })
+                  }
+                </select>
               </span>
             </div>
             <div style={ styles.body }>
-              { this.props.readTextFetching == false  ? (
+              { this.props.readTextFetching == false && !this.state.refreshing ? (
                 <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
               ) : ""}
               <FileButton title="Save" onClick={ () => { this.save() } } />
@@ -202,13 +197,10 @@ class PropertyEditor extends Component {
 }
 
 PropertyEditor.defaultProps = {
-
+  convolvrProps: getPropsList( BuiltinProps() )
 }
 
 import { connect } from 'react-redux'
-import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
 import {
   readText,
   writeText
@@ -251,9 +243,6 @@ export default connect(
       },
       closePropertyEditor: () => {
         dispatch( closePropertyEditor() )
-      },
-      toggleMenu: (force) => {
-          dispatch(toggleMenu(force))
       }
     }
   }
@@ -294,7 +283,7 @@ let styles = {
         marginBotto: '0.5em'
     },
     text: {
-        width: '75%',
+        width: '65%',
         padding: '0.25em',
         marginBottom: '0.5em',
         background: '#212121',

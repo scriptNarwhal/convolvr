@@ -50,7 +50,7 @@ import {
   
       return dispatch => {
        dispatch({
-          type: INVENTORYS_FETCH,
+          type: INVENTORY_ADD_FETCH,
           data
        })
        return axios.post(API_SERVER+`/api/inventory/${userId}/${category}`, data)

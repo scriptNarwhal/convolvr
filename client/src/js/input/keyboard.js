@@ -70,17 +70,20 @@ export default class Keyboard {
 
       let tools = world.user.toolbox;
 
-      if ( e.which >= 49 && e.which < 59 ) {
+      if ( isVRMode( world.mode ) ) {
 
-        tools.useTool( e.which - 49, 0)
-        tools.useTool( e.which - 49, 1) // both hands switch.. you can manually pick up a tool in one hand, none the less
+        if ( e.which >= 49 && e.which < 59 ) {
+
+          tools.useTool( e.which - 49, 0)
+          tools.useTool( e.which - 49, 1) // both hands switch.. you can manually pick up a tool in one hand, none the less
+
+        }
+
+        if ( e.which == 192 ) // debugging tool
+
+          tools.useTool( 10, 0 )
 
       }
-
-      if ( e.which == 192 ) // debugging tool
-
-        tools.useTool( 10, 0 )
-
 
     }, true)
 

@@ -183,9 +183,13 @@ export default class TerrainSystem {
     if ( force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
 
         lastCoords = this.lastChunkCoords = [ coords[0], coords[1], coords[2] ]
-        let userName = world.userName || "convolvr"
+        let userName = world.userName || "convolvr",
+            pageName = window.location.pathname,
+            shortURLView = pageName.indexOf('/files') > -1 || pageName.indexOf('/inventory') > -1 || pageName.indexOf('/settings') > -1
 
-        phase > 0 && this.loaded && browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
+        if ( phase > 0 && this.loaded && !shortURLView )
+
+          browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
 
         force = false 	// remove old chunks
 

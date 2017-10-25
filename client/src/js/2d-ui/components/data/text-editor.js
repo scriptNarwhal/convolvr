@@ -98,10 +98,11 @@ class TextEditor extends Component {
 
   toggleModal () {
 
+    this.props.closeTextEdit()
     this.setState({
       activated: !this.state.activated
     })
-    this.props.closeTextEdit()
+   
 
   }
 
@@ -145,9 +146,6 @@ TextEditor.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
-import {
   readText,
   writeText
 } from '../../../redux/actions/file-actions'
@@ -182,9 +180,6 @@ export default connect(
       },
       closeTextEdit: () => {
         dispatch( closeTextEdit() )
-      },
-      toggleMenu: (force) => {
-          dispatch(toggleMenu(force))
       }
     }
   }

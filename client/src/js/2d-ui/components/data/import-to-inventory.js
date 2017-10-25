@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import {
+  rgba,
+  rgb
+} from '../../../util'
 
 class ImportToInventory extends Component {
 
@@ -26,18 +30,11 @@ class ImportToInventory extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.sharesFetching && nextProps.sharesFetching == false && !!nextProps.readText ) {
-
-      this.setState({
-        text: nextProps.readText
-      })
-
-    }
-
     if ( this.props.activated == false && nextProps.activated == true ) {
       
       this.setState({
-        activated: true
+        activated: true,
+        name: this.props.filename
       })
       
     }
@@ -73,6 +70,7 @@ class ImportToInventory extends Component {
 
   toggleModal () {
 
+    this.props.closeImportToInventory()
     this.setState({
       activated: !this.state.activated
     })
@@ -87,10 +85,13 @@ class ImportToInventory extends Component {
        <div style={ styles.lightbox }>
           <div style={ styles.modal } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Import To Inventory As Entity</span> 
-
-                <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
-                
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>
+                Import To Inventory As Entity
+              </span> 
+                <input type="text" onChange={ (e) => { this.handleTextChange(e) }} 
+                       defaultValue={this.state.name} 
+                       style={ styles.text } 
+                /> 
               </span>
             </div>
             <div style={ styles.body }>
@@ -105,7 +106,7 @@ class ImportToInventory extends Component {
     } else {
 
       return (
-        <FileButton title="Import To Inventory" onClick={ () => { this.toggleModal() } } />
+        <span></span>
       )
 
     }
@@ -152,15 +153,6 @@ export default connect(
     }
   }
 )(ImportToInventory)
-
-
-
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-    return `rgb(${r}, ${g}, ${b})`
-  },
-  rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
-    return `rgba(${r}, ${g}, ${b}, ${a})`
-  }
 
 let styles = {
   modal: {

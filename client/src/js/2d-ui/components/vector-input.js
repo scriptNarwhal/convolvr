@@ -83,7 +83,11 @@ let styles = {
   numeric: {
     display: 'inline-block',
     marginRight: '1em',
-    width: '80px'
+    width: '80px',
+    background: '#202020',
+    color: "white",
+    padding: '0.5em',
+    border: '1px solid #808080'
   },
   inner: {
     transition: 'all 0.2s linear',

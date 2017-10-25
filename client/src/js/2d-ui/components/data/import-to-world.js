@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import { rgba, rgb } from '../../../util'
 
 class ImportToWorld extends Component {
 
@@ -132,13 +133,6 @@ ImportToWorld.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
-import {
-  readText,
-  writeText
-} from '../../../redux/actions/file-actions'
-import {
     closeImportToWorld
 } from '../../../redux/actions/util-actions'
 
@@ -166,15 +160,6 @@ export default connect(
     }
   }
 )(ImportToWorld)
-
-
-
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-    return `rgb(${r}, ${g}, ${b})`
-  },
-  rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
-    return `rgba(${r}, ${g}, ${b}, ${a})`
-  }
 
 let styles = {
   modal: {

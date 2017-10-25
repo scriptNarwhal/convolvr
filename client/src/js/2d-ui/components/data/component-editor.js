@@ -115,20 +115,40 @@ class ComponentEditor extends Component {
 
     }
 
-    handleContextAction ( action, data, e ) {
+    handlePropertyAction ( action, data, e ) {
     
-        let index = data.componentIndex
+        let index = data.propertyIndex,
+            properties = this.state.properties
 
         if ( action == "Delete" ) {
 
-
+            properties.splice( index, 1 )
+            this.setState({ properties })
 
         } else if ( action == "Edit" ) {
 
-
+            this.props.editLoadedItem( "property", data, index)
 
         }
     
+    }
+
+    handleComponentAction ( action, data, e ) {
+        
+        let index = data.componentIndex,
+            components = this.state.components
+    
+        if ( action == "Delete" ) {
+                
+            components.splice( index, 1 )
+            this.setState({ components })
+                
+        } else if (action == "Edit") {
+
+            this.props.editLoadedItem( "component", data, index)
+
+        }
+        
     }
 
     save () {
@@ -177,10 +197,10 @@ class ComponentEditor extends Component {
 
     toggleModal () {
 
+        this.props.closeComponentEditor()
         this.setState({
           activated: !this.state.activated
         })
-        this.props.closeComponentEditor()
 
     }
   
@@ -289,9 +309,6 @@ class ComponentEditor extends Component {
                             <VectorInput axis={4} decimalPlaces={4} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
                         </span>
                         <h4>Properties</h4>
-                        <PropertyEditor onSave={ data => this.onSaveProperty( data ) } 
-                                        username={ this.props.username }
-                        />
                         <div style={ styles.components }>
                             {
                             this.state.properties.map( (property, i) => {
@@ -300,7 +317,7 @@ class ComponentEditor extends Component {
                                         console.log(e, Object.keys(property)[0], "clicked")
                                         
                                         }}
-                                        onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
+                                        onContextMenu={ (name, data, e) => this.handlePropertyAction(name, {...data, componentIndex: i }, e) }
                                         contextMenuOptions={ this.props.contextMenuOptions }
                                         showTitle={true}
                                         username={this.props.username}
@@ -314,11 +331,10 @@ class ComponentEditor extends Component {
                             })
                             }
                         </div>
-                        <h4>Components</h4>
-                        <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
-                                         username={ this.props.username }
+                        <PropertyEditor onSave={ data => this.onSaveProperty( data ) } 
+                                        username={ this.props.username }
                         />
-            
+                        <h4>Components</h4>
                         <div style={ styles.components }>
                             {
                             this.state.components.map( (component, i) => {
@@ -327,7 +343,7 @@ class ComponentEditor extends Component {
                                         console.log(e, component.name, "clicked")
                                         
                                         }}
-                                        onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
+                                        onContextMenu={ (name, data, e) => this.handleComponentAction(name, {...data, componentIndex: i }, e) }
                                         contextMenuOptions={ this.props.contextMenuOptions }
                                         showTitle={true}
                                         username={this.props.username}
@@ -341,8 +357,11 @@ class ComponentEditor extends Component {
                             })
                             }
                         </div>
-                    <FileButton title="Save" onClick={ () => { this.save() } } />
-                    <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
+                        <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
+                                         username={ this.props.username }
+                        />
+                        <FileButton title="Save" onClick={ () => { this.save() } } />
+                        <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
                     </div>
                 </div>
                 </div>
@@ -365,15 +384,13 @@ ComponentEditor.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
-import {
     getInventory,
     addInventoryItem,
     updateInventoryItem
 } from '../../../redux/actions/inventory-actions'
 import {
-    closeComponentEditor
+    closeComponentEditor,
+    launchEditLoadedItem
 } from '../../../redux/actions/util-actions'
 
 export default connect(
@@ -395,6 +412,9 @@ export default connect(
   },
   dispatch => {
     return {
+      editLoadedItem: ( category, itemId ) => {
+        dispatch(launchEditLoadedItem( category, itemId ))
+      },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
       },
@@ -406,9 +426,6 @@ export default connect(
       },
       closeComponentEditor: () => {
         dispatch( closeComponentEditor() )
-      },
-      toggleMenu: (force) => {
-          dispatch(toggleMenu(force))
       }
     }
   }
@@ -430,7 +447,8 @@ let styles = {
         background: rgb(38, 38, 38)
     },
     basicInput: {
-        display: 'block'
+        display: 'block',
+        marginBottom: '0.25em'
     },
     components: {
 
@@ -473,6 +491,9 @@ let styles = {
         marginBottom: '0.5em',
         padding: '0.5em',
         background: 'black'
+    },
+    textInput: {
+        paddingLeft: '0.75em'
     },
     body: {
 
