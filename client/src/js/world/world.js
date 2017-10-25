@@ -36,7 +36,6 @@ export default class Convolvr {
 			usePostProcessing = false,
 			viewDist = [ 0.1, 10000 ]
 
-		//scene.scale.setScalar( 1 / 1 ) 
 		this.mobile = mobile
 		this.floorHeight = 0
 		this.highAltitudeGravity = false
@@ -104,7 +103,7 @@ export default class Convolvr {
 
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
-		this.raycaster.near = 0.75
+		this.raycaster.near = 0.25
 
 		three = this.three = {
 			world: this,

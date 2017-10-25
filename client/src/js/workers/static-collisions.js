@@ -255,6 +255,7 @@ self.onmessage = function ( event ) {
 	} else if ( message.command == "clear" ) {
 
 		voxels = []
+		voxelList = []
 
 	} else if ( message.command == "start" ) {
 
