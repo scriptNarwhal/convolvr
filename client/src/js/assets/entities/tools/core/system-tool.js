@@ -26,7 +26,7 @@ export default class SystemTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [0.08, 4200, 6000]
+                size: [0.08, 0.5, 2]
               },
               material: {
                 name: "metal"
@@ -43,8 +43,7 @@ export default class SystemTool extends Tool {
                         dataSource: this.world.systems.assets.props.systems
                       },
                       layout: {
-                        type: "tube",
-                        axis: "y",
+                        type: "grid",
                         mode: "factory", // child components will ignore layout
                         columns: 3
                       }

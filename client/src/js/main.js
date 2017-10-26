@@ -34,11 +34,13 @@ import UserInput from './input/user-input'
 import User from './world/user'
 import Toolbox from './world/toolbox'
 import Entity from './entity'
+//import ProgressBar from 'progressbardottop'
 
 let store:        Object = makeStore(routerReducer),
     socket:       Object   = events,
     token:        string   = "", 
     userInput:    UserInput,
+    //progressBar:  ProgressBar,
     user:         User     = new User(),
     loadingWorld: Convolvr = null,
     avatar:       Entity   = null, 
@@ -51,6 +53,10 @@ const history: Object = syncHistoryWithStore(browserHistory, store)
 
 token = localStorage.getItem("token") || ""
 clearOldData()
+// progressBar = new ProgressBar({
+//   selector: "#progressbar",
+//   hideOnComplete: true,
+// })
 userInput = new UserInput()
 
 loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) => {
@@ -115,8 +121,10 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
   })
   helpScreen.update( [ pos.x-4, altitude + 21, pos.z+10 ] )
   world.help = helpScreen
-
+  
 })
+
+//loadingWorld.progressBar = progressBar
 
 ReactDOM.render(
   (<Provider store={store}>

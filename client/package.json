@@ -44,6 +44,7 @@
     "moment": "^2.13.0",
     "notifyjs": "^2.0.3",
     "oimo": "^1.0.9",
+    "progressbardottop": "^0.1.4",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",

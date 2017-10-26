@@ -59,8 +59,8 @@ export default class Convolvr {
 		
 		if ( this.shadows > 0 ) {
 
-			renderer.shadowMapType = THREE.PCFSoftShadowMap
-			renderer.shadowMapEnabled = true
+			renderer.shadowMap.enabled = true;
+			renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 		}
 
@@ -146,7 +146,7 @@ export default class Convolvr {
 	init ( config, callback ) {
 		
 		let coords = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
-			skyLight =  new THREE.DirectionalLight( config.light.color, 1 ),
+			skyLight =  skyLight = new THREE.DirectionalLight( config.light.color, 1 ),
 			camera = three.camera,
 			skyMaterial = new THREE.MeshBasicMaterial( {color: 0x303030} ),
 			skyTexture = null,
@@ -156,12 +156,34 @@ export default class Convolvr {
 			envURL = '/data/images/photospheres/sky-reflection.jpg',
 			r = config.sky.red,
 			g = config.sky.green,
-			b = config.sky.blue
+			b = config.sky.blue,
+			shadowCam = null
 
 		this.config = config; console.info("World config: ", config)
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
 		three.scene.add(this.ambientLight)
+
+		if ( this.shadows > 0 ) {
+
+			skyLight.castShadow = true
+			shadowCam = skyLight.shadow.camera
+			skyLight.shadow.mapSize.width = this.mobile ? 256 : this.shadows > 1 ? 1024 : 512 // default
+			skyLight.shadow.mapSize.height = this.mobile ? 256 : this.shadows > 1 ? 1024 : 512 // default
+			shadowCam.near = 0.5      // default
+			shadowCam.far = 1300      
+			
+			shadowCam.left = -500
+			shadowCam.right = 500
+			shadowCam.top = 500
+			shadowCam.bottom = -500
+			three.scene.add(shadowCam)
+			
+			if  ( !this.shadowHelper ) {
+				this.shadowHelper = new THREE.CameraHelper( skyLight.shadow.camera );
+				three.scene.add( this.shadowHelper );
+			}
+		} 
 
 		if ( !!config && !!config.sky.photosphere ) { console.log("init world: photosphere: ", config.sky.photosphere)
 
@@ -189,7 +211,8 @@ export default class Convolvr {
 			world = this,
 			rebuildWorld = () => {
 
-				let yaw = config.light.yaw - Math.PI / 2.0
+				let yaw = config.light.yaw - Math.PI / 2.0,
+					zeroZeroZero = new THREE.Vector3(0,0,0)
 
 				!!world.skyLight && three.scene.remove( world.skyLight )
 				!!world.ambientLight && three.scene.remove( world.ambientLight )
@@ -197,7 +220,8 @@ export default class Convolvr {
 				world.skyLight = skyLight
 				three.scene.add(skyLight)
 				skyLight.position.set( Math.sin(yaw)*1000, Math.sin(config.light.pitch)*1000, Math.cos(yaw)*1000)
-				skyLight.lookAt(new THREE.Vector3(0,0,0))
+				//skyLight.lookAt(zeroZeroZero)
+				//skyLight.shadow.camera.lookAt(zeroZeroZero)
 				three.scene.add(this.skybox)
 				//rotateSky && this.skybox.rotation.set(0, Math.PI * 1, 0)
 				world.skybox.position.set(camera.position.x, 0, camera.position.z)
@@ -438,7 +462,7 @@ export default class Convolvr {
 			terrainEnt = this.terrain.distantTerrain,
 			config = this.config,
 			skyLight = this.skyLight,
-			yaw = config ? config.light.yaw : 0,
+			yaw = config ? config.light.yaw - Math.PI / 2.0 : 0,
 			pitch = config ? config.light.pitch : 0,
 			skyMat = null
 
@@ -453,8 +477,10 @@ export default class Convolvr {
 					skyMat.uniforms.time.value += delta
 
 				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
-				//skyLight.position.set( camera.position.x+Math.sin(yaw)*0.08000, camera.position.y+ Math.sin(pitch)*0.08000, camera.position.z+Math.cos(yaw)*0.08000)
-				//skyLight.lookAt( camera.position )
+				skyLight.shadow.camera.position.set( camera.position.x, 600+camera.position.y, camera.position.z)
+				skyLight.shadow.camera.updateMatrix()
+				skyLight.position.set( camera.position.x+Math.sin(yaw)*301, 800+camera.position.y+ Math.sin(pitch)*301, camera.position.z-Math.cos(yaw)*301)
+				//this.skyLight.shadow.camera.lookAt( skyLight )
 			}
     	}
 

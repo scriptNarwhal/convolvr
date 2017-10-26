@@ -51,7 +51,7 @@ export default function initLocalSettings ( world ) {
 
 		if ( shadows == null ) {
 
-			shadows = window.innerWidth < 720 ? 0 : 1
+			shadows = 0
 			localStorage.setItem( "shadows", shadows ) 
 
 		} else {

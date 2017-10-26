@@ -62,24 +62,19 @@ class Inventory extends Component {
                style={ isMobile() ? { paddingTop: '60px' } : { paddingTop: '0px' } }
                innerStyle={ { paddingTop: isMobile() ? '72px' : 0, paddingLeft: isMobile() ? '10px' : '72px' }  }       
         >
-          <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
-                         options={ this.props.inventoryEntities }
-                         username={ this.props.username }
-                         style={{zIndex: 9999}}
-                         category="Entities" 
-          />
-          <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
-                         options={ this.props.inventoryComponents }
-                         username={ this.props.username }
-                         style={{zIndex: 99999}}
-                         category="Components"   
-          />
-          <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
-                         options={ this.props.inventoryProperties }
-                         username={ this.props.username }
-                         style={{zIndex: 999999}}
-                         category="Properties" 
-          />
+        {
+          [[this.props.inventoryEntities,   "Entities"  ], 
+           [this.props.inventoryComponents, "Components"], 
+           [this.props.inventoryProperties, "Properties"]].map( (inventorySet, i) => (
+            <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
+                           options={ inventorySet[0] }
+                           username={ this.props.username }
+                           style={{zIndex: 9999}}
+                           category={ inventorySet[1] }
+                           key={i}
+            />
+           ))
+        }
         </Shell>
     )
 

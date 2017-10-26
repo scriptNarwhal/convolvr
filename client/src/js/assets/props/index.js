@@ -57,7 +57,7 @@ export default function BuiltinProps () {
                         { call: 'fillStyle', params: [ '#000000' ] },
                         { call: 'fillRect', params: [ 0, 0, 1024, 1024 ] },
                         { call: 'fillStyle', params: [ '#ffffff' ] },
-                        { call: 'noise', params: [ 1024, 1024, 4, 4 ] },
+                        { call: 'noise', params: [ 1024, 1024, 3, 3 ] },
                         { call: 'loop', params: [ 0, '+', '<', 1000 ], calls : [
                             { call: 'fillRect', params: [ 512, 512, 1, 1 ] },
                         ]}

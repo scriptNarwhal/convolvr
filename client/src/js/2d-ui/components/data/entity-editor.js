@@ -149,7 +149,8 @@ class EntityEditor extends Component {
   save () {
 
     let name = this.state.name,
-      dir = this.props.activated ? this.props.dir : this.props.cwd.join("/")
+        dir = this.props.activated ? this.props.dir : this.props.cwd.join("/"),
+        data = {}
 
     if ( name == "" )  {
         
