@@ -55,6 +55,7 @@
     "redux-logger": "^2.7.0",
     "redux-thunk": "^2.1.0",
     "stylus": "^0.54.5",
+    "three": "^0.86.0",
     "webvr-boilerplate": "^0.4.6"
   }
 }

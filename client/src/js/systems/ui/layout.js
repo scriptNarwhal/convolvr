@@ -71,7 +71,8 @@ export default class LayoutSystem {
 
         let x = index % columns,
             z = Math.max( 0, Math.floor( (index) / columns ) ),
-            margin = -gridSize,
+            size = gridSize * 1.15,
+            margin = -size,
             marginZ = 2 * margin / 3,
             pos = [ 0, 0, 0 ]
 

@@ -32,24 +32,80 @@ export default class SystemTool extends Tool {
                 name: "metal"
               },
               tool: {
-                panel: {
-                  title: "Systems",
-                  color: 0xff0707,
-                  content: {
-                    props: {
-                      metaFactory: { // generates factory for each item in dataSource
-                        type: "prop", // entity, prop
-                        propName: "vehicles",
-                        dataSource: this.world.systems.assets.props.systems
-                      },
-                      layout: {
-                        type: "grid",
-                        mode: "factory", // child components will ignore layout
-                        columns: 3
+                panels: [
+                  {
+                    title: "Systems",
+                    color: 0xff0707,
+                    content: {
+                      props: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "prop", // entity, prop
+                          propName: "structures",
+                          dataSource: this.world.systems.assets.props.systems
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
+                      }
+                    }
+                  },
+                  {
+                    title: "Vehicular",
+                    color: 0xff0707,
+                    content: {
+                      props: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "prop", // entity, prop
+                          propName: "vehicles",
+                          dataSource: this.world.systems.assets.props.systems
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
+                      }
+                    }
+                  },
+                  {
+                    title: "Media",
+                    color: 0xff0707,
+                    content: {
+                      props: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "prop", // entity, prop
+                          propName: "media",
+                          dataSource: this.world.systems.assets.props.systems
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
+                      }
+                    }
+                  },
+                  {
+                    title: "Interactivity",
+                    color: 0xff0707,
+                    content: {
+                      props: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "prop", // entity, prop
+                          propName: "interactivity",
+                          dataSource: this.world.systems.assets.props.systems
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
                       }
                     }
                   }
-                }
+                ]
               }
             },
             components: [
@@ -62,7 +118,7 @@ export default class SystemTool extends Tool {
 
     primaryAction ( telemetry) {
       
-      let system = this.options.system,
+      let options = this.options,
           cursor = telemetry.cursor,
           user = this.world.user,
           systems = this.world.systems,
@@ -78,7 +134,7 @@ export default class SystemTool extends Tool {
           entityId = -1,
           entity = null
       
-      if ( system.none ) return
+      if ( options.system && options.system.none ) return
         
     }
 

@@ -125,28 +125,32 @@ export default class AssetSystem {
             if ( g > b ) {
                 
                 if ( r > b ) {
-                    envURL = '/data/images/photospheres/sky-reflection-o.jpg'
+                    envURL = '/data/images/photospheres/sky-reflection-o'
                 } else if (red < 0.2 && blue < 0.2) {
-                    envURL = '/data/images/photospheres/sky-reflection-g.jpg'
+                    envURL = '/data/images/photospheres/sky-reflection-g'
                 } else {
-                    envURL = '/data/images/photospheres/sky-reflection-r.jpg'
+                    envURL = '/data/images/photospheres/sky-reflection-r'
                 }
                                         
             } else if ( b > r ) {
 
                 if ( g > r ) {
-                    envURL = '/data/images/photospheres/sky-reflection-c.jpg'
+                    envURL = '/data/images/photospheres/sky-reflection-c'
                 } else if ( r > (b / 6.0) ) {
-                    envURL = '/data/images/photospheres/sky-reflection-p.jpg'
+                    envURL = '/data/images/photospheres/sky-reflection-p'
                 } else {
-                    envURL = '/data/images/photospheres/sky-reflection-b.jpg'
+                    envURL = '/data/images/photospheres/sky-reflection-b'
                 }
 
             }
 
         }
 
-        return envURL
+        if (r+g+b < 1.4)
+
+            envURL += '-d'
+
+        return `${envURL}.jpg`
 
     }
 

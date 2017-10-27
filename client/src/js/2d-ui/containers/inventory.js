@@ -91,7 +91,6 @@ import {
     sendMessage
 } from '../../redux/actions/message-actions'
 import {
-  toggleMenu,
   showChat
 } from '../../redux/actions/app-actions'
 import {
@@ -142,9 +141,6 @@ export default connect(
       },
       removeInventoryItem: (userId, category, itemId) => {
         dispatch(removeInventoryItem(userId, category, itemId))
-      },
-      toggleMenu: (toggle) => {
-        dispatch(toggleMenu(toggle))
       },
       uploadFile: (file, username, dir) => {
         dispatch(uploadFile(file, username, dir))

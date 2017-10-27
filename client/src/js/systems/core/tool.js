@@ -18,72 +18,35 @@ export default class ToolSystem {
     init ( component ) { 
 
         let prop = component.props.tool,
-            contentProps = prop.panel && prop.panel.content ? prop.panel.content.props : {},
+            toolSystem = this,
+            contentProps = {},
             factories = null,
+            panels = [],
             panel = null
 
         if ( prop.panel ) {
            
-            panel = new Entity(-1, [ // move panels to asset system perhaps.. or define below*
-                {
-                    position: [0, 0, 0],
-                    props: { // colored top bar                      
-                        geometry: {
-                            shape: "box",
-                            size: [3, 0.5, 0.1],
-                            faceNormals: false
-                        },
-                        material: {
-                            name: "metal",
-                            color: prop.panel.color
-                        },
-                        components: [
-                            {
-                                position: [ 0, 0, -0.66 ],
-                                props: { // title for top bar
-                                    text: {
-                                        label: true,
-                                        lines: [ prop.panel.title ],
-                                        color: "#ffffff",
-                                        background: "#000000"
-                                    },
-                                    geometry: {
-                                        shape: "box",
-                                        size: [ 3, 0.5, 0.1 ]
-                                    },
-                                    material: {
-                                        name: "plastic",
-                                        color: 0xffffff
-                                    }
-                                },
-                                components: [],
-                                quaternion: [ 0, 0, 0, 1 ]
-                            }
-                        ]
-                        
-                    }
-                },
-                {
-                    position: [0, -2.25, 0], // position & init the panel once the tool is equipped
-                    props: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel
-                        geometry: {
-                            shape: "box",
-                            size: [ 3, 4, 0.1 ]
-                        },
-                        material: {
-                            name: "metal",
-                            color: 0x404050
-                        },
-                    }),
-                    components: []
-                }
-            ], [0, 1.5, 0], [0,0,0,1], GLOBAL_SPACE ) // component.entity.voxel
+            contentProps = prop.panel && prop.panel.content ? prop.panel.content.props : {}
+            panel = this._initPanelUIEntity( prop.panel, contentProps )
             this.panels.push( panel )
             
         }
 
+        if ( prop.panels ) {
+
+            prop.panels.map( (panel, p) => {
+
+                contentProps = panel && panel.content ? panel.content.props : {}
+                let panelEnt = toolSystem._initPanelUIEntity( panel, contentProps )
+                toolSystem.panels.push( panelEnt )
+
+            })
+
+        }
+
         return {
-            panel,
+            panels,
+            panel: panel || panels[0],
             preview: {
                 box: null,
                 show: cursor => {
@@ -113,6 +76,65 @@ export default class ToolSystem {
             
             }
         }
+
+    }
+
+    _initPanelUIEntity( panelProp, contentProps ) {
+
+        return new Entity(-1, [ // move panels to asset system perhaps.. or define below*
+            {
+                position: [0, 0, 0],
+                props: { // colored top bar                      
+                    geometry: {
+                        shape: "box",
+                        size: [3, 0.5, 0.1],
+                        faceNormals: false
+                    },
+                    material: {
+                        name: "metal",
+                        color: panelProp.color
+                    },
+                    components: [
+                        {
+                            position: [ 0, 0, -0.66 ],
+                            props: { // title for top bar
+                                text: {
+                                    label: true,
+                                    lines: [ panelProp.title ],
+                                    color: "#ffffff",
+                                    background: "#000000"
+                                },
+                                geometry: {
+                                    shape: "box",
+                                    size: [ 3, 0.5, 0.1 ]
+                                },
+                                material: {
+                                    name: "plastic",
+                                    color: 0xffffff
+                                }
+                            },
+                            components: [],
+                            quaternion: [ 0, 0, 0, 1 ]
+                        }
+                    ]
+                    
+                }
+            },
+            {
+                position: [0, -2.25, 0], // position & init the panel once the tool is equipped
+                props: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel
+                    geometry: {
+                        shape: "box",
+                        size: [ 3, 4, 0.1 ]
+                    },
+                    material: {
+                        name: "metal",
+                        color: 0x404050
+                    },
+                }),
+                components: []
+            }
+        ], [0, 1.5, 0], [0,0,0,1], GLOBAL_SPACE )
 
     }
 
@@ -151,13 +173,27 @@ export default class ToolSystem {
 
     }
 
-    _equip ( component, hand ) {
+    _positionToolPanel( toolPanel, userPos, index ) {
+
+        userPos[ 1 ] += 1.8
+        toolPanel.update(userPos)
+        toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
+        toolPanel.mesh.translateZ( -3 )
+        toolPanel.mesh.translateX( 1.25 + (index * 3) )
+        toolPanel.mesh.updateMatrix()
+
+    }
+
+    _equip ( component, hand ) { // refactor for panels[]
 
         let input = this.world.userInput,
+            toolSystem = this,
             hands = this.world.user.avatar.componentsByProp.hand, //this.toolbox.hands,
             toolPanel = component.entity.componentsByProp.tool ? component.entity.componentsByProp.tool[0].state.tool.panel : false,
-            toolMesh = component.entity.mesh
-      
+            toolPanels = component.entity.componentsByProp.tool ? component.entity.componentsByProp.tool[0].state.tool.panels : false,
+            toolMesh = component.entity.mesh,
+            userPos = this.world.user.avatar.mesh.position.toArray()
+
       if ( !input.trackedControls && !input.leapMotion ) {
 
           this.world.user.mesh.add( toolMesh )
@@ -175,14 +211,25 @@ export default class ToolSystem {
             
             toolPanel.init( three.scene )
 
+        this._positionToolPanel( toolPanel, userPos, 0 )
 
-        let userPos = this.world.user.avatar.mesh.position.toArray()
-        userPos[1] += 1.8
-        toolPanel.update(userPos)
-        toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
-        toolPanel.mesh.translateZ(-3)
-        toolPanel.mesh.translateX(1.25)
-        toolPanel.mesh.updateMatrix()
+      }
+
+      if ( toolPanels ) {
+
+        toolPanels.map( (toolPanel, i) => {
+
+            if ( toolPanel.mesh == null )
+            
+                toolPanel.init( three.scene )
+
+            toolSystem._positionToolPanel( toolPanel, userPos, i )
+
+        })
+
+      }
+
+      if ( toolPanel || toolPanels ) {
         console.info("---")
         console.warn("PANEL COLLISION CHECK")
         this.panels.map( panel => {
@@ -196,7 +243,6 @@ export default class ToolSystem {
             }
 
         })
-
       }
 
     }

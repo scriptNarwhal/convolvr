@@ -114,7 +114,7 @@ class App extends Component {
 
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
 
-    let showMenuURLs = [ "chat", "login", "worlds", "files", "places", "settings", "network", "new-world" ]
+    let showMenuURLs = [ "chat", "login", "worlds", "files", "places", "inventory", "settings", "network", "new-world" ]
     showMenuURLs.map( (menuUrl) => {
 
       window.location.pathname.indexOf(`/${menuUrl}`) > -1 && this.props.toggleMenu(true)
