@@ -12,6 +12,7 @@ import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
 import initLocalSettings from './local-settings'
+import SkyBox from './skybox'
 import { 
 	compressFloatArray,
 	compressVector3,
@@ -81,6 +82,7 @@ export default class Convolvr {
 		this.users = []
 		this.user = user || {}
 		this.camera = camera
+		this.skyboxMesh = false
 		this.vrFrame = !!window.VRFrameData ? new VRFrameData() : null
 		this.sendUpdatePacket = 0
 		this.capturing = false
@@ -121,7 +123,7 @@ export default class Convolvr {
 			staticCollisions: this.systems.staticCollisions.worker,
 			// oimo: this.systems.oimo.worker
 		}
-
+		this.skybox = new SkyBox( this )
 		camera.add(this.systems.audio.listener)
 		this.socketHandlers = new SocketHandlers( this, socket )
 		window.addEventListener('resize', e => this.onWindowResize( e ), true)
@@ -150,14 +152,17 @@ export default class Convolvr {
 			camera = three.camera,
 			skyMaterial = new THREE.MeshBasicMaterial( {color: 0x303030} ),
 			skyTexture = null,
-			skybox = this.skybox,
 			rotateSky = false,
 			shadowRes = 1024,
 			envURL = '/data/images/photospheres/sky-reflection.jpg',
 			r = config.sky.red,
 			g = config.sky.green,
 			b = config.sky.blue,
-			shadowCam = null
+			shadowCam = null,
+			oldConfig = Object.assign({}, this.config),
+			skySize = 1000+((this.viewDistance+3.5)*1.4)*140,
+			oldSkyMaterial = {}
+
 
 		this.config = config; console.info("World config: ", config)
 		this.terrain.initTerrain(config.terrain)
@@ -168,8 +173,8 @@ export default class Convolvr {
 
 			skyLight.castShadow = true
 			shadowCam = skyLight.shadow.camera
-			skyLight.shadow.mapSize.width = this.mobile ? 256 : this.shadows > 1 ? 1024 : 512 // default
-			skyLight.shadow.mapSize.height = this.mobile ? 256 : this.shadows > 1 ? 1024 : 512 // default
+			skyLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.shadows)  
+			skyLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.shadows) 
 			shadowCam.near = 0.5      // default
 			shadowCam.far = 1300      
 			
@@ -194,18 +199,15 @@ export default class Convolvr {
 
 			envURL = this.systems.assets.getEnvMapFromColor( r, g, b )
 			this.systems.assets.envMaps.default = envURL
-
+			
 		}
 
-		if ( !!! skybox ) {
+		if ( this.skyboxMesh )
 
-			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 1000+((this.viewDistance+3.5)*1.4)*140, 4), skyMaterial )
-		
-		} else {
+			three.scene.remove( this.skyBoxMesh )
+			oldSkyMaterial = this.skyboxMesh.material
 
-			skybox.material = skyMaterial
-
-		}
+		this.skyboxMesh = new THREE.Mesh(new THREE.OctahedronGeometry( skySize, 4), oldSkyMaterial )
 
 		let deferWorldLoading = false,
 			world = this,
@@ -222,10 +224,8 @@ export default class Convolvr {
 				skyLight.position.set( Math.sin(yaw)*1000, Math.sin(config.light.pitch)*1000, Math.cos(yaw)*1000)
 				//skyLight.lookAt(zeroZeroZero)
 				//skyLight.shadow.camera.lookAt(zeroZeroZero)
-				three.scene.add(this.skybox)
-				//rotateSky && this.skybox.rotation.set(0, Math.PI * 1, 0)
-				world.skybox.position.set(camera.position.x, 0, camera.position.z)
-				//world.terrain.bufferVoxels( true, 0 )
+				three.scene.add(world.skyboxMesh)
+				world.skyboxMesh.position.set(camera.position.x, 0, camera.position.z)
 				world.gravity = config.gravity
 				world.highAltitudeGravity = config.highAltitudeGravity
 				callback()
@@ -233,45 +233,12 @@ export default class Convolvr {
 
 		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
 
-			let starMatProp = this.systems.assets.getMaterialProp("stars"),
-				starSkyTexture = this.systems.material.procedural.generateTexture( starMatProp.procedural ) 
-
-			this.loadShaders( "/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl", (vert, frag) => {
-
-				skyMaterial = new THREE.ShaderMaterial({
-					side: 1,
-					fog: false,
-					uniforms: {
-						time: { type: "f", value: 1.0 },
-						red: { type: "f", value: config.sky.red },
-						green: { type: "f", value: config.sky.green },
-						blue: { type: "f", value: config.sky.blue },
-						terrainRed: { type: "f", value: config.terrain.red },
-						terrainGreen: { type: "f", value: config.terrain.green },
-						terrainBlue: { type: "f", value: config.terrain.blue },
-						lightYaw: { type: "f", value: config.light.yaw },
-						lightPitch: { type: "f", value: config.light.pitch },
-						starTexture: {
-							type: "t",
-							value: starSkyTexture
-						 }
-					},
-					vertexShader: vert,
-					fragmentShader: frag
-				})
-
-				skybox.material = skyMaterial
-
-			}, progress => {
-				console.log("Loading Shaders: ", progress)
-			})	
+			this.skybox.loadShaderSky( config, oldConfig, world.skyboxMesh, ()=>{})
 
 		} else {
 			// load sky texture 
 			deferWorldLoading = true
-			this.systems.assets.loadImage( '/data/user/'+this.config.sky.photosphere, {}, ( texture ) => {
-				texture.magFilter = THREE.LinearFilter
-	 			skybox.material = new THREE.MeshBasicMaterial({map: texture, side:1, fog: false})
+			this.skybox.loadTexturedSky( config.sky, this.skyboxMesh, ()=> {
 				rebuildWorld()
 			}) 
 
@@ -458,35 +425,7 @@ export default class Convolvr {
 
 	updateSkybox ( delta ) {
 
-		let camera = three.camera,
-			terrainEnt = this.terrain.distantTerrain,
-			config = this.config,
-			skyLight = this.skyLight,
-			yaw = config ? config.light.yaw - Math.PI / 2.0 : 0,
-			pitch = config ? config.light.pitch : 0,
-			skyMat = null
-
-		if ( this.skybox ) {
-
-			skyMat = this.skybox.material
-
-			if ( skyMat ) {
-
-				if ( skyMat.uniforms )
-
-					skyMat.uniforms.time.value += delta
-
-				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
-				skyLight.shadow.camera.position.set( camera.position.x, 600+camera.position.y, camera.position.z)
-				skyLight.shadow.camera.updateMatrix()
-				skyLight.position.set( camera.position.x+Math.sin(yaw)*301, 800+camera.position.y+ Math.sin(pitch)*301, camera.position.z-Math.cos(yaw)*301)
-				//this.skyLight.shadow.camera.lookAt( skyLight )
-			}
-    	}
-
-		if ( terrainEnt )
-
-			terrainEnt.update( [ camera.position.x, terrainEnt.mesh.position.y, camera.position.z ] )
+		this.skybox.followUser( delta, false )
 			
 	}
 

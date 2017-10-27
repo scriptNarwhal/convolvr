@@ -6,6 +6,9 @@
 body {
   font-family: RobotoLight, sans-serif;
 }
+a, a:visited {
+    color: #00e200
+}
 .table td {
     padding: '0.5em'
 }
@@ -129,9 +132,7 @@ body {
 .menu-item:hover span {
     opacity: 1;
 }
-.overview {
 
-}
 @media screen and (max-width: 1024px) {
 
 }

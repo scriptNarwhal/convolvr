@@ -59,7 +59,7 @@ export default class ContextMenu extends Component {
                        key={i}
                   >
                     { opt.name == "Download" ? (
-                      <a title={this.props.title} target="_blank" href={`/data/user/${username}${dir}/${this.props.title}`}>Download</a>
+                      <a title={this.props.title} style={styles.link} target="_blank" href={`/data/user/${username}${dir}/${this.props.title}`}>Download</a>
                     ) : opt.name }
                   </div>
                 )
@@ -117,6 +117,9 @@ let styles = {
       borderRadius: '8px',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)'
     }
+  },
+  link: {
+    color: "#00ff00"
   },
   option: {
     textAlign: 'left',

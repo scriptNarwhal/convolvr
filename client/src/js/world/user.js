@@ -2,11 +2,12 @@ export default class User {
 
   constructor ( data ) {
 
-    this.id = -Math.floor(Math.random()*99999999)
+    this.id = data ? data.id : -Math.floor(Math.random()*99999999)
     this.hands = []
+    this.data = data ? data.data : {}
     this.hud = null
     this.cursor = null
-    this.name = "Human"
+    this.name = data ? data.name : "Human"
     this.toolbox = null
     this.mesh = new THREE.Object3D()
     this.velocity = new THREE.Vector3(0, -0.0001, 0)
@@ -17,6 +18,10 @@ export default class User {
   }
 
   useAvatar ( avatar ) {
+
+    if ( this.avatar ) {
+      this.mesh.parent.remove( this.mesh )
+    }
 
     this.avatar = avatar
     this.mesh = avatar.mesh
