@@ -1,6 +1,7 @@
 import Entity from '../../entity'
 import BuiltinProps from '../../assets/props'
 import avatar from '../../assets/entities/avatars/avatar'
+import hero from '../../assets/entities/avatars/hero'
 import toolMenu from '../../assets/entities/tools/core/tool-menu'
 import helpScreen from '../../assets/entities/misc/help-screen'
 import chatScreen from '../../assets/entities/tools/social/chat-screen'
@@ -280,6 +281,7 @@ export default class AssetSystem {
     _initBuiltInEntities ( ) {
 
         this._addBuiltInEntity( "default-avatar", avatar )
+        this._addBuiltInEntity( "hero", hero )
         this._addBuiltInEntity( "tool-menu", toolMenu )
         this._addBuiltInEntity( "help-screen", helpScreen )
         this._addBuiltInEntity( "chat-screen", chatScreen )

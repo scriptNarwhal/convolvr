@@ -17,6 +17,14 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
             wholeBody = !!config ? config.wholeBody : false,
             id = !!config && !!config.id ? config.id : assetSystem.autoEntityID(),
             userData = { id },
+            heroMatProp = {
+              color: 0xffffff,
+              name: "basic",
+              repeat: ["wrapping", 1, 1],
+              config: {
+                transparent: true
+              }
+            },
             n = 2
         
         console.log("init avatar ", id)
@@ -53,11 +61,11 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
              props: { 
                 geometry: {
                   shape: "box",
-                  size: [ 0.12, 0.18, 0.26 ]
+                  size: [ 1.5, 1.5, 0.01 ]
                 },
                 material: {
-                  color: 0xffffff,
-                  name: "plastic",
+                  ...heroMatProp,
+                  map: "/data/images/textures/beings/hero/hero-back-512.png"
                 },
                 user: userData
              },
@@ -71,41 +79,34 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
        componentB = {
              props: { 
                 geometry: {
-                  shape: "frustum",
-                  size: [ 0.2, 0.2, 0.2 ],
+                  shape: "box",
+                  size: [ 0.01, 1.5, 1.5 ],
                 },
                 material: {
-                  color: 0xf0f0f0,
-                  name: "metal",
-                }
+                  ...heroMatProp,
+                  map: "/data/images/textures/beings/hero/hero-side-512.png"
+                },
              },
-             position: [ 0, (n - 1)*0.025, 0 ],
-             quaternion: cursorRot.toArray()
+             position: [ 0, 0, 0 ],
+             quaternion: [0,0,0,1]
          }
          components.push( componentB )
-         n = 0
-      
-        while (n < 2) {
-
-          components.push(Object.assign({}, {
-            props: {
-              noRaycast: true,
+        
+         components.push({
+            props: { 
               geometry: {
-                size: [ 0.11, 0.22, 0.33 ],
-                shape: "box"
+                shape: "box",
+                size: [ 1.5, 1.5, 0.01 ],
               },
               material: {
-                name: "metal",
-                color: 0x3b3b3b,
-              }
-            },
-            quaternion: [0, 0, 0, 1],
-            position: [ 0.1+(n - 1) * 0.2, 0, 0],
-            components: []
-          }))
-          ++n
-
-        }
+                ...heroMatProp,
+                map: "/data/images/textures/beings/hero/hero-front-512.png"
+              },
+          },
+          position: [ 0, 0, -0.01 ],
+          quaternion: [0,0,0,1]
+         })
+      
 
       } else {
 
@@ -113,7 +114,7 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
           props: {
             geometry: {
                 shape: "box",
-                size: [ 1, 1, 1 ],
+                size: [ 0.25, 0.25, 0.25 ],
             },
             material: {
               color: 0xffffff,
