@@ -35,7 +35,7 @@ export default class ToolSystem {
         if ( prop.panels ) {
 
             prop.panels.map( (panel, p) => {
-
+                console.info("init multiple panels", panel)
                 contentProps = panel && panel.content ? panel.content.props : {}
                 let panelEnt = toolSystem._initPanelUIEntity( panel, contentProps )
                 toolSystem.panels.push( panelEnt )
@@ -46,7 +46,7 @@ export default class ToolSystem {
 
         return {
             panels,
-            panel: panel || panels[0],
+            panel,
             preview: {
                 box: null,
                 show: cursor => {
@@ -218,7 +218,7 @@ export default class ToolSystem {
       if ( toolPanels ) {
 
         toolPanels.map( (toolPanel, i) => {
-
+            console.info("init tool panel", i)
             if ( toolPanel.mesh == null )
             
                 toolPanel.init( three.scene )

@@ -116,11 +116,11 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
       if (!simpleShading) {
 
         prop.alphaMap = "/data/images/textures/metal2.png"
-        prop.map = !!!prop.map ? '/data/images/textures/tiles-light.png' : prop.map
+        prop.map = !!!prop.map ? '/data/images/textures/metal3.png' : prop.map
 
       } else {
 
-        prop.map = !!!prop.map ? '/data/images/textures/metal4.jpg' : prop.map
+        prop.map = !!!prop.map ? '/data/images/textures/metal3.jpg' : prop.map
 
       }
       break

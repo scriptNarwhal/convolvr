@@ -154,6 +154,11 @@ export default class Entity {
 
         comp = new Component( this.components[ c ], this, systems, { mobile, index: c, path: [ c ] } ) // use simpler shading for mobile gpus
         compMesh = comp.mesh
+        if ( !!!compMesh || !!!compMesh.geometry.computeBoundingSphere ) { 
+          console.error("no geometry; aborting", c, this)
+          continue 
+        }
+ 
         compMesh.geometry.computeBoundingSphere() // check bounding radius
         compRadius = compMesh.geometry.boundingSphere.radius 
         dimensions = [
