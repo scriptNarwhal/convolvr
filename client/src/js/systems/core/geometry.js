@@ -94,7 +94,7 @@ export default class GeometrySystem {
           geometry = assets.geometries[ geometryCode ] // used cached copy
 
         }
-
+        
         return {
           geometry,
           geometryCode

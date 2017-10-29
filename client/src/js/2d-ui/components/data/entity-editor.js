@@ -8,6 +8,7 @@ import {
   rgba,
   rgb
 } from '../../../util'
+import { isMobile } from '../../../config'
 
 class EntityEditor extends Component {
 
@@ -78,6 +79,7 @@ class EntityEditor extends Component {
           id: -1,
           components: [
             {
+              name: "Box",
               position: [0, 0, 0],
               quaternion: [0, 0, 0, 1],
               props: {
@@ -103,6 +105,7 @@ class EntityEditor extends Component {
           id: -1,
           components: [
             {
+              name: "Sphere",
               position: [0, 0, 0],
               quaternion: [0, 0, 0, 1],
               props: {
@@ -139,8 +142,8 @@ class EntityEditor extends Component {
         this.setState({ components })
             
     } else if (action == "Edit") {
-
-        this.props.editLoadedItem("component", data, index)
+        console.info("EDITING COMPONENT~ ", data, index)
+        this.props.editLoadedItem(this.props.username, "Components", index)
 
     }
     
@@ -169,11 +172,11 @@ class EntityEditor extends Component {
 
     if ( this.props.onSave ) {
         
-        this.props.onSave( data )
+      this.props.onSave( data )
         
     } else {
         
-        this.props.addInventoryItem( this.props.username, "Entities", data )
+      this.props.addInventoryItem( this.props.username, "Entities", data )
         
     }
 
@@ -259,7 +262,7 @@ class EntityEditor extends Component {
 
       return (
        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
+          <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Entity Edit</span> 
                 <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.onNameChange(e) }} style={ styles.text } /> 
@@ -365,8 +368,8 @@ export default connect(
   },
   dispatch => {
     return {
-      editLoadedItem: ( category, itemId ) => {
-        dispatch(launchEditLoadedItem( category, itemId ))
+      editLoadedItem: ( username, category, index ) => {
+        dispatch(launchEditLoadedItem( username, category, index ))
       },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
@@ -388,19 +391,21 @@ export default connect(
 )(EntityEditor)
 
 let styles = {
-    modal: {
-      width: '100%',
-      maxWidth: '1280px',
-      minWidth: '320px',
-      height: '92%',
-      padding: '1em',
-      position: 'absolute',
-      top: '0px',
-      left: '0px',
-      right: '0px',
-      bottom: '0px',
-      margin: 'auto',
-      background: rgb(38, 38, 38)
+    modal: () => {
+      return {
+        width: '100%',
+        maxWidth: '1280px',
+        minWidth: '320px',
+        height: '92%',
+        padding: '1em',
+        position: 'absolute',
+        top: '0px',
+        left: ! isMobile() ? '72px' : '0px',
+        right: '0px',
+        bottom: '0px',
+        margin: 'auto',
+        background: rgb(38, 38, 38)
+      }
     },
     basicInput: {
         display: 'block'

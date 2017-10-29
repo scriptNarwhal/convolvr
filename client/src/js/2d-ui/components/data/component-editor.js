@@ -6,6 +6,7 @@ import {
     rgba,
     rgb
 } from '../../../util'
+import { isMobile } from '../../../config'
 import PropertyEditor from './property-editor'
 import VectorInput from '../vector-input'
 
@@ -74,6 +75,7 @@ class ComponentEditor extends Component {
 
             case "Wireframe Box":
                 template = {
+                    name: "Wireframe Box",
                     position: [0, 0, 0],
                     quaternion: [0, 0, 0, 1],
                     props: {
@@ -91,6 +93,7 @@ class ComponentEditor extends Component {
             break;
             case "Box2":
                 template = {
+                    name: "Box2",
                     position: [0, 0, 0],
                     quaternion: [0, 0, 0, 1],
                     props: {
@@ -127,7 +130,7 @@ class ComponentEditor extends Component {
 
         } else if ( action == "Edit" ) {
 
-            this.props.editLoadedItem( "property", data, index)
+            this.props.editLoadedItem( this.props.username, "Properties", index )
 
         }
     
@@ -288,7 +291,7 @@ class ComponentEditor extends Component {
 
             return (
             <div style={ styles.lightbox }>
-                <div style={ styles.modal } >
+                <div style={ styles.modal() } >
                     <div style={ styles.header }>
                     <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Component Edit</span> 
                         <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.onNameChange(e) }} style={ styles.text } /> 
@@ -432,20 +435,22 @@ export default connect(
 )(ComponentEditor)
 
 let styles = {
-    modal: {
-        width: '100%',
-        maxWidth: '1080px',
-        minWidth: '320px',
-        height: '92%',
-        padding: '1em',
-        position: 'absolute',
-        top: '0px',
-        left: '0px',
-        right: '0px',
-        bottom: '0px',
-        margin: 'auto',
-        background: rgb(38, 38, 38)
-    },
+    modal: () => {
+        return {
+          width: '100%',
+          maxWidth: '1080px',
+          minWidth: '320px',
+          height: '92%',
+          padding: '1em',
+          position: 'absolute',
+          top: '0px',
+          left: ! isMobile() ? '72px' : '0px',
+          right: '0px',
+          bottom: '0px',
+          margin: 'auto',
+          background: rgb(38, 38, 38)
+        }
+      },
     basicInput: {
         display: 'block',
         marginBottom: '0.25em'

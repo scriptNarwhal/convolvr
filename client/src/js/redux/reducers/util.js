@@ -16,9 +16,8 @@ import {
     UTIL_CLOSE_ENTITY_EDITOR,
     UTIL_CLOSE_INVENTORY_EXPORT,
     UTIL_CLOSE_COMPONENT_EDITOR,
-    UTIL_CLOSE_PROPERTY_EDITOR
-
-
+    UTIL_CLOSE_PROPERTY_EDITOR,
+    UTIL_LAUNCH_EDIT_LOADED_ITEM
 } from '../constants/action-types';
 
 module.exports = function app (state = {
@@ -75,6 +74,12 @@ module.exports = function app (state = {
         username: "",
         itemId: ""
     },
+    loadedItemEdit: {
+        activated: false,
+        username: "",
+        category: "",
+        itemId: ""
+    }
 }, action) {
   switch ( action.type ) {
     case UTIL_LAUNCH_TEXT_EDIT:
@@ -172,6 +177,17 @@ module.exports = function app (state = {
                 activated: true,
                 username: action.username,
                 itemId: action.itemId
+            }
+        }
+    case UTIL_LAUNCH_EDIT_LOADED_ITEM:
+        return {
+            ...state,
+            loadedItemEdit: {
+                ...state.loadedItemEdit,
+                activated: true,
+                username: action.username,
+                index: action.index,
+                category: action.category
             }
         }
     case UTIL_CLOSE_TEXT_EDIT:

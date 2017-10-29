@@ -103,29 +103,30 @@ export function launchPropertyEditor ( username, itemId ) {
     }
 }
 
-export function launchEditLoadedItem ( username, category, itemId ) {
+export function launchEditLoadedItem ( username, category, index ) {
 
     return dispatch => {
 
         if (category == "Components") {
 
-            dispatch(launchComponentEditor(username, itemId))
+            dispatch(launchComponentEditor(username, index))
 
         } else if (category == "Entities") {
 
-            dispatch(launchEntityEditor(username, itemId))
+            dispatch(launchEntityEditor(username, index))
 
         } else if (category == "Properties") {
 
-            dispatch(launchComponentEditor(username, itemId))
+            dispatch(launchComponentEditor(username, index))
 
         }
 
-        return {
+        dispatch({
             type: UTIL_LAUNCH_EDIT_LOADED_ITEM,
+            username,
             category,
-            itemId
-        }
+            index
+        })
 
     }
     

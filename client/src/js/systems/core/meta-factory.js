@@ -114,7 +114,7 @@ export default class MetaFactorySystem {
     _getSourceCategory ( source: any, category: string ) {
 
         let sourceCategory: any = ""
-
+        console.info("get source CATEGORY", category, source)
         switch( category ) {
 
             case "structures": sourceCategory = source.structures; break;
