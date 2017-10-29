@@ -184,7 +184,7 @@ export default class FactorySystem {
     _generateSystem ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         console.warn("system ", preset)
-
+        console.info("Generate SYSTEM ENTITY", data)
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,

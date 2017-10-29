@@ -55,7 +55,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
       props: {
           geometry: {
               shape: "box",
-              size: [ 72000, 72000, 1000 ]
+              size: [ 5, 5, 0.2 ]
           },
               material: {
               color: 0x808080,
