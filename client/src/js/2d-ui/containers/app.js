@@ -93,6 +93,8 @@ class App extends Component {
             voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
             altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
 
+        if ( world.terrain.voxels[ voxelKey ] ) 
+
           three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
 
         three.world.user.velocity.y = -1000

@@ -195,7 +195,7 @@ class ComponentEditor extends Component {
             position: this.state.position,
             quaternion: this.state.quaternion,
             components: this.state.components,
-            properties: this.state.properties
+            props: this.state.properties
         }
 
         if ( this.props.onSave ) {
@@ -222,7 +222,7 @@ class ComponentEditor extends Component {
 
     toggleModal () {
 
-        this.props.closeComponentEditor()
+        this.state.activated && this.props.closeComponentEditor()
         this.setState({
           activated: !this.state.activated
         })
