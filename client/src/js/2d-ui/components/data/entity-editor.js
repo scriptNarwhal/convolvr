@@ -36,13 +36,6 @@ class EntityEditor extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData )
-
-      this.setState({
-        text: nextProps.textData.text
-      })
-
-
     if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
       if ( nextProps.category != "" && nextProps.itemId != "" )
@@ -59,7 +52,14 @@ class EntityEditor extends Component {
         activated: true
       })
 
-    
+    if (this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated) {
+
+      this.setState(nextProps.entities[ nextProps.loadedItemIndex ])
+      this.setState({
+        index: nextProps.loadedItemIndex
+      })
+
+    }
   }
 
   componentWillUpdate ( nextProps, nextState ) {
@@ -134,7 +134,8 @@ class EntityEditor extends Component {
   handleContextAction ( action, data, e ) {
     
     let index = data.componentIndex,
-    components = this.state.components
+        components = this.state.components,
+        componentData = components[ index ]
 
     if ( action == "Delete" ) {
             
@@ -143,7 +144,7 @@ class EntityEditor extends Component {
             
     } else if (action == "Edit") {
         console.info("EDITING COMPONENT~ ", data, index)
-        this.props.editLoadedItem(this.props.username, "Components", index)
+        this.props.editLoadedItem("entityEdit", this.props.username, "Components", index, componentData)
 
     }
     
@@ -363,13 +364,18 @@ export default connect(
         activated: state.util.entityEdit.activated,
         fileUser: state.util.entityEdit.username,
         itemId: state.util.entityEdit.itemId,
+        entities: state.inventory.items.entities,
+        editLoadedItemActivated: state.util.loadedItemEdit.activated && state.util.loadedItemEdit.category == "Entities",
+        loadedItemIndex: state.util.loadedItemEdit.index,
+        loadedItemSource: state.util.loadedItemEdit.source,
+        loadedItemData: state.util.loadedItemEdit.data.component,
         vrMode: state.app.vrMode
     }
   },
   dispatch => {
     return {
-      editLoadedItem: ( username, category, index ) => {
-        dispatch(launchEditLoadedItem( username, category, index ))
+      editLoadedItem: ( source, username, category, index, data ) => {
+        dispatch(launchEditLoadedItem( source, username, category, index, data ))
       },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))

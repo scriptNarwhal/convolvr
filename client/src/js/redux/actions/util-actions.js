@@ -103,9 +103,18 @@ export function launchPropertyEditor ( username, itemId ) {
     }
 }
 
-export function launchEditLoadedItem ( username, category, index ) {
+export function launchEditLoadedItem ( source, username, category, index, data ) {
 
     return dispatch => {
+
+        dispatch({
+            type: UTIL_LAUNCH_EDIT_LOADED_ITEM,
+            username,
+            category,
+            source,
+            data,
+            index
+        })
 
         if (category == "Components") {
 
@@ -120,13 +129,6 @@ export function launchEditLoadedItem ( username, category, index ) {
             dispatch(launchComponentEditor(username, index))
 
         }
-
-        dispatch({
-            type: UTIL_LAUNCH_EDIT_LOADED_ITEM,
-            username,
-            category,
-            index
-        })
 
     }
     

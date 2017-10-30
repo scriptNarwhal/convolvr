@@ -28,13 +28,6 @@ class PropertyEditor extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData )
-
-      this.setState({
-        text: nextProps.textData.text
-      })
-
-
     if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
       if ( nextProps.category != "" && nextProps.itemId != "" )
@@ -51,6 +44,23 @@ class PropertyEditor extends Component {
         activated: true
       })
 
+      if ( this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated ) {
+        
+        if ( nextProps.editSource == "componentEdit" ) { // load from component in inventory
+          
+          this.setState( nextProps.loadedItemData )
+
+        } else { // load from inventory
+        
+          this.setState( nextProps.properties[ nextProps.loadedItemIndex ] )
+
+        }
+
+        this.setState({
+          index: nextProps.loadedItemIndex
+        })
+        
+      }
     
   }
 
@@ -221,17 +231,22 @@ export default connect(
         section: state.routing.locationBeforeTransitions.pathname,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
-        textData: state.files.readText.data,
-        readTextFetching: state.files.readText.fetching,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.propertyEdit.activated,
         fileUser: state.util.propertyEdit.username,
         itemId: state.util.propertyEdit.itemId,
+        properties: state.inventory.items.properties,
+        editLoadedItemActivated: state.util.loadedItemEdit.activated && state.util.loadedItemEdit.category == "Properties",
+        loadedItemIndex: state.util.loadedItemEdit.index,
+        loadedItemData: state.util.loadedItemEdit.data.component,
         vrMode: state.app.vrMode
     }
   },
   dispatch => {
     return {
+      editLoadedItem: ( source, username, category, index, data ) => {
+        dispatch(launchEditLoadedItem( source, username, category, index, data ))
+      },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
       },

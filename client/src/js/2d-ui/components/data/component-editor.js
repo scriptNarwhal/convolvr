@@ -34,14 +34,7 @@ class ComponentEditor extends Component {
             this.useTemplate("Wireframe Box")
     }
 
-    componentWillReceiveProps ( nextProps ) {
-
-        if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData )
-
-            this.setState({
-                text: nextProps.textData.text
-            })    
-
+    componentWillReceiveProps ( nextProps ) { 
 
         if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
@@ -59,6 +52,24 @@ class ComponentEditor extends Component {
             this.setState({
                 activated: true
             })
+        
+        if ( this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated ) {
+
+            if ( this.props.editSource == "entityEdit" ) { // load from entity in inventory
+
+                this.setState( nextProps.loadedItemData )
+
+            } else { // load from inventory
+
+                this.setState( nextProps.components[ nextProps.loadedItemIndex ])
+
+            }
+
+            this.setState({
+                index: nextProps.loadedItemIndex
+            })
+
+        }
 
         
     }
@@ -121,7 +132,8 @@ class ComponentEditor extends Component {
     handlePropertyAction ( action, data, e ) {
     
         let index = data.propertyIndex,
-            properties = this.state.properties
+            properties = this.state.properties,
+            propertyData = properties[index]
 
         if ( action == "Delete" ) {
 
@@ -130,7 +142,7 @@ class ComponentEditor extends Component {
 
         } else if ( action == "Edit" ) {
 
-            this.props.editLoadedItem( this.props.username, "Properties", index )
+            this.props.editLoadedItem( "componentEdit", this.props.username, "Properties", index, propertyData )
 
         }
     
@@ -139,7 +151,8 @@ class ComponentEditor extends Component {
     handleComponentAction ( action, data, e ) {
         
         let index = data.componentIndex,
-            components = this.state.components
+            components = this.state.components,
+            componentData = components[index]
     
         if ( action == "Delete" ) {
                 
@@ -148,7 +161,7 @@ class ComponentEditor extends Component {
                 
         } else if (action == "Edit") {
 
-            this.props.editLoadedItem( "component", data, index)
+            this.props.editLoadedItem( "componentEdit", this.props.username, data, index, componentData)
 
         }
         
@@ -403,20 +416,22 @@ export default connect(
         section: state.routing.locationBeforeTransitions.pathname,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
-        textData: state.files.readText.data,
-        readTextFetching: state.files.readText.fetching,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.componentEdit.activated,
         filename: state.util.componentEdit.category,
         fileUser: state.util.componentEdit.username,
         itemId: state.util.componentEdit.itemId,
+        components: state.inventory.items.components,
+        editLoadedItemActivated: state.util.loadedItemEdit.activated && state.util.loadedItemEdit.category == "Components",
+        loadedItemIndex: state.util.loadedItemEdit.index,
+        loadedItemData: state.util.loadedItemEdit.data.component,
         vrMode: state.app.vrMode
     }
   },
   dispatch => {
     return {
-      editLoadedItem: ( category, itemId ) => {
-        dispatch(launchEditLoadedItem( category, itemId ))
+      editLoadedItem: ( source, username, category, index, data ) => {
+        dispatch(launchEditLoadedItem( source, username, category, index, data ))
       },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))

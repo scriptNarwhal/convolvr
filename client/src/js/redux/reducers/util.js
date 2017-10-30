@@ -78,7 +78,13 @@ module.exports = function app (state = {
         activated: false,
         username: "",
         category: "",
-        itemId: ""
+        index: 0,
+        data: {
+            entity: false,
+            component: false,
+            property: false
+        },
+        source: ""
     }
 }, action) {
   switch ( action.type ) {
@@ -180,14 +186,31 @@ module.exports = function app (state = {
             }
         }
     case UTIL_LAUNCH_EDIT_LOADED_ITEM:
+
+        let data = Object.assign({}, state.loadedItemEdit.data)
+        
+        switch( action.category ) {
+            case "Entities":
+                data.entity = action.data
+            break
+            case "Components":
+                data.component = action.data
+            break
+            case "Properties":
+                data.property = action.data
+            break
+        }
+
         return {
             ...state,
             loadedItemEdit: {
                 ...state.loadedItemEdit,
                 activated: true,
+                data,
                 username: action.username,
                 index: action.index,
-                category: action.category
+                category: action.category,
+                source: action.source
             }
         }
     case UTIL_CLOSE_TEXT_EDIT:

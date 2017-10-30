@@ -42,7 +42,7 @@ class Inventory extends Component {
             this.props.launchImportToWorld( this.props.username, data )
           break;
           case "Edit":
-            this.props.launchEntityEditor( this.props.username, data.category, data.itemId )
+            this.props.editLoadedItem( this.props.username, data.category, data.itemIndex, data.itemData )
           break;
           case "Export JSON":
             this.props.launchInventoryExport( this.props.username, data.category, data.itemId )
@@ -66,7 +66,10 @@ class Inventory extends Component {
           [[this.props.inventoryEntities,   "Entities"  ], 
            [this.props.inventoryComponents, "Components"], 
            [this.props.inventoryProperties, "Properties"]].map( (inventorySet, i) => (
-            <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
+            <InventoryList onContextAction={ (name, data, e) => {
+                            let actionData = {...data, category: inventorySet[1], itemIndex: i, itemData: inventorySet[i] }
+                            this.onContextAction(name, actionData, e) 
+                           }}
                            options={ inventorySet[0] }
                            username={ this.props.username }
                            style={{zIndex: 9999}}
@@ -106,6 +109,9 @@ import {
   removeInventoryItem,
   addItemToWorld,
 } from '../../redux/actions/inventory-actions'
+import {
+  launchEditLoadedItem
+} from '../../redux/actions/util-actions'
 
 export default connect(
   (state, ownProps) => {
@@ -144,7 +150,10 @@ export default connect(
       },
       uploadFile: (file, username, dir) => {
         dispatch(uploadFile(file, username, dir))
-      }
+      },
+      editLoadedItem: ( username, category, index ) => {
+        dispatch(launchEditLoadedItem( username, category, index ))
+      },
     }
   }
 )(Inventory)
