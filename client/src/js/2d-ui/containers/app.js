@@ -30,7 +30,7 @@ class App extends Component {
           worldName = '',
           from = ''
 
-    	this.props.getMessage(chatMessage.message, chatMessage.from, chatMessage.files)
+    	this.props.getMessage(chatMessage.message, chatMessage.from, chatMessage.files, chatMessage.avatar)
 
       if (this.state.lastSender != chatMessage.from || (chatMessage.files != null && chatMessage.files.length > 0)) {
         from = `${chatMessage.from}: `
@@ -483,8 +483,8 @@ export default connect(
       login: (user, pass, email, data) => {
             dispatch(login(user, pass, email, data))
       },
-      getMessage: (message, from, files) => {
-          dispatch(getMessage(message, from, files))
+      getMessage: (message, from, files, avatar) => {
+          dispatch(getMessage(message, from, files, avatar))
       },
       showChat: () => {
         dispatch(showChat())

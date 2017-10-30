@@ -4,10 +4,7 @@ import FileButton from './file-button'
 import Card from '../card'
 import ComponentEditor from './component-editor'
 import VectorInput from '../vector-input'
-import {
-  rgba,
-  rgb
-} from '../../../util'
+import { rgba, rgb } from '../../../util'
 import { isMobile } from '../../../config'
 
 class EntityEditor extends Component {

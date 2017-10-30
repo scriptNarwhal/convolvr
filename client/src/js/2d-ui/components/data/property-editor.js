@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
 import { rgba, rgb } from '../../../util'
+import { isMobile } from '../../../config'
 import BuiltinProps from '../../../assets/props'
 import { getPropsList } from '../../../assets/props'
 
@@ -49,7 +50,7 @@ class PropertyEditor extends Component {
         if ( nextProps.editSource == "componentEdit" ) { // load from component in inventory
           
           if ( nextProps.loadedItemData ) {
-            this.setState( nextProps.loadedItemData )                    
+              this.setState( nextProps.loadedItemData )                    
           } else {
               alert("missing property action data")
               this.setState({activated: false})
@@ -173,7 +174,7 @@ class PropertyEditor extends Component {
 
       return (
        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
+          <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Property Edit</span> 
                 { !this.state.refreshing ? 
@@ -274,7 +275,8 @@ export default connect(
 )(PropertyEditor)
 
 let styles = {
-    modal: {
+  modal: () => {
+    return {
       width: '100%',
       maxWidth: '960px',
       minWidth: '320px',
@@ -282,12 +284,13 @@ let styles = {
       padding: '1em',
       position: 'absolute',
       top: '0px',
-      left: '0px',
+      left: ! isMobile() ? '72px' : '0px',
       right: '0px',
       bottom: '0px',
       margin: 'auto',
       background: rgb(38, 38, 38)
-    },
+    }
+  },
     lightbox: {
         position: 'fixed',
         top: 0,

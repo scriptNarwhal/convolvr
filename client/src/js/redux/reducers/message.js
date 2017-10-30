@@ -21,7 +21,8 @@ module.exports = function messages (state = {
                 {
                   message: action.message,
                   from: action.from,
-                  files: action.files
+                  files: action.files,
+                  avatar: action.avatar
                 }
             ]
       })
