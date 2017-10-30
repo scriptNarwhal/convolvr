@@ -48,12 +48,22 @@ class PropertyEditor extends Component {
         
         if ( nextProps.editSource == "componentEdit" ) { // load from component in inventory
           
-          this.setState( nextProps.loadedItemData )
+          if ( nextProps.loadedItemData ) {
+            this.setState( nextProps.loadedItemData )                    
+          } else {
+              alert("missing property action data")
+              this.setState({activated: false})
+          }
 
         } else { // load from inventory
         
-          this.setState( nextProps.properties[ nextProps.loadedItemIndex ] )
-
+          if ( nextProps.properties[ nextProps.loadedItemIndex ] ) {
+            this.setState( nextProps.properties[ nextProps.loadedItemIndex ] )         
+          } else {
+            alert("missing property inventory data")
+            this.setState({activated: false})
+          }
+          
         }
 
         this.setState({
@@ -185,7 +195,7 @@ class PropertyEditor extends Component {
               </span>
             </div>
             <div style={ styles.body }>
-              { this.props.readTextFetching == false && !this.state.refreshing ? (
+              {  !this.state.refreshing ? (
                 <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
               ) : ""}
               <FileButton title="Save" onClick={ () => { this.save() } } />

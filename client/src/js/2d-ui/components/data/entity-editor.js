@@ -54,7 +54,11 @@ class EntityEditor extends Component {
 
     if (this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated) {
 
-      this.setState(nextProps.entities[ nextProps.loadedItemIndex ])
+      if ( nextProps.entities[ nextProps.loadedItemIndex ]) {
+        this.setState(nextProps.entities[ nextProps.loadedItemIndex ])
+      } else {
+        alert("entity (inventory) data missing")
+      }
       this.setState({
         index: nextProps.loadedItemIndex
       })

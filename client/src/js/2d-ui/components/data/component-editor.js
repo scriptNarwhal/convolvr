@@ -57,12 +57,21 @@ class ComponentEditor extends Component {
 
             if ( this.props.editSource == "entityEdit" ) { // load from entity in inventory
 
-                this.setState( nextProps.loadedItemData )
-
+                if ( nextProps.loadedItemData ) {
+                    this.setState( nextProps.loadedItemData )                    
+                } else {
+                    alert("missing component action data")
+                    this.setState({activated: false})
+                }
+                
             } else { // load from inventory
 
-                this.setState( nextProps.components[ nextProps.loadedItemIndex ])
-
+                if (nextProps.components[ nextProps.loadedItemIndex ]) {
+                    this.setState( nextProps.components[ nextProps.loadedItemIndex ])
+                } else {
+                    alert("missing component inventory data")
+                    this.setState({activated: false})
+                }
             }
 
             this.setState({
@@ -395,7 +404,10 @@ class ComponentEditor extends Component {
 }
 
 ComponentEditor.defaultProps = {
-
+    contextMenuOptions: [
+        { name: "Edit" },
+        { name: "Delete"}
+    ]
 }
 
 import { connect } from 'react-redux'
