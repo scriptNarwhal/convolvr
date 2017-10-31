@@ -190,7 +190,7 @@ resultingPath: {
   marginBottom: '1em'
 },
 cancelButton: {
-  borderLeft: 'solid 0.2em magenta'
+  borderLeft: 'solid 0.2em #005aff'
 },
 header: {
   width: '100%',
