@@ -74,6 +74,14 @@ class ComponentEditor extends Component {
                 }
             }
 
+            let convolvrProps = this.state.props
+            if ( convolvrProps ) {
+                this.setState({
+                    properties: Object.keys( convolvrProps ).map(key=> { return { name: key, data: convolvrProps[key] } })
+                })
+            }
+            
+
             this.setState({
                 index: nextProps.loadedItemIndex
             })
@@ -179,7 +187,6 @@ class ComponentEditor extends Component {
     save () {
 
         let name = this.state.name,
-            dir = this.props.activated ? this.props.dir : this.props.cwd.join("/"),
             data = {},
             props = {}
 
@@ -345,7 +352,7 @@ class ComponentEditor extends Component {
                                         username={this.props.username}
                                         dir={this.props.dir}
                                         category={"Properties"}
-                                        title={Object.keys(property)[0]}
+                                        title={property.name}
                                         image=''
                                         key={i}
                                 />

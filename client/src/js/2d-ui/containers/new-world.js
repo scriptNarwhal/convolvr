@@ -9,7 +9,7 @@ class NewWorld extends Component {
 
   componentWillMount() {
 
-    this.state = {
+    this.setState({
       name: "",
       userName: "space",
       skyType: "shader",
@@ -37,16 +37,17 @@ class NewWorld extends Component {
       tools: false,
       vehicles: false,
       orbs: false,
-      blocks: false,
+      rocks: false,
       pyramids: true,
       columns: false,
       wheels: false,
       nets: false
-    }
+    })
 
   }
 
   createWorld() {
+
     let lightColor = [ parseFloat(this.state.red), parseFloat(this.state.green), parseFloat(this.state.blue) ],
         data = {
           id: 0,
@@ -89,7 +90,7 @@ class NewWorld extends Component {
             tools: this.state.tools,
             vehicles: this.state.vehicles,
             orbs: this.state.orbs,
-            blocks: this.state.blocks,
+            rocks: this.state.rocks,
             columns: this.state.columns,
             pyramids: this.state.pyramids,
             wheels: this.state.wheels,
@@ -115,7 +116,7 @@ class NewWorld extends Component {
     let value = e.target.value,
         state = this.state
         
-    state[ group ][ which ] = value
+    state[ which ] = value == 'yes' ? true : false
 
     this.setState(state)
 
@@ -364,7 +365,16 @@ class NewWorld extends Component {
                     </select>
                   </td>
                 </tr>
-             
+              <tr>
+                <td></td>
+                <td>Generate Rocks?</td>
+                <td>
+                  <select onChange={ e=> { this.onToggle( 'spawn', 'rocks', e) }}>
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                  </select>
+                </td>
+              </tr>
               <tr>
                 <td></td>
                 <td>Generate Roads?</td>
@@ -427,16 +437,6 @@ class NewWorld extends Component {
                   <select onChange={ e=> { this.onToggle( 'spawn', 'orbs', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>Generate Blocks?</td>
-                <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'blocks', e) }}>
-                    <option value="no">No</option>
-                    <option value="yes">Yes</option>
                   </select>
                 </td>
               </tr>

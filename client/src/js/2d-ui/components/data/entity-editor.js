@@ -57,8 +57,14 @@ class EntityEditor extends Component {
         alert("entity (inventory) data missing")
       }
       this.setState({
-        index: nextProps.loadedItemIndex
+        index: nextProps.loadedItemIndex,
+        refreshing: true
+      }, () => {
+        this.setState({
+          refreshing: false
+        })
       })
+
 
     }
   }
@@ -263,7 +269,9 @@ class EntityEditor extends Component {
           <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Entity Edit</span> 
-                <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.onNameChange(e) }} style={ styles.text } /> 
+                { !this.state.refreshing ? (
+                <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.onNameChange(e) }} style={ styles.text } />
+                ) : ""} 
               </span>
             </div>
             <div style={ styles.body }>

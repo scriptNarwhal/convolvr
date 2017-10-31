@@ -16,21 +16,11 @@ export default class InventoryList extends Component {
     
   }
 
-  toggle () {
-
-    this.setState({
-      activated: ! this.state.activated
-    })
-
-  }
-
   handleContextAction ( action, evt ) {
 
     if ( this.props.onAction )
 
       this.props.onAction( action, evt )
-
-    this.toggle()
 
   }
 
@@ -62,7 +52,7 @@ export default class InventoryList extends Component {
       
           <div style={styles.options}>
             {
-              this.props.options.map((opt, i) =>{
+              this.props.options && this.props.options.map((opt, i) =>{
                 return (
                     <Card image=''
                           clickHandler={ (e) => {

@@ -42,7 +42,7 @@ class Inventory extends Component {
             this.props.launchImportToWorld( this.props.username, data )
           break;
           case "Edit":
-            this.props.editLoadedItem( this.props.username, data.category, data.itemIndex, data.itemData )
+            this.props.editLoadedItem( data.source, this.props.username, data.category, data.itemIndex, data.itemData )
           break;
           case "Export JSON":
             this.props.launchInventoryExport( this.props.username, data.category, data.itemId )
@@ -66,8 +66,8 @@ class Inventory extends Component {
           [[this.props.inventoryEntities,   "Entities"  ], 
            [this.props.inventoryComponents, "Components"], 
            [this.props.inventoryProperties, "Properties"]].map( (inventorySet, i) => (
-            <InventoryList onContextAction={ (name, data, e) => {
-                            let actionData = {...data, category: inventorySet[1], itemIndex: i, itemData: inventorySet[i] }
+            <InventoryList onAction={ (name, data, e) => {
+                            let actionData = {...data, source: "inventory", category: inventorySet[1], itemIndex: i, itemData: inventorySet[i] }
                             this.onContextAction(name, actionData, e) 
                            }}
                            options={ inventorySet[0] }
