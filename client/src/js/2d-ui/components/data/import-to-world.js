@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import VectorInput from '../vector-input'
 import { rgba, rgb } from '../../../util'
 
 class ImportToWorld extends Component {
@@ -88,7 +89,7 @@ class ImportToWorld extends Component {
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Import To World</span> 
                 <input type="text" disabled onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
               </span>
-              <span>
+              <div>
                 Select world to import into
                 <select onChange={ e=> this.handleWorldChange(e) }>
                   {
@@ -101,10 +102,10 @@ class ImportToWorld extends Component {
                     })
                   }
                 </select>
-              </span>
-              <span>
+              </div>
+              <div>
                 Specify coordinates: <VectorInput axis={3} decimalPlaces={0} onChange={ (value, event) => { this.onCoordChange( value, event) }} />
-              </span>
+              </div>
               
             </div>
             <div style={ styles.body }>
@@ -119,7 +120,7 @@ class ImportToWorld extends Component {
     } else {
 
       return (
-        <FileButton title="Import To World" onClick={ () => { this.toggleModal() } } />
+        <span></span>
       )
 
     }
@@ -174,7 +175,9 @@ let styles = {
     right: 0,
     bottom: 0,
     margin: 'auto',
-    background: rgb(38, 38, 38),
+    border: '0.1em solid white',
+    backgroundColor: "black",
+    backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))',
     borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
   },
   lightbox: {

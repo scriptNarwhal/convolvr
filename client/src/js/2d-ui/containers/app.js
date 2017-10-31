@@ -91,12 +91,15 @@ class App extends Component {
 
         let cameraPos = world.three.camera.position,
             voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
-            altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
+            altitude = 0
 
-        if ( world.terrain.voxels[ voxelKey ] ) 
+        if ( world.terrain.voxels[ voxelKey ] ) {
 
+          altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
           three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
-
+        
+        }
+        
         three.world.user.velocity.y = -1000
 
       }
@@ -130,7 +133,7 @@ class App extends Component {
 
     if (rememberUser != null) {
 
-      username = localStorage.getItem("username") // refactor this to be more secure before beta
+      username = localStorage.getItem("username") // refactor this to be more secure before beta 0.6
       password = localStorage.getItem("password")
 
       if (username != null && username != '') {
@@ -336,13 +339,13 @@ class App extends Component {
           if (three.vrDisplay != null) {
             three.vrDisplay.requestPresent([{source: renderer.domElement}]).then( ()=> {
 
-              // if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
-              //   setTimeout(()=>{
-              //     console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
-              //     three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
+              if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
+                setTimeout(()=>{
+                  console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
+                  three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
                 
-              //   }, 0.09)
-              // }
+                }, 0.09)
+              }
               three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
                 vrAnimate( three.vrDisplay, Date.now(), [0,0,0], 0)
               })

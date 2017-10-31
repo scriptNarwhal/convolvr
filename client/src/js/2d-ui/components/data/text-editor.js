@@ -205,8 +205,9 @@ modal: {
   right: 0,
   bottom: 0,
   margin: 'auto',
-  background: rgb(38, 38, 38),
-  borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+  backgroundColor: "black",
+  backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))',
+  border: '0.1em solid white'
 },
 lightbox: {
   position: 'fixed',

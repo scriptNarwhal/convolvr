@@ -288,7 +288,9 @@ let styles = {
       right: '0px',
       bottom: '0px',
       margin: 'auto',
-      background: rgb(38, 38, 38)
+      border: '0.1em solid white',
+      backgroundColor: "black",
+      backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))'
     }
   },
     lightbox: {
