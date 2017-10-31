@@ -51,7 +51,7 @@ class EntityEditor extends Component {
 
     if (this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated) {
 
-      if ( nextProps.entities[ nextProps.loadedItemIndex ]) {
+      if ( nextProps.entities && nextProps.entities[ nextProps.loadedItemIndex ]) {
         this.setState(nextProps.entities[ nextProps.loadedItemIndex ])
       } else {
         alert("entity (inventory) data missing")
@@ -230,7 +230,7 @@ class EntityEditor extends Component {
   onIdChange(e) {
 
     this.setState({
-      id: e.target.value
+      id: parseInt(e.target.value)
     })
 
   }
@@ -241,16 +241,12 @@ class EntityEditor extends Component {
 
     components = this.state.components
 
-    if ( data.id <= -1 ) {
+    if ( data.id <= -1 )
 
       data.id = this.state.components.length
-      components.push( data )
-
-    } else {
-
-      components.splice( data.id, 1, data)
-
-    }
+      
+    
+    components.push( data )
 
     this.setState({
       components
@@ -272,8 +268,8 @@ class EntityEditor extends Component {
             </div>
             <div style={ styles.body }>
               <span style={styles.basicInput} title='ID'>
-                <span>ID</span> 
-                <input type="text" style={styles.textInput} defaultValue={this.state.id} onChange={ e=> { this.onIdChange(e) }} />
+                <span style={styles.id}>ID</span> 
+                <input type="numeric" step="1" style={styles.textInput} defaultValue={this.state.id} onChange={ e=> { this.onIdChange(e) }} />
               </span>
               <br/>
               <span style={styles.basicInput} title='Position'>
@@ -419,6 +415,9 @@ let styles = {
     basicInput: {
         display: 'block',
         marginBottom: '0.5em'
+    },
+    id: {
+      marginRight: '0.5em',
     },
     lightbox: {
         position: 'fixed',

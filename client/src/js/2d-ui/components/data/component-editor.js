@@ -66,7 +66,7 @@ class ComponentEditor extends Component {
                 
             } else { // load from inventory
 
-                if (nextProps.components[ nextProps.loadedItemIndex ]) {
+                if (nextProps.components && nextProps.components[ nextProps.loadedItemIndex ]) {
                     this.setState( nextProps.components[ nextProps.loadedItemIndex ])
                 } else {
                     alert("missing component inventory data")
@@ -180,7 +180,8 @@ class ComponentEditor extends Component {
 
         let name = this.state.name,
             dir = this.props.activated ? this.props.dir : this.props.cwd.join("/"),
-            data = {} 
+            data = {},
+            props = {}
 
         if ( name == "" )  {
 
@@ -189,13 +190,17 @@ class ComponentEditor extends Component {
 
         }
 
+        this.state.properties.map( prop => {
+            props = Object.assign({}, props, prop.data )
+        })
+
         data = {
             id: this.state.id,
             name: this.state.name,
             position: this.state.position,
             quaternion: this.state.quaternion,
             components: this.state.components,
-            props: this.state.properties
+            props
         }
 
         if ( this.props.onSave ) {
@@ -256,7 +261,7 @@ class ComponentEditor extends Component {
     onIdChange( e ) {
         
         this.setState({
-            id: e.target.value
+            id: parseInt(e.target.value)
         })
 
     }
@@ -267,16 +272,12 @@ class ComponentEditor extends Component {
 
         properties = this.state.properties
 
-        if (data.id <= -1) {
-
+        if ( data.id <= -1 )
+        
             data.id = this.state.properties.length
-            properties.push(data)
-
-        } else {
-
-            properties.splice(data.id, 1, data)
-
-        }
+              
+            
+        properties.push( data )
 
         this.setState({
             properties
@@ -290,16 +291,12 @@ class ComponentEditor extends Component {
 
         components = this.state.components
 
-        if (data.id <= -1) {
+        if ( data.id <= -1 )
 
             data.id = this.state.components.length
-            components.push(data)
+        
 
-        } else {
-
-            components.splice(data.id, 1, data)
-
-        }
+        components.push(data)
 
         this.setState({
             components
@@ -321,8 +318,8 @@ class ComponentEditor extends Component {
                     </div>
                     <div style={ styles.body }>
                         <span style={styles.basicInput} title='ID'>
-                            <span>ID</span>
-                            <input type="text" style={styles.textInput} defaultValue={this.state.id} disabled />
+                        <span style={styles.id}>ID</span> 
+                        <input type="numeric" step="1" style={styles.textInput} defaultValue={this.state.id} disabled />
                         </span>
                         <br/>
                         <span style={styles.basicInput} title='Position'>
@@ -486,6 +483,9 @@ let styles = {
     },
     components: {
 
+    },
+    id: {
+        marginRight: '0.5em',
     },
     lightbox: {
         position: 'fixed',

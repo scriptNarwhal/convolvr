@@ -34,11 +34,13 @@ import {
           .then(res => {
               dispatch({
                   type: INVENTORY_FETCH_DONE,
-                  data: res.data
+                  data: res.data,
+                  category
               })
           }).catch(err => {
               dispatch({
                   type: INVENTORY_FETCH_FAIL,
+                  category,
                   err: err
               })
           });

@@ -81,13 +81,16 @@ class PropertyEditor extends Component {
 
   useTemplate( name ) {
 
-    let template = ""
+    let template = "",
+        propName = ""
 
     template = this.props.convolvrProps.find( (prop) => { return prop.name == name} )
 
+    propName = name.split(".")[0]
+
     this.setState({
-      name: template.name.split(".")[0],
-      text: JSON.stringify(template.data),
+      name: template.name,
+      text: JSON.stringify({ [propName]: template.data }, null, "\t"),
       refreshing: true
     }, ()=>{
       this.setState({
@@ -131,11 +134,11 @@ class PropertyEditor extends Component {
 
         if ( this.props.onSave ) {
 
-          this.props.onSave( { [this.state.name]: JSON.parse(this.state.text) } )
+          this.props.onSave( JSON.parse(this.state.text) )
 
         } else {
 
-          this.props.addInventoryItem( this.props.username, "Properties", { [this.state.name]: JSON.parse(this.state.text) } )
+          this.props.addInventoryItem( this.props.username, "Properties", JSON.parse(this.state.text) )
 
         }
 
