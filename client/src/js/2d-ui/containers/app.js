@@ -17,7 +17,11 @@ class App extends Component {
       unread: 0,
       lastSender: ''
     }
+
     this.props.fetchWorlds()
+    this.props.getInventory(this.props.username, "Entities")
+    this.props.getInventory(this.props.username, "Components")
+    this.props.getInventory(this.props.username, "Properties")
 
     let world = three.world, 
         worldDetails = detectWorldDetailsFromURL()
@@ -43,15 +47,15 @@ class App extends Component {
       this.notify(chatMessage.message, chatMessage.from)
       worldName = this.props.world.toLowerCase() == "overworld" ? "Convolvr" : this.props.world
 
-      if (this.props.focus == false) {
+      if ( this.props.focus == false ) {
 
         this.setState({
           unread: this.state.unread +1
         })
 
-        if (this.state.unread > 0) {
+        if (this.state.unread > 0)
+
             document.title = `[${this.state.unread}] ${worldName}`
-        }
 
       } else {
         document.title = worldName
@@ -209,6 +213,7 @@ class App extends Component {
   componentWillReceiveProps ( nextProps ) {
 
     let newWorld = ["world", "Convolvr"],
+        userNameChanged = nextProps.username != this.props.username,
         pathChange = nextProps.url.pathname.indexOf("/at") > -1 ? false : nextProps.url.pathname != this.props.url.pathname
 
     if ( pathChange ) {
@@ -233,6 +238,14 @@ class App extends Component {
 
       console.warn("detected world voxel coords ", newWorld[3])
       three.camera.position.set( newWorld[3][0] * GRID_SIZE[0], newWorld[3][1] * GRID_SIZE[1], newWorld[3][2] * GRID_SIZE[2] )
+
+    }
+
+    if ( userNameChanged ) {
+
+      this.props.getInventory(nextProps.username, "Entities")
+      this.props.getInventory(nextProps.username, "Components")
+      this.props.getInventory(nextProps.username, "Properties")
 
     }
 
@@ -465,11 +478,15 @@ import {
   fetchUsers,
   login 
 } from '../../redux/actions/user-actions'
+import {
+  getInventory
+} from '../../redux/actions/inventory-actions'
 
 export default connect(
   state => {
     return {
       loggedIn: state.users.loggedIn,
+      username: state.users.loggedIn != false ? state.users.loggedIn.name : "public",
       url: state.routing.locationBeforeTransitions,
       tools: state.tools,
       users: state.users,
@@ -490,6 +507,9 @@ export default connect(
       },
       getMessage: (message, from, files, avatar) => {
           dispatch(getMessage(message, from, files, avatar))
+      },
+      getInventory: (userId, category) => {
+        dispatch(getInventory(userId, category))
       },
       showChat: () => {
         dispatch(showChat())
