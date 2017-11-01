@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 import FileButton from './file-button'
 import VectorInput from '../vector-input'
 import { rgba, rgb } from '../../../util'
+import { isMobile } from '../../../config'
 
 class ImportToWorld extends Component {
 
@@ -84,7 +85,7 @@ class ImportToWorld extends Component {
 
       return (
        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
+          <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Import To World</span> 
                 <input type="text" disabled onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
@@ -109,9 +110,8 @@ class ImportToWorld extends Component {
               
             </div>
             <div style={ styles.body }>
-              <textarea style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
-              <FileButton title="Save" onClick={ () => { this.save() } } />
-              <FileButton title="Close" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
+              <FileButton title="Add" onClick={ () => { this.save() } } />
+              <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
           </div>
         </div>
@@ -163,22 +163,23 @@ export default connect(
 )(ImportToWorld)
 
 let styles = {
-  modal: {
-    width: '50%',
-    maxWidth: '729px',
-    minWidth: '320px',
-    height: '480px',
-    padding: '0.25em',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    margin: 'auto',
-    border: '0.1em solid white',
-    backgroundColor: "black",
-    backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))',
-    borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+  modal: () => {
+    return {
+      width: '100%',
+      maxWidth: '1080px',
+      minWidth: '320px',
+      height: '92%',
+      padding: '1em',
+      position: 'absolute',
+      top: '0px',
+      left: ! isMobile() ? '72px' : '0px',
+      right: '0px',
+      bottom: '0px',
+      margin: 'auto',
+      border: '0.1em solid white',
+      backgroundColor: "black",
+      backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))'
+    }
   },
   lightbox: {
     position: 'fixed',

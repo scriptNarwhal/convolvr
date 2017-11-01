@@ -5,6 +5,7 @@ import EntityEditor from '../components/data/entity-editor'
 import ComponentEditor from '../components/data/component-editor'
 import PropertyEditor from '../components/data/property-editor'
 import ImportToWorld from '../components/data/import-to-world'
+import InventoryExport from '../components/data/inventory-export'
 
 export default class InventoryList extends Component {
 
@@ -38,7 +39,8 @@ export default class InventoryList extends Component {
                 this.props.category == "Entities" ? (
                   [
                     <EntityEditor username={this.props.username} key="1" />,
-                    <ImportToWorld key="2" />
+                    <ImportToWorld key="2" />,
+                    <InventoryExport key="3" />
                   ]
                 ) : this.props.category == "Components" ? (
                   <ComponentEditor username={this.props.username}/>

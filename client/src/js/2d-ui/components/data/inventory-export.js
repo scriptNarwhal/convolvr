@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
 import { rgba, rgb } from '../../../util'
+import { isMobile } from '../../../config'
 
 class InventoryExport extends Component {
 
@@ -19,11 +20,6 @@ class InventoryExport extends Component {
       name: ""
     })
 
-    if ( !!this.props.fileURL ) {
-
-      this.props.readText( this.props.fileURL, this.props.username, this.props.cwd.join("/") )
-
-    }
     
   }
 
@@ -86,7 +82,7 @@ class InventoryExport extends Component {
 
     if ( name != "" ) {
 
-      this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir )
+      // initiate file download maybe
       this.toggleModal()
 
     } else {
@@ -112,7 +108,7 @@ class InventoryExport extends Component {
 
       return (
        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
+          <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
                 <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
@@ -122,8 +118,8 @@ class InventoryExport extends Component {
               { this.props.readTextFetching == false  ? (
                 <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
               ) : ""}
-              <FileButton title="Save" onClick={ () => { this.save() } } />
-              <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
+              <FileButton title="Download" onClick={ () => { this.save() } } style={{display:"none"}} />
+              <FileButton title="Done" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
           </div>
         </div>
@@ -149,7 +145,7 @@ import {
     getInventory,
     addInventoryItem,
     updateInventoryItem
-}
+} from '../../../redux/actions/inventory-actions'
 import {
     closeInventoryExport
 } from '../../../redux/actions/util-actions'
@@ -190,23 +186,24 @@ export default connect(
 )(InventoryExport)
 
 let styles = {
-    modal: {
-        width: '50%',
-        maxWidth: '729px',
-        minWidth: '320px',
-        height: '480px',
-        padding: '0.25em',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        margin: 'auto',
-        border: '0.1em solid white',
-        backgroundColor: "black",
-        backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))',
-        borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
-    },
+  modal: () => {
+    return {
+      width: '100%',
+      maxWidth: '1080px',
+      minWidth: '320px',
+      height: '92%',
+      padding: '1em',
+      position: 'absolute',
+      top: '0px',
+      left: ! isMobile() ? '72px' : '0px',
+      right: '0px',
+      bottom: '0px',
+      margin: 'auto',
+      border: '0.1em solid white',
+      backgroundColor: "black",
+      backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))'
+    }
+  },
     lightbox: {
         position: 'fixed',
         top: 0,

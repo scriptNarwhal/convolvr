@@ -110,7 +110,9 @@ import {
   addItemToWorld,
 } from '../../redux/actions/inventory-actions'
 import {
-  launchEditLoadedItem
+  launchEditLoadedItem,
+  launchInventoryExport,
+  launchImportToWorld
 } from '../../redux/actions/util-actions'
 
 export default connect(
@@ -136,6 +138,12 @@ export default connect(
   },
   dispatch => {
     return {
+      launchImportToWorld: (username, data) => {
+        dispatch( launchImportToWorld(username, data))
+      },
+      launchInventoryExport: (username, category, itemId) => {
+        dispatch( launchInventoryExport(username, category, itemId))
+      },
       getInventory: (userId, category) => {
           dispatch(getInventory(userId, category))
       },
