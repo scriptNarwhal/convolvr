@@ -16,6 +16,7 @@ class InventoryExport extends Component {
 
     this.setState({
       activated: false,
+      refreshing: false,
       text: "",
       name: ""
     })
@@ -25,22 +26,31 @@ class InventoryExport extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData ) {
-
-      this.setState({
-        text: nextProps.textData.text
-      })
-
-    }
-
     if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
       if ( nextProps.category != "" && nextProps.itemId != "" ) {
 
-        //this.props.readText( nextProps.filename, nextProps.fileUser, nextProps.dir )
+        
         this.setState({
           name: nextProps.itemId
         })
+      }
+
+    }
+
+    if ( this.props.itemFetching && nextProps.itemFetching == false) {
+
+      if ( nextProps.itemData ) {
+
+        this.setState({
+          refreshing: true,
+          text: JSON.stringify(nextProps.itemData, null, "\t")
+        }, () => {
+          this.setState({
+            refreshing: false
+          })
+        })
+
       }
 
     }
@@ -50,6 +60,8 @@ class InventoryExport extends Component {
       this.setState({
         activated: true
       })
+
+      this.props.getInventoryItem( this.props.username, this.props.category, this.props.itemId )
 
     }
 
@@ -98,7 +110,7 @@ class InventoryExport extends Component {
     this.setState({
       activated: !this.state.activated
     })
-    this.props.closeTextEdit()
+    this.props.closeInventoryExport()
 
   }
 
@@ -115,7 +127,7 @@ class InventoryExport extends Component {
               </span>
             </div>
             <div style={ styles.body }>
-              { this.props.readTextFetching == false  ? (
+              { this.state.refreshing == false  ? (
                 <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
               ) : ""}
               <FileButton title="Download" onClick={ () => { this.save() } } style={{display:"none"}} />
@@ -128,7 +140,7 @@ class InventoryExport extends Component {
     } else {
 
       return (
-        <FileButton title="New File" onClick={ () => { this.toggleModal() } } />
+        <span></span>
       )
 
     }
@@ -143,6 +155,7 @@ InventoryExport.defaultProps = {
 import { connect } from 'react-redux'
 import {
     getInventory,
+    getInventoryItem,
     addInventoryItem,
     updateInventoryItem
 } from '../../../redux/actions/inventory-actions'
@@ -163,6 +176,7 @@ export default connect(
         activated: state.util.inventoryExport.activated,
         category: state.util.inventoryExport.category,
         fileUser: state.util.inventoryExport.username,
+        itemData: state.util.inventoryExport.itemData,
         itemId: state.util.inventoryExport.itemId,
         vrMode: state.app.vrMode
     }
@@ -171,6 +185,9 @@ export default connect(
     return {
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
+      },
+      getInventoryItem: ( userId, category, itemId ) => {
+        dispatch(getInventoryItem( userId, category, itemId ))
       },
       addInventoryItem: (userId, category, data) => {
           dispatch(addInventoryItem(userId, category, data))

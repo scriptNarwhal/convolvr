@@ -162,6 +162,7 @@ module.exports = function app (state = {
                 activated: true,
                 username: action.username,
                 category: action.category,
+                itemIndex: action.itemIndex,
                 itemId: action.itemId
             }
         }

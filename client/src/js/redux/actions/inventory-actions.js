@@ -47,6 +47,31 @@ import {
      }
   
   }
+
+  export function getInventoryItem ( userId, category, itemId ) {
+    
+        return dispatch => {
+         dispatch({
+            type: INVENTORY_ITEM_FETCH,
+            userId
+         })
+         return axios.get(API_SERVER+`/api/inventory/${userId}/${category}/${itemId}`)
+            .then( res => {
+                dispatch({
+                    type: INVENTORY_ITEM_FETCH_DONE,
+                    data: res.data,
+                    category
+                })
+            }).catch( err => {
+                dispatch({
+                    type: INVENTORY_ITEM_FETCH_FAIL,
+                    category,
+                    err: err
+                })
+            });
+       }
+    
+    }
   
   export function addInventoryItem ( userId, category, data ) {
   

@@ -67,7 +67,14 @@ class Inventory extends Component {
            [this.props.inventoryComponents, "Components"], 
            [this.props.inventoryProperties, "Properties"]].map( (inventorySet, i) => (
             <InventoryList onAction={ (name, data, e) => {
-                            let actionData = {...data, source: "inventory", category: inventorySet[1], itemIndex: i, itemData: inventorySet[i] }
+                            let actionData = {
+                              ...data, 
+                              source: "inventory", 
+                              category: inventorySet[1], 
+                              itemId: inventorySet[i].id, 
+                              itemIndex: i, 
+                              itemData: inventorySet[i] 
+                            }
                             this.onContextAction(name, actionData, e) 
                            }}
                            options={ inventorySet[0] }

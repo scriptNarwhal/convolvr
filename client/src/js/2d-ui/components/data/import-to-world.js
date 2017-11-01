@@ -21,6 +21,8 @@ class ImportToWorld extends Component {
       text: "",
       name: "",
       data: {},
+      coords: [0,0,0],
+      world: "Overworld",
       id: 0
     })
 
@@ -53,13 +55,17 @@ class ImportToWorld extends Component {
 
   onCoordChange ( value, event ) {
 
-
+    this.setState({
+      coords: value
+    })
 
   }
 
   handleWorldChange ( event ) {
 
-    let value = event.target.value
+    this.setState({
+      world: event.target.value
+    })
 
   }
 
@@ -68,6 +74,7 @@ class ImportToWorld extends Component {
     let name = this.state.name,
         data = {}
 
+    this.props.addItemToWorld( this.props.username, "Entities", this.props.itemId, this.state.world, this.state.coords.join("x") )
 
   }
 
@@ -90,7 +97,7 @@ class ImportToWorld extends Component {
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Import To World</span> 
                 <input type="text" disabled onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
               </span>
-              <div>
+              <div style={styles.basicInput}>
                 Select world to import into
                 <select onChange={ e=> this.handleWorldChange(e) }>
                   {
@@ -104,7 +111,7 @@ class ImportToWorld extends Component {
                   }
                 </select>
               </div>
-              <div>
+              <div style={styles.basicInput}>
                 Specify coordinates: <VectorInput axis={3} decimalPlaces={0} onChange={ (value, event) => { this.onCoordChange( value, event) }} />
               </div>
               
@@ -148,13 +155,16 @@ export default connect(
         worlds: state.worlds.all,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.importToWorld.activated,
-        filename: state.util.importToWorld.filename,
+        itemId: state.util.importToWorld.itemId,
         fileUser: state.util.importToWorld.username,
         dir: state.util.importToWorld.dir
     }
   },
   dispatch => {
     return {
+      addItemToWorld: ( userId, category, itemId, world, coords ) => {
+        dispatch( addItemToWorld( userId, category, itemId, world, coords ) )
+      },
       closeImportToWorld: () => {
         dispatch( closeImportToWorld() )
       }
@@ -188,6 +198,9 @@ let styles = {
     width: '100%',
     height: '100%',
     background: rgba(0, 0, 0, 0.5)
+  },
+  basicInput: {
+    marginBottom: '0.5em'
   },
   resultingPath: {
     marginBottom: '1em'
