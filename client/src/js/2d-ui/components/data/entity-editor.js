@@ -53,9 +53,7 @@ class EntityEditor extends Component {
 
       if ( nextProps.entities && nextProps.entities[ nextProps.loadedItemIndex ]) {
         this.setState(nextProps.entities[ nextProps.loadedItemIndex ])
-      } else {
-        alert("entity (inventory) data missing")
-      }
+      } 
       this.setState({
         index: nextProps.loadedItemIndex,
         refreshing: true
@@ -312,6 +310,7 @@ class EntityEditor extends Component {
               </div>
               <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
                                username={ this.props.username }
+                               title="Add Component"
               />
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />

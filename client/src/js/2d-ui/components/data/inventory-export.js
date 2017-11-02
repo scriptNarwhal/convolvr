@@ -3,6 +3,11 @@ import { browserHistory } from 'react-router'
 import FileButton from './file-button'
 import { rgba, rgb } from '../../../util'
 import { isMobile } from '../../../config'
+import { 
+  textAreaStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../../styles'
 
 class InventoryExport extends Component {
 
@@ -29,11 +34,11 @@ class InventoryExport extends Component {
     if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
       if ( nextProps.category != "" && nextProps.itemId != "" ) {
-
-        
+   
         this.setState({
           name: nextProps.itemId
         })
+
       }
 
     }
@@ -177,8 +182,7 @@ export default connect(
         category: state.util.inventoryExport.category,
         fileUser: state.util.inventoryExport.username,
         itemData: state.util.inventoryExport.itemData,
-        itemId: state.util.inventoryExport.itemId,
-        vrMode: state.app.vrMode
+        itemId: state.util.inventoryExport.itemId
     }
   },
   dispatch => {
@@ -204,65 +208,37 @@ export default connect(
 
 let styles = {
   modal: () => {
-    return {
-      width: '100%',
+    return Object.assign({}, modalStyle, {
       maxWidth: '1080px',
-      minWidth: '320px',
-      height: '92%',
-      padding: '1em',
-      position: 'absolute',
-      top: '0px',
-      left: ! isMobile() ? '72px' : '0px',
-      right: '0px',
-      bottom: '0px',
-      margin: 'auto',
-      border: '0.1em solid white',
-      backgroundColor: "black",
-      backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))'
-    }
+      left: ! isMobile() ? '72px' : '0px'
+    })
   },
-    lightbox: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        background: rgba(0, 0, 0, 0.5)
-    },
-    resultingPath: {
-        marginBottom: '1em'
-    },
-    cancelButton: {
-        borderLeft: 'solid 0.2em #005aff'
-    },
-    header: {
-        width: '100%',
-        marginTop: '0.5em',
-        marginBotto: '0.5em'
-    },
-    text: {
-        width: '75%',
-        padding: '0.25em',
-        marginBottom: '0.5em',
-        background: '#212121',
-        border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
-        borderRadius: '2px',
-        fontSize: '1em',
-        color: 'white'
-    },
-    textArea: {
-        margin: '0px',
-        width: '95%',
-        height: '358px',
-        color: 'white',
-        marginBottom: '0.5em',
-        padding: '0.5em',
-        background: 'black'
-    },
-    body: {
+  lightbox: lightboxStyle,
+  resultingPath: {
+      marginBottom: '1em'
+  },
+  cancelButton: {
+      borderLeft: 'solid 0.2em #005aff'
+  },
+  header: {
+      width: '100%',
+      marginTop: '0.5em',
+      marginBotto: '0.5em'
+  },
+  text: {
+      width: '75%',
+      padding: '0.25em',
+      marginBottom: '0.5em',
+      background: '#212121',
+      border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
+      borderRadius: '2px',
+      fontSize: '1em',
+      color: 'white'
+  },
+  textArea: textAreaStyle,
+  body: {
+  },
+  title: {
 
-    },
-    title: {
-
-    }
+  }
 }

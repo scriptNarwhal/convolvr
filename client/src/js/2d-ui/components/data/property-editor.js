@@ -5,7 +5,11 @@ import { rgba, rgb } from '../../../util'
 import { isMobile } from '../../../config'
 import BuiltinProps from '../../../assets/props'
 import { getPropsList } from '../../../assets/props'
-
+import { 
+  textAreaStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../../styles'
 class PropertyEditor extends Component {
 
   constructor () {
@@ -52,7 +56,7 @@ class PropertyEditor extends Component {
           if ( nextProps.loadedItemData ) {
               this.setState( nextProps.loadedItemData )                    
           } else {
-              alert("missing property action data")
+              console.warn("missing property action data")
               this.setState({activated: false})
           }
 
@@ -61,7 +65,7 @@ class PropertyEditor extends Component {
           if ( nextProps.properties[ nextProps.loadedItemIndex ] ) {
             this.setState( nextProps.properties[ nextProps.loadedItemIndex ] )         
           } else {
-            alert("missing property inventory data")
+            console.warn("missing property inventory data")
             this.setState({activated: false})
           }
           
@@ -118,8 +122,7 @@ class PropertyEditor extends Component {
 
     save () {
 
-        let name = this.state.name,
-            dir = this.props.activated ? this.props.dir : this.props.cwd.join("/") 
+        let name = this.state.name
 
         if ( name == "" ) {
 
@@ -212,7 +215,7 @@ class PropertyEditor extends Component {
     } else {
 
       return (
-        <FileButton title="New Property" onClick={ () => { this.toggleModal() } } />
+        <FileButton title={this.props.title} onClick={ () => { this.toggleModal() } } />
       )
 
     }
@@ -221,6 +224,7 @@ class PropertyEditor extends Component {
 }
 
 PropertyEditor.defaultProps = {
+  title: "New Property",
   convolvrProps: getPropsList( BuiltinProps() )
 }
 
@@ -241,19 +245,17 @@ import {
 export default connect(
   (state, ownProps) => {
     return {
-        cwd: state.files.listDirectories.workingPath,
         section: state.routing.locationBeforeTransitions.pathname,
-        stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.propertyEdit.activated,
-        fileUser: state.util.propertyEdit.username,
         itemId: state.util.propertyEdit.itemId,
         properties: state.inventory.items.properties,
         editLoadedItemActivated: state.util.loadedItemEdit.activated && state.util.loadedItemEdit.category == "Properties",
         loadedItemIndex: state.util.loadedItemEdit.index,
         loadedItemData: state.util.loadedItemEdit.data.component,
-        vrMode: state.app.vrMode
+        editSource: state.util.loadedItemEdit.source,
+        category: state.util.loadedItemEdit.category
     }
   },
   dispatch => {
@@ -279,65 +281,37 @@ export default connect(
 
 let styles = {
   modal: () => {
-    return {
-      width: '100%',
-      maxWidth: '960px',
-      minWidth: '320px',
-      height: '92%',
-      padding: '1em',
-      position: 'absolute',
-      top: '0px',
-      left: ! isMobile() ? '72px' : '0px',
-      right: '0px',
-      bottom: '0px',
-      margin: 'auto',
-      border: '0.1em solid white',
-      backgroundColor: "black",
-      backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))'
-    }
+    return Object.assign({}, modalStyle, {
+        maxWidth: '960px',
+        left: ! isMobile() ? '72px' : '0px'
+      })
   },
-    lightbox: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        background: rgba(0, 0, 0, 0.5)
-    },
-    resultingPath: {
-        marginBottom: '1em'
-    },
-    cancelButton: {
-        borderLeft: 'solid 0.2em #005aff'
-    },
-    header: {
-        width: '100%',
-        marginTop: '0.5em',
-        marginBotto: '0.5em'
-    },
-    text: {
-        width: '65%',
-        padding: '0.25em',
-        marginBottom: '0.5em',
-        background: '#212121',
-        border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
-        borderRadius: '2px',
-        fontSize: '1em',
-        color: 'white'
-    },
-    textArea: {
-        margin: '0px',
-        width: '95%',
-        height: '358px',
-        color: 'white',
-        marginBottom: '0.5em',
-        padding: '0.5em',
-        background: 'black'
-    },
-    body: {
+  lightbox: lightboxStyle,
+  resultingPath: {
+      marginBottom: '1em'
+  },
+  cancelButton: {
+      borderLeft: 'solid 0.2em #005aff'
+  },
+  header: {
+      width: '100%',
+      marginTop: '0.5em',
+      marginBotto: '0.5em'
+  },
+  text: {
+      width: '65%',
+      padding: '0.25em',
+      marginBottom: '0.5em',
+      background: '#212121',
+      border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
+      borderRadius: '2px',
+      fontSize: '1em',
+      color: 'white'
+  },
+  textArea: textAreaStyle,
+  body: {
+  },
+  title: {
 
-    },
-    title: {
-
-    }
+  }
 }

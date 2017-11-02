@@ -9,6 +9,12 @@ import {
 import { isMobile } from '../../../config'
 import PropertyEditor from './property-editor'
 import VectorInput from '../vector-input'
+import { 
+    textAreaStyle,
+    basicInputStyle,
+    lightboxStyle, 
+    modalStyle 
+} from '../../styles'
 
 class ComponentEditor extends Component {
 
@@ -55,12 +61,12 @@ class ComponentEditor extends Component {
         
         if ( this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated ) {
 
-            if ( this.props.editSource == "entityEdit" ) { // load from entity in inventory
+            if ( nextProps.editSource == "entityEdit" || nextProps.editSource == "componentEdit" ) { // load from entity in inventory
 
                 if ( nextProps.loadedItemData ) {
                     this.setState( nextProps.loadedItemData )                    
                 } else {
-                    alert("missing component action data")
+                    console.warn("missing component action data")
                     this.setState({activated: false})
                 }
                 
@@ -69,7 +75,7 @@ class ComponentEditor extends Component {
                 if (nextProps.components && nextProps.components[ nextProps.loadedItemIndex ]) {
                     this.setState( nextProps.components[ nextProps.loadedItemIndex ])
                 } else {
-                    alert("missing component inventory data")
+                    console.warn("missing component inventory data")
                     this.setState({activated: false})
                 }
             }
@@ -81,7 +87,6 @@ class ComponentEditor extends Component {
                 })
             }
             
-
             this.setState({
                 index: nextProps.loadedItemIndex
             })
@@ -234,7 +239,9 @@ class ComponentEditor extends Component {
 
     toggleModal () {
 
-        this.state.activated && this.props.closeComponentEditor()
+        if ( this.state.activated && this.props.closeComponentEditor ) {
+            this.props.closeComponentEditor()
+        }
         this.setState({
           activated: !this.state.activated
         })
@@ -337,7 +344,13 @@ class ComponentEditor extends Component {
                             <span>Rotation</span>
                             <VectorInput axis={4} decimalPlaces={4} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
                         </span>
-                        <h4>Properties</h4>
+                        <div>
+                            <h4 style={styles.h4}>Properties</h4>
+                            <PropertyEditor onSave={ data => this.onSaveProperty( data ) } 
+                                            username={ this.props.username }
+                                            title={"Add Property"}
+                            />
+                        </div>
                         <div style={ styles.components }>
                             {
                             this.state.properties.map( (property, i) => {
@@ -360,10 +373,13 @@ class ComponentEditor extends Component {
                             })
                             }
                         </div>
-                        <PropertyEditor onSave={ data => this.onSaveProperty( data ) } 
-                                        username={ this.props.username }
-                        />
-                        <h4>Components</h4>
+                        <div>
+                            <h4 style={styles.h4}>Components</h4>
+                            <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
+                                            username={ this.props.username }
+                                            title={"Add Component"}
+                            />
+                        </div>
                         <div style={ styles.components }>
                             {
                             this.state.components.map( (component, i) => {
@@ -386,9 +402,6 @@ class ComponentEditor extends Component {
                             })
                             }
                         </div>
-                        <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
-                                         username={ this.props.username }
-                        />
                         <FileButton title="Save" onClick={ () => { this.save() } } />
                         <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
                     </div>
@@ -399,7 +412,7 @@ class ComponentEditor extends Component {
         } else {
 
             return (
-                <FileButton title="New Component" onClick={ () => { this.toggleModal() } } />
+                <FileButton title={this.props.title} onClick={ () => { this.toggleModal() } } />
             )
 
         }
@@ -408,6 +421,7 @@ class ComponentEditor extends Component {
 }
 
 ComponentEditor.defaultProps = {
+    title: "New Component",
     contextMenuOptions: [
         { name: "Edit" },
         { name: "Delete"}
@@ -430,7 +444,6 @@ export default connect(
     return {
         cwd: state.files.listDirectories.workingPath,
         section: state.routing.locationBeforeTransitions.pathname,
-        stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.componentEdit.activated,
@@ -441,7 +454,8 @@ export default connect(
         editLoadedItemActivated: state.util.loadedItemEdit.activated && state.util.loadedItemEdit.category == "Components",
         loadedItemIndex: state.util.loadedItemEdit.index,
         loadedItemData: state.util.loadedItemEdit.data.component,
-        vrMode: state.app.vrMode
+        editSource: state.util.loadedItemEdit.source,
+        category: state.util.loadedItemEdit.category
     }
   },
   dispatch => {
@@ -467,42 +481,22 @@ export default connect(
 
 let styles = {
     modal: () => {
-        return {
-          width: '100%',
-          maxWidth: '1080px',
-          minWidth: '320px',
-          height: '92%',
-          padding: '1em',
-          position: 'absolute',
-          top: '0px',
-          left: ! isMobile() ? '72px' : '0px',
-          right: '0px',
-          bottom: '0px',
-          margin: 'auto',
-          border: '0.1em solid white',
-          backgroundColor: "black",
-          backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))'
-        }
-      },
-    basicInput: {
-        display: 'block',
-        marginBottom: '0.5em'
+        return Object.assign({}, modalStyle, {
+            maxWidth: '1080px',
+            left: ! isMobile() ? '72px' : '0px'
+          })
     },
+    basicInput: basicInputStyle,
     components: {
 
+    },
+    h4: {
+        display: "inline-block"
     },
     id: {
         marginRight: '0.5em',
     },
-    lightbox: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 9999999999,
-        background: rgba(0, 0, 0, 0.5)
-    },
+    lightbox: lightboxStyle,
     resultingPath: {
         marginBottom: '1em'
     },
@@ -524,15 +518,7 @@ let styles = {
         fontSize: '1em',
         color: 'white'
     },
-    textArea: {
-        margin: '0px',
-        width: '95%',
-        height: '358px',
-        color: 'white',
-        marginBottom: '0.5em',
-        padding: '0.5em',
-        background: 'black'
-    },
+    textArea: textAreaStyle,
     textInput: {
         paddingLeft: '0.75em'
     },

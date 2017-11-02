@@ -1,6 +1,15 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import { 
+  textAreaStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../../styles'
+import {
+  rgba,
+  rgb
+} from '../../../util'
 
 class TextEditor extends Component {
 
@@ -185,38 +194,14 @@ export default connect(
   }
 )(TextEditor)
 
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-  return `rgb(${r}, ${g}, ${b})`
-},
-rgba = ( r, g, b, a ) => { 
-  return `rgba(${r}, ${g}, ${b}, ${a})`
-}
-
 let styles = {
-modal: {
-  width: '50%',
-  maxWidth: '729px',
-  minWidth: '320px',
-  height: '480px',
-  padding: '0.25em',
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  margin: 'auto',
-  backgroundColor: "black",
-  backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))',
-  border: '0.1em solid white'
-},
-lightbox: {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  background: rgba(0, 0, 0, 0.5)
-},
+  modal: () => {
+    return Object.assign({}, modalStyle, {
+        maxWidth: '960px',
+        left: ! isMobile() ? '72px' : '0px'
+      })
+  },
+lightbox: lightboxStyle,
 resultingPath: {
   marginBottom: '1em'
 },
@@ -238,15 +223,7 @@ text: {
   fontSize: '1em',
   color: 'white',
 },
-textArea: {
-  margin: '0px',
-  width: '95%',
-  height: '358px',
-  color: 'white',
-  marginBottom: '0.5em',
-  padding: '0.5em',
-  background: 'black'
-},
+textArea: textAreaStyle,
 body: {
 
 },

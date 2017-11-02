@@ -4,6 +4,11 @@ import FileButton from './file-button'
 import VectorInput from '../vector-input'
 import { rgba, rgb } from '../../../util'
 import { isMobile } from '../../../config'
+import { 
+  textAreaStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../../styles'
 
 class ImportToWorld extends Component {
 
@@ -174,31 +179,12 @@ export default connect(
 
 let styles = {
   modal: () => {
-    return {
-      width: '100%',
-      maxWidth: '1080px',
-      minWidth: '320px',
-      height: '92%',
-      padding: '1em',
-      position: 'absolute',
-      top: '0px',
-      left: ! isMobile() ? '72px' : '0px',
-      right: '0px',
-      bottom: '0px',
-      margin: 'auto',
-      border: '0.1em solid white',
-      backgroundColor: "black",
-      backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))'
-    }
+    return Object.assign({}, modalStyle, {
+        maxWidth: '1080px',
+        left: ! isMobile() ? '72px' : '0px'
+      })
   },
-  lightbox: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    background: rgba(0, 0, 0, 0.5)
-  },
+  lightbox: lightboxStyle,
   basicInput: {
     marginBottom: '0.5em'
   },
@@ -223,15 +209,7 @@ let styles = {
     fontSize: '1em',
     color: 'white',
   },
-  textArea: {
-    margin: '0px',
-    width: '95%',
-    height: '358px',
-    color: 'white',
-    marginBottom: '0.5em',
-    padding: '0.5em',
-    background: 'black'
-  },
+  textArea: textAreaStyle,
   body: {
 
   },
