@@ -156,7 +156,7 @@ class ComponentEditor extends Component {
         let index = data.propertyIndex,
             properties = this.state.properties,
             propertyData = properties[index]
-
+        console.info("handlePropertyAction: propertyData: ", propertyData, properties )
         if ( action == "Delete" ) {
 
             properties.splice( index, 1 )
@@ -183,7 +183,7 @@ class ComponentEditor extends Component {
                 
         } else if (action == "Edit") {
 
-            this.props.editLoadedItem( "componentEdit", this.props.username, data, index, componentData)
+            this.props.editLoadedItem( "componentEdit", this.props.username, "Components", index, componentData)
 
         }
         
@@ -362,6 +362,7 @@ class ComponentEditor extends Component {
                                         onContextMenu={ (name, data, e) => this.handlePropertyAction(name, {...data, componentIndex: i }, e) }
                                         contextMenuOptions={ this.props.contextMenuOptions }
                                         showTitle={true}
+                                        compact={true}
                                         username={this.props.username}
                                         dir={this.props.dir}
                                         category={"Properties"}
@@ -391,6 +392,7 @@ class ComponentEditor extends Component {
                                         onContextMenu={ (name, data, e) => this.handleComponentAction(name, {...data, componentIndex: i }, e) }
                                         contextMenuOptions={ this.props.contextMenuOptions }
                                         showTitle={true}
+                                        compact={true}
                                         username={this.props.username}
                                         dir={this.props.dir}
                                         category={"Properties"}
@@ -513,7 +515,7 @@ let styles = {
         padding: '0.25em',
         marginBottom: '0.5em',
         background: '#212121',
-        border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
+        border: 'none',
         borderRadius: '2px',
         fontSize: '1em',
         color: 'white'

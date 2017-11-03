@@ -6,6 +6,12 @@ import ComponentEditor from './component-editor'
 import VectorInput from '../vector-input'
 import { rgba, rgb } from '../../../util'
 import { isMobile } from '../../../config'
+import { 
+  textAreaStyle,
+  basicInputStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../../styles'
 
 class EntityEditor extends Component {
 
@@ -297,6 +303,7 @@ class EntityEditor extends Component {
                             onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
                             contextMenuOptions={ this.props.contextMenuOptions }
                             showTitle={true}
+                            compact={true}
                             username={this.props.username}
                             dir={this.props.dir}
                             category={"Components"}
@@ -401,39 +408,17 @@ export default connect(
 )(EntityEditor)
 
 let styles = {
-    modal: () => {
-      return {
-        width: '100%',
-        maxWidth: '1280px',
-        minWidth: '320px',
-        height: '92%',
-        padding: '1em',
-        position: 'absolute',
-        top: '0px',
-        left: ! isMobile() ? '72px' : '0px',
-        right: '0px',
-        bottom: '0px',
-        margin: 'auto',
-        border: '0.1em solid white',
-        backgroundColor: "black",
-        backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))'
-      }
+  modal: () => {
+    return Object.assign({}, modalStyle, {
+          maxWidth: '1280px',
+          left: ! isMobile() ? '72px' : '0px'
+       })
     },
-    basicInput: {
-        display: 'block',
-        marginBottom: '0.5em'
-    },
+    basicInput: basicInputStyle,
     id: {
       marginRight: '0.5em',
     },
-    lightbox: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        background: rgba(0, 0, 0, 0.5)
-    },
+    lightbox: lightboxStyle,
     resultingPath: {
         marginBottom: '1em'
     },
@@ -453,20 +438,12 @@ let styles = {
         padding: '0.25em',
         marginBottom: '0.5em',
         background: '#212121',
-        border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
+        border: 'none',
         borderRadius: '2px',
         fontSize: '1em',
         color: 'white'
     },
-    textArea: {
-        margin: '0px',
-        width: '95%',
-        height: '358px',
-        color: 'white',
-        marginBottom: '0.5em',
-        padding: '0.5em',
-        background: 'black'
-    },
+    textArea: textAreaStyle,
     body: {
 
     },

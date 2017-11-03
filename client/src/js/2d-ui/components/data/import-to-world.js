@@ -204,7 +204,7 @@ let styles = {
     padding: '0.25em',
     marginBottom: '0.5em',
     background: '#212121',
-    border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
+    border: 'none',
     borderRadius: '2px',
     fontSize: '1em',
     color: 'white',

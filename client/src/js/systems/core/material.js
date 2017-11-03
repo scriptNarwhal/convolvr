@@ -79,7 +79,7 @@ export default class MaterialSystem {
                 mat.roughnessMap = roughnessMap
                 
                 let roughnessCallback = roughnessMap => { 
-
+                    roughnessMap.wrapS = roughnessMap.wrapT = THREE.ClampToEdgeWrapping
                     !!prop.repeat && this._setTextureRepeat( roughnessMap, prop.repeat )
                     roughnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
                     mat.roughnessMap = roughnessMap
@@ -88,6 +88,7 @@ export default class MaterialSystem {
                   },
                   mapCallback = diffuse => { 
 
+                    diffuse.wrapS = diffuse.wrapT = THREE.ClampToEdgeWrapping
                     !!prop.repeat && this._setTextureRepeat( diffuse, prop.repeat )
                     diffuse.anisotropy = anisotropy
                     mat.map = diffuse
@@ -96,6 +97,7 @@ export default class MaterialSystem {
                   },
                   mapAndRoughnessCallback = diffuse => {
 
+                    diffuse.wrapS = diffuse.wrapT = THREE.ClampToEdgeWrapping
                     !!prop.repeat && this._setTextureRepeat( diffuse, prop.repeat )
                     diffuse.anisotropy = anisotropy
                     mat.map = diffuse
@@ -104,6 +106,7 @@ export default class MaterialSystem {
                   },
                   metalnessCallback = metalnessMap => {
 
+                    metalnessMap.wrapS = metalnessMap.wrapT = THREE.ClampToEdgeWrapping
                     !!prop.repeat && this._setTextureRepeat( metalnessMap, prop.repeat )
                     metalnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
                     mat.metalnessMap = metalnessMap
@@ -112,6 +115,7 @@ export default class MaterialSystem {
                   },
                   mapAndMetalnessCallback = diffuse => {
 
+                    diffuse.wrapS = diffuse.wrapT = THREE.ClampToEdgeWrapping
                     !!prop.repeat && this._setTextureRepeat( diffuse, prop.repeat )
                     diffuse.anisotropy = anisotropy
                     mat.map = diffuse
@@ -120,6 +124,7 @@ export default class MaterialSystem {
                   },
                   metalnessAndRoughnessCallBack = roughnessMap => {
 
+                    roughnessMap.wrapS = roughnessMap.wrapT = THREE.ClampToEdgeWrapping
                     !!prop.repeat && this._setTextureRepeat( roughnessMap, prop.repeat )
                     roughnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
                     mat.roughnessMap = roughnessMap
@@ -128,6 +133,7 @@ export default class MaterialSystem {
                   },
                   mapMetalnessAndRoughnessCallback = tex => {
                     
+                    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping
                     !!prop.repeat && this._setTextureRepeat( diffuse, prop.repeat )
                     diffuse.anisotropy = anisotropy
                     mat.map = diffuse
@@ -192,9 +198,10 @@ export default class MaterialSystem {
 
             prop.specularMap && assets.loadImage( prop.specularMap, textureConfig, specularMap => { 
 
-                  specularMap.anisotropy = renderer.getMaxAnisotropy()
-                  material.specularMap = specularMap
-                  material.needsUpdate = true 
+              specularMap.wrapS = specularMap.wrapT = THREE.ClampToEdgeWrapping
+              specularMap.anisotropy = renderer.getMaxAnisotropy()
+              material.specularMap = specularMap
+              material.needsUpdate = true 
 
             })
 

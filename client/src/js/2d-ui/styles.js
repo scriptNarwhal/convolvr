@@ -10,7 +10,8 @@ export let modalStyle = {
     right: '0px',
     bottom: '0px',
     margin: 'auto',
-    border: '0.1em solid white',
+    borderRadius: '0.2em',
+    border: '0.15em solid #333344',
     backgroundColor: "black",
     backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))'
 }
