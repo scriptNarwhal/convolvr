@@ -71,10 +71,10 @@ class Inventory extends Component {
                               ...data, 
                               source: "inventory", 
                               category: inventorySet[1], 
-                              itemId: inventorySet[i].id, 
-                              itemIndex: i, 
-                              itemData: inventorySet[i] 
+                              itemId: inventorySet[0][ data.itemIndex ].id, 
+                              itemData: inventorySet[ data.itemIndex  ] 
                             }
+                            //console.info("<InventoryList> onAction ", name, i, data, actionData, inventorySet[0])
                             this.onContextAction(name, actionData, e) 
                            }}
                            options={ inventorySet[0] }

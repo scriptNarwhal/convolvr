@@ -175,7 +175,7 @@ class ComponentEditor extends Component {
         let index = data.componentIndex,
             components = this.state.components,
             componentData = components[index]
-    
+        console.info("handleComponentAction: componentData: ", componentData, components )
         if ( action == "Delete" ) {
                 
             components.splice( index, 1 )
@@ -359,7 +359,7 @@ class ComponentEditor extends Component {
                                         console.log(e, Object.keys(property)[0], "clicked")
                                         
                                         }}
-                                        onContextMenu={ (name, data, e) => this.handlePropertyAction(name, {...data, componentIndex: i }, e) }
+                                        onContextMenu={ (name, data, e) => this.handlePropertyAction(name, {...data, propertyIndex: i }, e) }
                                         contextMenuOptions={ this.props.contextMenuOptions }
                                         showTitle={true}
                                         compact={true}
@@ -395,7 +395,7 @@ class ComponentEditor extends Component {
                                         compact={true}
                                         username={this.props.username}
                                         dir={this.props.dir}
-                                        category={"Properties"}
+                                        category={"Components"}
                                         title={component.name}
                                         image=''
                                         key={i+'.2'}

@@ -17,11 +17,11 @@ export default class InventoryList extends Component {
     
   }
 
-  handleContextAction ( action, evt ) {
+  handleContextAction ( action, data, e ) {
 
-    if ( this.props.onAction )
+    if ( this.props.onAction ) 
 
-      this.props.onAction( action, evt )
+      this.props.onAction( action, data, e )
 
   }
 
@@ -56,14 +56,17 @@ export default class InventoryList extends Component {
             {
               this.props.options && this.props.options.map((opt, i) =>{
                 return (
-                    <Card image=''
-                          clickHandler={ (e) => {
-                            console.log(e, opt.name, "clicked")
+                    <Card clickHandler={ (e) => {
+                            
                            
                           }}
-                          onContextMenu={ (name, data, e) => this.handleContextAction(name, data, e) }
+                          onContextMenu={ (name, data, e) => { 
+                            this.handleContextAction(name, {...data, itemIndex: i}, e) 
+                          }}
                           contextMenuOptions={ this.props.contextMenuOptions }
                           showTitle={true}
+                          compact={true}
+                          image=''
                           username={this.props.username}
                           dir={this.props.dir}
                           category={this.props.category}

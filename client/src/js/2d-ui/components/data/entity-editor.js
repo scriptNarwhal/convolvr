@@ -154,7 +154,7 @@ class EntityEditor extends Component {
         this.setState({ components })
             
     } else if (action == "Edit") {
-        console.info("EDITING COMPONENT~ ", data, index)
+        console.info("EDITING COMPONENT~ ", componentData, index)
         this.props.editLoadedItem("entityEdit", this.props.username, "Components", index, componentData)
 
     }

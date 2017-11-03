@@ -26,7 +26,7 @@ export default class Card extends Component {
     
     if ( name == "Delete" ) {
 
-      if ( confirm("Delete file: "+data.filename+"?") ) {
+      if ( confirm(`Delete ${data.filename}?`) ) {
         this.props.onContextMenu(name, data, e)
       } else {
         this.props.onContextMenu("", {}, {})

@@ -108,7 +108,7 @@ module.exports = function places (state = {
             return Object.assign({}, state, {
                 item: {
                     ...state.item,
-                    entitie: action.data
+                    entity: action.data
                 },
                 fetching: false
             })
@@ -126,7 +126,7 @@ module.exports = function places (state = {
             return Object.assign({}, state, {
                 item: {
                     ...state.item,
-                    propertie: action.data
+                    property: action.data
                 },
                 fetching: false
             })

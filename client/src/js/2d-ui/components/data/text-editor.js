@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import { isMobile } from '../../../config'
 import { 
   textAreaStyle,
   lightboxStyle, 
@@ -121,7 +122,7 @@ class TextEditor extends Component {
 
       return (
        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
+          <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
                 <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
