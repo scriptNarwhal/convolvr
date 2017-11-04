@@ -112,7 +112,7 @@ let styles = {
       marginRight: '0.5em',
       marginLeft: '8px',
       marginBottom: '0.5em',
-      backgroundColor: 'rgb(24, 24, 24)',
+      backgroundColor: 'rgba(21, 21, 21, 0.85)',
       textAlign: "center",
       borderRadius: '8px',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)'

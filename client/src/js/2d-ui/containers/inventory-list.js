@@ -105,7 +105,7 @@ InventoryList.defaultProps = {
 let styles = {
   list: (color, compact) => {
     return {
-      backgroundColor: 'rgb(24, 24, 24)',
+      //backgroundColor: 'rgb(24, 24, 24)',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)',
       cursor: 'pointer',
       width: '32%',

@@ -28,6 +28,8 @@ a, a:visited {
 }
 .viewport {
     cursor: pointer;
+    -webkit-transition: filter 0.3s linear;
+    transition: filter 0.3s linear;
     width: 100% !important;
     height: 100% !important;
 }
@@ -50,77 +52,12 @@ a, a:visited {
 .hud .button {
   margin-right: 0;
 }
-.tab {
-  height: 8vh;
-  color: rgba(255,255,255,0.92);
-  width: 7.5vh;
-  font-size: 15px;
-  display: inline-block;
-  margin-top: 0.5vh;
-}
-.tab .button {
-  display: inline-block;
-  width: 7.5vh;
-  height: 7.5vh;
-  margin-right: 0;
-}
-.tab .button .inner {
-  height: 100%;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.07);
+
+.blurred {
+    -webkit-filter: blur(4px); 
+    filter: blur(4px);
 }
 
-
-.side-menu {
-  width: 100%;
-  padding-top: 0.75vh;
-}
-.menu-item {
-    display: inline-block;
-    height: 3vh;
-    margin-left: 0.25em;
-    min-height: 48px;
-    width: 100%;
-}
-.menu-item span {
-    position: relative;
-    top: 2.2vh;
-    color: rgba(255,255,255,0.94);
-    padding-left: 1em;
-    cursor: pointer;
-    display: inline-block;
-}
-.icon {
-    height: 4vh;
-    width: 4vh;
-    display: inline-block;
-}
-.button {
-    display: inline-block;
-    width: 5.5vh;
-    height: 5.5vh;
-    float: right;
-    margin-right: 0.5em;
-}
-.button .inner {
-    transition: all 0.2s linear;
-    background-size: contain;
-    height: 5vh;
-    width: 5vh;
-    display: block;
-    opacity: 0.8;
-    background-size: 60%;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    cursor: pointer;
-}
-
-.menu-item .button .inner {
-    right: 0.5em;
-}
-.menu-item span {
-    opacity: 0.7;
-}
 .menu-item:hover .button .inner {
     opacity: 1;
     background-color: rgba(255, 255, 255, 1);
@@ -153,3 +90,77 @@ a, a:visited {
     margin-top: 12px;
     background-color: rgba(255,255,255,0.66);
 }
+
+
+
+
+/* .side-menu {
+  width: 100%;
+  padding-top: 0.75vh;
+}
+.menu-item {
+    display: inline-block;
+    height: 3vh;
+    margin-left: 0.25em;
+    min-height: 48px;
+    width: 100%;
+}
+.menu-item span {
+    position: relative;
+    top: 2.2vh;
+    color: rgba(255,255,255,0.94);
+    padding-left: 1em;
+    cursor: pointer;
+    display: inline-block;
+} */
+/* .icon {
+    height: 4vh;
+    width: 4vh;
+    display: inline-block;
+}
+.button {
+    display: inline-block;
+    width: 5.5vh;
+    height: 5.5vh;
+    float: right;
+    margin-right: 0.5em;
+}
+.button .inner {
+    transition: all 0.2s linear;
+    background-size: contain;
+    height: 5vh;
+    width: 5vh;
+    display: block;
+    opacity: 0.8;
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    cursor: pointer;
+} */
+
+/* .menu-item .button .inner {
+    right: 0.5em;
+}
+.menu-item span {
+    opacity: 0.7;
+} */
+
+/* .tab {
+  height: 8vh;
+  color: rgba(255,255,255,0.92);
+  width: 7.5vh;
+  font-size: 15px;
+  display: inline-block;
+  margin-top: 0.5vh;
+}
+.tab .button {
+  display: inline-block;
+  width: 7.5vh;
+  height: 7.5vh;
+  margin-right: 0;
+}
+.tab .button .inner {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.07);
+} */

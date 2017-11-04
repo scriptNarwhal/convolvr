@@ -37,6 +37,7 @@ export default class Convolvr {
 			usePostProcessing = false,
 			viewDist = [ 0.1, 10000 ]
 
+		this.store = store
 		this.mobile = mobile
 		this.floorHeight = 0
 		this.highAltitudeGravity = false
@@ -436,6 +437,7 @@ export default class Convolvr {
 		if ( this.mode != "stereo" )
 
 			three.renderer.setSize(window.innerWidth, window.innerHeight)
+
 
 
 		if ( this.postProcessing.enabled )

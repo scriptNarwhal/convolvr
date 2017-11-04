@@ -11,9 +11,7 @@ class Inventory extends Component {
 
   componentWillMount () {
 
-    this.props.getInventory(this.props.username, "Entities")
-    this.props.getInventory(this.props.username, "Components")
-    this.props.getInventory(this.props.username, "Properties")
+    this.refreshInventory()
 
     this.setState({
       
@@ -24,8 +22,21 @@ class Inventory extends Component {
   componentWillReceiveProps ( nextProps ) {
 
     let userNameChanged = nextProps.username != this.props.username,
-        finishedFetchingDirs = this.props.dirsFetching == true && nextProps.dirsFetching == false,
-        finishedFetchingFiles = (this.props.filesFetching == true && nextProps.filesFetching == false)
+        inventoryUpdated = this.props.inventoryFetching && nextProps.inventoryFetching == false
+
+    if ( inventoryUpdated ) {
+
+      this.props.getInventory()
+
+    }
+
+  }
+
+  refreshInventory ( opts ) {
+
+    this.props.getInventory(this.props.username, "Entities")
+    this.props.getInventory(this.props.username, "Components")
+    this.props.getInventory(this.props.username, "Properties")
 
   }
 
@@ -54,16 +65,13 @@ class Inventory extends Component {
 
   render() {
 
-    let files = this.props.files,
-        dirs = this.props.dirs
-
     return (
         <Shell className="data-view" 
                style={ isMobile() ? { paddingTop: '60px' } : { paddingTop: '0px' } }
                innerStyle={ { paddingTop: isMobile() ? '72px' : 0, paddingLeft: isMobile() ? '10px' : '72px' }  }       
         >
         {
-          [[this.props.inventoryEntities,   "Entities"  ], 
+          false == this.props.inventoryFetching ? [[this.props.inventoryEntities,   "Entities"  ], 
            [this.props.inventoryComponents, "Components"], 
            [this.props.inventoryProperties, "Properties"]].map( (inventorySet, i) => (
             <InventoryList onAction={ (name, data, e) => {
@@ -83,7 +91,7 @@ class Inventory extends Component {
                            category={ inventorySet[1] }
                            key={i}
             />
-           ))
+           )) : ""
         }
         </Shell>
     )
@@ -127,18 +135,11 @@ export default connect(
     return {
         loggedIn: state.users.loggedIn,
         username: state.users.loggedIn != false ? state.users.loggedIn.name : "public",
-        messages: state.messages.messages,
-        stereoMode: state.app.stereoMode,
-        menuOpen: state.app.menuOpen,
-        chatOpen: state.app.chatOpen,
         vrMode: state.app.vrMode,
         inventoryEntities: state.inventory.items.entities,
         inventoryComponents: state.inventory.items.components,
         inventoryProperties: state.inventory.items.properties,
-        files: state.files.list.data,
-        dirs: state.files.listDirectories.data,
-        filesFetching: state.files.list.fetching,
-        dirsFetching: state.files.listDirectories.fetching,
+        inventoryFetching: state.inventory.fetching,
         workingPath: state.files.listDirectories.workingPath,
         upload: state.files.uploadMultiple
     }

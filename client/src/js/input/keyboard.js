@@ -1,6 +1,6 @@
-let isVRMode = ( mode ) => {
-  return (mode == "3d" || mode == "stereo")
-}
+import { dispatch } from 'redux';
+import { toggleMenu } from '../redux/actions/app-actions';
+import { isVRMode } from '../config.js'
 
 export default class Keyboard {
 
@@ -25,11 +25,11 @@ export default class Keyboard {
           case 16: keys.shift = true; break
           case 32: keys.space = true; break
           case 27: // escape key
-          world.mode = "web"
+          // world.mode = "web"
 
-          if ( world.user.username != "" )
+          // if ( world.user.username != "" )
            
-            document.body.setAttribute("class", "desktop")
+          //   document.body.setAttribute("class", "desktop")
           
           break;
           case 37: keys.left = true; break

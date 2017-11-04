@@ -125,7 +125,7 @@ let styles = {
       display: 'inline-block',
       marginRight: '0.5em',
       marginBottom: '0.5em',
-      backgroundColor: 'rgb(50, 50, 50)',
+      backgroundColor: 'rgba(255,255,255, 0.1)',
       backgroundSize: 'cover',
       backgroundImage: `url(${image})`,
       textAlign: "center",

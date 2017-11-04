@@ -11,9 +11,8 @@ export let modalStyle = {
     bottom: '0px',
     margin: 'auto',
     borderRadius: '0.2em',
-    border: '0.15em solid #333344',
-    backgroundColor: "black",
-    backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))'
+    border: '0.15em solid rgb(60,60,60)',
+    backgroundColor: "rgba(0,0,0,0.88)"
 }
 
 export let basicInputStyle = {
@@ -26,8 +25,8 @@ export let lightboxStyle = {
     top: 0,
     left: 0,
     width: '100%',
-    height: '100%',
-    background: rgba(0, 0, 0, 0.5)
+    height: '100%'
+    // background: rgba(0, 0, 0, 0.1)
 }
 
 export let textAreaStyle = {

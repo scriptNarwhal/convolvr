@@ -202,7 +202,7 @@ let styles = {
         left: ! isMobile() ? '72px' : '0px'
       })
   },
-lightbox: lightboxStyle,
+lightbox: {...lightboxStyle, backgroundColor: 'rgba(0,0,0,0.5)' },
 resultingPath: {
   marginBottom: '1em'
 },

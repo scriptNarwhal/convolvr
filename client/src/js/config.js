@@ -54,3 +54,5 @@ export let clearOldData = () => {
 }
 
 export let isMobile = () => window.innerWidth < 480 || window.devicePixelRatio >= 1.5 && window.innerWidth < 1280
+
+export let isVRMode = ( mode ) => (mode == "3d" || mode == "stereo")

@@ -11,7 +11,7 @@ import {
 import { API_SERVER } from '../../config.js'
 
 export function toggleMenu ( force ) {
-
+    console.log("toggle menu ", force)
     let mode = window.three.world.mode
 
     if ( mode != "stereo" ) {
@@ -20,6 +20,10 @@ export function toggleMenu ( force ) {
 
             mode = "web"
 
+        } else if ( force !== undefined ) {
+
+            mode = "3d"
+
         } else {
 
             mode = (mode == "3d" ? "web" : "3d")
@@ -27,7 +31,8 @@ export function toggleMenu ( force ) {
         }
 
         window.three.world.mode = mode
-
+        document.querySelector("#viewport").setAttribute("class", `viewport ${mode == "web" ? "blurred" : ""}`)
+        
     } 
     
     return {

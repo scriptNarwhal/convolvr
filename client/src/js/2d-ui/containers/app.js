@@ -70,13 +70,13 @@ class App extends Component {
 
         if ( worldMode != 'vr' && worldMode != 'stereo' ) { // 3d ui will show the chat in vr without interrupting things
         
-            this.props.toggleMenu()
+            this.props.toggleMenu(true)
         
         } else {
           setTimeout(()=>{
 
             browserHistory.push(`/${worldDetails[ 0 ]}/${worldDetails[ 1 ]}`)
-            this.props.toggleMenu()
+            this.props.toggleMenu(false)
           
           }, 3500)
         
