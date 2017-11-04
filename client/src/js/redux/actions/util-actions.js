@@ -126,7 +126,7 @@ export function launchEditLoadedItem ( source, username, category, index, data )
 
         } else if (category == "Properties") {
 
-            dispatch(launchComponentEditor(username, index))
+            dispatch(launchPropertyEditor(username, index))
 
         }
 

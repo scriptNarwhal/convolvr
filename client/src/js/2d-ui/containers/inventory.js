@@ -24,11 +24,9 @@ class Inventory extends Component {
     let userNameChanged = nextProps.username != this.props.username,
         inventoryUpdated = this.props.inventoryFetching && nextProps.inventoryFetching == false
 
-    if ( inventoryUpdated ) {
+    if ( inventoryUpdated )
 
-      this.props.getInventory()
-
-    }
+      this.refreshInventory()
 
   }
 
@@ -79,10 +77,11 @@ class Inventory extends Component {
                               ...data, 
                               source: "inventory", 
                               category: inventorySet[1], 
+                              itemIndex: data.itemIndex,
                               itemId: inventorySet[0][ data.itemIndex ].id, 
-                              itemData: inventorySet[ data.itemIndex  ] 
+                              itemData: inventorySet[0][ data.itemIndex ] 
                             }
-                            //console.info("<InventoryList> onAction ", name, i, data, actionData, inventorySet[0])
+                            console.info("<InventoryList> onAction ", actionData)
                             this.onContextAction(name, actionData, e) 
                            }}
                            options={ inventorySet[0] }
@@ -167,8 +166,8 @@ export default connect(
       uploadFile: (file, username, dir) => {
         dispatch(uploadFile(file, username, dir))
       },
-      editLoadedItem: ( username, category, index ) => {
-        dispatch(launchEditLoadedItem( username, category, index ))
+      editLoadedItem: ( source, username, category, index, data ) => {
+        dispatch(launchEditLoadedItem( source, username, category, index, data ))
       },
     }
   }

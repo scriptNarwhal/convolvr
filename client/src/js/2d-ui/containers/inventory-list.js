@@ -149,7 +149,6 @@ let styles = {
     width: '40%',
     height: '40px',
     paddingTop: '0em',
-    marginRight: '1em',
-    backgroundColor: 'rgba(0,0,0,0.2)'
+    marginRight: '1em'
   }
 }

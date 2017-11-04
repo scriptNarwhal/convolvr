@@ -141,7 +141,7 @@ class PropertyEditor extends Component {
 
         } else {
 
-          this.props.addInventoryItem( this.props.username, "Properties", JSON.parse(this.state.text) )
+          this.props.addInventoryItem( this.props.username, "Properties", { id: -1, name, data: JSON.parse(this.state.text) } )
 
         }
 

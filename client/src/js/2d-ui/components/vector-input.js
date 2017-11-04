@@ -47,7 +47,7 @@ onChange ( event, i ) {
                     <input step={""+(1 / (Math.pow(10, this.props.decimalPlaces)))} 
                            onBlur={ e=> {this.onChange(e, i) }} 
                            style={styles.numeric} 
-                           defaultValue={value} 
+                           defaultValue={i == 3 ? 1 : value} 
                            type='number' 
                            key={i} 
                     />
