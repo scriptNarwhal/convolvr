@@ -25,6 +25,7 @@ class Settings extends Component {
       floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
       IOTMode: localStorage.getItem("IOTMode") || 'off',
       leapMode: localStorage.getItem("leapMode") || "hybrid",
+      blurEffect: localStorage.getItem("blurEffect") == "on" ? true : window.innerWidth > 720 ? true : false,
       viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0,
       fov: localStorage.getItem("fov") != null ? localStorage.getItem("fov") : 75,
       manualLensDistance: localStorage.getItem("manualLensDistance") != null ? localStorage.getItem("manualLensDistance") : 0
@@ -66,6 +67,7 @@ class Settings extends Component {
     localStorage.setItem( 'floorHeight', this.state.floorHeight )
     localStorage.setItem( 'leapMode', this.state.leapMode )
     localStorage.setItem( 'viewDistance', this.state.viewDistance )
+    localStorage.setItem( 'blurEffect', this.state.blurEffect)
     localStorage.setItem( 'manualLensDistance', this.state.manualLensDistance )
     localStorage.setItem( 'fov', this.state.fov )
     this.reload()
@@ -283,6 +285,18 @@ class Settings extends Component {
                       style={ styles.select }
               >
                 <option value="on">On (Bloom HDR Effect)</option>
+                <option value="off">Off (Better Performance)</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <h3 style={styles.h3}>Menu Blur Effect</h3>
+            <div style={styles.col}>
+              <select onChange={e=> {this.setState({blurEffect: e.target.value})}}
+                      value={ this.state.blurEffect }
+                      style={ styles.select }
+              >
+                <option value="on">On (3d view is blurred when menu is open)</option>
                 <option value="off">Off (Better Performance)</option>
               </select>
             </div>

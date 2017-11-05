@@ -146,7 +146,7 @@ class PropertyEditor extends Component {
 
           this.props.onSave( JSON.parse(this.state.text) )
 
-        } else {
+        } else if (this.state.activated) {
 
           this.props.addInventoryItem( this.props.username, "Properties", { id: -1, name, data: JSON.parse(this.state.text) } )
 
@@ -209,7 +209,7 @@ class PropertyEditor extends Component {
               </span>
             </div>
             <div style={ styles.body }>
-              {  !this.state.refreshing ? (
+              {  this.state.activated && !this.state.refreshing ? (
                 <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
               ) : ""}
               <FileButton title="Save" onClick={ () => { this.save() } } />
@@ -258,7 +258,7 @@ export default connect(
         activated: state.util.propertyEdit.activated,
         itemId: state.util.propertyEdit.itemId,
         properties: state.inventory.items.properties,
-        editLoadedItemActivated: state.util.loadedItemEdit.activated && state.util.loadedItemEdit.category == "Properties",
+        editLoadedItemActivated: state.util.loadedItemEdit.activated.property && state.util.loadedItemEdit.category == "Properties",
         loadedItemIndex: state.util.loadedItemEdit.index,
         loadedItemData: state.util.loadedItemEdit.data.property,
         editSource: state.util.loadedItemEdit.source,

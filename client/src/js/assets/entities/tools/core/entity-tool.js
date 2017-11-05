@@ -26,10 +26,10 @@ export default class EntityTool extends Tool  {
       this.mesh = null
       this.name = "Entity Tool"
       this.options = {
-        entityType: allOptions[ 5 ]
+        entityType: allOptions[ 4 ]
       }
       this.all = allOptions
-      this.current = 5
+      this.current = 4
       this.entity = new Entity(-1, [
           {
             props: {

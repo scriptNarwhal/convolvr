@@ -59,7 +59,7 @@ class ComponentEditor extends Component {
                 activated: true
             })
         
-        if ( this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated ) {
+        if ( this.props.editMode && this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated ) {
 
             if ( nextProps.editSource == "entityEdit" || nextProps.editSource == "componentEdit" ) { // load from entity in inventory
 
@@ -347,6 +347,7 @@ class ComponentEditor extends Component {
                         <div>
                             <h4 style={styles.h4}>Properties</h4>
                             <PropertyEditor onSave={ data => this.onSaveProperty( data ) } 
+                                            entityEditMode={true}
                                             username={ this.props.username }
                                             title={"Add Property"}
                             />
@@ -377,6 +378,7 @@ class ComponentEditor extends Component {
                         <div>
                             <h4 style={styles.h4}>Components</h4>
                             <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
+                                            entityEditMode={true}
                                             username={ this.props.username }
                                             title={"Add Component"}
                             />
@@ -424,6 +426,7 @@ class ComponentEditor extends Component {
 
 ComponentEditor.defaultProps = {
     title: "New Component",
+    entityEditMode: true,
     contextMenuOptions: [
         { name: "Edit" },
         { name: "Delete"}

@@ -75,7 +75,11 @@ module.exports = function app (state = {
         itemId: ""
     },
     loadedItemEdit: {
-        activated: false,
+        activated: {
+            entity: false,
+            component: false,
+            property: false
+        },
         username: "",
         category: "",
         index: -1,
@@ -189,17 +193,21 @@ module.exports = function app (state = {
         }
     case UTIL_LAUNCH_EDIT_LOADED_ITEM:
 
-        let data = Object.assign({}, state.loadedItemEdit.data)
+        let data = {...state.loadedItemEdit.data },
+            activated = {...state.loadedItemEdit.activated }
         
         switch( action.category ) {
             case "Entities":
                 data.entity = action.data
+                activated.entity = true
             break
             case "Components":
                 data.component = action.data
+                activated.component = true
             break
             case "Properties":
                 data.property = action.data
+                activated.property = true
             break
         }
 
@@ -207,7 +215,7 @@ module.exports = function app (state = {
             ...state,
             loadedItemEdit: {
                 ...state.loadedItemEdit,
-                activated: true,
+                activated,
                 data,
                 username: action.username,
                 index: action.index,

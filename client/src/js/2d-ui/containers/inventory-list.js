@@ -43,9 +43,13 @@ export default class InventoryList extends Component {
                     <InventoryExport key="3" />
                   ]
                 ) : this.props.category == "Components" ? (
-                  <ComponentEditor username={this.props.username}/>
+                  <ComponentEditor username={this.props.username}
+                                  entityEditMode={false}
+                  />
                 ) : (
-                  <PropertyEditor username={this.props.username}/>
+                  <PropertyEditor username={this.props.username}
+                                  entityEditMode={false}
+                  />
                 )
               }
               
