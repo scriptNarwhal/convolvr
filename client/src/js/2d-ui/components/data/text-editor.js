@@ -66,6 +66,12 @@ class TextEditor extends Component {
 
     }
 
+    if ( this.props.writeTextFetching && nextProps.writeTextFetching == false ) {
+      
+      this.props.listFiles( nextProps.username, nextProps.cwd.join("/") )
+      
+    }
+
   }
 
   componentWillUpdate ( nextProps, nextState ) {
@@ -156,11 +162,12 @@ TextEditor.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
+  listFiles,
   readText,
   writeText
 } from '../../../redux/actions/file-actions'
 import {
-  closeTextEdit
+  closeTextEdit,
 } from '../../../redux/actions/util-actions'
 
 export default connect(
@@ -172,6 +179,7 @@ export default connect(
         menuOpen: state.app.menuOpen,
         textData: state.files.readText.data,
         readTextFetching: state.files.readText.fetching,
+        writeTextFetching: state.files.writeText.fetching,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.textEdit.activated,
         filename: state.util.textEdit.filename,
@@ -190,7 +198,10 @@ export default connect(
       },
       closeTextEdit: () => {
         dispatch( closeTextEdit() )
-      }
+      },
+      listFiles: (username, dir) => {
+        dispatch(listFiles(username, dir))
+      },
     }
   }
 )(TextEditor)

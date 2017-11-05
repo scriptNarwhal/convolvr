@@ -47,9 +47,9 @@ class ImportToWorld extends Component {
         }
 
         if ( this.props.itemData == false && nextProps.itemData == true ) 
+
           this.setState({name: nextProps.itemData.name})
         
-
   }
 
   componentWillUpdate ( nextProps, nextState ) {
@@ -83,9 +83,12 @@ class ImportToWorld extends Component {
   save ( id ) {
 
     let name = this.state.name,
+        itemData = Object.assign({}, this.props.itemData),
         data = {}
 
-    this.props.addItemToWorld( this.props.username, "Entities", this.props.itemData.id, this.state.world, this.state.coords.join("x"), this.props.itemData )
+    itemData.world = this.props.currentWorld
+
+    this.props.addItemToWorld( this.props.username, "Entities", this.props.itemData.id, this.state.world, this.state.coords.join("x"), itemData )
     this.toggleModal()
 
   }
@@ -106,7 +109,8 @@ class ImportToWorld extends Component {
        <div style={ styles.lightbox }>
           <div style={ styles.modal() } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Import To World</span> 
+              <span style={ styles.title }> 
+                <span style={{marginRight: '0.5em'}}>Import To World</span> 
                 <input type="text" disabled onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
               </span>
               <div style={styles.basicInput}>
@@ -167,6 +171,7 @@ export default connect(
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         vrMode: state.app.vrMode,
+        currentWorld: state.worlds.current,
         worlds: state.worlds.all,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.importToWorld.activated,

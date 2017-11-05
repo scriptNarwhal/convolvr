@@ -10,6 +10,7 @@ import {
   lightboxStyle, 
   modalStyle 
 } from '../../styles'
+import { isMobile } from '../../../config'
 
 class SharingSettings extends Component {
 

@@ -191,9 +191,9 @@ class Data extends Component {
             })
           }
           <hr style={styles.hr} />
-          { this._renderFiles( nonImages, mobile, dirName == 'thumbs' ) }
+          { this.props.filesFetching == false && this._renderFiles( nonImages, mobile, dirName == 'thumbs' ) }
           <hr style={styles.hr} />
-          { this._renderFiles( imageFiles, mobile, dirName == 'thumbs' ) }
+          { this.props.filesFetching == false && this._renderFiles( imageFiles, mobile, dirName == 'thumbs' ) }
         </Shell>
     )
 
