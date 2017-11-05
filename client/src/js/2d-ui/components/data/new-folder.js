@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
-
+import { rgba, rgb } from '../../../util'
 
 class NewFolder extends Component {
 
@@ -114,8 +114,8 @@ NewFolder.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
+  closeNewFolder
+} from '../../../redux/actions/util-actions'
 import {
   createDirectory,
   listDirectories
@@ -140,20 +140,10 @@ export default connect(
       },
       listDirectories: (username, dir) => {
           dispatch(listDirectories(username, dir))
-      },
-      toggleMenu: ( force ) => {
-          dispatch( toggleMenu( force ) )
       }
     }
   }
 )(NewFolder)
-
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-  return `rgb(${r}, ${g}, ${b})`
-},
-rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
-  return `rgba(${r}, ${g}, ${b}, ${a})`
-}
 
 let styles = {
 modal: {
@@ -183,7 +173,7 @@ resultingPath: {
   marginBottom: '1em'
 },
 cancelButton: {
-  borderLeft: 'solid 0.2em magenta'
+  borderLeft: 'solid 0.2em #005aff'
 },
 header: {
   width: '100%',

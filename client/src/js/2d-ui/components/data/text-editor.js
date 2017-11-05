@@ -1,6 +1,16 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import { isMobile } from '../../../config'
+import { 
+  textAreaStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../../styles'
+import {
+  rgba,
+  rgb
+} from '../../../util'
 
 class TextEditor extends Component {
 
@@ -56,6 +66,12 @@ class TextEditor extends Component {
 
     }
 
+    if ( this.props.writeTextFetching && nextProps.writeTextFetching == false ) {
+      
+      this.props.listFiles( nextProps.username, nextProps.cwd.join("/") )
+      
+    }
+
   }
 
   componentWillUpdate ( nextProps, nextState ) {
@@ -98,10 +114,11 @@ class TextEditor extends Component {
 
   toggleModal () {
 
+    this.props.closeTextEdit()
     this.setState({
       activated: !this.state.activated
     })
-    this.props.closeTextEdit()
+   
 
   }
 
@@ -111,7 +128,7 @@ class TextEditor extends Component {
 
       return (
        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
+          <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
                 <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
@@ -145,14 +162,12 @@ TextEditor.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
-import {
+  listFiles,
   readText,
   writeText
 } from '../../../redux/actions/file-actions'
 import {
-  closeTextEdit
+  closeTextEdit,
 } from '../../../redux/actions/util-actions'
 
 export default connect(
@@ -164,6 +179,7 @@ export default connect(
         menuOpen: state.app.menuOpen,
         textData: state.files.readText.data,
         readTextFetching: state.files.readText.fetching,
+        writeTextFetching: state.files.writeText.fetching,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.textEdit.activated,
         filename: state.util.textEdit.filename,
@@ -183,49 +199,26 @@ export default connect(
       closeTextEdit: () => {
         dispatch( closeTextEdit() )
       },
-      toggleMenu: (force) => {
-          dispatch(toggleMenu(force))
-      }
+      listFiles: (username, dir) => {
+        dispatch(listFiles(username, dir))
+      },
     }
   }
 )(TextEditor)
 
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-  return `rgb(${r}, ${g}, ${b})`
-},
-rgba = ( r, g, b, a ) => { 
-  return `rgba(${r}, ${g}, ${b}, ${a})`
-}
-
 let styles = {
-modal: {
-  width: '50%',
-  maxWidth: '729px',
-  minWidth: '320px',
-  height: '480px',
-  padding: '0.25em',
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  margin: 'auto',
-  background: rgb(38, 38, 38),
-  borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
-},
-lightbox: {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100%',
-  height: '100%',
-  background: rgba(0, 0, 0, 0.8)
-},
+  modal: () => {
+    return Object.assign({}, modalStyle, {
+        maxWidth: '960px',
+        left: ! isMobile() ? '72px' : '0px'
+      })
+  },
+lightbox: {...lightboxStyle, backgroundColor: 'rgba(0,0,0,0.5)' },
 resultingPath: {
   marginBottom: '1em'
 },
 cancelButton: {
-  borderLeft: 'solid 0.2em magenta'
+  borderLeft: 'solid 0.2em #005aff'
 },
 header: {
   width: '100%',
@@ -242,15 +235,7 @@ text: {
   fontSize: '1em',
   color: 'white',
 },
-textArea: {
-  margin: '0px',
-  width: '95%',
-  height: '358px',
-  color: 'white',
-  marginBottom: '0.5em',
-  padding: '0.5em',
-  background: 'black'
-},
+textArea: textAreaStyle,
 body: {
 
 },

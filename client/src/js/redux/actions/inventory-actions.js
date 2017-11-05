@@ -5,6 +5,9 @@ import {
     INVENTORY_FETCH,
     INVENTORY_FETCH_FAIL,
     INVENTORY_FETCH_DONE,
+    INVENTORY_ITEM_FETCH,
+    INVENTORY_ITEM_FETCH_FAIL,
+    INVENTORY_ITEM_FETCH_DONE,
     INVENTORY_UPDATE_FETCH,
     INVENTORY_UPDATE_DONE,
     INVENTORY_UPDATE_FAIL,
@@ -31,23 +34,50 @@ import {
           .then(res => {
               dispatch({
                   type: INVENTORY_FETCH_DONE,
-                  data: res.data
+                  data: res.data,
+                  category
               })
           }).catch(err => {
               dispatch({
                   type: INVENTORY_FETCH_FAIL,
+                  category,
                   err: err
               })
           });
      }
   
   }
+
+  export function getInventoryItem ( userId, category, itemId ) {
+    
+        return dispatch => {
+         dispatch({
+            type: INVENTORY_ITEM_FETCH,
+            userId
+         })
+         return axios.get(API_SERVER+`/api/inventory/${userId}/${category}/${itemId}`)
+            .then( res => {
+                dispatch({
+                    type: INVENTORY_ITEM_FETCH_DONE,
+                    data: res.data,
+                    category
+                })
+            }).catch( err => {
+                dispatch({
+                    type: INVENTORY_ITEM_FETCH_FAIL,
+                    category,
+                    err: err
+                })
+            });
+       }
+    
+    }
   
   export function addInventoryItem ( userId, category, data ) {
   
       return dispatch => {
        dispatch({
-          type: INVENTORYS_FETCH,
+          type: INVENTORY_ADD_FETCH,
           data
        })
        return axios.post(API_SERVER+`/api/inventory/${userId}/${category}`, data)
@@ -112,23 +142,29 @@ import {
      }
   
   }
-
-  export function addItemToWorld ( userId, category, itemId, world, coords ) {
+  
+  export function addItemToWorld ( userId, category, itemId, world, coords, itemData ) {
     
         return dispatch => {
+            itemData.voxel = coords.split("x").map( v=> parseInt(v) )
          dispatch({
-            type: INVENTORY_UPDATE_FETCH,
-            id: id
+            type: INVENTORY_ADD_TO_WORLD_FETCH,
+            userId,
+            category,
+            itemId,
+            itemData,
+            world,
+            coords
          })
-         return axios.put(API_SERVER+`/api/import-from-inventory/${userId}/${category}/${itemId}/${world}/${coords}`, {})
+         return axios.put(API_SERVER+`/api/import-to-world/${world}/${coords}`, itemData)
             .then(response => {
                 dispatch({
-                  type: INVENTORY_UPDATE_DONE,
+                  type: INVENTORY_ADD_TO_WORLD_DONE,
                   updated: response.data
               })
             }).catch(response => {
                 dispatch({
-                      type: INVENTORY_UPDATE_FAIL,
+                      type: INVENTORY_ADD_TO_WORLD_FAIL,
                       err: response.err
                   })
             });

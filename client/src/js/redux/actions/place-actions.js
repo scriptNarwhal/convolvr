@@ -15,6 +15,9 @@ import {
   PLACE_DELETE_FETCH,
   PLACE_DELETE_DONE,
   PLACE_DELETE_FAIL,
+  PLACE_FETCH,
+  PLACE_FETCH_DONE,
+  PLACE_FETCH_FAIL,
 } from '../constants/action-types'
 import axios from 'axios'
 import { browserHistory } from 'react-router'
@@ -42,6 +45,28 @@ export function fetchPlaces () {
    }
 
 }
+
+export function fetchPlace ( username, placename ) {
+    
+        return dispatch => {
+         dispatch({
+            type: PLACE_FETCH
+         })
+         return axios.get(API_SERVER+`/api/places/${username}/${placename}`)
+            .then(res => {
+                dispatch({
+                    type: PLACE_FETCH_DONE,
+                    data: res.data
+                })
+            }).catch(res => {
+                dispatch({
+                    type: PLACE_FETCH_FAIL,
+                    err: err
+                })
+            });
+       }
+    
+    }
 
 export function fetchUserPlaces( userId ) {
 

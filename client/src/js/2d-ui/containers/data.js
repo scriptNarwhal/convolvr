@@ -96,7 +96,7 @@ class Data extends Component {
       case "Delete":
         this.props.deleteFile( this.props.username, dir, data.filename )
       break;
-      case "Import":
+      case "Add To Inventory":
         this.props.launchImportToInventory( this.props.username, dir, data.filename )
       break;
 
@@ -104,19 +104,19 @@ class Data extends Component {
 
   }
 
-  _renderFiles ( files, mobile ) {
+  _renderFiles ( files, mobile, thumbs ) {
 
     if ( !!files && !this.props.filesFetching) {
 
       return files.map((file, i) => {
               return (
-                <Card image={this.isImage(file) ? this.getFullPath(file, true) : ''}
+                <Card image={this.isImage(file) ? !thumbs && this.getFullPath(file, true) : ''}
                       clickHandler={ (e, title) => {
                         console.log(e, title, "clicked")
                         let newWindow = window.open(this.getFullPath(file), "_blank")
                         newWindow.focus()
                       }}
-                      compact={!this.isImage(file)}
+                      compact={thumbs || !this.isImage(file) }
                       quarterSize={mobile && this.isImage(file) }
                       onContextMenu={ (name, data, e) => this.onContextAction(name, data, e) }
                       showTitle={true}
@@ -158,6 +158,8 @@ class Data extends Component {
 
       })
 
+    let dirName = this.state.workingPath[ this.state.workingPath.length - 1 ]
+
     return (
         <Shell className="data-view" style={ mobile ? { paddingTop: '100px' } : {} }>
           <LocationBar path={this.state.workingPath}
@@ -189,9 +191,9 @@ class Data extends Component {
             })
           }
           <hr style={styles.hr} />
-          { this._renderFiles( nonImages, mobile ) }
+          { this.props.filesFetching == false && this._renderFiles( nonImages, mobile, dirName == 'thumbs' ) }
           <hr style={styles.hr} />
-          { this._renderFiles( imageFiles, mobile ) }
+          { this.props.filesFetching == false && this._renderFiles( imageFiles, mobile, dirName == 'thumbs' ) }
         </Shell>
     )
 
@@ -223,6 +225,7 @@ import {
   launchTextEdit,
   launchRenameFile,
   launchSharingSettings,
+  launchImportToInventory
 } from '../../redux/actions/util-actions'
 
 export default connect(
@@ -262,6 +265,9 @@ export default connect(
       },
       launchSharingSettings: ( username, dir, filename ) => {
         dispatch(launchSharingSettings( username, dir, filename ) )
+      },
+      launchImportToInventory: ( username, dir, filename ) => {
+        dispatch(launchImportToInventory( username, dir, filename ) )
       },
       moveFile: (username, dir, file, targetDir, targetFile) => {
         dispatch(moveFile(username, dir, file, targetDir, targetFile))

@@ -41,7 +41,7 @@ export default class Tool {
 
       } else {
 
-          hands[hand].mesh.add(toolMesh) // add to respective hand 
+          hands[ hand ].mesh.add( toolMesh ) // add to respective hand 
 
       }
 

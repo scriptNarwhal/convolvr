@@ -142,7 +142,7 @@ export default class UserInput {
 
 			} else {
 
-				if ( world.cameraMode == 'fps' ) { // fps camera // make configurable
+				if ( world.settings.cameraMode == 'fps' ) { // fps camera // make configurable
 
 					this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, 0, "YXZ")
 					//this.camera.rotateZ(this.rotationVector.z)

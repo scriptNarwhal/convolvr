@@ -6,6 +6,9 @@ import {
     INVENTORY_FETCH,
     INVENTORY_FETCH_DONE,
     INVENTORY_FETCH_FAIL,
+    INVENTORY_ITEM_FETCH,
+    INVENTORY_ITEM_FETCH_DONE,
+    INVENTORY_ITEM_FETCH_FAIL,
     INVENTORY_UPDATE_FETCH,
     INVENTORY_UPDATE_DONE,
     INVENTORY_UPDATE_FAIL,
@@ -23,6 +26,15 @@ module.exports = function places (state = {
         entities: [],
         components: [],
         properties: []
+    },
+    itemFetching: false,
+    entitiesFetching: false,
+    componentsFetching: false,
+    propertiesFetching: false,
+    item: {
+        component: false,
+        entity: false,
+        property: false
     },
     updated: false,
     created: false,
@@ -47,14 +59,23 @@ module.exports = function places (state = {
           error: action.err
       })
     case INVENTORY_FETCH:
-      return Object.assign({}, state, {
-          fetching: true
-      })
     case INVENTORY_FETCH_FAIL:
-      return Object.assign({}, state, {
-          fetching: false,
-          error: action.err
-      })
+      let newState = {},
+          isFetching = action.type == INVENTORY_FETCH
+
+      switch ( action.category ) {
+          case "Entities":
+            newState.entitiesFetching = isFetching
+          break
+          case "Components":
+            newState.componentsFetching = isFetching
+          break
+          case "Properties":
+            newState.propertiesFetching = isFetching
+          break
+      }
+
+      return Object.assign({}, state, newState )
     case INVENTORY_FETCH_DONE:
       switch( action.category ) {
           case "Entities":
@@ -63,7 +84,7 @@ module.exports = function places (state = {
                     ...state.items,
                     entities: action.data
                 },
-                fetching: false
+                entitiesFetching: false
             })
           break
           case "Components":
@@ -72,7 +93,7 @@ module.exports = function places (state = {
                     ...state.items,
                     components: action.data
                 },
-                fetching: false
+                componentsFetching: false
             })
           break
           case "Properties":
@@ -81,11 +102,49 @@ module.exports = function places (state = {
                     ...state.items,
                     properties: action.data
                 },
-                fetching: false
+                propertiesFetching: false
             })
           break
       }
-     
+    case INVENTORY_ITEM_FETCH:
+      return Object.assign({}, state, {
+          itemFetching: true
+      })
+    case INVENTORY_ITEM_FETCH_FAIL:
+      return Object.assign({}, state, {
+          itemFetching: false,
+          error: action.err
+      })
+    case INVENTORY_ITEM_FETCH_DONE:
+      switch( action.category ) {
+          case "Entities":
+            return Object.assign({}, state, {
+                item: {
+                    ...state.item,
+                    entity: action.data
+                },
+                itemFetching: false
+            })
+          break
+          case "Components":
+            return Object.assign({}, state, {
+                item: {
+                    ...state.item,
+                    component: action.data
+                },
+                itemFetching: false
+            })
+          break
+          case "Properties":
+            return Object.assign({}, state, {
+                item: {
+                    ...state.item,
+                    property: action.data
+                },
+                itemFetching: false
+            })
+          break
+      }
     case INVENTORY_UPDATE_FETCH:
       return Object.assign({}, state, {
           fetching: true,

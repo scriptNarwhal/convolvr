@@ -59,7 +59,7 @@ export default class ContextMenu extends Component {
                        key={i}
                   >
                     { opt.name == "Download" ? (
-                      <a title={this.props.title} target="_blank" href={`/data/user/${username}${dir}/${this.props.title}`}>Download</a>
+                      <a title={this.props.title} style={styles.link} target="_blank" href={`/data/user/${username}${dir}/${this.props.title}`}>Download</a>
                     ) : opt.name }
                   </div>
                 )
@@ -107,16 +107,19 @@ let styles = {
       position: 'relative',
       cursor: 'pointer',
       width: '224px',
-      height: '178px',
+      height: '192px',
       display: 'inline-block',
       marginRight: '0.5em',
       marginLeft: '8px',
       marginBottom: '0.5em',
-      backgroundColor: 'rgb(24, 24, 24)',
+      backgroundColor: 'rgba(21, 21, 21, 0.85)',
       textAlign: "center",
       borderRadius: '8px',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)'
     }
+  },
+  link: {
+    color: "#00ff00"
   },
   option: {
     textAlign: 'left',
@@ -124,7 +127,8 @@ let styles = {
     paddingBottom: '0.2em'
   },
   options: {
-    paddingTop:'0.4em'
+    paddingTop:'0.4em',
+    fontSize: '19px'
   },
   button: ( compact, image, close ) => {
     return {

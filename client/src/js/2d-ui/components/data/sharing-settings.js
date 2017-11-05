@@ -1,6 +1,16 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import {
+  rgba,
+  rgb
+} from '../../../util'
+import { 
+  textAreaStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../../styles'
+import { isMobile } from '../../../config'
 
 class SharingSettings extends Component {
 
@@ -35,6 +45,14 @@ class SharingSettings extends Component {
 
     }
 
+    if ( this.props.activated == false && nextProps.activated == true ) {
+      
+      this.setState({
+        activated: true
+      })
+      
+    }
+
   }
 
   componentWillUpdate ( nextProps, nextState ) {
@@ -49,11 +67,24 @@ class SharingSettings extends Component {
 
   }
 
-  handleTextArea (e) {
+  remove ( index ) {
 
-    this.setState({
-      text: e.target.value
-    })
+    let data = {
+      id: this.props.shares[ index ].id
+    }
+
+    this.props.deleteShare( this.props.username, data )
+
+  }
+
+  shareFolder () {
+
+    let data = {
+      username: this.props.username,
+      directory: this.props.cwd.join("/")
+    }
+
+    this.props.createShare( this.props.username, data )
 
   }
 
@@ -93,38 +124,35 @@ class SharingSettings extends Component {
 
       return (
        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
+          <div style={ styles.modal() } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Shared Folders</span> 
-
-                <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
-                
-              </span>
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Shared Folders</span> </span>
               <table>
-                <th>
-                    <td>id</td>
-                    <td>name</td>
-                    <td>directory</td>
-                    <td></td>
-                </th>
+                <tbody>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>directory</th>
+                  <th></th>
+                </tr>
                 {
-                    this.props.shares.map( s => {
+                    this.props.shares.map( (s,i) => {
                         return (
                             
-                            <tr>
+                            <tr key={i}>
                                 <td>{s.id}</td>
                                 <td>{s.name}</td>
                                 <td>{s.directory}</td>
-                                <td></td>
+                                <td> <FileButton title="Remove" onClick={ () => { this.remove(i) } } /></td>
                             </tr>
                         )
                     })
                 }
-                </table>
+                </tbody>
+              </table>
             </div>
             <div style={ styles.body }>
-              <textarea style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
-              <FileButton title="Save" onClick={ () => { this.save() } } />
+              <FileButton title="Share Current Folder" onClick={ () => { this.shareFolder() } } />
               <FileButton title="Close" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
           </div>
@@ -134,7 +162,7 @@ class SharingSettings extends Component {
     } else {
 
       return (
-        <FileButton title="Sharing" onClick={ () => { this.toggleModal() } } />
+        <span></span>
       )
 
     }
@@ -151,8 +179,10 @@ import {
     toggleMenu
 } from '../../../redux/actions/app-actions'
 import {
-  readText,
-  writeText
+  listShares,
+  updateShare,
+  createShare,
+  deleteShare
 } from '../../../redux/actions/file-actions'
 import {
   closeSharingSettings
@@ -166,6 +196,8 @@ export default connect(
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         vrMode: state.app.vrMode,
+        shares: state.files.listShares.data ? state.files.listShares.data : [],
+        sharesFetching: state.files.listShares.fetching || state.files.createShare.fetching,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.sharingSettings.activated,
         filename: state.util.sharingSettings.filename,
@@ -175,8 +207,8 @@ export default connect(
   },
   dispatch => {
     return {
-      listShares: (username) => {
-        dispatch( readText (filename, username, dir) )
+      listShares: (filename, username, dir) => {
+        dispatch( listShares (filename, username, dir) )
       },
       updateShare: (username, data) => {
         dispatch ( writeText (username, data) )
@@ -185,7 +217,7 @@ export default connect(
         dispatch ( writeText (username, data) )
       },
       deleteShare: (username, data) => {
-          dispatch(toggleMenu(force))
+          dispatch(deleteShare(username, data))
       },
       closeSharingSettings: () => {
         dispatch( closeSharingSettings() )
@@ -194,44 +226,19 @@ export default connect(
   }
 )(SharingSettings)
 
-
-
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-    return `rgb(${r}, ${g}, ${b})`
-  },
-  rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
-    return `rgba(${r}, ${g}, ${b}, ${a})`
-  }
-
 let styles = {
-  modal: {
-    width: '50%',
-    maxWidth: '729px',
-    minWidth: '320px',
-    height: '480px',
-    padding: '0.25em',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    margin: 'auto',
-    background: rgb(38, 38, 38),
-    borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+  modal: () => {
+    return Object.assign({}, modalStyle, {
+        maxWidth: '729px',
+        left: ! isMobile() ? '72px' : '0px'
+      })
   },
-  lightbox: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    background: rgba(0, 0, 0, 0.8)
-  },
+  lightbox: lightboxStyle,
   resultingPath: {
     marginBottom: '1em'
   },
   cancelButton: {
-    borderLeft: 'solid 0.2em magenta'
+    borderLeft: 'solid 0.2em #005aff'
   },
   header: {
     width: '100%',
@@ -248,15 +255,7 @@ let styles = {
     fontSize: '1em',
     color: 'white',
   },
-  textArea: {
-    margin: '0px',
-    width: '95%',
-    height: '358px',
-    color: 'white',
-    marginBottom: '0.5em',
-    padding: '0.5em',
-    background: 'black'
-  },
+  textArea: textAreaStyle,
   body: {
 
   },

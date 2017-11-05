@@ -1,6 +1,15 @@
+//@flow
+import Convolvr from '../../world/world'
+import * as THREE from 'three'
+
 export default class ProceduralMaterials {
 
-  constructor( materialSystem, world ) {
+  world: Convolvr
+  materials: Object
+  randoms: Array<number>
+  noise: boolean
+
+  constructor( materialSystem: Object, world: Convolvr ) {
 
     this.world = world
     this.materials = materialSystem
@@ -10,11 +19,11 @@ export default class ProceduralMaterials {
   }
 
 
-  generateTexture( params ) { // would be useful for tiling / random patterns
+  generateTexture( params: Object ) { // would be useful for tiling / random patterns
 
-    let assets = this.world.systems.assets,
-      textureCode = params.name,
-      texture = null // probably using size... and.. some data from the rendering
+    let assets:      Object = this.world.systems.assets,
+        textureCode: string = params.name,
+        texture:     Object = {} 
 
     if ( assets.proceduralTextures[ textureCode ] == null ) {  // reference TextSystem for canvas code here..
 
@@ -30,12 +39,12 @@ export default class ProceduralMaterials {
 
   }
 
-  _renderTexture( params ) {
+  _renderTexture( params: Object ) {
 
-    let newTex = null,
-      canvas = document.createElement("canvas"),
-      canvasSize = [1024, 1024],
-      context = null
+    let newTex:     THREE.CanvasTexture = null,
+        canvas:     Object              = document.createElement("canvas"),
+        canvasSize: Array<number>       = [1024, 1024],
+        context:    Object  = {}
 
     canvas.setAttribute("style", "display:none")
     canvas.width = canvasSize[0]
@@ -51,7 +60,7 @@ export default class ProceduralMaterials {
 
   }
 
-  _renderInstructions( context, calls, i = 0 ) {
+  _renderInstructions( context: Object, calls: Array<Object>, i: number = 0 ) {
 
     const DCS = calls.length
     let draw = null,
@@ -118,20 +127,19 @@ export default class ProceduralMaterials {
 
   }
 
-  _renderLoop( context, calls, start, dir, cond, limit ) {
+  _renderLoop( context: Object, calls: Array<Object>, start: number, dir: string, cond: string, limit: number ) {
 
     const MAX = 1000
 
-    let i = start
-
-    dir = dir == "+" ? 1 : -1    
+    let i:   number = start,
+        inc: number = dir == "+" ? 1 : -1    
 
     if ( cond == "<" ) {
 
       while ( i < limit && Math.abs(i) < MAX ) {
 
         this._renderInstructions(context, calls, i)
-        i += dir
+        i += inc
       }
 
     } else {
@@ -139,7 +147,7 @@ export default class ProceduralMaterials {
       while ( i > limit && Math.abs(i) < MAX ) {
 
         this._renderInstructions(context, calls, i)
-        i += dir
+        i += inc
 
       }
 

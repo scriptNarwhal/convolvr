@@ -11,9 +11,7 @@ class Inventory extends Component {
 
   componentWillMount () {
 
-    this.props.getInventory(this.props.username, "Entities")
-    this.props.getInventory(this.props.username, "Components")
-    this.props.getInventory(this.props.username, "Properties")
+    this.refreshInventory()
 
     this.setState({
       
@@ -24,8 +22,19 @@ class Inventory extends Component {
   componentWillReceiveProps ( nextProps ) {
 
     let userNameChanged = nextProps.username != this.props.username,
-        finishedFetchingDirs = this.props.dirsFetching == true && nextProps.dirsFetching == false,
-        finishedFetchingFiles = (this.props.filesFetching == true && nextProps.filesFetching == false)
+        inventoryUpdated = this.props.inventoryFetching && nextProps.inventoryFetching == false
+
+    if ( inventoryUpdated )
+
+      this.refreshInventory()
+
+  }
+
+  refreshInventory ( opts ) {
+
+    this.props.getInventory(this.props.username, "Entities")
+    this.props.getInventory(this.props.username, "Components")
+    this.props.getInventory(this.props.username, "Properties")
 
   }
 
@@ -38,14 +47,14 @@ class Inventory extends Component {
     
         switch ( name ) {
     
-          case "Import":
-            this.props.launchImportToWorld( this.props.username, data )
+          case "Add To World":
+            this.props.launchImportToWorld( this.props.username, data.itemIndex, data.itemData )
           break;
-          case "Edit JSON":
-            this.props.launchInventoryEditor( this.props.username, data.category, data.itemId )
+          case "Edit":
+            this.props.editLoadedItem( data.source, this.props.username, data.category, data.itemIndex, data.itemData )
           break;
           case "Export JSON":
-            this.props.launchInventoryExport( this.props.username, data.category, data.itemId )
+            this.props.launchInventoryExport( this.props.username, data.category, data.itemId, data.itemIndex, data.itemData )
           break;
     
         }
@@ -54,26 +63,35 @@ class Inventory extends Component {
 
   render() {
 
-    let files = this.props.files,
-        dirs = this.props.dirs
-
     return (
         <Shell className="data-view" 
                style={ isMobile() ? { paddingTop: '60px' } : { paddingTop: '0px' } }
                innerStyle={ { paddingTop: isMobile() ? '72px' : 0, paddingLeft: isMobile() ? '10px' : '72px' }  }       
         >
-          <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
-                         options={ this.props.inventoryEntities }
-                         category="Entities" 
-          />
-          <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
-                         options={ this.props.inventoryComponents }
-                         category="Components"   
-          />
-          <InventoryList onContextAction={ (name, data, e) => this.onContextAction(name, data, e) }
-                         options={ this.props.inventoryProperties }
-                         category="Properties" 
-          />
+        {
+          false == this.props.inventoryFetching ? [[this.props.inventoryEntities,   "Entities"  ], 
+           [this.props.inventoryComponents, "Components"], 
+           [this.props.inventoryProperties, "Properties"]].map( (inventorySet, i) => (
+            <InventoryList onAction={ (name, data, e) => {
+                            let actionData = {
+                              ...data, 
+                              source: "inventory", 
+                              category: inventorySet[1], 
+                              itemIndex: data.itemIndex,
+                              itemId: inventorySet[0][ data.itemIndex ].id, 
+                              itemData: inventorySet[0][ data.itemIndex ] 
+                            }
+                            console.info("<InventoryList> onAction ", actionData)
+                            this.onContextAction(name, actionData, e) 
+                           }}
+                           options={ inventorySet[0] }
+                           username={ this.props.username }
+                           style={{zIndex: 9999}}
+                           category={ inventorySet[1] }
+                           key={i}
+            />
+           )) : ""
+        }
         </Shell>
     )
 
@@ -90,7 +108,6 @@ import {
     sendMessage
 } from '../../redux/actions/message-actions'
 import {
-  toggleMenu,
   showChat
 } from '../../redux/actions/app-actions'
 import {
@@ -106,30 +123,34 @@ import {
   removeInventoryItem,
   addItemToWorld,
 } from '../../redux/actions/inventory-actions'
+import {
+  launchEditLoadedItem,
+  launchInventoryExport,
+  launchImportToWorld
+} from '../../redux/actions/util-actions'
 
 export default connect(
   (state, ownProps) => {
     return {
         loggedIn: state.users.loggedIn,
         username: state.users.loggedIn != false ? state.users.loggedIn.name : "public",
-        messages: state.messages.messages,
-        stereoMode: state.app.stereoMode,
-        menuOpen: state.app.menuOpen,
-        chatOpen: state.app.chatOpen,
         vrMode: state.app.vrMode,
         inventoryEntities: state.inventory.items.entities,
         inventoryComponents: state.inventory.items.components,
         inventoryProperties: state.inventory.items.properties,
-        files: state.files.list.data,
-        dirs: state.files.listDirectories.data,
-        filesFetching: state.files.list.fetching,
-        dirsFetching: state.files.listDirectories.fetching,
+        inventoryFetching: state.inventory.fetching,
         workingPath: state.files.listDirectories.workingPath,
         upload: state.files.uploadMultiple
     }
   },
   dispatch => {
     return {
+      launchImportToWorld: (username, index, data) => {
+        dispatch( launchImportToWorld(username, index, data))
+      },
+      launchInventoryExport: (username, category, itemId, itemIndex, itemData) => {
+        dispatch( launchInventoryExport(username, category, itemId, itemIndex, itemData))
+      },
       getInventory: (userId, category) => {
           dispatch(getInventory(userId, category))
       },
@@ -142,12 +163,12 @@ export default connect(
       removeInventoryItem: (userId, category, itemId) => {
         dispatch(removeInventoryItem(userId, category, itemId))
       },
-      toggleMenu: (toggle) => {
-        dispatch(toggleMenu(toggle))
-      },
       uploadFile: (file, username, dir) => {
         dispatch(uploadFile(file, username, dir))
-      }
+      },
+      editLoadedItem: ( source, username, category, index, data ) => {
+        dispatch(launchEditLoadedItem( source, username, category, index, data ))
+      },
     }
   }
 )(Inventory)

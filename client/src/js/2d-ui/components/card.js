@@ -26,7 +26,7 @@ export default class Card extends Component {
     
     if ( name == "Delete" ) {
 
-      if ( confirm("Delete file: "+data.filename+"?") ) {
+      if ( confirm(`Delete ${data.filename}?`) ) {
         this.props.onContextMenu(name, data, e)
       } else {
         this.props.onContextMenu("", {}, {})
@@ -78,6 +78,13 @@ export default class Card extends Component {
                 />
               ) : ''
             }
+            {
+              this.props.description != "" ? (
+                <div style={styles.description(this.props.compact)}>
+                  { this.props.description }
+                </div>
+              ) : ""
+            }
         </div>
     )
 
@@ -87,6 +94,7 @@ export default class Card extends Component {
 
 Card.defaultProps = {
     title: "Menu Item",
+    description: "",
     username: "",
     dir: "",
     category: "",
@@ -98,9 +106,10 @@ Card.defaultProps = {
     onContextMenu: false,
     contextMenuOptions: [
       { name: "Download" },
-      // { name: "Rename" }, // until there's time to implement the modal
-      // { name: "Add To Inventory"},
+      { name: "Add To Inventory"},
       { name: "Delete" },
+      { name: "Rename" },
+      { name: "Share" },
       { name: "Edit" },
     ]
 }
@@ -116,11 +125,16 @@ let styles = {
       display: 'inline-block',
       marginRight: '0.5em',
       marginBottom: '0.5em',
-      backgroundColor: 'rgb(50, 50, 50)',
+      backgroundColor: 'rgba(255,255,255, 0.1)',
       backgroundSize: 'cover',
       backgroundImage: `url(${image})`,
       textAlign: "center",
       verticalAlign: "top",
+    }
+  },
+  description: ( compact ) => {
+    return {
+      opacity: 0.8
     }
   },
   title: (image, quarterSize) => {

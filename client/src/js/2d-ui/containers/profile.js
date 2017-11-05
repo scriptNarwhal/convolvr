@@ -101,6 +101,17 @@ class Profile extends Component {
 
   }
 
+  onAvatarChange( value ) {
+
+    this.setState({
+      data: {
+        ...state.data,
+        avatar: value
+      }
+    })
+
+  }
+
   updateField( field, e ) {
 
     this.setState({
@@ -199,6 +210,25 @@ class Profile extends Component {
               </span>
             </div>
           </div>
+          <div>
+            <h3 style={styles.h3}>Change 3D Avatar</h3>
+            <div style={styles.col}>
+              <span style={{paddingLeft: '1em'}}>
+                <select onChange={ e=> { this.onAvatarChange( e.target.value )} } >
+                  <option value="avatar">default</option>
+                  <option value="hero">hero</option>
+                  <option value="monster">monster</option>
+                  {
+                    this.props.entities.map( (ent, i) => {
+                      return (
+                        <option value={ent.name} key={i}>{ent.name}</option>
+                      )
+                    })
+                  }
+                </select>
+              </span>
+            </div>
+          </div>
             <input style={styles.save}
                  type='submit'
                  value={ this.state.id == -1 ? "Create Account" : "Save Settings" }
@@ -234,6 +264,8 @@ export default connect(
         settings: state.worlds.universeSettings,
         worlds: state.worlds.all,
         user: state.users.loggedIn,
+        entities: state.inventory.items.entities ?  state.inventory.items.entities : [],
+        entitiesFetching: state.inventory.fetching,
         loginFetching: state.users.fetching,
         updateFetching: state.users.updateFetching
     }

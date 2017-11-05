@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import {
+  rgba,
+  rgb
+} from '../../../util'
 
 class ImportToInventory extends Component {
 
@@ -21,18 +25,18 @@ class ImportToInventory extends Component {
       id: 0
     })
 
-    this.props.listShares( this.props.username )
     
   }
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.sharesFetching && nextProps.sharesFetching == false && !!nextProps.readText ) {
-
+    if ( this.props.activated == false && nextProps.activated == true ) {
+      
       this.setState({
-        text: nextProps.readText
+        activated: true,
+        name: this.props.filename
       })
-
+      
     }
 
   }
@@ -62,25 +66,11 @@ class ImportToInventory extends Component {
     let name = this.state.name,
         data = {}
 
-    if ( id ) {
-
-        this.props.shares.map( s => { 
-          if ( s.id == id ) 
-            data = s
-        })
-        data = Object.assign({}, data, this.state.data )
-        this.props.updateShare(  this.props.username, data )
-     
-    } else {
-
-        this.props.createShare(  this.props.username, this.state.data )
-
-    }
-
   }
 
   toggleModal () {
 
+    this.props.closeImportToInventory()
     this.setState({
       activated: !this.state.activated
     })
@@ -95,32 +85,14 @@ class ImportToInventory extends Component {
        <div style={ styles.lightbox }>
           <div style={ styles.modal } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Import To Inventory</span> 
-
-                <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
-                
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>
+                Import To Inventory As Entity
+              </span> 
+                <input type="text" onChange={ (e) => { this.handleTextChange(e) }} 
+                       defaultValue={this.state.name} 
+                       style={ styles.text } 
+                /> 
               </span>
-              <table>
-                <th>
-                    <td>id</td>
-                    <td>name</td>
-                    <td>directory</td>
-                    <td></td>
-                </th>
-                {
-                    this.props.shares.map( s => {
-                        return (
-                            
-                            <tr>
-                                <td>{s.id}</td>
-                                <td>{s.name}</td>
-                                <td>{s.directory}</td>
-                                <td></td>
-                            </tr>
-                        )
-                    })
-                }
-                </table>
             </div>
             <div style={ styles.body }>
               <textarea style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
@@ -134,7 +106,7 @@ class ImportToInventory extends Component {
     } else {
 
       return (
-        <FileButton title="Sharing" onClick={ () => { this.toggleModal() } } />
+        <span></span>
       )
 
     }
@@ -175,33 +147,12 @@ export default connect(
   },
   dispatch => {
     return {
-      listShares: (username) => {
-        dispatch( readText (filename, username, dir) )
-      },
-      updateShare: (username, data) => {
-        dispatch ( writeText (username, data) )
-      },
-      createShare: (username, data) => {
-        dispatch ( writeText (username, data) )
-      },
-      deleteShare: (username, data) => {
-          dispatch(toggleMenu(force))
-      },
       closeImportToInventory: () => {
         dispatch( closeImportToInventory() )
       }
     }
   }
 )(ImportToInventory)
-
-
-
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-    return `rgb(${r}, ${g}, ${b})`
-  },
-  rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
-    return `rgba(${r}, ${g}, ${b}, ${a})`
-  }
 
 let styles = {
   modal: {
@@ -216,7 +167,9 @@ let styles = {
     right: 0,
     bottom: 0,
     margin: 'auto',
-    background: rgb(38, 38, 38),
+    border: '0.1em solid white',
+    backgroundColor: "black",
+    backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))',
     borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
   },
   lightbox: {
@@ -231,7 +184,7 @@ let styles = {
     marginBottom: '1em'
   },
   cancelButton: {
-    borderLeft: 'solid 0.2em magenta'
+    borderLeft: 'solid 0.2em #005aff'
   },
   header: {
     width: '100%',

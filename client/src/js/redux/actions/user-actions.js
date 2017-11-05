@@ -127,18 +127,27 @@ export function login ( user, pass, email, data ) {
          .then(response => {
              dispatch(loginDone(response))
              dispatch(fetchUserWorlds(response.data.id))
+             
           }).catch(response => {
               dispatch(loginFailed(response))
         });
    }
 }
 
-export function loginDone (response) {
-    let data = response.data,
+export function loginDone ( response ) {
+
+    setTimeout(()=>{
+        let data = response.data,
         worldUser = three.world.user
-    worldUser.name = data.name
-    worldUser.email = data.email
-    worldUser.id = data.id
+
+        worldUser.name = data.name
+        worldUser.email = data.email
+        worldUser.id = data.id
+        console.info("USER DATA: ", worldUser.data)
+        worldUser.data = Object.assign({}, worldUser.data, data.data )
+    }, 1000)
+    
+
   if (window.location.href.indexOf("/login") > -1) {
       browserHistory.push("/chat")
   }

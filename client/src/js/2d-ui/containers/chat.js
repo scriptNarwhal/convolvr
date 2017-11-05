@@ -4,11 +4,13 @@ import Shell from '../components/shell'
 import Card from '../components/card'
 import Button from '../components/button'
 import LocationBar from '../components/location-bar'
+import { rgba, rgb } from '../../util'
 
 let linkRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm,
     imageRegex = /(\.png|\.jpg|\.jpeg|\.gif|\.svg|\.webp)/
 
 class Chat extends Component {
+
   constructor() {
     super()
     this.state = {
@@ -16,6 +18,7 @@ class Chat extends Component {
     }
     this.messageBody = null
   }
+
   componentDidMount () {
 
     let worldMode = three.world.mode
@@ -66,8 +69,10 @@ class Chat extends Component {
   send (message, files = []) {
 
       console.log("send button")
-      let from = this.props.username
-      this.props.sendMessage(message || this.state.text, from, files)
+      let from = this.props.username,
+          avatar = this.props.user.data.profilePicture
+      console.warn("send chat message ", avatar)
+      this.props.sendMessage(message || this.state.text, from, files, avatar)
       this.setState({
         text: ""
       })
@@ -132,7 +137,7 @@ class Chat extends Component {
                 {
                     this.props.messages.map((m, i) => {
                         let fromLabel = m.from != lastSender || (m.files != null && m.files.length > 0) ?
-                            (<span style={styles.username}>{m.from}:</span>) : ''
+                            (<span style={styles.username(m.avatar)} >{m.from}:</span>) : ''
                         lastSender = m.from
                         return (
                         <span key={i} style={styles.message} >
@@ -213,6 +218,7 @@ export default connect(
         cwd: state.files.listDirectories.workingPath,
         loggedIn: state.users.loggedIn,
         username: !!state.users.loggedIn ? state.users.loggedIn.name : "Human",
+        user: !!state.users.loggedIn ? state.users.loggedIn : { data: {} },
         messages: state.messages.messages,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
@@ -222,8 +228,8 @@ export default connect(
   },
   dispatch => {
     return {
-      sendMessage: (message, from) => {
-          dispatch(sendMessage(message, from))
+      sendMessage: (message, from, files, avatar) => {
+          dispatch(sendMessage(message, from, files, avatar))
       },
       uploadMultiple: ( files, username, dir ) => {
         dispatch( uploadFiles( files, username, dir ) )
@@ -280,13 +286,39 @@ const styles = {
   innerMessage: {
     color: "white"
   },
-  username: {
-    padding: '0.25em',
-    color: '#f0f0f0',
-    background: "#101010",
-    display: 'inline-block',
-    borderTopLeftRadius: '2px',
-    borderBottomLeftRadius: '2px'
+  username: (avatar) => {
+
+    const usernameStyle = {
+      display: 'inline-block',
+      padding: '0.25em',
+      color: '#f0f0f0'
+    }
+
+    if ( !!avatar ) {
+      
+      return {
+        ...usernameStyle,
+        paddingLeft: '72px',
+        paddingRight: '10px',
+        color: rgb(240, 240, 240),
+        height: '56px',
+        width: 'auto',
+        backgroundImage: `url(/data/user/${avatar})`,
+        backgroundSize: 'contain',
+        backgroundRepeat: 'no-repeat'
+      }
+
+    } else {
+      
+      return {
+        ...usernameStyle,
+        background: "#101010",
+        borderTopLeftRadius: '2px',
+        borderBottomLeftRadius: '2px'
+      }
+
+    }
+
   },
   messageText: {
     paddingRight: '0.5em',

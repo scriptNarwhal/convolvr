@@ -1,9 +1,13 @@
+import { dispatch } from 'redux';
+import { toggleMenu } from '../redux/actions/app-actions';
+
 export default class Mouse {
     
     constructor ( userInput, world ) {
 
         this.input = userInput
         this.world = world
+        this.store = world.store
 
     }
 
@@ -106,6 +110,7 @@ export default class Mouse {
             //world.showChat();
             world.mode = "web"
             document.body.setAttribute("class", "desktop")
+            this.store.dispatch( toggleMenu( true ) )
 
         } else {
 
@@ -117,11 +122,13 @@ export default class Mouse {
 
 
                 document.body.setAttribute("class", "3d")
-
+                this.store.dispatch( toggleMenu( false ) )
             }
 
         }
 
+        //document.querySelector("#viewport").setAttribute("class", `viewport ${world.mode == "web" ? "blurred" : ""}`)
+        
     }
 
 }

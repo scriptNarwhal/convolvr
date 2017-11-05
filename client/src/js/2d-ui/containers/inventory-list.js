@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
-import Button from '../components/button.js'
-import Card from '../components/card.js'
+import Button from '../components/button'
+import Card from '../components/Card'
+import EntityEditor from '../components/data/entity-editor'
+import ComponentEditor from '../components/data/component-editor'
+import PropertyEditor from '../components/data/property-editor'
+import ImportToWorld from '../components/data/import-to-world'
+import InventoryExport from '../components/data/inventory-export'
 
 export default class InventoryList extends Component {
 
@@ -12,21 +17,11 @@ export default class InventoryList extends Component {
     
   }
 
-  toggle () {
+  handleContextAction ( action, data, e ) {
 
-    this.setState({
-      activated: ! this.state.activated
-    })
+    if ( this.props.onAction ) 
 
-  }
-
-  handleContextAction ( action, evt ) {
-
-    if ( this.props.onAction )
-
-      this.props.onAction( action, evt )
-
-    this.toggle()
+      this.props.onAction( action, data, e )
 
   }
 
@@ -36,20 +31,46 @@ export default class InventoryList extends Component {
         dir = this.props.dir
 
     return (
-        <div style={styles.list(this.props.color, this.props.compact)} title={this.props.category }>
-          <span style={styles.title}>{ this.props.category }</span>
+        <div style={Object.assign({}, styles.list(this.props.color, this.props.compact), this.props.style )} title={this.props.category }>
+          <span style={styles.title}>
+            { this.props.category }
+            <span style={styles.new}>
+              {
+                this.props.category == "Entities" ? (
+                  [
+                    <EntityEditor username={this.props.username} key="1" />,
+                    <ImportToWorld key="2" />,
+                    <InventoryExport key="3" />
+                  ]
+                ) : this.props.category == "Components" ? (
+                  <ComponentEditor username={this.props.username}
+                                  entityEditMode={false}
+                  />
+                ) : (
+                  <PropertyEditor username={this.props.username}
+                                  entityEditMode={false}
+                  />
+                )
+              }
+              
+            </span>
+          </span>
+      
           <div style={styles.options}>
             {
-              this.props.options.map((opt, i) =>{
+              this.props.options && this.props.options.map((opt, i) =>{
                 return (
-                    <Card image=''
-                          clickHandler={ (e) => {
-                            console.log(e, opt.name, "clicked")
+                    <Card clickHandler={ (e) => {
+                            
                            
                           }}
-                          onContextMenu={ (name, data, e) => this.handleContextAction(name, data, e) }
+                          onContextMenu={ (name, data, e) => { 
+                            this.handleContextAction(name, {...data, itemIndex: i}, e) 
+                          }}
                           contextMenuOptions={ this.props.contextMenuOptions }
                           showTitle={true}
+                          compact={true}
+                          image=''
                           username={this.props.username}
                           dir={this.props.dir}
                           category={this.props.category}
@@ -71,8 +92,9 @@ InventoryList.defaultProps = {
     title: "File Options",
     dir: "",
     username: "",
-    category: "entities",
+    category: "Entities",
     showTitle: false,
+    style: {},
     color: '#252525',
     compact: false,
     isImage: false,
@@ -80,15 +102,14 @@ InventoryList.defaultProps = {
     contextMenuOptions: [
         { name: "Add To World" },
         { name: "Export JSON"},
-        { name: "Edit JSON" }
+        { name: "Edit" }
     ]
 }
 
 let styles = {
   list: (color, compact) => {
     return {
-      position: 'relative',
-      backgroundColor: 'rgb(24, 24, 24)',
+      //backgroundColor: 'rgb(24, 24, 24)',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)',
       cursor: 'pointer',
       width: '32%',
@@ -123,7 +144,15 @@ let styles = {
     width: '100%',
     height: '40px',
     display: 'block',
+    textAlign: 'left',
+    paddingLeft: '1em',
     paddingTop: '0.5em',
     backgroundColor: 'rgba(0,0,0,0.2)'
+  },
+  new: {
+    width: '40%',
+    height: '40px',
+    paddingTop: '0em',
+    marginRight: '1em'
   }
 }

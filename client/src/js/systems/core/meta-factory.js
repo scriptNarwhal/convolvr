@@ -1,6 +1,14 @@
+//@flow
+import Convolvr from '../../world/world'
+import Component from '../../component'
+import Entity from '../../entity'
+import * as THREE from 'three'
+
 export default class MetaFactorySystem {
     
-    constructor ( world ) {
+    world: Convolvr
+
+    constructor ( world: Convolvr ) {
 
         this.world = world
         // This system will add factory components for sets of entities, components, systems by category.. 
@@ -8,24 +16,24 @@ export default class MetaFactorySystem {
         // TODO: implement prop.source == "component" and prop.componentPath = [1, 0... ]
     }
 
-    init ( component ) { 
+    init ( component: Component ) { 
         
-        let components     = component.components,
-            prop           = component.props.metaFactory,
-            assetType      = prop.type,
-            category       = prop.propName,
-            gridWidth      = prop.gridWidth || 3,
-            gridSize       = prop.gridSize || 1,
-            vOffset        = prop.vOffset || -0.66,
-            sourceCategory = "none",
-            factories      = [],
-            presets        = [],
-            preset         = "",
-            source         = [],
-            index          = 0,
-            keys           = {},
-            x              = 0,
-            y              = 0
+        let components:     Array<Component> = component.components,
+            prop:           Object           = component.props.metaFactory,
+            assetType:      string           = prop.type,
+            category:       string           = prop.propName,
+            gridWidth:      number           = prop.gridWidth || 3,
+            gridSize:       number           = prop.gridSize || 1,
+            vOffset:        number           = prop.vOffset || -0.66,
+            sourceCategory: any           = "none",
+            factories:      Array<Object>    = [],
+            presets:        Array<any>       = [],
+            preset:         string           = "",
+            source:         Array<any>       = [],
+            index:          number           = 0,
+            keys:           Object           = {},
+            x:              number           = 0,
+            y:              number           = 0
 
         if ( assetType == "component" ) {
 
@@ -76,7 +84,7 @@ export default class MetaFactorySystem {
             
         } else { // map through system categories
             
-            sourceCategory = source[ category ] // structures, vehicles, media, interactivity
+            sourceCategory = this._getSourceCategory( source, category ) // structures, vehicles, media, interactivity
         
             Object.keys( sourceCategory ).map( ( key, a ) => { // vehicle, propulsion, control, etc
 
@@ -84,7 +92,7 @@ export default class MetaFactorySystem {
              
                 Object.keys( categorySystems ).map( systemPreset => {
 
-                        this._addComponent( component, systemPreset, assetType, "systems", key,  x, y, index, gridSize, vOffset)
+                        this._addComponent( component, categorySystems[systemPreset], assetType, "systems", key,  x, y, index, gridSize, vOffset)
                         x += 1
                         index += 1
     
@@ -103,35 +111,54 @@ export default class MetaFactorySystem {
 
     }
 
-    _getPreset ( assetType, item, i, presets ) {
+    _getSourceCategory ( source: any, category: string ) {
 
-        //preset = assetType == "entity" ? item.name : preset
-        //preset = assetType == "component" ? presets[ i ] : preset
+        let sourceCategory: any = ""
+        console.info("get source CATEGORY", category, source)
+        switch( category ) {
+
+            case "structures": sourceCategory = source.structures; break;
+            case "vehicles": sourceCategory = source.vehicles; break;
+            case "media": sourceCategory = source.media; break;
+            case "interactivity": sourceCategory = source.interactivity; break;
+
+        }
+
+        return sourceCategory
+
+    }
+
+    _getPreset ( assetType: string, item: Object, i: number, presets: Array<any> ) {
+
+        let preset: string = ""
+
         switch ( assetType ) {
 
             case "world":
             case "place":
             case "entity":
             case "material":
-                return item.name
+                preset =  item.name
             break
             case "component":
-                return presets[ i ]
+                preset =  presets[ i ]
             break
             case "geometry":
-                return item.shape
+                preset =  item.shape
             break
 
         }
 
+        return preset
+
     }
 
-    _addComponent ( component, factoryItem, assetType, assetCategory, preset, x, y, i, gridSize, vOffset ) {
+    _addComponent ( component: Component, factoryItem: any, assetType: string, assetCategory: string, preset: any, x: number, y: number, i: number, gridSize: number, vOffset: number ) {
 
-        let addTo = null,
-            layout = {},
-            systems = this.world.systems,
-            pos = [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 0.120 ]
+        let addTo:   Component     = null,
+            layout:  Object        = {},
+            systems: Object        = this.world.systems,
+            pos:     Array<number> = [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 0.120 ]
 
         if ( component.props.layout ) {
 

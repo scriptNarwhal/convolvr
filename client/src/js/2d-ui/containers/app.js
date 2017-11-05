@@ -17,7 +17,11 @@ class App extends Component {
       unread: 0,
       lastSender: ''
     }
+
     this.props.fetchWorlds()
+    this.props.getInventory(this.props.username, "Entities")
+    this.props.getInventory(this.props.username, "Components")
+    this.props.getInventory(this.props.username, "Properties")
 
     let world = three.world, 
         worldDetails = detectWorldDetailsFromURL()
@@ -30,7 +34,7 @@ class App extends Component {
           worldName = '',
           from = ''
 
-    	this.props.getMessage(chatMessage.message, chatMessage.from, chatMessage.files)
+    	this.props.getMessage(chatMessage.message, chatMessage.from, chatMessage.files, chatMessage.avatar)
 
       if (this.state.lastSender != chatMessage.from || (chatMessage.files != null && chatMessage.files.length > 0)) {
         from = `${chatMessage.from}: `
@@ -43,15 +47,15 @@ class App extends Component {
       this.notify(chatMessage.message, chatMessage.from)
       worldName = this.props.world.toLowerCase() == "overworld" ? "Convolvr" : this.props.world
 
-      if (this.props.focus == false) {
+      if ( this.props.focus == false ) {
 
         this.setState({
           unread: this.state.unread +1
         })
 
-        if (this.state.unread > 0) {
+        if (this.state.unread > 0)
+
             document.title = `[${this.state.unread}] ${worldName}`
-        }
 
       } else {
         document.title = worldName
@@ -66,13 +70,13 @@ class App extends Component {
 
         if ( worldMode != 'vr' && worldMode != 'stereo' ) { // 3d ui will show the chat in vr without interrupting things
         
-            this.props.toggleMenu()
+            this.props.toggleMenu(true)
         
         } else {
           setTimeout(()=>{
 
             browserHistory.push(`/${worldDetails[ 0 ]}/${worldDetails[ 1 ]}`)
-            this.props.toggleMenu()
+            this.props.toggleMenu(false)
           
           }, 3500)
         
@@ -91,10 +95,15 @@ class App extends Component {
 
         let cameraPos = world.three.camera.position,
             voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
-            altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
+            altitude = 0
 
+        if ( world.terrain.voxels[ voxelKey ] ) {
+
+          altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
           three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
-
+        
+        }
+        
         three.world.user.velocity.y = -1000
 
       }
@@ -114,7 +123,7 @@ class App extends Component {
 
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
 
-    let showMenuURLs = [ "chat", "login", "worlds", "files", "places", "settings", "network", "new-world" ]
+    let showMenuURLs = [ "chat", "login", "worlds", "files", "places", "inventory", "settings", "network", "new-world" ]
     showMenuURLs.map( (menuUrl) => {
 
       window.location.pathname.indexOf(`/${menuUrl}`) > -1 && this.props.toggleMenu(true)
@@ -128,7 +137,7 @@ class App extends Component {
 
     if (rememberUser != null) {
 
-      username = localStorage.getItem("username") // refactor this to be more secure before beta
+      username = localStorage.getItem("username") // refactor this to be more secure before beta 0.6
       password = localStorage.getItem("password")
 
       if (username != null && username != '') {
@@ -204,6 +213,7 @@ class App extends Component {
   componentWillReceiveProps ( nextProps ) {
 
     let newWorld = ["world", "Convolvr"],
+        userNameChanged = nextProps.username != this.props.username,
         pathChange = nextProps.url.pathname.indexOf("/at") > -1 ? false : nextProps.url.pathname != this.props.url.pathname
 
     if ( pathChange ) {
@@ -228,6 +238,14 @@ class App extends Component {
 
       console.warn("detected world voxel coords ", newWorld[3])
       three.camera.position.set( newWorld[3][0] * GRID_SIZE[0], newWorld[3][1] * GRID_SIZE[1], newWorld[3][2] * GRID_SIZE[2] )
+
+    }
+
+    if ( userNameChanged ) {
+
+      this.props.getInventory(nextProps.username, "Entities")
+      this.props.getInventory(nextProps.username, "Components")
+      this.props.getInventory(nextProps.username, "Properties")
 
     }
 
@@ -334,13 +352,13 @@ class App extends Component {
           if (three.vrDisplay != null) {
             three.vrDisplay.requestPresent([{source: renderer.domElement}]).then( ()=> {
 
-              // if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
-              //   setTimeout(()=>{
-              //     console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
-              //     three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
+              if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
+                setTimeout(()=>{
+                  console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
+                  three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
                 
-              //   }, 0.09)
-              // }
+                }, 0.09)
+              }
               three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
                 vrAnimate( three.vrDisplay, Date.now(), [0,0,0], 0)
               })
@@ -460,11 +478,15 @@ import {
   fetchUsers,
   login 
 } from '../../redux/actions/user-actions'
+import {
+  getInventory
+} from '../../redux/actions/inventory-actions'
 
 export default connect(
   state => {
     return {
       loggedIn: state.users.loggedIn,
+      username: state.users.loggedIn != false ? state.users.loggedIn.name : "public",
       url: state.routing.locationBeforeTransitions,
       tools: state.tools,
       users: state.users,
@@ -483,8 +505,11 @@ export default connect(
       login: (user, pass, email, data) => {
             dispatch(login(user, pass, email, data))
       },
-      getMessage: (message, from, files) => {
-          dispatch(getMessage(message, from, files))
+      getMessage: (message, from, files, avatar) => {
+          dispatch(getMessage(message, from, files, avatar))
+      },
+      getInventory: (userId, category) => {
+        dispatch(getInventory(userId, category))
       },
       showChat: () => {
         dispatch(showChat())

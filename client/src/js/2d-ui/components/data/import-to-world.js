@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import VectorInput from '../vector-input'
+import { rgba, rgb } from '../../../util'
+import { isMobile } from '../../../config'
+import { 
+  textAreaStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../../styles'
 
 class ImportToWorld extends Component {
 
@@ -18,23 +26,30 @@ class ImportToWorld extends Component {
       text: "",
       name: "",
       data: {},
+      coords: [0,0,0],
+      world: "Overworld",
       id: 0
     })
 
-    this.props.listShares( this.props.username )
     
   }
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.sharesFetching && nextProps.sharesFetching == false && !!nextProps.readText ) {
+    let data = {}
+    
+        if ( this.props.activated == false && nextProps.activated == true ) {
+    
+          this.setState({
+            activated: true
+          })
+    
+        }
 
-      this.setState({
-        text: nextProps.readText
-      })
+        if ( this.props.itemData == false && nextProps.itemData == true ) 
 
-    }
-
+          this.setState({name: nextProps.itemData.name})
+        
   }
 
   componentWillUpdate ( nextProps, nextState ) {
@@ -49,10 +64,18 @@ class ImportToWorld extends Component {
 
   }
 
-  handleTextArea (e) {
+  onCoordChange ( value, event ) {
 
     this.setState({
-      text: e.target.value
+      coords: value
+    })
+
+  }
+
+  handleWorldChange ( event ) {
+
+    this.setState({
+      world: event.target.value
     })
 
   }
@@ -60,22 +83,13 @@ class ImportToWorld extends Component {
   save ( id ) {
 
     let name = this.state.name,
+        itemData = Object.assign({}, this.props.itemData),
         data = {}
 
-    if ( id ) {
+    itemData.world = this.props.currentWorld
 
-        this.props.shares.map( s => { 
-          if ( s.id == id ) 
-            data = s
-        })
-        data = Object.assign({}, data, this.state.data )
-        this.props.updateShare(  this.props.username, data )
-     
-    } else {
-
-        this.props.createShare(  this.props.username, this.state.data )
-
-    }
+    this.props.addItemToWorld( this.props.username, "Entities", this.props.itemData.id, this.state.world, this.state.coords.join("x"), itemData )
+    this.toggleModal()
 
   }
 
@@ -93,39 +107,34 @@ class ImportToWorld extends Component {
 
       return (
        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
+          <div style={ styles.modal() } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Import To World</span> 
-
-                <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
-                
+              <span style={ styles.title }> 
+                <span style={{marginRight: '0.5em'}}>Import To World</span> 
+                <input type="text" disabled onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
               </span>
-              <table>
-                <th>
-                    <td>id</td>
-                    <td>name</td>
-                    <td>directory</td>
-                    <td></td>
-                </th>
-                {
-                    this.props.shares.map( s => {
-                        return (
-                            
-                            <tr>
-                                <td>{s.id}</td>
-                                <td>{s.name}</td>
-                                <td>{s.directory}</td>
-                                <td></td>
-                            </tr>
-                        )
+              <div style={styles.basicInput}>
+                Select world to import into
+                <select onChange={ e=> this.handleWorldChange(e) }>
+                  {
+                    this.props.worlds.map( (world, w) => {
+                       
+                      return (
+                        <option key={w}value={world.name}>{world.name}</option>
+                      )
+
                     })
-                }
-                </table>
+                  }
+                </select>
+              </div>
+              <div style={styles.basicInput}>
+                Specify coordinates: <VectorInput axis={3} decimalPlaces={0} onChange={ (value, event) => { this.onCoordChange( value, event) }} />
+              </div>
+              
             </div>
             <div style={ styles.body }>
-              <textarea style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
-              <FileButton title="Save" onClick={ () => { this.save() } } />
-              <FileButton title="Close" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
+              <FileButton title="Add" onClick={ () => { this.save() } } />
+              <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
           </div>
         </div>
@@ -134,7 +143,7 @@ class ImportToWorld extends Component {
     } else {
 
       return (
-        <FileButton title="Sharing" onClick={ () => { this.toggleModal() } } />
+        <span></span>
       )
 
     }
@@ -148,12 +157,8 @@ ImportToWorld.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
-import {
-  readText,
-  writeText
-} from '../../../redux/actions/file-actions'
+  addItemToWorld
+} from '../../../redux/actions/inventory-actions'
 import {
     closeImportToWorld
 } from '../../../redux/actions/util-actions'
@@ -166,26 +171,19 @@ export default connect(
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         vrMode: state.app.vrMode,
+        currentWorld: state.worlds.current,
+        worlds: state.worlds.all,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.importToWorld.activated,
-        filename: state.util.importToWorld.filename,
-        fileUser: state.util.importToWorld.username,
+        itemId: state.util.importToWorld.itemId,
+        itemData: state.util.importToWorld.itemData,
         dir: state.util.importToWorld.dir
     }
   },
   dispatch => {
     return {
-      listShares: (username) => {
-        dispatch( readText (filename, username, dir) )
-      },
-      updateShare: (username, data) => {
-        dispatch ( writeText (username, data) )
-      },
-      createShare: (username, data) => {
-        dispatch ( writeText (username, data) )
-      },
-      deleteShare: (username, data) => {
-          dispatch(toggleMenu(force))
+      addItemToWorld: ( userId, category, itemId, world, coords, itemData ) => {
+        dispatch( addItemToWorld( userId, category, itemId, world, coords, itemData ) )
       },
       closeImportToWorld: () => {
         dispatch( closeImportToWorld() )
@@ -194,44 +192,22 @@ export default connect(
   }
 )(ImportToWorld)
 
-
-
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-    return `rgb(${r}, ${g}, ${b})`
-  },
-  rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
-    return `rgba(${r}, ${g}, ${b}, ${a})`
-  }
-
 let styles = {
-  modal: {
-    width: '50%',
-    maxWidth: '729px',
-    minWidth: '320px',
-    height: '480px',
-    padding: '0.25em',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    margin: 'auto',
-    background: rgb(38, 38, 38),
-    borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+  modal: () => {
+    return Object.assign({}, modalStyle, {
+        maxWidth: '1080px',
+        left: ! isMobile() ? '72px' : '0px'
+      })
   },
-  lightbox: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    background: rgba(0, 0, 0, 0.8)
+  lightbox: lightboxStyle,
+  basicInput: {
+    marginBottom: '0.5em'
   },
   resultingPath: {
     marginBottom: '1em'
   },
   cancelButton: {
-    borderLeft: 'solid 0.2em magenta'
+    borderLeft: 'solid 0.2em #005aff'
   },
   header: {
     width: '100%',
@@ -243,20 +219,12 @@ let styles = {
     padding: '0.25em',
     marginBottom: '0.5em',
     background: '#212121',
-    border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
+    border: 'none',
     borderRadius: '2px',
     fontSize: '1em',
     color: 'white',
   },
-  textArea: {
-    margin: '0px',
-    width: '95%',
-    height: '358px',
-    color: 'white',
-    marginBottom: '0.5em',
-    padding: '0.5em',
-    background: 'black'
-  },
+  textArea: textAreaStyle,
   body: {
 
   },

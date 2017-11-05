@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
-
+import { rgba, rgb } from '../../../util'
 
 class MoveFile extends Component {
 
@@ -29,6 +29,15 @@ class MoveFile extends Component {
 
     }
 
+    if ( this.props.activated == false && nextProps.activated == true )
+    
+      this.setState({
+        activated: true,
+        name: nextProps.filename
+      })
+
+    
+
   }
 
   componentWillUpdate ( nextProps, nextState ) {
@@ -38,6 +47,7 @@ class MoveFile extends Component {
 
   toggleModal () {
 
+    this.props.closeRenameFile()
     this.setState({
       name: "",
       activated: !this.state.activated
@@ -61,7 +71,7 @@ class MoveFile extends Component {
 
     if ( name != "" ) {
 
-      this.props.moveFile( this.props.username, `${cwd}/${dirName}` )
+      this.props.moveFile( this.props.username, cwd, this.props.filename, name, cwd )
       this.toggleModal()
 
     } else {
@@ -86,7 +96,7 @@ class MoveFile extends Component {
               <span style={ styles.title }> Rename File </span>
             </div>
             <div style={ styles.body }>
-              <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } />
+              <input type="text" defaultValue={this.state.name} onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } />
               <div style={ styles.resultingPath }>
                 { resultingPath }
               </div>
@@ -100,7 +110,7 @@ class MoveFile extends Component {
     } else {
 
       return (
-        <FileButton title="Rename" onClick={ () => { this.toggleModal() } } />
+        <span></span>
       )
 
     }
@@ -108,52 +118,49 @@ class MoveFile extends Component {
   }
 }
 
-NewFolder.defaultProps = {
+MoveFile.defaultProps = {
 
 }
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
+  closeRenameFile
+} from '../../../redux/actions/util-actions'
 import {
-  createDirectory,
+  moveFile,
   listDirectories
 } from '../../../redux/actions/file-actions'
 
 export default connect(
   (state, ownProps) => {
     return {
-        creatingDir: state.files.createDirectory.fetching,
+        creatingDir: state.files.move.fetching,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         cwd: state.files.listDirectories.workingPath,
         section: state.routing.locationBeforeTransitions.pathname,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
-        vrMode: state.app.vrMode
+        vrMode: state.app.vrMode,
+        activated: state.util.renameFile.activated,
+        filename: state.util.renameFile.filename,
+        fileUser: state.util.renameFile.username,
+        dir: state.util.renameFile.dir,
     }
   },
   dispatch => {
     return {
-      moveFile: ( username, dir, filename, targetFile, targetDir ) => {
-        dispatch( createDirectory( username, dir, filename, targetFile, targetDir ) )
+      moveFile: ( username, dir, filename, targetDir, targetFile ) => {
+        dispatch( moveFile( username, dir, filename, targetFile, targetDir ) )
+      },
+      closeRenameFile: () => {
+        dispatch(closeRenameFile())
       },
       listDirectories: (username, dir) => {
           dispatch(listDirectories(username, dir))
-      },
-      toggleMenu: ( force ) => {
-          dispatch( toggleMenu( force ) )
       }
     }
   }
 )(MoveFile)
-
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-  return `rgb(${r}, ${g}, ${b})`
-},
-rgba = ( r, g, b, a ) => { // because I never remeber to quote that rofl..
-  return `rgba(${r}, ${g}, ${b}, ${a})`
-}
 
 let styles = {
 modal: {
@@ -183,7 +190,7 @@ resultingPath: {
   marginBottom: '1em'
 },
 cancelButton: {
-  borderLeft: 'solid 0.2em magenta'
+  borderLeft: 'solid 0.2em #005aff'
 },
 header: {
   width: '100%',

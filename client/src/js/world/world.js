@@ -11,7 +11,8 @@ import Entity from '../entity'
 import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
-import initLocalSettings from './local-settings'
+import Settings from './local-settings'
+import SkyBox from './skybox'
 import { 
 	compressFloatArray,
 	compressVector3,
@@ -25,7 +26,7 @@ export default class Convolvr {
 	
 	constructor( user, userInput = false, socket, store, loadedCallback ) {
 
-		let mobile = window.innerWidth < 480 || window.devicePixelRatio >= 1.5,
+		let mobile = window.innerWidth < 480 || (window.innerWidth < 1024 && window.devicePixelRatio >= 1.5),
 			scene = new THREE.Scene(),
 			camera = null,
 			screenResX = window.devicePixelRatio * window.innerWidth,
@@ -34,20 +35,17 @@ export default class Convolvr {
 			three = {},
 			postProcessing = false,
 			usePostProcessing = false,
-			viewDist = [ 0.1, 10000 ]
+			viewDist = [ 0.1, 100000 ]
 
-		//scene.scale.setScalar( 1 / 1 ) 
+		this.store = store
 		this.mobile = mobile
-		this.floorHeight = 0
-		this.highAltitudeGravity = false
-		this.viewDistance = 0 // default
 		this.userInput = userInput
-		initLocalSettings( this )
-		viewDist = [ 0.1, 2000 + (3+this.viewDistance)*GRID_SIZE[0]*150 ]
-		usePostProcessing = this.enablePostProcessing == 'on'
-		camera = new THREE.PerspectiveCamera( this.fov, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
+		this.settings= new Settings( this )
+		viewDist = [ 0.1, 2000 + (3+this.settings.viewDistance)*GRID_SIZE[0]*150 ]
+		usePostProcessing = this.settings.enablePostProcessing == 'on'
+		camera = new THREE.PerspectiveCamera( this.settings.fov, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
 
-		let rendererOptions = { antialias: this.aa != 'off' && !usePostProcessing }
+		let rendererOptions = { antialias: this.settings.aa != 'off' && !usePostProcessing }
 
 		if ( usePostProcessing ) {
 
@@ -58,10 +56,10 @@ export default class Convolvr {
 
 		renderer = new THREE.WebGLRenderer(rendererOptions)
 		
-		if ( this.shadows > 0 ) {
+		if ( this.settings.shadows > 0 ) {
 
-			renderer.shadowMapType = THREE.PCFSoftShadowMap
-			renderer.shadowMapEnabled = true
+			renderer.shadowMap.enabled = true;
+			renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 
 		}
 
@@ -82,12 +80,12 @@ export default class Convolvr {
 		this.users = []
 		this.user = user || {}
 		this.camera = camera
+		this.skyboxMesh = false
 		this.vrFrame = !!window.VRFrameData ? new VRFrameData() : null
 		this.sendUpdatePacket = 0
 		this.capturing = false
 		this.webcamImage = ""
 		this.HMDMode = "standard" // "head-movement"
-		this.vrMovement = "stick" // teleport
 		this.vrHeight = 0
 		this.screenResX = screenResX
 		this.initRenderer( renderer, "viewport" )
@@ -104,7 +102,7 @@ export default class Convolvr {
 
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
-		this.raycaster.near = 0.75
+		this.raycaster.near = 0.25
 
 		three = this.three = {
 			world: this,
@@ -122,7 +120,7 @@ export default class Convolvr {
 			staticCollisions: this.systems.staticCollisions.worker,
 			// oimo: this.systems.oimo.worker
 		}
-
+		this.skybox = new SkyBox( this )
 		camera.add(this.systems.audio.listener)
 		this.socketHandlers = new SocketHandlers( this, socket )
 		window.addEventListener('resize', e => this.onWindowResize( e ), true)
@@ -147,22 +145,47 @@ export default class Convolvr {
 	init ( config, callback ) {
 		
 		let coords = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
-			skyLight =  new THREE.DirectionalLight( config.light.color, 1 ),
+			skyLight =  skyLight = new THREE.DirectionalLight( config.light.color, 1 ),
 			camera = three.camera,
 			skyMaterial = new THREE.MeshBasicMaterial( {color: 0x303030} ),
 			skyTexture = null,
-			skybox = this.skybox,
 			rotateSky = false,
 			shadowRes = 1024,
 			envURL = '/data/images/photospheres/sky-reflection.jpg',
 			r = config.sky.red,
 			g = config.sky.green,
-			b = config.sky.blue
+			b = config.sky.blue,
+			shadowCam = null,
+			oldConfig = Object.assign({}, this.config),
+			skySize = 1000+((this.settings.viewDistance+3.5)*1.4)*140,
+			oldSkyMaterial = {}
+
 
 		this.config = config; console.info("World config: ", config)
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
 		three.scene.add(this.ambientLight)
+
+		if ( this.shadows > 0 ) {
+
+			skyLight.castShadow = true
+			shadowCam = skyLight.shadow.camera
+			skyLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)  
+			skyLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows) 
+			shadowCam.near = 0.5      // default
+			shadowCam.far = 1300      
+			
+			shadowCam.left = -500
+			shadowCam.right = 500
+			shadowCam.top = 500
+			shadowCam.bottom = -500
+			three.scene.add(shadowCam)
+			
+			if  ( !this.shadowHelper ) {
+				this.shadowHelper = new THREE.CameraHelper( skyLight.shadow.camera );
+				three.scene.add( this.shadowHelper );
+			}
+		} 
 
 		if ( !!config && !!config.sky.photosphere ) { console.log("init world: photosphere: ", config.sky.photosphere)
 
@@ -173,24 +196,22 @@ export default class Convolvr {
 
 			envURL = this.systems.assets.getEnvMapFromColor( r, g, b )
 			this.systems.assets.envMaps.default = envURL
-
+			
 		}
 
-		if ( !!! skybox ) {
+		if ( this.skyboxMesh )
 
-			this.skybox = skybox = new THREE.Mesh(new THREE.OctahedronGeometry( 1000+((this.viewDistance+3.5)*1.4)*140, 4), skyMaterial )
-		
-		} else {
+			three.scene.remove( this.skyBoxMesh )
+			oldSkyMaterial = this.skyboxMesh.material
 
-			skybox.material = skyMaterial
-
-		}
+		this.skyboxMesh = new THREE.Mesh(new THREE.OctahedronGeometry( skySize, 4), oldSkyMaterial )
 
 		let deferWorldLoading = false,
 			world = this,
 			rebuildWorld = () => {
 
-				let yaw = config.light.yaw - Math.PI / 2.0
+				let yaw = config.light.yaw - Math.PI / 2.0,
+					zeroZeroZero = new THREE.Vector3(0,0,0)
 
 				!!world.skyLight && three.scene.remove( world.skyLight )
 				!!world.ambientLight && three.scene.remove( world.ambientLight )
@@ -198,11 +219,10 @@ export default class Convolvr {
 				world.skyLight = skyLight
 				three.scene.add(skyLight)
 				skyLight.position.set( Math.sin(yaw)*1000, Math.sin(config.light.pitch)*1000, Math.cos(yaw)*1000)
-				skyLight.lookAt(new THREE.Vector3(0,0,0))
-				three.scene.add(this.skybox)
-				//rotateSky && this.skybox.rotation.set(0, Math.PI * 1, 0)
-				world.skybox.position.set(camera.position.x, 0, camera.position.z)
-				//world.terrain.bufferVoxels( true, 0 )
+				//skyLight.lookAt(zeroZeroZero)
+				//skyLight.shadow.camera.lookAt(zeroZeroZero)
+				three.scene.add(world.skyboxMesh)
+				world.skyboxMesh.position.set(camera.position.x, 0, camera.position.z)
 				world.gravity = config.gravity
 				world.highAltitudeGravity = config.highAltitudeGravity
 				callback()
@@ -210,45 +230,12 @@ export default class Convolvr {
 
 		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
 
-			let starMatProp = this.systems.assets.getMaterialProp("stars"),
-				starSkyTexture = this.systems.material.procedural.generateTexture( starMatProp.procedural ) 
-
-			this.loadShaders( "/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl", (vert, frag) => {
-
-				skyMaterial = new THREE.ShaderMaterial({
-					side: 1,
-					fog: false,
-					uniforms: {
-						time: { type: "f", value: 1.0 },
-						red: { type: "f", value: config.sky.red },
-						green: { type: "f", value: config.sky.green },
-						blue: { type: "f", value: config.sky.blue },
-						terrainRed: { type: "f", value: config.terrain.red },
-						terrainGreen: { type: "f", value: config.terrain.green },
-						terrainBlue: { type: "f", value: config.terrain.blue },
-						lightYaw: { type: "f", value: config.light.yaw },
-						lightPitch: { type: "f", value: config.light.pitch },
-						starTexture: {
-							type: "t",
-							value: starSkyTexture
-						 }
-					},
-					vertexShader: vert,
-					fragmentShader: frag
-				})
-
-				skybox.material = skyMaterial
-
-			}, progress => {
-				console.log("Loading Shaders: ", progress)
-			})	
+			this.skybox.loadShaderSky( config, oldConfig, world.skyboxMesh, ()=>{})
 
 		} else {
 			// load sky texture 
 			deferWorldLoading = true
-			this.systems.assets.loadImage( '/data/user/'+this.config.sky.photosphere, {}, ( texture ) => {
-				texture.magFilter = THREE.LinearFilter
-	 			skybox.material = new THREE.MeshBasicMaterial({map: texture, side:1, fog: false})
+			this.skybox.loadTexturedSky( config.sky, this.skyboxMesh, ()=> {
 				rebuildWorld()
 			}) 
 
@@ -435,33 +422,7 @@ export default class Convolvr {
 
 	updateSkybox ( delta ) {
 
-		let camera = three.camera,
-			terrainEnt = this.terrain.distantTerrain,
-			config = this.config,
-			skyLight = this.skyLight,
-			yaw = config ? config.light.yaw : 0,
-			pitch = config ? config.light.pitch : 0,
-			skyMat = null
-
-		if ( this.skybox ) {
-
-			skyMat = this.skybox.material
-
-			if ( skyMat ) {
-
-				if ( skyMat.uniforms )
-
-					skyMat.uniforms.time.value += delta
-
-				this.skybox.position.set(camera.position.x, camera.position.y, camera.position.z)
-				//skyLight.position.set( camera.position.x+Math.sin(yaw)*0.08000, camera.position.y+ Math.sin(pitch)*0.08000, camera.position.z+Math.cos(yaw)*0.08000)
-				//skyLight.lookAt( camera.position )
-			}
-    	}
-
-		if ( terrainEnt )
-
-			terrainEnt.update( [ camera.position.x, terrainEnt.mesh.position.y, camera.position.z ] )
+		this.skybox.followUser( delta, false )
 			
 	}
 
@@ -472,6 +433,7 @@ export default class Convolvr {
 		if ( this.mode != "stereo" )
 
 			three.renderer.setSize(window.innerWidth, window.innerHeight)
+
 
 
 		if ( this.postProcessing.enabled )

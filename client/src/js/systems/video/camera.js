@@ -11,7 +11,7 @@ export default class CameraSystem {
         let prop = component.props.camera,
             type = prop.type,
             fov = prop.fov || 78,
-            viewDistance = this.world.viewDistance,
+            viewDistance = this.world.settings.viewDistance,
             camera = new THREE.PerspectiveCamera( fov, 1, 1000+viewDistance*200, 15000000 + viewDistance*600000 )
 
         return {

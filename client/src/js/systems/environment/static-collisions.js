@@ -1,22 +1,35 @@
+//@flow
+import Convolvr from '../../world/world'
+import Component from '../../component'
+import Entity from '../../entity'
+import * as THREE from 'three'
+
+
 let entPos = new THREE.Vector3()
 
 export default class StaticCollisions {
 
-	constructor( world ) {
+	world:  Convolvr
+	worker: Worker
 
-		this.worker = null
-		let worker = new Worker('/data/js/workers/static-collision.js')
+	constructor( world: Convolvr ) {
 
-	      worker.onmessage = function ( event ) {
+		this.worker = new Worker('/data/js/workers/static-collision.js')
 
-	        let message = JSON.parse(event.data),
-	          	vrFrame = world.vrFrame,
-				vrHeight = 0,
-	          	cam = three.camera,
-	          	user = world.user,
-				userPos = three.camera.position,
-	          	position = [],
-	          	velocity = []
+		let worker: Worker = this.worker,
+			three:  Object = window.three || {}
+
+	      worker.onmessage = function ( event: Object ) {
+
+			let eventData: string        = event.data || '{}',
+				message:   Object        = JSON.parse(eventData),
+	          	vrFrame:   Object        = world.vrFrame,
+				vrHeight:  number        = 0,
+	          	cam:       THREE.Camera  = three.camera,
+	          	user:      Object        = world.user,
+				userPos:   THREE.Vector3 = three.camera.position,
+	          	position:  Array<number> = [],
+	          	velocity:  Array<number> = []
 
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
 
@@ -56,7 +69,7 @@ export default class StaticCollisions {
 
 	      if ( message.data.type == "top" ) {
 
-				three.camera.position.set( three.camera.position.x, message.data.position[1]+13.5 +vrHeight, three.camera.position.z )	
+				three.camera.position.set( three.camera.position.x, message.data.position[1]+14.25 +(vrHeight != 0 ? vrHeight-1 : 0), three.camera.position.z )	
 
 				if ( Math.abs( user.velocity.y ) > 400 ) {
 
@@ -85,7 +98,7 @@ export default class StaticCollisions {
 				// console.log("floor collision", message.data.position, message.data)
 				three.camera.position.set(three.camera.position.x, message.data.position[1]+vrHeight, three.camera.position.z)
 
-				if ( Math.abs(user.velocity.y) > 0.100 ) {
+				if ( Math.abs(user.velocity.y) > 1 ) {
 
 					user.velocity.y *= 0.66
 					user.velocity.x *= 0.96
@@ -115,7 +128,7 @@ export default class StaticCollisions {
 		this.worker = worker
 	}
 
-	init ( component ) {
+	init ( component: Component ) {
 		
 		return {
 

@@ -41,11 +41,11 @@ export let clearOldData = () => {
 
   if (localStorage.getItem("postProcessing") != null) {
 
-    if (localStorage.getItem("version0.41") == null) {
+    if (localStorage.getItem("version0.45") == null) {
 
-      localStorage.setItem("version0.41", "1")
+      localStorage.setItem("version0.45", "1")
       localStorage.setItem("postProcessing", "off")
-      localStorage.setItem("shadows", window.innerWidth < 720 ? 0 : 1 )
+      localStorage.setItem("shadows", 0 )
 
     }
 
@@ -55,3 +55,4 @@ export let clearOldData = () => {
 
 export let isMobile = () => window.innerWidth < 480 || window.devicePixelRatio >= 1.5 && window.innerWidth < 1280
 
+export let isVRMode = ( mode ) => (mode == "3d" || mode == "stereo")

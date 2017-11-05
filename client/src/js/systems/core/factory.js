@@ -2,7 +2,7 @@
 import Convolvr from '../../world/world'
 import Component from '../../component'
 import Entity from '../../entity'
-import { THREE } from 'three'
+import * as THREE from 'three'
 
 export default class FactorySystem {
 
@@ -184,7 +184,7 @@ export default class FactorySystem {
     _generateSystem ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         console.warn("system ", preset)
-
+        console.info("Generate SYSTEM ENTITY", data)
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
@@ -198,8 +198,12 @@ export default class FactorySystem {
                         size: [0.5, 0.5, 0.05]
                     },
                     text: {
-                        lines: [preset],
-                        color: 0xff0000,
+                        lines: [
+                            preset,
+                            ...(JSON.stringify(data).match(/.{1,34}/g) || [""])
+                            ],
+                        color: "#ff0000",
+                        background: "#000000",
                         label: false
                     },
                     toolUI: {
@@ -280,9 +284,15 @@ export default class FactorySystem {
                         name: "metal",
                         color: 0x00ffff // get actual world color here..
                     },
+                    text: {
+                        lines: [JSON.stringify(data)],
+                        color: "#ff0000",
+                        background: "#000000",
+                        label: false
+                    },
                     geometry: {
-                        shape: "sphere",
-                        size: [0.05, 0.05, 0.05]
+                        shape: "box",
+                        size: [0.25, 0.25, 0.05]
                     }
                 }
             )}
@@ -305,9 +315,15 @@ export default class FactorySystem {
                         name: "metal",
                         color: 0xff8000
                     },
+                    text: {
+                        lines: [JSON.stringify(data)],
+                        color: "#ff0000",
+                        background: "#000000",
+                        label: false
+                    },
                     geometry: {
-                        shape: "sphere",
-                        size: [0.05, 0.05, 0.05]
+                        shape: "box",
+                        size: [0.25, 0.25, 0.05]
                     }
                 }
             )}
@@ -336,9 +352,15 @@ export default class FactorySystem {
                         name: "metal",
                         color: 0x0080ff
                     },
+                    text: {
+                        lines: [JSON.stringify(data)],
+                        color: "#ff0000",
+                        background: "#000000",
+                        label: false
+                    },
                     geometry: {
-                        shape: "sphere",
-                        size: [0.05, 0.05, 0.05]
+                        shape: "box",
+                        size: [0.25, 0.25, 0.05]
                     }
                 }
             )}
@@ -364,12 +386,18 @@ export default class FactorySystem {
                         // implement
                     },
                     material: {
-                        name: "wireframe",
+                        name: "metal",
                         color: 0x000000
                     },
+                    text: {
+                        lines: [JSON.stringify(data)],
+                        color: "#ff0000",
+                        background: "#000000",
+                        label: false
+                    },
                     geometry: {
-                        shape: "sphere",
-                        size: [0.05, 0.05, 0.05]
+                        shape: "box",
+                        size: [0.25, 0.25, 0.05]
                     }
                 }
             )}

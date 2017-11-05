@@ -44,6 +44,7 @@
     "moment": "^2.13.0",
     "notifyjs": "^2.0.3",
     "oimo": "^1.0.9",
+    "progressbardottop": "^0.1.4",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
@@ -54,6 +55,7 @@
     "redux-logger": "^2.7.0",
     "redux-thunk": "^2.1.0",
     "stylus": "^0.54.5",
+    "three": "^0.86.0",
     "webvr-boilerplate": "^0.4.6"
   }
 }

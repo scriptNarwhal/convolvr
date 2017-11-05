@@ -142,7 +142,7 @@ export default class ToolActionHandler {
                     break
             }
 
-            if (world.IOTMode)
+            if (world.settings.IOTMode)
 
                 animate(world, Date.now(), 0)
 

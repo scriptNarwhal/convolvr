@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
+import { rgba, rgb } from '../../../util'
+import { isMobile } from '../../../config'
+import { 
+  textAreaStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../../styles'
 
 class InventoryExport extends Component {
 
@@ -14,45 +21,43 @@ class InventoryExport extends Component {
 
     this.setState({
       activated: false,
+      refreshing: false,
       text: "",
       name: ""
     })
 
-    if ( !!this.props.fileURL ) {
-
-      this.props.readText( this.props.fileURL, this.props.username, this.props.cwd.join("/") )
-
-    }
     
   }
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData ) {
-
-      this.setState({
-        text: nextProps.textData.text
-      })
-
-    }
-
-    if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
-
-      if ( nextProps.category != "" && nextProps.itemId != "" ) {
-
-        //this.props.readText( nextProps.filename, nextProps.fileUser, nextProps.dir )
-        this.setState({
-          name: nextProps.itemId
-        })
-      }
-
-    }
+    let data = {}
 
     if ( this.props.activated == false && nextProps.activated == true ) {
 
       this.setState({
         activated: true
       })
+
+      if (nextProps.itemData) {
+
+        data = { ...nextProps.itemData }
+
+        if ( nextProps.category == "Properties")
+
+          data = data.data
+
+        this.setState({
+          refreshing: true,
+          name: nextProps.itemData.name,
+          text: JSON.stringify(data, null, "\t")
+        }, () => {
+          this.setState({
+            refreshing: false
+          })
+        })
+
+      }
 
     }
 
@@ -85,7 +90,7 @@ class InventoryExport extends Component {
 
     if ( name != "" ) {
 
-      this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir )
+      // initiate file download maybe
       this.toggleModal()
 
     } else {
@@ -101,7 +106,13 @@ class InventoryExport extends Component {
     this.setState({
       activated: !this.state.activated
     })
-    this.props.closeTextEdit()
+    this.props.closeInventoryExport()
+
+  }
+
+  toFileName (s) {
+
+    return s.replace(/(ies)/, 'y').replace('ents', 'ent').toLowerCase().replace(/(\s|\n|\t)/g, '-')
 
   }
 
@@ -111,18 +122,18 @@ class InventoryExport extends Component {
 
       return (
        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
+          <div style={ styles.modal() } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
-                <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Export</span> 
+              { this.state.name }.{ this.toFileName(this.props.category) }.json
               </span>
             </div>
             <div style={ styles.body }>
-              { this.props.readTextFetching == false  ? (
+              { this.state.refreshing == false  ? (
                 <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
               ) : ""}
-              <FileButton title="Save" onClick={ () => { this.save() } } />
-              <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
+              <FileButton title="Download" onClick={ () => { this.save() } } style={{display:"none"}} />
+              <FileButton title="Done" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
           </div>
         </div>
@@ -131,7 +142,7 @@ class InventoryExport extends Component {
     } else {
 
       return (
-        <FileButton title="New File" onClick={ () => { this.toggleModal() } } />
+        <span></span>
       )
 
     }
@@ -145,17 +156,11 @@ InventoryExport.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
-    toggleMenu
-} from '../../../redux/actions/app-actions'
-import {
-  readText,
-  writeText
-} from '../../../redux/actions/file-actions'
-import {
     getInventory,
+    getInventoryItem,
     addInventoryItem,
     updateInventoryItem
-}
+} from '../../../redux/actions/inventory-actions'
 import {
     closeInventoryExport
 } from '../../../redux/actions/util-actions'
@@ -173,20 +178,18 @@ export default connect(
         activated: state.util.inventoryExport.activated,
         category: state.util.inventoryExport.category,
         fileUser: state.util.inventoryExport.username,
+        itemData: state.util.inventoryExport.itemData,
         itemId: state.util.inventoryExport.itemId,
-        vrMode: state.app.vrMode
+        itemIndex: state.util.inventoryExport.itemIndex
     }
   },
   dispatch => {
     return {
-      readText: (filename, username, dir) => {
-        dispatch( readText (filename, username, dir) )
-      },
-      writeText: (text, filename, username, dir) => {
-        dispatch( writeText (text, filename, username, dir) )
-      },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
+      },
+      getInventoryItem: ( userId, category, itemId ) => {
+        dispatch(getInventoryItem( userId, category, itemId ))
       },
       addInventoryItem: (userId, category, data) => {
           dispatch(addInventoryItem(userId, category, data))
@@ -196,79 +199,44 @@ export default connect(
       },
       closeInventoryExport: () => {
         dispatch( closeInventoryExport() )
-      },
-      toggleMenu: (force) => {
-          dispatch(toggleMenu(force))
       }
     }
   }
 )(InventoryExport)
 
-let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
-  return `rgb(${r}, ${g}, ${b})`
-},
-rgba = ( r, g, b, a ) => { 
-  return `rgba(${r}, ${g}, ${b}, ${a})`
-}
-
 let styles = {
-    modal: {
-        width: '50%',
-        maxWidth: '729px',
-        minWidth: '320px',
-        height: '480px',
-        padding: '0.25em',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        margin: 'auto',
-        background: rgb(38, 38, 38),
-        borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
-    },
-    lightbox: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        background: rgba(0, 0, 0, 0.8)
-    },
-    resultingPath: {
-        marginBottom: '1em'
-    },
-    cancelButton: {
-        borderLeft: 'solid 0.2em magenta'
-    },
-    header: {
-        width: '100%',
-        marginTop: '0.5em',
-        marginBotto: '0.5em'
-    },
-    text: {
-        width: '75%',
-        padding: '0.25em',
-        marginBottom: '0.5em',
-        background: '#212121',
-        border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
-        borderRadius: '2px',
-        fontSize: '1em',
-        color: 'white'
-    },
-    textArea: {
-        margin: '0px',
-        width: '95%',
-        height: '358px',
-        color: 'white',
-        marginBottom: '0.5em',
-        padding: '0.5em',
-        background: 'black'
-    },
-    body: {
+  modal: () => {
+    return Object.assign({}, modalStyle, {
+      maxWidth: '1080px',
+      left: ! isMobile() ? '72px' : '0px'
+    })
+  },
+  lightbox: lightboxStyle,
+  resultingPath: {
+      marginBottom: '1em'
+  },
+  cancelButton: {
+      borderLeft: 'solid 0.2em #005aff'
+  },
+  header: {
+      width: '100%',
+      marginTop: '0.5em',
+      marginBotto: '0.5em'
+  },
+  text: {
+      width: '75%',
+      padding: '0.25em',
+      marginBottom: '0.5em',
+      background: '#212121',
+      border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
+      borderRadius: '2px',
+      fontSize: '1em',
+      color: 'white'
+  },
+  textArea: {...textAreaStyle, minHeight: '50vh'},
+  body: {
+  },
+  title: {
 
-    },
-    title: {
-
-    }
+  }
 }

@@ -1,6 +1,6 @@
-let isVRMode = ( mode ) => {
-  return (mode == "3d" || mode == "stereo")
-}
+import { dispatch } from 'redux';
+import { toggleMenu } from '../redux/actions/app-actions';
+import { isVRMode } from '../config.js'
 
 export default class Keyboard {
 
@@ -25,11 +25,11 @@ export default class Keyboard {
           case 16: keys.shift = true; break
           case 32: keys.space = true; break
           case 27: // escape key
-          world.mode = "web"
+          // world.mode = "web"
 
-          if ( world.user.username != "" )
+          // if ( world.user.username != "" )
            
-            document.body.setAttribute("class", "desktop")
+          //   document.body.setAttribute("class", "desktop")
           
           break;
           case 37: keys.left = true; break
@@ -70,17 +70,20 @@ export default class Keyboard {
 
       let tools = world.user.toolbox;
 
-      if ( e.which >= 49 && e.which < 59 ) {
+      if ( isVRMode( world.mode ) ) {
 
-        tools.useTool( e.which - 49, 0)
-        tools.useTool( e.which - 49, 1) // both hands switch.. you can manually pick up a tool in one hand, none the less
+        if ( e.which >= 49 && e.which < 59 ) {
+
+          tools.useTool( e.which - 49, 0)
+          tools.useTool( e.which - 49, 1) // both hands switch.. you can manually pick up a tool in one hand, none the less
+
+        }
+
+        if ( e.which == 192 ) // debugging tool
+
+          tools.useTool( 10, 0 )
 
       }
-
-      if ( e.which == 192 ) // debugging tool
-
-        tools.useTool( 10, 0 )
-
 
     }, true)
 

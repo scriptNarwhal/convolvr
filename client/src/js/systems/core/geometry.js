@@ -1,19 +1,29 @@
+//import Convolvr from '../../world/world'
+//import Component from '../../component'
+//import * as THREE from 'three'
+
 export default class GeometrySystem {
 
-    constructor (world) {
-      this.world = world
-      this.nodeGeom = new THREE.PlaneGeometry( 0.001, 0.001, 0.001)
-      this.detail = world.geometry
-    }
+  world: Convolvr
+  nodeGeom: THREE.PlaneGeometry
+  detail: number
 
-    init ( component ) { 
+  constructor ( world: Convolvr ) {
 
-        let prop = component.props.geometry,
-            geometry = null,
-            size = prop.size,
-            assets = this.world.systems.assets,
-            geometryCode = prop.shape+':'+size.join(':'),
-            faceNormals = false 
+    this.world = world
+    this.nodeGeom = new THREE.PlaneGeometry( 0.001, 0.001, 0.001)
+    this.detail = world.settings.geometry
+
+  }
+
+  init ( component: Component ) { 
+
+        let prop:         Object        = component.props.geometry,
+            geometry:     Object        = {},
+            size:         Array<number> = prop.size,
+            assets:       Object        = this.world.systems.assets,
+            geometryCode: string        = prop.shape+':'+size.join(':'),
+            faceNormals:  boolean       = false
         
         if ( assets.geometries[ geometryCode ] == null ) {
 
@@ -71,7 +81,7 @@ export default class GeometrySystem {
 
           }
 
-          if ( faceNormals && (prop.faceNormals === true || prop.faceNormals === undefined )) {
+          if ( geometry.computeVertexNormals && faceNormals && (prop.faceNormals === true || prop.faceNormals === undefined )) {
 
             geometry.computeVertexNormals()
 
@@ -84,7 +94,7 @@ export default class GeometrySystem {
           geometry = assets.geometries[ geometryCode ] // used cached copy
 
         }
-
+        
         return {
           geometry,
           geometryCode
@@ -92,7 +102,7 @@ export default class GeometrySystem {
 
     }
 
-    _extrudeGeometry ( prop ) { // prop.size, shape, settings
+    _extrudeGeometry ( prop: Object ) { // prop.size, shape, settings
 
       let length = prop.size[2], 
           width = prop.size[0],
@@ -136,7 +146,7 @@ export default class GeometrySystem {
 
     }
 
-    _latheGeometry ( prop ) { // prop.size, shape, settings
+    _latheGeometry ( prop: Object ) { // prop.size, shape, settings
 
       let segments = 8 || prop.segments,
           phiStart = prop.phiStart ? prop.phiStart : 0,

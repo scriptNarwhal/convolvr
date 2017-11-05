@@ -6,7 +6,7 @@ let videoChat = {
                 props: {
                     geometry: {
                         shape: "box",
-                        size: [ 72000, 72000, 1000 ]
+                        size: [ 3, 3, 0.25 ]
                     },
                         material: {
                         color: 0x808080,
@@ -24,13 +24,13 @@ let videoChat = {
                     }
                 },
                 quaternion: [ 0, 0, 0, 1 ],
-                position: [ 0, 0, -5000]
+                position: [ 0, 0, -0.25]
             },
             {
                 props: {
                     geometry: {
                         shape: "box",
-                        size: [ 72000, 72000, 1000 ]
+                        size: [ 3, 3, 0.25 ]
                     },
                         material: {
                         color: 0x808080,
@@ -45,7 +45,7 @@ let videoChat = {
                     }
                 },
                 quaternion: [ 0, 0, 0, 1 ],
-                position: [ 0, 0, 5000 ]
+                position: [ 0, 0, 0.25 ]
             }
         ]
 }

@@ -16,7 +16,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
             cursorAxis = new THREE.Vector3( 1, 0, 0 ),
             wholeBody = !!config ? config.wholeBody : false,
             id = !!config && !!config.id ? config.id : assetSystem.autoEntityID(),
-            userData = { id },
+            userData = { id, data: assetSystem.world.user.data ? assetSystem.world.user.data : { avatar: "default" } },
             n = 2
         
         console.log("init avatar ", id)
@@ -113,7 +113,7 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
           props: {
             geometry: {
                 shape: "box",
-                size: [ 1, 1, 1 ],
+                size: [ 0.25, 0.25, 0.25 ],
             },
             material: {
               color: 0xffffff,

@@ -6,6 +6,9 @@
 body {
   font-family: RobotoLight, sans-serif;
 }
+a, a:visited {
+    color: #00e200
+}
 .table td {
     padding: '0.5em'
 }
@@ -25,6 +28,8 @@ body {
 }
 .viewport {
     cursor: pointer;
+    -webkit-transition: filter 0.3s linear;
+    transition: filter 0.3s linear;
     width: 100% !important;
     height: 100% !important;
 }
@@ -47,28 +52,49 @@ body {
 .hud .button {
   margin-right: 0;
 }
-.tab {
-  height: 8vh;
-  color: rgba(255,255,255,0.92);
-  width: 7.5vh;
-  font-size: 15px;
-  display: inline-block;
-  margin-top: 0.5vh;
+
+.blurred {
+    -webkit-filter: blur(4px); 
+    filter: blur(4px);
 }
-.tab .button {
-  display: inline-block;
-  width: 7.5vh;
-  height: 7.5vh;
-  margin-right: 0;
+
+.menu-item:hover .button .inner {
+    opacity: 1;
+    background-color: rgba(255, 255, 255, 1);
+    cursor:pointer;
 }
-.tab .button .inner {
-  height: 100%;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.07);
+.tab:hover .button .inner {
+    opacity: 1;
+}
+.menu-item:hover span {
+    opacity: 1;
+}
+
+@media screen and (max-width: 1024px) {
+
+}
+.shell > div.inner {
+  top: 9vh;
+  left:0;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+    padding-top: 12px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    margin-top: 12px;
+    background-color: rgba(255,255,255,0.66);
 }
 
 
-.side-menu {
+
+
+/* .side-menu {
   width: 100%;
   padding-top: 0.75vh;
 }
@@ -86,8 +112,8 @@ body {
     padding-left: 1em;
     cursor: pointer;
     display: inline-block;
-}
-.icon {
+} */
+/* .icon {
     height: 4vh;
     width: 4vh;
     display: inline-block;
@@ -110,45 +136,31 @@ body {
     background-repeat: no-repeat;
     background-position: 50%;
     cursor: pointer;
-}
+} */
 
-.menu-item .button .inner {
+/* .menu-item .button .inner {
     right: 0.5em;
 }
 .menu-item span {
     opacity: 0.7;
-}
-.menu-item:hover .button .inner {
-    opacity: 1;
-    background-color: rgba(255, 255, 255, 1);
-    cursor:pointer;
-}
-.tab:hover .button .inner {
-    opacity: 1;
-}
-.menu-item:hover span {
-    opacity: 1;
-}
-.overview {
+} */
 
+/* .tab {
+  height: 8vh;
+  color: rgba(255,255,255,0.92);
+  width: 7.5vh;
+  font-size: 15px;
+  display: inline-block;
+  margin-top: 0.5vh;
 }
-@media screen and (max-width: 1024px) {
-
+.tab .button {
+  display: inline-block;
+  width: 7.5vh;
+  height: 7.5vh;
+  margin-right: 0;
 }
-.shell > div.inner {
-  top: 9vh;
-  left:0;
-}
-
-::-webkit-scrollbar {
-    width: 10px;
-}
-::-webkit-scrollbar-track {
-    background: transparent;
-    padding-top: 12px;
-}
-::-webkit-scrollbar-thumb {
-    border-radius: 2px;
-    margin-top: 12px;
-    background-color: rgba(255,255,255,0.66);
-}
+.tab .button .inner {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.07);
+} */

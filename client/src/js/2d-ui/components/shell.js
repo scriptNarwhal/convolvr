@@ -184,7 +184,7 @@ let styles = {
       zIndex: (hasMenu ? 999999 : 1),
       cursor: 'pointer',
       backgroundColor: droppingFile ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0)',
-      backgroundImage: noBackground ? 'none' : 'linear-gradient(to bottom, #0c0c0c, #111111, #212121)',
+      //backgroundImage: noBackground ? 'none' : 'linear-gradient(to bottom, #0c0c0c, #111111, #212121)',
       overflowY: 'auto',
       overflowX: 'hidden',
       paddingRight: '20px' //scrollbars are ugly (minimap would be nicer)

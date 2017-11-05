@@ -14,17 +14,17 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
       if (!simpleShading) {
 
         //prop.metalnessMap = "/data/images/textures/tiles.png" 
-        prop.roughnessMap = '/data/images/textures/gplaypattern_@2X-2.png'
-        prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
+        prop.roughnessMap = '/data/images/textures/terrain5.jpg'
+        prop.map = !!!prop.map ? '/data/images/textures/terrain4.jpg' : prop.map
 
       } else {
 
-        prop.map = '/data/images/textures/gplaypattern_@2X-2.png'
+        prop.map = '/data/images/textures/terrain4.jpg'
         prop.envMap = 'none'
 
       }
 
-      prop.repeat = ['wrapping', 12, 12]
+      prop.repeat = ['wrapping', 10, 10]
       break
     case "terrain2":
       if (!simpleShading) {
@@ -42,12 +42,12 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
     case "terrain3":
       if (!simpleShading) {
 
-        prop.map = !!!prop.map ? '/data/images/textures/terrain2.jpg' : prop.map
+        prop.map = !!!prop.map ? '/data/images/textures/terrain4.jpg' : prop.map
         //prop.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
 
       } else {
 
-        prop.map = '/data/images/textures/terrain2.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
+        prop.map = '/data/images/textures/terrain4.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
         prop.envMap = 'none'
 
       }
@@ -105,10 +105,10 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
 
       if (!simpleShading)
 
-        prop.metalnessMap = "/data/images/textures/gplaypattern_@2X-2.png"
+        prop.metalnessMap = "/data/images/textures/metal4.jpg"
 
 
-      prop.map = !!!prop.map ? '/data/images/textures/shattered_@2X-2.png' : prop.map
+      prop.map = !!!prop.map ? '/data/images/textures/metal4.jpg' : prop.map
       break
     case "metal2":
       prop.repeat = !!!prop.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
@@ -116,11 +116,11 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
       if (!simpleShading) {
 
         prop.alphaMap = "/data/images/textures/metal2.png"
-        prop.map = !!!prop.map ? '/data/images/textures/tiles-light.png' : prop.map
+        prop.map = !!!prop.map ? '/data/images/textures/metal3.png' : prop.map
 
       } else {
 
-        prop.map = !!!prop.map ? '/data/images/textures/metal3.png' : prop.map
+        prop.map = !!!prop.map ? '/data/images/textures/metal3.jpg' : prop.map
 
       }
       break
