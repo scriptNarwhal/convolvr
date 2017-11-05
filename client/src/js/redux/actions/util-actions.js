@@ -58,21 +58,22 @@ export function launchImportToInventory ( username, dir, filename ) {
     }
 }
 
-export function launchImportToWorld ( username, dir, filename ) {
+export function launchImportToWorld ( username, itemIndex, itemData ) {
     return {
         type: UTIL_LAUNCH_IMPORT_TO_WORLD,
         username,
-        filename,
-        dir
+        itemIndex,
+        itemData
     }
 }
 
-export function launchInventoryExport ( username, category, itemId, itemIndex ) {
+export function launchInventoryExport ( username, category, itemId, itemIndex, itemData ) {
     return {
         type: UTIL_LAUNCH_INVENTORY_EXPORT,
         username,
         category,
         itemIndex,
+        itemData,
         itemId
     }
 }

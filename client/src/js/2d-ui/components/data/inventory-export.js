@@ -31,24 +31,17 @@ class InventoryExport extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
+    if ( this.props.activated == false && nextProps.activated == true ) {
 
-      if ( nextProps.category != "" && nextProps.itemId != "" ) {
-   
-        this.setState({
-          name: nextProps.itemId
-        })
+      this.setState({
+        activated: true
+      })
 
-      }
-
-    }
-
-    if ( this.props.itemFetching && nextProps.itemFetching == false) {
-
-      if ( nextProps.itemData ) {
+      if (nextProps.itemData) {
 
         this.setState({
           refreshing: true,
+          name: nextProps.itemData.name,
           text: JSON.stringify(nextProps.itemData, null, "\t")
         }, () => {
           this.setState({
@@ -58,15 +51,7 @@ class InventoryExport extends Component {
 
       }
 
-    }
-
-    if ( this.props.activated == false && nextProps.activated == true ) {
-
-      this.setState({
-        activated: true
-      })
-
-      this.props.getInventoryItem( this.props.username, this.props.category, this.props.itemId )
+      //this.props.getInventoryItem( this.props.username, this.props.category, this.props.itemId )
 
     }
 
@@ -119,6 +104,12 @@ class InventoryExport extends Component {
 
   }
 
+  toFileName (s) {
+
+    return s.replace(/(ies)/, 'y').replace('ents', 'ent').toLowerCase().replace(/(\s|\n|\t)/g, '-')
+
+  }
+
   render() {
 
     if ( this.state.activated ) {
@@ -127,8 +118,8 @@ class InventoryExport extends Component {
        <div style={ styles.lightbox }>
           <div style={ styles.modal() } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
-                <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Export</span> 
+              { this.state.name }.{ this.toFileName(this.props.category) }.json
               </span>
             </div>
             <div style={ styles.body }>
@@ -236,7 +227,7 @@ let styles = {
       fontSize: '1em',
       color: 'white'
   },
-  textArea: textAreaStyle,
+  textArea: {...textAreaStyle, minHeight: '50vh'},
   body: {
   },
   title: {

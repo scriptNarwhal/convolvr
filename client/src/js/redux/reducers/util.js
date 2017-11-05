@@ -43,8 +43,8 @@ module.exports = function app (state = {
     importToWorld: {
         activated: false,
         username: "",
-        filename: "",
-        dir: ""
+        itemData: false,
+        itemIndex: -1
     },
     importToInventory: {
         activated: false,
@@ -78,7 +78,7 @@ module.exports = function app (state = {
         activated: false,
         username: "",
         category: "",
-        index: 0,
+        index: -1,
         data: {
             entity: false,
             component: false,
@@ -139,8 +139,8 @@ module.exports = function app (state = {
                 ...state.importToWorld,
                 activated: true,
                 username: action.username,
-                filename: action.filename,
-                dir: action.dir
+                itemData: action.itemData,
+                itemIndex: action.itemIndex
             }
         }
     case UTIL_LAUNCH_ENTITY_EDITOR:
@@ -163,6 +163,7 @@ module.exports = function app (state = {
                 username: action.username,
                 category: action.category,
                 itemIndex: action.itemIndex,
+                itemData: action.itemData,
                 itemId: action.itemId
             }
         }
@@ -219,7 +220,10 @@ module.exports = function app (state = {
             ...state,
             textEdit: {
                 ...state.textEdit,
-                activated: false
+                activated: false,
+                username: "",
+                filename: "",
+                dir: ""
             }
         }
     case UTIL_CLOSE_RENAME_FILE:
@@ -227,7 +231,11 @@ module.exports = function app (state = {
             ...state,
             renameFile: {
                 ...state.renameFile,
-                activated: false
+                activated: false,
+                username: "",
+                filename: "",
+                target: "",
+                dir: ""
             }
         }
     case UTIL_CLOSE_SHARING_SETTINGS:
@@ -260,6 +268,13 @@ module.exports = function app (state = {
             entityEdit: {
                 ...state.entityEdit,
                 activated: false
+            },
+            loadedItemEdit: {
+                ...state.loadedItemEdit,
+                data: {
+                    ...state.loadedItemEdit.data,
+                    entity: null
+                }
             }
         }
     case UTIL_CLOSE_INVENTORY_EXPORT:
@@ -276,6 +291,13 @@ module.exports = function app (state = {
             componentEdit: {
                 ...state.componentEdit,
                 activated: false
+            },
+            loadedItemEdit: {
+                ...state.loadedItemEdit,
+                data: {
+                    ...state.loadedItemEdit.data,
+                    component: null
+                }
             }
         }
     case UTIL_CLOSE_PROPERTY_EDITOR:
@@ -284,6 +306,13 @@ module.exports = function app (state = {
             propertyEdit: {
                 ...state.propertyEdit,
                 activated: false
+            },
+            loadedItemEdit: {
+                ...state.loadedItemEdit,
+                data: {
+                    ...state.loadedItemEdit.data,
+                    property: null
+                }
             }
         }
     default:

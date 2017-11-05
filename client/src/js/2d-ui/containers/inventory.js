@@ -48,13 +48,13 @@ class Inventory extends Component {
         switch ( name ) {
     
           case "Add To World":
-            this.props.launchImportToWorld( this.props.username, data.itemData )
+            this.props.launchImportToWorld( this.props.username, data.itemIndex, data.itemData )
           break;
           case "Edit":
             this.props.editLoadedItem( data.source, this.props.username, data.category, data.itemIndex, data.itemData )
           break;
           case "Export JSON":
-            this.props.launchInventoryExport( this.props.username, data.category, data.itemId, data.itemIndex )
+            this.props.launchInventoryExport( this.props.username, data.category, data.itemId, data.itemIndex, data.itemData )
           break;
     
         }
@@ -145,11 +145,11 @@ export default connect(
   },
   dispatch => {
     return {
-      launchImportToWorld: (username, data) => {
-        dispatch( launchImportToWorld(username, data))
+      launchImportToWorld: (username, index, data) => {
+        dispatch( launchImportToWorld(username, index, data))
       },
-      launchInventoryExport: (username, category, itemId) => {
-        dispatch( launchInventoryExport(username, category, itemId))
+      launchInventoryExport: (username, category, itemId, itemIndex, itemData) => {
+        dispatch( launchInventoryExport(username, category, itemId, itemIndex, itemData))
       },
       getInventory: (userId, category) => {
           dispatch(getInventory(userId, category))
