@@ -22,10 +22,11 @@ class PropertyEditor extends Component {
       activated: false,
       text: "",
       name: "",
+      data: {},
       refreshing: false
     })
 
-    if ( !this.props.itemId )
+    if ( !this.props.editLoadedItemActivated )
     
       this.useTemplate("geometry.0")
 
@@ -35,11 +36,11 @@ class PropertyEditor extends Component {
 
     if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
-      if ( nextProps.category != "" && nextProps.itemId != "" )
+      //if ( nextProps.category != "" && nextProps.itemId != "" )
 
-        this.setState({
-          name: nextProps.itemId
-        })
+        // this.setState({
+        //   name: nextProps.itemId
+        // })
 
     }
 
@@ -54,7 +55,8 @@ class PropertyEditor extends Component {
         if ( nextProps.editSource == "componentEdit" ) { // load from component in inventory
           
           if ( nextProps.loadedItemData ) {
-              this.setState( nextProps.loadedItemData )                    
+            this.setState( nextProps.loadedItemData )      
+            this.setText( nextProps.loadedItemData.name, nextProps.loadedItemData.data )
           } else {
               console.warn("missing property action data")
               this.setState({activated: false})
@@ -91,10 +93,15 @@ class PropertyEditor extends Component {
     template = this.props.convolvrProps.find( (prop) => { return prop.name == name} )
 
     propName = name.split(".")[0]
+    this.setText( propName, template.data )
+
+  }
+
+  setText ( propName, data ) {
 
     this.setState({
-      name: template.name,
-      text: JSON.stringify({ [propName]: template.data }, null, "\t"),
+      name: propName,
+      text: JSON.stringify({ [propName]: data }, null, "\t"),
       refreshing: true
     }, ()=>{
       this.setState({
@@ -253,7 +260,7 @@ export default connect(
         properties: state.inventory.items.properties,
         editLoadedItemActivated: state.util.loadedItemEdit.activated && state.util.loadedItemEdit.category == "Properties",
         loadedItemIndex: state.util.loadedItemEdit.index,
-        loadedItemData: state.util.loadedItemEdit.data.component,
+        loadedItemData: state.util.loadedItemEdit.data.property,
         editSource: state.util.loadedItemEdit.source,
         category: state.util.loadedItemEdit.category
     }

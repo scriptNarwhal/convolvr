@@ -67,11 +67,12 @@ export function launchImportToWorld ( username, dir, filename ) {
     }
 }
 
-export function launchInventoryExport ( username, category, itemId ) {
+export function launchInventoryExport ( username, category, itemId, itemIndex ) {
     return {
         type: UTIL_LAUNCH_INVENTORY_EXPORT,
         username,
         category,
+        itemIndex,
         itemId
     }
 }

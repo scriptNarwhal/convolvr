@@ -182,7 +182,8 @@ export default connect(
         category: state.util.inventoryExport.category,
         fileUser: state.util.inventoryExport.username,
         itemData: state.util.inventoryExport.itemData,
-        itemId: state.util.inventoryExport.itemId
+        itemId: state.util.inventoryExport.itemId,
+        itemIndex: state.util.inventoryExport.itemIndex
     }
   },
   dispatch => {

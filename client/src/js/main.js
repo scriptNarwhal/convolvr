@@ -167,10 +167,10 @@ function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: Array
 
   compProps.rest = {
     get: {
-      url: "http://localhost:3007/api/chunks/"+world.name+"/0x0x0,-1x0x0"
+      url: "/api/chunks/"+world.name+"/0x0x0,-1x0x0"
     }
   }
-  compProps.text.lines = ["localhost:3007/api/chunks/overworld/0x0x0,-1x0x0"] // really just clearing the default text until something loads
+  compProps.text.lines = ["/api/chunks/overworld/0x0x0,-1x0x0"] // really just clearing the default text until something loads
   compProps.text.color = "#f0f0f0"
   httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
   httpClient.update( [ -12, 0, 0 ] )
