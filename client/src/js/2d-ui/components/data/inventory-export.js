@@ -59,8 +59,6 @@ class InventoryExport extends Component {
 
       }
 
-      //this.props.getInventoryItem( this.props.username, this.props.category, this.props.itemId )
-
     }
 
   }

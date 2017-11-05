@@ -142,23 +142,29 @@ import {
      }
   
   }
-
-  export function addItemToWorld ( userId, category, itemId, world, coords ) {
+  
+  export function addItemToWorld ( userId, category, itemId, world, coords, itemData ) {
     
         return dispatch => {
+            itemData.voxel = coords.split("x").map( v=> parseInt(v) )
          dispatch({
-            type: INVENTORY_UPDATE_FETCH,
-            id: id
+            type: INVENTORY_ADD_TO_WORLD_FETCH,
+            userId,
+            category,
+            itemId,
+            itemData,
+            world,
+            coords
          })
-         return axios.put(API_SERVER+`/api/import-from-inventory/${userId}/${category}/${itemId}/${world}/${coords}`, {})
+         return axios.put(API_SERVER+`/api/import-to-world/${world}/${coords}`, itemData)
             .then(response => {
                 dispatch({
-                  type: INVENTORY_UPDATE_DONE,
+                  type: INVENTORY_ADD_TO_WORLD_DONE,
                   updated: response.data
               })
             }).catch(response => {
                 dispatch({
-                      type: INVENTORY_UPDATE_FAIL,
+                      type: INVENTORY_ADD_TO_WORLD_FAIL,
                       err: response.err
                   })
             });

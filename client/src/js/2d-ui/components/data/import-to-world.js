@@ -36,13 +36,19 @@ class ImportToWorld extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.activated == false && nextProps.activated == true ) {
-      
-      this.setState({
-        activated: true
-      })
-      
-    }
+    let data = {}
+    
+        if ( this.props.activated == false && nextProps.activated == true ) {
+    
+          this.setState({
+            activated: true
+          })
+    
+        }
+
+        if ( this.props.itemData == false && nextProps.itemData == true ) 
+          this.setState({name: nextProps.itemData.name})
+        
 
   }
 
@@ -79,7 +85,8 @@ class ImportToWorld extends Component {
     let name = this.state.name,
         data = {}
 
-    this.props.addItemToWorld( this.props.username, "Entities", this.props.itemId, this.state.world, this.state.coords.join("x") )
+    this.props.addItemToWorld( this.props.username, "Entities", this.props.itemData.id, this.state.world, this.state.coords.join("x"), this.props.itemData )
+    this.toggleModal()
 
   }
 
@@ -146,6 +153,9 @@ ImportToWorld.defaultProps = {
 
 import { connect } from 'react-redux'
 import {
+  addItemToWorld
+} from '../../../redux/actions/inventory-actions'
+import {
     closeImportToWorld
 } from '../../../redux/actions/util-actions'
 
@@ -161,14 +171,14 @@ export default connect(
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.importToWorld.activated,
         itemId: state.util.importToWorld.itemId,
-        fileUser: state.util.importToWorld.username,
+        itemData: state.util.importToWorld.itemData,
         dir: state.util.importToWorld.dir
     }
   },
   dispatch => {
     return {
-      addItemToWorld: ( userId, category, itemId, world, coords ) => {
-        dispatch( addItemToWorld( userId, category, itemId, world, coords ) )
+      addItemToWorld: ( userId, category, itemId, world, coords, itemData ) => {
+        dispatch( addItemToWorld( userId, category, itemId, world, coords, itemData ) )
       },
       closeImportToWorld: () => {
         dispatch( closeImportToWorld() )
