@@ -31,6 +31,8 @@ class InventoryExport extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
+    let data = {}
+
     if ( this.props.activated == false && nextProps.activated == true ) {
 
       this.setState({
@@ -39,10 +41,16 @@ class InventoryExport extends Component {
 
       if (nextProps.itemData) {
 
+        data = { ...nextProps.itemData }
+
+        if ( nextProps.category == "Properties")
+
+          data = data.data
+
         this.setState({
           refreshing: true,
           name: nextProps.itemData.name,
-          text: JSON.stringify(nextProps.itemData, null, "\t")
+          text: JSON.stringify(data, null, "\t")
         }, () => {
           this.setState({
             refreshing: false
