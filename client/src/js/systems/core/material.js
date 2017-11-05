@@ -35,7 +35,7 @@ export default class MaterialSystem {
             pattern = !!prop.procedural ? prop.procedural.name : "",
             materialCode = '',
             shading = !!prop.shading ? prop.shading : 'default',
-            simpleShading = this.world.lighting != 'high'
+            simpleShading = this.world.settings.lighting != 'high'
             
         basic = _initMaterialProp( prop, simpleShading )
         materialCode = `${prop.repeat ? prop.repeat.join(",") : ""}:${prop.name}:${prop.color}:${prop.map}:${prop.specular}:${reflection}:${prop.alpha}:${prop.bump}:${pattern}`

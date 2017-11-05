@@ -1,4 +1,6 @@
-export default function initLocalSettings ( world ) {
+export default class Settings {
+
+	constructor(world) {
 
 		let cameraMode = localStorage.getItem("camera"),
 			vrMovement = localStorage.getItem("vrMovement"),
@@ -14,127 +16,129 @@ export default function initLocalSettings ( world ) {
 			manualLensDistance = localStorage.getItem("manualLensDistance"),
 			fov = localStorage.getItem("fov")
 
-		if ( cameraMode == null ) {
+		if (cameraMode == null) {
 
 			cameraMode = 'fps'
 			localStorage.setItem("camera", 'fps')
 
 		}
 
-		if ( leapMode == null ) {
+		if (leapMode == null) {
 
 			leapMode = "hybrid"
-			localStorage.setItem( "leapMode", leapMode )
+			localStorage.setItem("leapMode", leapMode)
 
 		}
 
-		if ( vrMovement == null ) {
+		if (vrMovement == null) {
 
 			vrMovement = 'stick' // change to teleport later
 			localStorage.setItem("vrMovement", vrMovement)
 
 		}
 
-		if ( IOTMode == null ) {
+		if (IOTMode == null) {
 
 			IOTMode = 'off'
 			localStorage.setItem("IOTMode", IOTMode)
 
 		}
 
-		if ( aa == null ) {
+		if (aa == null) {
 
 			aa = 'on'
 			localStorage.setItem("aa", aa)
 
 		}
 
-		if ( shadows == null ) {
+		if (shadows == null) {
 
 			shadows = 0
-			localStorage.setItem( "shadows", shadows ) 
+			localStorage.setItem("shadows", shadows)
 
 		} else {
 
-			shadows = parseInt( shadows )
+			shadows = parseInt(shadows)
 
 		}
 
-		if ( geometry == null ) {
+		if (geometry == null) {
 
 			geometry = window.innerWidth < 720 ? 1 : 2
 
 		} else {
 
-			geometry = parseInt( geometry )
+			geometry = parseInt(geometry)
 
 		}
 
-		if ( lighting == null ) {
+		if (lighting == null) {
 
 			lighting = 'high'
 			localStorage.setItem("lighting", !world.mobile ? 'high' : 'low')
 
 		}
 
-		if ( enablePostProcessing == null ) {
+		if (enablePostProcessing == null) {
 
 			enablePostProcessing = 'off'
 			localStorage.setItem("postProcessing", enablePostProcessing)
 
 		}
 
-		if ( floorHeight == null ) {
+		if (floorHeight == null) {
 
 			floorHeight = 0
 			localStorage.setItem("floorHeight", floorHeight)
 
-		} 
+		}
 
-		if ( viewDistance == null ) {
+		if (viewDistance == null) {
 
 			viewDistance = 0
 			localStorage.setItem("viewDistance", 0)
 
 		} else {
 
-			viewDistance = parseInt( viewDistance )
+			viewDistance = parseInt(viewDistance)
 
 		}
 
-		if ( fov == null ) {
-			
+		if (fov == null) {
+
 			fov = 75
 			localStorage.setItem("fov", fov)
 
 		} else {
 
-			fov = parseInt( fov )
+			fov = parseInt(fov)
 
 		}
 
-		if ( manualLensDistance == null ) {
+		if (manualLensDistance == null) {
 
 			manualLensDistance = 0
 
 		} else {
 
-			manualLensDistance = parseFloat( manualLensDistance )
+			manualLensDistance = parseFloat(manualLensDistance)
 
 		}
 
-		world.fov = fov
-		world.aa = aa
-		world.shadows = shadows
-		world.geometry = geometry
-		world.viewDistance = viewDistance
-		world.cameraMode = cameraMode
-		world.vrMovement = vrMovement
-		world.lighting = lighting
-		world.enablePostProcessing = enablePostProcessing
-		world.IOTMode = IOTMode == 'on'
-		world.floorHeight = parseInt(floorHeight)
+		this.fov = fov
+		this.aa = aa
+		this.shadows = shadows
+		this.geometry = geometry
+		this.viewDistance = viewDistance
+		this.cameraMode = cameraMode
+		this.vrMovement = vrMovement
+		this.lighting = lighting
+		this.enablePostProcessing = enablePostProcessing
+		this.IOTMode = IOTMode == 'on'
+		this.floorHeight = parseInt(floorHeight)
 		world.userInput.leapMode = leapMode
-		world.manualLensDistance = manualLensDistance
+		this.manualLensDistance = manualLensDistance
 
 	}
+
+}

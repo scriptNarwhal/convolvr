@@ -60,7 +60,7 @@ export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
       camera = t.camera,
       cPos = camera.position,
       frame = world.vrFrame,
-      floorHeight = world.floorHeight,
+      floorHeight = world.settings.floorHeight,
       user = world.user,
       cursors = !!user ? user.avatar.componentsByProp.cursor : false,
       cursor = !!cursors ? cursors[cursorIndex] : false,

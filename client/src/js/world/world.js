@@ -11,7 +11,7 @@ import Entity from '../entity'
 import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
-import initLocalSettings from './local-settings'
+import Settings from './local-settings'
 import SkyBox from './skybox'
 import { 
 	compressFloatArray,
@@ -26,7 +26,7 @@ export default class Convolvr {
 	
 	constructor( user, userInput = false, socket, store, loadedCallback ) {
 
-		let mobile = window.innerWidth < 480 || window.devicePixelRatio >= 1.5,
+		let mobile = window.innerWidth < 480 || (window.innerWidth < 1024 && window.devicePixelRatio >= 1.5),
 			scene = new THREE.Scene(),
 			camera = null,
 			screenResX = window.devicePixelRatio * window.innerWidth,
@@ -35,20 +35,17 @@ export default class Convolvr {
 			three = {},
 			postProcessing = false,
 			usePostProcessing = false,
-			viewDist = [ 0.1, 10000 ]
+			viewDist = [ 0.1, 100000 ]
 
 		this.store = store
 		this.mobile = mobile
-		this.floorHeight = 0
-		this.highAltitudeGravity = false
-		this.viewDistance = 0 // default
 		this.userInput = userInput
-		initLocalSettings( this )
-		viewDist = [ 0.1, 2000 + (3+this.viewDistance)*GRID_SIZE[0]*150 ]
-		usePostProcessing = this.enablePostProcessing == 'on'
-		camera = new THREE.PerspectiveCamera( this.fov, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
+		this.settings= new Settings( this )
+		viewDist = [ 0.1, 2000 + (3+this.settings.viewDistance)*GRID_SIZE[0]*150 ]
+		usePostProcessing = this.settings.enablePostProcessing == 'on'
+		camera = new THREE.PerspectiveCamera( this.settings.fov, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
 
-		let rendererOptions = { antialias: this.aa != 'off' && !usePostProcessing }
+		let rendererOptions = { antialias: this.settings.aa != 'off' && !usePostProcessing }
 
 		if ( usePostProcessing ) {
 
@@ -59,7 +56,7 @@ export default class Convolvr {
 
 		renderer = new THREE.WebGLRenderer(rendererOptions)
 		
-		if ( this.shadows > 0 ) {
+		if ( this.settings.shadows > 0 ) {
 
 			renderer.shadowMap.enabled = true;
 			renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
@@ -89,7 +86,6 @@ export default class Convolvr {
 		this.capturing = false
 		this.webcamImage = ""
 		this.HMDMode = "standard" // "head-movement"
-		this.vrMovement = "stick" // teleport
 		this.vrHeight = 0
 		this.screenResX = screenResX
 		this.initRenderer( renderer, "viewport" )
@@ -161,7 +157,7 @@ export default class Convolvr {
 			b = config.sky.blue,
 			shadowCam = null,
 			oldConfig = Object.assign({}, this.config),
-			skySize = 1000+((this.viewDistance+3.5)*1.4)*140,
+			skySize = 1000+((this.settings.viewDistance+3.5)*1.4)*140,
 			oldSkyMaterial = {}
 
 
@@ -174,8 +170,8 @@ export default class Convolvr {
 
 			skyLight.castShadow = true
 			shadowCam = skyLight.shadow.camera
-			skyLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.shadows)  
-			skyLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.shadows) 
+			skyLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)  
+			skyLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows) 
 			shadowCam.near = 0.5      // default
 			shadowCam.far = 1300      
 			

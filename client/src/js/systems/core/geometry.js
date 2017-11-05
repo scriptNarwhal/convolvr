@@ -12,7 +12,7 @@ export default class GeometrySystem {
 
     this.world = world
     this.nodeGeom = new THREE.PlaneGeometry( 0.001, 0.001, 0.001)
-    this.detail = world.geometry
+    this.detail = world.settings.geometry
 
   }
 
