@@ -5,6 +5,11 @@ import {
   rgba,
   rgb
 } from '../../../util'
+import { 
+  textAreaStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../../styles'
 
 class ImportToInventory extends Component {
 
@@ -155,31 +160,13 @@ export default connect(
 )(ImportToInventory)
 
 let styles = {
-  modal: {
-    width: '50%',
-    maxWidth: '729px',
-    minWidth: '320px',
-    height: '480px',
-    padding: '0.25em',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    margin: 'auto',
-    border: '0.1em solid white',
-    backgroundColor: "black",
-    backgroundImage: 'linear-gradient(rgb(12, 12, 12), rgb(17, 17, 17), rgb(33, 33, 33))',
-    borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+  modal: () => {
+    return Object.assign({}, modalStyle(isMobile()), {
+        maxWidth: '1080px',
+        left: ! isMobile() ? '72px' : '0px'
+      })
   },
-  lightbox: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    background: rgba(0, 0, 0, 0.8)
-  },
+  lightbox: lightboxStyle,
   resultingPath: {
     marginBottom: '1em'
   },
@@ -201,15 +188,7 @@ let styles = {
     fontSize: '1em',
     color: 'white',
   },
-  textArea: {
-    margin: '0px',
-    width: '95%',
-    height: '358px',
-    color: 'white',
-    marginBottom: '0.5em',
-    padding: '0.5em',
-    background: 'black'
-  },
+  textArea: textAreaStyle,
   body: {
 
   },

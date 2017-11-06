@@ -1,18 +1,20 @@
 import { rgba } from '../util'
 
-export let modalStyle = {
-    width: '100%',
-    minWidth: '320px',
-    height: '92%',
-    padding: '1em',
-    position: 'absolute',
-    top: '0px',
-    right: '0px',
-    bottom: '0px',
-    margin: 'auto',
-    borderRadius: '0.2em',
-    border: '0.15em solid rgb(60,60,60)',
-    backgroundColor: "rgba(0,0,0,0.88)"
+export let modalStyle = (mobile) => {
+    return {
+        width: '100%',
+        minWidth: '320px',
+        height: mobile ? '86%' : '92%',
+        padding: '1em',
+        position: 'absolute',
+        top: mobile ? '64px' : '0px',
+        right: '0px',
+        bottom: '0px',
+        margin: 'auto',
+        borderRadius: '0.2em',
+        border: '0.15em solid rgb(60,60,60)',
+        backgroundColor: "rgba(0,0,0,0.88)"
+    }
 }
 
 export let basicInputStyle = {

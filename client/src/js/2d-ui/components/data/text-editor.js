@@ -208,7 +208,7 @@ export default connect(
 
 let styles = {
   modal: () => {
-    return Object.assign({}, modalStyle, {
+    return Object.assign({}, modalStyle(isMobile()), {
         maxWidth: '960px',
         left: ! isMobile() ? '72px' : '0px'
       })

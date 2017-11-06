@@ -129,7 +129,8 @@ class PropertyEditor extends Component {
 
     save () {
 
-        let name = this.state.name
+        let name = this.state.name,
+            newId = typeof this.props.properties == 'object' ? this.props.properties.length : 0
 
         if ( name == "" ) {
 
@@ -148,7 +149,11 @@ class PropertyEditor extends Component {
 
         } else if (this.state.activated) {
 
-          this.props.addInventoryItem( this.props.username, "Properties", { id: -1, name, data: JSON.parse(this.state.text) } )
+          if ( this.state.id != -1) 
+
+            newId = this.state.id
+
+          this.props.addInventoryItem( this.props.username, "Properties", { id: newId, name, data: JSON.parse(this.state.text) } )
 
         }
 
@@ -288,7 +293,7 @@ export default connect(
 
 let styles = {
   modal: () => {
-    return Object.assign({}, modalStyle, {
+    return Object.assign({}, modalStyle(isMobile()), {
         maxWidth: '960px',
         left: ! isMobile() ? '72px' : '0px'
       })

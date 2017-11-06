@@ -192,6 +192,7 @@ class ComponentEditor extends Component {
     save () {
 
         let name = this.state.name,
+            newId = -1,
             data = {},
             props = {}
 
@@ -221,6 +222,11 @@ class ComponentEditor extends Component {
             
         } else {
             
+            newId = typeof this.props.components == 'object' ? this.props.components.length : 0
+            if ( data.id == -1 ) 
+
+                data.id = newId
+
             this.props.addInventoryItem( this.props.username, "Components", data )
             
         }
@@ -331,11 +337,6 @@ class ComponentEditor extends Component {
                     </span>
                     </div>
                     <div style={ styles.body }>
-                        <span style={styles.basicInput} title='ID'>
-                        <span style={styles.id}>ID</span> 
-                        <input type="numeric" step="1" style={styles.textInput} defaultValue={this.state.id} disabled />
-                        </span>
-                        <br/>
                         <span style={styles.basicInput} title='Position'>
                             <span>Position</span>
                             <VectorInput axis={3} decimalPlaces={2} onChange={ (value, event) => { this.onPositionChange( value, event) }} />
@@ -486,7 +487,7 @@ export default connect(
 
 let styles = {
     modal: () => {
-        return Object.assign({}, modalStyle, {
+        return Object.assign({}, modalStyle(isMobile()), {
             maxWidth: '1080px',
             left: ! isMobile() ? '72px' : '0px'
           })
