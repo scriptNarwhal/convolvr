@@ -58,10 +58,11 @@ export default class InventoryList extends Component {
       
           <div style={styles.options}>
             {
-              this.props.options && this.props.options.map((opt, i) =>{
+              this.props.fetching == false && this.props.options && this.props.options.map((opt, i) =>{
                 return (
                     <Card clickHandler={ (e) => {
-                            
+                            // make this more like onContextMenu
+                            // make it export json by default (maybe edit, later)
                            
                           }}
                           onContextMenu={ (name, data, e) => { 
@@ -92,6 +93,7 @@ InventoryList.defaultProps = {
     title: "File Options",
     dir: "",
     username: "",
+    fetching: false,
     category: "Entities",
     showTitle: false,
     style: {},

@@ -22,7 +22,7 @@ class Inventory extends Component {
   componentWillReceiveProps ( nextProps ) {
 
     let userNameChanged = nextProps.username != this.props.username,
-        inventoryUpdated = this.props.inventoryFetching && nextProps.inventoryFetching == false
+        inventoryUpdated = this.props.inventoryUpdating && nextProps.inventoryUpdating == false
 
     if ( inventoryUpdated )
 
@@ -62,14 +62,14 @@ class Inventory extends Component {
       }
 
   render() {
-
+// false == this.props.inventoryUpdating
     return (
         <Shell className="data-view" 
                style={ isMobile() ? { paddingTop: '60px' } : { paddingTop: '0px' } }
                innerStyle={ { paddingTop: isMobile() ? '72px' : 0, paddingLeft: isMobile() ? '10px' : '72px' }  }       
         >
         {
-          false == this.props.inventoryFetching ? [[this.props.inventoryEntities,   "Entities"  ], 
+          true ? [[this.props.inventoryEntities,   "Entities"  ], 
            [this.props.inventoryComponents, "Components"], 
            [this.props.inventoryProperties, "Properties"]].map( (inventorySet, i) => (
             <InventoryList onAction={ (name, data, e) => {
@@ -84,6 +84,7 @@ class Inventory extends Component {
                             console.info("<InventoryList> onAction ", actionData)
                             this.onContextAction(name, actionData, e) 
                            }}
+                           fetching={ this.props.inventoryUpdating }
                            options={ inventorySet[0] }
                            username={ this.props.username }
                            style={{zIndex: 9999}}
@@ -138,7 +139,7 @@ export default connect(
         inventoryEntities: state.inventory.items.entities,
         inventoryComponents: state.inventory.items.components,
         inventoryProperties: state.inventory.items.properties,
-        inventoryFetching: state.inventory.fetching,
+        inventoryUpdating: state.inventory.fetching,
         workingPath: state.files.listDirectories.workingPath,
         upload: state.files.uploadMultiple
     }

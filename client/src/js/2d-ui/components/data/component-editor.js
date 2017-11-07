@@ -209,7 +209,7 @@ class ComponentEditor extends Component {
 
         data = {
             id: this.state.id,
-            name: this.state.name,
+            name: this.state.name.toString(),
             position: this.state.position,
             quaternion: this.state.quaternion,
             components: this.state.components,
@@ -368,7 +368,7 @@ class ComponentEditor extends Component {
                                         username={this.props.username}
                                         dir={this.props.dir}
                                         category={"Properties"}
-                                        title={property.name}
+                                        title={property.name || typeof property == 'object' ? Object.keys(property)[0] : "Property "+i}
                                         image=''
                                         key={i}
                                 />
