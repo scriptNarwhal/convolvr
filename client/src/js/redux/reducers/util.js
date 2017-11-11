@@ -17,17 +17,20 @@ import {
     UTIL_CLOSE_INVENTORY_EXPORT,
     UTIL_CLOSE_COMPONENT_EDITOR,
     UTIL_CLOSE_PROPERTY_EDITOR,
-    UTIL_LAUNCH_EDIT_LOADED_ITEM
+    UTIL_LAUNCH_EDIT_LOADED_ITEM,
+    UTIL_ACTIVATE_MODAL
 } from '../constants/action-types';
 
 module.exports = function app (state = {
     textEdit: {
+        windowsOpen: 0,
         activated: false,
         username: "",
         filename: "",
         dir: ""
     },
     renameFile: {
+        windowsOpen: 0,
         activated: false,
         username: "",
         filename: "",
@@ -35,46 +38,54 @@ module.exports = function app (state = {
         dir: ""
     },
     sharingSettings: {
+        windowsOpen: 0,
         activated: false,
         username: "",
         filename: "",
         dir: ""
     },
     importToWorld: {
+        windowsOpen: 0,
         activated: false,
         username: "",
         itemData: false,
         itemIndex: -1
     },
     importToInventory: {
+        windowsOpen: 0,
         activated: false,
         username: "",
         filename: "",
         dir: ""
     },
     entityEdit: {
+        windowsOpen: 0,
         activated: false,
         username: "",
         category: "",
         itemId: ""
     },
     inventoryExport: {
+        windowsOpen: 0,
         activated: false,
         username: "",
         category: "",
         itemId: ""
     },
     componentEdit: {
+        windowsOpen: 0,
         activated: false,
         username: "",
         itemId: ""
     },
     propertyEdit: {
+        windowsOpen: 0,
         activated: false,
         username: "",
         itemId: ""
     },
     loadedItemEdit: {
+        windowsOpen: 0,
         activated: {
             entity: false,
             component: false,
@@ -92,11 +103,99 @@ module.exports = function app (state = {
     }
 }, action) {
   switch ( action.type ) {
+    case UTIL_ACTIVATE_MODAL:
+        let newState = {...state }
+        switch( action.modalType ) {
+            case "textEdit":
+                newState = {
+                    ...newState,
+                    textEdit: {
+                        ...newState.textEdit,
+                        windowsOpen: newState.textEdit.windowsOpen + 1
+                    }
+                }
+            break;
+            case "renameFile":
+                newState = {
+                    ...newState,
+                    renameFile: {
+                        ...newState.renameFile,
+                        windowsOpen: newState.renameFile.windowsOpen + 1
+                    }
+                }
+            break;
+            case "sharingSettings":
+                newState = {
+                    ...newState,
+                    sharingSettings: {
+                        ...newState.sharingSettings,
+                        windowsOpen: newState.sharingSettings.windowsOpen + 1
+                    }
+                }
+            break;
+            case "importToWorld":
+                newState = {
+                    ...newState,
+                    importToWorld: {
+                        ...newState.importToWorld,
+                        windowsOpen: newState.importToWorld.windowsOpen + 1
+                    }
+                }
+            break;
+            case "importToInventory":
+                newState = {
+                    ...newState,
+                    importToInventory: {
+                        ...newState.importToInventory,
+                        windowsOpen: newState.importToInventory.windowsOpen + 1
+                    }
+                }
+            break;
+            case "entityEdit":
+                newState = {
+                    ...newState,
+                    entityEdit: {
+                        ...newState.entityEdit,
+                        windowsOpen: newState.entityEdit.windowsOpen + 1
+                    }
+                }
+            break;
+            case "inventoryExport":
+                newState = {
+                    ...newState,
+                    inventoryExport: {
+                        ...newState.inventoryExport,
+                        windowsOpen: newState.inventoryExport.windowsOpen + 1
+                    }
+                }
+            break;
+            case "componentEdit":
+                newState = {
+                    ...newState,
+                    componentEdit: {
+                        ...newState.componentEdit,
+                        windowsOpen: newState.componentEdit.windowsOpen + 1
+                    }
+                }
+            break;
+            case "propertyEdit":
+                newState = {
+                    ...newState,
+                    propertyEdit: {
+                        ...newState.propertyEdit,
+                        windowsOpen: newState.propertyEdit.windowsOpen + 1
+                    }
+                }
+            break;
+            
+        }
+        return newState
     case UTIL_LAUNCH_TEXT_EDIT:
         return {
             ...state,
             textEdit: {
                 ...state.textEdit,
+                windowsOpen: state.textEdit.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 filename: action.filename,
@@ -108,6 +207,7 @@ module.exports = function app (state = {
             ...state,
             renameFile: {
                 ...state.renameFile,
+                windowsOpen: state.renameFile.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 filename: action.filename,
@@ -119,6 +219,7 @@ module.exports = function app (state = {
             ...state,
             sharingSettings: {
                 ...state.sharingSettings,
+                windowsOpen: state.sharingSettings.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 filename: action.filename,
@@ -130,6 +231,7 @@ module.exports = function app (state = {
             ...state,
             importToInventory: {
                 ...state.importToInventory,
+                windowsOpen: state.importToInventory.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 filename: action.filename,
@@ -141,6 +243,7 @@ module.exports = function app (state = {
             ...state,
             importToWorld: {
                 ...state.importToWorld,
+                windowsOpen: state.textEdit.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 itemData: action.itemData,
@@ -152,6 +255,7 @@ module.exports = function app (state = {
             ...state,
             entityEdit: {
                 ...state.entityEdit,
+                windowsOpen: state.entityEdit.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 category: action.category,
@@ -163,6 +267,7 @@ module.exports = function app (state = {
             ...state,
             inventoryExport: {
                 ...state.inventoryExport,
+                windowsOpen: state.inventoryExport.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 category: action.category,
@@ -176,6 +281,7 @@ module.exports = function app (state = {
             ...state,
             componentEdit: {
                 ...state.componentEdit,
+                windowsOpen: state.componentEdit.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 itemId: action.itemId
@@ -186,6 +292,7 @@ module.exports = function app (state = {
             ...state,
             propertyEdit: {
                 ...state.propertyEdit,
+                windowsOpen: state.propertyEdit.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 itemId: action.itemId
@@ -228,6 +335,7 @@ module.exports = function app (state = {
             ...state,
             textEdit: {
                 ...state.textEdit,
+                windowsOpen: state.textEdit.windowsOpen - 1,
                 activated: false,
                 username: "",
                 filename: "",
@@ -239,6 +347,7 @@ module.exports = function app (state = {
             ...state,
             renameFile: {
                 ...state.renameFile,
+                windowsOpen: state.renameFile.windowsOpen - 1,
                 activated: false,
                 username: "",
                 filename: "",
@@ -251,6 +360,7 @@ module.exports = function app (state = {
             ...state,
             sharingSettings: {
                 ...state.sharingSettings,
+                windowsOpen: state.sharingSettings.windowsOpen - 1,
                 activated: false
             }
         }
@@ -259,6 +369,7 @@ module.exports = function app (state = {
             ...state,
             importToInventory: {
                 ...state.importToInventory,
+                windowsOpen: state.importToInventory.windowsOpen - 1,
                 activated: false
             }
         }
@@ -267,6 +378,7 @@ module.exports = function app (state = {
             ...state,
             importToWorld: {
                 ...state.importToWorld,
+                windowsOpen: state.importToWorld.windowsOpen - 1,
                 activated: false
             }
         }
@@ -275,10 +387,12 @@ module.exports = function app (state = {
             ...state,
             entityEdit: {
                 ...state.entityEdit,
+                windowsOpen: state.entityEdit.windowsOpen - 1,
                 activated: false
             },
             loadedItemEdit: {
                 ...state.loadedItemEdit,
+                windowsOpen: state.loadedItemEdit.windowsOpen - 1,
                 data: {
                     ...state.loadedItemEdit.data,
                     entity: null
@@ -290,6 +404,7 @@ module.exports = function app (state = {
             ...state,
             inventoryExport: {
                 ...state.inventoryExport,
+                windowsOpen: state.inventoryExport.windowsOpen - 1,
                 activated: false
             }
         }
@@ -298,10 +413,12 @@ module.exports = function app (state = {
             ...state,
             componentEdit: {
                 ...state.componentEdit,
+                windowsOpen: state.componentEdit.windowsOpen - 1,
                 activated: false
             },
             loadedItemEdit: {
                 ...state.loadedItemEdit,
+                windowsOpen: state.loadedItemEdit.windowsOpen - 1,
                 data: {
                     ...state.loadedItemEdit.data,
                     component: null
@@ -313,10 +430,12 @@ module.exports = function app (state = {
             ...state,
             propertyEdit: {
                 ...state.propertyEdit,
+                windowsOpen: state.propertyEdit.windowsOpen - 1,
                 activated: false
             },
             loadedItemEdit: {
                 ...state.loadedItemEdit,
+                windowsOpen: state.loadedItemEdit.windowsOpen - 1,
                 data: {
                     ...state.loadedItemEdit.data,
                     property: null

@@ -147,7 +147,8 @@ export default connect(
         activated: state.util.importToInventory.activated,
         filename: state.util.importToInventory.filename,
         fileUser: state.util.importToInventory.username,
-        dir: state.util.importToInventory.dir
+        dir: state.util.importToInventory.dir,
+        instances: state.util.importToInventory.windowsOpen
     }
   },
   dispatch => {

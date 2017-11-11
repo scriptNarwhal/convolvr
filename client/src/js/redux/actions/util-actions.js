@@ -1,3 +1,4 @@
+//@flow
 import axios from 'axios';
 import {
     UTIL_LAUNCH_TEXT_EDIT,
@@ -18,11 +19,19 @@ import {
     UTIL_CLOSE_ENTITY_EDITOR,
     UTIL_CLOSE_INVENTORY_EXPORT,
     UTIL_CLOSE_COMPONENT_EDITOR,
-    UTIL_CLOSE_PROPERTY_EDITOR
+    UTIL_CLOSE_PROPERTY_EDITOR,
+    UTIL_ACTIVATE_MODAL
 } from '../constants/action-types';
 import { API_SERVER } from '../../config.js'
 
-export function launchTextEdit ( username, dir, filename ) {
+export function activateModal ( modalType: string ) {
+    return {
+        type: UTIL_ACTIVATE_MODAL,
+        modalType
+    }
+}
+
+export function launchTextEdit ( username: string, dir: string, filename: string ) {
     return {
         type: UTIL_LAUNCH_TEXT_EDIT,
         username,
@@ -31,7 +40,7 @@ export function launchTextEdit ( username, dir, filename ) {
     }
 }
 
-export function launchRenameFile ( username, dir, filename ) {
+export function launchRenameFile ( username: string, dir: string, filename: string ) {
     return {
         type: UTIL_LAUNCH_RENAME_FILE,
         username,
@@ -40,7 +49,7 @@ export function launchRenameFile ( username, dir, filename ) {
     }
 }
 
-export function launchSharingSettings ( username, dir, filename ) {
+export function launchSharingSettings ( username: string, dir: string, filename: string ) {
     return {
         type: UTIL_LAUNCH_SHARING_SETTINGS,
         username,
@@ -49,7 +58,7 @@ export function launchSharingSettings ( username, dir, filename ) {
     }
 }
 
-export function launchImportToInventory ( username, dir, filename ) {
+export function launchImportToInventory ( username: string, dir: string, filename: string ) {
     return {
         type: UTIL_LAUNCH_IMPORT_TO_INVENTORY,
         username,
@@ -58,7 +67,7 @@ export function launchImportToInventory ( username, dir, filename ) {
     }
 }
 
-export function launchImportToWorld ( username, itemIndex, itemData ) {
+export function launchImportToWorld ( username: string, itemIndex: number, itemData: Object ) {
     return {
         type: UTIL_LAUNCH_IMPORT_TO_WORLD,
         username,
@@ -67,7 +76,7 @@ export function launchImportToWorld ( username, itemIndex, itemData ) {
     }
 }
 
-export function launchInventoryExport ( username, category, itemId, itemIndex, itemData ) {
+export function launchInventoryExport ( username: string, category: string, itemId: number, itemIndex: number, itemData: Object ) {
     return {
         type: UTIL_LAUNCH_INVENTORY_EXPORT,
         username,
@@ -78,7 +87,7 @@ export function launchInventoryExport ( username, category, itemId, itemIndex, i
     }
 }
 
-export function launchEntityEditor ( username, itemId ) {
+export function launchEntityEditor ( username: string, itemId: number ) {
     return {
         type: UTIL_LAUNCH_ENTITY_EDITOR,
         username,
@@ -87,7 +96,7 @@ export function launchEntityEditor ( username, itemId ) {
     }
 }
 
-export function launchComponentEditor ( username, itemId ) {
+export function launchComponentEditor ( username: string, itemId: number ) {
     return {
         type: UTIL_LAUNCH_COMPONENT_EDITOR,
         username,
@@ -96,7 +105,7 @@ export function launchComponentEditor ( username, itemId ) {
     }
 }
 
-export function launchPropertyEditor ( username, itemId ) {
+export function launchPropertyEditor ( username: string, itemId: number ) {
     return {
         type: UTIL_LAUNCH_PROPERTY_EDITOR,
         username,
@@ -105,9 +114,9 @@ export function launchPropertyEditor ( username, itemId ) {
     }
 }
 
-export function launchEditLoadedItem ( source, username, category, index, data ) {
+export function launchEditLoadedItem ( source: string, username: string, category: string, index: number, data: Object ) {
 
-    return dispatch => {
+    return (dispatch: Function) => {
 
         dispatch({
             type: UTIL_LAUNCH_EDIT_LOADED_ITEM,

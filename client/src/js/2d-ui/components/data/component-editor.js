@@ -217,10 +217,10 @@ class ComponentEditor extends Component {
         }
 
         if ( this.props.onSave ) {
-            
+            console.info("<ComponentEditor> onSave() data ", data)
             this.props.onSave( data )
             
-        } else {
+        } else if (this.props.editSource == "inventory") {
             
             newId = typeof this.props.components == 'object' ? this.props.components.length : 0
             if ( data.id == -1 ) 
@@ -247,6 +247,10 @@ class ComponentEditor extends Component {
 
         if ( this.state.activated && this.props.closeComponentEditor ) {
             this.props.closeComponentEditor()
+        } else {
+            this.setState({
+              id: -1
+            })
         }
         this.setState({
           activated: !this.state.activated
@@ -417,7 +421,7 @@ class ComponentEditor extends Component {
         } else {
 
             return (
-                <FileButton title={this.props.title} onClick={ () => { this.toggleModal() } } />
+                <FileButton title={this.props.title} onClick={ () => { this.toggleModal(); this.setState({editMode: false})} } />
             )
 
         }
@@ -455,6 +459,7 @@ export default connect(
         activated: state.util.componentEdit.activated,
         filename: state.util.componentEdit.category,
         fileUser: state.util.componentEdit.username,
+        instances: state.util.componentEdit.windowsOpen,
         itemId: state.util.componentEdit.itemId,
         components: state.inventory.items.components,
         editLoadedItemActivated: state.util.loadedItemEdit.activated && state.util.loadedItemEdit.category == "Components",

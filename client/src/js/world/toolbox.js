@@ -314,7 +314,7 @@ export default class Toolbox {
           entityId = hand.state.hand.grip( value ),
           avatar = this.user.avatar.mesh
       
-      this.sendToolAction(true, value < 0 ? "Replace Entity" : "Grab Entity", handIndex, avatar.position.toArray(), avatar.quaternion.toArray(), null, entityId, null, null, this.user.avatar.voxel )
+      this.sendToolAction(true, { name: value < 0 ? "Replace Entity" : "Grab Entity"}, handIndex, avatar.position.toArray(), avatar.quaternion.toArray(), null, entityId, null, null, this.user.avatar.voxel )
 
     }
 

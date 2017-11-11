@@ -202,6 +202,7 @@ export default connect(
         activated: state.util.sharingSettings.activated,
         filename: state.util.sharingSettings.filename,
         fileUser: state.util.sharingSettings.username,
+        instances: state.util.sharingSettings.windowsOpen,
         dir: state.util.sharingSettings.dir,
     }
   },

@@ -177,7 +177,8 @@ export default connect(
         activated: state.util.importToWorld.activated,
         itemId: state.util.importToWorld.itemId,
         itemData: state.util.importToWorld.itemData,
-        dir: state.util.importToWorld.dir
+        dir: state.util.importToWorld.dir,
+        instances: state.util.importToWorld.windowsOpen
     }
   },
   dispatch => {

@@ -51,7 +51,9 @@ export default class ProceduralMaterials {
     canvas.height = canvasSize[1]
     canvas.setAttribute("height", canvasSize[1])
     canvas.setAttribute("width", canvasSize[0])
-    document.body.appendChild(canvas)
+    if (document && document.body != null) {
+      document.body.appendChild(canvas)
+    }
     context = canvas.getContext("2d")
     this._renderInstructions( context, params.calls )
     newTex = new THREE.CanvasTexture(canvas)

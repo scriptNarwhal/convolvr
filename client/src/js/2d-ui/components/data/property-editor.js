@@ -36,11 +36,7 @@ class PropertyEditor extends Component {
 
     if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
-      //if ( nextProps.category != "" && nextProps.itemId != "" )
-
-        // this.setState({
-        //   name: nextProps.itemId
-        // })
+      this.loadPropertyData( this.props, nextProps )
 
     }
 
@@ -50,28 +46,14 @@ class PropertyEditor extends Component {
         activated: true
       })
 
-      if ( this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated ) {
-        
-        if ( nextProps.editSource == "componentEdit" ) { // load from component in inventory
-          
-          if ( nextProps.loadedItemData ) {
-            this.setState( nextProps.loadedItemData )      
-            this.setText( nextProps.loadedItemData.name, nextProps.loadedItemData.data )
-          } else {
-              console.warn("missing property action data")
-              this.setState({activated: false})
-          }
+      let loadEditItemActiveChanged = this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated,
+          itemIndexChanged = this.props.loadedItemIndex != nextProps.loadedItemIndex,
+          itemIdChanged = this.props.itemId != nextProps.itemId
 
-        } else { // load from inventory
+
+      if ( loadEditItemActiveChanged || itemIndexChanged || itemIdChanged ) {
         
-          if ( nextProps.properties[ nextProps.loadedItemIndex ] ) {
-            this.setState( nextProps.properties[ nextProps.loadedItemIndex ] )         
-          } else {
-            console.warn("missing property inventory data")
-            this.setState({activated: false})
-          }
-          
-        }
+        this.loadPropertyData( this.props, nextProps )
 
         this.setState({
           index: nextProps.loadedItemIndex
@@ -81,27 +63,59 @@ class PropertyEditor extends Component {
     
   }
 
+  loadPropertyData ( props, nextProps ) {
+
+    if ( nextProps.editSource == "componentEdit" ) { // load from component in inventory
+      if ( nextProps.loadedItemData ) {
+
+        this.setState( nextProps.loadedItemData )      
+        this.setText( nextProps.loadedItemData.name, nextProps.loadedItemData.data, true )
+
+      } else {
+
+          console.warn("missing property action data")
+          this.setState({activated: false})
+
+      }
+    } else { // load from inventory
+      let inventoryData = nextProps.properties[ nextProps.itemIndex || nextProps.itemId ]
+
+      if ( inventoryData ) {
+
+        this.setState( inventoryData )         
+        this.setText( inventoryData.name, inventoryData.data, false )
+
+      } else {
+
+        console.warn("missing property inventory data")
+        this.setState({activated: false})
+
+      }
+    }
+
+  }
+
   componentWillUpdate ( nextProps, nextState ) {
 
   }
 
-  useTemplate( name ) {
+  useTemplate( name: string ) {
 
-    let template = "",
-        propName = ""
+    let template: string = "",
+        propName: string = ""
 
     template = this.props.convolvrProps.find( (prop) => { return prop.name == name} )
 
     propName = name.split(".")[0]
-    this.setText( propName, template.data )
+    this.setText( propName, template.data, true )
 
   }
 
-  setText ( propName, data ) {
+  setText ( propName: string, data: Object, addName: boolean ) {
 
     this.setState({
       name: propName,
-      text: JSON.stringify({ [propName]: data }, null, "\t"),
+      text: JSON.stringify( addName ? { [propName]: data } : data, null, "\t"),
       refreshing: true
     }, ()=>{
       this.setState({
@@ -129,8 +143,8 @@ class PropertyEditor extends Component {
 
     save () {
 
-        let name = this.state.name,
-            newId = typeof this.props.properties == 'object' ? this.props.properties.length : 0
+        let name: string = this.state.name,
+            newId: number = typeof this.props.properties == 'object' ? this.props.properties.length : 0
 
         if ( name == "" ) {
 
@@ -163,8 +177,8 @@ class PropertyEditor extends Component {
 
     validate() {
 
-        let valid = null,
-            output = null
+        let valid: boolean = null,
+            output: Object = {}
 
         try {
           output = JSON.parse(this.state.text)
@@ -179,7 +193,9 @@ class PropertyEditor extends Component {
 
   toggleModal () {
 
-    this.props.closePropertyEditor()
+    if ( this.state.activated) {
+      this.props.closePropertyEditor()
+    }
     this.setState({
       activated: !this.state.activated
     })
@@ -266,6 +282,7 @@ export default connect(
         editLoadedItemActivated: state.util.loadedItemEdit.activated.property && state.util.loadedItemEdit.category == "Properties",
         loadedItemIndex: state.util.loadedItemEdit.index,
         loadedItemData: state.util.loadedItemEdit.data.property,
+        instances: state.util.propertyEdit.windowsOpen,
         editSource: state.util.loadedItemEdit.source,
         category: state.util.loadedItemEdit.category
     }

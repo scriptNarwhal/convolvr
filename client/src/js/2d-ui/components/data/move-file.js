@@ -144,6 +144,7 @@ export default connect(
         activated: state.util.renameFile.activated,
         filename: state.util.renameFile.filename,
         fileUser: state.util.renameFile.username,
+        instances: state.util.renameFile.windowsOpen,
         dir: state.util.renameFile.dir,
     }
   },

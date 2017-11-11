@@ -1,3 +1,4 @@
+//!@flow
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import FileButton from './file-button'
@@ -37,7 +38,7 @@ class EntityEditor extends Component {
     
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: Object ) {
 
     if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
@@ -73,7 +74,7 @@ class EntityEditor extends Component {
     }
   }
 
-  componentWillUpdate ( nextProps, nextState ) {
+  componentWillUpdate ( nextProps: Object, nextState: Object ) {
 
   }
 
@@ -142,11 +143,11 @@ class EntityEditor extends Component {
 
   }
 
-  handleContextAction ( action, data, e ) {
+  handleContextAction ( action: string, data: Object, e: Object ) {
     
-    let index = data.componentIndex,
-        components = this.state.components,
-        componentData = components[ index ]
+    let index:         number        = data.componentIndex,
+        components:    Array<Object> = this.state.components,
+        componentData: Object        = components[ index ]
 
     if ( action == "Delete" ) {
             
@@ -210,14 +211,17 @@ class EntityEditor extends Component {
 
   toggleModal ( ) {
 
+    if ( this.state.activated )
+
+      this.props.closeEntityEditor()
+
     this.setState({
       activated: !this.state.activated
     })
-    this.props.closeEntityEditor()
 
   }
 
-  onPositionChange ( value, event ) {
+  onPositionChange ( value: Array<number>, event: Object ) {
 
     this.setState({
       position: value
@@ -225,7 +229,7 @@ class EntityEditor extends Component {
 
   }
 
-  onRotationChange ( value, event ) {
+  onRotationChange ( value: Array<number>, event: Object ) {
 
     this.setState({
       quaternion: value
@@ -249,7 +253,7 @@ class EntityEditor extends Component {
 
   }
 
-  onSaveComponent( data ) {
+  onSaveComponent( data: Object ) {
 
     let components = []
 
@@ -297,7 +301,7 @@ class EntityEditor extends Component {
                     return (
                       <Card clickHandler={ (e) => {
                               console.log(e, component.name, "clicked")
-                            
+                              this.handleContextAction("Edit",  {...data, componentIndex: i }, {} )
                             }}
                             onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
                             contextMenuOptions={ this.props.contextMenuOptions }
@@ -379,6 +383,7 @@ export default connect(
         loadedItemIndex: state.util.loadedItemEdit.index,
         loadedItemSource: state.util.loadedItemEdit.source,
         loadedItemData: state.util.loadedItemEdit.data.component,
+        instances: state.util.entityEdit.windowsOpen,
         vrMode: state.app.vrMode
     }
   },

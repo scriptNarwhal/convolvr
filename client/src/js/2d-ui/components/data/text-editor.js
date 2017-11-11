@@ -184,6 +184,7 @@ export default connect(
         activated: state.util.textEdit.activated,
         filename: state.util.textEdit.filename,
         fileUser: state.util.textEdit.username,
+        instances: state.util.textEdit.windowsOpen,
         dir: state.util.textEdit.dir,
         vrMode: state.app.vrMode
     }

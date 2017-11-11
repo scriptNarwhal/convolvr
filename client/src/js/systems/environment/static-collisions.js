@@ -69,12 +69,12 @@ export default class StaticCollisions {
 
 	      if ( message.data.type == "top" ) {
 
-				three.camera.position.set( three.camera.position.x, message.data.position[1]+14.25 +(vrHeight != 0 ? vrHeight-1 : 0), three.camera.position.z )	
+				cam.position.set( cam.position.x, message.data.position[1]+14.25 +(vrHeight != 0 ? vrHeight-1 : 0), cam.position.z )	
 
-				if ( Math.abs( user.velocity.y ) > 400 ) {
+				if ( Math.abs( user.velocity.y ) > 150 ) {
 
 					window.navigator.vibrate && window.navigator.vibrate(50)
-					user.velocity.y *= -0.56
+					user.velocity.y *= -0.8
 					user.falling = true
 
 				} else {
@@ -86,7 +86,7 @@ export default class StaticCollisions {
 				
 			} else if ( message.data.type == "bottom" ) {
 
-				three.camera.position.set( three.camera.position.x, message.data.position[1]-4 +vrHeight, three.camera.position.z )
+				cam.position.set( cam.position.x, message.data.position[1]-4 +vrHeight, cam.position.z )
 				user.velocity.y *= -0.45
 			}
 
@@ -96,7 +96,7 @@ export default class StaticCollisions {
 
 			} else if ( message.command == "floor collision" ) { 
 				// console.log("floor collision", message.data.position, message.data)
-				three.camera.position.set(three.camera.position.x, message.data.position[1]+vrHeight, three.camera.position.z)
+				cam.position.set(cam.position.x, message.data.position[1]+vrHeight, three.cam.position.z)
 
 				if ( Math.abs(user.velocity.y) > 1 ) {
 

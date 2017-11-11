@@ -349,6 +349,7 @@ class App extends Component {
           window.addEventListener('resize', onResize);
           window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
           console.log("vrDisplay", three.vrDisplay)
+          renderer.domElement.setAttribute("class", "viewport") // clear blur effect
           if (three.vrDisplay != null) {
             three.vrDisplay.requestPresent([{source: renderer.domElement}]).then( ()=> {
 

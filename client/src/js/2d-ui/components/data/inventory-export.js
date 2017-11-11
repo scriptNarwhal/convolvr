@@ -180,7 +180,8 @@ export default connect(
         fileUser: state.util.inventoryExport.username,
         itemData: state.util.inventoryExport.itemData,
         itemId: state.util.inventoryExport.itemId,
-        itemIndex: state.util.inventoryExport.itemIndex
+        itemIndex: state.util.inventoryExport.itemIndex,
+        instances: state.util.inventoryExport.windowsOpen,
     }
   },
   dispatch => {
