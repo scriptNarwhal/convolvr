@@ -46,10 +46,7 @@ class ComponentEditor extends Component {
 
             if ( nextProps.category != "" && nextProps.itemId != "" )
 
-                this.setState({
-                    name: nextProps.itemId
-                })
-
+                this.loadPropertyData( this.props, nextProps)
 
         }
 
@@ -61,24 +58,7 @@ class ComponentEditor extends Component {
         
         if ( this.props.editMode && this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated ) {
 
-            if ( nextProps.editSource == "entityEdit" || nextProps.editSource == "componentEdit" ) { // load from entity in inventory
-
-                if ( nextProps.loadedItemData ) {
-                    this.setState( nextProps.loadedItemData )                    
-                } else {
-                    console.warn("missing component action data")
-                    this.setState({activated: false})
-                }
-                
-            } else { // load from inventory
-
-                if (nextProps.components && nextProps.components[ nextProps.loadedItemIndex ]) {
-                    this.setState( nextProps.components[ nextProps.loadedItemIndex ])
-                } else {
-                    console.warn("missing component inventory data")
-                    this.setState({activated: false})
-                }
-            }
+            this.loadPropertyData( this.props, nextProps )
 
             let convolvrProps = this.state.props
             if ( convolvrProps ) {
@@ -92,8 +72,30 @@ class ComponentEditor extends Component {
             })
 
         }
+      
+    }
 
-        
+    loadPropertyData(props, nextProps) {
+
+        if (nextProps.editSource == "entityEdit" || nextProps.editSource == "componentEdit") { // load from entity in inventory
+
+            if (nextProps.loadedItemData) {
+                this.setState(nextProps.loadedItemData)
+            } else {
+                console.warn("missing component action data")
+                this.setState({ activated: false })
+            }
+
+        } else { // load from inventory
+
+            if (nextProps.components && nextProps.components[nextProps.loadedItemIndex]) {
+                this.setState(nextProps.components[nextProps.loadedItemIndex])
+            } else {
+                console.warn("missing component inventory data")
+                this.setState({ activated: false })
+            }
+        }
+
     }
 
     componentWillUpdate ( nextProps, nextState ) {
@@ -520,7 +522,7 @@ let styles = {
         marginBotto: '0.5em'
     },
     text: {
-        width: '75%',
+        width: '40%',
         padding: '0.25em',
         marginBottom: '0.5em',
         background: '#212121',

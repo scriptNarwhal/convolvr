@@ -1,12 +1,25 @@
 import React, { Component } from 'react'
+import { 
+  buttonFileStyle,
+  buttonInnerStyle,
+  buttonStyle,
+} from '../styles'
+
+let styles = {
+  button: buttonStyle,
+  inner: buttonInnerStyle,
+  file: buttonFileStyle
+}
 
 export default class Button extends Component {
 
   render() {
 
-      let innerStyle = this.props.innerStyle != false ? Object.assign({}, styles.inner, this.props.innerStyle) : styles.inner,
-          style = this.props.style != false ? Object.assign({}, styles.button, this.props.style) : styles.button
-          innerStyle.backgroundImage = 'url('+(this.props.image != null ? this.props.image : "")+')';
+    let compact =  this.props.compact,
+        innerStyle = this.props.innerStyle != false ? { ...styles.inner(compact), ...this.props.innerStyle } : styles.inner(compact),
+        style = this.props.style != false ? { ...styles.button(compact), ...this.props.style} : styles.button(compact)
+      
+    innerStyle.backgroundImage = 'url('+(this.props.image != null ? this.props.image : "")+')';
 
     return (
         <div style={style} className="ui-button">
@@ -29,30 +42,7 @@ export default class Button extends Component {
 
 Button.defaultProps = {
     title: "Button",
-    style: false
+    style: false,
+    compact: false
 }
 
-let styles = {
-  button: {
-    display: 'inline-block',
-    width: '60px',
-    height: '60px'
-  },
-  inner: {
-    transition: 'all 0.2s linear',
-    width: '60px',
-    height: '60px',
-    display: 'block',
-    backgroundSize: '60%',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: '50%',
-    cursor: 'pointer'
-  },
-  file: {
-    position: 'relative',
-    bottom: '-1.5em',
-    left: '0.5em',
-    width: '92px',
-    opacity: 0
-  }
-}

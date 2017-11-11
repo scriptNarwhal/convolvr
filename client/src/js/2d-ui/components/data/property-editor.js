@@ -328,7 +328,7 @@ let styles = {
       marginBotto: '0.5em'
   },
   text: {
-      width: '65%',
+      width: '40%',
       padding: '0.25em',
       marginBottom: '0.5em',
       background: '#212121',

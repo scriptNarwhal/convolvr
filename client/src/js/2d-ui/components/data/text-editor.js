@@ -211,10 +211,11 @@ let styles = {
   modal: () => {
     return Object.assign({}, modalStyle(isMobile()), {
         maxWidth: '960px',
-        left: ! isMobile() ? '72px' : '0px'
+        left: ! isMobile() ? '72px' : '0px',
+        boxShadow: "0px 10px 100px rgba(0, 0, 0, 0.92)"
       })
   },
-lightbox: {...lightboxStyle, backgroundColor: 'rgba(0,0,0,0.5)' },
+lightbox: {...lightboxStyle, backgroundColor: 'rgba(0,0,0,0.0)' },
 resultingPath: {
   marginBottom: '1em'
 },

@@ -60,14 +60,8 @@ export default class InventoryList extends Component {
             {
               this.props.fetching == false && this.props.options && this.props.options.map((opt, i) =>{
                 return (
-                    <Card clickHandler={ (e) => {
-                            // make this more like onContextMenu
-                            // make it export json by default (maybe edit, later)
-                           
-                          }}
-                          onContextMenu={ (name, data, e) => { 
-                            this.handleContextAction(name, {...data, itemIndex: i}, e) 
-                          }}
+                    <Card clickHandler={ (e, name) => { this.handleContextAction("Export JSON", { itemIndex: i}, e) }}
+                          onContextMenu={ (name, data, e) => { this.handleContextAction(name, {...data, itemIndex: i}, e) }}
                           contextMenuOptions={ this.props.contextMenuOptions }
                           showTitle={true}
                           compact={true}
@@ -112,11 +106,13 @@ let styles = {
   list: (color, compact) => {
     return {
       //backgroundColor: 'rgb(24, 24, 24)',
-      boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)',
+      boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0.2em 5em 0px',
+      borderBottomRightRadius: '0.25em',
+      borderBottomLeftRadius: '0.25em',
+      backgroundColor: 'rgba(255, 255, 255, 0.17)',
       cursor: 'pointer',
       width: '32%',
       minWidth: '320px',
-      height: '100%',
       display: 'inline-block',
       marginRight: '0.5em',
       marginLeft: '8px',

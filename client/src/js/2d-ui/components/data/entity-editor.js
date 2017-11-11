@@ -438,7 +438,7 @@ let styles = {
 
     },
     text: {
-        width: '75%',
+        width: '40%',
         padding: '0.25em',
         marginBottom: '0.5em',
         background: '#212121',

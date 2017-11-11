@@ -159,7 +159,8 @@ modal: {
   bottom: 0,
   margin: 'auto',
   background: rgb(38, 38, 38),
-  borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06)
+  borderTop: '0.2em solid'+ rgba(255, 255, 255, 0.06),
+  boxShadow: "0px 10px 100px rgba(0, 0, 0, 0.92)"
 },
 lightbox: {
   position: 'fixed',
@@ -167,7 +168,7 @@ lightbox: {
   left: 0,
   width: '100%',
   height: '100%',
-  background: rgba(0, 0, 0, 0.8)
+  background: rgba(0, 0, 0, 0.0)
 },
 resultingPath: {
   marginBottom: '1em'
