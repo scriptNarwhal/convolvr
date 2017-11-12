@@ -244,7 +244,7 @@ export default connect(
   }
 )(Chat)
 
-const styles = {
+let styles = {
   chat: {
       width: '100%'
   },

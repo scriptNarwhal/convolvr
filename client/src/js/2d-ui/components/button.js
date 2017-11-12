@@ -30,7 +30,7 @@ export default class Button extends Component {
                  } }
             >
             { !!this.props.onFiles ? (
-                <input type="file" multiple onChange={ e=> this.props.onFiles( e.target.files ) } style={styles.file} />
+                <input type="file" multiple onChange={ e=> this.props.onFiles( e.target.files ) } style={styles.file()} />
               ) : ""
             }
             </div>

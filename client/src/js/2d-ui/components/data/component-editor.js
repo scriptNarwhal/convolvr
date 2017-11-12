@@ -363,20 +363,17 @@ class ComponentEditor extends Component {
                             {
                             this.state.properties.map( (property, i) => {
                                 return (
-                                <Card clickHandler={ (e) => {
-                                        console.log(e, Object.keys(property)[0], "clicked")
-                                        
-                                        }}
-                                        onContextMenu={ (name, data, e) => this.handlePropertyAction(name, {...data, propertyIndex: i }, e) }
-                                        contextMenuOptions={ this.props.contextMenuOptions }
-                                        showTitle={true}
-                                        compact={true}
-                                        username={this.props.username}
-                                        dir={this.props.dir}
-                                        category={"Properties"}
-                                        title={property.name || typeof property == 'object' ? Object.keys(property)[0] : "Property "+i}
-                                        image=''
-                                        key={i}
+                                <Card clickHandler={ (e, name) => { this.handlePropertyAction("Edit", { propertyIndex: i}, e) } }
+                                      onContextMenu={ (name, data, e) => this.handlePropertyAction(name, {...data, propertyIndex: i }, e) }
+                                      contextMenuOptions={ this.props.contextMenuOptions }
+                                      showTitle={true}
+                                      compact={true}
+                                      username={this.props.username}
+                                      dir={this.props.dir}
+                                      category={"Properties"}
+                                      title={property.name || typeof property == 'object' ? Object.keys(property)[0] : "Property "+i}
+                                      image=''
+                                      key={i}
                                 />
                                 )
                             })
@@ -394,20 +391,17 @@ class ComponentEditor extends Component {
                             {
                             this.state.components.map( (component, i) => {
                                 return (
-                                <Card clickHandler={ (e) => {
-                                        console.log(e, component.name, "clicked")
-                                        
-                                        }}
-                                        onContextMenu={ (name, data, e) => this.handleComponentAction(name, {...data, componentIndex: i }, e) }
-                                        contextMenuOptions={ this.props.contextMenuOptions }
-                                        showTitle={true}
-                                        compact={true}
-                                        username={this.props.username}
-                                        dir={this.props.dir}
-                                        category={"Components"}
-                                        title={component.name}
-                                        image=''
-                                        key={i+'.2'}
+                                <Card clickHandler={ (e, name) => { this.handleComponentAction("Edit", { componentIndex: i}, e) } }
+                                      onContextMenu={ (name, data, e) => this.handleComponentAction(name, {...data, componentIndex: i }, e) }
+                                      contextMenuOptions={ this.props.contextMenuOptions }
+                                      showTitle={true}
+                                      compact={true}
+                                      username={this.props.username}
+                                      dir={this.props.dir}
+                                      category={"Components"}
+                                      title={component.name}
+                                      image=''
+                                      key={i+'.2'}
                                 />
                                 )
                             })

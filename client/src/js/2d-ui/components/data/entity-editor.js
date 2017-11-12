@@ -301,7 +301,7 @@ class EntityEditor extends Component {
                     return (
                       <Card clickHandler={ (e) => {
                               console.log(e, component.name, "clicked")
-                              this.handleContextAction("Edit",  {...data, componentIndex: i }, {} )
+                              this.handleContextAction("Edit",  { componentIndex: i }, {} )
                             }}
                             onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
                             contextMenuOptions={ this.props.contextMenuOptions }
