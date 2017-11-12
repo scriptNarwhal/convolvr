@@ -34,14 +34,19 @@ export let lightboxStyle = {
     // background: rgba(0, 0, 0, 0.1)
 }
 
-export let textAreaStyle = {
-    margin: '0px',
-    width: '95%',
-    height: '358px',
-    color: 'white',
-    marginBottom: '0.5em',
-    padding: '0.5em',
-    background: 'rgba(0, 0, 0, 0.16)'
+export let textAreaStyle = (mobile) => {
+    return {
+        margin: '0px',
+        width: '95%',
+        height: mobile ? '60vh' : '70vh',
+        color: 'white',
+        marginBottom: '0.5em',
+        padding: '0.5em',
+        fontSize: '14px',
+        border: '0.22em solid #494949',
+        borderRadius: '0.22em',
+        background: 'rgba(0, 0, 0, 0.16)'
+    }
 }
 
 let compactWidth = (compact) => compact ? '52px' : '60px'
@@ -104,4 +109,16 @@ export let tabTitleStyle = ( mobile ) => {
         width: '92px',
         opacity: 0
       }
+  }
+
+  export let textTitleInputStyle = {
+    width: '40%',
+    padding: '0.25em',
+    marginBottom: '0.5em',
+    background: '#212121',
+    border: '0.22em solid #494949',
+    borderRadius: '3px',
+    fontSize: '1em',
+    color: 'white',
+    marginRight: '0.5em'
   }

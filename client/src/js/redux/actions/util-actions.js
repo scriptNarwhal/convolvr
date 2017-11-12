@@ -87,30 +87,33 @@ export function launchInventoryExport ( username: string, category: string, item
     }
 }
 
-export function launchEntityEditor ( username: string, itemId: number ) {
+export function launchEntityEditor ( username: string, itemId: number, source: string = "inventory" ) {
     return {
         type: UTIL_LAUNCH_ENTITY_EDITOR,
         username,
         category: "Entities",
-        itemId
+        itemId,
+        source
     }
 }
 
-export function launchComponentEditor ( username: string, itemId: number ) {
+export function launchComponentEditor ( username: string, itemId: number, source: string = "inventory" ) {
     return {
         type: UTIL_LAUNCH_COMPONENT_EDITOR,
         username,
         category: "Components",
-        itemId
+        itemId,
+        source
     }
 }
 
-export function launchPropertyEditor ( username: string, itemId: number ) {
+export function launchPropertyEditor ( username: string, itemId: number, source: string = "inventory" ) {
     return {
         type: UTIL_LAUNCH_PROPERTY_EDITOR,
         username,
         category: "Properties",
-        itemId
+        itemId,
+        source
     }
 }
 

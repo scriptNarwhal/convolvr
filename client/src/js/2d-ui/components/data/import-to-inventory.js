@@ -100,7 +100,7 @@ class ImportToInventory extends Component {
               </span>
             </div>
             <div style={ styles.body }>
-              <textarea style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
+              <textarea style={ styles.textArea( isMobile() ) } onBlur={ e=> this.handleTextArea(e) } />
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Close" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>

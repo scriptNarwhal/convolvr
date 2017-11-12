@@ -136,7 +136,7 @@ class TextEditor extends Component {
             </div>
             <div style={ styles.body }>
               { this.props.readTextFetching == false  ? (
-                <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
+                <textarea defaultValue={ this.state.text } style={ styles.textArea(isMobile()) } onBlur={ e=> this.handleTextArea(e) } />
               ) : ""}
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />

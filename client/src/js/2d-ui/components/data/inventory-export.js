@@ -130,7 +130,7 @@ class InventoryExport extends Component {
             </div>
             <div style={ styles.body }>
               { this.state.refreshing == false  ? (
-                <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
+                <textarea defaultValue={ this.state.text } style={ styles.textArea( isMobile() ) } onBlur={ e=> this.handleTextArea(e) } />
               ) : ""}
               <FileButton title="Download" onClick={ () => { this.save() } } style={{display:"none"}} />
               <FileButton title="Done" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
@@ -234,7 +234,7 @@ let styles = {
       fontSize: '1em',
       color: 'white'
   },
-  textArea: {...textAreaStyle, minHeight: '50vh'},
+  textArea: (mobile) => { return {...textAreaStyle( mobile ), minHeight: '50vh' } },
   body: {
   },
   title: {

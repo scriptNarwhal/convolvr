@@ -8,6 +8,7 @@ import { getPropsList } from '../../../assets/props'
 import { 
   textAreaStyle,
   lightboxStyle, 
+  textTitleInputStyle,
   modalStyle 
 } from '../../styles'
 class PropertyEditor extends Component {
@@ -159,7 +160,7 @@ class PropertyEditor extends Component {
 
         if ( this.props.onSave ) {
 
-          this.props.onSave( JSON.parse(this.state.text) )
+          this.props.onSave( { name, data: JSON.parse(this.state.text) } )
 
         } else if (this.state.activated) {
 
@@ -231,7 +232,7 @@ class PropertyEditor extends Component {
             </div>
             <div style={ styles.body }>
               {  this.state.activated && !this.state.refreshing ? (
-                <textarea defaultValue={ this.state.text } style={ styles.textArea } onBlur={ e=> this.handleTextArea(e) } />
+                <textarea defaultValue={ this.state.text } style={ styles.textArea( isMobile() ) } onBlur={ e=> this.handleTextArea(e) } />
               ) : ""}
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
@@ -253,6 +254,7 @@ class PropertyEditor extends Component {
 
 PropertyEditor.defaultProps = {
   title: "New Property",
+  source: "inventory",
   convolvrProps: getPropsList( BuiltinProps() )
 }
 
@@ -283,7 +285,7 @@ export default connect(
         loadedItemIndex: state.util.loadedItemEdit.index,
         loadedItemData: state.util.loadedItemEdit.data.property,
         instances: state.util.propertyEdit.windowsOpen,
-        editSource: state.util.loadedItemEdit.source,
+        editSource: state.util.loadedItemEdit.source.property,
         category: state.util.loadedItemEdit.category
     }
   },
@@ -312,6 +314,7 @@ let styles = {
   modal: () => {
     return Object.assign({}, modalStyle(isMobile()), {
         maxWidth: '960px',
+        height: '84%',
         left: ! isMobile() ? '72px' : '0px'
       })
   },
@@ -327,16 +330,7 @@ let styles = {
       marginTop: '0.5em',
       marginBotto: '0.5em'
   },
-  text: {
-      width: '40%',
-      padding: '0.25em',
-      marginBottom: '0.5em',
-      background: '#212121',
-      border: 'solid 0.1em'+ rgba(255, 255, 255, 0.19),
-      borderRadius: '2px',
-      fontSize: '1em',
-      color: 'white'
-  },
+  text: textTitleInputStyle,
   textArea: textAreaStyle,
   body: {
   },

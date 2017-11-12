@@ -63,7 +63,8 @@ module.exports = function app (state = {
         activated: false,
         username: "",
         category: "",
-        itemId: ""
+        itemId: "",
+        source: "inventory"
     },
     inventoryExport: {
         windowsOpen: 0,
@@ -76,13 +77,15 @@ module.exports = function app (state = {
         windowsOpen: 0,
         activated: false,
         username: "",
-        itemId: ""
+        itemId: "",
+        source: "inventory"
     },
     propertyEdit: {
         windowsOpen: 0,
         activated: false,
         username: "",
-        itemId: ""
+        itemId: "",
+        source: "inventory"
     },
     loadedItemEdit: {
         windowsOpen: 0,
@@ -99,7 +102,11 @@ module.exports = function app (state = {
             component: false,
             property: false
         },
-        source: ""
+        source: {
+            entity: "inventory",
+            component: "inventory",
+            property: "inventory"
+        }
     }
 }, action) {
   switch ( action.type ) {
@@ -250,18 +257,6 @@ module.exports = function app (state = {
                 itemIndex: action.itemIndex
             }
         }
-    case UTIL_LAUNCH_ENTITY_EDITOR:
-        return {
-            ...state,
-            entityEdit: {
-                ...state.entityEdit,
-                windowsOpen: state.entityEdit.windowsOpen + 1,
-                activated: true,
-                username: action.username,
-                category: action.category,
-                itemId: action.itemId
-            }
-        }
     case UTIL_LAUNCH_INVENTORY_EXPORT:
         return {
             ...state,
@@ -276,6 +271,19 @@ module.exports = function app (state = {
                 itemId: action.itemId
             }
         }
+    case UTIL_LAUNCH_ENTITY_EDITOR:
+        return {
+            ...state,
+            entityEdit: {
+                ...state.entityEdit,
+                windowsOpen: state.entityEdit.windowsOpen + 1,
+                activated: true,
+                username: action.username,
+                category: action.category,
+                itemId: action.itemId,
+                source: action.source
+            }
+        }
      case UTIL_LAUNCH_COMPONENT_EDITOR:
         return {
             ...state,
@@ -284,7 +292,8 @@ module.exports = function app (state = {
                 windowsOpen: state.componentEdit.windowsOpen + 1,
                 activated: true,
                 username: action.username,
-                itemId: action.itemId
+                itemId: action.itemId,
+                source: action.source
             }
         }
     case UTIL_LAUNCH_PROPERTY_EDITOR:
@@ -295,26 +304,31 @@ module.exports = function app (state = {
                 windowsOpen: state.propertyEdit.windowsOpen + 1,
                 activated: true,
                 username: action.username,
-                itemId: action.itemId
+                itemId: action.itemId,
+                source: action.source
             }
         }
     case UTIL_LAUNCH_EDIT_LOADED_ITEM:
 
         let data = {...state.loadedItemEdit.data },
-            activated = {...state.loadedItemEdit.activated }
+            activated = {...state.loadedItemEdit.activated },
+            source = {...state.loadedItemEdit.source }
         
         switch( action.category ) {
             case "Entities":
                 data.entity = action.data
                 activated.entity = true
+                source.entity = action.source
             break
             case "Components":
                 data.component = action.data
                 activated.component = true
+                source.component = action.source
             break
             case "Properties":
                 data.property = action.data
                 activated.property = true
+                source.property = action.source
             break
         }
 
@@ -327,7 +341,7 @@ module.exports = function app (state = {
                 username: action.username,
                 index: action.index,
                 category: action.category,
-                source: action.source
+                source
             }
         }
     case UTIL_CLOSE_TEXT_EDIT:

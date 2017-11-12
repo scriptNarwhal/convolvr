@@ -40,7 +40,7 @@ class ComponentEditor extends Component {
             this.useTemplate("Wireframe Box")
     }
 
-    componentWillReceiveProps ( nextProps ) { 
+    componentWillReceiveProps ( nextProps: Object ) { 
 
         if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
 
@@ -50,22 +50,17 @@ class ComponentEditor extends Component {
 
         }
 
-        if ( this.props.activated == false && nextProps.activated == true )
+        const editSourceMatches = nextProps.editSource == nextProps.source
+
+        if ( this.props.activated == false && nextProps.activated == true && editSourceMatches )
 
             this.setState({
                 activated: true
             })
         
-        if ( this.props.editMode && this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated ) {
+        if ( editSourceMatches && this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated ) {
 
             this.loadPropertyData( this.props, nextProps )
-
-            let convolvrProps = this.state.props
-            if ( convolvrProps ) {
-                this.setState({
-                    properties: Object.keys( convolvrProps ).map(key=> { return { name: key, data: convolvrProps[key] } })
-                })
-            }
             
             this.setState({
                 index: nextProps.loadedItemIndex
@@ -75,7 +70,7 @@ class ComponentEditor extends Component {
       
     }
 
-    loadPropertyData(props, nextProps) {
+    loadPropertyData( props: Object, nextProps: Object ) {
 
         if (nextProps.editSource == "entityEdit" || nextProps.editSource == "componentEdit") { // load from entity in inventory
 
@@ -96,13 +91,25 @@ class ComponentEditor extends Component {
             }
         }
 
+        let convolvrProps = this.state.props,
+        propsList = []
+        Object.keys( convolvrProps ).map(key=> { 
+            console.info("saving property ", key); 
+            propsList.push({ name: key, data: convolvrProps[key] }) 
+        })
+        if ( convolvrProps ) {
+            this.setState({
+                properties: propsList
+            })
+        }
+
     }
 
-    componentWillUpdate ( nextProps, nextState ) {
+    componentWillUpdate ( nextProps: Object, nextState: Object ) {
 
     }
 
-    useTemplate( name ) {
+    useTemplate( name: string ) {
 
         let template = ""
 
@@ -153,11 +160,11 @@ class ComponentEditor extends Component {
 
     }
 
-    handlePropertyAction ( action, data, e ) {
+    handlePropertyAction ( action: string, data: Object, e: any ) {
     
         let index = data.propertyIndex,
             properties = this.state.properties,
-            propertyData = properties[index]
+            propertyData = properties[index].data
         console.info("handlePropertyAction: propertyData: ", propertyData, properties )
         if ( action == "Delete" ) {
 
@@ -206,6 +213,7 @@ class ComponentEditor extends Component {
         }
 
         this.state.properties.map( prop => {
+            console.log("Prop ", prop)
             props = Object.assign({}, props, prop.data )
         })
 
@@ -217,12 +225,12 @@ class ComponentEditor extends Component {
             components: this.state.components,
             props
         }
-
-        if ( this.props.onSave ) {
-            console.info("<ComponentEditor> onSave() data ", data)
+        console.info("<ComponentEditor> save() data ", data)
+        if ( this.props.onSave && this.props.source != "inventory" ) {
+            
             this.props.onSave( data )
             
-        } else if (this.props.editSource == "inventory") {
+        } else if (this.props.editSource == "inventory" && this.props.source == "inventory" ) {
             
             newId = typeof this.props.components == 'object' ? this.props.components.length : 0
             if ( data.id == -1 ) 
@@ -355,6 +363,7 @@ class ComponentEditor extends Component {
                             <h4 style={styles.h4}>Properties</h4>
                             <PropertyEditor onSave={ data => this.onSaveProperty( data ) } 
                                             entityEditMode={true}
+                                            source={"componentEditor"}
                                             username={ this.props.username }
                                             title={"Add Property"}
                             />
@@ -371,7 +380,7 @@ class ComponentEditor extends Component {
                                       username={this.props.username}
                                       dir={this.props.dir}
                                       category={"Properties"}
-                                      title={property.name || typeof property == 'object' ? Object.keys(property)[0] : "Property "+i}
+                                      title={typeof property == 'object' ? property.name : "Property "+i}
                                       image=''
                                       key={i}
                                 />
@@ -383,6 +392,7 @@ class ComponentEditor extends Component {
                             <h4 style={styles.h4}>Components</h4>
                             <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
                                             entityEditMode={true}
+                                            source={"componentEditor"}
                                             username={ this.props.username }
                                             title={"Add Component"}
                             />
@@ -427,6 +437,7 @@ class ComponentEditor extends Component {
 
 ComponentEditor.defaultProps = {
     title: "New Component",
+    source: "inventory",
     entityEditMode: true,
     contextMenuOptions: [
         { name: "Edit" },
@@ -461,7 +472,7 @@ export default connect(
         editLoadedItemActivated: state.util.loadedItemEdit.activated && state.util.loadedItemEdit.category == "Components",
         loadedItemIndex: state.util.loadedItemEdit.index,
         loadedItemData: state.util.loadedItemEdit.data.component,
-        editSource: state.util.loadedItemEdit.source,
+        editSource: state.util.loadedItemEdit.source.component,
         category: state.util.loadedItemEdit.category
     }
   },
@@ -490,6 +501,7 @@ let styles = {
     modal: () => {
         return Object.assign({}, modalStyle(isMobile()), {
             maxWidth: '1080px',
+            height: '86%',
             left: ! isMobile() ? '72px' : '0px'
           })
     },

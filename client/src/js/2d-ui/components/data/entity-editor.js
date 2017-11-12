@@ -320,6 +320,7 @@ class EntityEditor extends Component {
               </div>
               <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
                                username={ this.props.username }
+                               source={"entityEditor"}
                                title="Add Component"
               />
               <FileButton title="Save" onClick={ () => { this.save() } } />
@@ -381,7 +382,7 @@ export default connect(
         entities: state.inventory.items.entities,
         editLoadedItemActivated: state.util.loadedItemEdit.activated && state.util.loadedItemEdit.category == "Entities",
         loadedItemIndex: state.util.loadedItemEdit.index,
-        loadedItemSource: state.util.loadedItemEdit.source,
+        loadedItemSource: state.util.loadedItemEdit.source.entity,
         loadedItemData: state.util.loadedItemEdit.data.component,
         instances: state.util.entityEdit.windowsOpen,
         vrMode: state.app.vrMode
@@ -414,7 +415,7 @@ export default connect(
 let styles = {
   modal: () => {
     return Object.assign({}, modalStyle(isMobile()), {
-          maxWidth: '1280px',
+          maxWidth: '1180px',
           left: ! isMobile() ? '72px' : '0px'
        })
     },
