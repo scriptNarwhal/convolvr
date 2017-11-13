@@ -31,6 +31,7 @@ class ComponentEditor extends Component {
             name: "",
             components: [],
             properties: [],
+            props: {},
             position: [0,0,0],
             quaternion: [0,0,0,1]
         })
@@ -40,68 +41,71 @@ class ComponentEditor extends Component {
             this.useTemplate("Wireframe Box")
     }
 
-    componentWillReceiveProps ( nextProps: Object ) { 
-
-        if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
-
-            if ( nextProps.category != "" && nextProps.itemId != "" )
-
-                this.loadPropertyData( this.props, nextProps)
-
-        }
+    componentWillReceiveProps(nextProps: Object) {
 
         const editSourceMatches = nextProps.editSource == nextProps.source
 
-        if ( this.props.activated == false && nextProps.activated == true && editSourceMatches )
+        if (editSourceMatches) {
+            if (this.props.itemId != nextProps.itemId || this.props.category != nextProps.category) {
 
-            this.setState({
-                activated: true
-            })
-        
-        if ( editSourceMatches && this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated ) {
+                if (nextProps.category != "" && nextProps.itemId != "")
 
-            this.loadPropertyData( this.props, nextProps )
-            
-            this.setState({
-                index: nextProps.loadedItemIndex
-            })
+                    this.loadComponentData(this.props, nextProps)
 
+            }
+
+            if (this.props.activated == false && nextProps.activated == true)
+
+                this.setState({
+                    activated: true
+                })
+
+            if (this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated) {
+
+                this.loadComponentData(this.props, nextProps)
+
+                this.setState({
+                    index: nextProps.loadedItemIndex
+                })
+
+            }
         }
-      
     }
 
-    loadPropertyData( props: Object, nextProps: Object ) {
+    loadComponentData(props: Object, nextProps: Object) {
+        if (nextProps.source == nextProps.editSource) {
+            if (nextProps.editSource == "entityEdit" || nextProps.editSource == "componentEdit") { // load from entity in inventory
 
-        if (nextProps.editSource == "entityEdit" || nextProps.editSource == "componentEdit") { // load from entity in inventory
+                if (nextProps.loadedItemData) {
+                    this.setState(nextProps.loadedItemData)
+                } else {
+                    console.warn("missing component action data")
+                    this.setState({ activated: false })
+                }
 
-            if (nextProps.loadedItemData) {
-                this.setState(nextProps.loadedItemData)
-            } else {
-                console.warn("missing component action data")
-                this.setState({ activated: false })
+            } else { // load from inventory
+
+                if (nextProps.components && nextProps.components[nextProps.loadedItemIndex]) {
+                    this.setState(nextProps.components[nextProps.loadedItemIndex])
+                } else {
+                    console.warn("missing component inventory data")
+                    this.setState({ activated: false })
+                }
             }
 
-        } else { // load from inventory
-
-            if (nextProps.components && nextProps.components[nextProps.loadedItemIndex]) {
-                this.setState(nextProps.components[nextProps.loadedItemIndex])
-            } else {
-                console.warn("missing component inventory data")
-                this.setState({ activated: false })
-            }
-        }
-
-        let convolvrProps = this.state.props,
-        propsList = []
-        Object.keys( convolvrProps ).map(key=> { 
-            console.info("saving property ", key); 
-            propsList.push({ name: key, data: convolvrProps[key] }) 
-        })
-        if ( convolvrProps ) {
-            this.setState({
-                properties: propsList
+            let convolvrProps = this.state.props,
+                propsList = []
+            Object.keys(convolvrProps).map(key => {
+                console.info("saving property ", key);
+                propsList.push({ name: key, data: { [key]: convolvrProps[key] } })
             })
+            if (convolvrProps) {
+                this.setState({
+                    properties: propsList
+                })
+            }
         }
+
 
     }
 
@@ -164,7 +168,7 @@ class ComponentEditor extends Component {
     
         let index = data.propertyIndex,
             properties = this.state.properties,
-            propertyData = properties[index].data
+            propertyData = properties[index]
         console.info("handlePropertyAction: propertyData: ", propertyData, properties )
         if ( action == "Delete" ) {
 
@@ -363,7 +367,7 @@ class ComponentEditor extends Component {
                             <h4 style={styles.h4}>Properties</h4>
                             <PropertyEditor onSave={ data => this.onSaveProperty( data ) } 
                                             entityEditMode={true}
-                                            source={"componentEditor"}
+                                            source={"componentEdit"}
                                             username={ this.props.username }
                                             title={"Add Property"}
                             />
@@ -392,7 +396,7 @@ class ComponentEditor extends Component {
                             <h4 style={styles.h4}>Components</h4>
                             <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
                                             entityEditMode={true}
-                                            source={"componentEditor"}
+                                            source={"componentEdit"}
                                             username={ this.props.username }
                                             title={"Add Component"}
                             />

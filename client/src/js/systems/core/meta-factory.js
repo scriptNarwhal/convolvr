@@ -49,9 +49,9 @@ export default class MetaFactorySystem {
             source = prop.dataSource
 
         }
-
+        console.info("init metafactory prop ", prop)
         if ( typeof source == 'string' && source == 'self' ) {
-            
+            console.info( "source is string")
             if ( assetType == "file" )
                             
                 source = component.state.file.res.listFiles.data || []
@@ -59,7 +59,7 @@ export default class MetaFactorySystem {
         }
 
         if ( typeof source.map == 'function') { // array of geometries / materials, components, entities, worlds, places, files, (directories could use source[category])
-
+            console.info( "source is ")
             source.map( (item, i) => {
                 
                 if ( assetType == 'entity' && typeof item == 'function' )
@@ -83,7 +83,8 @@ export default class MetaFactorySystem {
             })
             
         } else { // map through system categories
-            
+            console.info( "source is object")
+            source = prop.dataSource
             sourceCategory = this._getSourceCategory( source, category ) // structures, vehicles, media, interactivity
         
             Object.keys( sourceCategory ).map( ( key, a ) => { // vehicle, propulsion, control, etc

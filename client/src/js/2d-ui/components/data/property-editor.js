@@ -35,42 +35,47 @@ class PropertyEditor extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
+    if ( nextProps.source == nextProps.editSource ) {
 
-      this.loadPropertyData( this.props, nextProps )
+      if (this.props.itemId != nextProps.itemId || this.props.category != nextProps.category) {
 
-    }
+        this.loadPropertyData(this.props, nextProps)
 
-    if ( this.props.activated == false && nextProps.activated == true )
+      }
 
-      this.setState({
-        activated: true
-      })
+      if (this.props.activated == false && nextProps.activated == true)
+
+        this.setState({
+          activated: true
+        })
 
       let loadEditItemActiveChanged = this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated,
-          itemIndexChanged = this.props.loadedItemIndex != nextProps.loadedItemIndex,
-          itemIdChanged = this.props.itemId != nextProps.itemId
+        itemIndexChanged = this.props.loadedItemIndex != nextProps.loadedItemIndex,
+        itemIdChanged = this.props.itemId != nextProps.itemId
 
 
-      if ( loadEditItemActiveChanged || itemIndexChanged || itemIdChanged ) {
-        
-        this.loadPropertyData( this.props, nextProps )
+      if (loadEditItemActiveChanged || itemIndexChanged || itemIdChanged) {
+
+        this.loadPropertyData(this.props, nextProps)
 
         this.setState({
           index: nextProps.loadedItemIndex
         })
-        
+
       }
+
+    }
     
   }
 
   loadPropertyData ( props, nextProps ) {
 
+    console.info("propertyEditor edit load property data: editSource, editData, ", nextProps.editSource, nextProps.loadedItemData)
     if ( nextProps.editSource == "componentEdit" ) { // load from component in inventory
       if ( nextProps.loadedItemData ) {
 
         this.setState( nextProps.loadedItemData )      
-        this.setText( nextProps.loadedItemData.name, nextProps.loadedItemData.data, true )
+        this.setText( nextProps.loadedItemData.name, nextProps.loadedItemData.data, false )
 
       } else {
 

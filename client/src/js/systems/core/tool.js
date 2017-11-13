@@ -22,7 +22,8 @@ export default class ToolSystem {
             contentProps = {},
             factories = null,
             panels = [],
-            panel = null
+            panel = null,
+            newPanel = null
 
         if ( prop.panel ) {
            
@@ -34,10 +35,10 @@ export default class ToolSystem {
 
         if ( prop.panels ) {
 
-            prop.panels.map( (panel, p) => {
-                console.info("init multiple panels", panel)
-                contentProps = panel && panel.content ? panel.content.props : {}
-                let panelEnt = toolSystem._initPanelUIEntity( panel, contentProps )
+            prop.panels.map( ( newPanel, p) => {
+                console.info("init multiple panels", newPanel)
+                contentProps = newPanel && newPanel.content ? newPanel.content.props : {}
+                let panelEnt = toolSystem._initPanelUIEntity( newPanel, contentProps )
                 toolSystem.panels.push( panelEnt )
 
             })
@@ -214,7 +215,7 @@ export default class ToolSystem {
         this._positionToolPanel( toolPanel, userPos, 0 )
 
       }
-
+      console.warn("_equip toolPanels", toolPanels, component.entity.componentsByProp.tool)
       if ( toolPanels ) {
 
         toolPanels.map( (toolPanel, i) => {

@@ -320,7 +320,7 @@ class EntityEditor extends Component {
               </div>
               <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
                                username={ this.props.username }
-                               source={"entityEditor"}
+                               source={"entityEdit"}
                                title="Add Component"
               />
               <FileButton title="Save" onClick={ () => { this.save() } } />

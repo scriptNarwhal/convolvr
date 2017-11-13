@@ -77,7 +77,11 @@ export default class FactorySystem {
                 case "assets":
                     created = this._generateAsset( data, voxel, entityPos, quat )
                 break
-                case "systems":
+                case "vehicles":
+                case "media":
+                case "interactivity":
+                case "structures":
+                
                     created = this._generateSystem( data, voxel, entityPos, quat, preset )
                 break
 

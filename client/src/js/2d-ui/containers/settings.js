@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { browserHistory } from 'react-router'
 import Shell from '../components/shell'
 
 class Settings extends Component {
@@ -303,6 +304,11 @@ class Settings extends Component {
           </div>
           <input style={styles.save}
                  type='submit'
+                 value="Profile Settings"
+                 onClick={ e=> { browserHistory.push("/profile") } }
+          />
+          <input style={styles.save}
+                 type='submit'
                  value="Reset To Defaults"
                  onClick={ e=> this.resetToDefault()}
           />
@@ -446,8 +452,8 @@ export default connect(
 const styles = {
   modal: {
     width: '100%',
+    height: '150vh',
     maxWidth: '800px',
-    height: '100%',
     minWidth: '360px',
     margin: 'auto',
     display: 'block',
