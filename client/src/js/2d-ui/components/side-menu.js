@@ -59,6 +59,11 @@ class SideMenu extends Component {
                  compact={ isMobile() }
                  title="Home"
             /> 
+            <Tab clickHandler={ e => { this.navigate(e, "/new-world") } }
+                 showTitle={ this.state.menuHover }
+                 image="/data/images/plus.png"
+                 title="New"
+            />
             <Tab clickHandler={ e => { this.navigate(e, "/worlds") }}
                  image="/data/images/circle-a.png"
                  showTitle={ this.state.menuHover }
@@ -72,11 +77,6 @@ class SideMenu extends Component {
                  compact={ isMobile() }
                  title="Places"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/new-world") } }
-                 showTitle={ this.state.menuHover }
-                 image="/data/images/plus.png"
-                 title="New"
-            />
             <Tab clickHandler={ e => { this.navigate(e, "/inventory") } }
                  showTitle={ this.state.menuHover }
                  image="/data/images/entities.png"
@@ -88,13 +88,6 @@ class SideMenu extends Component {
                  image="/data/images/chat.png"
                  compact={ isMobile() }
                  title="Chat"
-            />
-            <Tab clickHandler={ e => { this.navigate(e, "/profile") } }
-                 showTitle={ this.state.menuHover }
-                 image="/data/images/person-s2.png"
-                 compact={ isMobile() }
-                 style={ styles.mobileHidden() }
-                 title="Profile"
             />
             <Tab clickHandler={ e => { this.navigate(e, "/files") }}
                  showTitle={ this.state.menuHover }
@@ -108,6 +101,13 @@ class SideMenu extends Component {
                  style={ styles.mobileHidden() }
                  compact={ isMobile() }
                  title="Network"
+            />
+            <Tab clickHandler={ e => { this.navigate(e, "/profile") } }
+                 showTitle={ this.state.menuHover }
+                 image="/data/images/person-s2.png"
+                 compact={ isMobile() }
+                 style={ styles.mobileHidden() }
+                 title="Profile"
             />
             <Tab clickHandler={ e => { this.navigate(e, "/login") } }
                  showTitle={ this.state.menuHover }

@@ -96,7 +96,7 @@ export default class StaticCollisions {
 
 			} else if ( message.command == "floor collision" ) { 
 				// console.log("floor collision", message.data.position, message.data)
-				cam.position.set(cam.position.x, message.data.position[1]+vrHeight, three.cam.position.z)
+				cam.position.set(cam.position.x, message.data.position[1]+vrHeight, cam.position.z)
 
 				if ( Math.abs(user.velocity.y) > 1 ) {
 

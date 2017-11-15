@@ -53,6 +53,12 @@ class Data extends Component {
 
   }
 
+  isTextFile (file) {
+
+    return /(^[^.]*$|\.md|\.js|\.json|\.htm|\.css|\.go|\.java|\.py|\.xml|\.yml|\.txt|\.doc|\.csv|\.gitignore)/.test(file)
+
+  }
+
   getFullPath (file, thumbnail) {
 
     let username = this.props.username,
@@ -109,12 +115,18 @@ class Data extends Component {
     if ( !!files && !this.props.filesFetching) {
 
       return files.map((file, i) => {
+          console.info("file ", file)
               return (
                 <Card image={this.isImage(file) ? !thumbs && this.getFullPath(file, true) : ''}
                       clickHandler={ (e, title) => {
-                        console.log(e, title, "clicked")
-                        let newWindow = window.open(this.getFullPath(file), "_blank")
-                        newWindow.focus()
+                        console.log(e, title, "clicked");
+                        if ( this.isTextFile( file ) ) {
+                          this.onContextAction("Edit", { filename: file }, {})
+                        } else {
+                          let newWindow = window.open(this.getFullPath(file), "_blank")
+                          newWindow.focus()
+                        }
+                        
                       }}
                       compact={thumbs || !this.isImage(file) }
                       quarterSize={mobile && this.isImage(file) }
