@@ -119,7 +119,7 @@ export default class FactorySystem {
 
             if ( created.mesh != null ) {
 
-                created.mesh.translateZ(-0.5,)
+                created.mesh.translateZ(0)
                 created.update(created.mesh.position.toArray())
 
             }

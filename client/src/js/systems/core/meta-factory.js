@@ -189,12 +189,12 @@ export default class MetaFactorySystem {
                         anchorOutput: true
                     },
                     geometry: {
-                        shape: 'node',
-                        size: [1,1,1]
+                        shape: 'box',
+                        size: [0.25,0.25,0.25]
                     },
                     material: {
-                        name: 'basic',
-                        color: 0x000000
+                        name: 'wireframe',
+                        color: 0xffffff
                     }
                 },
                 position:  pos,

@@ -51,7 +51,7 @@ export default class CursorSystem {
             
         }
 
-        raycaster.set( position, handDirection )
+        raycaster.set( { ...position, y: position.y+0.25 }, handDirection )
     
         coords = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), 0, Math.floor( position.z / GRID_SIZE[ 2 ] ) ]
         raycaster.ray.far = 100000
