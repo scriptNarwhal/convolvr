@@ -76,11 +76,12 @@ export default class ToolSystem {
                 props: { // colored top bar                      
                     geometry: {
                         shape: "box",
+                        detail: [4,2,2],
                         size: [3, 0.5, 0.1],
-                        faceNormals: false
+                        faceNormals: true
                     },
                     material: {
-                        name: "metal",
+                        name: "wireframe",
                         color: panelProp.color
                     },
                     components: [
@@ -117,8 +118,8 @@ export default class ToolSystem {
                         size: [ 3, 4, 0.1 ]
                     },
                     material: {
-                        name: "metal",
-                        color: 0x404050
+                        name: "plastic",
+                        color: 0xffffff
                     },
                 }),
                 components: []

@@ -9,11 +9,9 @@ export default class GeometrySystem {
   detail: number
 
   constructor ( world: Convolvr ) {
-
     this.world = world
     this.nodeGeom = new THREE.PlaneGeometry( 0.001, 0.001, 0.001)
     this.detail = world.settings.geometry
-
   }
 
   init ( component: Component ) { 
@@ -22,7 +20,8 @@ export default class GeometrySystem {
             geometry:     Object        = {},
             size:         Array<number> = prop.size,
             assets:       Object        = this.world.systems.assets,
-            geometryCode: string        = prop.shape+':'+size.join(':'),
+            detail:       Array<number> = prop.detail || [this.detail, this.detail, this.detail],
+            geometryCode: string        = `${prop.shape}:${size.join(':')}:${detail.join(':')}`,
             faceNormals:  boolean       = false
         
         if ( assets.geometries[ geometryCode ] == null ) {
@@ -36,22 +35,22 @@ export default class GeometrySystem {
               faceNormals = true
             break
             case "box":
-              geometry = new THREE.BoxGeometry( size[0], size[1], size[2] )
+              geometry = new THREE.BoxGeometry( size[0], size[1], size[2], ...detail )
               faceNormals = true
             break
             case "octahedron":
               geometry = new THREE.OctahedronGeometry( size[0], 0 )
             break
             case "sphere":
-              geometry = new THREE.OctahedronGeometry( size[0], 1+this.detail )
+              geometry = new THREE.OctahedronGeometry( size[0], 1+detail[0] )
               faceNormals = true
             break
             case "cylinder":
-              geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 6 + 6* this.detail, 1 )
+              geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 6 + 6* detail[0], 1 )
               faceNormals = true
             break
             case "open-cylinder":
-              geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 6 + 10 * this.detail, 1, true )
+              geometry = new THREE.CylinderGeometry( size[0], size[0], size[1], 6 + 10 * detail[0], 1, true )
               faceNormals = true
             break
             case "cone":
@@ -59,7 +58,7 @@ export default class GeometrySystem {
               faceNormals = true
             break
             case "torus":
-              geometry = new THREE.TorusGeometry( size[0], 6.3, 5, 6 + this.detail * 6 )
+              geometry = new THREE.TorusGeometry( size[0], 6.3, 5, 6 + detail[0] * 6 )
             break
             case "hexagon":
               geometry = new THREE.CylinderGeometry( size[0], size[1], size[2], 6 )
@@ -78,28 +77,20 @@ export default class GeometrySystem {
               geometry = this._latheGeometry( prop )
             break
             // define more mappings here..
-
           }
 
           if ( geometry.computeVertexNormals && faceNormals && (prop.faceNormals === true || prop.faceNormals === undefined )) {
-
             geometry.computeVertexNormals()
-
           }
-          
           assets.geometries[ geometryCode ] = geometry
-
         } else {
-
           geometry = assets.geometries[ geometryCode ] // used cached copy
-
         }
         
         return {
           geometry,
           geometryCode
         }
-
     }
 
     _extrudeGeometry ( prop: Object ) { // prop.size, shape, settings
