@@ -37,8 +37,7 @@ class ComponentEditor extends Component {
         })
         
         if ( !this.props.itemId )
-
-            this.useTemplate("Wireframe Box")
+            this.useTemplate("Wireframe Box")            
     }
 
     componentWillReceiveProps(nextProps: Object) {
@@ -47,23 +46,18 @@ class ComponentEditor extends Component {
 
         if (editSourceMatches) {
             if (this.props.itemId != nextProps.itemId || this.props.category != nextProps.category) {
-
                 if (nextProps.category != "" && nextProps.itemId != "")
-
                     this.loadComponentData(this.props, nextProps)
 
             }
 
             if (this.props.activated == false && nextProps.activated == true)
-
                 this.setState({
                     activated: true
                 })
 
             if (this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated) {
-
                 this.loadComponentData(this.props, nextProps)
-
                 this.setState({
                     index: nextProps.loadedItemIndex
                 })
@@ -105,8 +99,6 @@ class ComponentEditor extends Component {
                 })
             }
         }
-
-
     }
 
     componentWillUpdate ( nextProps: Object, nextState: Object ) {
@@ -118,7 +110,6 @@ class ComponentEditor extends Component {
         let template = ""
 
         switch ( name ) {
-
             case "Wireframe Box":
                 template = {
                     name: "Wireframe Box",
@@ -155,13 +146,9 @@ class ComponentEditor extends Component {
                     components: []
                 }
             break;
-
         }
-
         this.setState( template )
-
         return JSON.stringify(template)
-
     }
 
     handlePropertyAction ( action: string, data: Object, e: any ) {
@@ -171,16 +158,13 @@ class ComponentEditor extends Component {
             propertyData = properties[index]
         console.info("handlePropertyAction: propertyData: ", propertyData, properties )
         if ( action == "Delete" ) {
-
             properties.splice( index, 1 )
             this.setState({ properties })
 
         } else if ( action == "Edit" ) {
-
             this.props.editLoadedItem( "componentEdit", this.props.username, "Properties", index, propertyData )
-
+        
         }
-    
     }
 
     handleComponentAction ( action, data, e ) {
@@ -190,16 +174,13 @@ class ComponentEditor extends Component {
             componentData = components[index]
         console.info("handleComponentAction: componentData: ", componentData, components )
         if ( action == "Delete" ) {
-                
             components.splice( index, 1 )
             this.setState({ components })
                 
         } else if (action == "Edit") {
-
             this.props.editLoadedItem( "componentEdit", this.props.username, "Components", index, componentData)
 
         }
-        
     }
 
     save () {
@@ -210,10 +191,8 @@ class ComponentEditor extends Component {
             props = {}
 
         if ( name == "" )  {
-
             alert("Name is required.")
             return
-
         }
 
         this.state.properties.map( prop => {
@@ -231,34 +210,24 @@ class ComponentEditor extends Component {
         }
         console.info("<ComponentEditor> save() data ", data)
         if ( this.props.onSave && this.props.source != "inventory" ) {
-            
             this.props.onSave( data )
             
         } else if (this.props.editSource == "inventory" && this.props.source == "inventory" ) {
-            
             newId = typeof this.props.components == 'object' ? this.props.components.length : 0
             if ( data.id == -1 ) 
-
                 data.id = newId
 
-            this.props.addInventoryItem( this.props.username, "Components", data )
-            
+            this.props.addInventoryItem( this.props.username, "Components", data )   
         }
-
         this.toggleModal()
-
     }
 
     validate() {
-
         let valid = null
-
         return valid
-
     }
 
     toggleModal () {
-
         if ( this.state.activated && this.props.closeComponentEditor ) {
             this.props.closeComponentEditor()
         } else {
@@ -266,42 +235,34 @@ class ComponentEditor extends Component {
               id: -1
             })
         }
+
         this.setState({
           activated: !this.state.activated
         })
-
     }
   
     onPositionChange ( value, event ) {
-    
         this.setState({
           position: value
         })
-    
     }
     
     onRotationChange ( value, event ) {
-    
         this.setState({
           quaternion: value
         })
-    
     }
 
     onNameChange( e ) {
-
         this.setState({
             name: e.target.value
         })
-
     }
 
     onIdChange( e ) {
-        
         this.setState({
             id: parseInt(e.target.value)
         })
-
     }
 
     onSaveProperty( data ) {
@@ -309,18 +270,13 @@ class ComponentEditor extends Component {
         let properties = []
 
         properties = this.state.properties
-
         if ( data.id <= -1 )
-        
             data.id = this.state.properties.length
               
-            
         properties.push( data )
-
         this.setState({
             properties
         })
-
     }
 
     onSaveComponent( data ) {
@@ -328,18 +284,13 @@ class ComponentEditor extends Component {
         let components = []
 
         components = this.state.components
-
         if ( data.id <= -1 )
-
             data.id = this.state.components.length
         
-
         components.push(data)
-
         this.setState({
             components
         })
-
     }
 
     render() {

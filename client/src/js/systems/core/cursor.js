@@ -37,21 +37,16 @@ export default class CursorSystem {
             i = 0
 
         if ( handMesh != null ) {
-
             handMesh.getWorldDirection( handDirection )
             handDirection.multiplyScalar( -1 )
             position = handMesh.position
-            
         } else {
-
             camera.getWorldDirection(handDirection)
-            
             cameraPos.fromArray(camera.position.toArray())
             position = cameraPos
-            
         }
 
-        raycaster.set( { ...position, y: position.y+0.25 }, handDirection )
+        raycaster.set( { ...position, x: position.x+0.1, y: position.y+0.12 }, handDirection )
     
         coords = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), 0, Math.floor( position.z / GRID_SIZE[ 2 ] ) ]
         raycaster.ray.far = 100000
@@ -71,22 +66,16 @@ export default class CursorSystem {
                 entity = obj.object.userData.entity
 
                 if ( !! entity && entity.componentsByProp.terrain ) {
-
                     i -= 1
                     continue
-
                 }
 
                 if ( !!entity && obj.distance < 50 ) {
 
                     if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
-
                         component = entity.allComponents[ 0 ]; //console.log("one component: ", component ? Object.keys(component.props).join("-") : "")
-
                     } else { 
-                    
                         component = entity.getComponentByFace( obj.faceIndex ); //console.log("closest", component ? Object.keys(component.props).join("-") : "")
-
                     }
 
                 }
@@ -97,9 +86,7 @@ export default class CursorSystem {
             }
 
         } else {
-
             callback( cursor, hand, world, null, null, null )
-
         }
 
     }
@@ -113,24 +100,17 @@ export default class CursorSystem {
             i = 0
 
         while ( x < 2 ) {
-            
             while ( z < 2 ) {
-
                 key = [ coords[ 0 ] + x, 0, coords[ 2 ] + z ].join(".")
-
                 if ( typeof voxels[ key ] == 'object' ) { //console.warn("Empty Voxel! ", key, voxels[ key ] ) }
                     castObjects = castObjects.concat( !!voxels[ key ] ? voxels[ key ].meshes : [] )
                 } else {
                     //console.warn(key, 'notloaded')
                 }
-
                 z ++
-
             }
-
             z = -1
             x ++
-
         }
         
         if ( voxels[ "0.1.0" ] != null )
@@ -145,15 +125,10 @@ export default class CursorSystem {
                 castObjects.splice( i, 1 )
 
             } else {
-
                 i += 1
-            
-            }
-            
+            }    
         }
-
         return castObjects
-
     }
 
     handleCursors ( cursors, cursorIndex, hands, camera, world ) {

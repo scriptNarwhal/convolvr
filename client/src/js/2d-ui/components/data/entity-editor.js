@@ -41,26 +41,22 @@ class EntityEditor extends Component {
   componentWillReceiveProps ( nextProps: Object ) {
 
     if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
-
       if ( nextProps.category != "" && nextProps.itemId != "" )
-
         this.setState({
           name: nextProps.itemId
         })
 
     }
-
     if ( this.props.activated == false && nextProps.activated == true )
-
       this.setState({
         activated: true
       })
 
     if (this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated) {
-
       if ( nextProps.entities && nextProps.entities[ nextProps.loadedItemIndex ]) {
         this.setState(nextProps.entities[ nextProps.loadedItemIndex ])
       } 
+
       this.setState({
         index: nextProps.loadedItemIndex,
         refreshing: true
@@ -69,8 +65,6 @@ class EntityEditor extends Component {
           refreshing: false
         })
       })
-
-
     }
   }
 
@@ -145,9 +139,9 @@ class EntityEditor extends Component {
 
   handleContextAction ( action: string, data: Object, e: Object ) {
     
-    let index:         number        = data.componentIndex,
-        components:    Array<Object> = this.state.components,
-        componentData: Object        = components[ index ]
+    let index:          number        = data.componentIndex,
+        components:     Array<Object> = this.state.components,
+        componentData:  Object        = components[ index ]
 
     if ( action == "Delete" ) {
             
@@ -169,10 +163,8 @@ class EntityEditor extends Component {
         data = {}
 
     if ( name == "" )  {
-        
       alert("Name is required.")
       return
-        
     }
 
     data = {
@@ -184,65 +176,49 @@ class EntityEditor extends Component {
     }
 
     if ( this.props.onSave ) {
-        
       this.props.onSave( data )
         
     } else {
-        
+  
       if (data.id == -1) 
-
         data.id = newId
 
-      this.props.addInventoryItem( this.props.username, "Entities", data )
-        
+      this.props.addInventoryItem( this.props.username, "Entities", data )   
     }
-
     this.toggleModal()
-
   }
 
   validate ( ) {
-
+             
     let valid = null
-
     return valid
-
   }
 
   toggleModal ( ) {
-
     if ( this.state.activated )
-
       this.props.closeEntityEditor()
 
     this.setState({
       activated: !this.state.activated
     })
-
   }
 
   onPositionChange ( value: Array<number>, event: Object ) {
-
     this.setState({
       position: value
     })
-
   }
 
   onRotationChange ( value: Array<number>, event: Object ) {
-
     this.setState({
       quaternion: value
     })
-
   }
 
   onNameChange(e) {
-
     this.setState({
       name: e.target.value
     })
-
   }
 
   onIdChange(e) {

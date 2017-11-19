@@ -6,6 +6,7 @@ import {
 	GRID_SIZE
 } from '../config.js'
 import { send } from '../network/socket'
+import User from './user'
 import Avatar from '../assets/entities/avatars/avatar'
 import Entity from '../entity'
 import Systems from '../systems'
@@ -24,7 +25,43 @@ let world = null
 
 export default class Convolvr {
 	
-	constructor( user, userInput = false, socket, store, loadedCallback ) {
+	postProcessing:   PostProcessing
+	initialLoad: 	  boolean
+	loadedCallback:   Function
+	sendUpdatePacket: number
+	three:            Object
+	socket: 		  any
+	store: 			  any
+	mobile: 		  boolean
+	userInput: 		  UserInput
+	settings: 		  Settings
+	config: 		  Object
+	windowFocus: 	  boolean
+	name: 			  string
+	userName: 		  string
+	mode: 			  string
+	rPos: 			  boolean
+	users: 			  Array<User>
+	user: 			  User
+	camera: 		  any
+	skyboxMesh: 	  any
+	skybox: 		  SkyBox
+	vrFrame: 		  any
+	capturing: 		  boolean
+	webcamImage: 	  string
+	HMDMode:		  string
+	vrHeight: 		  number
+	screenResX: 	  number
+	octree: 		  any
+	raycaster: 		  any
+	systems: 		  Systems
+	terrain: 		  TerrainSystem
+	workers: 		  Object
+	skyBoxMesh:       any
+	skyLight:         any
+	shadowHelper:     any
+
+	constructor( user: User, userInput: UserInput, socket: any, store: any, loadedCallback: Function ) {
 
 		let mobile = window.innerWidth < 480 || (window.innerWidth < 1024 && window.devicePixelRatio >= 1.5),
 			scene = new THREE.Scene(),
@@ -48,26 +85,21 @@ export default class Convolvr {
 		let rendererOptions = { antialias: this.settings.aa != 'off' && !usePostProcessing }
 
 		if ( usePostProcessing ) {
-
 			rendererOptions.alpha = true
 			rendererOptions.clearColor = 0x000000
-
 		}
 
 		renderer = new THREE.WebGLRenderer(rendererOptions)
 		
 		if ( this.settings.shadows > 0 ) {
-
 			renderer.shadowMap.enabled = true;
 			renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
-
 		}
 
 		postProcessing = new PostProcessing(renderer, scene, camera)
 
 		if ( usePostProcessing )
-
-			postProcessing.init()
+		postProcessing.init()
 
 		this.postProcessing = postProcessing
 		this.socket = socket
@@ -128,36 +160,33 @@ export default class Convolvr {
 		animate(this, 0, 0)
 	
 		three.vrDisplay = null
-		navigator.getVRDisplays().then( displays => { console.log( "displays", displays )
+		window.navigator.getVRDisplays().then( displays => { console.log( "displays", displays )
 				
 			if ( displays.length > 0 )
-
 				three.vrDisplay = displays[ 0 ]
 
 			
 		})
-
 		this.initialLoad = false
 		this.loadedCallback = () => { loadedCallback( this ); this.initialLoad = true;  }
-
 	}
 
-	init ( config, callback ) {
+	init ( config: Object, callback: Function ) {
 		
-		let coords = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
-			skyLight =  skyLight = new THREE.DirectionalLight( config.light.color, 1 ),
-			camera = three.camera,
-			skyMaterial = new THREE.MeshBasicMaterial( {color: 0x303030} ),
-			skyTexture = null,
-			rotateSky = false,
-			shadowRes = 1024,
-			envURL = '/data/images/photospheres/sky-reflection.jpg',
-			r = config.sky.red,
-			g = config.sky.green,
-			b = config.sky.blue,
-			shadowCam = null,
-			oldConfig = Object.assign({}, this.config),
-			skySize = 1000+((this.settings.viewDistance+3.5)*1.4)*140,
+		let coords 	 	   = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
+			skyLight 	   = skyLight = new THREE.DirectionalLight( config.light.color, 1 ),
+			camera 		   = three.camera,
+			skyMaterial    = new THREE.MeshBasicMaterial( {color: 0x303030} ),
+			skyTexture     = null,
+			rotateSky      = false,
+			shadowRes      = 1024,
+			envURL 	       = '/data/images/photospheres/sky-reflection.jpg',
+			r 		       = config.sky.red,
+			g 			   = config.sky.green,
+			b 			   = config.sky.blue,
+			shadowCam 	   = null,
+			oldConfig 	   = Object.assign({}, this.config),
+			skySize 	   = 1000+((this.settings.viewDistance+3.5)*1.4)*140,
 			oldSkyMaterial = {}
 
 
@@ -166,7 +195,7 @@ export default class Convolvr {
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
 		three.scene.add(this.ambientLight)
 
-		if ( this.shadows > 0 ) {
+		if ( this.settings.shadows > 0 ) {
 
 			skyLight.castShadow = true
 			shadowCam = skyLight.shadow.camera
@@ -174,7 +203,6 @@ export default class Convolvr {
 			skyLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows) 
 			shadowCam.near = 0.5      // default
 			shadowCam.far = 1300      
-			
 			shadowCam.left = -500
 			shadowCam.right = 500
 			shadowCam.top = 500
@@ -188,21 +216,18 @@ export default class Convolvr {
 		} 
 
 		if ( !!config && !!config.sky.photosphere ) { console.log("init world: photosphere: ", config.sky.photosphere)
-
 			this.systems.assets.envMaps.default = '/data/user/'+config.sky.photosphere
 			rotateSky = true
-
 		} else {
-
 			envURL = this.systems.assets.getEnvMapFromColor( r, g, b )
 			this.systems.assets.envMaps.default = envURL
-			
 		}
 
 		if ( this.skyboxMesh )
 
 			three.scene.remove( this.skyBoxMesh )
-			oldSkyMaterial = this.skyboxMesh.material
+		
+		oldSkyMaterial = this.skyboxMesh.material
 
 		this.skyboxMesh = new THREE.Mesh(new THREE.OctahedronGeometry( skySize, 4), oldSkyMaterial )
 
@@ -223,30 +248,23 @@ export default class Convolvr {
 				//skyLight.shadow.camera.lookAt(zeroZeroZero)
 				three.scene.add(world.skyboxMesh)
 				world.skyboxMesh.position.set(camera.position.x, 0, camera.position.z)
-				world.gravity = config.gravity
-				world.highAltitudeGravity = config.highAltitudeGravity
 				callback()
 			}
 
 		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
-
 			this.skybox.loadShaderSky( config, oldConfig, world.skyboxMesh, ()=>{})
-
 		} else {
 			// load sky texture 
 			deferWorldLoading = true
 			this.skybox.loadTexturedSky( config.sky, this.skyboxMesh, ()=> {
 				rebuildWorld()
 			}) 
-
 		}
 
 		if ( coords ) {
-			
 			coords = coords.split(".")
 			three.camera.position.fromArray([parseInt(coords[0])*GRID_SIZE[0], parseInt(coords[1])*GRID_SIZE[1], parseInt(coords[2])* GRID_SIZE[2] ])
 			three.camera.updateMatrix()
-
 		}
 
 		document.title = config.name.toLowerCase() == 'overworld' && config.userName == 'convolvr' ? `Convolvr` : config.name // make "Convolvr" default configurable via admin settings
@@ -254,7 +272,7 @@ export default class Convolvr {
 
 	}
 
-	loadShaders ( vertex_url, fragment_url, onLoad, onProgress, onError ) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
+	loadShaders ( vertex_url: string, fragment_url: string, onLoad: Function, onProgress: Function, onError: Function ) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
 
 		var vertex_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
 		vertex_loader.setResponseType('text')
@@ -270,7 +288,7 @@ export default class Convolvr {
 
 	}
 
-	initRenderer ( renderer, id ) {
+	initRenderer ( renderer: any, id: string ) {
 
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1
 		renderer.setClearColor(0x2b2b2b)
@@ -281,7 +299,7 @@ export default class Convolvr {
 		renderer.domElement.setAttribute("id", id)
 	}
 
-	load ( userName, name, callback, readyCallback ) { console.log("load world", userName, name)
+	load ( userName: string, name: string, callback: Function, readyCallback: Function ) { console.log("load world", userName, name)
 
 		let world = this
 		
@@ -302,7 +320,7 @@ export default class Convolvr {
 
 	}
 
-	reload ( user, name, place, coords, noRedirect ) {
+	reload ( user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean ) {
 
 		let world = this,
 			octree = this.octree
@@ -341,7 +359,7 @@ export default class Convolvr {
 		
 	}
 
-	generateFullLOD ( coords ) {
+	generateFullLOD ( coords: Array<number> ) {
 
 		let voxel = this.terrain.voxels[coords],
 			scene = three.scene
@@ -360,13 +378,13 @@ export default class Convolvr {
 
 	sendUserData () {
 
-		let camera = three.camera,
-			mobile = this.mobile,
-			image = "",
+		let camera 	  = three.camera,
+			mobile 	  = this.mobile,
+			input 	  = this.userInput,
+			image 	  = "",
 			imageSize = [0, 0],
-			input = this.userInput,
 			userHands = !!world.user.toolbox ? world.user.toolbox.hands : [],
-			hands = []
+			hands 	  = []
 
 		if ( this.sendUpdatePacket == 12 ) // send image
 
@@ -412,7 +430,7 @@ export default class Convolvr {
 	    }
 	}
 
-	getVoxel ( position ) {
+	getVoxel ( position: any ) {
 
 		let pos = position || this.camera.position
 
@@ -420,7 +438,7 @@ export default class Convolvr {
 
 	}
 
-	updateSkybox ( delta ) {
+	updateSkybox ( delta: number ) {
 
 		this.skybox.followUser( delta, false )
 			
@@ -453,7 +471,7 @@ export default class Convolvr {
 
 	sendVideoFrame () { // probably going to remove this now that webrtc is in place
 
-		let imageSize = [0, 0]
+		let imageSize: Array<number> = [0, 0]
 
 		if ( this.capturing ) {
 

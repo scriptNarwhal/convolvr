@@ -133,6 +133,7 @@ export default class Settings {
 		
 		this.IOTMode = this.IOTMode == 'on'
 		world.userInput.leapMode = this.leapMode
+		this.gravity = 1
 
 	}
 

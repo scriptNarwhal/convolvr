@@ -1,12 +1,16 @@
+import Component from '../../component'
+import Convolvr from '../../world/world'
+
 export default class ToolUISystem {
 
-    constructor ( world ) {
+    world: Convolvr
+
+    constructor ( world: Convolvr ) {
 
         this.world = world
-
     }
 
-    init ( component ) { // allows component to cycle tools / select one for the user 
+    init ( component: Component ) { // allows component to cycle tools / select one for the user 
 
         let props = component.props,
             state = component.state,
@@ -22,22 +26,17 @@ export default class ToolUISystem {
             activate && state.activate.callbacks.push( () => {
                 console.info("Switch tool callback")
                 this.switchTool( component, prop.toolIndex, typeof prop.toolHand == 'number' ? prop.toolHand : 0 )
-
-            } )
+            })
 
             hover && state.hover.callbacks.push( () => {
-
                 state.hover.cursorHovering = true
                 component.mesh.material.wireframe = true
-
-            } )
+            })
 
             lookAway && state.lookAway.callbacks.push( () => {
-
                 state.hover.cursorHovering = false
                 component.mesh.material.wireframe = false
-
-            } )
+            })
 
         } else if ( prop.currentTool != undefined ) {
 
@@ -59,10 +58,9 @@ export default class ToolUISystem {
                 this.show( component )
             }
         }
-
     }
 
-    switchTool ( component, tool, hand ) {
+    switchTool ( component: Component, tool: number, hand: number ) {
 
         let toolbox = this.world.user.toolbox,
             currentTools = toolbox.currentTools,
@@ -73,20 +71,15 @@ export default class ToolUISystem {
             toolUIs = entity.componentsByProp.toolUI
         
         toolUIs.forEach( ui => {
-
             if ( ui.props.toolUI.currentTool ) {
-
                 ui.mesh.position.set( -0.050 + 0.3333 * hand, 0, -0.3333 )
                 //ui.mesh.updateMatrix()
             }
-
         })
-
         toolbox.useTool( tool, hand, true )
-
     }
 
-    updatePosition ( component ) {
+    updatePosition ( component: Component ) {
 
       let mesh = component.entity.mesh,
           userMesh = this.world.user.avatar.mesh,
@@ -100,21 +93,15 @@ export default class ToolUISystem {
       mesh.translateX(  0.1 )
       mesh.translateY(  1.0 )
       mesh.updateMatrix()
-
     }
 
-    hide ( component ) {
-
+    hide ( component: Component ) {
       component.entity.mesh.visible = false
-
     }
 
-    show ( component ) {
-
+    show ( component: Component ) {
       component.entity.mesh.visible = true
       this.updatePosition( component )
-
     }
-
 }
 

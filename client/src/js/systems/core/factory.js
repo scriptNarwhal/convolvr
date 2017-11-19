@@ -19,26 +19,16 @@ export default class FactorySystem {
 
         let prop = component.props.factory
 
-        if ( prop.autoGenerate !== false ) {
+        if ( prop.autoGenerate !== false )
 
-            setTimeout(()=>{
-
-                this.generate( component )
-
-            }, 1000)
-
-        }
+            setTimeout(()=>{ this.generate( component )}, 1000)
+        
 
         return {
-
             generate: () => {
-
                 this.generate( component )
-
             }
-
         }
-
     }
 
     generate ( component: Component ) {
@@ -106,30 +96,19 @@ export default class FactorySystem {
         }
 
         if ( created != null ) {
-
             if ( !!prop.anchorOutput ) {
-
                 created.init(component.mesh)
-
             } else {
-
                 created.init(window.three.scene)
-
             }
 
             if ( created.mesh != null ) {
-
                 created.mesh.translateZ(0)
                 created.update(created.mesh.position.toArray())
-
             }
-
         } else {
-
             console.error( "error generating entity", created, prop )
-
         }
-
     }
 
     _generateEntity ( components: Array<Component>, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
@@ -145,9 +124,7 @@ export default class FactorySystem {
             }
 
         }
-
         return  new Entity( -1, components, position, quaternion, voxel )
-
     }
 
     _generateComponent ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
@@ -182,7 +159,6 @@ export default class FactorySystem {
                 }
             )}
         ], position, quaternion, voxel)
-
     }
 
     _generateSystem ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
@@ -219,7 +195,6 @@ export default class FactorySystem {
                 }
             )}
         ], position, quaternion, voxel)
-
     }
 
     _generateMaterial ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
@@ -241,7 +216,6 @@ export default class FactorySystem {
                 }
             )}
         ], position, quaternion, voxel)
-
     }
 
     _generateAsset ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
@@ -271,7 +245,6 @@ export default class FactorySystem {
                 }
             )}
         ], position, quaternion, voxel)
-
     }
 
     _generateWorld ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
@@ -301,7 +274,6 @@ export default class FactorySystem {
                 }
             )}
         ], position, quaternion, voxel)
-
     }
 
     _generatePlace ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {

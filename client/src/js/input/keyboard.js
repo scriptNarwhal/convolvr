@@ -9,6 +9,8 @@ export default class Keyboard {
     let keys = input.keys
 
     document.addEventListener("keydown", event => {
+      
+      let user = input.user
 
       if ( isVRMode( world.mode ) ) { // 0 = chat, 1 = vr
 
@@ -16,7 +18,13 @@ export default class Keyboard {
 
           case 86: keys.q = true; break
           case 87: keys.w = true; break
-          case 88: keys.e = true; break
+          case 88: 
+            if (keys.e==false) {
+              user.toolbox.grip( 0, 1 )
+            }
+            keys.e = true
+          
+          break
           case 65: keys.a = true; break
           case 83: keys.s = true; break
           case 68: keys.d = true; break
@@ -45,11 +53,18 @@ export default class Keyboard {
 
     document.addEventListener( "keyup" ,  event => {
 
+      let user = input.user
+
       switch ( event.keyCode ) {
 
         case 86: keys.q = false; break
         case 87: keys.w = false; break
-        case 88: keys.e = false; break
+        case 88:
+          if (keys.e==true) {
+            user.toolbox.grip( 0, -1 )
+          }
+          keys.e = false
+        break
         case 65: keys.a = false; break
         case 83: keys.s = false; break
         case 68: keys.d = false; break
@@ -147,15 +162,6 @@ export default class Keyboard {
 
     }
 
-    if ( keys.q ) {
-
-      rotateVec.z = -0.5
-
-    } else if ( keys.e ) {
-
-      rotateVec.z = 0.5
-
-    } 
     // if (keys.shift) {
     //   velocity.x *= 1.02;
     //   velocity.z *= 1.02;

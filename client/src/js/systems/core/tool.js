@@ -1,21 +1,25 @@
+//@flow
 import Entity from '../../entity'
+import Component from '../../component'
 import { 
     GLOBAL_SPACE,
     GRID_SIZE 
 } from '../../config'
+import Convolvr from '../../world/world'
 
 // TODO: hook into user.toolbox interfaces (primaryAction, etc.. )
 
 export default class ToolSystem {
 
-    constructor ( world ) {
+    world: Convolvr
+    panels: Array<Entity>
 
+    constructor ( world: Convolvr ) {
         this.world = world
         this.panels = []
-
     }
 
-    init ( component ) { 
+    init ( component: Component ) { 
 
         let prop = component.props.tool,
             toolSystem = this,
@@ -26,61 +30,45 @@ export default class ToolSystem {
             newPanel = null
 
         if ( prop.panel ) {
-           
             contentProps = prop.panel && prop.panel.content ? prop.panel.content.props : {}
             panel = this._initPanelUIEntity( prop.panel, contentProps )
             this.panels.push( panel )
-            
         }
 
-        if ( prop.panels ) {
-
-            prop.panels.map( ( newPanel, p) => {
-                console.info("init multiple panels", newPanel)
+        if ( prop.panels )
+            prop.panels.map( ( newPanel, p) => { console.info("init multiple panels", newPanel);
                 contentProps = newPanel && newPanel.content ? newPanel.content.props : {}
                 let panelEnt = toolSystem._initPanelUIEntity( newPanel, contentProps )
+                console.info("panel ent ", panelEnt)
+                panels.push( panelEnt )
                 toolSystem.panels.push( panelEnt )
-
             })
-
-        }
 
         return {
             panels,
             panel,
             preview: {
                 box: null,
-                show: cursor => {
-
+                show: (cursor: Component) => {
                     this._showPreview( component, cursor )
-
                 },
                 hide: () => {
-
                     this._hidePreview( component )
-
                 } 
             },
-            equip: ( hand ) => {
-            
+            equip: ( hand: number) => {
                 this._equip( component, hand )
-            
             },
-            unequip: ( hand ) => {
-            
+            unequip: ( hand: number ) => {
                 this._unequip( component, hand )
-            
             },
-            initLabel: ( value ) => {
-
+            initLabel: ( value: any ) => {
                 this.initLabel( component, value )
-            
             }
         }
-
     }
 
-    _initPanelUIEntity( panelProp, contentProps ) {
+    _initPanelUIEntity( panelProp: Object, contentProps: Object ) {
 
         return new Entity(-1, [ // move panels to asset system perhaps.. or define below*
             {
@@ -139,7 +127,7 @@ export default class ToolSystem {
 
     }
 
-    _showPreview ( component, cursor ) {
+    _showPreview ( component: Component, cursor: Component ) {
 
         console.warn(" Show Preview ", cursor)
 
@@ -147,119 +135,97 @@ export default class ToolSystem {
             assets = this.world.systems.assets,
             preview = null
 
-        if ( !previewBox && cursor ) {
+        if ( previewBox == null && cursor ) {
 
             preview = assets.makeEntity( "preview-box", true, {}, component.entity.voxel )
             preview.components[0].props.noRaycast = {}
             preview.init( cursor.mesh, {} )
             component.state.tool.preview.box = preview
             // preview = this.generatePreview( component, preset, data )
-
-        } else {
-
+        } else if (previewBox != null) {
             previewBox.mesh.visible = true
-
         }
-
     }
 
-    _hidePreview ( component ) {
+    _hidePreview ( component: Component ) {
 
         let previewBox = component.state.tool.preview ? component.state.tool.preview.box : null
         
-        if ( previewBox )
-
+        if ( previewBox != null )
             previewBox.mesh.visible = false
 
-
     }
 
-    _positionToolPanel( toolPanel, userPos, index ) {
-
+    _positionToolPanel( toolPanel: Entity, userPos: Array<number>, index: number ) {
         userPos[ 1 ] += 1.8
         toolPanel.update(userPos)
-        toolPanel.mesh.rotation.y = three.camera.rotation.y - Math.PI / 8
-        toolPanel.mesh.translateZ( -3 )
-        toolPanel.mesh.translateX( 1.25 + (index * 3) )
-        toolPanel.mesh.updateMatrix()
-
+        let mesh = toolPanel.mesh
+        mesh.rotation.y = this.world.three.camera.rotation.y - Math.PI / 8
+        mesh.translateZ( -3 )
+        mesh.translateX( 1.25 + (index * 3) )
+        mesh.updateMatrix()
     }
 
-    _equip ( component, hand ) { // refactor for panels[]
-
-        let input = this.world.userInput,
-            toolSystem = this,
-            hands = this.world.user.avatar.componentsByProp.hand, //this.toolbox.hands,
-            toolPanel = component.entity.componentsByProp.tool ? component.entity.componentsByProp.tool[0].state.tool.panel : false,
-            toolPanels = component.entity.componentsByProp.tool ? component.entity.componentsByProp.tool[0].state.tool.panels : false,
-            toolMesh = component.entity.mesh,
-            userPos = this.world.user.avatar.mesh.position.toArray()
-
-      if ( !input.trackedControls && !input.leapMotion ) {
-
-          this.world.user.mesh.add( toolMesh )
-          toolMesh.position.set( 0.05-( 0.08 * hand ), -0.333, -0.05 )
-
-      } else {
-
-          hands[ hand ].mesh.add( toolMesh ) // add to respective hand 
-
-      }
-
-      if ( toolPanel ) {
+    _equip ( component: Component, hand: number ) { // refactor for panels[]
         
-        if ( toolPanel.mesh == null )
-            
-            toolPanel.init( three.scene )
+        let hands:            Array<Component> = this.world.user.avatar.componentsByProp.hand, //this.toolbox.hands,
+            componentsByProp: any              = component.entity.componentsByProp,
+            input                              = this.world.userInput,
+            toolSystem                         = this,
+            toolPanel:        Entity           = componentsByProp.tool[0].state.tool.panel,
+            toolPanels:       Array<Entity>    = componentsByProp.tool[0].state.tool.panels,
+            toolMesh:         any              = component.entity.mesh,
+            userPos:          Array<number>    = this.world.user.avatar.mesh.position.toArray()
 
-        this._positionToolPanel( toolPanel, userPos, 0 )
+        console.info("_equip", toolPanel, toolPanels)
 
-      }
-      console.warn("_equip toolPanels", toolPanels, component.entity.componentsByProp.tool)
-      if ( toolPanels ) {
+        if ( !input.trackedControls && !input.leapMotion ) {
+            this.world.user.mesh.add( toolMesh )
+            toolMesh.position.set( 0.05-( 0.08 * hand ), -0.333, -0.05 )
+        } else {
+            hands[ hand ].mesh.add( toolMesh ) // add to respective hand 
+        }
 
-        toolPanels.map( (toolPanel, i) => {
-            console.info("init tool panel", i)
+        if ( toolPanel ) {
             if ( toolPanel.mesh == null )
-            
-                toolPanel.init( three.scene )
+                toolPanel.init( this.world.three.scene )
 
-            toolSystem._positionToolPanel( toolPanel, userPos, i )
+            this._positionToolPanel( toolPanel, userPos, 0 )
+        }
+        console.warn("_equip toolPanels", toolPanels, component.entity.componentsByProp.tool)
+        if ( toolPanels && toolPanels.length > 0 ) {
+            toolPanels.map( (toolPanel, i) => {
+                console.info("init tool panel", i)
+                if ( toolPanel.mesh == null )
+                    toolPanel.init( this.world.three.scene )
 
-        })
+                toolSystem._positionToolPanel( toolPanel, userPos, i )
+            })
+        }
 
-      }
-
-      if ( toolPanel || toolPanels ) {
-        console.info("---")
-        console.warn("PANEL COLLISION CHECK")
-        this.panels.map( panel => {
-            console.log("panel distance ", toolPanel.mesh.position.sub( panel.mesh.position ).length())
-            if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 4 ) {
-
-                panel.mesh.translateX(0.5,0)
-                panel.mesh.translateZ(0.5,0)
-                panel.mesh.updateMatrix()
-
-            }
-
-        })
-      }
-
+        if ( toolPanel ) {
+            console.info("---"); console.warn("PANEL COLLISION CHECK");
+            this.panels.map( (panel: Entity, i: number) => { 
+                console.log("panel distance ", toolPanel, panel);
+                let mesh = panel.mesh
+                if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 8 ) {
+                    mesh.translateX(7.5*i,0)
+                    mesh.translateZ(7.5*i,0)
+                    mesh.updateMatrix()
+                }
+            })
+        }
     }
 
-    _unequip ( component, hand ) {
+    _unequip ( component: Component, hand: number ) {
 
         let compMesh = component.mesh
 
         if ( compMesh != null && compMesh.parent != null )
-            
             compMesh.parent.remove( compMesh )
-
-
     }
 
-    initLabel ( component, value ) {
+    initLabel ( component: Component, value: any ) {
 
         return {
             props: {
@@ -281,8 +247,6 @@ export default class ToolSystem {
             },
             position: [ 0.2, 0.08, 0.08 ]
         }
-
     }
-
 }
 

@@ -4,11 +4,9 @@ export default class SkyBox {
 
         this.world = world
         this.systems = this.world.systems
-    
     }
 
     init ( config, oldMesh ) {
-
 
 
     }
@@ -28,25 +26,20 @@ export default class SkyBox {
             image = material.map.image
             
             if ( !!config && !!config.photosphere && image.naturalWidth / image.naturalHeight > 2.2) {
-            
                 three.scene.remove( world.skyboxMesh )
-                world.skyboxMesh = new THREE.Mesh(new THREE.CylinderGeometry( skySize/2, skySize/2, skySize, 24), material )
-                            
+                world.skyboxMesh = new THREE.Mesh(new THREE.CylinderGeometry( skySize/2, skySize/2, skySize, 24), material )        
             } else {
-            
-                world.skyboxMesh.material = material
-            
+                world.skyboxMesh.material = material  
             }
-
             callback()
         })
-
     }
 
     loadShaderSky ( config, oldConfig, mesh, callback ) {
 
         let starMatProp = this.systems.assets.getMaterialProp("stars"),
-            starSkyTexture = this.systems.material.procedural.generateTexture( starMatProp.procedural ) 
+            starSkyTexture = this.systems.material.procedural.generateTexture( starMatProp.procedural ),
+            world = this.world 
 
         this.world.loadShaders( "/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl", (vert, frag) => {
 
@@ -71,13 +64,10 @@ export default class SkyBox {
                 vertexShader: vert,
                 fragmentShader: frag
             })
-
             mesh.material = skyMaterial
-
         }, progress => {
             console.log("Loading Shaders: ", progress)
         })	 
-
     }
 
     followUser ( delta, position ) {
@@ -103,10 +93,8 @@ export default class SkyBox {
                 this.world.skyboxMesh.position.set(camera.position.x, camera.position.y, camera.position.z)
                 
                 if (skyLight.castShadow) {
-
                     skyLight.shadow.camera.position.set( camera.position.x, 600+camera.position.y, camera.position.z)
                     skyLight.shadow.camera.updateMatrix()
-
                 }
         
                 skyLight.position.set( camera.position.x+Math.sin(yaw)*301, 800+camera.position.y+ Math.sin(pitch)*301, camera.position.z-Math.cos(yaw)*301)

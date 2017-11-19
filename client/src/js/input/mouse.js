@@ -34,13 +34,11 @@ export default class Mouse {
 
         }
 
-        document.addEventListener("mousemove", function (e) {
+        document.addEventListener("mousemove", e => {
 
             if ( uInput.focus ) {
- 
                 uInput.rotationVector.y -= (e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 600.0
                 uInput.rotationVector.x -= (e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 600.0
-
             }
 
         })
@@ -75,9 +73,7 @@ export default class Mouse {
                 let user = this.input.user
 
                 if ( world.mode != "web" && this.input.focus && e.target.tagName.toLowerCase() == "canvas" ) {
-
                     switch ( e.which ) {
-
                         case 1: // left mouse
                             user.toolbox.usePrimary(0, 0) // right hand
                         break
@@ -87,14 +83,10 @@ export default class Mouse {
                         case 3: // right click
                             user.toolbox.grip( 0, -1 )
                         break
-
                     }
                 }
-
             }, false)
-
         }, 250)
-
     }
 
     lockChangeAlert( canvas ) {
@@ -124,12 +116,7 @@ export default class Mouse {
                 document.body.setAttribute("class", "3d")
                 this.store.dispatch( toggleMenu( false ) )
             }
-
         }
-
-        //document.querySelector("#viewport").setAttribute("class", `viewport ${world.mode == "web" ? "blurred" : ""}`)
-        
     }
-
 }
 
