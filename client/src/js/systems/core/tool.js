@@ -129,8 +129,6 @@ export default class ToolSystem {
 
     _showPreview ( component: Component, cursor: Component ) {
 
-        console.warn(" Show Preview ", cursor)
-
         let previewBox = component.state.tool.preview ? component.state.tool.preview.box : null,
             assets = this.world.systems.assets,
             preview = null
@@ -157,9 +155,11 @@ export default class ToolSystem {
     }
 
     _positionToolPanel( toolPanel: Entity, userPos: Array<number>, index: number ) {
-        userPos[ 1 ] += 1.8
-        toolPanel.update(userPos)
-        let mesh = toolPanel.mesh
+        
+        let userPosition = [userPos[0], userPos[ 1 ] + 2.8, userPos[2]],
+            mesh = toolPanel.mesh
+
+        toolPanel.update(userPosition)
         mesh.rotation.y = this.world.three.camera.rotation.y - Math.PI / 8
         mesh.translateZ( -3 )
         mesh.translateX( 1.25 + (index * 3) )
@@ -177,8 +177,6 @@ export default class ToolSystem {
             toolMesh:         any              = component.entity.mesh,
             userPos:          Array<number>    = this.world.user.avatar.mesh.position.toArray()
 
-        console.info("_equip", toolPanel, toolPanels)
-
         if ( !input.trackedControls && !input.leapMotion ) {
             this.world.user.mesh.add( toolMesh )
             toolMesh.position.set( 0.05-( 0.08 * hand ), -0.333, -0.05 )
@@ -192,7 +190,6 @@ export default class ToolSystem {
 
             this._positionToolPanel( toolPanel, userPos, 0 )
         }
-        console.warn("_equip toolPanels", toolPanels, component.entity.componentsByProp.tool)
         if ( toolPanels && toolPanels.length > 0 ) {
             toolPanels.map( (toolPanel, i) => {
                 console.info("init tool panel", i)

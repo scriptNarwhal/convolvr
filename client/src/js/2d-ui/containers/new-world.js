@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
 import Shell from '../components/shell'
+import { 
+  modalStyle 
+} from '../styles'
+import { isMobile } from '../../config'
 
 class NewWorld extends Component {
 
@@ -176,7 +180,7 @@ class NewWorld extends Component {
   render() {
     return (
         <Shell className="login">
-          <div style={styles.innerLogin}>
+          <div style={styles.modal()}>
             <div style={styles.title}>
               Create New World
             </div>
@@ -531,20 +535,14 @@ export default connect(
 )(NewWorld)
 
 const styles = {
-  innerLogin: {
-    width: '100%',
-    maxWidth: '800px',
-    height: 'auto',
-    paddingBottom: '2em',
-    minWidth: '360px',
-    margin: 'auto',
-    display: 'block',
-    position: 'relative',
-    top: '0',
-    left: '0px',
-    right: '0px',
-    borderTop: '0.8vh solid rgb(43, 43, 43)',
-    background: 'rgb(27, 27, 27)'
+  modal: () => {
+    return Object.assign({}, modalStyle(isMobile()), {
+        maxWidth: '1080px',
+        bottom: undefined,
+        top: '1em',
+        height: '120vh',
+        left: ! isMobile() ? '72px' : '0px'
+      })
   },
   title: {
     fontSize: "2em",

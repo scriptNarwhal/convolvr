@@ -54,8 +54,8 @@ a, a:visited {
 }
 
 .blurred {
-    -webkit-filter: blur(4px); 
-    filter: blur(4px);
+    -webkit-filter: blur(3px); 
+    filter: blur(3px);
 }
 
 .menu-item:hover .button .inner {

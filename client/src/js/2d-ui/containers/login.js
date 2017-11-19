@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import Shell from '../components/shell'
+import { 
+  textAreaStyle,
+  basicInputStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../styles'
+import { isMobile } from '../../config'
 
 class Login extends Component {
   componentDidMount() {
@@ -50,16 +57,16 @@ class Login extends Component {
 
     return (
         <Shell className="login" noBackground={true}>
-          <div style={styles.innerLogin}>
+          <div style={styles.modal()}>
             <div style={styles.title}>
               Sign in to Convolvr Metaverse
-              <span style={styles.subtitle}>
+            </div>
+            <span style={styles.subtitle}>
                 Build machines, art & software in VR, with friends, in real time.
               </span>
-              <span style={ Object.assign({}, styles.subtitle, { width: '280px' }) }>
+              <span style={ styles.subtitle }>
                 Run your own server, contribute or learn more on <a href="https://github.com/Convolvr/convolvr">Github</a>
               </span>
-            </div>
             <div style={styles.form}>
               <div style={styles.username}>
                 <span style={styles.label}>Username</span>
@@ -143,19 +150,14 @@ export default connect(
 )(Login)
 
 const styles = {
-  innerLogin: {
-    width: '100%',
-    minHeight: '291px',
-    minWidth: '252px',
-    maxWidth: '530px',
-    borderRadius: '4px',
-    margin: 'auto',
-    display: 'block',
-    position: 'relative',
-    top: '6vh',
-    left: '0px',
-    right: '0px',
-    bottom: '5vh'
+  modal: () => {
+    return Object.assign({}, modalStyle(isMobile()), {
+        maxWidth: '1080px',
+        bottom: undefined,
+        top: '1em',
+        height: '85vh',
+        left: '0px'
+      })
   },
   title: {
     fontSize: '2em',
@@ -163,9 +165,8 @@ const styles = {
     paddingBottom: '0.66em'
   },
   subtitle: {
-    fontSize: '0.5em',
-    display: 'inline-block',
-    maxWidth: '360px',
+    fontSize: '1em',
+    display: 'block',
     background: 'rgba(0,0,0,0.1)',
     padding: '0.5em',
     paddingBottom: '0.5em',

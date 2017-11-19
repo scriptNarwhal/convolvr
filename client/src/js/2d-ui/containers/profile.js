@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import Shell from '../components/shell'
 import { browserHistory } from 'react-router'
+import { 
+  modalStyle 
+} from '../styles'
+import { isMobile } from '../../config'
 
 class Profile extends Component {
 
   constructor () {
-
     super()
-
   }
 
   componentWillMount () {
@@ -20,13 +22,11 @@ class Profile extends Component {
         id = -1
 
     if ( user ) {
-
       email = user.email
       pass = user.password
       name = user.name
       data = user.data || {} 
       id = user.id
-
     }
 
     this.setState({
@@ -36,7 +36,6 @@ class Profile extends Component {
       data,
       id
     })
-
   }
 
   componentWillReceiveProps ( nextProps, nextState ) {
@@ -59,18 +58,12 @@ class Profile extends Component {
     }
 
     if ( this.props.updateFetching && nextProps.updateFetching == false ) {
-
       alert("Profile Updated.")
       this.props.login( this.state.name, this.state.pass )
-
     }
-
     if ( this.props.loginFetching && nextProps.loginFetching == false ) {
-
       browserHistory.push("/")
-
     }
-
   }
 
   save ( ) {
@@ -82,23 +75,14 @@ class Profile extends Component {
     this.validate( this.state )
 
     if ( error === null ) {
-
       if ( this.state.id == -1 ) {
-
         this.props.login( this.state.name, this.state.pass, this.state.email, data )
-
       } else {
-        
         this.props.updateUser( this.state.id, this.state.name, this.state.pass, this.state.email, data )
-
       }
-
     } else {
-
       alert( error )
-
     }
-
   }
 
   onAvatarChange( value ) {
@@ -109,7 +93,6 @@ class Profile extends Component {
         avatar: value
       }
     })
-
   }
 
   updateField( field, e ) {
@@ -117,7 +100,6 @@ class Profile extends Component {
     this.setState({
       [field]: e.target.value
     })
-
   }
 
   validate ( data ) {
@@ -125,15 +107,12 @@ class Profile extends Component {
     let error = null
 
     if ( data.name == "" )
-
       error = "Username is required."
-
+    
     if ( data.email != "" && data.email.indexOf("@") < 0 )
-
       error = "Email must be valid or left blank."
-
+    
     return error
-
   }
 
   upload ( e ) {
@@ -143,17 +122,13 @@ class Profile extends Component {
         imageURL = ""
 
     if ( !!e.target.files ) {
-
       data.append('file', e.target.files[0])
       imageURL = username+"/profile-images/"+e.target.files[0].name.replace(/\s/g, '-')
       this.setState({
         profilePicture: imageURL
       })
-  
       this.props.uploadFile(data, username, "profile-images")
-
     }
-    
   }
   
   render() {
@@ -162,7 +137,7 @@ class Profile extends Component {
 
     return (
         <Shell className="settings">
-          <div style={styles.modal}>
+          <div style={styles.modal()}>
             <div>
               <h1>Profile</h1>
             </div>
@@ -296,19 +271,14 @@ export default connect(
 
 
 const styles = {
-  modal: {
-    width: '100%',
-    maxWidth: '800px',
-    height: '100%',
-    minWidth: '360px',
-    margin: 'auto',
-    display: 'block',
-    position: 'relative',
-    top: '2vh',
-    left: '0px',
-    right: '0px',
-    borderTop: '0.8vh solid rgb(43, 43, 43)',
-    background: 'rgb(27, 27, 27)'
+  modal: () => {
+    return Object.assign({}, modalStyle(isMobile()), {
+        maxWidth: '1080px',
+        bottom: undefined,
+        top: '1em',
+        height: '85vh',
+        left: '0px'
+      })
   },
   textInput: {
     background: "#404040",

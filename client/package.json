@@ -48,6 +48,7 @@
     "oimo": "^1.0.9",
     "progressbardottop": "^0.1.4",
     "react": "^15.3.2",
+    "react-color": "^2.13.8",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",

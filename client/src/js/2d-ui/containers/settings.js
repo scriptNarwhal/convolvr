@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router'
 import Shell from '../components/shell'
+import { 
+  textAreaStyle,
+  basicInputStyle,
+  lightboxStyle, 
+  modalStyle 
+} from '../styles'
+import { isMobile } from '../../config'
 
 class Settings extends Component {
 
@@ -125,7 +132,7 @@ class Settings extends Component {
 
     return (
         <Shell className="settings">
-          <div style={styles.modal}>
+          <div style={styles.modal()}>
             <div>
               <h1>Settings</h1>
               <h3 style={styles.h3}>View Distance</h3>
@@ -450,19 +457,14 @@ export default connect(
 )(Settings)
 
 const styles = {
-  modal: {
-    width: '100%',
-    height: '150vh',
-    maxWidth: '800px',
-    minWidth: '360px',
-    margin: 'auto',
-    display: 'block',
-    position: 'relative',
-    top: '2vh',
-    left: '0px',
-    right: '0px',
-    borderTop: '0.8vh solid rgb(43, 43, 43)',
-    background: 'rgb(27, 27, 27)'
+  modal: () => {
+    return Object.assign({}, modalStyle(isMobile()), {
+        maxWidth: '1080px',
+        bottom: undefined,
+        top: '1em',
+        height: '120vh',
+        left: '0px'
+      })
   },
   save: {
     float: 'right',
