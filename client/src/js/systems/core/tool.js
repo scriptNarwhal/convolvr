@@ -125,7 +125,6 @@ export default class ToolSystem {
                 components: []
             }
         ], [0, 1.5, 0], [0,0,0,1], GLOBAL_SPACE )
-
     }
 
     _showPreview ( component: Component, cursor: Component ) {
@@ -152,7 +151,6 @@ export default class ToolSystem {
         
         if ( previewBox != null )
             previewBox.mesh.visible = false
-
     }
 
     _positionToolPanel( toolPanel: Entity, userPos: Array<number>, index: number ) {
@@ -204,7 +202,7 @@ export default class ToolSystem {
         if ( toolPanel ) {
             console.info("---"); console.warn("PANEL COLLISION CHECK");
             this.panels.map( (panel: Entity, i: number) => { 
-                console.log("panel distance ", toolPanel, panel);
+                console.log("panel distance ", toolPanel.mesh.position.sub( panel.mesh.position ).length());
                 let mesh = panel.mesh
                 if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 8 ) {
                     mesh.translateX(7.5*i,0)

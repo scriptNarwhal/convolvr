@@ -45,19 +45,14 @@ export default class FactorySystem {
             quat:       Array<number>    = data.quaternion,
             components: Array<Component> = data.components,
             created:    Entity           = null
-
+        console.info("!!! generate( type:", type, "preset", preset, "propName", propName )
         if ( type == 'entity' ) {
-
             created = this._generateEntity( components, voxel, entityPos, quat, preset )
-
         } else if (type == 'component') {
-
             created = this._generateComponent( data, voxel, entityPos, quat, preset )
-
         } else if ( type == 'prop' ) {
 
             switch ( propName ) {
-
                 case "geometry":
                     created = this._generateGeometry( data, voxel, entityPos, quat, preset  )
                 break
@@ -67,32 +62,19 @@ export default class FactorySystem {
                 case "assets":
                     created = this._generateAsset( data, voxel, entityPos, quat )
                 break
-                case "vehicles":
-                case "media":
-                case "interactivity":
-                case "structures":
-                
+                case "systems":
                     created = this._generateSystem( data, voxel, entityPos, quat, preset )
                 break
-
             }
 
         } else if ( type == "world" ) {
-
             created = this._generateWorld( data, voxel, entityPos, quat )
-
         } else if ( type == "place" ) {
-
             created = this._generatePlace( data, voxel, entityPos, quat )
-
         } else if ( type == "file" ) {
-
             created = this._generateFile( data, voxel, entityPos, quat )
-
         } else if ( type == "directory" ) {
-
             created = this._generateDirectory( data, voxel, entityPos, quat )
-
         }
 
         if ( created != null ) {

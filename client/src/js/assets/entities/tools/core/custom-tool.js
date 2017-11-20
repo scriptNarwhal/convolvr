@@ -1,4 +1,4 @@
-import Tool from './tool'
+import Tool from '../../../../world/tool'
 import { GRID_SIZE } from '../../../../config'
 
 export default class CustomTool extends Tool {

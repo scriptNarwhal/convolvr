@@ -88,10 +88,8 @@ export default class Keyboard {
       if ( isVRMode( world.mode ) ) {
 
         if ( e.which >= 49 && e.which < 59 ) {
-
           tools.useTool( e.which - 49, 0)
           tools.useTool( e.which - 49, 1) // both hands switch.. you can manually pick up a tool in one hand, none the less
-
         }
 
         if ( e.which == 192 ) // debugging tool
@@ -99,9 +97,7 @@ export default class Keyboard {
           tools.useTool( 10, 0 )
 
       }
-
     }, true)
-
   }
 
 
@@ -113,53 +109,33 @@ export default class Keyboard {
         rotateVec = input.rotationVector
 
     if ( keys.right ) {
-
       rotateVec.y -= 0.05
-
     } else if ( keys.left ) {
-
       rotateVec.y += 0.05
-
     }
 
     if ( keys.up ) {
-
       rotateVec.x += 0.033
-
     } else if ( keys.down ) {
-
       rotateVec.x -= 0.033
-
     }
 
     if ( keys.a ) {  // maybe insert more options here...
-
       moveVec.x = -1
-
     } else if ( keys.d ) {
-
       moveVec.x = 1
-
     }
 
     if ( keys.w ) {
-
       moveVec.z = -1.3
-
     } else if (keys.s) {
-
       moveVec.z = 1.3
-
     }
 
     if ( keys.r ) {
-
       moveVec.y = 1
-
     } else if (keys.f) {
-
       moveVec.y = -1
-
     }
 
     // if (keys.shift) {
@@ -172,7 +148,5 @@ export default class Keyboard {
       velocity.y = 500
 
     }
-
   }
-  
 }

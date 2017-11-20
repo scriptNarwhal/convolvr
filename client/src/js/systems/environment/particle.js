@@ -57,20 +57,18 @@ export default class ParticleSystem {
         while ( p >= 0 ) {
 
             particles = pSystems[ p ]
-            options = particles.options
-
-            while ( s >= 0 ) {
-
-                particles.ps.spawnParticle( options )
-                s -= 1
-
+            
+            if ( particles && particles.options ) {
+                options = particles.options
+                while ( s >= 0 ) {
+                    particles.ps.spawnParticle( options )
+                    s -= 1
+                }
+                particles.ps.update( time )
             }
-
-            particles.ps.update( time )
+            
             p -= 1
-
         }
-
     }
 }
 

@@ -1,4 +1,4 @@
-import Tool from './tool'
+import Tool from '../../../../world/tool'
 import Component from '../../../../component'
 import Entity from '../../../../entity'
 import { GRID_SIZE } from '../../../../config'

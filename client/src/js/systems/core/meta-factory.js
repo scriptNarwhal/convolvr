@@ -79,7 +79,7 @@ export default class MetaFactorySystem {
             Object.keys( sourceCategory ).map( ( key, a ) => { // vehicle, propulsion, control, etc
                 let categorySystems = sourceCategory[ key ]
                 Object.keys( categorySystems ).map( systemPreset => {
-                        this._addComponent( component, categorySystems[systemPreset], assetType, "systems", key, x, y, index, gridSize, vOffset)
+                        this._addComponent( component, {[key]: categorySystems[systemPreset]}, assetType, "systems", key, x, y, index, gridSize, vOffset)
                         x += 1
                         index += 1
                         if ( x > gridWidth ) {
@@ -128,7 +128,7 @@ export default class MetaFactorySystem {
     }
 
     _addComponent ( component: Component, factoryItem: any, assetType: string, assetCategory: string, preset: any, x: number, y: number, i: number, gridSize: number, vOffset: number ) {
-
+        console.info("_addComponent", factoryItem)
         let addTo:   Component     = null,
             layout:  Object        = {},
             systems: Object        = this.world.systems,
