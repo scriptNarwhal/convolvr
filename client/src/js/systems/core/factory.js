@@ -23,7 +23,6 @@ export default class FactorySystem {
 
             setTimeout(()=>{ this.generate( component )}, 1000)
         
-
         return {
             generate: () => {
                 this.generate( component )
@@ -145,8 +144,6 @@ export default class FactorySystem {
 
     _generateSystem ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
-        console.warn("system ", preset)
-        console.info("Generate SYSTEM ENTITY", data)
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
@@ -162,9 +159,10 @@ export default class FactorySystem {
                     text: {
                         lines: [
                             preset,
-                            ...(JSON.stringify(data).match(/.{1,34}/g) || [""])
+                            ...(JSON.stringify(data).match(/.{1,20}/g) || [""])
                             ],
-                        color: "#ff0000",
+                        fontSize: 80,
+                        color: "#ffffff",
                         background: "#000000",
                         label: false
                     },
@@ -244,7 +242,11 @@ export default class FactorySystem {
                         color: 0x00ffff // get actual world color here..
                     },
                     text: {
-                        lines: [JSON.stringify(data)],
+                        lines: [
+                            data.name,
+                            ...(JSON.stringify(data) .match(/.{1,20}/g) || [""])
+                        ],
+                        fontSize: 80,
                         color: "#ff0000",
                         background: "#000000",
                         label: false

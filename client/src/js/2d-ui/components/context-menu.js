@@ -128,7 +128,7 @@ let styles = {
   },
   options: {
     paddingTop:'0.4em',
-    fontSize: '19px'
+    fontSize: '17px'
   },
   button: ( compact, image, close ) => {
     return {

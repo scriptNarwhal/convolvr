@@ -1,10 +1,11 @@
 /* app.css */
 @font-face {
-  font-family: RobotoLight;
-  src: url(/data/fonts/Roboto-Light.ttf);
+  font-family: 'droid_sans_monoregular';
+  /* src: url(/data/fonts/Roboto-Light.ttf); */
+  src: url(/data/fonts/DroidSansMono-webfont.ttf);
 }
 body {
-  font-family: RobotoLight, sans-serif;
+  font-family: droid_sans_monoregular, sans-serif, monospace;
 }
 a, a:visited {
     color: #00e200

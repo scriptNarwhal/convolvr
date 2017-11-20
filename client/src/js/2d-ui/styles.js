@@ -73,6 +73,7 @@ export let tabTitleStyle = ( mobile ) => {
       transition: "all 0.3s linear",
       height: 0,
       opacity: 0,
+      fontSize: '12px',
       position: 'relative',
       top: mobile ? '0px' : '-15px'
     }
@@ -121,4 +122,20 @@ export let tabTitleStyle = ( mobile ) => {
     fontSize: '1em',
     color: 'white',
     marginRight: '0.5em'
+  }
+
+  export let fileButtonStyle = {
+      height: '28px',
+      verticalAlign: 'top',
+      display: 'inline-block',
+      paddingLeft: '0.5em',
+      paddingBottom: '0.25em',
+      paddingTop: '0.1em',
+      paddingRight: '0.5em',
+      marginLeft: '0.5em',
+      background: 'rgba(255, 255, 255, 0.15)',
+      textAlign: "center",
+      borderRadius: '1.5px',
+      borderLeft: '0.2em solid lime',
+      boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)'
   }

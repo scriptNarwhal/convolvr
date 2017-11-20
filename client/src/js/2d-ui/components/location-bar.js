@@ -31,7 +31,7 @@ export default class LocationBar extends Component {
                        onClick={ e=> { this.props.onItemSelect(opt, i) } }
                        key={i}
                   >
-                    { opt } /
+                    { opt }/
                   </div>
                 )
               })
@@ -101,7 +101,7 @@ let styles = {
     fontSize: "20pt",
     display: 'inline-block',
     float: 'left',
-    marginRight: '0.5em'
+    marginRight: '0.25em'
   },
   home: {
     fontSize: "20pt",

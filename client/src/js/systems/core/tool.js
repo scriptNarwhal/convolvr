@@ -191,7 +191,6 @@ export default class ToolSystem {
         }
         if ( toolPanels && toolPanels.length > 0 ) {
             toolPanels.map( (toolPanel, i) => {
-                console.info("init tool panel", i)
                 if ( toolPanel.mesh == null )
                     toolPanel.init( this.world.three.scene )
 

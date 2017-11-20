@@ -157,7 +157,7 @@ export default class MetaFactorySystem {
                     },
                     geometry: {
                         shape: 'box',
-                        size: [0.25,0.25,0.25]
+                        size: [0.1,0.1,0.1]
                     },
                     material: {
                         name: 'wireframe',
