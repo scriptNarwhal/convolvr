@@ -75,18 +75,13 @@ export default class AssetSystem {
             textureCode = `${asset}:${configCode}`
 
         if ( this.textures[ textureCode ] == null ) {
-
             texture = this.textureLoader.load(asset, texture => { callback(texture) })
             this.textures[ textureCode ] = texture
-
         } else {
-
             texture = this.textures[ textureCode ]
-
         }
 
         callback( texture )
-
     }
 
     loadSound ( asset, sound, callback ) {
@@ -94,19 +89,14 @@ export default class AssetSystem {
         if (this.audioBuffers[ asset ] == null) {
 
            this.audioLoader.load( asset, buffer => {
-
                 sound.setBuffer( buffer )
                 callback()
-
            })
 
         } else {
-
             sound.setBuffer( this.audioBuffers[ asset ] )
             callback()
-
         }
-
     }
 
     loadModel ( asset, callback ) {
@@ -142,12 +132,10 @@ export default class AssetSystem {
                 } else {
                     envURL = '/data/images/photospheres/sky-reflection-b'
                 }
-
             }
-
         }
 
-        if (r+g+b < 1.4)
+        if (r+g+b < 1.6)
 
             envURL += '-d'
 
@@ -156,51 +144,35 @@ export default class AssetSystem {
     }
 
     setWorlds ( worlds ) {
-
         this.worlds = worlds
-
     }
 
     setPlaces ( places ) {
-
         this.places = places
-
     }
 
     addUserEntities ( entities ) {
-
         this.userEntities = this.userEntities.concat( entities )
-
     }
 
     addUserComponents ( components ) {
-
         this.userComponents = this.userComponents.concat( components )
-
     }
 
     addUserProperties ( properties ) {
-        
         this.userProperties = this.userProperties.concat( properties )
-        
     }
 
     addUserAssets ( assets ) {
-
         this.systems.asset = this.systems.asset.concat( assets )
-
     }
-
+    // call this
     setUserFiles ( files ) {
-
         this.files = files
-
     }
-
+    // call this
     setUserDirectories ( directories ) {
-
         this.directories = directories
-
     }
 
     makeEntity ( name,  init, config, voxel  ) {
@@ -209,27 +181,18 @@ export default class AssetSystem {
             ent = typeof toMake == 'function' ? toMake( this, config, voxel ) : toMake
 
         if ( init ) {
-
             return new Entity( ent.id, ent.components, ent.position, ent.quaternion, voxel )
-
         } else {
-
-            return Object.assign({}, ent, { voxel })
-
+            return { ...ent, voxel }
         }
-
     }
 
     makeComponent ( name, data, config ) {
 
         if ( data ) {
-
-            return Object.assign( {}, this.componentsByName[ name ], data )
-
+            return { ...this.componentsByName[ name ], data }
         } else {
-
-            return Object.assign( {}, this.componentsByName[ name ] )
-
+            return { ...this.componentsByName[ name ] }
         }
 
     }
@@ -244,42 +207,32 @@ export default class AssetSystem {
             
         })
 
-        return Object.assign({}, prop)
-
+        return { ...prop }
     }
 
     autoEntityID ( ) {
-
         this.autoDecrementEntity --
         return this.autoDecrementEntity
-
     }
 
     _addBuiltInComponent ( name, data ) {
-
         this.components.push(data)
         this.componentsByName[name] = data
-
     }
 
     _addBuiltInEntity ( name, data ) {
-
         this.entities.push(data)
         this.entitiesByName[name] = data
-
     }
 
     _initBuiltInComponents ( ) {
-
         this._addBuiltInComponent("panel", panel1Comp)
         this._addBuiltInComponent("column", column1Comp)
         this._addBuiltInComponent("panel2", panel2Comp)
         this._addBuiltInComponent("column2", column2Comp)
-
     }
 
     _initBuiltInEntities ( ) {
-
         this._addBuiltInEntity( "default-avatar", avatar )
         this._addBuiltInEntity( "hero", hero )
         this._addBuiltInEntity( "tool-menu", toolMenu )
@@ -294,19 +247,16 @@ export default class AssetSystem {
         this._addBuiltInEntity( "column", column1 )
         this._addBuiltInEntity( "wirebox", wirebox )
         this._addBuiltInEntity( "icon", this._initButton() )
-
     }
 
     _loadPlaces ( places ) {
         // implement.. call this from redux action
         this.places = places
-        
     }
 
     _loadWorlds ( worlds ) { 
         // implement call this from redux action
         this.worlds = worlds
-
     }
 
     _initButton ( component, data ) {
@@ -388,5 +338,4 @@ export default class AssetSystem {
             }
         }
     }
-
 }

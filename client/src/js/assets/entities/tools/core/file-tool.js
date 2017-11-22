@@ -17,7 +17,7 @@ export default class FileTool extends Tool {
 
       }
 
-      this.entity = new Entity(-1, coords, [
+      this.entity = new Entity(-1, [
           {
             props: {
               geometry: {
@@ -36,7 +36,7 @@ export default class FileTool extends Tool {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "file", // entity, prop, place, world, user, file, directory
                         //propName: "geometry",
-                        dataSource: this.world.systems.assets.places
+                        dataSource: this.world.systems.assets.files
                       }
                     }
                   }
@@ -47,8 +47,7 @@ export default class FileTool extends Tool {
               this.initLabel( false, "Files")
             ]
           }
-        ])
-
+        ], null, null, coords)
     }
 
     primaryAction ( telemetry ) {
@@ -68,7 +67,5 @@ export default class FileTool extends Tool {
       let preview = null
       
       return preview
-      
     }
-    
 }

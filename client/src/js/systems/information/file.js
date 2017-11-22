@@ -6,9 +6,7 @@ export default class FileSystem {
     world: Convolvr
 
     constructor ( world: Convolvr ) {
-
         this.world = world
-
     }
 
     init ( component: Component ) { 
@@ -19,32 +17,22 @@ export default class FileSystem {
             res = {}
 
         if ( prop.listFiles ) { // init logic here... only read methods; (write logic triggered by events)
-
             params = prop.listFiles
             this.listFiles( component, params.username, params.dir )
-
         }
-
         if ( prop.listDirectories ) {
-
             params = prop.listDirectories
             this.listDirectories( component, params.username, params.dir )
-
         }
-
         if ( prop.readText ) {
-
             params = prop.readText
             this.readText( component, params.filename, params.username, params.dir )
-
         }
 
         if ( prop.refresh !== false )
 
             defaultCallbacks.push( () => {
-
                 component.entity.updateComponentAtPath( component, component.path )
-                    
             })
 
         res = {
@@ -114,7 +102,6 @@ export default class FileSystem {
                 this.deleteFile( component, filename, username, dir )
             }
         }
-
     }
 
     _handleResponse( type, data ) {
@@ -123,7 +110,6 @@ export default class FileSystem {
         component.state.file.res[ type ].callbacks.forEach( callBack => {
             callBack( data )
         })
-
     }
 
     createFile ( component, username, dir ) {
@@ -131,15 +117,10 @@ export default class FileSystem {
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
         axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+outDir : ''}`, {}).then(response => {
-           
            this._handleResponse( 'createFile', response.data )
-          
         }).catch(err => {
-           
-           component.state.file.res.createFile.error = err
-           
+           component.state.file.res.createFile.error = err 
         })
-
     }
 
     uploadFile ( component, file, username, dir ) {
@@ -147,15 +128,10 @@ export default class FileSystem {
         let outDir = !!dir ? "?dir="+dir : ""
 
         axios.post(`${API_SERVER}/api/files/upload/${username}${outDir}`, file).then(response => {
-           
             this._handleResponse( 'uploadFile', response.data )
-          
         }).catch(err => {
-           
             component.state.file.res.uploadFile.error = err
-           
         })
-
     }
 
     createDirectory () {
@@ -163,29 +139,19 @@ export default class FileSystem {
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
         axios.post(`${API_SERVER}/api/directories/${username}/${dir != null ? "?dir="+outDir : ''}`, {}).then(response => {
-           
             this._handleResponse( 'createDirectory', response.data )
-          
         }).catch(err => {
-           
-           component.state.file.res.createDirectory.error = err
-           
+           component.state.file.res.createDirectory.error = err 
         })
-
     }
 
     listFiles ( component, username, dir ) {
 
         axios.get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir="+dir : ''}`).then(response => {
-             
             this._handleResponse( 'listFiles', response.data )
-          
         }).catch(err => {
-           
            component.state.file.res.listFiles.error = err
-          
         })
-
     }
 
     listDirectories ( component, username, dir) {
@@ -195,11 +161,8 @@ export default class FileSystem {
             this._handleResponse( 'listDirectories', response.data )
           
         }).catch(err => {
-           
-          component.state.file.res.listDirectories.error = err
-           
+          component.state.file.res.listDirectories.error = err 
         })
-
     }
 
     deleteFile (component, filename, username, dir) {

@@ -58,6 +58,7 @@ import SignalSystem from './information/signal'
 import SkillSystem from './game/skill'
 import SocialMediaSystem from './chat/social-media'
 import SpeechSystem from './audio/speech'
+import StateSystem from './information/state'
 import StatSystem from './game/stat'
 import StaticCollisions  from './environment/static-collisions'
 import SwitchSystem from './information/switch'
@@ -75,11 +76,13 @@ import NPCSystem from './game/npc'
 
 export default class Systems {
 
+	world: Convolvr
+	liveSystems: Array<any>
+
 	/**
 	*  Initializes all systems before components can be registered
-	*  @param {Convolvr} world 
 	**/
-    constructor ( world )  {
+    constructor ( world: Convolvr )  {
 
         let systems = {
 			ability: 		  new AbilitySystem( world ),
@@ -142,6 +145,7 @@ export default class Systems {
 			screenshot: 	  new ScreenshotSystem( world ),
 			socialMedia: 	  new SocialMediaSystem( world ),
 			speech: 		  new SpeechSystem( world ),
+			state:            new StateSystem( world ),
 			stat: 			  new StatSystem( world ),
 			staticCollisions: new StaticCollisions( world ),
 			switch: 		  new SwitchSystem( world ),
@@ -167,14 +171,12 @@ export default class Systems {
 			hand: true, light: true, particles: true, text: true, audio: true, video: true, metaFactory: true, miniature: true,
 			tool: true, toolUI: true, layout: true, datgui: true, obj: true, fbx: true
 		}
-
     }
 
 	/**
 	*  Reads component props, registers with systems and populates state with the resulting data
-	*  @param {Component} component 
 	**/
-    registerComponent ( component ) {
+    registerComponent ( component: Component) {
 
         let componentsByProp = component.entity.componentsByProp,
 			entity = component.entity,
@@ -187,27 +189,19 @@ export default class Systems {
         Object.keys( props ).map( prop => {
 
             if ( this[ prop ] != null ) {
-
-                if ( !!this.deffered[ prop ] ) { /* add other systems here */
-                    
+				
+				if ( !!this.deffered[ prop ] ) { /* add other systems here */
 					deferredSystems.push( prop )
-
                 } else {
-
                     state[ prop ] = this[ prop ].init( component )
-
-                }
-
+				}
+				
 				if ( !!!componentsByProp[ prop ] ) {
-
                     componentsByProp[ prop ] = []
-
-                }
-
+				}
+				
 				componentsByProp[ prop ].push( component )
-
             }
-
         })
     
 		mesh = new THREE.Mesh( state.geometry.geometry, state.material.material )
@@ -217,9 +211,7 @@ export default class Systems {
         component.mesh = mesh
 
         deferredSystems.map( prop => {
-
             state[ prop ] = this[ prop ].init( component )
-
         })
 
         return mesh
@@ -227,17 +219,23 @@ export default class Systems {
 
 	/**
 	*  Fires once per frame, passing the delta and total time passed
-	*  @param {delta} number
-	*  @param {time}  number 
 	**/
-	tick ( delta, time ) {
+	tick ( delta: number, time: number ) {
+		
+		// let l = 0,
+		// 	systems = this.liveSystems,
+		// 	ln = systems.length
+
+		// while ( l < ln ) {
+
+		// 	systems[ l ].tick( delta, time )
+		// 	l += 1
+		// }
 
 		this.particles.tick( delta, time )
 		this.terrain.tick( delta, time )
 		this.fbx.tick( delta, time )
-
 	}
-	
 }
 
 

@@ -16,18 +16,14 @@ export function getPropsList ( props ) {
 
         let category = props.systems[ cat ]
 
-        Object.keys(category).map( key => {
-            
+        Object.keys(category).map( key => {  
             category[ key ].map( (dat, d) => {
                 out.push({ name: `${key}.${d}`, data: dat })
             })
-                    
         })
-
     })
-
+    
     return out
-
 }
 
 export default function BuiltinProps () {

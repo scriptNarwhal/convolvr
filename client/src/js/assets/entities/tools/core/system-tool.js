@@ -39,7 +39,7 @@ export default class SystemTool extends Tool {
                     content: {
                       props: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "prop", // entity, prop
+                          type: "prop", // entity, component, prop
                           propName: "structures",
                           dataSource: this.world.systems.assets.props.systems
                         },
@@ -57,7 +57,7 @@ export default class SystemTool extends Tool {
                     content: {
                       props: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "prop", // entity, prop
+                          type: "prop", // entity, component, prop
                           propName: "vehicles",
                           dataSource: this.world.systems.assets.props.systems
                         },
@@ -75,7 +75,7 @@ export default class SystemTool extends Tool {
                     content: {
                       props: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "prop", // entity, prop
+                          type: "prop", // entity, component, prop
                           propName: "media",
                           dataSource: this.world.systems.assets.props.systems
                         },
@@ -93,7 +93,7 @@ export default class SystemTool extends Tool {
                     content: {
                       props: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "prop", // entity, prop
+                          type: "prop", // entity, component, prop
                           propName: "interactivity",
                           dataSource: this.world.systems.assets.props.systems
                         },
@@ -135,6 +135,9 @@ export default class SystemTool extends Tool {
           entity = null
       
       if ( options.system && options.system.none ) return
+
+      // gotta implement, yo
+
         
     }
 
@@ -145,10 +148,8 @@ export default class SystemTool extends Tool {
     configure ( config ) {
       
       if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
-
         this.options = Object.assign( {}, config.data )
         console.log("Configuring tool ", this.options)
-
       }
       
   }

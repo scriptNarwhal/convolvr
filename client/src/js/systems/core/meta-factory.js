@@ -24,7 +24,7 @@ export default class MetaFactorySystem {
             category:       string           = prop.propName,
             gridWidth:      number           = prop.gridWidth || 3,
             gridSize:       number           = prop.gridSize || 1,
-            vOffset:        number           = prop.vOffset || -0.66,
+            vOffset:        number           = prop.vOffset || -1.2,
             sourceCategory: any              = "none",
             factories:      Array<Object>    = [],
             presets:        Array<any>       = [],
@@ -44,7 +44,7 @@ export default class MetaFactorySystem {
         } else { 
             source = prop.dataSource
         }
-        console.info("init metafactory prop ", prop)
+        //console.info("init metafactory prop ", prop)
         if (typeof source == 'string' && source == 'self' ) {
             console.info( "source is string", source)
             if ( assetType == "file" )
@@ -54,7 +54,7 @@ export default class MetaFactorySystem {
         }
 
         if (typeof source.map == 'function') { // array of geometries / materials, components, entities, worlds, places, files, (directories could use source[category])
-            console.info( "metafactory source is ", source)
+            //console.info( "metafactory source is ", source)
             source.map( (item, i) => {
                 if ( assetType == 'entity' && typeof item == 'function' )
                 
@@ -72,7 +72,6 @@ export default class MetaFactorySystem {
             })
             
         } else { // map through system categories
-            console.info( "source is object")
             source = prop.dataSource
             sourceCategory = this._getSourceCategory( source, category ) // structures, vehicles, media, interactivity
         

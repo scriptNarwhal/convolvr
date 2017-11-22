@@ -9,11 +9,8 @@ export default class FactorySystem {
     world: Convolvr
 
     constructor ( world: Convolvr ) {
-
         this.world = world
-
     }
-
 
     init ( component: Component ) { //console.log("factory component init ", component)
 
@@ -44,7 +41,9 @@ export default class FactorySystem {
             quat:       Array<number>    = data.quaternion,
             components: Array<Component> = data.components,
             created:    Entity           = null
+            
         console.info("!!! generate( type:", type, "preset", preset, "propName", propName )
+
         if ( type == 'entity' ) {
             created = this._generateEntity( components, voxel, entityPos, quat, preset )
         } else if (type == 'component') {
@@ -95,7 +94,6 @@ export default class FactorySystem {
     _generateEntity ( components: Array<Component>, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         if ( !! components && components.length > 0 ) { // debugging this..
-
             components[0].props.miniature = { }
             components[0].props.toolUI = {
                 configureTool: {
@@ -103,7 +101,6 @@ export default class FactorySystem {
                     preset
                 }
             }
-
         }
         return  new Entity( -1, components, position, quaternion, voxel )
     }
@@ -288,7 +285,6 @@ export default class FactorySystem {
                 }
             )}
         ], position, quaternion, voxel)
-
     }
 
     _generateFile ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
@@ -325,7 +321,6 @@ export default class FactorySystem {
                 }
             )}
         ], position, quaternion, voxel)
-
     }
 
     _generateDirectory ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
@@ -362,7 +357,5 @@ export default class FactorySystem {
                 }
             )}
         ], position, quaternion, voxel)
-
     }
-
 }

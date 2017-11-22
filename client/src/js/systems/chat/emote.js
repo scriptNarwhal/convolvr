@@ -7,9 +7,7 @@ export default class EmoteSystem {
     world: Convolvr
 
     constructor ( world: Convolvr ) {
-
         this.world = world
-
     }
 
     init ( component: Component ) { 
@@ -21,5 +19,23 @@ export default class EmoteSystem {
         return {
             
         }
+    }
+
+    use ( component: Component ) {
+
+        let prop = component.props.emote
+        //TODO: implement
+    }
+
+    permutate ( component: Component ) {
+        
+        let prop = component.props.emote
+        //TODO: implement
+    }
+
+    record ( component: Component ) {
+        
+        let prop = component.props.emote 
+        //TODO: implement 
     }
 }
