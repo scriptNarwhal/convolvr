@@ -86,7 +86,28 @@ export default class ToolSystem {
                     },
                     components: [
                         {
-                            position: [ 0, 0, -0.66 ],
+                            position: [ 0, 0, 0],
+                            props: { // title for top bar
+                                text: {
+                                    label: true,
+                                    lines: [ panelProp.title ],
+                                    color: "#ffffff",
+                                    background: "#000000"
+                                },
+                                geometry: {
+                                    shape: "box",
+                                    size: [ 3, 0.5, 0.1 ]
+                                },
+                                material: {
+                                    name: "plastic",
+                                    color: 0xffffff
+                                }
+                            },
+                            components: [],
+                            quaternion: [ 0, 0, 0, 1 ]
+                        },
+                        {
+                            position: [ 0, 0, 0],
                             props: { // title for top bar
                                 text: {
                                     label: true,

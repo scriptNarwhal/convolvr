@@ -41,8 +41,6 @@ export default class FactorySystem {
             quat:       Array<number>    = data.quaternion,
             components: Array<Component> = data.components,
             created:    Entity           = null
-            
-        console.info("!!! generate( type:", type, "preset", preset, "propName", propName )
 
         if ( type == 'entity' ) {
             created = this._generateEntity( components, voxel, entityPos, quat, preset )

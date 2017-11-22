@@ -18,22 +18,22 @@ export default class FileSystem {
 
         if ( prop.listFiles ) { // init logic here... only read methods; (write logic triggered by events)
             params = prop.listFiles
-            this.listFiles( component, params.username, params.dir )
+            this._listFiles( component, params.username, params.dir )
         }
         if ( prop.listDirectories ) {
             params = prop.listDirectories
-            this.listDirectories( component, params.username, params.dir )
+            this._listDirectories( component, params.username, params.dir )
         }
         if ( prop.readText ) {
             params = prop.readText
-            this.readText( component, params.filename, params.username, params.dir )
+            this._readText( component, params.filename, params.username, params.dir )
         }
 
         if ( prop.refresh !== false )
 
-            defaultCallbacks.push( () => {
-                component.entity.updateComponentAtPath( component, component.path )
-            })
+            // defaultCallbacks.push( () => {
+            //     component.entity.updateComponentAtPath( component, component.path )
+            // })
 
         res = {
             createFile: {
@@ -77,29 +77,35 @@ export default class FileSystem {
             workingPath: [],
             workingDirectory: "/",
             res,
+            renderFiles: (username: string, dir: string) => {
+                this._renderFiles( component, username, string )
+            },
+            renderDirectories: (username: string, dir: string) => {
+                this._renderDirectories( component, username, string )
+            },
             setWorkingDirectory: ( username, dir ) => {
-                this.setWorkingDirectory( component, username, dir )
+                this._setWorkingDirectory( component, username, dir )
             },
             createFile: ( username, dir ) => {
-                this.createFile( component, username, dir )
+                this._createFile( component, username, dir )
             },
             uploadFile: ( file, username, dir ) => {
-                this.uploadFile( component, file, username, dir )
+                this._uploadFile( component, file, username, dir )
             },
             listFiles: ( username, dir ) => {
-                this.listFiles( component, username, dir )
+                this._listFiles( component, username, dir )
             },
             listDirectories: ( username, dir ) => {
-                this.listDirectories ( component, username, dir )
+                this._listDirectories ( component, username, dir )
             },
             readText: ( filename, username, dir ) => {
-                this.readText( component, filename, username, dir )
+                this._readText( component, filename, username, dir )
             },
             writeText: ( text, filename, username, dir ) => {
-                this.writeText( component, text, filename, username, dir )
+                this._writeText( component, text, filename, username, dir )
             },
             deleteFile: ( filename, username, dir ) => {
-                this.deleteFile( component, filename, username, dir )
+                this._deleteFile( component, filename, username, dir )
             }
         }
     }
@@ -112,7 +118,15 @@ export default class FileSystem {
         })
     }
 
-    createFile ( component, username, dir ) {
+    _renderFiles( component: Component, username: string, dir: string ) {
+
+    }
+
+    _renderDirectories( component: Component, username: string, dir: string ) {
+        //TODO: implement
+    }
+
+    _createFile ( component, username, dir ) {
 
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
@@ -123,7 +137,7 @@ export default class FileSystem {
         })
     }
 
-    uploadFile ( component, file, username, dir ) {
+    _uploadFile ( component, file, username, dir ) {
 
         let outDir = !!dir ? "?dir="+dir : ""
 
@@ -134,7 +148,7 @@ export default class FileSystem {
         })
     }
 
-    createDirectory () {
+    _createDirectory () {
 
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
@@ -145,7 +159,7 @@ export default class FileSystem {
         })
     }
 
-    listFiles ( component, username, dir ) {
+    _listFiles ( component, username, dir ) {
 
         axios.get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir="+dir : ''}`).then(response => {
             this._handleResponse( 'listFiles', response.data )
@@ -154,7 +168,7 @@ export default class FileSystem {
         })
     }
 
-    listDirectories ( component, username, dir) {
+    _listDirectories ( component, username, dir) {
 
         axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir="+dir : ''}`).then(response => {
            
@@ -165,48 +179,35 @@ export default class FileSystem {
         })
     }
 
-    deleteFile (component, filename, username, dir) {
+    _deleteFile (component, filename, username, dir) {
 
-        // implement
+        //TODO: implement
 
     }
 
-    setWorkingDirectory ( component, username, dir ) {
-
+    _setWorkingDirectory ( component, username, dir ) {
         component.state.file.workingDirectory = username+dir
         component.state.file.workingPath = (username+dir).split("/")
-
     }
 
-    readText ( component, filename, username, dir ) {
+    _readText ( component, filename, username, dir ) {
 
         axios.get(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`).then(response => {
-           
             this._handleResponse( 'readText', response.data )
-          
         }).catch(err => {
-           
-          component.state.file.res.readText.error = err
-            
+          component.state.file.res.readText.error = err  
         })
-
     }
 
-    writeText ( component, text, filename, username, dir ) {
+    _writeText ( component, text, filename, username, dir ) {
 
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
         axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+outDir : ''}`, {text: text}).then(response => {
-           
             this._handleResponse( 'writeText', response.data )
-          
         }).catch(err => {
-
            component.state.file.res.writeText.error = err
-          
         })
-
     }
-
 }
 

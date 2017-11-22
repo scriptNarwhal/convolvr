@@ -59,6 +59,7 @@ export function listFiles (username, dir) {
      })
      return axios.get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir="+dir : ''}`)
         .then(response => {
+            window.three.world.systems.assets.setUserFiles( response.data )
             dispatch({
                 type: FILES_LIST_DONE,
                 data: response.data
@@ -71,6 +72,29 @@ export function listFiles (username, dir) {
         })
    }
 
+}
+
+export function listDirectories (username, dir) {
+    return dispatch => {
+     dispatch({
+         type: DIRECTORIES_LIST_FETCH,
+         username,
+         dir
+     })
+     return axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir="+dir : ''}`)
+        .then(response => {
+            window.three.world.systems.assets.setUserDirectories( response.data )
+            dispatch({
+                type: DIRECTORIES_LIST_DONE,
+                data: response.data
+            })
+        }).catch(response => {
+            dispatch({
+                type: DIRECTORIES_LIST_FAIL,
+                error: response
+            })
+        })
+   }
 }
 
 export function uploadFile ( file, username, dir ) {
@@ -198,28 +222,6 @@ export function uploadFiles ( files, username, dir ) {
 
    }
 
-}
-
-export function listDirectories (username, dir) {
-    return dispatch => {
-     dispatch({
-         type: DIRECTORIES_LIST_FETCH,
-         username,
-         dir
-     })
-     return axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir="+dir : ''}`)
-        .then(response => {
-            dispatch({
-                type: DIRECTORIES_LIST_DONE,
-                data: response.data
-            })
-        }).catch(response => {
-            dispatch({
-                type: DIRECTORIES_LIST_FAIL,
-                error: response
-            })
-        })
-   }
 }
 
 export function createFile (username, dir) {
