@@ -100,6 +100,10 @@ export default class AssetSystem {
     }
 
     loadModel ( asset, callback ) {
+        // use obj and fbx systems
+        let systems = this.world.systems,
+            obj = systems.obj,
+            fbx = systems.fbx
 
         // implement
         // check format from file extension

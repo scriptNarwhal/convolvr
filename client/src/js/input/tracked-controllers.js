@@ -37,15 +37,13 @@ export default class TrackedController {
         rotation    = input.rotationVector,
         tools       = world.user.toolbox
 
-    //console.log("oculus touch handler ", a, b, buttons
-
     if ( useTracking && gamepad.pose )
     
       tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
 
     if ( gamepad.hand == 'left' ) {
 
-      if ( world.vrMovement == 'stick' ) {
+      if ( world.settings.vrMovement == 'stick' ) {
 
         if ( Math.abs(axes[0]) > 0.1 )
 

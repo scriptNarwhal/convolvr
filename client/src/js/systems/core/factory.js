@@ -105,14 +105,17 @@ export default class FactorySystem {
 
     _generateComponent ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
-        data.props.miniature = { }
-        data.props.toolUI = {
-            configureTool: {
-                tool: 1,
-                preset
-            }
+        let newComponent = {
+            ...data,
+            toolUI: {
+                configureTool: {
+                    tool: 1,
+                    preset
+                }
+            },
+            miniature:{}
         }
-        return new Entity( -1, [ data ], position, quaternion, voxel )
+        return new Entity( -1, [ newComponent ], position, quaternion, voxel )
     }
 
     _generateGeometry ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
@@ -142,7 +145,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {},
+                    miniature: {scale: 0.4},
                     material: {
                         name: "metal",
                         color: 0xffffff
@@ -198,7 +201,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
                 props: Object.assign({}, {material: {diffuse: data}}, {
                     mixin: true,
-                    miniature: {},
+                    miniature: {scale: 0.4},
                     assets: {
                         images: [data]
                     },
@@ -227,7 +230,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {},
+                    miniature: {scale: 0.4},
                     portal: {
                         username: data.username,
                         world: data.name
@@ -260,7 +263,7 @@ export default class FactorySystem {
          return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {},
+                    miniature: {scale: 0.4},
                     portal: {
                         username: data.username,
                         world: data.world,
@@ -290,7 +293,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {},
+                    miniature: {scale: 0.4},
                     text: {
                         color: 0xffffff,
                         background: 0x000000,
@@ -326,7 +329,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {},
+                    miniature: {scale: 0.4},
                     text: {
                         color: 0xffffff,
                         background: 0x000000,

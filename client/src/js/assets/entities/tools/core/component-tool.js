@@ -95,22 +95,18 @@ export default class ComponentTool extends Tool {
 
       //console.warn( `Component Tool Type ${componentType} Selected`, selected )
       if ( cursorSystem.entityCoolDown > 5 )
-
         return false // stop spamming lol.. // console.log("too many components; waiting for entity cooldown; aborting")
-      
       if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 100 || ( cursorState.distance < 100 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
         console.warn(" Problem ")
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByProp.toolUI[ 0 ].state.toolUI.show()
         user.toolbox.usePrimary( telemetry.hand, entity  )
         return false
-
       }
 
       entityId = selected.id
 
       if ( components.length == 0 )
-        
         components = [ component ]
       
       props = selected.componentsByProp
@@ -120,31 +116,22 @@ export default class ComponentTool extends Tool {
         return false 
 
       } else {
-
         coords = selected.voxel
-
       }
 
       !!selected && !!selected.mesh && selected.mesh.updateMatrixWorld()
       let selectedPos = !!selected && !!selected.mesh ? selected.mesh.localToWorld( new THREE.Vector3() ) : false
       
       components.map( ( comp, i ) => { // apply transformation and offset to components
-
         if ( !!comp ) {
-
           if ( selectedPos )
-
             comp.position = [
               position[ 0 ] - selectedPos.x,
               position[ 1 ] - selectedPos.y,
               position[ 2 ] - selectedPos.z
             ]
-
-          
           comp.quaternion = quat
-
         }
-
       })
 
       cursorSystem.entityCoolDown = 100
@@ -155,7 +142,6 @@ export default class ComponentTool extends Tool {
         entityId,
         components
       }
-
     }
 
     secondaryAction ( telemetry, value ) {
@@ -163,40 +149,29 @@ export default class ComponentTool extends Tool {
       this.current += value // cycle components
 
       if ( this.current >= this.all.length ) {
-
         this.current = 0
-
       } else if ( this.current < 0 ) {
-
         this.current = this.all.length - 1
-
       }
       
       this.selectedComponent = null
       this.options.componentType = this.all[ this.current ]
 
       if ( this.entity.componentsByProp ) {
-
         this.entity.componentsByProp.text[ 0 ].state.text.update( this.options.componentType )
-
       }
 
       return false // no socket event
-
     }
 
     configure ( config ) {
-
       this.options.componentType = config.preset
-      
     }
 
     generatePreview( component, preset, data ) {
       
       let preview = null
       
-      return preview
-      
+      return preview 
     }
-
 }

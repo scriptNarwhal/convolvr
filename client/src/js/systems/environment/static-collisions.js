@@ -32,10 +32,8 @@ export default class StaticCollisions {
 	          	velocity:  Array<number> = []
 
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
-
 				vrHeight = 1 * vrFrame.pose.position[1]
 				world.vrHeight = vrHeight
-
 			}
 
 	    if ( message.command == "update" ) {
@@ -72,20 +70,15 @@ export default class StaticCollisions {
 				cam.position.set( cam.position.x, message.data.position[1]+14.25 +(vrHeight != 0 ? vrHeight-1 : 0), cam.position.z )	
 
 				if ( Math.abs( user.velocity.y ) > 150 ) {
-
 					window.navigator.vibrate && window.navigator.vibrate(50)
 					user.velocity.y *= -0.8
 					user.falling = true
-
 				} else {
-
 					user.falling = false
 					user.velocity.y = 0
-
 				}
 				
 			} else if ( message.data.type == "bottom" ) {
-
 				cam.position.set( cam.position.x, message.data.position[1]-4 +vrHeight, cam.position.z )
 				user.velocity.y *= -0.45
 			}
@@ -99,17 +92,13 @@ export default class StaticCollisions {
 				cam.position.set(cam.position.x, message.data.position[1]+vrHeight, cam.position.z)
 
 				if ( Math.abs(user.velocity.y) > 1 ) {
-
 					user.velocity.y *= 0.66
 					user.velocity.x *= 0.96
 					user.velocity.z *= 0.96
 					user.falling = true
-
 				} else {
-
 					user.falling = false
 					user.velocity.y = 0
-
 				}
 
 			} else if ( message.command == "load entities" ) {

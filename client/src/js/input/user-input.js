@@ -121,9 +121,9 @@ export default class UserInput {
 		if ( terrainConfig && terrainMesh ) {
 			terrainMode = terrainConfig.type
 			if (terrainMode == "plane" || terrainMode == "both") {
-				bottom = terrainMesh.position.y + 0.110 + world.vrHeight
+				bottom = terrainMesh.position.y +1.5 + world.vrHeight
 			} else {
-				bottom = 0.110 + world.vrHeight
+				bottom = 1.5 + world.vrHeight
 			}
 		}
 
@@ -150,27 +150,20 @@ export default class UserInput {
 		velocity.add( this.moveVector.applyQuaternion(this.camera.quaternion).multiplyScalar(delta*0.08) )
 
 		if (this.leapMotion && this.moveVector.length() > 0) {
-
 			if ( velocity.y < 0 )
-
 				velocity.y *= 0.95
 
 		}
 
 		if ( Math.abs(velocity.y) > 0.2 )
-
 			this.device.falling = true
 
 		if ( world.settings.gravity > 0 ) {
-
 			if ( this.device.falling ) { //if not standing on something..
-
 				if ( world.settings.highAltitudeGravity || this.camera.position.y < 220.00 )
-
 					velocity.y -= 0.016 * delta  // apply gravity
 
-			}
-					
+			}			
 		}
 
 		this.moveVector.set( 0, 0, 0 )
@@ -180,13 +173,11 @@ export default class UserInput {
 		this.camera.matrixWorldNeedsUpdate = true
 
 		if ( this.camera.position.y < bottom + 0.3330 ) {
-
 			velocity.y *= this.keys.shift ? -0.80 : -0.25
 			this.device.falling = false
 			this.camera.position.y = bottom + 0.3330
 				
 			if ( velocity.y > 0.1 )
-
 				window.navigator.vibrate && window.navigator.vibrate(50) // replace with haptics system
 				
 		}
