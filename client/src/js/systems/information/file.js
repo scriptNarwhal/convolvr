@@ -120,10 +120,40 @@ export default class FileSystem {
 
     _renderFiles( component: Component, username: string, dir: string ) {
 
+        let files = component.state.file.res.listFiles.data,
+            entity = component.entity,
+            fileViewer = {
+                ...component.data,
+                props: {
+                    ...component.data.props,
+                    metaFactory: { // generates factory for each item in dataSource
+                        type: "file", // entity, prop, place, world, user, file, directory
+                        dataSource: files
+                    }
+                }
+            }
+
+        entity.updateComponentAtPath( fileViewer, component.path )
+        entity.reInit()
     }
 
     _renderDirectories( component: Component, username: string, dir: string ) {
-        //TODO: implement
+        
+        let dirs = component.state.file.res.listDirectories.data,
+            entity = component.entity,
+            directoryViewer = {
+                ...component.data,
+                props: {
+                    ...component.data.props,
+                    metaFactory: { // generates factory for each item in dataSource
+                        type: "directory", // entity, prop, place, world, user, file, directory
+                        dataSource: dirs
+                    }
+                }
+            }
+
+        entity.updateComponentAtPath( directoryViewer, component.path )
+        entity.reInit()
     }
 
     _createFile ( component, username, dir ) {

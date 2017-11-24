@@ -1,4 +1,4 @@
-import { 
+ import { 
   GRID_SIZE,
   API_SERVER
  } from './config'
@@ -12,9 +12,7 @@ export default class Entity {
       let world = window.three.world
 
       if ( id == -1 ) {
-
         world && world.systems.assets.autoEntityID()
-
       }
 
       this.id = id
@@ -53,31 +51,23 @@ export default class Entity {
     let entityConfig = Object.assign({}, config, { updateWorkers: true } )
 
     if ( !! componentPath ) {
-
       this.updateComponentAtPath( component, componentPath )
       this.init( this.anchor, entityConfig )
-    
     }
 
     if ( !! components ) {
-
       this.components = components
       this.init( this.anchor, entityConfig )
-
     }
 
     if ( !! position ) {
-
       this.position = position
       this.mesh.position.fromArray( position )
-
     }
 
     if ( !!quaternion ) {
-
       this.quaternion = quaternion
-      this.mesh.quaternion.fromArray( quaternion )
-      
+      this.mesh.quaternion.fromArray( quaternion )  
     }
 
     this.mesh.updateMatrix()
@@ -85,9 +75,7 @@ export default class Entity {
   }
 
   reInit( ) {
-
     this.init( this.parent, { updateWorkers: true } )
-
   }
 
   init ( parent, config = {}, callback ) {
@@ -124,23 +112,16 @@ export default class Entity {
       world.octree.remove( this.mesh )
 
       if ( this.anchor ) {
-
         this.anchor.remove( this.mesh )
-
       } else {
-
         three.scene.remove( this.mesh )
-
       }
 
       this.removeFromVoxel( this.voxel )
-      
       workerUpdate = !! config && config.updateWorkers ? "update" : workerUpdate
 
     } else {
-
       workerUpdate = !! config && config.updateWorkers ? "add" : workerUpdate
-
     }
 
     this.anchor = parent 
@@ -187,24 +168,19 @@ export default class Entity {
           compMesh.updateMatrix()
 
           while ( face > -1 ) {
-
               faces[ face ].materialIndex = s
               face --
-              
           }
 
           base.merge( compMesh.geometry, compMesh.matrix )
           s ++
 
         } else if ( !comp.detached ) {
-
           nonMerged.push( comp.mesh )
-          
         }
 
         this.allComponents.push( comp )
-        c ++
-
+        c += 1
     }
 
     addToOctree = this.componentsByProp.terrain != true && this.componentsByProp.noRaycast != true
@@ -213,52 +189,38 @@ export default class Entity {
     !! workerUpdate && this.updateWorkers( workerUpdate, systems )
 
     if ( s > 0 ) {
-
       mesh = new THREE.Mesh( base, materials )
-
     } else {
-
       mesh = nonMerged[ 0 ] // maybe nest inside of Object3D ?
-
     }
 
     if ( world.shadows > 0 ) {
-
       mesh.castShadow = true
       mesh.receiveShadow = true
-
     }
 
     s = 1
 
     while ( s < nonMerged.length ) {
-
         mesh.add( nonMerged[ s ] )
         s ++
-
     }
 
     if ( !! this.quaternion && (!config.ignoreRotation || this.components.length == 1) )
-
         mesh.quaternion.fromArray( this.quaternion )
-
 
     !! this.position && mesh.position.fromArray( this.position )
 
     mesh.userData = { 
-
       entity: this,
       compsByFaceIndex: this.compsByFaceIndex
-
     }
 
     addToOctree && world.octree.add( mesh )
-
     parent.add( mesh )
     this.mesh = mesh
 
     if ( (!!!config || !!!config.noVoxel) && addToOctree )
-
       this.addToVoxel( this.voxel, mesh )
 
     
@@ -266,21 +228,15 @@ export default class Entity {
     mesh.updateMatrix()
     !! callback && callback( this )
     return this
-
   }
 
   save ( oldVoxel = false ) {
     
     if ( oldVoxel !== false ) {
-        
       this.saveUpdatedEntity( oldVoxel )
-        
     } else {
-    
       this.saveNewEntity()
-        
     }
-    
   }
     
   saveNewEntity () {
@@ -292,7 +248,6 @@ export default class Entity {
     }).catch(response => {
       console.error("Entity failed to save", response)
     })
-    
   }
     
   saveUpdatedEntity ( oldVoxel ) {
@@ -304,35 +259,25 @@ export default class Entity {
     }).catch(response => {
       console.error("Entity failed to send update", response)
     })   
-    
   }
 
   getVoxel ( initial ) {
 
     let position = null,
         coords = null
-    
-    if ( initial ) {
 
+    if ( initial ) {
       position = this.mesh != null ? this.mesh.position.toArray() : this.position
       coords = [Math.floor( position[ 0 ] / GRID_SIZE[ 0 ] ), 0, Math.floor( position[ 2 ] / GRID_SIZE[ 2 ] )]
-
     } else {
-
       coords = this.voxel
-
     }        
-
     this.voxel = coords
-
     return coords
-
   }
 
   addToVoxel ( coords, mesh ) {
-    
     this.getVoxelForUpdate( coords, addTo => { addTo.meshes.push( mesh ) })
-
   }
 
   removeFromVoxel ( coords, mesh ) {
@@ -340,7 +285,6 @@ export default class Entity {
     let removeFrom = this.getVoxelForUpdate( coords )
 
     removeFrom.meshes.splice( removeFrom.meshes.indexOf( mesh ), 1 )
-
   }
 
   getVoxelForUpdate ( coords, callback ) {
@@ -352,31 +296,20 @@ export default class Entity {
         voxel = terrain.voxels[ coords.join(".") ]
 
     if ( !!! voxel) { console.warn("voxel not loaded")
-    
      voxel = terrain.loadVoxel( coords, callback )
-
     } else if (typeof voxel != 'boolean' ) {
-
       callback && callback( voxel )
-
     } else {
 
       setTimeout( ()=> {
 
         let voxel = terrain.voxels[ coords.join(".") ]
-
         if ( typeof voxel === 'object' ) {
-
           callback( voxel )
-
         } else {
-
           terrain.loadVoxel( coords, callback )
-
         }
-
       }, 600)
-
     }
 
     return voxel
@@ -389,19 +322,13 @@ export default class Entity {
     let foundComponent = null
 
     if ( components == false )
-
       components = this.components
 
     if ( pathIndex + 1 < path.length ) {
-      
-      foundComponent = this.getComponentByPath( components[ path[ pathIndex ] ].components, path, pathIndex + 1 )
-
+      foundComponent = this.getComponentByPath( path, pathIndex + 1, components[ path[ pathIndex ] ].components )
     } else {
-            
       foundComponent = components[ path[ pathIndex ] ]
-
     }
-
   }
 
   updateComponentAtPath ( component, path, pathIndex = 0, components = false, resetState = false ) {
@@ -412,47 +339,32 @@ export default class Entity {
     console.log( "update component at path", component, path, pathIndex, components )
 
     if ( components == false )
-      
       components = this.components
 
     if ( pathIndex + 1 < path.length ) {
-
-      this.updateComponentAtPath( component, components[ path[ pathIndex ] ].components, path, pathIndex + 1 )
-
+      this.updateComponentAtPath( component, path, pathIndex + 1, components[ path[ pathIndex ] ].components )
     } else {
 
       if ( resetState == false ) {
 
-        if ( this.allComponents[ path[ pathIndex ] ]) {
-        
+        if ( this.allComponents.indexOf()) {
           oldState = this.allComponents[ path[ pathIndex ] ].state
-        
         } else {
-
           console.warn( "Error finding component state", path, pathIndex, path[ pathIndex ], this.allComponents )
-
         }
 
         if ( oldState.tool || oldState.toolUI )
-
           sanitizedState = { tool: {}, toolUI: {} }
         
         component.state = Object.assign({}, oldState, component.state || {}, sanitizedState )
-
       }
 
       if ( component.data ) {
-
         components[ path[ pathIndex ] ] = component.data
-
       } else {
-
         components[ path[ pathIndex ] ] = component
-
       }
-    
     }   
-    
   }
 
   updateWorkers ( mode, systems ) {

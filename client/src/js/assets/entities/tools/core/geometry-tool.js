@@ -89,9 +89,7 @@ export default class GeometryTool extends Tool {
           return false 
       
       } else {
-      
           coords = selected.voxel
-      
       }
 
       if ( !! cursorComponent && !! selected ) {
@@ -121,7 +119,6 @@ export default class GeometryTool extends Tool {
         entityId,
         components
       }
-
     }
 
     secondaryAction ( telemetry, value ) {
@@ -144,9 +141,7 @@ export default class GeometryTool extends Tool {
           })
         })
         this.entity.update( false, false, false, newComp, [0] )
-
-      }
-      
+      } 
     }
 
     generatePreview( component, preset, data ) {
@@ -154,7 +149,5 @@ export default class GeometryTool extends Tool {
       let preview = null
 
       return preview
-
     }
-
 }
