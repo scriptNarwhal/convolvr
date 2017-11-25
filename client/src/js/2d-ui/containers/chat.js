@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Shell from '../components/shell'
 import Card from '../components/card'
 import Button from '../components/button'
+import { browserHistory } from 'react-router'
 import LocationBar from '../components/location-bar'
 import { rgba, rgb } from '../../util'
 
@@ -17,6 +18,14 @@ class Chat extends Component {
         text: ""
     }
     this.messageBody = null
+  }
+
+  handleBGClick (e) {
+    if (e.target.getAttribute("id") == "bg-toggle-menu") {
+      this.props.toggleMenu(false)
+      browserHistory.push("/")
+
+    }
   }
 
   componentDidMount () {
@@ -133,6 +142,10 @@ class Chat extends Component {
         <Shell className="chat"
               noBackground={true}
         >
+         <span style={{ width: '100%', height: '100%', position:'fixed', top: 0, left: 0}}
+              onClick={ (e) => { this.handleBGClick(e) } }
+              id="bg-toggle-menu" 
+        >
             <section style={styles.messages(mobile)} ref={ r=> { this.messageBody = r} }>
                 {
                     this.props.messages.map((m, i) => {
@@ -188,6 +201,7 @@ class Chat extends Component {
                         style={ styles.uploadStyle(mobile) }
                   />
             </section>
+          </span>
         </Shell>
     )
 
@@ -335,10 +349,8 @@ let styles = {
       textAlign: 'left',
       position: 'fixed',
       left: mobile ? 0 : '65px',
-      bottom: '58px',
       top: mobile ? '162px' : 0,
       overflowY: 'auto',
-      height: '93%',
       overflowX: 'hidden',
       fontSize: '14pt'
     }

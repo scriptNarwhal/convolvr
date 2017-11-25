@@ -6,6 +6,14 @@ import LocationBar from '../components/location-bar'
 
 class Worlds extends Component {
 
+  handleBGClick (e) {
+    if (e.target.getAttribute("id") == "bg-toggle-menu") {
+      this.props.toggleMenu(false)
+      browserHistory.push("/")
+
+    }
+  }
+
   switchWorlds ( userName, name ) {
 
     if (userName == '') {
@@ -17,6 +25,7 @@ class Worlds extends Component {
     //window.location.href = window.location.href // workaround..
     this.props.setCurrentWorld( userName, name )
     three.world.reload( userName, name, false, false )
+    this.props.toggleMenu(false)
   }
 
   _renderWorlds ( worlds ) {
@@ -97,6 +106,10 @@ class Worlds extends Component {
                         this.props.changeDirectory(path)
                      }}
         />
+        <span style={{ width: '100%', height: '100%', position:'fixed', top: 0, left: 0}}
+              onClick={ (e) => { this.handleBGClick(e) } }
+              id="bg-toggle-menu" 
+        >
           <div style={styles.worlds}>
             { this._renderWorlds( userWorldsWithSkyboxes ) }
           </div>
@@ -109,8 +122,8 @@ class Worlds extends Component {
           <div style={styles.worlds}>
             { this._renderWorlds( worlds ) }
           </div>
-
-        </Shell>
+        </span>
+      </Shell>
     )
   }
 }
@@ -122,6 +135,9 @@ import { connect } from 'react-redux';
 import {
     sendMessage
 } from '../../redux/actions/message-actions'
+import {
+  toggleMenu
+} from '../../redux/actions/app-actions'
 import { fetchWorlds, setCurrentWorld } from '../../redux/actions/world-actions'
 
 export default connect(
@@ -133,6 +149,9 @@ export default connect(
   },
   dispatch => {
     return {
+      toggleMenu: (force) => {
+        dispatch( toggleMenu( force ) )
+      },
       sendMessage: (message, from) => {
           dispatch(sendMessage(message, from))
       },

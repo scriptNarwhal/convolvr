@@ -28,19 +28,34 @@ export default class FileTool extends Tool {
                 name: "metal"
               },
               tool: {
-                panel: {
-                  title: "Files",
-                  color: 0x07ff07,
-                  content: {
-                    props: {
-                      metaFactory: { // generates factory for each item in dataSource
-                        type: "file", // entity, prop, place, world, user, file, directory
-                        //propName: "geometry",
-                        dataSource: this.world.systems.assets.files
+                panels: [
+                  {
+                    title: "Files",
+                    color: 0x07ff07,
+                    content: {
+                      props: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "file", // entity, prop, place, world, user, file, directory
+                          //propName: "geometry",
+                          dataSource: this.world.systems.assets.files
+                        }
+                      }
+                    }
+                  },
+                  {
+                    title: "Directories",
+                    color: 0x07ff07,
+                    content: {
+                      props: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "directory", // entity, prop, place, world, user, file, directory
+                          //propName: "geometry",
+                          dataSource: this.world.systems.assets.files
+                        }
                       }
                     }
                   }
-                }
+                ]
               }
             },
             components: [
