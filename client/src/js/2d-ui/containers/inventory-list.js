@@ -144,8 +144,7 @@ let styles = {
     display: 'block',
     textAlign: 'left',
     paddingLeft: '1em',
-    paddingTop: '0.5em',
-    backgroundColor: 'rgba(0,0,0,0.2)'
+    paddingTop: '0.5em'
   },
   new: {
     width: '40%',

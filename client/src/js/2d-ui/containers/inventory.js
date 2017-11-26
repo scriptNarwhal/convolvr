@@ -39,11 +39,9 @@ class Inventory extends Component {
   }
 
   refreshInventory ( opts ) {
-
     this.props.getInventory(this.props.username, "Entities")
     this.props.getInventory(this.props.username, "Components")
     this.props.getInventory(this.props.username, "Properties")
-
   }
 
   componentWillUpdate (nextProps, nextState) {

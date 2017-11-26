@@ -76,6 +76,7 @@ export default class SkyBox {
             terrainEnt = this.world.terrain.distantTerrain,
             config = this.world.config,
             skyLight = this.world.skyLight,
+            sunLight = this.world.sunLight,
             yaw = config ? config.light.yaw - Math.PI / 2.0 : 0,
             pitch = config ? config.light.pitch : 0,
             skyMat = null
@@ -96,8 +97,10 @@ export default class SkyBox {
                     skyLight.shadow.camera.position.set( camera.position.x, 600+camera.position.y, camera.position.z)
                     skyLight.shadow.camera.updateMatrix()
                 }
-        
-                skyLight.position.set( camera.position.x+Math.sin(yaw)*301, 800+camera.position.y+ Math.sin(pitch)*301, camera.position.z-Math.cos(yaw)*301)
+                
+                skyLight.position.set( camera.position.x, 2000+camera.position.y, camera.position.z )
+                sunLight.position.set( camera.position.x+Math.sin(yaw)*-2001, 2000+camera.position.y+ Math.sin(pitch)*801, camera.position.z+Math.cos(yaw)*2001)
+                //console.log(skyLight.position, sunLight.position)
                 //this.skyLight.shadow.camera.lookAt( skyLight )
             }
         }

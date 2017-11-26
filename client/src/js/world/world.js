@@ -59,6 +59,7 @@ export default class Convolvr {
 	workers: 		  Object
 	skyBoxMesh:       any
 	skyLight:         any
+	sunLight:         any
 	shadowHelper:     any
 
 	constructor( user: User, userInput: UserInput, socket: any, store: any, loadedCallback: Function ) {
@@ -174,7 +175,8 @@ export default class Convolvr {
 	init ( config: Object, callback: Function ) {
 		
 		let coords 	 	   = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
-			skyLight 	   = skyLight = new THREE.DirectionalLight( config.light.color, 1 ),
+			skyLight 	   = this.skyLight = new THREE.DirectionalLight( config.light.color, 1 ),
+			sunLight       = this.sunLight = new THREE.DirectionalLight( 0xffffff, config.light.intensity ),
 			camera 		   = three.camera,
 			skyMaterial    = new THREE.MeshBasicMaterial( {color: 0x303030} ),
 			skyTexture     = null,
@@ -189,18 +191,18 @@ export default class Convolvr {
 			skySize 	   = 1000+((this.settings.viewDistance+3.5)*1.4)*140,
 			oldSkyMaterial = {}
 
-
 		this.config = config; console.info("World config: ", config)
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
 		three.scene.add(this.ambientLight)
+		three.scene.add(sunLight)
 
 		if ( this.settings.shadows > 0 ) {
 
-			skyLight.castShadow = true
-			shadowCam = skyLight.shadow.camera
-			skyLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)  
-			skyLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows) 
+			sunLight.castShadow = true
+			shadowCam = sunLight.shadow.camera
+			sunLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)  
+			sunLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows) 
 			shadowCam.near = 0.5      // default
 			shadowCam.far = 1300      
 			shadowCam.left = -500
@@ -210,7 +212,7 @@ export default class Convolvr {
 			three.scene.add(shadowCam)
 			
 			if  ( !this.shadowHelper ) {
-				this.shadowHelper = new THREE.CameraHelper( skyLight.shadow.camera );
+				this.shadowHelper = new THREE.CameraHelper( sunLight.shadow.camera );
 				three.scene.add( this.shadowHelper );
 			}
 		} 
@@ -242,10 +244,14 @@ export default class Convolvr {
 				!!world.ambientLight && three.scene.remove( world.ambientLight )
 
 				world.skyLight = skyLight
+				world.sunLight = sunLight
 				three.scene.add(skyLight)
-				skyLight.position.set( Math.sin(yaw)*1000, Math.sin(config.light.pitch)*1000, Math.cos(yaw)*1000)
-				//skyLight.lookAt(zeroZeroZero)
-				//skyLight.shadow.camera.lookAt(zeroZeroZero)
+				skyLight.position.set( 0, 5000, 0 )
+				sunLight.position.set( Math.sin(yaw)*1000, Math.sin(config.light.pitch)*1000, Math.cos(yaw)*1000)
+				
+				skyLight.lookAt(zeroZeroZero)
+				sunLight.lookAt(zeroZeroZero)
+				//sunLight.shadow.camera.lookAt(zeroZeroZero)
 				three.scene.add(world.skyboxMesh)
 				world.skyboxMesh.position.set(camera.position.x, 0, camera.position.z)
 				callback()

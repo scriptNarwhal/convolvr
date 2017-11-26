@@ -45,8 +45,9 @@ void main( void ) {
     float mixedTerrainBlue = blue / 2.0 + terrainBlue* 0.75;
    */
     vec3 newColor = vec3(0,0,0);
+    vec3 terrainGradient = vec3(0,0,0);
 
-    if ( vUv.y >= 0.5 ) {
+    if ( vUv.y >= 0.49 ) {
 
         luminance += 0.5 + depth * 1.4;
         glow =+ sin(0.45 * depth * depth);
@@ -74,21 +75,11 @@ void main( void ) {
         color = vec4( newColor, 1.0 );
         glow += sin( abs(vUv.x * PI -lightYaw  )  ) * 1.2;
         
-    } else if ( vUv.y < 0.5 && vUv.y > 0.49 ) {
-
-        luminance += depth * 1.7;
-        glow += 0.3 * depth * depth;
-        glow += sin( abs( ((vUv.x * PI) -lightYaw/2.0) ) ) /1.75;
-        float p = 1.0 - (vUv.y-0.49)*100.0;
-        glow = mix( glow, 0.2, p );
-        //color = vec4(terrainRed, terrainGreen, terrainBlue, 1.0);
-        color = vec4( luminance*mix( luminance*red, terrainRed, p), luminance*mix( luminance*green, terrainGreen, p), luminance*mix(luminance*blue, terrainBlue, p), 1.0 );
-        
-    } else {    
+     } else {    
 
         glow = 0.75;
-        float terrainGradient = 1.0-vUv.y;
-        color = vec4( mix(0.9, terrainRed* 0.9, terrainGradient), mix(0.9, terrainGreen* 0.9, terrainGradient), mix(0.9, terrainBlue* 0.9, terrainGradient), 1.0);
+        terrainGradient = vec3(1.0-vUv.y*red, 1.0-vUv.y*green, 1.0-vUv.y*blue );
+        color = vec4( mix(0.9, terrainRed* 0.9, terrainGradient.x), mix(0.9, terrainGreen* 0.9, terrainGradient.y), mix(0.9, terrainBlue* 0.9, terrainGradient.z), 1.0);
 
     }
 
