@@ -93,13 +93,13 @@ export default class SkyBox {
 
                 this.world.skyboxMesh.position.set(camera.position.x, camera.position.y, camera.position.z)
                 
-                if (skyLight.castShadow) {
-                    skyLight.shadow.camera.position.set( camera.position.x, 600+camera.position.y, camera.position.z)
-                    skyLight.shadow.camera.updateMatrix()
+                if (sunLight.castShadow) {
+                    sunLight.shadow.camera.position.set(sunLight.position.x, sunLight.position.y, sunLight.position.z)
+                    sunLight.shadow.camera.updateMatrix()
                 }
                 
                 skyLight.position.set( camera.position.x, 2000+camera.position.y, camera.position.z )
-                sunLight.position.set( camera.position.x+Math.sin(yaw)*-2001, 2000+camera.position.y+ Math.sin(pitch)*801, camera.position.z+Math.cos(yaw)*2001)
+                sunLight.position.set( camera.position.x-Math.sin(yaw)*2001, 2000+camera.position.y+ Math.sin(pitch)*801, camera.position.z-Math.cos(yaw)*2001)
                 //console.log(skyLight.position, sunLight.position)
                 //this.skyLight.shadow.camera.lookAt( skyLight )
             }

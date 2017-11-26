@@ -124,6 +124,20 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
 
       }
       break
+      case "metal3":
+      prop.repeat = !!!prop.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
+
+      if (!simpleShading) {
+
+        prop.metalnessMap = "/data/images/textures/metal5.jpg"
+        prop.map = !!!prop.map ? '/data/images/textures/metal5.jpg' : prop.map
+
+      } else {
+
+        prop.map = !!!prop.map ? '/data/images/textures/metal5.jpg' : prop.map
+
+      }
+      break
     case "glass":
       prop.repeat = ['wrapping', 18, 18]
 

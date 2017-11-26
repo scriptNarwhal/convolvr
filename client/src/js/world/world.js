@@ -175,8 +175,8 @@ export default class Convolvr {
 	init ( config: Object, callback: Function ) {
 		
 		let coords 	 	   = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
-			skyLight 	   = this.skyLight = new THREE.DirectionalLight( config.light.color, 1 ),
-			sunLight       = this.sunLight = new THREE.DirectionalLight( 0xffffff, config.light.intensity ),
+			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.35 ),
+			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, config.light.intensity ),
 			camera 		   = three.camera,
 			skyMaterial    = new THREE.MeshBasicMaterial( {color: 0x303030} ),
 			skyTexture     = null,
@@ -191,20 +191,26 @@ export default class Convolvr {
 			skySize 	   = 1000+((this.settings.viewDistance+3.5)*1.4)*140,
 			oldSkyMaterial = {}
 
+		this.skyLight = skyLight
+		this.sunLight = sunLight
+		this.skyLight.color.set( config.light.color )
+		this.sunLight.intensity = config.light.intensity
+
 		this.config = config; console.info("World config: ", config)
 		this.terrain.initTerrain(config.terrain)
-		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor)
+		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor, 10.5)
 		three.scene.add(this.ambientLight)
 		three.scene.add(sunLight)
 
 		if ( this.settings.shadows > 0 ) {
 
 			sunLight.castShadow = true
+			sunLight.shadowCameraVisible = true
 			shadowCam = sunLight.shadow.camera
 			sunLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)  
 			sunLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows) 
 			shadowCam.near = 0.5      // default
-			shadowCam.far = 1300      
+			shadowCam.far = 1300000      
 			shadowCam.left = -500
 			shadowCam.right = 500
 			shadowCam.top = 500
@@ -295,7 +301,7 @@ export default class Convolvr {
 	initRenderer ( renderer: any, id: string ) {
 
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1
-		renderer.setClearColor(0x2b2b2b)
+		renderer.setClearColor(0x1b1b1b)
 		renderer.setPixelRatio(pixelRatio)
 		renderer.setSize(window.innerWidth, window.innerHeight)
 		document.body.appendChild( renderer.domElement )
