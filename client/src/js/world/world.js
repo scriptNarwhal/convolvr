@@ -176,7 +176,7 @@ export default class Convolvr {
 		
 		let coords 	 	   = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
 			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.35 ),
-			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, config.light.intensity ),
+			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, config.light.intensity*1.1 ),
 			camera 		   = three.camera,
 			skyMaterial    = new THREE.MeshBasicMaterial( {color: 0x303030} ),
 			skyTexture     = null,
@@ -406,6 +406,7 @@ export default class Convolvr {
 					id: this.user.id,
 					username: this.user.username,
 					image: this.webcamImage,
+					avatar: this.user.data.avatar ? this.user.data.avatar : "default-avatar",
 					imageSize,
 					hands,
 					position: compressVector3( camera.position, 4 ),

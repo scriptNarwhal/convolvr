@@ -41,24 +41,43 @@ export default class EntityTool extends Tool  {
                 name: "metal"
               },
               tool: {
-                panel: {
-                  title: "Entities",
-                  color: 0x07ff00,
-                  content: {
-                    props: {
-                      metaFactory: { // generates factory for each item in dataSource
-                        type: "entity", // component, prop
-                        // propName: "userEntities", // toggle to user's entities
-                        dataSource: this.world.systems.assets.entities
-                      },
-                      layout: {
-                        type: "grid",
-                        mode: "factory", // child components will ignore layout
-                        columns: 3
+                panels: [
+                  {
+                    title: "Entities",
+                    color: 0x07ff00,
+                    content: {
+                      props: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "entity", // component, prop
+                          // propName: "userEntities", // toggle to user's entities
+                          dataSource: this.world.systems.assets.entities
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
+                      }
+                    }
+                  },{
+                    title: "My Entities",
+                    color: 0x07ff00,
+                    content: {
+                      props: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "entity", // component, prop
+                          // propName: "userEntities", // toggle to user's entities
+                          dataSource: this.world.systems.assets.userEntities
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
                       }
                     }
                   }
-                }
+                ]
               }
             },
             components: [

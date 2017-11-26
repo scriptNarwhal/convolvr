@@ -42,7 +42,7 @@ export default class UserUpdateHandler {
 
                     if (user == null) {
 
-                        avatar = world.systems.assets.makeEntity("default-avatar", true, { wholeBody: true, id: entity.id }, coords)
+                        avatar = world.systems.assets.makeEntity(entity.avatar, true, { wholeBody: true, id: entity.id }, coords)
                         user = world.users["user" + entity.id] = {
                             id: entity.id,
                             avatar,

@@ -89,7 +89,7 @@ class Profile extends Component {
 
     this.setState({
       data: {
-        ...state.data,
+        ...this.state.data,
         avatar: value
       }
     })

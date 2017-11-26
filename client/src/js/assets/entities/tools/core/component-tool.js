@@ -37,23 +37,41 @@ export default class ComponentTool extends Tool {
                 name: "metal"
               },
               tool: {
-                panel: { // helper to create tool configuration-panel entity ( coordinated by tool system )
-                  title: "Components",
-                  color: 0x003bff,
-                  content: {
-                    props: {
-                      metaFactory: { // generates factory for each item in dataSource
-                        type: "component", // component, entity, prop
-                        dataSource: this.world.systems.assets.componentsByName
-                      },
-                      layout: {
-                        type: "grid",
-                        mode: "factory", // child components will ignore layout
-                        columns: 3
+                panels: [
+                  { // helper to create tool configuration-panel entity ( coordinated by tool system )
+                    title: "Components",
+                    color: 0x003bff,
+                    content: {
+                      props: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "component", // component, entity, prop
+                          dataSource: this.world.systems.assets.componentsByName
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
                       }
                     }
-                  }
-                }
+                  },{ // helper to create tool configuration-panel entity ( coordinated by tool system )
+                    title: "My Components",
+                    color: 0x003bff,
+                    content: {
+                      props: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "component", // component, entity, prop
+                          dataSource: this.world.systems.assets.userComponents
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
+                      }
+                    }
+                  },
+                ]
               }
             },
             components: [
