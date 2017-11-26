@@ -33,6 +33,7 @@ export default class ContextMenu extends Component {
 
     let username = this.props.username,
         dir = this.props.dir,
+        numberOfOptions = this.props.options.length,
         nonEntity = this.props.category && this.props.category == "Properties" || this.props.category == "Components"
 
     if ( this.state.activated ) {
@@ -55,7 +56,7 @@ export default class ContextMenu extends Component {
                 
                 return (
                   <div onClick={ e=> this.handleContextAction( opt.name, e ) }
-                       style={styles.option}
+                       style={ { ...styles.option, borderBottom: i < numberOfOptions -1 ? styles.option.borderBottom : 'none' } }
                        key={i}
                   >
                     { opt.name == "Download" ? (
@@ -107,24 +108,30 @@ let styles = {
       position: 'relative',
       cursor: 'pointer',
       width: '224px',
-      height: '192px',
+      height: '204px',
       display: 'inline-block',
       marginRight: '0.5em',
       marginLeft: '8px',
       marginBottom: '0.5em',
-      backgroundColor: 'rgba(21, 21, 21, 0.85)',
+      backgroundColor: 'rgba(250, 250, 250, 1)',
       textAlign: "center",
-      borderRadius: '8px',
-      boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)'
+      borderRadius: "5px",
+      color: "black",
+      boxShadow: "rgba(0, 0, 0, 0.7) 1px 0.35em 1.2em",
+      fontWeight: "600",
+      border: "1px rgba(77, 77, 77, 0.64) solid"
     }
   },
   link: {
-    color: "#00ff00"
+    color: "#008523",
+    textDecoration: 'none'
   },
   option: {
     textAlign: 'left',
     paddingLeft: '0.8em',
-    paddingBottom: '0.2em'
+    paddingBottom: '0.2em',
+    borderBottom: '0.2em #bbbbbb solid'
+
   },
   options: {
     paddingTop:'0.4em',

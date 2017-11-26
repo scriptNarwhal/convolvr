@@ -269,7 +269,6 @@ export default class Convolvr {
 
 		document.title = config.name.toLowerCase() == 'overworld' && config.userName == 'convolvr' ? `Convolvr` : config.name // make "Convolvr" default configurable via admin settings
 		false == deferWorldLoading && rebuildWorld()
-
 	}
 
 	loadShaders ( vertex_url: string, fragment_url: string, onLoad: Function, onProgress: Function, onError: Function ) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
@@ -285,7 +284,6 @@ export default class Convolvr {
 			});
 
 		}, onProgress, onError)
-
 	}
 
 	initRenderer ( renderer: any, id: string ) {
@@ -309,15 +307,10 @@ export default class Convolvr {
 		this.systems.terrain.readyCallback = readyCallback
 	
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then( response => { // fix this... needs userName now
-
 			 this.init(response.data, ()=> { callback && callback(world) } )
-
 		}).catch(response => {
-
 			console.log("World Error", response)
-
 		})
-
 	}
 
 	reload ( user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean ) {
@@ -326,22 +319,15 @@ export default class Convolvr {
 			octree = this.octree
 
 		this.terrain.voxelList.map( v => {
-
 			v.entities.map(e => {
-				
 				if ( e.mesh ) {
-
 					octree.remove( e.mesh )
 					three.scene.remove( e.mesh )
-
-				}
-					
+				}					
 			})
 
-			if ( v.mesh )
-				
+			if ( v.mesh )				
 				three.scene.remove( v.mesh )
-
 
 		})
 
@@ -350,13 +336,13 @@ export default class Convolvr {
 		this.terrain.platforms = []
 		this.terrain.voxels = {}
 		this.terrain.voxelList = []
+		this.skyboxMesh.parent.remove(this.skyboxMesh)
 		this.load( user, name, () => {}, () => {} )
 
 		if ( !!! noRedirect )
 
 			browserHistory.push("/"+(user||"convolvr")+"/"+name+(!!place ? `/${place}` : ''))
 
-		
 	}
 
 	generateFullLOD ( coords: Array<number> ) {
@@ -365,15 +351,12 @@ export default class Convolvr {
 			scene = three.scene
 
 		if ( voxel != null && voxel.cleanUp == false ) {
-
 			voxel.entities.map( ( entity, i )=>{
 
 				i > 2 && entity.init(scene)
 
 			})
-
 		}
-
 	}
 
 	sendUserData () {
@@ -394,18 +377,14 @@ export default class Convolvr {
 	  	this.sendUpdatePacket += 1
 
 	  	if ( this.sendUpdatePacket %((2+(2*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0 ) { // send packets faster / slower for all vr / mobile combinations
-
 			if ( input.trackedControls || input.leapMotion ) {
-
 				userHands.forEach( handComponent => {
-
 					let hand = handComponent.mesh
 
 					hands.push({
 						pos: compressFloatArray(hand.position.toArray(), 4), 
 						quat: compressFloatArray(hand.quaternion.toArray(), 8) 
 					})
-
 				})
 			}
 
@@ -420,11 +399,9 @@ export default class Convolvr {
 					position: compressVector3( camera.position, 4 ),
 					quaternion: compressVector4( camera.quaternion, 8 ),
 				}
-			
 			})
 
 			if ( this.capturing )
-
 				this.webcamImage = ""
 
 	    }

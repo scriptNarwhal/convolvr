@@ -17,9 +17,7 @@ class Worlds extends Component {
   switchWorlds ( userName, name ) {
 
     if (userName == '') {
-
       userName = 'space'
-
     }
     //browserHistory.push(userName+"/"+name)
     //window.location.href = window.location.href // workaround..
@@ -69,13 +67,9 @@ class Worlds extends Component {
         !!this.props.worlds && this.props.worlds.map( (world) => {
 
           if ( !!world.sky.photosphere ) {
-
             worldsWithSkyboxes.push( world )
-
           } else {
-
             worlds.push( world )            
-
           }
 
         })
@@ -83,13 +77,9 @@ class Worlds extends Component {
         !!this.props.userWorlds && this.props.userWorlds.map( (world) => {
           
           if ( !!world.sky.photosphere ) {
-
             userWorldsWithSkyboxes.push( world )
-
           } else {
-
             userWorlds.push( world )            
-
           }
 
         })
