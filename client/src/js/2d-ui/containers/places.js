@@ -6,6 +6,14 @@ import LocationBar from '../components/location-bar'
 
 class Places extends Component {
 
+  handleBGClick (e) {
+    if (e.target.getAttribute("id") == "bg-toggle-menu") {
+      this.props.toggleMenu(false)
+      browserHistory.push("/")
+
+    }
+  }
+
   setCurrentPlace (userName, world, name) {
     if (userName == '') {
       userName = 'space'
@@ -29,7 +37,11 @@ class Places extends Component {
                         this.props.changeDirectory(path)
                      }}
         />
-          <div style={styles.worlds}>
+          <span style={{ width: '100%', height: '100%', position:'fixed', top: 0, left: 0}}
+              onClick={ (e) => { this.handleBGClick(e) } }
+              id="bg-toggle-menu" 
+        >
+        <div style={styles.worlds}>
           {
             this.props.userPlaces.map((place, i) => {
               let thumb = ''
@@ -65,6 +77,7 @@ class Places extends Component {
             })
           }
           </div>
+        </span>
         </Shell>
     )
   }
@@ -74,8 +87,11 @@ class Places extends Component {
 Places.defaultProps = {
 
 }
-import { connect } from 'react-redux';
 
+import { connect } from 'react-redux';
+import {
+  toggleMenu
+} from '../../redux/actions/app-actions'
 import { fetchPlaces, setCurrentPlace } from '../../redux/actions/place-actions'
 
 export default connect(
@@ -87,6 +103,9 @@ export default connect(
   },
   dispatch => {
     return {
+      toggleMenu: (force) => {
+        dispatch( toggleMenu( force ) )
+      },
       setCurrentPlace: (user, world, place) => {
           dispatch(setCurrentWorld(user, world, place))
       }

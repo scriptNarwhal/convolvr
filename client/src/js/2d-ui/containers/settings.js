@@ -135,7 +135,9 @@ class Settings extends Component {
           <div style={styles.modal()}>
             <div>
               <h1>Settings</h1>
-              <h3 style={styles.h3}>View Distance</h3>
+            </div>
+            <div style={ { ...styles.even, ...styles.top } }>
+            <h3 style={styles.h3}>View Distance</h3>
               <div style={styles.col}>
                 <input onChange={e=> {this.setState({viewDistance: parseInt(e.target.value)})}}
                       style={styles.range}
@@ -149,7 +151,9 @@ class Settings extends Component {
                   {(this.state.viewDistance >= 0 ?'+ ':'')+this.state.viewDistance} Voxels 
                 </span>
               </div>
-              <h3 style={styles.h3}>Field Of View</h3>
+            </div>
+            <div style={styles.odd}>
+            <h3 style={styles.h3}>Field Of View</h3>
               <div style={styles.col}>
                 <input onChange={e=> {this.setState({fov: parseInt(e.target.value)})}}
                       style={styles.range}
@@ -164,7 +168,7 @@ class Settings extends Component {
                 </span>
               </div>
             </div>
-            <div>
+            <div style={styles.even}>
               <h3 style={styles.h3}>Lighting Quality</h3>
               <div style={styles.col}>
                 <select onChange={e=> {this.setState({lighting: e.target.value})}}
@@ -176,7 +180,7 @@ class Settings extends Component {
                 </select>
               </div>
             </div>
-            <div>
+            <div style={styles.odd}>
               <h3 style={styles.h3}>Shadow Quality</h3>
               <div style={styles.col}>
                 <select onChange={e=> {this.setState({shadows: parseInt(e.target.value)})}}
@@ -190,7 +194,7 @@ class Settings extends Component {
                 </select>
               </div>
             </div>
-            <div>
+            <div style={styles.even}>
               <h3 style={styles.h3}>Geometry Detail</h3>
               <div style={styles.col}>
                 <select onChange={e=> {this.setState({geometry: parseInt(e.target.value)})}}
@@ -204,7 +208,7 @@ class Settings extends Component {
                 </select>
               </div>
             </div>
-          <div>
+          <div style={styles.odd}>
             <h3 style={styles.h3}>Antialiasing</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({aa: e.target.value})}}
@@ -216,7 +220,7 @@ class Settings extends Component {
               </select>
             </div>
           </div>
-          <div>
+          <div style={styles.even}>
             <h3 style={styles.h3}>Override Lens Spacing</h3>
             <div style={styles.col}>
               <input onChange={e=> {this.setState({manualLensDistance: parseFloat(e.target.value)})}}
@@ -232,7 +236,7 @@ class Settings extends Component {
               </span>
             </div>
           </div>
-          <div>
+          <div style={styles.odd}>
             <h3 style={styles.h3}>Floor Height (VR)</h3>
             <div style={styles.col}>
               <input onChange={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
@@ -248,7 +252,7 @@ class Settings extends Component {
               </span>
             </div>
           </div>
-          <div>
+          <div style={styles.even}>
             <h3 style={styles.h3}>Leap Motion Mode</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({leapMode: e.target.value})}}
@@ -261,7 +265,7 @@ class Settings extends Component {
               </select>
             </div>
           </div>
-          <div>
+          <div style={styles.odd}>
             <h3 style={styles.h3}>Camera Control Mode</h3>
             <div style={styles.col}>
               <select onChange={e=> { this.setState({camera: e.target.value})}}
@@ -273,7 +277,7 @@ class Settings extends Component {
             </select>
             </div>
           </div>
-          <div>
+          <div style={styles.even}>
             <h3 style={styles.h3}>IOT Mode</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({IOTMode: e.target.value})}}
@@ -285,7 +289,7 @@ class Settings extends Component {
               </select>
             </div>
           </div>
-          <div>
+          <div style={styles.odd}>
             <h3 style={styles.h3}>Post Processing</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({postProcessing: e.target.value})}}
@@ -297,7 +301,7 @@ class Settings extends Component {
               </select>
             </div>
           </div>
-          <div>
+          <div style={{ ...styles.even, ...styles.bottom }}>
             <h3 style={styles.h3}>Menu Blur Effect</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({blurEffect: e.target.value})}}
@@ -478,6 +482,20 @@ const styles = {
     padding: '0.5em',
     borderRadius: '3px',
     boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.54)'
+  },
+  top: {
+    borderTopRightRadius: '0.2em',
+    borderTopLeftRadius: '0.2em'
+  },
+  bottom: {
+    borderBottomRightRadius: '0.2em',
+    borderBottomLeftRadius: '0.2em'
+  },
+  odd: {
+    backgroundColor: 'rgba(32,32,32,0.85)'
+  },
+  even: {
+    backgroundColor: 'rgba(42,42,42,0.85)'
   },
   h3: {
     textAlign: 'left',

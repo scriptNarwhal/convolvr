@@ -12,6 +12,14 @@ class Network extends Component {
 
   }
 
+  handleBGClick (e) {
+    if (e.target.getAttribute("id") == "bg-toggle-menu") {
+      this.props.toggleMenu(false)
+      browserHistory.push("/")
+
+    }
+  }
+
   componentWillMount () {
     console.log("init network view !!!")
     if (!!!this.props.settings) {
@@ -33,6 +41,10 @@ class Network extends Component {
                         
                      }}
         />
+         <span style={{ width: '100%', height: '100%', position:'fixed', top: 0, left: 0}}
+              onClick={ (e) => { this.handleBGClick(e) } }
+              id="bg-toggle-menu" 
+        >
           <div style={styles.worlds}>
           {
             this.props.settings != undefined && this.props.settings.network != undefined &&
@@ -50,6 +62,7 @@ class Network extends Component {
             })
           }
           </div>
+          </span>
         </Shell>
     )
   }
@@ -63,6 +76,9 @@ import { connect } from 'react-redux';
 import {
   fetchUniverseSettings
 } from '../../redux/actions/world-actions'
+import {
+  toggleMenu
+} from '../../redux/actions/app-actions'
 
 export default connect(
   (state, ownProps) => {
@@ -73,6 +89,9 @@ export default connect(
   },
   dispatch => {
     return {
+      toggleMenu: (force) => {
+        dispatch( toggleMenu( force ) )
+      },
       fetchUniverseSettings: () => {
         dispatch(fetchUniverseSettings())
       }

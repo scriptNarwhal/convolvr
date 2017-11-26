@@ -9,6 +9,14 @@ import {
 
 class Inventory extends Component {
 
+  handleBGClick (e) {
+    if (e.target.getAttribute("id") == "bg-toggle-menu") {
+      this.props.toggleMenu(false)
+      browserHistory.push("/")
+
+    }
+  }
+
   componentWillMount () {
 
     this.refreshInventory()
@@ -68,6 +76,10 @@ class Inventory extends Component {
                style={ isMobile() ? { paddingTop: '60px' } : { paddingTop: '0px' } }
                innerStyle={ { paddingTop: isMobile() ? '72px' : 0, paddingLeft: isMobile() ? '10px' : '72px' }  }       
         >
+        <span style={{ width: '100%', height: '100%', position:'fixed', top: 0, left: 0, paddingLeft: '60px'}}
+              onClick={ (e) => { this.handleBGClick(e) } }
+              id="bg-toggle-menu" 
+        >
         {
           true ? [[this.props.inventoryEntities,   "Entities"  ], 
            [this.props.inventoryComponents, "Components"], 
@@ -93,6 +105,7 @@ class Inventory extends Component {
             />
            )) : ""
         }
+        </span>
         </Shell>
     )
 
@@ -129,6 +142,9 @@ import {
   launchInventoryExport,
   launchImportToWorld
 } from '../../redux/actions/util-actions'
+import {
+  toggleMenu
+} from '../../redux/actions/app-actions'
 
 export default connect(
   (state, ownProps) => {
@@ -146,6 +162,9 @@ export default connect(
   },
   dispatch => {
     return {
+      toggleMenu: (force) => {
+        dispatch( toggleMenu( force ) )
+      },
       launchImportToWorld: (username, index, data) => {
         dispatch( launchImportToWorld(username, index, data))
       },

@@ -50,7 +50,7 @@ export default class FileTool extends Tool {
                         metaFactory: { // generates factory for each item in dataSource
                           type: "directory", // entity, prop, place, world, user, file, directory
                           //propName: "geometry",
-                          dataSource: this.world.systems.assets.files
+                          dataSource: this.world.systems.assets.directories
                         }
                       }
                     }
