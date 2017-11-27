@@ -194,7 +194,7 @@ export default class Entity {
       mesh = nonMerged[ 0 ] // maybe nest inside of Object3D ?
     }
 
-    if ( world.shadows > 0 ) {
+    if ( world.settings.shadows > 0 ) {
       mesh.castShadow = true
       mesh.receiveShadow = true
     }

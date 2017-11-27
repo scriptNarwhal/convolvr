@@ -119,7 +119,7 @@ export default class AssetSystem {
             
             if ( g > b ) {
                 
-                if ( r > b ) {
+                if ( r > b && g > r /3  ) {
                     envURL = '/data/images/photospheres/sky-reflection-o'
                 } else if (red < 0.2 && blue < 0.2) {
                     envURL = '/data/images/photospheres/sky-reflection-g'

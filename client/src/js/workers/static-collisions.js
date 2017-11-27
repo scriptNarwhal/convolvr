@@ -33,6 +33,7 @@ self.update = ( ) => {
 		size 		 = 50000,
 		voxel 		 = null,
 		ent 		 = null,
+		entRadius    = 10,
 		structure 	 = null,
 		bounds 		 = [0, 0],
 		voxel 		 = null,
@@ -48,8 +49,7 @@ self.update = ( ) => {
 
 		if ( !!!voxel || !!!voxel.position) continue
 
-		if ( !!voxel && distance2dCompare( position, voxel.position, 180 ) ) { 	// do collisions on voxels & structures... just walls at first..
-					
+		if ( !!voxel && distance2dCompare( position, voxel.position, 180 ) ) { 	// do collisions on voxels & structures... just walls at first..		
 			if ( voxel.loaded == undefined ) {
 				voxel.loaded = true
 				self.postMessage('{"command": "load entities", "data":{"coords":"'+voxel.cell[0]+'.'+voxel.cell[1]+'.'+voxel.cell[2]+'"}}');
@@ -62,7 +62,6 @@ self.update = ( ) => {
 				yPos = voxel.position[1]
 				
 				if ( distance2dCompare( position, voxel.position, 24.5 ) ) {
-						
 					if ( position[1] > yPos - 21 + vrHeight  && position[1] < yPos + 14.25 + (vrHeight != 0 ? vrHeight-1 : 0) ) {
 						collision = true
 						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
@@ -73,16 +72,20 @@ self.update = ( ) => {
 
 						while ( e >= 0 ) {
 							ent = voxel.entities[ e ]
+							entRadius = ent.boundingRadius
 
 							if ( !!! ent || !!!ent.components ) { console.warn("Problem with entity! ",e ,ent); continue }
-
-							if ( distance3dCompare( position, ent.position, (ent.boundingRadius||5)+0.5,) ) { 
-
+							// console.info("collision check entity ", position, ent.position, (ent.boundingRadius || 5))
+							if ( distance3dCompare( position, [ent.position[0]-entRadius, ent.position[1], ent.position[2]-entRadius], (entRadius*1.4||3)+4.5) ) { 
 								ent.components.map( entComp => {
-									if ( distance3dCompare( position, entComp.position, entComp.boundingRadius || 3) ) {
+									if ( distance3dCompare( position, [ ent.position[0] + entComp.position[0], 
+																		ent.position[1] + entComp.position[1], 
+																		ent.position[2] + entComp.position[2] 
+																	  ], entComp.boundingRadius || Math.max(entComp.props.geometry.size[0], entComp.props.geometry.size[2]) / 1.5 )) {
 										collision = true
 
 										if ( !! entComp.props.floor ) { 
+											console.info("floor collision!")
 											self.postMessage( JSON.stringify( {command: "floor collision", data: { 
 												position: entComp.position, 
 												floorData: entComp.props.floor
