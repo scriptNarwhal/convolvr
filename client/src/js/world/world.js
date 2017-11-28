@@ -211,8 +211,8 @@ export default class Convolvr {
 			sunLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows) 
 			shadowCam.near = 0.5      // default
 			shadowCam.far = 1300000      
-			shadowCam.left = -500
-			shadowCam.right = 500
+			shadowCam.left = -400
+			shadowCam.right = 400
 			shadowCam.top = 500
 			shadowCam.bottom = -500
 			three.scene.add(shadowCam)

@@ -55,11 +55,13 @@ export default class StaticCollisions {
 			//entPos.fromArray( message.data.position )
 
 			let distance = entPos.distanceTo( userPos ),
+				oldYV = user.velocity.y,
 				direction = entPos.sub(userPos)	
 
 			if ( distance < 500 ) { // debug
 
-				user.velocity.sub( direction.multiplyScalar(100) )
+				user.velocity.sub( direction.multiplyScalar(10) )
+				user.velocity.y = oldYV
 
 			}
 
@@ -88,10 +90,10 @@ export default class StaticCollisions {
 			user.falling = false
 
 			} else if ( message.command == "floor collision" ) { 
-				// console.log("floor collision", message.data.position, message.data)
-				cam.position.set(cam.position.x, message.data.position[1]+vrHeight, cam.position.z)
+				console.log("floor collision user.velocity.y", user.velocity.y)
+				//cam.position.set(cam.position.x, message.data.position[1]+vrHeight, cam.position.z)
 
-				if ( Math.abs(user.velocity.y) > 10 ) {
+				if ( Math.abs(user.velocity.y) > 15 ) {
 					user.velocity.y *= -0.66
 					user.velocity.x *= 0.96
 					user.velocity.z *= 0.96
