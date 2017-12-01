@@ -50,7 +50,7 @@ export default class StaticCollisions {
 	          
 	        console.log(message.data)
 
-		}  else if ( message.command == "entity-user collision" ) {  console.log("!!!!!  entity-user collision", message.data)
+		}  else if ( message.command == "entity-user collision" ) { 
 
 			//entPos.fromArray( message.data.position )
 
@@ -71,14 +71,14 @@ export default class StaticCollisions {
 
 				cam.position.set( cam.position.x, message.data.position[1]+14.25 +(vrHeight != 0 ? vrHeight-1 : 0), cam.position.z )	
 
-				if ( Math.abs( user.velocity.y ) > 150 ) {
-					window.navigator.vibrate && window.navigator.vibrate(50)
-					user.velocity.y *= -0.8
-					user.falling = true
-				} else {
+				// if ( Math.abs( user.velocity.y ) > 150 ) {
+				// 	window.navigator.vibrate && window.navigator.vibrate(50)
+				// 	user.velocity.y *= -0.8
+				// 	user.falling = true
+				// } else {
 					user.falling = false
 					user.velocity.y = 0
-				}
+				// }
 				
 			} else if ( message.data.type == "bottom" ) {
 				cam.position.set( cam.position.x, message.data.position[1]-4 +vrHeight, cam.position.z )
@@ -90,13 +90,12 @@ export default class StaticCollisions {
 			user.falling = false
 
 			} else if ( message.command == "floor collision" ) { 
-				console.log("floor collision user.velocity.y", user.velocity.y)
-				//cam.position.set(cam.position.x, message.data.position[1]+vrHeight, cam.position.z)
+				//cam.position.set(cam.position.x, message.data.position[1]+vrHeight+2, cam.position.z)
 
-				if ( Math.abs(user.velocity.y) > 15 ) {
-					user.velocity.y *= -0.66
-					user.velocity.x *= 0.96
-					user.velocity.z *= 0.96
+				if ( user.velocity.y < -15 ) {
+					user.velocity.y *= -0.76
+					user.velocity.x *= 0.97
+					user.velocity.z *= 0.97
 					user.falling = true
 				} else {
 					user.falling = false

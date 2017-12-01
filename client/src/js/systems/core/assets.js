@@ -170,11 +170,11 @@ export default class AssetSystem {
     addUserAssets ( assets ) {
         this.systems.asset = this.systems.asset.concat( assets )
     }
-    // call this
+
     setUserFiles ( files ) {
         this.files = files
     }
-    // call this
+
     setUserDirectories ( directories ) {
         this.directories = directories
     }
