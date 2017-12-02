@@ -82,8 +82,8 @@ self.update = ( ) => {
 									boundingRadius * 1.5
 								)) {
 									if ( !! entComp.props.floor ) {
-										let verticalOffset = (position[1] + 3 - (entComp.position[1]+ent.position[1])) 
-										if ( verticalOffset > 0 && verticalOffset < 4 ) {
+										let verticalOffset = (position[1] + 2 - (entComp.position[1]+ent.position[1])) 
+										if ( verticalOffset > 0 && verticalOffset < 5 ) {
 											self.postMessage( JSON.stringify( {command: "floor collision", data: { 
 												position: entComp.position, 
 												floorData: entComp.props.floor
