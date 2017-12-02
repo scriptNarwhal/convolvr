@@ -79,7 +79,7 @@ module.exports = function places (state = {
     case INVENTORY_FETCH_DONE:
       switch( action.category ) {
           case "Entities":
-            three.world.systems.assets.userEntities = action.data
+            three.world.systems.assets.addUserEntities(action.data)
             return Object.assign({}, state, {
                 items: {
                     ...state.items,
@@ -89,7 +89,7 @@ module.exports = function places (state = {
             })
           break
           case "Components":
-            three.world.systems.assets.userComponents = action.data
+            three.world.systems.assets.addUserComponents(action.data)
             return Object.assign({}, state, {
                 items: {
                     ...state.items,

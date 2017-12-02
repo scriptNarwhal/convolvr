@@ -48,14 +48,12 @@ class App extends Component {
       worldName = this.props.world.toLowerCase() == "overworld" ? "Convolvr" : this.props.world
 
       if ( this.props.focus == false ) {
-
         this.setState({
           unread: this.state.unread +1
         })
 
         if (this.state.unread > 0)
-
-            document.title = `[${this.state.unread}] ${worldName}`
+          document.title = `[${this.state.unread}] ${worldName}`
 
       } else {
         document.title = worldName
@@ -69,28 +67,18 @@ class App extends Component {
         browserHistory.push("/chat")
 
         if ( worldMode != 'vr' && worldMode != 'stereo' ) { // 3d ui will show the chat in vr without interrupting things
-        
             this.props.toggleMenu(true)
-        
         } else {
           setTimeout(()=>{
-
             browserHistory.push(`/${worldDetails[ 0 ]}/${worldDetails[ 1 ]}`)
             this.props.toggleMenu(false)
-          
-          }, 3500)
-        
+          }, 3500) 
         }
-
       }
-
     })
 
     this.props.fetchUniverseSettings()
-
     setTimeout( ()=> { console.log("world & worldUser ", worldDetails[0], worldDetails[1] )
-
-
       let respawnCamera = () => {
 
         let cameraPos = world.three.camera.position,
@@ -101,44 +89,43 @@ class App extends Component {
           altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
           three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
         }
-        
         three.world.user.velocity.y = -1000
-
       }
 
       world.load( worldDetails[ 0 ], worldDetails[ 1 ], () => { /* systems online */ }, ()=> { /* terrain finished loading */
-
         console.log("init 3d UI / terrain loaded")
         respawnCamera()
-
       })
-
     }, 100)
 
-    setTimeout(()=>{
+    world.initChatAndLoggedInUser = ( doLogin = false ) => {
       this.props.getChatHistory(0) // wait a fraction of a second for the world to load / to show in 3d too
-      let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...
-      username = '',
-      password = '',
-      autoSignIn = false
-
-      if (rememberUser != null) {
-
-        username = localStorage.getItem("username") // refactor this to be more secure before beta 0.6
-        password = localStorage.getItem("password")
-
-        if (username != null && username != '') {
-
-          autoSignIn = true
-          this.props.login(username, password, "", {})
-
+      if ( doLogin ) {
+        let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...
+        username = '',
+        password = '',
+        autoSignIn = false
+  
+        if (rememberUser != null) {
+  
+          username = localStorage.getItem("username") // refactor this to be more secure before beta 0.6
+          password = localStorage.getItem("password")
+  
+          if (username != null && username != '') {
+  
+            autoSignIn = true
+            this.props.login(username, password, "", {})
+  
+          }
         }
+  
+        if (!autoSignIn && this.props.loggedIn == false && window.location.href.indexOf("/chat") >-1) {
+          browserHistory.push("/login")
+        }
+      } else {
+        world.onUserLogin( world.user )
       }
-
-      if (!autoSignIn && this.props.loggedIn == false && window.location.href.indexOf("/chat") >-1) {
-        browserHistory.push("/login")
-      }
-    }, 200)
+    }
 
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
 

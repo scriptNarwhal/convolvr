@@ -83,6 +83,7 @@ export default class Convolvr {
 		usePostProcessing = this.settings.enablePostProcessing == 'on'
 		camera = new THREE.PerspectiveCamera( this.settings.fov, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
 		this.onUserLogin = () => {}
+		this.initChatAndLoggedInUser = () => {}
 		let rendererOptions = { antialias: this.settings.aa != 'off' && !usePostProcessing }
 
 		if ( usePostProcessing ) {
@@ -345,7 +346,9 @@ export default class Convolvr {
 		this.terrain.platforms = []
 		this.terrain.voxels = {}
 		this.terrain.voxelList = []
-		this.skyboxMesh.parent.remove(this.skyboxMesh)
+		if ( this.skyboxMesh && this.skyboxMesh.parent ) {
+			this.skyboxMesh.parent.remove(this.skyboxMesh)
+		}
 		this.load( user, name, () => {}, () => {} )
 
 		if ( !!! noRedirect )
@@ -358,9 +361,7 @@ export default class Convolvr {
 
 		if ( voxel != null && voxel.cleanUp == false ) {
 			voxel.entities.map( ( entity, i )=>{
-
 				i > 2 && entity.init(scene)
-
 			})
 		}
 	}
@@ -410,21 +411,16 @@ export default class Convolvr {
 	}
 
 	getVoxel ( position: any ) {
-
 		let pos = position || this.camera.position
 
 		return [ Math.floor( pos.x / GRID_SIZE[ 0 ] ), 0, Math.floor( pos.z / GRID_SIZE[ 2 ] ) ]
-
 	}
 
 	updateSkybox ( delta: number ) {
-
 		this.skybox.followUser( delta, false )
-			
 	}
 
 	onWindowResize () {
-
 		this.screenResX = window.devicePixelRatio * window.innerWidth
 			
 		if ( this.mode != "stereo" )
@@ -458,12 +454,8 @@ export default class Convolvr {
 			canvas.height = 240
 			context.drawImage(v, 0, 0, 320, 240);
 			this.webcamImage = canvas.toDataURL("image/jpg", 0.6)
-
 	 	}
-
 	 this.sendUpdatePacket = 0
 	 return imageSize
-
 	}
-
 }

@@ -26,36 +26,35 @@ import car from '../../assets/entities/vehicles/car'
 export default class AssetSystem {
 
     constructor ( world: Convolvr ) {
-
-        this.world               = world
-        this.geometries          = {}
-        this.materials           = {}
-        this.textures            = {}
-        this.proceduralTextures  = {}
-        this.envMaps             = {
+        this.world                = world
+        this.geometries           = {}
+        this.materials            = {}
+        this.textures             = {}
+        this.proceduralTextures   = {}
+        this.envMaps              = {
             default: '/data/images/photospheres/sky-reflection.jpg'
         }
-        this.audioBuffers        = {}
-        this.models              = {}
-        this.entities            = []
-        this.autoDecrementEntity = -1 // entities loaded from network / db have positive ids
-        this.components          = []
-        this.entitiesByName      = {}
-        this.componentsByName    = {}
-        this.userEntities        = []
-        this.userComponents      = []
-        this.places              = []
-        this.worlds              = []
-        this.props               = BuiltinProps()
+        this.audioBuffers         = {}
+        this.models               = {}
+        this.entities             = []
+        this.autoDecrementEntity  = -1 // entities loaded from network / db have positive ids
+        this.components           = []
+        this.entitiesByName       = {}
+        this.componentsByName     = {}
 
-        this.files = [] // user's files; separate from entity file systems
-        this.directories = [] // user's directories
-        
-        this.textureLoader = new THREE.TextureLoader()
-        this.audioLoader = new THREE.AudioLoader()
+        this.userEntitiesByName   = {}
+        this.userComponentsByName = {}
+        this.userEntities         = []
+        this.userComponents       = []
+        this.places               = []
+        this.worlds               = []
+        this.props                = BuiltinProps()
+        this.files                = [] // user's files; separate from entity file systems
+        this.directories          = [] // user's directories
+        this.textureLoader        = new THREE.TextureLoader()
+        this.audioLoader          = new THREE.AudioLoader()
         this._initBuiltInEntities()
         this._initBuiltInComponents()
-
     }
 
     init ( component ) { 
@@ -65,7 +64,6 @@ export default class AssetSystem {
         return {
             
         }
-
     }
 
     loadImage ( asset, config, callback ) {
@@ -118,17 +116,14 @@ export default class AssetSystem {
         if ( r !== g && g !== b ) {
             
             if ( g > b ) {
-                
                 if ( r > b && g > r /3  ) {
                     envURL = '/data/images/photospheres/sky-reflection-o'
                 } else if (red < 0.2 && blue < 0.2) {
                     envURL = '/data/images/photospheres/sky-reflection-g'
                 } else {
                     envURL = '/data/images/photospheres/sky-reflection-r'
-                }
-                                        
+                }               
             } else if ( b > r ) {
-
                 if ( g > r ) {
                     envURL = '/data/images/photospheres/sky-reflection-c'
                 } else if ( r > (b / 6.0) ) {
@@ -140,11 +135,9 @@ export default class AssetSystem {
         }
 
         if (r+g+b < 1.6)
-
             envURL += '-d'
 
         return `${envURL}.jpg`
-
     }
 
     setWorlds ( worlds ) {
@@ -156,10 +149,18 @@ export default class AssetSystem {
     }
 
     addUserEntities ( entities ) {
+        let assets = this
+        entities.map( ent => {
+            assets.userEntitiesByName[ ent.name ] = ent
+        })
         this.userEntities = this.userEntities.concat( entities )
     }
 
     addUserComponents ( components ) {
+        let assets = this
+        components.map( comp => {
+            assets.userComponentsByName[ component.name ] = comp
+        })
         this.userComponents = this.userComponents.concat( components )
     }
 
@@ -180,8 +181,9 @@ export default class AssetSystem {
     }
 
     makeEntity ( name,  init, config, voxel  ) {
-        
-        let toMake = this.entitiesByName[ name ],
+        let builtIn = this.entitiesByName,
+            library = builtIn[ name ] != null ? builtIn : this.userEntitiesByName,
+            toMake = library[ name ],
             ent = typeof toMake == 'function' ? toMake( this, config, voxel ) : toMake
 
         if ( init ) {
@@ -192,13 +194,14 @@ export default class AssetSystem {
     }
 
     makeComponent ( name, data, config ) {
+        let builtIn = this.componentsByName,
+            library = builtIn[ name ] != null ? builtIn : this.userComponentsByName
 
         if ( data ) {
-            return { ...this.componentsByName[ name ], data }
+            return { ...library[ name ], data }
         } else {
-            return { ...this.componentsByName[ name ] }
+            return { ...library[ name ] }
         }
-
     }
 
     getMaterialProp ( name ) {
