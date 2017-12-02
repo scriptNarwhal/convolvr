@@ -79,7 +79,7 @@ self.update = ( ) => {
 								if ( distance2dCompare( 
 									position, 
 									[ ent.position[0] + entComp.position[0], 0, ent.position[2] + entComp.position[2]],
-									boundingRadius 
+									boundingRadius * 1.5
 								)) {
 									if ( !! entComp.props.floor ) {
 										let verticalOffset = (position[1] + 3 - (entComp.position[1]+ent.position[1])) 
