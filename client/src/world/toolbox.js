@@ -271,7 +271,7 @@ export default class Toolbox {
     setHandOrientation ( hand, position, orientation ) {
 
       let userHand = this.hands[ hand ]
-
+     // console.info( userHand, position, orientation )
       if ( !!userHand && position && orientation ) {
         // console.log("toolbox: setHandOrientation", position )
         userHand.state.hand.setHandOrientation( position, orientation, hand )

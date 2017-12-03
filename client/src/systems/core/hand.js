@@ -103,9 +103,10 @@ export default class HandSystem {
         if ( mesh ) {
             mesh.autoUpdateMatrix = false
             mesh.position.fromArray(position).add(this.world.camera.position)
-            mesh.translateX(0.03+ index*-0.05)
-            mesh.position.y += this.world.floorHeight
+            //mesh.translateX(0.3+ index*-0.5)
+            mesh.position.y += this.world.settings.floorHeight
             mesh.quaternion.fromArray(rotation)
+            mesh.updateMatrix()
         }
     }
 
@@ -118,6 +119,7 @@ export default class HandSystem {
             hands = avatar.componentsByProp.hand
 
         if (!avatar || !avatar.mesh) {
+            console.warn("toggleTrackedHAnds FaileD!!")
             console.warn("No avatar entity for hand.toggleTrackedHands()")
             return
         } else {
@@ -139,7 +141,7 @@ export default class HandSystem {
             //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
             hand.parent.remove(hand)
             scene.add(hand)
-            hand.position.set(position.x -0.35+ i*0.7, position.y -0.25, position.z -0.25)
+            hand.position.set(position.x -0.7+ i*1.4, position.y -0.4, position.z -0.5)
             
             if ( i > 0 ) {
               if ( !!hand.children[0] ) {
@@ -156,7 +158,7 @@ export default class HandSystem {
                 hand.children[0].visible = false
               }  
             }
-            hand.position.set(-0.35+ i*0.7, -0.25, -0.25)
+            hand.position.set(-0.7+ i*1.4, -0.35, -0.25)
         }
 
         hand.updateMatrix()
