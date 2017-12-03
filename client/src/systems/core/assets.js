@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { API_SERVER } from '../../config.js'
+
 import Entity from '../../entity'
 import BuiltinProps from '../../assets/props'
 import avatar from '../../assets/entities/avatars/avatar'
@@ -44,6 +47,7 @@ export default class AssetSystem {
 
         this.userEntitiesByName   = {}
         this.userComponentsByName = {}
+        this.loadingItemsById   = { entities: {}, components: {}, properties: {}}
         this.userEntities         = []
         this.userComponents       = []
         this.places               = []
@@ -134,7 +138,7 @@ export default class AssetSystem {
             }
         }
 
-        if (r+g+b < 1.6)
+        if (r+g+b < 2.0)
             envURL += '-d'
 
         return `${envURL}.jpg`
@@ -146,6 +150,45 @@ export default class AssetSystem {
 
     setPlaces ( places ) {
         this.places = places
+    }
+
+    loadInventoryEntity ( username, itemId, callback ) {
+        let assets = this
+        if (this.loadingItemsById.entities[ itemId ]) { return }
+        console.log("continuing to load")
+        this.loadingItemsById.entities[ itemId ] = true
+         return axios.get(API_SERVER+"/api/inventory/"+username+"/Entities/"+itemId)
+                .then(response => {
+                    assets.addUserEntities( [ response.data ] )
+                    assets.loadingItemsById.entities[ itemId ] = false
+                }).catch(response => {
+                   console.error(response)
+                })
+    }
+
+    loadInventoryComponent ( username, itemId, callback ) {
+        let assets = this
+        if (this.loadingItemsById.components[ itemId ]) { return }
+        this.loadingItemsById.components[ itemId ] = true
+         return axios.get(API_SERVER+"/api/inventory/"+username+"/Components/"+itemId)
+                .then(response => {
+                    assets.addUserComponents( [ response.data ] )
+                    assets.loadingItemsById.components[ itemId ] = false
+                }).catch(response => {
+                    console.error(response)
+                })
+    }
+
+    isEntityLoaded ( entityName ) {
+        let found = false
+        
+        if ( this.entitiesByName[ entityName ] != null ) {
+            found = true
+        }
+        if ( this.userEntitiesByName[ entityName ] != null ) {
+            found = true
+        }
+        return found
     }
 
     addUserEntities ( entities ) {
@@ -176,11 +219,20 @@ export default class AssetSystem {
         this.files = files
     }
 
+    addUserFiles ( files ) {
+        this.files = this.files.concat( files )
+    }
+
     setUserDirectories ( directories ) {
         this.directories = directories
     }
 
+    addUserDirectories ( directories ) {
+        this.directories = this.directories.concat( directories )
+    }
+
     makeEntity ( name,  init, config, voxel  ) {
+        console.log("make entity ", name)
         let builtIn = this.entitiesByName,
             library = builtIn[ name ] != null ? builtIn : this.userEntitiesByName,
             toMake = library[ name ],

@@ -9,9 +9,7 @@ export default class UserUpdateHandler {
 
         this.world = world
         this.handlers = handlers
-
         socket.on("update", packet => {
-
             let data = JSON.parse(packet.data),
                 world = this.world,
                 voxels = world.systems.terrain.voxels,
@@ -30,92 +28,90 @@ export default class UserUpdateHandler {
                 h = 0
 
             if (!!data.entity && world.terrain.loaded) {
-
                 entity = data.entity
                 userVoxel = voxels[coords[0] + '.0.' + coords[2]]
-
                 if (entity.id != world.user.id) { //  && closeToCamera == false 
-
                     pos = entity.position
                     quat = entity.quaternion
                     user = world.users["user" + entity.id]
-
                     if (user == null) {
-
-                        avatar = world.systems.assets.makeEntity(entity.avatar, true, { wholeBody: true, id: entity.id }, coords)
-                        user = world.users["user" + entity.id] = {
-                            id: entity.id,
-                            avatar,
-                            mesh: null
-                        }
-
-                        let initPlayerAvatar = (newUser, newData) => {
-
-                            console.info("[Remote] User avatar init")
-                            avatar.init(window.three.scene)
-                            newUser.mesh = avatar.mesh
-
-                            if (newData.entity.hands.length > 0)
-
-                                setTimeout(() => {
-
-                                    avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands(true)
-
-                                }, 1000)
-
-                        }
-
-                        if (userVoxel == null) {
-
-                            console.warn("[Remote] Voxel not loaded", coords)
-                            world.systems.terrain.loadVoxel(coords, loadedVoxel => { initPlayerAvatar(user, data) })
-
-                        } else if (userVoxel.loaded == false && userVoxel.fetching == false) {
-
-                            console.info("[Remote] Voxel being loaded...", coords)
-                            userVoxel.fetchData(loadedVoxel => { initPlayerAvatar(user, data) })
-
-                        } else if (userVoxel.fetching) {
-
-                            console.info("[Remote] Voxel already fetching...", coords)
-                            setTimeout(() => {
-
-                                initPlayerAvatar(user, data)
-
-                            }, 1000)
-
-                        } else {
-                            initPlayerAvatar(user, data)
-
-                        }
-
+                        this.loadPlayerAvatar( entity, userVoxel, coords, data )
                     } else if (user && user.mesh) {
-
                         if (data.entity.hands.length > 0) {
-
                             hands = user.avatar.componentsByProp.hand
-
                             while (h < hands.length) {
-
                                 hand = hands[h]
                                 hand.mesh.position.fromArray(data.entity.hands[h].pos)
                                 hand.mesh.quaternion.fromArray(data.entity.hands[h].quat)
                                 hand.mesh.updateMatrix()
                                 h += 1
-
                             }
-
                         }
-
                         user.avatar.update([pos.x, pos.y, pos.z], [quat.x, quat.y, quat.z, quat.w])
-
                     }
-
                 }
+            }
+        })
+    }
 
+    loadPlayerAvatar ( entity, userVoxel, coords, data ) {
+
+        if ( this.isEntityLoaded( entity.avatar ) ) {
+            console.log("entity is loaded")
+            this.addAvatarToVoxel( entity, userVoxel, coords, data )
+        } else {
+            console.log("entity is not loaded")
+            if ( !!!this.world.systems.assets.loadingItemsById.entities[ entity.avatar ] ) {
+                this.world.systems.assets.loadInventoryEntity( entity.username, entity.avatar).then(()=>{
+                    console.info("loadPlayerAvatar loadInventory callback")
+                   // this.world.systems.assets.userEntities
+                    this.addAvatarToVoxel( entity, userVoxel, coords, data )
+                })
+            }
+        }
+    }
+
+    addAvatarToVoxel ( entity, userVoxel, coords, data ) {
+        console.log("add avatar to voxel")
+        let world = this.world,
+            avatar = world.systems.assets.makeEntity(entity.avatar, true, { wholeBody: true, id: entity.id }, coords),
+            user = world.users["user" + entity.id] = {
+                id: entity.id,
+                avatar,
+                mesh: null
             }
 
-        })
+        if (userVoxel == null) {
+            console.warn("[Remote] Voxel not loaded", coords)
+            world.systems.terrain.loadVoxel(coords, loadedVoxel => { this.initPlayerAvatar(avatar, user, data) })
+        } else if (userVoxel.loaded == false && userVoxel.fetching == false) {
+            console.info("[Remote] Voxel being loaded...", coords)
+            userVoxel.fetchData(loadedVoxel => { this.initPlayerAvatar(avatar, user, data) })
+        } else if (userVoxel.fetching) {
+            console.info("[Remote] Voxel already fetching...", coords)
+            setTimeout(() => {
+                this.initPlayerAvatar(avatar, user, data)
+            }, 1000)
+        } else {
+            this.initPlayerAvatar(avatar, user, data)
+        }
+    }
 
+    initPlayerAvatar (avatar, newUser, newData) {
+        console.log("initPlayerAvatar")
+        console.info("[Remote] User avatar init")
+        avatar.init(window.three.scene)
+        newUser.mesh = avatar.mesh
+
+        if (newData.entity.hands.length > 0)
+            setTimeout(() => {
+                avatar.componentsByProp.hand[1].state.hand.toggleTrackedHands(true)
+            }, 1000)
+    }
+
+    isEntityLoaded ( entityName ) {
+        let assets = this.world.systems.assets
+        
+        return assets.isEntityLoaded( entityName )   
     }
 }

@@ -346,6 +346,8 @@ export default class Convolvr {
 		this.terrain.platforms = []
 		this.terrain.voxels = {}
 		this.terrain.voxelList = []
+		// problem here 
+
 		if ( this.skyboxMesh && this.skyboxMesh.parent ) {
 			this.skyboxMesh.parent.remove(this.skyboxMesh)
 		}
@@ -394,7 +396,7 @@ export default class Convolvr {
 			send( 'update', {
 				entity: {
 					id: this.user.id,
-					username: this.user.username,
+					username: this.user.name,
 					image: this.webcamImage,
 					avatar: this.user.data.avatar ? this.user.data.avatar : "default-avatar",
 					imageSize,

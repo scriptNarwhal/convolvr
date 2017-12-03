@@ -69,7 +69,7 @@ export default class StaticCollisions {
 
 	      if ( message.data.type == "top" ) {
 
-				cam.position.set( cam.position.x, message.data.position[1]+14.25 +(vrHeight != 0 ? vrHeight-1 : 0), cam.position.z )	
+				cam.position.set( cam.position.x, 14.25 + message.data.position[1] +(vrHeight != 0 ? vrHeight-1 : 0), cam.position.z )	
 
 				// if ( Math.abs( user.velocity.y ) > 150 ) {
 				// 	window.navigator.vibrate && window.navigator.vibrate(50)
