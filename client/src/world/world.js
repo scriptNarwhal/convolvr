@@ -234,12 +234,12 @@ export default class Convolvr {
 
 		if ( this.skyboxMesh )
 
-			three.scene.remove( this.skyBoxMesh )
+			three.scene.remove( this.skyboxMesh )
 		
 		oldSkyMaterial = this.skyboxMesh.material
 
 		this.skyboxMesh = new THREE.Mesh(new THREE.OctahedronGeometry( skySize, 4), oldSkyMaterial )
-
+		three.scene.add(this.skyboxMesh)
 		let deferWorldLoading = false,
 			world = this,
 			rebuildWorld = () => {
@@ -259,6 +259,9 @@ export default class Convolvr {
 				skyLight.lookAt(zeroZeroZero)
 				sunLight.lookAt(zeroZeroZero)
 				//sunLight.shadow.camera.lookAt(zeroZeroZero)
+				if (world.skyboxMesh.parent) {
+					world.skyboxMesh.parent.remove( world.skyboxMesh )
+				}
 				three.scene.add(world.skyboxMesh)
 				world.skyboxMesh.position.set(camera.position.x, 0, camera.position.z)
 				callback()
@@ -347,7 +350,7 @@ export default class Convolvr {
 		this.terrain.voxels = {}
 		this.terrain.voxelList = []
 		// problem here 
-
+		console.info("reload ", this.skyboxMesh)
 		if ( this.skyboxMesh && this.skyboxMesh.parent ) {
 			this.skyboxMesh.parent.remove(this.skyboxMesh)
 		}

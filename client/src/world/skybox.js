@@ -28,6 +28,7 @@ export default class SkyBox {
             if ( !!config && !!config.photosphere && image.naturalWidth / image.naturalHeight > 2.2) {
                 three.scene.remove( world.skyboxMesh )
                 world.skyboxMesh = new THREE.Mesh(new THREE.CylinderGeometry( skySize/2, skySize/2, skySize, 24), material )        
+                three.scene.add(world.skyBoxMesh)
             } else {
                 world.skyboxMesh.material = material  
             }
