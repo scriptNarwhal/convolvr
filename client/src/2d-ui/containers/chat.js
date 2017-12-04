@@ -344,6 +344,7 @@ let styles = {
   messages: (mobile) => {
     return {
       width: '100%',
+      height: '92%',
       minWidth: '410px',
       margin: 'auto auto auto 0.5em',
       textAlign: 'left',
