@@ -13,5 +13,9 @@
     },
     "logging": {
       "level": 2
+    },
+    "app": {
+      "name": "Convolvr",
+	    "htmlDir": "world.html"
     }
 }
