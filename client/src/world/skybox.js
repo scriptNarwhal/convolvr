@@ -39,9 +39,9 @@ export default class SkyBox {
     loadShaderSky ( config, oldConfig, mesh, callback ) {
 
         let starMatProp = this.systems.assets.getMaterialProp("stars"),
-            starSkyTexture = this.systems.material.procedural.generateTexture( starMatProp.procedural ),
+            starSkyTexture = this.systems.material.procedural.generateTexture( starMatProp ),
             world = this.world 
-
+        console.info("star texture ", starSkyTexture )
         this.world.loadShaders( "/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl", (vert, frag) => {
 
             let skyMaterial = new THREE.ShaderMaterial({

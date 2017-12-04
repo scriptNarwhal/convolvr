@@ -26,11 +26,10 @@ export default class ProceduralMaterials {
         texture:     Object = {} 
 
     if ( assets.proceduralTextures[ textureCode ] == null ) {  // reference TextSystem for canvas code here..
-
-      texture = this._renderTexture( params )
+      texture = this._renderTexture( params.procedural )
+      assets.proceduralTextures[ textureCode ] = texture
 
     } else { // use cached version if available
-
       texture = assets.proceduralTextures[ textureCode ]
 
     }

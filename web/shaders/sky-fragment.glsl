@@ -50,7 +50,7 @@ void main( void ) {
     if ( vUv.y >= 0.49 ) {
 
         luminance += min(0.3, depth * 1.4);
-        glow =+ sin(0.25 * depth * depth);
+        glow =+ sin(0.45 * depth * depth);
         newColor = vec3( luminance * red, luminance * green, luminance * blue );
 
         if ( luminance * green > 1.0 ) {
