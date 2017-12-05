@@ -15,6 +15,7 @@ export default class ToolActionHandler {
             let data = JSON.parse(packet.data),
                 world = this.world,
                 user = world.user,
+                avatar = null,
                 pos = data.position,
                 coords = data.coords,
                 voxel = world.terrain.voxels[coords[0] + ".0." + coords[2]],

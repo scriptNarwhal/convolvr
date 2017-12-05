@@ -1,9 +1,23 @@
 import Entity from '../../../entity'
 import Component from '../../../component'
-// default avatar
 
 let monster = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 'vr hands'
-    
+
+  let chatText = {
+    position: [0, 4, 0],
+    quaternion: [0,0,0,1],
+    props: {
+      text: {
+        label: true,
+        lines: ["..."]
+      },
+      chat: {
+        displayMessages: true,
+        userId: config.userId
+      }
+    }
+  }
+
   console.log("init avatar, assetSystem ", assetSystem )
 
         var mesh = null, // new THREE.Object3D();
@@ -157,7 +171,8 @@ let monster = ( assetSystem, config, voxel ) => { // wholeBody == true == not ju
         ++n
 
       }
-        
+    
+    components.push( chatText )
     entity = new Entity( id, components, [0,0,0], [0,0,0,1], voxel )
   
     return entity

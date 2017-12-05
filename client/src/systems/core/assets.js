@@ -331,7 +331,7 @@ export default class AssetSystem {
 
         } else {
 
-            button = {
+            button = { // TODO: come back to this
                 props: {
                     // activate: true,
                     // hover: true,

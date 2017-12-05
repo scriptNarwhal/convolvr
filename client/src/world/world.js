@@ -170,7 +170,10 @@ export default class Convolvr {
 			
 		})
 		this.initialLoad = false
-		this.loadedCallback = () => { loadedCallback( this ); this.initialLoad = true;  }
+		this.loadedCallback = () => { 
+			loadedCallback( this );
+			 this.initialLoad = true;  
+		}
 	}
 
 	init ( config: Object, callback: Function ) {

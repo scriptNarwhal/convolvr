@@ -50,6 +50,7 @@ import MagicSystem from './game/magic'
 import MaterialSystem from './core/material'
 import MiniatureSystem from './core/miniature'
 import ObjPluginSystem from './importers/obj-plugin'
+import ObjectiveSystem from './game/objective'
 import OimoPluginSystem from './environment/oimo-plugin'
 import RESTSystem from './information/rest'
 import RPGRaceSystem from './game/rpg-race'
@@ -132,6 +133,7 @@ export default class Systems {
 			npc: 			  new NPCSystem( world ),
 			obj: 			  new ObjPluginSystem( world ),
 			oimo: 		   	  new OimoPluginSystem( world ),
+			objective:        new ObjectiveSystem( world ),
 			particles: 		  new ParticleSystem( world ),
 			propulsion: 	  new PropulsionSystem( world ),
 			powerSupply: 	  new PowerSupplySystem( world ),
@@ -163,14 +165,21 @@ export default class Systems {
 		}
 
         this.systems = systems
-        Object.keys( systems ).map( system => {
-            this[ system ] = systems[ system ]
-        })
+		for (let s: number = 0; s < 2; s ++) {
+			Object.keys( systems ).map( system => {
+				if (s == 1) {
+					this[ system ].onAllSystemsLoaded && this[ system ].allSystemsReady()
+				} else {
+					this[ system ] = systems[ system ]
+				}
+			})
+		}
 
 		this.deffered = {
 			hand: true, light: true, particles: true, text: true, audio: true, video: true, metaFactory: true, miniature: true,
 			tool: true, toolUI: true, layout: true, datgui: true, obj: true, fbx: true
 		}
+		
     }
 
 	/**
