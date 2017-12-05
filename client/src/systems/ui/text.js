@@ -6,7 +6,7 @@ export default class TextSystem {
 
     }
 
-    init ( component ) {
+    init ( component: Component ) {
 
         let prop = component.props.text,
             text = prop.lines,
@@ -58,13 +58,13 @@ export default class TextSystem {
         }
     }
 
-    _write ( component, text ) {
+    _write ( component: Component, text: string ) {
 
         component.props.text.lines.push( text )
 
     }
 
-    _update ( component ) {
+    _update ( component: Component ) {
 
         let prop         = component.props.text,
             state        = component.state.text,
@@ -82,7 +82,7 @@ export default class TextSystem {
         textTexture.needsUpdate = true   
     }
     
-    _renderText ( context, text, color, background, canvasSize, config ) {
+    _renderText ( context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: Object ) {
 
         let textLine = '',
             fontSize = (config.fontSize > 0 ? config.fontSize : (label ? 58 : 40)),
@@ -129,7 +129,7 @@ export default class TextSystem {
         }
     }
 
-    _highlightSynesthesia ( l, line, lines, context, textState ) {
+    _highlightSynesthesia ( l: number, line: string, lines: number, context: any, textState: Object ) {
 
         let xSize = textState.canvasSize[0],
         lineHeight = textState.fontSize,

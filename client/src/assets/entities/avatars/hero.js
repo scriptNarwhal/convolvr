@@ -1,23 +1,8 @@
 import Entity from '../../../entity'
 import Component from '../../../component'
-// default avatar
+import chatText from '../../components/chat-text'
 
 let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 'vr hands'
-
-  let chatText = {
-    position: [0, 4, 0],
-    quaternion: [0,0,0,1],
-    props: {
-      text: {
-        label: true,
-        lines: ["..."]
-      },
-      chat: {
-        displayMessages: true,
-        userId: config.userId
-      }
-    }
-  }
 
   console.log("init avatar, assetSystem ", assetSystem )
 
@@ -174,7 +159,7 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
 
       }
         
-    components.push( chatText )
+    components.push( chatText( config ) )
     entity = new Entity( id, components, [0,0,0], [0,0,0,1], voxel )
     return entity
 }

@@ -34,8 +34,7 @@ export default class MetaFactorySystem {
             keys:           Object           = {},
             x:              number           = 0,
             y:              number           = 0
-        console.warn("***********")
-        console.warn("metafactory assetType", assetType)
+
         if ( assetType == "component" ) {
             Object.keys( prop.dataSource ).map( name => {
                 presets.push( name )

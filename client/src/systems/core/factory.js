@@ -123,7 +123,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
                 props: Object.assign({}, {geometry: data}, {
                     mixin: true,
-                    miniature: { scale: 0.4 },
+                    miniature: {},
                     material: {
                         name: "metal",
                         color: 0xffffff
@@ -145,7 +145,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     material: {
                         name: "metal",
                         color: 0xffffff
@@ -180,7 +180,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
                 props: Object.assign({}, {material: data}, {
                     mixin: true,
-                    miniature: { scale: 0.4 },
+                    miniature: {},
                     geometry: {
                         shape: "sphere",
                         size: [0.05, 0.05, 0.05]
@@ -201,7 +201,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
                 props: Object.assign({}, {material: {diffuse: data}}, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     assets: {
                         images: [data]
                     },
@@ -230,7 +230,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     portal: {
                         username: data.username,
                         world: data.name
@@ -263,7 +263,7 @@ export default class FactorySystem {
          return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     portal: {
                         username: data.username,
                         world: data.world,
@@ -293,7 +293,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     text: {
                         color: 0xffffff,
                         background: 0x000000,
@@ -329,7 +329,7 @@ export default class FactorySystem {
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     text: {
                         color: 0xffffff,
                         background: 0x000000,

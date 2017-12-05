@@ -70,7 +70,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
 
  
   world.onUserLogin = newUser => { // 
-    avatar = systems.assets.makeEntity(  newUser.data.avatar || "default-avatar", true, { wholeBody: false }, coords ) // entity id can be passed into config object
+    avatar = systems.assets.makeEntity(  newUser.data.avatar || "default-avatar", true, { userId: newUser.name, wholeBody: false }, coords ) // entity id can be passed into config object
     avatar.init( scene )
     user.useAvatar( avatar )
     world.user = user

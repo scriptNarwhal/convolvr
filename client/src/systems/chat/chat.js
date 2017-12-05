@@ -32,20 +32,22 @@ export default class ChatSystem {
                     
                     if ( props.chat.displayMessages ) {
 
+                        console.log("display messages")
+                        console.log(props.chat)
                         if ( userId == "all" ) {
 
-                        if ( chatMessage.from != chat.lastSender ) {
-                            from = `${chatMessage.from}: `
-                        }
+                            if ( chatMessage.from != chat.lastSender ) {
+                                from = `${chatMessage.from}: `
+                            }
 
-                        comp.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
-                        comp.state.text.update()
+                            comp.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
+                            comp.state.text.update()
 
                         } else if ( userId == props.chat.userId  && props.text ) {
 
                              comp.state.text.write(`${chatMessage.from}${chatMessage.message}`) // can batch this without re-rendering each time
                              comp.state.text.update()  
-
+                            // initiate hide timeout?
                         }
                     }
                  })
@@ -85,14 +87,31 @@ export default class ChatSystem {
         return {
             sendMessage: (message) => {
                 this.sendMessage(message)
-            }    
+            },
+            hide: (delay = 0) => {
+                setTimeout(()=>{
+                    this._hide( component )
+                }, delay)
+            },
+            show: () => {
+                this._show( component )
+            },
+
         }
+    }
+
+    _hide ( component: Component ) {
+
+    }
+
+    _show ( component: Component ) {
+
     }
 
     initChatModal() {
         let chatModal = this.world.systems.assets.makeEntity("help-screen", true),
             cPos = three.camera.position
-            
+
         chatModal.components[0].props.text.lines = ["Welcome"]
         chatModal.init(three.scene, false, ()=>{})
         chatModal.update(cPos.x, cPos.y - 1, cPos.z - 0.7)
@@ -104,6 +123,14 @@ export default class ChatSystem {
             userPos = user.mesh.position
         
         this.chatModal && this.chatModal.update( userPos.x, userPos.y-1, userPos.z-1.2 )
+    }
+
+    hideChatModal () {
+        this.chatModal.mesh.visible = false
+    }
+
+    showChatModal () {
+        this.chatModal.mesh.visible = true
     }
 
     sendMessage (message) {
