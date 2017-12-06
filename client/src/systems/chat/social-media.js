@@ -3,6 +3,7 @@ export default class SocialMediaSystem {
     constructor ( world ) {
 
         this.world = world
+        this.friends = []
 
     }
 

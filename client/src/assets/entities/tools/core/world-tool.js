@@ -62,11 +62,15 @@ export default class WorldTool extends Tool {
     configure ( config ) {
       
       if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
+        let newWorld = [ config.userName, config.name ]
+        if ( !!newWorld[ 0 ] && !!newWorld[ 1 ] ) { // not navigating to built in ui / page
 
-        this.options = Object.assign( {}, config.data )
-        console.log("Configuring tool ", this.options)
-
+            three.world.reload ( newWorld[ 0 ], newWorld[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
+        }
       }
+        // make this use the item as a portal for now
+        // this.options = Object.assign( {}, config.data )
+        // console.log("Configuring tool ", this.options)
       
   }
 

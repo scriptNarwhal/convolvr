@@ -4,7 +4,6 @@ import AudioSystem from './audio/audio'
 import AssetSystem from './core/assets'
 import BrowserSystem from './ui/browser'
 import CameraSystem from './video/camera'
-import CPUSystem from './information/cpu'
 import ConditionSystem from './information/condition'
 import ContainerSystem from './ui/container'
 import ConveyorSystem from './vehicle/conveyor'
@@ -28,17 +27,12 @@ import LayoutSystem from './ui/layout'
 import VideoSystem from './video/video'
 import InputSystem from './information/input'
 import MediaSystem from './ui/media'
-import DisplayAdapterSystem from './information/display-adapter'
 import GraphSystem from './ui/graph'
 import MemorySystem from './information/memory'
-import IOControllerSystem from './information/io-controller'
-import NetworkInterfaceSystem from './information/network-interface'
-import DriveControllerSystem from './information/drive-controller'
 import DisplaySystem from './video/display'
 import DrawingSystem from './video/drawing'
 import ControlSystem from './vehicle/control'
 import PropulsionSystem from './vehicle/propulsion'
-import PowerSupplySystem from './information/power-supply'
 import MetaFactorySystem from './core/meta-factory'
 import ParticleSystem from './environment/particle'
 import PortalSystem from './environment/portal'
@@ -74,6 +68,8 @@ import WallSystem from './environment/wall'
 import WebRTCSystem from './video/webrtc'
 import WeaponSystem from './game/weapon'
 import NPCSystem from './game/npc'
+import VirtualDeviceSystem from './information/virtual-device'
+import VirtualMachineSystem from './information/virtual-machine'
 
 export default class Systems {
 
@@ -98,14 +94,12 @@ export default class Systems {
 			control: 		  new ControlSystem( world ),
 			conveyor: 		  new ConveyorSystem( world ),
 			cursor: 		  new CursorSystem( world ),
-			cpu: 			  new CPUSystem( world ),
 			datgui: 		  new DatGUIVRPluginSystem( world ),
 			destructable: 	  new DestructableSystem( world ),
 			display: 		  new DisplaySystem( world ),
-			displayAdapter:   new DisplayAdapterSystem( world ),
+			virtualDevice:    new VirtualDeviceSystem( world ),
 			door: 			  new DoorSystem( world ),
 			drawing: 		  new DrawingSystem( world ),
-			driveController:  new DriveControllerSystem( world ),
 			emote: 			  new EmoteSystem( world ),
 			faction: 		  new FactionSystem( world ),
 			factory: 		  new FactorySystem( world ),
@@ -117,7 +111,6 @@ export default class Systems {
 			graph: 		      new GraphSystem( world ),
 			hand: 			  new HandSystem( world ),
 			hover: 			  new HoverSystem( world ),
-			ioController: 	  new IOControllerSystem( world ),
 			input: 			  new InputSystem( world ),
 			loop: 			  new LoopSystem( world ),
 			light: 			  new LightSystem( world ),
@@ -125,18 +118,15 @@ export default class Systems {
 			lookAway: 		  new LookAwaySystem( world ),
 			magic: 			  new MagicSystem( world ),
 			material: 		  new MaterialSystem( world ),
-			memory: 		  new MemorySystem( world ),
 			media: 			  new MediaSystem( world ),
 			metaFactory: 	  new MetaFactorySystem( world ),
 			miniature: 		  new MiniatureSystem( world ),
-			networkInterface: new NetworkInterfaceSystem( world ),
 			npc: 			  new NPCSystem( world ),
 			obj: 			  new ObjPluginSystem( world ),
 			oimo: 		   	  new OimoPluginSystem( world ),
 			objective:        new ObjectiveSystem( world ),
 			particles: 		  new ParticleSystem( world ),
 			propulsion: 	  new PropulsionSystem( world ),
-			powerSupply: 	  new PowerSupplySystem( world ),
 			portal: 		  new PortalSystem( world ),
 			projectile: 	  new ProjectileSystem( world ),
 			quest: 			  new QuestSystem( world ),
@@ -159,6 +149,7 @@ export default class Systems {
 			user: 			  new UserSystem( world ),
 			vehicle: 		  new VehicleSystem( world ),
 			video: 			  new VideoSystem( world ),
+			virtualMachine:   new VirtualMachineSystem( world ),
 			wall: 			  new WallSystem( world ),
 			webrtc: 		  new WebRTCSystem( world ),
 			weapon:			  new WeaponSystem( world )

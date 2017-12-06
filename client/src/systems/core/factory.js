@@ -235,6 +235,12 @@ export default class FactorySystem {
                         username: data.username,
                         world: data.name
                     },
+                    toolUI: {
+                        configureTool: {
+                            tool: 5,
+                            data
+                        }
+                    },  
                     material: {
                         name: "metal",
                         color: 0x00ffff // get actual world color here..

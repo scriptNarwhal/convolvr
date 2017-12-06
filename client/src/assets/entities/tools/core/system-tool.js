@@ -116,28 +116,66 @@ export default class SystemTool extends Tool {
         
     }
 
-    primaryAction ( telemetry) {
+    primaryAction ( telemetry ) {
       
-      let options = this.options,
-          cursor = telemetry.cursor,
-          user = this.world.user,
-          systems = this.world.systems,
-          assetSystem = systems.assets,
-          cursorSystem = systems.cursor,
-          cursorState = cursor.state.cursor || {},
-          position = telemetry.position,
-          quat = telemetry.quaternion,
-          selected = !!cursorState.entity ? cursorState.entity : false,
-          coords = telemetry.voxel,
-          props = {},
-          components = [],
-          entityId = -1,
-          entity = null
+      let options         = this.options,
+          cursor          = telemetry.cursor,
+          user            = this.world.user,
+          systems         = this.world.systems,
+          assetSystem     = systems.assets,
+          cursorSystem    = systems.cursor,
+          cursorState     = cursor.state.cursor || {},
+          componentPath   = cursorState.componentPath,
+          position        = telemetry.position,
+          quat            = telemetry.quaternion,
+          selected        = !!cursorState.entity ? cursorState.entity : false,
+          coords          = telemetry.voxel,
+          props           = {},
+          components      = [ ],
+          component       = {}, 
+          cursorComponent = cursorState.component,
+          entity          = telemetry.entity,
+          entityId        = selected ? selected.id : -1
       
       if ( options.system && options.system.none ) return
 
-      // gotta implement, yo
+      props = selected.componentsByProp
+      
+      if ( !!!selected || props.miniature || props.activate ) {
+          console.warn("no tool action, calling activation callbacks")
+          return false 
+      
+      } else {
+          coords = selected.voxel
+      }
 
+      if ( !! cursorComponent && !! selected ) {
+
+        componentPath = cursorComponent.path
+        component = Object.assign({}, {
+          position: cursorComponent.data.position,
+          quaternion: cursorComponent.data.quaternion,
+          props: cursorComponent.props,
+          components: cursorComponent.components
+        })
+        console.log("set geometry", component)
+        component.props.geometry = Object.assign( {}, cursorComponent.props.geometry, this.options )
+        components = [ component ]
+
+      } else {
+
+        return false
+
+      }
+
+      return {
+        coords,
+        component,
+        componentPath,
+        entity,
+        entityId,
+        components
+      }
         
     }
 
