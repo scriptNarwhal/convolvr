@@ -16,7 +16,6 @@ export default class GeometryTool extends Tool {
         shape: 'box', 
         size: [1.1, 1.1, 0.110]
       }
-
       this.entity = new Entity(-1, [
           {
             props: {
@@ -53,7 +52,6 @@ export default class GeometryTool extends Tool {
             ]
           }
         ], coords )
-
     }
 
     primaryAction ( telemetry ) {
@@ -77,9 +75,9 @@ export default class GeometryTool extends Tool {
           component       = {}, 
           cursorComponent = cursorState.component,
           entity          = telemetry.entity,
-          entityId        = selected ? selected.id : -1
+          entityId        = selected ? selected.id : -1,
+          size            = [1,1,1]
           
-
       console.log(" ( Geometry Tool ) ", componentPath )
       
       props = selected.componentsByProp
@@ -87,13 +85,11 @@ export default class GeometryTool extends Tool {
       if ( !!!selected || props.miniature || props.activate ) {
           console.warn("no tool action, calling activation callbacks")
           return false 
-      
       } else {
           coords = selected.voxel
       }
 
       if ( !! cursorComponent && !! selected ) {
-
         componentPath = cursorComponent.path
         component = Object.assign({}, {
           position: cursorComponent.data.position,
@@ -102,13 +98,15 @@ export default class GeometryTool extends Tool {
           components: cursorComponent.components
         })
         console.log("set geometry", component)
-        component.props.geometry = Object.assign( {}, cursorComponent.props.geometry, this.options )
+        if (component.props.geometry.size) {
+          component.props.geometry = Object.assign( {}, cursorComponent.props.geometry, this.options, { size: component.props.geometry.size } )  
+        } else {
+          component.props.geometry = Object.assign( {}, cursorComponent.props.geometry, this.options ) 
+        }
         components = [ component ]
-
       } else {
 
         return false
-
       }
 
       return {

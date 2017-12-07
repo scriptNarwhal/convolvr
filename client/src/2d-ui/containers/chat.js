@@ -243,6 +243,10 @@ export default connect(
   dispatch => {
     return {
       sendMessage: (message, from, files, avatar) => {
+          // if (message == "" && files.length == 0) {
+          //   dispatch(toggleMenu())
+          //   return
+          // }
           dispatch(sendMessage(message, from, files, avatar))
       },
       uploadMultiple: ( files, username, dir ) => {

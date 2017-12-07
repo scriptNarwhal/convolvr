@@ -152,7 +152,7 @@ export default class FactorySystem {
                     },
                     geometry: {
                         shape: "box",
-                        size: [0.5, 0.5, 0.05]
+                        size: [ 0.5, 0.5, 0.05 ]
                     },
                     text: {
                         lines: [
@@ -167,6 +167,7 @@ export default class FactorySystem {
                     toolUI: {
                         configureTool: {
                             tool: 2,
+                            preset,
                             data
                         }
                     }
@@ -183,7 +184,7 @@ export default class FactorySystem {
                     miniature: {},
                     geometry: {
                         shape: "sphere",
-                        size: [0.05, 0.05, 0.05]
+                        size: [ 0.05, 0.05, 0.05 ]
                     },
                     toolUI: {
                         configureTool: {
@@ -206,13 +207,13 @@ export default class FactorySystem {
                         images: [data]
                     },
                     material: {
-                        name: "wireframe",
+                        name: "plastic",
                         color: 0xffffff,
                         map: data
                     },
                     geometry: {
-                        shape: "sphere",
-                        size: [0.05, 0.05, 0.05]
+                        shape: "box",
+                        size: [0.5, 0.5, 0.5]
                     },
                     toolUI: {
                         configureTool: {

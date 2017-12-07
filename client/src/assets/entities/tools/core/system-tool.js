@@ -158,8 +158,8 @@ export default class SystemTool extends Tool {
           props: cursorComponent.props,
           components: cursorComponent.components
         })
-        console.log("set geometry", component)
-        component.props.geometry = Object.assign( {}, cursorComponent.props.geometry, this.options )
+        console.log("set system", preset, this.options, component)
+        component.props[ preset ] = this.options
         components = [ component ]
 
       } else {
@@ -187,6 +187,7 @@ export default class SystemTool extends Tool {
       
       if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
         this.options = Object.assign( {}, config.data )
+        this.preset = config.preset
         console.log("Configuring tool ", this.options)
       }
       
