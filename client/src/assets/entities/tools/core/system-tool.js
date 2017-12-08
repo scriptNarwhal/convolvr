@@ -132,7 +132,7 @@ export default class SystemTool extends Tool {
           coords          = telemetry.voxel,
           props           = {},
           components      = [ ],
-          component       = {}, 
+          component       = {},
           cursorComponent = cursorState.component,
           entity          = telemetry.entity,
           entityId        = selected ? selected.id : -1
@@ -158,8 +158,8 @@ export default class SystemTool extends Tool {
           props: cursorComponent.props,
           components: cursorComponent.components
         })
-        console.log("set system", preset, this.options, component)
-        component.props[ preset ] = this.options
+        console.log("set system", this.preset, this.options, component)
+        component.props[ this.preset ] = this.options
         components = [ component ]
 
       } else {
@@ -171,6 +171,7 @@ export default class SystemTool extends Tool {
       return {
         coords,
         component,
+        components,
         componentPath,
         entity,
         entityId,
