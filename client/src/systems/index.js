@@ -22,6 +22,7 @@ import GeometrySystem from './core/geometry'
 import GrabSystem from './core/grab'
 import HoverSystem from './core/hover'
 import HandSystem from './core/hand'
+import HeadSystem from './core/head'
 import LightSystem from './environment/light'
 import LayoutSystem from './ui/layout'
 import VideoSystem from './video/video'
@@ -61,6 +62,7 @@ import TextSystem from './ui/text'
 import ToolSystem from './core/tool'
 import TimeSystem from './information/time'
 import ToolUISystem from './core/tool-ui'
+import ToolboxSystem from './core/toolbox'
 import UserSystem from './core/user'
 import VehicleSystem from './vehicle/vehicle'
 import WallSystem from './environment/wall'
@@ -69,6 +71,7 @@ import WeaponSystem from './game/weapon'
 import NPCSystem from './game/npc'
 import VirtualDeviceSystem from './information/virtual-device'
 import VirtualMachineSystem from './information/virtual-machine'
+import SkyboxSystem from './environment/skybox'
 
 export default class Systems {
 
@@ -109,6 +112,7 @@ export default class Systems {
 			grab:             new GrabSystem( world ),
 			graph: 		      new GraphSystem( world ),
 			hand: 			  new HandSystem( world ),
+			head: 			  new HeadSystem( world ),
 			hover: 			  new HoverSystem( world ),
 			input: 			  new InputSystem( world ),
 			loop: 			  new LoopSystem( world ),
@@ -133,6 +137,7 @@ export default class Systems {
 			rpgRace:		  new RPGRaceSystem( world ),
 			signal: 		  new SignalSystem( world ),
 			skill: 			  new SkillSystem( world ),
+			skybox:           new SkyboxSystem( world ),
 			screenshot: 	  new ScreenshotSystem( world ),
 			socialMedia: 	  new SocialMediaSystem( world ),
 			speech: 		  new SpeechSystem( world ),
@@ -145,6 +150,7 @@ export default class Systems {
 			time: 			  new TimeSystem( world ),
 			toolUI: 		  new ToolUISystem( world ),
 			tool: 			  new ToolSystem( world ),
+			toolbox:          new ToolboxSystem( world ),
 			user: 			  new UserSystem( world ),
 			vehicle: 		  new VehicleSystem( world ),
 			video: 			  new VideoSystem( world ),
@@ -153,14 +159,18 @@ export default class Systems {
 			webrtc: 		  new WebRTCSystem( world ),
 			weapon:			  new WeaponSystem( world )
 		}
+		this.systems = systems
+		this.liveSystems = []
 
-        this.systems = systems
 		for (let s: number = 0; s < 2; s ++) {
 			Object.keys( systems ).map( system => {
 				if (s == 1) {
 					this[ system ].onAllSystemsLoaded && this[ system ].allSystemsReady()
 				} else {
 					this[ system ] = systems[ system ]
+					if ( this[ system ].live ) {
+						this.liveSystems.push( this[ system ] )
+					}
 				}
 			})
 		}
@@ -169,7 +179,6 @@ export default class Systems {
 			hand: true, light: true, particles: true, text: true, audio: true, video: true, metaFactory: true, miniature: true,
 			tool: true, toolUI: true, layout: true, datgui: true, obj: true, fbx: true
 		}
-		
     }
 
 	/**
@@ -221,19 +230,21 @@ export default class Systems {
 	**/
 	tick ( delta: number, time: number ) {
 		
-		// let l = 0,
-		// 	systems = this.liveSystems,
-		// 	ln = systems.length
+		let systems = this.liveSystems,
+			ln = systems.length,
+			l = 0
+		// refactor this to check time after each system/tick to avoid dropping render frames
+		if ( ln == 0 ) {
+			return
+		}
 
-		// while ( l < ln ) {
-
-		// 	systems[ l ].tick( delta, time )
-		// 	l += 1
-		// }
-
-		this.particles.tick( delta, time )
-		this.terrain.tick( delta, time )
-		this.fbx.tick( delta, time )
+		while ( l < ln ) {
+			systems[ l ].tick( delta, time )
+			l += 1
+		}
+		// this.particles.tick( delta, time )
+		// this.terrain.tick( delta, time )
+		// this.fbx.tick( delta, time )
 	}
 }
 

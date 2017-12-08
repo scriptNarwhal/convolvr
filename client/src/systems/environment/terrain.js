@@ -11,39 +11,40 @@ import {
 
 export default class TerrainSystem {
 
+  live: boolean
+
     constructor ( world ) {
 
-        this.world            = world
-        this.config           = world.config.terrain
-        this.octree           = world.octree
-        this.phase            = 0
-        this.mesh             = null
-        this.distantTerrain   = null
-        this.StaticCollisions = null
-        this.physicsVoxels    = []
-        this.voxels           = []
-        this.voxelList        = [] // map of coord strings to voxels
-        this.lastChunkCoords  = [ 0, 0, 0 ]
-        this.chunkCoords      = [ 0, 0, 0 ]
-        this.cleanUpChunks    = []
-        this.reqChunks        = []
-        this.loadedVoxels     = []
-        this.loaded           = false
-        this.readyCallback    = () => {}
+      this.world            = world
+      this.config           = world.config.terrain
+      this.octree           = world.octree
+      this.phase            = 0
+      this.mesh             = null
+      this.distantTerrain   = null
+      this.StaticCollisions = null
+      this.physicsVoxels    = []
+      this.voxels           = []
+      this.voxelList        = [] // map of coord strings to voxels
+      this.lastChunkCoords  = [ 0, 0, 0 ]
+      this.chunkCoords      = [ 0, 0, 0 ]
+      this.cleanUpChunks    = []
+      this.reqChunks        = []
+      this.loadedVoxels     = []
+      this.loaded           = false
+      this.live             = true
+      this.readyCallback    = () => {}
 
-        let globalVoxel = new Voxel( { 
-          cell: GLOBAL_SPACE, 
-          name: "Global Voxel", 
-          visible: true, 
-          altitude: 0, 
-          entities: [] 
-        }, GLOBAL_SPACE, this.world )
-
-        this.voxels[ GLOBAL_SPACE.join(".") ] = globalVoxel
-
+      let globalVoxel = new Voxel( { 
+        cell: GLOBAL_SPACE, 
+        name: "Global Voxel", 
+        visible: true, 
+        altitude: 0, 
+        entities: [] 
+      }, GLOBAL_SPACE, this.world )
+      this.voxels[ GLOBAL_SPACE.join(".") ] = globalVoxel
     }
 
-    init ( component ) { // system to render terrain voxels from now on..
+    init ( component ) {
 
         let prop = component.props.tab,
             state = {}
@@ -54,7 +55,6 @@ export default class TerrainSystem {
     tick ( delta, time ) {
 
       this.bufferVoxels( false, this.phase )
-
     }
 
     initTerrain ( config ) {
@@ -77,17 +77,13 @@ export default class TerrainSystem {
           mat            = null
 
       if (!!this.mesh) {
-
         world.octree.remove(this.mesh)
         three.scene.remove(this.mesh)
         this.distantTerrain = null
-
       }
 
       if ( type != 'empty' ) {
-
         yPosition = type == 'plane' || type == "both" ? -120 / this.config.flatness : 0
-
         distantTerrain = new Entity( -1, [{
             props: {
               geometry: {
@@ -106,16 +102,12 @@ export default class TerrainSystem {
           }], [0, yPosition, 0], [0,0,0,1], world.getVoxel())
 
         distantTerrain.init( three.scene, { noVoxel: true }, (terrainEnt) => {
-
           terrainSystem.mesh = terrainEnt.mesh
           terrainEnt.mesh.rotation.x = -Math.PI/2
           terrainEnt.mesh.updateMatrix()
-
         })
         this.distantTerrain = distantTerrain
-
       }
-
   }
 
   loadVoxel ( coords, callback ) {

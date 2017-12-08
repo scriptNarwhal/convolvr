@@ -9,6 +9,7 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
     loader: Object
     manager: Object
     mixers: Array<Object>
+    live: boolean
 
     constructor ( world: Convolvr ) {
 
@@ -16,7 +17,7 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
         this.loader = {}
         this.manager = {}
         this.mixers = []
-
+        this.live = true
     }
 
     init ( component: Component ) { 

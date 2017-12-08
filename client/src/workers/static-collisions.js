@@ -102,9 +102,9 @@ self.checkStaticCollisions = ( voxel, position ) => {
 					if (distance2dCompare(
 						position,
 						[ent.position[0] + entComp.position[0], 0, ent.position[2] + entComp.position[2]],
-						boundingRadius * 1.5
+						boundingRadius * 2.2
 					)) {
-						let verticalOffset = (position[1] + 2 - (entComp.position[1] + ent.position[1]))
+						let verticalOffset = (position[1] + 2 - (entComp.position[1] + ent.position[1] )) //  + entComp.geometry ? entComp.geometry.size[1] : 1
 						if (verticalOffset > 0 && verticalOffset < 5) {
 							self.postMessage(JSON.stringify({
 								command: "floor collision", data: {
