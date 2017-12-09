@@ -110,6 +110,23 @@ export default class TerrainSystem {
       }
   }
 
+  destroy () {
+    this.voxelList.map( v => {
+			v.entities.map(e => {
+				if ( e.mesh ) {
+					this.world.octree.remove( e.mesh )
+					three.scene.remove( e.mesh )
+				}					
+			})
+
+			if ( v.mesh )				
+				three.scene.remove( v.mesh )
+    })
+    this.platforms = []
+		this.voxels = {}
+		this.voxelList = []
+  }
+
   loadVoxel ( coords, callback ) {
 
     let voxels     = this.voxels,

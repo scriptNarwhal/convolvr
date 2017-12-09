@@ -139,6 +139,7 @@ export default class Systems {
 			skill: 			  new SkillSystem( world ),
 			skybox:           new SkyboxSystem( world ),
 			screenshot: 	  new ScreenshotSystem( world ),
+			skybox:           new SkyboxSystem( world ),
 			socialMedia: 	  new SocialMediaSystem( world ),
 			speech: 		  new SpeechSystem( world ),
 			state:            new StateSystem( world ),

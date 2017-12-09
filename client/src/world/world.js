@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 import { animate } from './render'
 import { 
 	API_SERVER,
+	APP_NAME,
 	GRID_SIZE
 } from '../config.js'
 import { send } from '../network/socket'
@@ -154,7 +155,7 @@ export default class Convolvr {
 			staticCollisions: this.systems.staticCollisions.worker,
 			// oimo: this.systems.oimo.worker
 		}
-		this.skybox = new SkyBox( this )
+		this.skybox = this.systems.skybox
 		camera.add(this.systems.audio.listener)
 		this.socketHandlers = new SocketHandlers( this, socket )
 		window.addEventListener('resize', e => this.onWindowResize( e ), true)
@@ -202,11 +203,14 @@ export default class Convolvr {
 
 		this.config = config; console.info("World config: ", config)
 		this.terrain.initTerrain(config.terrain)
-		this.ambientLight = new THREE.AmbientLight(config.light.ambientColor, 10.5)
-		three.scene.add(this.ambientLight)
-		three.scene.add(sunLight)
-
-		if ( this.settings.shadows > 0 ) {
+		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 10.5)
+		this.ambientLight.color.set( config.light.ambientColor )
+		Array(this.ambientLight, this.sunLight, this.skyLight).forEach( light => {
+			if ( !!!light.parent ) {
+				three.scene.add( light )
+			}
+		})
+		if ( this.settings.shadows > 0 && sunLight.castShadow == false ) {
 
 			sunLight.castShadow = true
 			sunLight.shadowCameraVisible = true
@@ -234,15 +238,13 @@ export default class Convolvr {
 			envURL = this.systems.assets.getEnvMapFromColor( r, g, b )
 			this.systems.assets.envMaps.default = envURL
 		}
-
-		if ( this.skyboxMesh )
-
-			three.scene.remove( this.skyboxMesh )
 		
 		oldSkyMaterial = this.skyboxMesh.material
-
-		this.skyboxMesh = new THREE.Mesh(new THREE.OctahedronGeometry( skySize, 4), oldSkyMaterial )
-		three.scene.add(this.skyboxMesh)
+		if (this.skyboxMesh.parent) {
+			three.scene.remove(this.skyboxMesh)
+		}
+		this.skyboxMesh = this.skybox.createSkybox( skySize, oldSkyMaterial )
+		
 		let deferWorldLoading = false,
 			world = this,
 			rebuildWorld = () => {
@@ -251,21 +253,14 @@ export default class Convolvr {
 					zeroZeroZero = new THREE.Vector3(0,0,0)
 
 				!!world.skyLight && three.scene.remove( world.skyLight )
-				!!world.ambientLight && three.scene.remove( world.ambientLight )
-
 				world.skyLight = skyLight
-				world.sunLight = sunLight
-				three.scene.add(skyLight)
 				skyLight.position.set( 0, 5000, 0 )
 				sunLight.position.set( Math.sin(yaw)*1000, Math.sin(config.light.pitch)*1000, Math.cos(yaw)*1000)
 				
 				skyLight.lookAt(zeroZeroZero)
 				sunLight.lookAt(zeroZeroZero)
 				//sunLight.shadow.camera.lookAt(zeroZeroZero)
-				if (world.skyboxMesh.parent) {
-					world.skyboxMesh.parent.remove( world.skyboxMesh )
-				}
-				three.scene.add(world.skyboxMesh)
+			
 				world.skyboxMesh.position.set(camera.position.x, 0, camera.position.z)
 				callback()
 			}
@@ -286,23 +281,8 @@ export default class Convolvr {
 			three.camera.updateMatrix()
 		}
 
-		document.title = config.name.toLowerCase() == 'overworld' && config.userName == 'convolvr' ? `Convolvr` : config.name // make "Convolvr" default configurable via admin settings
+		document.title = config.name.toLowerCase() == 'overworld' && config.userName == APP_NAME.toLowerCase() ? APP_NAME : config.name // make "Convolvr" default configurable via admin settings
 		false == deferWorldLoading && rebuildWorld()
-	}
-
-	loadShaders ( vertex_url: string, fragment_url: string, onLoad: Function, onProgress: Function, onError: Function ) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
-		var vertex_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
-
-		vertex_loader.setResponseType('text')
-		vertex_loader.load( vertex_url, vertex_text => {
-
-			var fragment_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
-			fragment_loader.setResponseType('text')
-			fragment_loader.load( fragment_url, fragment_text => {
-				onLoad(vertex_text, fragment_text)
-			});
-
-		}, onProgress, onError)
 	}
 
 	initRenderer ( renderer: any, id: string ) {
@@ -335,28 +315,13 @@ export default class Convolvr {
 		let world = this,
 			octree = this.octree
 
-		this.terrain.voxelList.map( v => {
-			v.entities.map(e => {
-				if ( e.mesh ) {
-					octree.remove( e.mesh )
-					three.scene.remove( e.mesh )
-				}					
-			})
-
-			if ( v.mesh )				
-				three.scene.remove( v.mesh )
-		})
+		this.terrain.destroy()
 
 		this.workers.staticCollisions.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		//this.workers.oimo.postMessage(JSON.stringify( { command: "clear", data: {}} ))
-		this.terrain.platforms = []
-		this.terrain.voxels = {}
-		this.terrain.voxelList = []
 		// problem here 
 		console.info("reload ", this.skyboxMesh)
-		if ( this.skyboxMesh && this.skyboxMesh.parent ) {
-			this.skyboxMesh.parent.remove(this.skyboxMesh)
-		}
+		this.skybox.destroy()
 		this.load( user, name, () => {}, () => {} )
 
 		if ( !!! noRedirect )
@@ -422,10 +387,6 @@ export default class Convolvr {
 		let pos = position || this.camera.position
 
 		return [ Math.floor( pos.x / GRID_SIZE[ 0 ] ), 0, Math.floor( pos.z / GRID_SIZE[ 2 ] ) ]
-	}
-
-	updateSkybox ( delta: number ) {
-		this.skybox.followUser( delta, false )
 	}
 
 	onWindowResize () {
