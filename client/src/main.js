@@ -32,7 +32,6 @@ import Systems from './systems/index'
 import { events } from './network/socket'
 import UserInput from './input/user-input'
 import User from './world/user'
-import Toolbox from './world/toolbox'
 import Entity from './entity'
 //import ProgressBar from 'progressbardottop'
 
@@ -74,7 +73,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
     avatar.init( scene )
     user.useAvatar( avatar )
     world.user = user
-    user.toolbox = new Toolbox( user, world )
+    user.toolbox = world.systems.toolbox
     
     toolMenu = systems.assets.makeEntity( "tool-menu", true, {}, GLOBAL_SPACE ) // method for spawning built in entities
     user.hud = toolMenu

@@ -35,16 +35,12 @@ export default class ChatSystem {
                         console.log("display messages")
                         console.log(props.chat)
                         if ( userId == "all" ) {
-
                             if ( chatMessage.from != chat.lastSender ) {
                                 from = `${chatMessage.from}: `
                             }
-
                             comp.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
                             comp.state.text.update()
-
                         } else if ( userId == props.chat.userId  && props.text ) {
-
                              comp.state.text.write(`${chatMessage.from}${chatMessage.message}`) // can batch this without re-rendering each time
                              comp.state.text.update()  
                             // initiate hide timeout?
@@ -55,9 +51,12 @@ export default class ChatSystem {
         })
     }
 
-    allSystemsReady () {
+    allSystemsLoaded () {
          // init chat modal for current user
-        this.initChatModal()
+         setTimeout( ()=>{
+            
+            this.initChatModal()
+         }, 1700)
     }
 
     init ( component: Component ) { 

@@ -11,7 +11,7 @@ export default class HandSystem {
         if ( component.props.hand == undefined || component.props.hand != undefined && userInput.trackedControls == false && userInput.leapMotion == false) {
             setTimeout(()=>{
                 this.toggleTrackedHands( component, false )
-            }, 500)
+            }, 1500)
         }
     
         return {

@@ -59,10 +59,10 @@ import StaticCollisions  from './environment/static-collisions'
 import SwitchSystem from './information/switch'
 import TerrainSystem from './environment/terrain'
 import TextSystem from './ui/text'
-import ToolSystem from './core/tool'
+import ToolSystem from './tool/tool'
 import TimeSystem from './information/time'
-import ToolUISystem from './core/tool-ui'
-import ToolboxSystem from './core/toolbox'
+import ToolUISystem from './tool/tool-ui'
+import ToolboxSystem from './tool/toolbox'
 import UserSystem from './core/user'
 import VehicleSystem from './vehicle/vehicle'
 import WallSystem from './environment/wall'
@@ -82,6 +82,8 @@ export default class Systems {
 	*  Initializes all systems before components can be registered
 	**/
     constructor ( world: Convolvr )  {
+
+		world.systems = this
 
         let systems = {
 			ability: 		  new AbilitySystem( world ),
@@ -166,7 +168,7 @@ export default class Systems {
 		for (let s: number = 0; s < 2; s ++) {
 			Object.keys( systems ).map( system => {
 				if (s == 1) {
-					this[ system ].onAllSystemsLoaded && this[ system ].allSystemsReady()
+					this[ system ].allSystemsLoaded && this[ system ].allSystemsLoaded()
 				} else {
 					this[ system ] = systems[ system ]
 					if ( this[ system ].live ) {

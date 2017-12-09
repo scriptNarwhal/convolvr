@@ -13,8 +13,8 @@ import Entity from '../entity'
 import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
+import SkyboxSystem from '../systems/environment/skybox'
 import Settings from './local-settings'
-import SkyBox from './skybox'
 import { 
 	compressFloatArray,
 	compressVector3,
@@ -46,7 +46,7 @@ export default class Convolvr {
 	user: 			  User
 	camera: 		  any
 	skyboxMesh: 	  any
-	skybox: 		  SkyBox
+	skybox: 		  SkyboxSystem
 	vrFrame: 		  any
 	capturing: 		  boolean
 	webcamImage: 	  string
@@ -91,18 +91,14 @@ export default class Convolvr {
 			rendererOptions.alpha = true
 			rendererOptions.clearColor = 0x000000
 		}
-
 		renderer = new THREE.WebGLRenderer(rendererOptions)
-		
 		if ( this.settings.shadows > 0 ) {
 			renderer.shadowMap.enabled = true;
 			renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 		}
-
 		postProcessing = new PostProcessing(renderer, scene, camera)
-
 		if ( usePostProcessing )
-		postProcessing.init()
+			postProcessing.init()
 
 		this.postProcessing = postProcessing
 		this.socket = socket
@@ -151,11 +147,11 @@ export default class Convolvr {
 		window.three = this.three
 		this.systems = new Systems( this )
 		this.terrain = this.systems.terrain
+		this.skybox = this.systems.skybox
 		this.workers = {
 			staticCollisions: this.systems.staticCollisions.worker,
 			// oimo: this.systems.oimo.worker
 		}
-		this.skybox = this.systems.skybox
 		camera.add(this.systems.audio.listener)
 		this.socketHandlers = new SocketHandlers( this, socket )
 		window.addEventListener('resize', e => this.onWindowResize( e ), true)
@@ -164,11 +160,9 @@ export default class Convolvr {
 	
 		three.vrDisplay = null
 		window.navigator.getVRDisplays().then( displays => { console.log( "displays", displays )
-				
 			if ( displays.length > 0 )
 				three.vrDisplay = displays[ 0 ]
 
-			
 		})
 		this.initialLoad = false
 		this.loadedCallback = () => { 
@@ -199,6 +193,7 @@ export default class Convolvr {
 		this.skyLight = skyLight
 		this.sunLight = sunLight
 		this.skyLight.color.set( config.light.color )
+		this.skyLight.intensity = config.light.intensity / 1.2
 		this.sunLight.intensity = config.light.intensity
 
 		this.config = config; console.info("World config: ", config)
