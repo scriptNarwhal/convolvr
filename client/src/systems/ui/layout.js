@@ -1,9 +1,7 @@
 export default class LayoutSystem {
 
     constructor ( world ) {
-
         this.world = world
-
     }
 
     init ( component ) { 
@@ -15,16 +13,11 @@ export default class LayoutSystem {
             index = component.index
 
         if ( (prop && !!!prop.mode) && ownProp.mode != "factory" ) {
-
             prop.gridSize = prop.gridSize == null ? 3 : 0
-            
             position = this.useLayout( prop.type, component, position, index, prop.axis, prop.columns, prop.gridSize, prop.isometric)
-            
             component.mesh.position.fromArray( position )
             component.mesh.updateMatrix()
-
         }
-        
 
         return {
             type: prop.type
@@ -36,7 +29,6 @@ export default class LayoutSystem {
         let pos = [ 0, 0, 0 ]
 
         switch ( name ) {
-            
             case "list":
                 pos = this._listLayout( component, position, index, axis, gridSize)
             break
@@ -52,11 +44,8 @@ export default class LayoutSystem {
             case "fibonacci":
                 pos = this._fibonacciLayout( component, position, index, axis, columns, gridSize )
             break
-                    
         }
-
         return [ pos[0] + position[0], pos[1] + position[1], pos[2] + position[2] ]
-
     }
 
     _listLayout ( component, position, index, axis, gridSize ) {
@@ -64,7 +53,6 @@ export default class LayoutSystem {
         let pos = [ 0, index * gridSize, 0 ]
 
         return pos
-
     }
 
     _gridLayout ( component, position, index, axis = "xy", columns, gridSize, isometric ) {
@@ -77,21 +65,14 @@ export default class LayoutSystem {
             pos = [ 0, 0, 0 ]
 
         if ( axis == 'xy' ) {
-
             pos = [ margin + (x * gridSize), z * gridSize, -marginZ ]
-
         } else if ( axis == 'zy' ) {
-
             pos = [ margin, z * gridSize, x * gridSize -marginZ ]
-
         } else if ( axis == 'xz') {
-
             pos = [ margin + (x * gridSize), 0, z * gridSize -marginZ ]
-
         }
 
         return pos
-
     }
 
     _radialLayout ( component, position, index, axis, columns, gridSize, isometric ) {
@@ -105,39 +86,30 @@ export default class LayoutSystem {
     _tubeLayout ( component, position, index, axis, columns, gridSize, isometric ) {
 
         let x = index % columns,
-        z = Math.max( 0, Math.floor( (index) / columns ) ),
-        margin = gridSize,
-        marginZ = 2 * margin,
-        columnWidth = 2*Math.PI / columns,
-        pos = [ 0, 0, 0 ],
-        xPos = 0,
-        zPos = 0,
-        yPos = 0
+            z = Math.max( 0, Math.floor( (index) / columns ) ),
+            margin = gridSize,
+            marginZ = 2 * margin,
+            columnWidth = 2*Math.PI / columns,
+            pos = [ 0, 0, 0 ],
+            xPos = 0,
+            zPos = 0,
+            yPos = 0
 
         if ( axis == 'x' ) {
-
             xPos = z * gridSize
             yPos = Math.sin(x * columnWidth) * gridSize
             zPos = Math.cos(z * columnWidth) * gridSize
-            
         } else if ( axis == 'y' ) {
-
             yPos = z * gridSize
             xPos = Math.sin(x * columnWidth) * gridSize
             zPos = Math.cos(x * columnWidth) * gridSize
-
         } else if ( axis == 'z') {
-
             zPos =z * gridSize
             xPos = Math.sin(x * columnWidth) * gridSize
             yPos = Math.cos(z * columnWidth) * gridSize
-
         }
-
         pos = [ xPos, yPos, zPos +marginZ ]
-
         return pos
-    
     }
 
     _fibonacciLayout ( component, position, index, columns, gridSize ) {
@@ -146,6 +118,5 @@ export default class LayoutSystem {
         let pos = [ 0, index * gridSize, 0 ]
         
         return pos
-
     }
 }
