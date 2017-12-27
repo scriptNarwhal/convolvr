@@ -284,8 +284,10 @@ export default class Convolvr {
 		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1
 
 		renderer.setClearColor(0x1b1b1b)
-		renderer.setPixelRatio(pixelRatio)
-		renderer.setSize(window.innerWidth, window.innerHeight)
+		// renderer.setPixelRatio(pixelRatio)
+		let dpr = window.devicePixelRatio;
+		console.log("%device pixel ratio"+dpr, 'color:green;')
+		renderer.setSize(window.innerWidth * dpr, window.innerHeight * dpr)
 		document.body.appendChild( renderer.domElement )
 		renderer.domElement.setAttribute("class", "viewport")
 		renderer.domElement.setAttribute("id", id)
@@ -385,13 +387,14 @@ export default class Convolvr {
 	}
 
 	onWindowResize () {
-		this.screenResX = window.devicePixelRatio * window.innerWidth
-			
-		if ( this.mode != "stereo" )
-			three.renderer.setSize(window.innerWidth, window.innerHeight)
-
-		if ( this.postProcessing.enabled )
-			this.postProcessing.onResize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
+		let dpr = window.devicePixelRatio
+		this.screenResX = dpr * window.innerWidth
+		if ( this.mode != "stereo" ) {
+			three.renderer.setSize(window.innerWidth * dpr, window.innerHeight * dpr)
+			if ( this.postProcessing.enabled )
+				this.postProcessing.onResize(window.innerWidth * dpr, window.innerHeight * dpr)
+		
+		}
 			
 		three.camera.aspect = innerWidth / innerHeight
 		three.camera.updateProjectionMatrix()
