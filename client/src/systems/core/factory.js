@@ -38,10 +38,13 @@ export default class FactorySystem {
             preset:     string           = prop.preset,
             propName:   string           = prop.propName,
             data:       Object           = prop.data,
-            quat:       Array<number>    = data.quaternion,
-            components: Array<Component> = data.components,
+            quat:       Array<number>    = data ? data.quaternion : [0,0,0,1],
+            components: Array<Component> = data ? data.components : [],
             created:    Entity           = null
-
+        if (!data) {
+            console.warn("No data for factory to generate with")
+            return
+        }
         if ( type == 'entity' ) {
             created = this._generateEntity( components, voxel, entityPos, quat, preset )
         } else if (type == 'component') {

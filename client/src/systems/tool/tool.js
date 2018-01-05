@@ -7,8 +7,6 @@ import {
 } from '../../config'
 import Convolvr from '../../world/world'
 
-// TODO: hook into user.toolbox interfaces (primaryAction, etc.. )
-
 export default class ToolSystem {
 
     world: Convolvr
@@ -145,7 +143,7 @@ export default class ToolSystem {
                 }),
                 components: []
             }
-        ], [0, 1.5, 0], [0,0,0,1], GLOBAL_SPACE )
+        ], [0, -0.75, 0], [0,0,0,1], GLOBAL_SPACE )
     }
 
     _showPreview ( component: Component, cursor: Component ) {
@@ -176,7 +174,7 @@ export default class ToolSystem {
 
     _positionToolPanel( toolPanel: Entity, userPos: Array<number>, index: number ) {
         
-        let userPosition = [userPos[0], userPos[ 1 ] + 2.8, userPos[2]],
+        let userPosition = [userPos[0], userPos[ 1 ] + 2.25, userPos[2]],
             mesh = toolPanel.mesh
 
         toolPanel.update(userPosition)
