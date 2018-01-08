@@ -157,6 +157,7 @@ export default class Convolvr {
 		window.addEventListener('resize', e => this.onWindowResize( e ), true)
 		this.onWindowResize()	
 		animate(this, 0, 0)
+		this.animate = animate;
 	
 		three.vrDisplay = null
 		window.navigator.getVRDisplays().then( displays => { console.log( "displays", displays )
@@ -169,6 +170,10 @@ export default class Convolvr {
 			loadedCallback( this );
 			 this.initialLoad = true;  
 		}
+	}
+
+	startAnimation () { // for debugging
+		this.animate(this, 0, 0)
 	}
 
 	init ( config: Object, callback: Function ) {
@@ -206,7 +211,6 @@ export default class Convolvr {
 			}
 		})
 		if ( this.settings.shadows > 0 && sunLight.castShadow == false ) {
-
 			sunLight.castShadow = true
 			sunLight.shadowCameraVisible = true
 			shadowCam = sunLight.shadow.camera

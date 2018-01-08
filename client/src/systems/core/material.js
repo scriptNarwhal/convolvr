@@ -44,10 +44,8 @@ export default class MaterialSystem {
         let onMapsLoaded = loadedMat => {
 
           if ( prop.procedural )
-
             loadedMat.map = this.procedural.generateTexture( prop.procedural )
           
-
           assets.materials[ materialCode ] = loadedMat
         }
 
@@ -155,13 +153,9 @@ export default class MaterialSystem {
                   })
 
                 } else {
-                  
                   onMapsLoaded( material ) 
-
                 }
-
               })
-
             })
             
           } else {
@@ -209,16 +203,13 @@ export default class MaterialSystem {
           } 
 
         } else {
-
           material = assets.materials[ materialCode ]
-
         }
 
       return {
           material,
           materialCode
       }
-
     }
 
     _loadAlphaMap ( prop, textureConfig, material, assets, callback ) {
@@ -237,7 +228,6 @@ export default class MaterialSystem {
         callback()
 
       })
-
     }
 
     _loadBumpMap ( prop, textureConfig, material, assets, callback ) {

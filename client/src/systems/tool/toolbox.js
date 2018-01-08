@@ -51,7 +51,7 @@ export default class ToolboxSystem {
                 toolbox.hands.push(m)
             })
           })
-        }, 7000)
+        }, 5000)
         
         console.info("user hands ", this.hands)
         this.tools = [

@@ -67,7 +67,6 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       voxelKey:  string        = coords.join("."),
       altitude:  number        = systems.terrain.voxels[ voxelKey ].data.altitude
 
- 
   world.onUserLogin = newUser => { // 
     avatar = systems.assets.makeEntity(  newUser.data.avatar || "default-avatar", true, { userId: newUser.name, wholeBody: false }, coords ) // entity id can be passed into config object
     avatar.init( scene )
