@@ -201,6 +201,19 @@ export default class Systems {
 
             if ( this[ prop ] != null ) {
 				
+				// if ( prop == "material" ) {
+				// 	if (!props.assets) {
+
+				// 		let assets = state[ prop ].assets;
+				// 		// roughnessMap
+				// 		// map
+				// 		// metalnessMap
+				// 		// bumpMap
+				// 		// alphaMap
+				// 		// specularMap
+				// 	}
+				// }
+
 				if ( !!this.deffered[ prop ] ) { /* add other systems here */
 					deferredSystems.push( prop )
                 } else {

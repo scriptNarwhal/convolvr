@@ -38,7 +38,8 @@ export default class MaterialSystem {
             simpleShading = this.world.settings.lighting != 'high'
             
         basic = _initMaterialProp( prop, simpleShading )
-        materialCode = `${prop.repeat ? prop.repeat.join(",") : ""}:${prop.name}:${prop.color}:${prop.map}:${prop.specular}:${reflection}:${prop.alpha}:${prop.bump}:${pattern}`
+        materialCode = `${prop.repeat ? prop.repeat.join(",") : ""}:${prop.name}:${prop.color}:${prop.map}:${prop.specular}:${reflection}:`+
+                                                                   `${prop.alpha}:${prop.bump}:${prop.roughnessMap}:${prop.metalnessMap}:${pattern}`;
 
         let onMapsLoaded = loadedMat => {
 
@@ -48,25 +49,18 @@ export default class MaterialSystem {
           
 
           assets.materials[ materialCode ] = loadedMat
-
         }
 
         if ( assets.materials[ materialCode ] == null ) {
-
           if ( !! prop.config ) // raw, three.js material properties, to override things
-
             mat = Object.assign({}, mat, prop.config)
 
-         
           if ( !!prop.repeat )
-
             textureConfig.repeat = prop.repeat
-
 
           if ( envMapUrl && envMapUrl != "none" && (prop.roughnessMap || prop.metalnessMap) || shading == 'physical' ) {
 
             shading = 'physical'
-
             assets.loadImage( envMapUrl, textureConfig, ( envMap ) => { 
 
               envMap.mapping = THREE.EquirectangularReflectionMapping 
@@ -84,7 +78,6 @@ export default class MaterialSystem {
                     roughnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
                     mat.roughnessMap = roughnessMap
                     material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
-
                   },
                   mapCallback = diffuse => { 
 
@@ -93,7 +86,6 @@ export default class MaterialSystem {
                     diffuse.anisotropy = anisotropy
                     mat.map = diffuse
                     material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
-
                   },
                   mapAndRoughnessCallback = diffuse => {
 
@@ -102,7 +94,6 @@ export default class MaterialSystem {
                     diffuse.anisotropy = anisotropy
                     mat.map = diffuse
                     assets.loadImage( prop.roughnessMap, textureConfig, roughnessCallback )
-
                   },
                   metalnessCallback = metalnessMap => {
 
@@ -111,7 +102,6 @@ export default class MaterialSystem {
                     metalnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
                     mat.metalnessMap = metalnessMap
                     material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
-
                   },
                   mapAndMetalnessCallback = diffuse => {
 
@@ -120,7 +110,6 @@ export default class MaterialSystem {
                     diffuse.anisotropy = anisotropy
                     mat.map = diffuse
                     assets.loadImage( prop.roughnessMap, textureConfig, metalnessCallback )
-
                   },
                   metalnessAndRoughnessCallBack = roughnessMap => {
 
@@ -129,7 +118,6 @@ export default class MaterialSystem {
                     roughnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
                     mat.roughnessMap = roughnessMap
                     assets.loadImage( prop.roughnessMap, textureConfig, metalnessCallback )
-
                   },
                   mapMetalnessAndRoughnessCallback = tex => {
                     
@@ -138,37 +126,22 @@ export default class MaterialSystem {
                     diffuse.anisotropy = anisotropy
                     mat.map = diffuse
                     assets.loadImage( prop.roughnessMap, textureConfig, metalnessAndRoughnessCallBack )
-
                   }
 
                 if ( prop.roughnessMap && !!! prop.map ) { 
-                  
                   assets.loadImage( prop.roughnessMap, textureConfig, roughnessCallback )
-
                 } else if ( prop.roughnessMap && prop.metalnessMap && !!! prop.map ) {
-                
                   assets.loadImage( prop.roughnessMap, textureConfig, metalnessAndRoughnessCallBack )
-
                 } else if ( prop.map && prop.roughnessMap ) {
-                  
                   assets.loadImage( prop.map, textureConfig, mapAndRoughnessCallback )
-
                 } else if ( !!! prop.roughnessMap && prop.map ) {
-                  
                   assets.loadImage( prop.map, textureConfig, mapCallback )
-
                 } else if ( !!!prop.roughnessMap && prop.map && prop.metalnessMap ) {
-
                   assets.loadImage( prop.map, textureConfig, mapAndMetalnessCallback )
-
                 } else if ( prop.roughnessMap && prop.map && prop.metalnessMap ) {
-
                   assets.loadImage( prop.map, textureConfig, mapMetalnessAndRoughnessCallback )
-
                 } else {
-                  
                   material = materialSystem._initMaterial( prop, mat, shading, basic, mobile )
-
                 }
 
                 if ( prop.alphaMap || prop.bumpMap ) {

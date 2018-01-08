@@ -98,8 +98,8 @@ export default class Mouse {
     }
 
     windows10Fix(movement: Array<number>) {
-        if ( Math.abs(movement[0] - this.lastMovement[0]) < 60 && 
-             Math.abs(movement[1] - this.lastMovement[1]) < 60) {
+        if ( Math.abs(movement[0] - this.lastMovement[0]) < 160 && 
+             Math.abs(movement[1] - this.lastMovement[1]) < 160) {
             return movement;
         } else {
             return [ 0, 0 ]
