@@ -8,12 +8,14 @@ export default class Mouse {
         this.input = userInput
         this.world = world
         this.store = world.store
+        this.lastMovement = [0,0]
 
     }
 
     init () {
 
         let viewport = document.querySelector("#viewport"),
+            mouse = this,
             uInput = this.input,
             world = this.world
 
@@ -33,15 +35,6 @@ export default class Mouse {
             document.addEventListener('webkitpointerlockchange', () => { this.lockChangeAlert(viewport) }, false)
 
         }
-
-        document.addEventListener("mousemove", e => {
-
-            if ( uInput.focus ) {
-                uInput.rotationVector.y -= (e.movementX || e.mozMovementX || e.webkitMovementX || 0) / 600.0
-                uInput.rotationVector.x -= (e.movementY || e.mozMovementY || e.webkitMovementY || 0) / 600.0
-            }
-
-        })
 
         setTimeout(() => {
 
@@ -87,6 +80,30 @@ export default class Mouse {
                 }
             }, false)
         }, 250)
+
+        document.addEventListener("mousemove", e => {
+           
+            if ( uInput.focus ) {
+                let movement = [0,0];
+                movement = mouse.windows10Fix([
+                    (e.movementX || e.mozMovementX || e.webkitMovementX || 0),
+                    (e.movementY || e.mozMovementY || e.webkitMovementY || 0)
+                ])
+                    
+                uInput.rotationVector.y -= movement[0] / 600
+                uInput.rotationVector.x -= movement[1] / 600
+                mouse.lastMovement = [ ...movement ]
+            }
+        })
+    }
+
+    windows10Fix(movement: Array<number>) {
+        if ( Math.abs(movement[0] - this.lastMovement[0]) < 60 && 
+             Math.abs(movement[1] - this.lastMovement[1]) < 60) {
+            return movement;
+        } else {
+            return [ 0, 0 ]
+        }
     }
 
     lockChangeAlert( canvas ) {
@@ -107,9 +124,7 @@ export default class Mouse {
         } else {
 
             if (world.user.username != "") {
-
                 if (world.mode != "stereo")
-
                     world.mode = "3d"
 
 

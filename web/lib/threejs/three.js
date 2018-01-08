@@ -18017,7 +18017,7 @@
 		function makePowerOfTwo( image ) {
 
 			if ( image instanceof HTMLImageElement || image instanceof HTMLCanvasElement ) {
-
+				
 				var canvas = document.createElementNS( 'http://www.w3.org/1999/xhtml', 'canvas' );
 				canvas.width = _Math.nearestPowerOfTwo( image.width );
 				canvas.height = _Math.nearestPowerOfTwo( image.height );

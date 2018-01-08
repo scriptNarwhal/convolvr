@@ -191,7 +191,17 @@ self.onmessage = ( event ) => {
 			}
 		}
 	} else if ( message.command == "update entity" ) {
-		entities = voxels[ data.coords.join(".") ].entities
+		if (!data || !data.coords) {
+			console.warn("no data to update entity")
+			return
+		}
+		let cell =  data.coords.join(".")
+		if ( !voxels[cell] ) {
+			console.warn("can't update entity with no voxel")
+			return
+		}
+		entities = voxels[ cell ].entities
+
 		if ( entities != null ) {
 			c = entities.length-1
 

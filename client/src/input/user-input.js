@@ -68,7 +68,7 @@ export default class UserInput {
 		this.gamepadMode = false
 		this.trackedControls = false
 		this.handsDetected = 0
-		this.gamepads = {},
+		this.gamepads = {}
 		this.initDone = false
 		
 	}

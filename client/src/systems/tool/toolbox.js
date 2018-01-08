@@ -36,17 +36,23 @@ export default class ToolboxSystem {
   
       allSystemsLoaded( ) {
 
-        let world = this.world
-  
-        setTimeout( // HACK // remove eventually
-          () => {
-            this.user = this.world.user
-            this.user.avatar.componentsByProp.hand.map((m, i) => {
+        let world = this.world,
+            user = world.user,
+            toolbox = this
+
+        this.user = world.user
+        setTimeout( ()=>{
+          console.log("allSystemsLoaded init avatar")
+          console.log(user.avatar)
+          user.avatar.addHandler("init", () => {
+           console.log("user avatar init event handler ", user.avatar)
+            user.avatar.componentsByProp.hand.map((m, i) => {
               if (i < 3)
-                this.hands.push(m)
+                toolbox.hands.push(m)
             })
-          }, 1500
-        )
+          })
+        }, 7000)
+        
         console.info("user hands ", this.hands)
         this.tools = [
           new EntityTool({}, world, this),
