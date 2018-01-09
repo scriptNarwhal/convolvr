@@ -242,10 +242,10 @@ class Settings extends Component {
               <input onChange={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
                    style={styles.range}
                    defaultValue={this.state.floorHeight}
-                   step={1}
+                   step={0.1}
                    type='range'
-                   min='-2'
-                   max='2'
+                   min='-3'
+                   max='3'
               />
               <span style={styles.numericLabel}>
                 {this.state.floorHeight} Units

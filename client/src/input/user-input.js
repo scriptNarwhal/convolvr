@@ -123,7 +123,7 @@ export default class UserInput {
 			if (terrainMode == "plane" || terrainMode == "both") {
 				bottom = terrainMesh.position.y +1.5 + world.vrHeight
 			} else {
-				bottom = 1.5 + world.vrHeight
+				bottom = 2.0 + world.vrHeight
 			}
 		}
 

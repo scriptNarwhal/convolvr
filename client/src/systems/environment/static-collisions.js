@@ -33,7 +33,7 @@ export default class StaticCollisions {
 
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
 				vrHeight = 1 * vrFrame.pose.position[1]
-				world.vrHeight = vrHeight
+				world.vrHeight = vrHeight+1.5
 			}
 
 	    if ( message.command == "update" ) {
@@ -69,7 +69,7 @@ export default class StaticCollisions {
 
 	      if ( message.data.type == "top" ) {
 
-				cam.position.set( cam.position.x, 14.25 + message.data.position[1] +(vrHeight != 0 ? vrHeight-1 : 0), cam.position.z )	
+				cam.position.set( cam.position.x, 14.25 + message.data.position[1] +(vrHeight != 0 ? vrHeight+0.25 : 0), cam.position.z )	
 
 				// if ( Math.abs( user.velocity.y ) > 150 ) {
 				// 	window.navigator.vibrate && window.navigator.vibrate(50)

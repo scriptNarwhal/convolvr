@@ -14,7 +14,7 @@ let observer = {
 		position: [0, 0, 0],
 		prevPos: [0, 0, 0],
 		velocity: [0, 0, 0],
-		vrHeight: 0
+		vrHeight: 1.66
 	},
 	voxelList = [],
 	voxels = []
@@ -56,7 +56,7 @@ self.update = ( ) => {
 				
 				yPos = voxel.position[1]
 				if ( distance2dCompare( position, voxel.position, 24.5 ) ) {
-					if ( position[1] > yPos - 21 + vrHeight  && position[1] < 14.25+yPos + (vrHeight != 0 ? vrHeight-1 : 0) ) {
+					if ( position[1] > yPos - 21 + vrHeight  && position[1] < 14.25+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
 						collision = true
 						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
 					}

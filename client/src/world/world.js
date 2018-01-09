@@ -117,7 +117,7 @@ export default class Convolvr {
 		this.capturing = false
 		this.webcamImage = ""
 		this.HMDMode = "standard" // "head-movement"
-		this.vrHeight = 0
+		this.vrHeight = 1.66
 		this.screenResX = screenResX
 		this.initRenderer( renderer, "viewport" )
 		this.octree = new THREE.Octree({
