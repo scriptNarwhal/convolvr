@@ -200,7 +200,8 @@ export default class ToolboxSystem {
             configureTool    = null,
             action           = null,
             miniature        = null,
-            activate         = null
+            activate         = null,
+            sendAction       = true
         
         tool.hidePreview()
   
@@ -226,14 +227,16 @@ export default class ToolboxSystem {
                 }         
                 tool.configure( configureTool ); //console.log(" configure tool: ", configureTool )
               }
+              sendAction = false
           }
         }
   
         if ( tool.mesh == null )
           tool.equip(hand)        
   
-        action = tool.primaryAction( telemetry )
-  
+        if (sendAction) {
+          action = tool.primaryAction( telemetry )
+        }
         if ( !!action )
           this.sendToolAction( true, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.componentPath || componentPath, action.coords )
   
