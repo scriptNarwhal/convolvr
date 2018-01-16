@@ -217,9 +217,9 @@ export default class ToolboxSystem {
           miniature = cursorEntity.componentsByProp.miniature
         
           if ( miniature && cursorComponent && cursorComponent.props.toolUI ) {
-            console.log("ToolUI!")
+            
             configureTool = componentsByProp.toolUI[ 0 ].props.toolUI.configureTool 
-  
+            console.log("ToolUI!", configureTool)
               if ( configureTool ) {
                 if ( toolIndex != configureTool.tool ) {
                   this.currentTools[ hand ] = configureTool.tool

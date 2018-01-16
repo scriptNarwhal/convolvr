@@ -15,12 +15,9 @@ export default class EntityTool extends Tool  {
         coords =  [ cameraPos.x, 0, cameraPos.z ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
 
       Object.keys( allEntities ).map( name => {
-    
         if ( name != "default-avatar" && name != "tool-menu" && name != "help-screen" && name != "chat-screen" )
-
           allOptions.push( name ) 
 
-        
       })
 
       this.mesh = null
@@ -103,34 +100,26 @@ export default class EntityTool extends Tool  {
           tooManyComponents = !!selected && selected.components.length >= 48,
           pointingAtTerrain = !!selected && selected.componentsByProp.terrain
   
-      console.log( "( Entity Tool )", telemetry, params )
+      console.log( "( Entity Tool )", telemetry, params, entity )
 
       if ( ! tooManyComponents ) {
-  
         if ( selected && selected.componentsByProp && !!!selected.componentsByProp.miniature && (cursorState.distance < 100) ) { // switch to component tool
-            
             user.toolbox.useTool( 1, telemetry.hand, false )
             user.hud.componentsByProp.toolUI[0].state.toolUI.show()
             //user.toolbox.usePrimary( telemetry.hand )
             return false
-
         }
-
       }
       
       if ( entity && cursorSystem.entityCoolDown <= 0 ) {
-
         cursorSystem.entityCoolDown = 80
         return {
           entity
         }
-
       } else {
         console.log(" ( No entity ) ", params.entity, entity )
         return false
-
       }
-
     }
 
     secondaryAction ( telemetry, value ) {
@@ -138,22 +127,16 @@ export default class EntityTool extends Tool  {
       this.current += value // cycle entities
 
       if ( this.current >= this.all.length ) {
-
         this.current = 0
-
       } else if ( this.current < 0 ) {
-
         this.current = this.all.length -1
-        
       }
 
       this.selectedEntity = null
       this.options.entityType = this.all[ this.current ]
 
       if ( this.entity.componentsByProp ) {
-
         this.entity.componentsByProp.text[ 0 ].state.text.update( this.options.entityType )
-
       }
 
       return false // no socket event
@@ -161,17 +144,12 @@ export default class EntityTool extends Tool  {
     }
     
     configure ( config ) {
-
       this.options.entityType = config.preset
-
     }
 
     generatePreview( component, preset, data ) {
-      
       let preview = null
       
       return preview
-      
     }
-
 }

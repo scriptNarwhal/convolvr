@@ -38,7 +38,7 @@ export default class MiniatureSystem {
 
             scale = 1 / ( component.entity.boundingRadius / ( finalScale || 0.5 ) )
 
-            if ( !! revert ) {
+            if ( revert ) {
                 component.entity.mesh.scale.set( 1, 1, 1 )
             } else {
                 component.entity.mesh.scale.set( scale, scale, scale )

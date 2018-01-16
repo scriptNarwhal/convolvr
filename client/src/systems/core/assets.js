@@ -318,7 +318,7 @@ export default class AssetSystem {
         this._addBuiltInEntity( "preview-box", previewBox )
         this._addBuiltInEntity( "panel3", panel3 )
         this._addBuiltInEntity( "block",  block )
-        this._addBuiltInEntity( "column", column1 )
+        this._addBuiltInEntity( "column1", column1 )
         this._addBuiltInEntity( "wirebox", wirebox )
         this._addBuiltInEntity( "icon", this._initButton() )
     }

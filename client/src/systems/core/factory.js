@@ -96,12 +96,16 @@ export default class FactorySystem {
 
         if ( !! components && components.length > 0 ) { // debugging this..
             components[0].props.miniature = { }
-            components[0].props.toolUI = {
+            let toolUIProp = {
                 configureTool: {
                     tool: 0,
                     preset
                 }
             }
+            components.forEach( component => {
+                component.props.toolUI = component.props.toolUI ? { ...component.props.toolUI, ...toolUIProp} : toolUIProp;
+            })
+            components[0]
         }
         return  new Entity( -1, components, position, quaternion, voxel )
     }
