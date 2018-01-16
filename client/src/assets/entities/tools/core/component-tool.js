@@ -45,7 +45,7 @@ export default class ComponentTool extends Tool {
                       props: {
                         metaFactory: { // generates factory for each item in dataSource
                           type: "component", // component, entity, prop
-                          dataSource: this.world.systems.assets.componentsByName
+                          dataSource: this.world.systems.assets.componentsByName //componentsByName
                         },
                         layout: {
                           type: "grid",
@@ -129,7 +129,7 @@ export default class ComponentTool extends Tool {
       
       props = selected.componentsByProp
 
-      if ( !!!selected || props.miniature || props.activate ) {
+      if ( !!!selected ) { //
         console.warn("no tool action, calling activation callbacks")
         return false 
 
