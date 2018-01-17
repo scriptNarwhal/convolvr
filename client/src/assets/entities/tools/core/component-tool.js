@@ -1,7 +1,7 @@
 import Tool from '../../../../world/tool'
 import Component from '../../../../component'
 import Entity from '../../../../entity'
-import { GRID_SIZE } from '../../../../config'
+import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
 export default class ComponentTool extends Tool {
   constructor ( data, world, toolbox ) {
@@ -12,7 +12,7 @@ export default class ComponentTool extends Tool {
           components = assets.componentsByName,
           allOptions = [],
           cameraPos = world.three.camera.position,
-          coords =  [ cameraPos.x, 0, cameraPos.z ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+          coords = GLOBAL_SPACE
   
         Object.keys( components ).map( name => allOptions.push( name ) )
         console.log( "all components", components )
@@ -130,7 +130,7 @@ export default class ComponentTool extends Tool {
       props = selected.componentsByProp
 
       if ( !!!selected ) { //
-        console.warn("no tool action, calling activation callbacks")
+        console.warn("Component Tool: no entity selected")
         return false 
 
       } else {

@@ -1,6 +1,6 @@
 import Tool from '../../../../world/tool'
 import Entity from '../../../../entity'
-import { GRID_SIZE } from '../../../../config'
+import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
 export default class WorldTool extends Tool {
 
@@ -9,7 +9,7 @@ export default class WorldTool extends Tool {
     super ( data, world, toolbox )
 
     let cameraPos = world.three.camera.position,
-        coords =  [ cameraPos[0], 0, cameraPos[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+        coords = GLOBAL_SPACE
 
       this.mesh = null
       this.name = "World Tool"

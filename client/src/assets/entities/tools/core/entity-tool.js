@@ -1,6 +1,6 @@
 import Tool from '../../../../world/tool'
 import Entity from '../../../../entity'
-import { GRID_SIZE } from '../../../../config'
+import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
 export default class EntityTool extends Tool  {
 
@@ -12,7 +12,7 @@ export default class EntityTool extends Tool  {
         allEntities = assets.entitiesByName,
         allOptions = [],
         cameraPos = world.three.camera.position,
-        coords =  [ cameraPos.x, 0, cameraPos.z ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+        coords = GLOBAL_SPACE
 
       Object.keys( allEntities ).map( name => {
         if ( name != "default-avatar" && name != "tool-menu" && name != "help-screen" && name != "chat-screen" )
