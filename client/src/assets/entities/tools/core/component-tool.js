@@ -45,7 +45,7 @@ export default class ComponentTool extends Tool {
                       props: {
                         metaFactory: { // generates factory for each item in dataSource
                           type: "component", // component, entity, prop
-                          dataSource: this.world.systems.assets.componentsByName //componentsByName
+                          dataSource: this.world.systems.assets.components //componentsByName
                         },
                         layout: {
                           type: "grid",
@@ -79,9 +79,7 @@ export default class ComponentTool extends Tool {
             ]
           }
         ],
-        null,
-        null,
-        coords)
+        [0,0,0], [0,0,0,1], coords)
 
     }
 

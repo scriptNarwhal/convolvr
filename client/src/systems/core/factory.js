@@ -94,8 +94,11 @@ export default class FactorySystem {
 
     _generateEntity(menuItem: boolean, components: Array<Component>, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
+        let ent: Entity = null;
+
         if ( !! components && components.length > 0 ) {
             components[0].props.miniature = { }
+            ent = new Entity( -1, components, position, quaternion, voxel )    
             if (menuItem) {
                 let toolUIProp = {
                     configureTool: {
@@ -104,12 +107,12 @@ export default class FactorySystem {
                     }
                 }
 
-                components.forEach( component => {
+                ent.components.forEach( (component: Component) => {
                     component.props.toolUI = component.props.toolUI ? { ...component.props.toolUI, ...toolUIProp} : toolUIProp;
                 })
             }
         }
-        return  new Entity( -1, components, position, quaternion, voxel )
+        return  ent;
     }
 
     _generateComponent(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
@@ -138,7 +141,7 @@ export default class FactorySystem {
                     mixin: true,
                     miniature: {},
                     material: {
-                        name: "metal",
+                        name: "wireframe",
                         color: 0xffffff
                     },
                     ...(menuItem ? {

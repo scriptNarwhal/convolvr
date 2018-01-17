@@ -2,7 +2,7 @@ export default class TextSystem {
 
     constructor ( ) {
 
-        this.mappedColors = ["#000000", "#ffffff", "#ffff00", "#ff0040", "#0080ff", "#ff4000", "#ffa000", "#4000ff", "#00a0ff", "#400000" ]
+        this.mappedColors = ["#505050", "#ffffff", "#ffff00", "#ff0020", "#0080ff", "#ff3000", "#ffb000", "#7000ef", "#00a0ff", "#505050" ]
 
     }
 
@@ -85,11 +85,14 @@ export default class TextSystem {
     _renderText ( context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: Object ) {
 
         let textLine = '',
-            fontSize = (config.fontSize > 0 ? config.fontSize : (label ? 58 : 40)),
+            fontSize = (config.fontSize > 0 ? config.fontSize : (label ? 58 : 39)),
+            lineHeight = fontSize*1.35,
             textRenderState = {
                 codeBlock: false,
                 canvasSize,
                 fontSize: fontSize,
+                lineHeight,
+                fillStyle: background,
                 color
             },
             label = config.label,
@@ -123,8 +126,11 @@ export default class TextSystem {
         } else {
             text.map(( line, l ) => { 
                 this._highlightMarkdown( l, line, lines, context, textRenderState ) // markdown
-                this._highlightSynesthesia( l, line, lines, context, textRenderState )
-                context.fillText( line, 16, 960-(1 + (lines-l)*fontSize*1.35) )
+                if (line[0] == '%' || /^.*\:\s\%/.test(line) ) {
+                    this._highlightSynesthesia( l, line, lines, context, textRenderState )
+                } else {
+                    context.fillText( line, 16, 960-(1 + (lines-l)*lineHeight) )
+                }
             })
         }
     }
@@ -132,23 +138,22 @@ export default class TextSystem {
     _highlightSynesthesia ( l: number, line: string, lines: number, context: any, textState: Object ) {
 
         let xSize = textState.canvasSize[0],
-        lineHeight = textState.fontSize,
-        height = 960-(1 + (lines-l)*lineHeight),
-        letters = [],
-        len = 0
+            lineHeight = textState.fontSize*1.35,
+            height = 960-(1 + (lines-l)*lineHeight),
+            letters = [],
+            len = 0
       
-        if ( line[0] == '%' ) { // markdown heading
-
-            letters = line.split("")
+        letters = line.split("")
             len = letters.length
 
-            line.split("").map( (letter,l) => {
-                if ( parseInt( letter ) ) {
-                    context.fillStyle = this.mappedColors[ parseInt( letter ) ]
-                    context.fillRect(0, height+10, xSize* (l/lines), lineHeight+10)
+            line.split("").map( (letter, lIndex) => {
+                let parsed = parseInt( letter );
+                if ( parsed || parsed === 0) {
+                    context.fillStyle = this.mappedColors[ parsed ]
+                    context.fillText( letter, lIndex*22, 960-((lines-l)*lineHeight) )
                 }
             })
-        } 
+        context.fillStyle = textState.fillStyle;
     }
 
     _highlightMarkdown( l, line, lines, context, textState ) {
