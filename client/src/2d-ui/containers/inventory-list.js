@@ -106,10 +106,10 @@ let styles = {
   list: (color, compact) => {
     return {
       //backgroundColor: 'rgb(24, 24, 24)',
-      boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0.2em 5em 0px',
-      borderBottomRightRadius: '0.25em',
-      borderBottomLeftRadius: '0.25em',
-      backgroundColor: 'rgba(255, 255, 255, 0.17)',
+      // boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0.2em 5em 0px',
+      // borderBottomRightRadius: '0.25em',
+      // borderBottomLeftRadius: '0.25em',
+      // backgroundColor: 'rgba(255, 255, 255, 0.17)',
       cursor: 'pointer',
       width: '32%',
       minWidth: '320px',
