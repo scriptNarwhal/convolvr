@@ -118,19 +118,21 @@ export default class FactorySystem {
     _generateComponent(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         let newComponent = {
-            ...data,
-            miniature:{},
-            ...(menuItem ? {
-                toolUI: {
-                    configureTool: {
-                        tool: 1,
-                        preset
-                    }
+                ...data,
+                props: {
+                    ...data.props,
+                    ...(menuItem ? {
+                        toolUI: {
+                            configureTool: {
+                                tool: 1,
+                                preset
+                            }
+                        },
+                        miniature:{},
+                    } : {})
                 }
-            } : {})
-        }
-        console.info("generateComponent", newComponent)
-        console.info(new Entity( -1, [ newComponent ], position, quaternion, voxel ))
+            };
+            
         return new Entity( -1, [ newComponent ], position, quaternion, voxel )
     }
 
