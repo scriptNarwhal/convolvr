@@ -81,7 +81,7 @@ export default class TextSystem {
         this._renderText( context, text, color, background, canvasSize, config )
         textTexture.needsUpdate = true   
     }
-    
+
     _renderText ( context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: Object ) {
 
         let textLine = '',
@@ -148,10 +148,11 @@ export default class TextSystem {
 
             line.split("").map( (letter, lIndex) => {
                 let parsed = parseInt( letter );
+                
                 if ( parsed || parsed === 0) {
                     context.fillStyle = this.mappedColors[ parsed ]
-                    context.fillText( letter, lIndex*22, 960-((lines-l)*lineHeight) )
                 }
+                context.fillText( letter, lIndex*22, 960-((lines-l)*lineHeight) )
             })
         context.fillStyle = textState.fillStyle;
     }
