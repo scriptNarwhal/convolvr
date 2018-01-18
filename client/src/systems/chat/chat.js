@@ -1,6 +1,13 @@
 import { events } from '../../network/socket'
+import Convolvr from '../../world/world';
+import Entity from '../../entity';
 
 export default class ChatSystem {
+
+    world: Convolvr
+    componentsByUserId: Object
+    lastSender: string
+    chatModal: Entity
 
     constructor ( world: Convolvr ) {
 
@@ -9,6 +16,7 @@ export default class ChatSystem {
         this.lastSender = ""
 
         let byUserId = this.componentsByUserId,
+            currentUser = this.world.user.name,
             chat = this
 
         events.on("chat message", message => {
@@ -24,30 +32,31 @@ export default class ChatSystem {
                     
                     if ( props.chat.displayMessages ) {
 
+                        console.log("display messages")
+                        console.log(props.chat)
                         if ( userId == "all" ) {
-
-                        if ( chatMessage.from != chat.lastSender ) {
-                            from = `${chatMessage.from}: `
-                        }
-
-                        comp.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
-                        comp.state.text.update()
-
+                            if ( chatMessage.from != chat.lastSender ) {
+                                from = `${chatMessage.from}: `
+                            }
+                            comp.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
+                            comp.state.text.update()
                         } else if ( userId == props.chat.userId  && props.text ) {
-
                              comp.state.text.write(`${chatMessage.from}${chatMessage.message}`) // can batch this without re-rendering each time
                              comp.state.text.update()  
-
+                            // initiate hide timeout?
                         }
-
                     }
-
                  })
-
             })
-
         })
+    }
 
+    allSystemsLoaded () {
+         // init chat modal for current user
+         setTimeout( ()=>{
+            
+            this.initChatModal()
+         }, 1700)
     }
 
     init ( component: Component ) { 
@@ -59,15 +68,11 @@ export default class ChatSystem {
         prop.userId = prop.userId || "all"
 
         if ( this.componentsByUserId[ prop.userId ] == null ) {
-
             this.componentsByUserId[ prop.userId ] = []
-
         }
        
         if ( !this.containsObject( component, this.componentsByUserId[ prop.userId ] ) ) {
-
             this.componentsByUserId[ prop.userId ].push( component )
-
         }
         
         if ( prop.sendMessage ) {
@@ -81,8 +86,50 @@ export default class ChatSystem {
         return {
             sendMessage: (message) => {
                 this.sendMessage(message)
-            }    
+            },
+            hide: (delay = 0) => {
+                setTimeout(()=>{
+                    this._hide( component )
+                }, delay)
+            },
+            show: () => {
+                this._show( component )
+            },
+
         }
+    }
+
+    _hide ( component: Component ) {
+
+    }
+
+    _show ( component: Component ) {
+
+    }
+
+    initChatModal() {
+        let chatModal = this.world.systems.assets.makeEntity("help-screen", true),
+            cPos = three.camera.position
+
+        chatModal.components[0].props.text.lines = ["Welcome"]
+        chatModal.init(three.scene, false, ()=>{})
+        chatModal.update(cPos.x, cPos.y - 1, cPos.z - 0.7)
+        this.chatModal = chatModal
+    }
+
+    updateChatModal() {
+        let user = this.world.user.avatar,
+            userPos = user.mesh.position
+        
+        this.chatModal && this.chatModal.update( userPos.x, userPos.y-1, userPos.z-1.2 )
+    }
+
+    hideChatModal () {
+        this.chatModal.mesh.visible = false
+    }
+
+    showChatModal () {
+        this.chatModal.mesh.visible = true
     }
 
     sendMessage (message) {

@@ -1,9 +1,9 @@
 import Entity from '../../../entity'
 import Component from '../../../component'
-// default avatar
+import chatText from '../../components/chat-text'
 
 let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 'vr hands'
-    
+
   console.log("init avatar, assetSystem ", assetSystem )
 
         var mesh = null, // new THREE.Object3D();
@@ -159,10 +159,9 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
 
       }
         
+    components.push( chatText( config ) )
     entity = new Entity( id, components, [0,0,0], [0,0,0,1], voxel )
-  
     return entity
-
 }
 
 export default hero

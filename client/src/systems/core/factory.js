@@ -27,7 +27,7 @@ export default class FactorySystem {
         }
     }
 
-    generate ( component: Component ) {
+    generate(component: Component, menuItem: boolean = true) {
 
         let prop:       Object           = component.props.factory,
             position:   THREE.Vector3    = component.entity.mesh.position,
@@ -38,39 +38,42 @@ export default class FactorySystem {
             preset:     string           = prop.preset,
             propName:   string           = prop.propName,
             data:       Object           = prop.data,
-            quat:       Array<number>    = data.quaternion,
-            components: Array<Component> = data.components,
+            quat:       Array<number>    = data ? data.quaternion : [0,0,0,1],
+            components: Array<Component> = data ? data.components : [],
             created:    Entity           = null
-
+        if (!data) {
+            console.warn("No data for factory to generate with")
+            return
+        }
         if ( type == 'entity' ) {
-            created = this._generateEntity( components, voxel, entityPos, quat, preset )
+            created = this._generateEntity( menuItem, components, voxel, entityPos, quat, preset )
         } else if (type == 'component') {
-            created = this._generateComponent( data, voxel, entityPos, quat, preset )
+            created = this._generateComponent( menuItem, data, voxel, entityPos, quat, preset )
         } else if ( type == 'prop' ) {
 
             switch ( propName ) {
                 case "geometry":
-                    created = this._generateGeometry( data, voxel, entityPos, quat, preset  )
+                    created = this._generateGeometry( menuItem, data, voxel, entityPos, quat, preset  )
                 break
                 case "material":
-                    created = this._generateMaterial( data, voxel, entityPos, quat, preset  )
+                    created = this._generateMaterial( menuItem, data, voxel, entityPos, quat, preset  )
                 break
                 case "assets":
-                    created = this._generateAsset( data, voxel, entityPos, quat )
+                    created = this._generateAsset( menuItem, data, voxel, entityPos, quat )
                 break
                 case "systems":
-                    created = this._generateSystem( data, voxel, entityPos, quat, preset )
+                    created = this._generateSystem( menuItem, data, voxel, entityPos, quat, preset )
                 break
             }
 
         } else if ( type == "world" ) {
-            created = this._generateWorld( data, voxel, entityPos, quat )
+            created = this._generateWorld( menuItem, data, voxel, entityPos, quat )
         } else if ( type == "place" ) {
-            created = this._generatePlace( data, voxel, entityPos, quat )
+            created = this._generatePlace( menuItem, data, voxel, entityPos, quat )
         } else if ( type == "file" ) {
-            created = this._generateFile( data, voxel, entityPos, quat )
+            created = this._generateFile( menuItem, data, voxel, entityPos, quat )
         } else if ( type == "directory" ) {
-            created = this._generateDirectory( data, voxel, entityPos, quat )
+            created = this._generateDirectory( menuItem, data, voxel, entityPos, quat )
         }
 
         if ( created != null ) {
@@ -89,70 +92,87 @@ export default class FactorySystem {
         }
     }
 
-    _generateEntity ( components: Array<Component>, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+    _generateEntity(menuItem: boolean, components: Array<Component>, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
-        if ( !! components && components.length > 0 ) { // debugging this..
+        let ent: Entity = null;
+
+        if ( !! components && components.length > 0 ) {
             components[0].props.miniature = { }
-            components[0].props.toolUI = {
-                configureTool: {
-                    tool: 0,
-                    preset
+            ent = new Entity( -1, components, position, quaternion, voxel )    
+            if (menuItem) {
+                let toolUIProp = {
+                    configureTool: {
+                        tool: 0,
+                        preset
+                    }
                 }
+
+                ent.components.forEach( (component: Component) => {
+                    component.props.toolUI = component.props.toolUI ? { ...component.props.toolUI, ...toolUIProp} : toolUIProp;
+                })
             }
         }
-        return  new Entity( -1, components, position, quaternion, voxel )
+        return  ent;
     }
 
-    _generateComponent ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+    _generateComponent(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         let newComponent = {
-            ...data,
-            toolUI: {
-                configureTool: {
-                    tool: 1,
-                    preset
+                ...data,
+                props: {
+                    ...data.props,
+                    ...(menuItem ? {
+                        toolUI: {
+                            configureTool: {
+                                tool: 1,
+                                preset
+                            }
+                        },
+                        miniature:{},
+                    } : {})
                 }
-            },
-            miniature:{}
-        }
+            };
+            
         return new Entity( -1, [ newComponent ], position, quaternion, voxel )
     }
 
-    _generateGeometry ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+    _generateGeometry(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         return new Entity(-1, [{
                 props: Object.assign({}, {geometry: data}, {
                     mixin: true,
-                    miniature: { scale: 0.4 },
+                    miniature: {},
                     material: {
-                        name: "metal",
+                        name: "wireframe",
                         color: 0xffffff
                     },
-                    toolUI: {
-                        configureTool: {
-                            tool: 3,
-                            preset: data,
-                            data
+                    ...(menuItem ? {
+                        toolUI: {
+                            configureTool: {
+                                tool: 3,
+                                preset: data,
+                                data
+                            }
                         }
-                    }
+                    } : {})
                 }
             )}
         ], position, quaternion, voxel)
     }
 
-    _generateSystem ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+    _generateSystem(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     material: {
                         name: "metal",
                         color: 0xffffff
                     },
                     geometry: {
                         shape: "box",
-                        size: [0.5, 0.5, 0.05]
+                        size: [ 0.5, 0.5, 0.05 ]
                     },
                     text: {
                         lines: [
@@ -164,77 +184,90 @@ export default class FactorySystem {
                         background: "#000000",
                         label: false
                     },
-                    toolUI: {
-                        configureTool: {
-                            tool: 2,
-                            data
+                    ...(menuItem ? {
+                        toolUI: {
+                            configureTool: {
+                                tool: 2,
+                                preset,
+                                data
+                            }
                         }
-                    }
+                    } : {})
                 }
             )}
         ], position, quaternion, voxel)
     }
 
-    _generateMaterial ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+    _generateMaterial(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         return new Entity(-1, [{
                 props: Object.assign({}, {material: data}, {
                     mixin: true,
-                    miniature: { scale: 0.4 },
+                    miniature: {},
                     geometry: {
                         shape: "sphere",
-                        size: [0.05, 0.05, 0.05]
+                        size: [ 0.05, 0.05, 0.05 ]
                     },
-                    toolUI: {
-                        configureTool: {
-                            tool: 4,
-                            data
+                    ...(menuItem ? {
+                        toolUI: {
+                            configureTool: {
+                                tool: 4,
+                                data
+                            }
                         }
-                    }
+                    } : {})
                 }
             )}
         ], position, quaternion, voxel)
     }
 
-    _generateAsset ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateAsset(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
         return new Entity(-1, [{
                 props: Object.assign({}, {material: {diffuse: data}}, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     assets: {
                         images: [data]
                     },
                     material: {
-                        name: "wireframe",
+                        name: "plastic",
                         color: 0xffffff,
                         map: data
                     },
                     geometry: {
-                        shape: "sphere",
-                        size: [0.05, 0.05, 0.05]
+                        shape: "box",
+                        size: [0.5, 0.5, 0.5]
                     },
-                    toolUI: {
-                        configureTool: {
-                            tool: 7,
-                            data
+                    ...(menuItem ? {
+                        toolUI: {
+                            configureTool: {
+                                tool: 7,
+                                data
+                            }
                         }
-                    }
+                    } : {})
                 }
             )}
         ], position, quaternion, voxel)
     }
 
-    _generateWorld ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateWorld(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     portal: {
                         username: data.username,
                         world: data.name
                     },
+                    toolUI: {
+                        configureTool: {
+                            tool: 5,
+                            data
+                        }
+                    },  
                     material: {
                         name: "metal",
                         color: 0x00ffff // get actual world color here..
@@ -258,12 +291,12 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generatePlace ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generatePlace(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
          return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     portal: {
                         username: data.username,
                         world: data.world,
@@ -288,12 +321,12 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generateFile ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateFile(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     text: {
                         color: 0xffffff,
                         background: 0x000000,
@@ -324,12 +357,12 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generateDirectory ( data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateDirectory(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,
-                    miniature: {scale: 0.4},
+                    miniature: {},
                     text: {
                         color: 0xffffff,
                         background: 0x000000,

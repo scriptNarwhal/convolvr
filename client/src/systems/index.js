@@ -4,7 +4,6 @@ import AudioSystem from './audio/audio'
 import AssetSystem from './core/assets'
 import BrowserSystem from './ui/browser'
 import CameraSystem from './video/camera'
-import CPUSystem from './information/cpu'
 import ConditionSystem from './information/condition'
 import ContainerSystem from './ui/container'
 import ConveyorSystem from './vehicle/conveyor'
@@ -23,22 +22,17 @@ import GeometrySystem from './core/geometry'
 import GrabSystem from './core/grab'
 import HoverSystem from './core/hover'
 import HandSystem from './core/hand'
+import HeadSystem from './core/head'
 import LightSystem from './environment/light'
 import LayoutSystem from './ui/layout'
 import VideoSystem from './video/video'
 import InputSystem from './information/input'
 import MediaSystem from './ui/media'
-import DisplayAdapterSystem from './information/display-adapter'
 import GraphSystem from './ui/graph'
-import MemorySystem from './information/memory'
-import IOControllerSystem from './information/io-controller'
-import NetworkInterfaceSystem from './information/network-interface'
-import DriveControllerSystem from './information/drive-controller'
 import DisplaySystem from './video/display'
 import DrawingSystem from './video/drawing'
 import ControlSystem from './vehicle/control'
 import PropulsionSystem from './vehicle/propulsion'
-import PowerSupplySystem from './information/power-supply'
 import MetaFactorySystem from './core/meta-factory'
 import ParticleSystem from './environment/particle'
 import PortalSystem from './environment/portal'
@@ -50,6 +44,7 @@ import MagicSystem from './game/magic'
 import MaterialSystem from './core/material'
 import MiniatureSystem from './core/miniature'
 import ObjPluginSystem from './importers/obj-plugin'
+import ObjectiveSystem from './game/objective'
 import OimoPluginSystem from './environment/oimo-plugin'
 import RESTSystem from './information/rest'
 import RPGRaceSystem from './game/rpg-race'
@@ -64,15 +59,19 @@ import StaticCollisions  from './environment/static-collisions'
 import SwitchSystem from './information/switch'
 import TerrainSystem from './environment/terrain'
 import TextSystem from './ui/text'
-import ToolSystem from './core/tool'
+import ToolSystem from './tool/tool'
 import TimeSystem from './information/time'
-import ToolUISystem from './core/tool-ui'
+import ToolUISystem from './tool/tool-ui'
+import ToolboxSystem from './tool/toolbox'
 import UserSystem from './core/user'
 import VehicleSystem from './vehicle/vehicle'
 import WallSystem from './environment/wall'
 import WebRTCSystem from './video/webrtc'
 import WeaponSystem from './game/weapon'
 import NPCSystem from './game/npc'
+import VirtualDeviceSystem from './information/virtual-device'
+import VirtualMachineSystem from './information/virtual-machine'
+import SkyboxSystem from './environment/skybox'
 
 export default class Systems {
 
@@ -83,6 +82,8 @@ export default class Systems {
 	*  Initializes all systems before components can be registered
 	**/
     constructor ( world: Convolvr )  {
+
+		world.systems = this
 
         let systems = {
 			ability: 		  new AbilitySystem( world ),
@@ -97,14 +98,12 @@ export default class Systems {
 			control: 		  new ControlSystem( world ),
 			conveyor: 		  new ConveyorSystem( world ),
 			cursor: 		  new CursorSystem( world ),
-			cpu: 			  new CPUSystem( world ),
 			datgui: 		  new DatGUIVRPluginSystem( world ),
 			destructable: 	  new DestructableSystem( world ),
 			display: 		  new DisplaySystem( world ),
-			displayAdapter:   new DisplayAdapterSystem( world ),
+			virtualDevice:    new VirtualDeviceSystem( world ),
 			door: 			  new DoorSystem( world ),
 			drawing: 		  new DrawingSystem( world ),
-			driveController:  new DriveControllerSystem( world ),
 			emote: 			  new EmoteSystem( world ),
 			faction: 		  new FactionSystem( world ),
 			factory: 		  new FactorySystem( world ),
@@ -115,8 +114,8 @@ export default class Systems {
 			grab:             new GrabSystem( world ),
 			graph: 		      new GraphSystem( world ),
 			hand: 			  new HandSystem( world ),
+			head: 			  new HeadSystem( world ),
 			hover: 			  new HoverSystem( world ),
-			ioController: 	  new IOControllerSystem( world ),
 			input: 			  new InputSystem( world ),
 			loop: 			  new LoopSystem( world ),
 			light: 			  new LightSystem( world ),
@@ -124,17 +123,15 @@ export default class Systems {
 			lookAway: 		  new LookAwaySystem( world ),
 			magic: 			  new MagicSystem( world ),
 			material: 		  new MaterialSystem( world ),
-			memory: 		  new MemorySystem( world ),
 			media: 			  new MediaSystem( world ),
 			metaFactory: 	  new MetaFactorySystem( world ),
 			miniature: 		  new MiniatureSystem( world ),
-			networkInterface: new NetworkInterfaceSystem( world ),
 			npc: 			  new NPCSystem( world ),
 			obj: 			  new ObjPluginSystem( world ),
 			oimo: 		   	  new OimoPluginSystem( world ),
+			objective:        new ObjectiveSystem( world ),
 			particles: 		  new ParticleSystem( world ),
 			propulsion: 	  new PropulsionSystem( world ),
-			powerSupply: 	  new PowerSupplySystem( world ),
 			portal: 		  new PortalSystem( world ),
 			projectile: 	  new ProjectileSystem( world ),
 			quest: 			  new QuestSystem( world ),
@@ -142,7 +139,9 @@ export default class Systems {
 			rpgRace:		  new RPGRaceSystem( world ),
 			signal: 		  new SignalSystem( world ),
 			skill: 			  new SkillSystem( world ),
+			skybox:           new SkyboxSystem( world ),
 			screenshot: 	  new ScreenshotSystem( world ),
+			skybox:           new SkyboxSystem( world ),
 			socialMedia: 	  new SocialMediaSystem( world ),
 			speech: 		  new SpeechSystem( world ),
 			state:            new StateSystem( world ),
@@ -154,18 +153,30 @@ export default class Systems {
 			time: 			  new TimeSystem( world ),
 			toolUI: 		  new ToolUISystem( world ),
 			tool: 			  new ToolSystem( world ),
+			toolbox:          new ToolboxSystem( world ),
 			user: 			  new UserSystem( world ),
 			vehicle: 		  new VehicleSystem( world ),
 			video: 			  new VideoSystem( world ),
+			virtualMachine:   new VirtualMachineSystem( world ),
 			wall: 			  new WallSystem( world ),
 			webrtc: 		  new WebRTCSystem( world ),
 			weapon:			  new WeaponSystem( world )
 		}
+		this.systems = systems
+		this.liveSystems = []
 
-        this.systems = systems
-        Object.keys( systems ).map( system => {
-            this[ system ] = systems[ system ]
-        })
+		for (let s: number = 0; s < 2; s ++) {
+			Object.keys( systems ).map( system => {
+				if (s == 1) {
+					this[ system ].allSystemsLoaded && this[ system ].allSystemsLoaded()
+				} else {
+					this[ system ] = systems[ system ]
+					if ( this[ system ].live ) {
+						this.liveSystems.push( this[ system ] )
+					}
+				}
+			})
+		}
 
 		this.deffered = {
 			hand: true, light: true, particles: true, text: true, audio: true, video: true, metaFactory: true, miniature: true,
@@ -190,6 +201,19 @@ export default class Systems {
 
             if ( this[ prop ] != null ) {
 				
+				// if ( prop == "material" ) {
+				// 	if (!props.assets) {
+
+				// 		let assets = state[ prop ].assets;
+				// 		// roughnessMap
+				// 		// map
+				// 		// metalnessMap
+				// 		// bumpMap
+				// 		// alphaMap
+				// 		// specularMap
+				// 	}
+				// }
+
 				if ( !!this.deffered[ prop ] ) { /* add other systems here */
 					deferredSystems.push( prop )
                 } else {
@@ -222,19 +246,21 @@ export default class Systems {
 	**/
 	tick ( delta: number, time: number ) {
 		
-		// let l = 0,
-		// 	systems = this.liveSystems,
-		// 	ln = systems.length
+		let systems = this.liveSystems,
+			ln = systems.length,
+			l = 0
+		// refactor this to check time after each system/tick to avoid dropping render frames
+		if ( ln == 0 ) {
+			return
+		}
 
-		// while ( l < ln ) {
-
-		// 	systems[ l ].tick( delta, time )
-		// 	l += 1
-		// }
-
-		this.particles.tick( delta, time )
-		this.terrain.tick( delta, time )
-		this.fbx.tick( delta, time )
+		while ( l < ln ) {
+			systems[ l ].tick( delta, time )
+			l += 1
+		}
+		// this.particles.tick( delta, time )
+		// this.terrain.tick( delta, time )
+		// this.fbx.tick( delta, time )
 	}
 }
 

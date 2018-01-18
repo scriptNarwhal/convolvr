@@ -1,6 +1,6 @@
 import Tool from '../../../../world/tool'
 import Entity from '../../../../entity'
-import { GRID_SIZE } from '../../../../config'
+import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
 export default class SystemTool extends Tool {
 
@@ -9,7 +9,7 @@ export default class SystemTool extends Tool {
     super(data, world, toolbox)
 
     let cameraPos = world.three.camera.position,
-        coords =  [ cameraPos.x, 0, cameraPos.z ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+        coords = GLOBAL_SPACE
 
     this.mesh = null;
     this.name = "System Tool"
@@ -116,28 +116,67 @@ export default class SystemTool extends Tool {
         
     }
 
-    primaryAction ( telemetry) {
+    primaryAction ( telemetry ) {
       
-      let options = this.options,
-          cursor = telemetry.cursor,
-          user = this.world.user,
-          systems = this.world.systems,
-          assetSystem = systems.assets,
-          cursorSystem = systems.cursor,
-          cursorState = cursor.state.cursor || {},
-          position = telemetry.position,
-          quat = telemetry.quaternion,
-          selected = !!cursorState.entity ? cursorState.entity : false,
-          coords = telemetry.voxel,
-          props = {},
-          components = [],
-          entityId = -1,
-          entity = null
+      let options         = this.options,
+          cursor          = telemetry.cursor,
+          user            = this.world.user,
+          systems         = this.world.systems,
+          assetSystem     = systems.assets,
+          cursorSystem    = systems.cursor,
+          cursorState     = cursor.state.cursor || {},
+          componentPath   = cursorState.componentPath,
+          position        = telemetry.position,
+          quat            = telemetry.quaternion,
+          selected        = !!cursorState.entity ? cursorState.entity : false,
+          coords          = telemetry.voxel,
+          props           = {},
+          components      = [ ],
+          component       = {},
+          cursorComponent = cursorState.component,
+          entity          = telemetry.entity,
+          entityId        = selected ? selected.id : -1
       
       if ( options.system && options.system.none ) return
 
-      // gotta implement, yo
+      props = selected.componentsByProp
+      
+      if ( !!!selected || props.miniature || props.activate ) {
+          console.warn("no tool action, calling activation callbacks")
+          return false 
+      
+      } else {
+          coords = selected.voxel
+      }
 
+      if ( !! cursorComponent && !! selected ) {
+
+        componentPath = cursorComponent.path
+        component = Object.assign({}, {
+          position: cursorComponent.data.position,
+          quaternion: cursorComponent.data.quaternion,
+          props: cursorComponent.props,
+          components: cursorComponent.components
+        })
+        console.log("set system", this.preset, this.options, component)
+        component.props[ this.preset ] = this.options
+        components = [ component ]
+
+      } else {
+
+        return false
+
+      }
+
+      return {
+        coords,
+        component,
+        components,
+        componentPath,
+        entity,
+        entityId,
+        components
+      }
         
     }
 
@@ -149,6 +188,7 @@ export default class SystemTool extends Tool {
       
       if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
         this.options = Object.assign( {}, config.data )
+        this.preset = config.preset
         console.log("Configuring tool ", this.options)
       }
       

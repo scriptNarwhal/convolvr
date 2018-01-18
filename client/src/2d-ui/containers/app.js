@@ -6,7 +6,8 @@ import Button from '../components/button'
 import { vrAnimate } from '../../world/render'
 import { 
   detectWorldDetailsFromURL,
-  GRID_SIZE 
+  GRID_SIZE,
+  APP_NAME
 } from '../../config'
 
 class App extends Component {
@@ -45,7 +46,7 @@ class App extends Component {
       })
 
       this.notify(chatMessage.message, chatMessage.from)
-      worldName = this.props.world.toLowerCase() == "overworld" ? "Convolvr" : this.props.world
+      worldName = this.props.world.toLowerCase() == "overworld" ? APP_NAME : this.props.world
 
       if ( this.props.focus == false ) {
         this.setState({
@@ -63,17 +64,8 @@ class App extends Component {
           worldUser = worldDetails[ 0 ]
 
       if ( !this.props.menuOpen ) {
-        
-        browserHistory.push("/chat")
-
-        if ( worldMode != 'vr' && worldMode != 'stereo' ) { // 3d ui will show the chat in vr without interrupting things
-            this.props.toggleMenu(true)
-        } else {
-          setTimeout(()=>{
-            browserHistory.push(`/${worldDetails[ 0 ]}/${worldDetails[ 1 ]}`)
-            this.props.toggleMenu(false)
-          }, 3500) 
-        }
+        // TODO: implement show chat modal
+        // world.chatModal.componentsByProp.text[0].state.text. 
       }
     })
 

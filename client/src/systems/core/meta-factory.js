@@ -34,8 +34,7 @@ export default class MetaFactorySystem {
             keys:           Object           = {},
             x:              number           = 0,
             y:              number           = 0
-        console.warn("***********")
-        console.warn("metafactory assetType", assetType)
+
         if ( assetType == "component" ) {
             Object.keys( prop.dataSource ).map( name => {
                 presets.push( name )
@@ -93,7 +92,7 @@ export default class MetaFactorySystem {
     _getSourceCategory ( source: any, category: string ) {
 
         let sourceCategory: any = ""
-        console.info("get source CATEGORY", category, source)
+        
         switch( category ) {
             case "structures": sourceCategory = source.structures; break;
             case "vehicles": sourceCategory = source.vehicles; break;
@@ -127,7 +126,7 @@ export default class MetaFactorySystem {
     }
 
     _addComponent ( component: Component, factoryItem: any, assetType: string, assetCategory: string, preset: any, x: number, y: number, i: number, gridSize: number, vOffset: number ) {
-        console.info("_addComponent", factoryItem)
+
         let addTo:   Component     = null,
             layout:  Object        = {},
             systems: Object        = this.world.systems,

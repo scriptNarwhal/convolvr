@@ -113,6 +113,21 @@ export default class AssetSystem {
         // fire callback
     }
 
+    loadShaders ( vertex_url: string, fragment_url: string, onLoad: Function, onProgress: Function, onError: Function ) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
+		var vertex_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
+
+		vertex_loader.setResponseType('text')
+		vertex_loader.load( vertex_url, vertex_text => {
+
+			var fragment_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
+			fragment_loader.setResponseType('text')
+			fragment_loader.load( fragment_url, fragment_text => {
+				onLoad(vertex_text, fragment_text)
+			});
+
+		}, onProgress, onError)
+	}
+
     getEnvMapFromColor ( r, g, b ) {
 
         let envURL = '/data/images/photospheres/sky-reflection.jpg'
@@ -303,7 +318,7 @@ export default class AssetSystem {
         this._addBuiltInEntity( "preview-box", previewBox )
         this._addBuiltInEntity( "panel3", panel3 )
         this._addBuiltInEntity( "block",  block )
-        this._addBuiltInEntity( "column", column1 )
+        this._addBuiltInEntity( "column1", column1 )
         this._addBuiltInEntity( "wirebox", wirebox )
         this._addBuiltInEntity( "icon", this._initButton() )
     }
@@ -331,7 +346,7 @@ export default class AssetSystem {
 
         } else {
 
-            button = {
+            button = { // TODO: come back to this
                 props: {
                     // activate: true,
                     // hover: true,

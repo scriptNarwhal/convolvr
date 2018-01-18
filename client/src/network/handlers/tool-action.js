@@ -15,6 +15,7 @@ export default class ToolActionHandler {
             let data = JSON.parse(packet.data),
                 world = this.world,
                 user = world.user,
+                avatar = null,
                 pos = data.position,
                 coords = data.coords,
                 voxel = world.terrain.voxels[coords[0] + ".0." + coords[2]],
@@ -100,7 +101,7 @@ export default class ToolActionHandler {
                                 voxelEnt.mesh.position.fromArray([0, 0, -voxelEnt.boundingRadius])
                                 voxelEnt.mesh.quaternion.fromArray([0, 0, 0, 1])
                                 voxelEnt.mesh.updateMatrix()
-
+                                console.log("grab entity: found entity")
                             }
                         })
 
@@ -136,6 +137,8 @@ export default class ToolActionHandler {
                             voxelEnt.position = voxelEnt.mesh.position.toArray()
                             voxelEnt.getVoxel()
 
+                        } else {
+                         console.warn("no voxel ent to replace")
                         }
 
                     }

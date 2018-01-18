@@ -29,7 +29,13 @@ export default class Entity {
       this.name = name || `entity${this.id}:${this.voxel.join("x")}`
       this.lastFace = 0
       this._compPos = new THREE.Vector3()
-      
+      this.handlers = {
+        init: [],
+        update: [],
+        save: [],
+        addToVoxel: [],
+        removeFromVoxel: []
+      }
   }
 
   serialize ( ) {
@@ -71,7 +77,19 @@ export default class Entity {
     }
 
     this.mesh.updateMatrix()
+    this.callHandlers("update")
+  }
 
+  addHandler(type: string, handler: Function) {
+    this.handlers[ type ].push( handler );
+  }
+
+  callHandlers(type: string) {
+    let ent = this;
+
+    this.handlers[ type ].forEach( handler => {
+      handler( ent )
+    })
   }
 
   reInit( ) {
@@ -194,6 +212,11 @@ export default class Entity {
       mesh = nonMerged[ 0 ] // maybe nest inside of Object3D ?
     }
 
+    if (!mesh) {
+      console.warn("entity mesh failed to generate", this)
+      return
+    }
+
     if ( world.settings.shadows > 0 ) {
       mesh.castShadow = true
       mesh.receiveShadow = true
@@ -227,6 +250,7 @@ export default class Entity {
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()
     !! callback && callback( this )
+    this.callHandlers("init")
     return this
   }
 
@@ -237,6 +261,7 @@ export default class Entity {
     } else {
       this.saveNewEntity()
     }
+    this.callHandlers("save")
   }
     
   saveNewEntity () {
@@ -278,6 +303,7 @@ export default class Entity {
 
   addToVoxel ( coords, mesh ) {
     this.getVoxelForUpdate( coords, addTo => { addTo.meshes.push( mesh ) })
+    this.callHandlers("addToVoxel")
   }
 
   removeFromVoxel ( coords, mesh ) {
@@ -285,6 +311,7 @@ export default class Entity {
     let removeFrom = this.getVoxelForUpdate( coords )
 
     removeFrom.meshes.splice( removeFrom.meshes.indexOf( mesh ), 1 )
+    this.callHandlers("removeFromVoxel")
   }
 
   getVoxelForUpdate ( coords, callback ) {

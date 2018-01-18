@@ -14,7 +14,7 @@ let observer = {
 		position: [0, 0, 0],
 		prevPos: [0, 0, 0],
 		velocity: [0, 0, 0],
-		vrHeight: 0
+		vrHeight: 1.66
 	},
 	voxelList = [],
 	voxels = []
@@ -26,7 +26,6 @@ self.update = ( ) => {
 		innerBox 	 = [false, false],
 		velocity 	 = observer.velocity,
 		vrHeight 	 = observer.vrHeight,
-		closeToVenue = false,
 		collision 	 = false,
 		yPos 		 = 0,
 		voxel 		 = null,
@@ -46,81 +45,93 @@ self.update = ( ) => {
 		voxel = voxelList[ i ]
 
 		if ( !!!voxel || !!!voxel.position) continue
-
 		if ( !!voxel && distance2dCompare( position, voxel.position, 180 ) ) { 	// do collisions on voxels & structures... just walls at first..		
 			if ( voxel.loaded == undefined ) {
 				voxel.loaded = true
 				self.postMessage('{"command": "load entities", "data":{"coords":"'+voxel.cell[0]+'.'+voxel.cell[1]+'.'+voxel.cell[2]+'"}}');
 			}
-
 			if ( distance2dCompare( position, voxel.position, 60 ) ) {
 					
 				let alt = voxel.altitude || 0
 				
 				yPos = voxel.position[1]
-				
 				if ( distance2dCompare( position, voxel.position, 24.5 ) ) {
-					if ( position[1] > yPos - 21 + vrHeight  && position[1] < 14.25+yPos + (vrHeight != 0 ? vrHeight-1 : 0) ) {
+					if ( position[1] > yPos - 21 + vrHeight  && position[1] < 14.25+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
 						collision = true
 						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
 					}
 				}	
 				if ( !!voxel.entities && voxel.entities.length > 0 ) {
-					e = voxel.entities.length - 1
-
-					while ( e >= 0 ) {
-						ent = voxel.entities[ e ]
-						entRadius = ent.boundingRadius 
-
-						if ( !!! ent || !!!ent.components ) { console.warn("Problem with entity! ",e ,ent); continue }
-						if ( distance3dCompare( position, [ent.position[0]-entRadius, ent.position[1], ent.position[2]-entRadius], (entRadius*1.6||3)+2.5) ) { 
-							ent.components.map( entComp => {
-								let boundingRadius = entComp.boundingRadius*1.2 || Math.max(entComp.props.geometry.size[0], entComp.props.geometry.size[2])*1.4
-								if ( distance2dCompare( 
-									position, 
-									[ ent.position[0] + entComp.position[0], 0, ent.position[2] + entComp.position[2]],
-									boundingRadius * 1.5
-								)) {
-									if ( !! entComp.props.floor ) {
-										let verticalOffset = (position[1] + 2 - (entComp.position[1]+ent.position[1])) 
-										if ( verticalOffset > 0 && verticalOffset < 5 ) {
-											self.postMessage( JSON.stringify( {command: "floor collision", data: { 
-												position: entComp.position, 
-												floorData: entComp.props.floor
-											}}))
-											collision = true
-										}
-									} else if ( distance3dCompare( 
-										position, 
-										[ ent.position[0] + entComp.position[0], ent.position[1] + entComp.position[1], ent.position[2] + entComp.position[2]],
-										boundingRadius
-									)) {
-										collision = true
-										self.postMessage( JSON.stringify( {command: "entity-user collision", data:{ position: entComp.position }} ) )
-									}
-								}
-							})
-						}
-						e -= 1
-					}
+					collision = self.checkStaticCollisions( voxel, position )
 				}	
 			}
 		}
 	}
 
 	if ( !collision )
-
 		observer.prevPos = [ observer.position[0], observer.position[1], observer.position[2] ]
 	
-
 	self.postMessage('{"command": "update"}')
 	self.updateLoop = setTimeout( () => {
 		self.update()
 	}, 15)
-
 }
 
-self.onmessage = function ( event ) { 
+self.checkStaticCollisions = ( voxel, position ) => {
+	let e = voxel.entities.length - 1,
+		ent = null,
+		entRadius = 10,
+		collision = false
+
+	while (e >= 0) {
+		ent = voxel.entities[e]
+		entRadius = ent.boundingRadius
+		if (!!!ent || !!!ent.components) {
+			console.warn("Problem with entity! ", e, ent); continue
+		}
+		if (distance3dCompare(
+			position,
+			[ent.position[0] - entRadius, ent.position[1],
+			ent.position[2] - entRadius], (entRadius * 1.6 || 3) + 2.5
+		)) {
+
+			ent.components.map(entComp => {
+				let boundingRadius = entComp.boundingRadius * 1.2 || Math.max(entComp.props.geometry.size[0], entComp.props.geometry.size[2]) * 1.4
+
+				if (!!entComp.props.floor) {
+					if (distance2dCompare(
+						position,
+						[ent.position[0] + entComp.position[0], 0, ent.position[2] + entComp.position[2]],
+						boundingRadius * 2.2
+					)) {
+						let verticalOffset = (position[1] + 2 - (entComp.position[1] + ent.position[1] )) //  + entComp.geometry ? entComp.geometry.size[1] : 1
+						if (verticalOffset > 0 && verticalOffset < 5) {
+							self.postMessage(JSON.stringify({
+								command: "floor collision", data: {
+									position: entComp.position,
+									floorData: entComp.props.floor
+								}
+							}))
+							collision = true
+						}
+					}
+				} else if (distance3dCompare(
+					position,
+					[ent.position[0] + entComp.position[0], ent.position[1] + entComp.position[1], ent.position[2] + entComp.position[2]],
+					boundingRadius
+				)) {
+					collision = true
+					self.postMessage(JSON.stringify({ command: "entity-user collision", data: { position: entComp.position } }))
+				}
+
+			})
+		}
+		e -= 1
+	}
+	return collision
+}
+
+self.onmessage = ( event ) => { 
 
 	var message  = JSON.parse( event.data ),
 		data 	 = message.data,
@@ -139,23 +150,18 @@ self.onmessage = function ( event ) {
 		user.vrHeight = data.vrHeight
 		//self.postMessage(JSON.stringify(self.observer));
 	} else if ( message.command == "add voxels" ) {
-
 		voxelList = voxelList.concat(data)
 		data.map( v => {
 			voxels[ v.cell.join(".") ] = v
 		})
-
 	} else if ( message.command == "remove voxels" ) {
-
 		p = data.length -1
-
+	
 		while ( p >= 0 ) {
-
 			toRemove = data[p]
 			c = voxelList.length-1
-
+			
 			while ( c >= 0 ) {
-
 				voxel = voxelList[ c ]
 				if ( voxel != null && voxel.cell[0] == toRemove.cell[0] && voxel.cell[1] == toRemove.cell[1]  && voxel.cell[2] == toRemove.cell[2] ) {	
 					voxelList.splice( c, 1 )
@@ -165,22 +171,17 @@ self.onmessage = function ( event ) {
 			}
 			p --
 		}
-
 	} else if ( message.command == "add entity" ) {
-
 		if (!!! voxels[data.coords.join(".")])
 			voxels[data.coords.join(".")] = { entities: [], cell: data.coords }
 
     	entities = voxels[data.coords.join(".")].entities
     	entities.push( data.entity )
-
-  } else if ( message.command == "remove entity" ) {
-
+  	} else if ( message.command == "remove entity" ) {
     	entities = voxels[ data.coords.join(".") ].entities
-
 		if ( entities != null ) {
-
 			c = entities.length-1
+			
 			while ( c >= 0 ) {
 				if ( entities[c].id == data.entityId ) {
 					voxels[ data.coords.join(".") ].entities.splice(c, 1)
@@ -189,10 +190,17 @@ self.onmessage = function ( event ) {
 				c--
 			}
 		}
-
 	} else if ( message.command == "update entity" ) {
-
-		entities = voxels[ data.coords.join(".") ].entities
+		if (!data || !data.coords) {
+			console.warn("no data to update entity")
+			return
+		}
+		let cell =  data.coords.join(".")
+		if ( !voxels[cell] ) {
+			console.warn("can't update entity with no voxel")
+			return
+		}
+		entities = voxels[ cell ].entities
 
 		if ( entities != null ) {
 			c = entities.length-1
@@ -205,20 +213,13 @@ self.onmessage = function ( event ) {
 				c--
 			}
 		}
-
 	} else if ( message.command == "clear" ) {
-
 		voxels = []
 		voxelList = []
-
 	} else if ( message.command == "start" ) {
-
 		self.update()
-
 	} else if ( message.command == "stop" ) {
-
 		self.stop()
-
 	} else if ( message.command == "log" ) {
 		if (data == "") {
 			self.postMessage('{"command":"log","data":[' + user.position[0] + ',' + user.position[1] + ',' + user.position[2] + ']}');

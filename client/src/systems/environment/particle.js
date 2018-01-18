@@ -1,7 +1,15 @@
+import Convolvr from "../../world/world";
+
 export default class ParticleSystem {
+    
+    world:           Convolvr
+    particleSystems: Array<any>
+    live:            boolean
+    
     constructor (world) {
         this.world = world
         this.particleSystems = []
+        this.live = true
     }
 
     init (component) { 

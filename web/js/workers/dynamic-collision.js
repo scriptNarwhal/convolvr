@@ -26,7 +26,7 @@ observer = {
   prevPos: [0, 0, 0],
   velocity: [0, 0, 0],
   hands: [],
-  vrHeight: 0
+  vrHeight: 1.66
 };
 
 self.onmessage = function (event) {

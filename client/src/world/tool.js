@@ -65,10 +65,11 @@ export default class Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 0.333, 0.09, 0.05 ]
+                size: [ 0.333, 0.9, 0.5 ]
               },
               material: {
-                name: "plastic"
+                name: "plastic",
+                color: 0xffffff
               },
               text: {
                 label: true,

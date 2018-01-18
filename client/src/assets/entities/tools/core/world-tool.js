@@ -1,6 +1,6 @@
 import Tool from '../../../../world/tool'
 import Entity from '../../../../entity'
-import { GRID_SIZE } from '../../../../config'
+import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
 export default class WorldTool extends Tool {
 
@@ -9,7 +9,7 @@ export default class WorldTool extends Tool {
     super ( data, world, toolbox )
 
     let cameraPos = world.three.camera.position,
-        coords =  [ cameraPos[0], 0, cameraPos[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) )
+        coords = GLOBAL_SPACE
 
       this.mesh = null
       this.name = "World Tool"
@@ -62,11 +62,15 @@ export default class WorldTool extends Tool {
     configure ( config ) {
       
       if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
+        let newWorld = [ config.userName, config.name ]
+        if ( !!newWorld[ 0 ] && !!newWorld[ 1 ] ) { // not navigating to built in ui / page
 
-        this.options = Object.assign( {}, config.data )
-        console.log("Configuring tool ", this.options)
-
+            three.world.reload ( newWorld[ 0 ], newWorld[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
+        }
       }
+        // make this use the item as a portal for now
+        // this.options = Object.assign( {}, config.data )
+        // console.log("Configuring tool ", this.options)
       
   }
 
