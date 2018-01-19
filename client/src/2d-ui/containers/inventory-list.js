@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Button from '../components/button'
-import Card from '../components/Card'
+import Card from '../components/card'
 import EntityEditor from '../components/data/entity-editor'
 import ComponentEditor from '../components/data/component-editor'
 import PropertyEditor from '../components/data/property-editor'
