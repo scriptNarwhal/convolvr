@@ -190,7 +190,7 @@ self.onmessage = ( event ) => {
 				c--
 			}
 		}
-	} else if ( message.command == "update entity" ) {
+	} else if ( message.command == "update entity" || message.command == "update telemetry" ) {
 		if (!data || !data.coords) {
 			console.warn("no data to update entity")
 			return
@@ -207,7 +207,15 @@ self.onmessage = ( event ) => {
 
 			while ( c >= 0 ) {
 				if (entities[ c ].id == data.entityId) {
-					entities[ c ] = data.entity
+					if ( message.command == "update entity" ) {
+						entities[ c ] = data.entity
+					} else {
+						console.info("update telemetry")
+						entities[ c ].position = data.position
+						if ( data.quaternion ) {
+							entities[ c ].quaternion = data.quaternion;
+						}
+					}					
 					c = -1
 				}
 				c--

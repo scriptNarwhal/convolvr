@@ -11,7 +11,6 @@ export default class ToolActionHandler {
         this.handlers = handlers
 
         socket.on("tool action", packet => {
-
             let data = JSON.parse(packet.data),
                 world = this.world,
                 user = world.user,
@@ -24,14 +23,11 @@ export default class ToolActionHandler {
                 userHand = {}
 
             if ( voxel == null || voxel.loaded == false ) {
-
                 if (voxel)
-
                     world.systems.terrain.loadVoxel(coords)
 
                 console.warn("[Remote] Voxel not loaded", coords)
                 return
-
             }
 
             switch ( data.tool ) {
@@ -44,11 +40,8 @@ export default class ToolActionHandler {
                     break
                 case "Component Tool":
                     voxel.entities.map(voxelEnt => { // find & re-init entity
-
                         if (voxelEnt.id == data.entityId) // console.log("got component tool message", data.entity.components); // concat with existing components array
-
                             voxelEnt.update(false, false, voxelEnt.components.concat(data.entity.components), false, false, { ignoreRotation: true })
-
 
                     })
                     break;
@@ -60,24 +53,19 @@ export default class ToolActionHandler {
                     break
                 case "Update Tool":
                     voxel.entities.map(voxelEnt => { // find & re-init entity.. also probably look up the right component to modify by id *******************
-
                         if (voxelEnt.id == data.entityId) {
                             //console.log("Update Tool message", data.components[0]) // concat with existing components array
                             voxelEnt.update(false, false, false, data.components[0], data.componentPath, { ignoreRotation: true })
                         }
-
                     })
                     break
                 case "Delete Tool":
                     voxel.entities.map((voxelEnt, i) => { // find & re-init entity ^^^^^^
-
                         if (voxelEnt.id == data.entityId) {
-
                             console.log("got delete tool message", data.entityId) // concat with existing components array
                             world.octree.remove(voxelEnt.mesh)
                             three.scene.remove(voxelEnt.mesh)
                             voxel.entities.splice(i, 1)
-
                         }
 
                     })
@@ -88,13 +76,10 @@ export default class ToolActionHandler {
                     break
                 case "Grab Entity":
                     if (data.user != user.name) {
-
                         remoteUser = world.users["user" + data.userId]
                         userHand = remoteUser.avatar.componentsByProp.hand[data.hand]
-
                         voxel.entities.map(voxelEnt => {
                             if (voxelEnt.id == data.entityId) {
-
                                 three.scene.remove(voxelEnt.mesh)
                                 userHand.state.hand.grabbedEntity = voxelEnt
                                 userHand.mesh.add(voxelEnt.mesh)
@@ -104,7 +89,6 @@ export default class ToolActionHandler {
                                 console.log("grab entity: found entity")
                             }
                         })
-
                     }
                     break
                 case "Replace Entity":
@@ -119,36 +103,26 @@ export default class ToolActionHandler {
                             handPos = []
 
                         if (voxelEnt) {
-
                             if (handState.trackedHands) {
-
                                 handPos = userHand.mesh.position
                                 entity.update(handPos.toArray(), userHand.mesh.quaternion.toArray())
-
                             } else {
-
                                 avatarPos = avatar.mesh.position
                                 entity.update(avatarPos.toArray(), avatar.mesh.quaternion.toArray())
-
                             }
-
                             voxelEnt.mesh.translateZ(-voxelEnt.boundingRadius)
                             voxelEnt.mesh.updateMatrix()
                             voxelEnt.position = voxelEnt.mesh.position.toArray()
                             voxelEnt.getVoxel()
-
                         } else {
                          console.warn("no voxel ent to replace")
                         }
-
                     }
                     break
             }
 
             if (world.settings.IOTMode)
-
                 animate(world, Date.now(), 0)
-
 
         })
     }
