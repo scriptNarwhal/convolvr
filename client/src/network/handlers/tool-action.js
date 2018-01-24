@@ -11,7 +11,6 @@ export default class ToolActionHandler {
         this.handlers = handlers
 
         socket.on("tool action", packet => {
-
             let data = JSON.parse(packet.data),
                 world = this.world,
                 user = world.user,
@@ -41,7 +40,6 @@ export default class ToolActionHandler {
                     break
                 case "Component Tool":
                     voxel.entities.map(voxelEnt => { // find & re-init entity
-
                         if (voxelEnt.id == data.entityId) // console.log("got component tool message", data.entity.components); // concat with existing components array
                             voxelEnt.update(false, false, voxelEnt.components.concat(data.entity.components), false, false, { ignoreRotation: true })
 
@@ -81,7 +79,6 @@ export default class ToolActionHandler {
                         userHand = remoteUser.avatar.componentsByProp.hand[data.hand]
                         voxel.entities.map(voxelEnt => {
                             if (voxelEnt.id == data.entityId) {
-
                                 three.scene.remove(voxelEnt.mesh)
                                 userHand.state.hand.grabbedEntity = voxelEnt
                                 userHand.mesh.add(voxelEnt.mesh)
@@ -91,7 +88,6 @@ export default class ToolActionHandler {
                                 console.log("grab entity: found entity")
                             }
                         })
-
                     }
                     break
                 case "Replace Entity":

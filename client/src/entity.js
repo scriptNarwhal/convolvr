@@ -49,7 +49,6 @@ export default class Entity {
       voxel: this.voxel,
       boundingRadius: this.boundingRadius
     }
-
   }
 
   update ( position, quaternion = false, components, component, componentPath, config = {} ) {
@@ -60,20 +59,21 @@ export default class Entity {
       this.updateComponentAtPath( component, componentPath )
       this.init( this.anchor, entityConfig )
     }
-
     if ( !! components ) {
       this.components = components
       this.init( this.anchor, entityConfig )
     }
-
-    if ( !! position ) {
-      this.position = position
-      this.mesh.position.fromArray( position )
-    }
-
-    if ( !!quaternion ) {
-      this.quaternion = quaternion
-      this.mesh.quaternion.fromArray( quaternion )  
+    if ( position ) {
+      if ( !! position ) {
+        this.position = position
+        this.mesh.position.fromArray( position )
+        this.updateWorkers("update-telemetry", three.world.systems)
+      }
+      if ( !!quaternion ) {
+        this.quaternion = quaternion
+        this.mesh.quaternion.fromArray( quaternion )  
+      }
+      this.updateWorkers("update-telemetry", three.world.systems )
     }
 
     this.mesh.updateMatrix()
@@ -395,7 +395,6 @@ export default class Entity {
   }
 
   updateWorkers ( mode, systems ) {
-
     let entityData = {
         id: this.id,
         components: this.components,
@@ -407,7 +406,6 @@ export default class Entity {
       message = ""
 
     if ( mode == "add" ) {
-
       message = JSON.stringify({
         command: "add entity",
         data: {
@@ -415,12 +413,9 @@ export default class Entity {
           entity: entityData
         }
       })
-
       systems.staticCollisions.worker.postMessage( message )
       //systems.oimo.worker.postMessage( message )
-
     } else if ( mode == "update") {
-      
       message = JSON.stringify({
         command: "update entity",
         data: { 
@@ -429,12 +424,19 @@ export default class Entity {
           entity: entityData
         }
       })
-
       systems.staticCollisions.worker.postMessage( message )
       //systems.oimo.worker.postMessage( message )
-
+    } else if ( mode == "update-telemetry" ) {
+      message = JSON.stringify({
+        command: "update telemetry",
+        data: {
+          entityId: this.id,
+          coords: this.voxel,
+          position,
+          quaternion
+        } 
+      })
     }
-
   }
 
   getClosestComponent( position, recursive = true ) {
@@ -451,21 +453,16 @@ export default class Entity {
     this.allComponents.map( component => {
 
       if ( !! component.merged ) {
-
         return false
-
       }
 
       compPos.setFromMatrixPosition( component.mesh.matrixWorld ) // get world position
       newDist = compPos.distanceTo( position )
 
       if ( newDist < distance ) { 
-
         distance = newDist
         closest = component
-
       }
-
     })
 
     if ( !!!closest ) {
@@ -473,35 +470,24 @@ export default class Entity {
       distance = 0.0900
       newDist = 0
       this.combinedComponents.map( component => {
-
         if ( component.data ) {
-
           compPos.fromArray( component.data.position )
           worldCompPos = entMesh.localToWorld( compPos )
           newDist = worldCompPos.distanceTo( position ) //console.log("compPos", compPos, "worldCompPos", worldCompPos, "newDist", newDist)
           
           if ( newDist < distance ) {  
-  
             distance = newDist
             closest = component
-  
           }
-
         }
-      
       })
-
     }
 
     if ( !!closest && recursive && closest.components.length > 1 ) {
-
       closestSubComp = closest.getClosestComponent( position )
       closest = !!closestSubComp ? closestSubComp : closest
-
     }
-
     return closest
-
   }
 
   getComponentByFace ( face ) {
@@ -509,17 +495,11 @@ export default class Entity {
     let component = false
 
     this.compsByFaceIndex.forEach((comp) => {
-
       if ( face >= comp.from && face <= comp.to ) {
-
         component = comp.component
-
       } 
-
     })
 
     return component
-
   }
-
 }
