@@ -20,7 +20,7 @@ export default class Entity {
       this.position = position ? position : false
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
-      this.boundingRadius = 0.5, // set in init()
+      this.boundingRadius = 0.5 // set in init()
       this.componentsByProp = {} // arrays are defined here with key of prop
       this.compsByFaceIndex = [] // possibly deprecated
       this.allComponents = []

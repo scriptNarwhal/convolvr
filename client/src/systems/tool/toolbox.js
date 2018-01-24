@@ -287,7 +287,20 @@ export default class ToolboxSystem {
             entityId = hand.state.hand.grip( value ),
             avatar = this.user.avatar.mesh
         
-        this.sendToolAction(true, { name: value < 0 ? "Replace Entity" : "Grab Entity"}, handIndex, avatar.position.toArray(), avatar.quaternion.toArray(), null, entityId, null, null, this.user.avatar.voxel )
+        this.sendToolAction(
+          true, 
+          {
+             name: value < 0 ? "Replace Entity" : "Grab Entity"
+          }, 
+          handIndex, 
+          avatar.position.toArray(), 
+          avatar.quaternion.toArray(), 
+          null, 
+          entityId, 
+          null, 
+          null, 
+          this.user.avatar.voxel 
+        )
       }
   
       setHandOrientation ( hand, position, orientation ) {
@@ -308,11 +321,9 @@ export default class ToolboxSystem {
             toolName = tool.name
   
         if ( toolName == "Geometry Tool" || toolName == "Material Tool" || toolName == "System Tool" )
-  
           toolName = "Update Tool"
   
         if ( !!!coords )
-  
             coords = [ Math.floor(cPos.x / GRID_SIZE[ 0 ]), 0, Math.floor(cPos.z / GRID_SIZE[ 2 ]) ]
   
         if ( entity )  { entity.voxel = coords }
