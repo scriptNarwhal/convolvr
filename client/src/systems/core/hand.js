@@ -60,7 +60,6 @@ export default class HandSystem {
                     if ( entity ) {
                         component.mesh.remove(entity.mesh)
                         three.scene.add(entity.mesh)
-                        oldVoxel = [...entity.voxel]
                         
                         if ( state.hand.trackedHands ) {
                             handPos = component.mesh.position
@@ -73,9 +72,8 @@ export default class HandSystem {
                         entity.mesh.translateZ( -entity.boundingRadius )
                         entity.mesh.updateMatrix()
                         entity.position = entity.mesh.position.toArray()
-                        entity.getVoxel()
+                        entity.getVoxel( false, true )
                         entity.save( oldVoxel )
-
                         state.hand = Object.assign({}, state.hand, { grabbedEntity: false })
                     }
                 }
@@ -83,7 +81,6 @@ export default class HandSystem {
                 entity = cursor.state.cursor.entity
 
                 if (!!entity && !!!state.hand.grabbedEntity) {
-                    
                     console.info("Pick Up")
                     three.scene.remove( entity.mesh )
                     state.hand.grabbedEntity = entity

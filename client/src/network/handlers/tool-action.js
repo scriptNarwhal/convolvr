@@ -81,6 +81,7 @@ export default class ToolActionHandler {
                             if (voxelEnt.id == data.entityId) {
                                 three.scene.remove(voxelEnt.mesh)
                                 userHand.state.hand.grabbedEntity = voxelEnt
+                                voxelEnt.updateOldCoords()
                                 userHand.mesh.add(voxelEnt.mesh)
                                 voxelEnt.mesh.position.fromArray([0, 0, -voxelEnt.boundingRadius])
                                 voxelEnt.mesh.quaternion.fromArray([0, 0, 0, 1])

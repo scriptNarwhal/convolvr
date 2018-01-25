@@ -26,6 +26,7 @@ export default class Entity {
       this.allComponents = []
       this.combinedComponents = []
       this.voxel = voxel ? voxel : this.getVoxel( true )
+      this.oldCoords = [ ...this.voxel ]
       this.name = name || `entity${this.id}:${this.voxel.join("x")}`
       this.lastFace = 0
       this._compPos = new THREE.Vector3()
@@ -38,8 +39,7 @@ export default class Entity {
       }
   }
 
-  serialize ( ) {
-
+  serialize( ) {
     return {
       id: this.id,
       name: this.name,
@@ -51,8 +51,7 @@ export default class Entity {
     }
   }
 
-  update ( position, quaternion = false, components, component, componentPath, config = {} ) {
-
+  update( position, quaternion = false, components, component, componentPath, config = {} ) {
     let entityConfig = Object.assign({}, config, { updateWorkers: true } )
 
     if ( !! componentPath ) {
@@ -67,13 +66,19 @@ export default class Entity {
       if ( !! position ) {
         this.position = position
         this.mesh.position.fromArray( position )
-        this.updateWorkers("update-telemetry", three.world.systems)
       }
       if ( !!quaternion ) {
         this.quaternion = quaternion
         this.mesh.quaternion.fromArray( quaternion )  
       }
-      this.updateWorkers("update-telemetry", three.world.systems )
+      this.updateWorkers(
+        "update-telemetry", 
+        three.world.systems, 
+        {
+          oldCoords: this.oldCoords
+        }
+      )
+      this.updateOldCoords()
     }
 
     this.mesh.updateMatrix()
@@ -96,8 +101,7 @@ export default class Entity {
     this.init( this.parent, { updateWorkers: true } )
   }
 
-  init ( parent, config = {}, callback ) {
-
+  init( parent, config = {}, callback ) {
     let mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
         three = window.three,
@@ -255,7 +259,6 @@ export default class Entity {
   }
 
   save ( oldVoxel = false ) {
-    
     if ( oldVoxel !== false ) {
       this.saveUpdatedEntity( oldVoxel )
     } else {
@@ -265,7 +268,6 @@ export default class Entity {
   }
     
   saveNewEntity () {
-    
     let data = this.serialize()
 
     axios.put(`${API_SERVER}/api/import-to-world/${three.world.name}/${this.voxel.join("x")}`, data).then( response => {
@@ -276,7 +278,6 @@ export default class Entity {
   }
     
   saveUpdatedEntity ( oldVoxel ) {
-    
     let data = this.serialize()
 
     axios.put(`${API_SERVER}/api/update-world-entity/${three.world.name}/${oldVoxel.join("x")}/${this.voxel.join("x")}`, data).then( response => {
@@ -286,41 +287,58 @@ export default class Entity {
     })   
   }
 
-  getVoxel ( initial ) {
-
+  getVoxel ( initial, check ) {
     let position = null,
         coords = null
 
-    if ( initial ) {
+    if (initial) {
       position = this.mesh != null ? this.mesh.position.toArray() : this.position
       coords = [Math.floor( position[ 0 ] / GRID_SIZE[ 0 ] ), 0, Math.floor( position[ 2 ] / GRID_SIZE[ 2 ] )]
     } else {
       coords = this.voxel
     }        
+    if (check) {
+      if (this.voxel[0] != coords[0] || this.voxel[1] != coords[1] || this.voxel[2] != coords[2]) {
+        this.onVoxelChanged(coords)
+      }
+    }
     this.voxel = coords
     return coords
   }
 
+  onVoxelChanged () {
+
+  }
+
+  updateOldCoords () {
+    this.oldCoords = [ ...this.voxel ]
+  }
+
   addToVoxel ( coords, mesh ) {
-    this.getVoxelForUpdate( coords, addTo => { addTo.meshes.push( mesh ) })
+    let ent = this;
+
+    this.getVoxelForUpdate( coords, addTo => { 
+      addTo.meshes.push( mesh ) 
+      addTo.entities.push( ent )
+    })
     this.callHandlers("addToVoxel")
   }
 
   removeFromVoxel ( coords, mesh ) {
+    let removeFrom = this.getVoxelForUpdate( coords ),
+        ent = this;
 
-    let removeFrom = this.getVoxelForUpdate( coords )
-
+    removeFrom.entities.splice( removeFrom.entities.indexOf( ent ), 1)
     removeFrom.meshes.splice( removeFrom.meshes.indexOf( mesh ), 1 )
     this.callHandlers("removeFromVoxel")
   }
 
   getVoxelForUpdate ( coords, callback ) {
-
     let world = window.three.world,
         thisEnt = this,
         systems = world.systems,
         terrain = systems.terrain,
-        voxel = terrain.voxels[ coords.join(".") ]
+        voxel = terrain.voxels[ coords.join(".") ];
 
     if ( !!! voxel) { console.warn("voxel not loaded")
      voxel = terrain.loadVoxel( coords, callback )
@@ -345,7 +363,6 @@ export default class Entity {
 
   // refactor to return instantiated component
   getComponentByPath ( path, pathIndex, components = false ) {
-
     let foundComponent = null
 
     if ( components == false )
@@ -359,7 +376,6 @@ export default class Entity {
   }
 
   updateComponentAtPath ( component, path, pathIndex = 0, components = false, resetState = false ) {
-
     let oldState = {},
         sanitizedState = {}
 
@@ -394,7 +410,7 @@ export default class Entity {
     }   
   }
 
-  updateWorkers ( mode, systems ) {
+  updateWorkers ( mode, systems, config = {} ) {
     let entityData = {
         id: this.id,
         components: this.components,
@@ -432,15 +448,15 @@ export default class Entity {
         data: {
           entityId: this.id,
           coords: this.voxel,
-          position,
-          quaternion
+          oldCoords: config.oldCoords,
+          position: entityData.position,
+          quaternion: entityData.quaternion
         } 
       })
     }
   }
 
   getClosestComponent( position, recursive = true ) {
- 
     let compPos = this._compPos, 
         entMesh = this.mesh,
         worldCompPos = null,
@@ -491,7 +507,6 @@ export default class Entity {
   }
 
   getComponentByFace ( face ) {
-    
     let component = false
 
     this.compsByFaceIndex.forEach((comp) => {
