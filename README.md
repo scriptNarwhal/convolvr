@@ -35,7 +35,6 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
   toolMenu.init( three.scene, {}, menu => {
     menu.componentsByProp.toolUI[0].state.toolUI.updatePosition() 
   }) 
-
   userInput.init( world, world.camera, user )
 
   let chatScreen = world.systems.assets.makeEntity( "chat-screen", true )
