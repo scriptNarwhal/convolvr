@@ -96,7 +96,8 @@ self.checkStaticCollisions = ( voxel, position ) => {
 		)) {
 
 			ent.components.map(entComp => {
-				let boundingRadius = entComp.boundingRadius * 1.2 || Math.max(entComp.props.geometry.size[0], entComp.props.geometry.size[2]) * 1.4
+				let boundingRadius = entComp.boundingRadius * 1.2 ||
+				    Math.max(entComp.props.geometry.size[0], entComp.props.geometry.size[2]) * 1.4
 
 				if (!!entComp.props.floor) {
 					if (distance2dCompare(
@@ -150,76 +151,18 @@ self.onmessage = ( event ) => {
 		user.vrHeight = data.vrHeight
 		//self.postMessage(JSON.stringify(self.observer));
 	} else if ( message.command == "add voxels" ) {
-		voxelList = voxelList.concat(data)
-		data.map( v => {
-			voxels[ v.cell.join(".") ] = v
-		})
+		self.addVoxels( message, data )
 	} else if ( message.command == "remove voxels" ) {
-		p = data.length -1
-	
-		while ( p >= 0 ) {
-			toRemove = data[p]
-			c = voxelList.length-1
-			
-			while ( c >= 0 ) {
-				voxel = voxelList[ c ]
-				if ( voxel != null && voxel.cell[0] == toRemove.cell[0] && voxel.cell[1] == toRemove.cell[1]  && voxel.cell[2] == toRemove.cell[2] ) {	
-					voxelList.splice( c, 1 )
-					voxels[ voxel.cell.join(".")] = null
-				}
-				c--
-			}
-			p --
-		}
+		self.removeVoxels( message, data )
 	} else if ( message.command == "add entity" ) {
-		if (!!! voxels[data.coords.join(".")])
-			voxels[data.coords.join(".")] = { entities: [], cell: data.coords }
-
-    	entities = voxels[data.coords.join(".")].entities
-    	entities.push( data.entity )
+		self.addEntity()
   	} else if ( message.command == "remove entity" ) {
-    	entities = voxels[ data.coords.join(".") ].entities
-		if ( entities != null ) {
-			c = entities.length-1
-			
-			while ( c >= 0 ) {
-				if ( entities[c].id == data.entityId ) {
-					voxels[ data.coords.join(".") ].entities.splice(c, 1)
-					c = -1
-				}
-				c--
-			}
-		}
+    	self.removeEntity( message, data )
 	} else if ( message.command == "update entity" || message.command == "update telemetry" ) {
-		if (!data || !data.coords) {
-			console.warn("no data to update entity")
-			return
-		}
-		let cell =  data.coords.join(".")
-		if ( !voxels[cell] ) {
-			console.warn("can't update entity with no voxel")
-			return
-		}
-		entities = voxels[ cell ].entities
-
-		if ( entities != null ) {
-			c = entities.length-1
-
-			while ( c >= 0 ) {
-				if (entities[ c ].id == data.entityId) {
-					if ( message.command == "update entity" ) {
-						entities[ c ] = data.entity
-					} else {
-						console.info("update telemetry")
-						entities[ c ].position = data.position
-						if ( data.quaternion ) {
-							entities[ c ].quaternion = data.quaternion;
-						}
-					}					
-					c = -1
-				}
-				c--
-			}
+		if ( message.command == "update entity" ) {
+			self.updateEntity( message, data )
+		} else {
+			self.updateTelemetry( message, data )
 		}
 	} else if ( message.command == "clear" ) {
 		voxels = []
@@ -235,6 +178,136 @@ self.onmessage = ( event ) => {
 		}
 	}
 };
+
+self.addVoxels = ( message, data ) => {
+	voxelList = voxelList.concat(data)
+	data.map( v => {
+		voxels[ v.cell.join(".") ] = v
+	})
+}
+
+self.removeVoxels = ( message, data ) => {
+	let toRemove = null,
+		voxel = null,
+		c 		 = 0,
+		p 		 = data.length -1
+	
+	while ( p >= 0 ) {
+		toRemove = data[p]
+		c = voxelList.length-1
+		
+		while ( c >= 0 ) {
+			voxel = voxelList[ c ]
+			if ( voxel != null && voxel.cell[0] == toRemove.cell[0] && voxel.cell[1] == toRemove.cell[1]  
+																	&& voxel.cell[2] == toRemove.cell[2] ) {	
+				voxelList.splice( c, 1 )
+				voxels[ voxel.cell.join(".")] = null
+			}
+			c--
+		}
+		p --
+	}
+}
+
+self.addEntity = ( message, data ) => {
+	if (!data) {
+		console.warn("no data for addEntity")
+		return
+	}
+	if (!!! voxels[data.coords.join(".")]) {
+		voxels[data.coords.join(".")] = { entities: [], cell: data.coords }
+	}
+	let entities = voxels[data.coords.join(".")].entities
+	entities.push( data.entity )
+}
+
+self.removeEntity = ( message, data ) => {
+	let entities = voxels[ data.coords.join(".") ].entities
+	if ( entities != null ) {
+		let c = entities.length-1
+		
+		while ( c >= 0 ) {
+			if ( entities[c].id == data.entityId ) {
+				voxels[ data.coords.join(".") ].entities.splice(c, 1)
+				c = -1
+			}
+			c--
+		}
+	}
+}
+
+self.updateEntity = ( message, data ) => {
+	let cell =  data.coords.join(".")
+
+	if (!data || !data.coords) {
+		console.warn("no data to update entity")
+		return
+	}
+	if ( !voxels[cell] ) {
+		console.warn("can't update entity with no voxel")
+		return
+	}
+	let entities = voxels[ cell ].entities
+
+	if ( entities != null ) {
+		let c = entities.length-1
+		while ( c >= 0 ) {
+			if (entities[ c ].id == data.entityId) {
+				entities[ c ] = data.entity			
+				c = -1
+			}
+			c--
+		}
+	}
+}
+
+self.updateTelemetry = ( message, data ) => {
+	if (!data || !data.coords) {
+		console.warn("no data to update entity")
+		return
+	}
+	let cell =  data.coords.join(".")
+	if ( !voxels[cell] ) {
+		console.warn("can't update entity with no voxel")
+		return
+	}
+	let entities = voxels[ cell ].entities,
+		oldCell = message.data.oldCoords.join("."),
+		oldEntities = voxels[oldCell];
+
+	if (oldCell != cell) {
+		c = oldEntities.length - 1
+		while (c >= 0) {
+			let movedEnt = oldEntities[c]
+			if (movedEnt.id == data.entityId) {
+				oldEntities.splice(oldEntities.indedOf(movedEnt), 1)
+				entities.push(movedEnt)
+				console.log("update telemetry: moved between voxels")
+				movedEnt.position = data.position
+				if (data.quaternion) {
+					movedEnt.quaternion = data.quaternion;
+				}
+				c = -1
+			}
+		}
+
+	} else {
+		if (entities != null) {
+			c = entities.length - 1
+			while (c >= 0) {
+				if (entities[c].id == data.entityId) {
+					console.info("update telemetry")
+					entities[c].position = data.position
+					if (data.quaternion) {
+						entities[c].quaternion = data.quaternion;
+					}
+					c = -1
+				}
+				c--
+			}
+		}
+	}
+}
 
 self.stop = () => {
 	clearTimeout( self.updateLoop )

@@ -270,7 +270,10 @@ export default class Entity {
   saveNewEntity () {
     let data = this.serialize()
 
-    axios.put(`${API_SERVER}/api/import-to-world/${three.world.name}/${this.voxel.join("x")}`, data).then( response => {
+    axios.put(
+      `${API_SERVER}/api/import-to-world/${three.world.name}/${this.voxel.join("x")}`,
+       data
+    ).then( response => {
       console.info("Entity Saved", this)
     }).catch(response => {
       console.error("Entity failed to save", response)
@@ -280,9 +283,12 @@ export default class Entity {
   saveUpdatedEntity ( oldVoxel ) {
     let data = this.serialize()
 
-    axios.put(`${API_SERVER}/api/update-world-entity/${three.world.name}/${oldVoxel.join("x")}/${this.voxel.join("x")}`, data).then( response => {
+    axios.put(
+      `${API_SERVER}/api/update-world-entity/${three.world.name}/${oldVoxel.join("x")}/${this.voxel.join("x")}`,
+       data
+    ).then( response => {
       console.info("Entity Updated", this)
-    }).catch(response => {
+    }).catch( response => {
       console.error("Entity failed to send update", response)
     })   
   }
