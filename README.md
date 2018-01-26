@@ -44,6 +44,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
 
 })
 ```
+
 ### Entity / System Mapping
 ```js
 {
