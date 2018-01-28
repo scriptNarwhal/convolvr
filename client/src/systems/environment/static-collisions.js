@@ -58,11 +58,9 @@ export default class StaticCollisions {
 				oldYV = user.velocity.y,
 				direction = entPos.sub(userPos)	
 
-			if ( distance < 500 ) { // debug
-
+			if ( distance < 30 ) { // debug
 				user.velocity.sub( direction.multiplyScalar(10) )
 				user.velocity.y = oldYV
-
 			}
 
 		} else if ( message.command == "platform collision" ) { // consider sending "top" or "bottom" collision type
@@ -103,13 +101,9 @@ export default class StaticCollisions {
 				}
 
 			} else if ( message.command == "load entities" ) {
-				
 				world.generateFullLOD(message.data.coords)
-
 			} else {
-
 				console.log(message.data)
-
 			}
 
 		}
@@ -119,11 +113,9 @@ export default class StaticCollisions {
 	}
 
 	init ( component: Component ) {
-		
 		return {
 
 		}
-
 	}
 
 }

@@ -36,7 +36,6 @@ export default class Tool {
       let components = this.entity.componentsByProp
       
       if ( components && components.tool )
-
         this.entity.componentsByProp.tool[0].state.tool.preview.show( cursor )
 
     }
@@ -46,7 +45,6 @@ export default class Tool {
       let components = this.entity.componentsByProp
 
       if ( components && components.tool )
-      
         components.tool[0].state.tool.preview.hide()
       
     }
@@ -54,7 +52,6 @@ export default class Tool {
     unequip ( hand ) {
 
       if ( this.mesh != null && this.mesh.parent != null )
-       
           this.mesh.parent.remove( this.mesh )
 
     }
