@@ -179,7 +179,7 @@ export default class Convolvr {
 	init ( config: Object, callback: Function ) {
 		
 		let coords 	 	   = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
-			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.35 ),
+			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.25 ),
 			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, config.light.intensity*1.1 ),
 			camera 		   = three.camera,
 			skyMaterial    = new THREE.MeshBasicMaterial( {color: 0x303030} ),
@@ -203,7 +203,7 @@ export default class Convolvr {
 
 		this.config = config; console.info("World config: ", config)
 		this.terrain.initTerrain(config.terrain)
-		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 10.5)
+		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 1.1)
 		this.ambientLight.color.set( config.light.ambientColor )
 		Array(this.ambientLight, this.sunLight, this.skyLight).forEach( light => {
 			if ( !!!light.parent ) {

@@ -194,7 +194,7 @@ export default class CursorSystem {
 
             if ( !!!cursorState.cursor.entity && !!! noRayCast )
 
-                window.navigator.vibrate && window.navigator.vibrate(35)
+                window.navigator.vibrate && window.navigator.vibrate(25)
 
             newCursorState = {
                 distance: obj.distance || 2,
@@ -204,9 +204,9 @@ export default class CursorSystem {
                 component,
                 componentPath: component ? component.path : []
             }
-
+            cursor.mesh.material.color.set(0x00ff00);
         } else {
-
+            cursor.mesh.material.color.set(0xffffff);
             newCursorState = {
                 distance: 2,
                 mesh: null,
@@ -221,94 +221,62 @@ export default class CursorSystem {
         newCursorState.lookingAtEntity = noRayCast ? cursorState.cursor.entity : entity
 
         if ( !!!component && cursorState.cursor.component ) {
-        
             if ( lookAway ) {
-
                 callbacks = cursorState.component.state.lookAway.callbacks
                 cb = callbacks.length - 1
-        
                 while ( cb >= 0 ) {
-        
                         callbacks[ cb ]()
                         cb --
-        
                 }
-
             }
-            
         }
 
         cursorState.cursor = Object.assign( {}, newCursorState )
 
         if ( !!entity && !!component ) 
-
             if ( hover ) {
-
                 callbacks = component.state.hover.callbacks
                 cb = callbacks.length - 1
-
                 while ( cb >= 0 ) {
-
                     callbacks[ cb ]()
                     cb --
-
                 }
-
             }
-
-        
-
     }
 
     _animateCursors ( world, input, cursorSystem, cursor, cursorMesh, state, i, cursorIndex ) {
 
-        let cursorPos = cursorMesh.position,
-            cursorSpeed = ( state.distance - cursorPos.z ) / 10,
+        let cursorState = cursor.state.cursor,
+            cursorPos = cursorMesh.position,
+            cursorSpeed = (cursorState.speed || 0 +(cursorState.speed || 0 +( state.distance - cursorPos.z ) / 8) / 2.0)/2.0,
             trackedControls = ( input.trackedControls || input.leapMotion )
             
+        cursorState.speed = cursorSpeed;
         cursorMesh.updateMatrix()
         cursorMesh.updateMatrixWorld()
 
         if ( i == 0 ) { // head cursor
-                
             if ( trackedControls && cursorMesh.visible == true ) {
-
                 cursorMesh.visible = false
-
             } else if ( !trackedControls && cursorMesh.visible == false ) {
-
                 cursorMesh.visible = true
-
             }
 
         } else if ( i > 0 ) { // hands
-
             if ( trackedControls && cursorMesh.visible == false ) {
-
                 cursorMesh.visible = true
-
             } else if ( !trackedControls && cursorMesh.visible ) {
-
                 cursorMesh.visible = false
-
             }
-
         }
 
         if ( !!state ) { // animate cursor (in / out)
-
             if ( state.distance-0.33 < (-cursorPos.z) && (cursorPos.z < 4 - cursorSpeed) ) { // near bound of allowed movement
-
                 cursorPos.z += cursorSpeed
-
             } else if ( state.distance-0.33 > (-cursorPos.z) && (cursorPos.z > -3 + cursorSpeed) ) { // far bound of allowed movement
-                
                 cursorPos.z -= cursorSpeed
-                
             }
-
         }
-
     }
 
     _snapToComponent( mesh, component, entity ) {

@@ -117,7 +117,7 @@ Card.defaultProps = {
 let styles = {
   card: (image, color, compact, quarterSize) => {
     return {
-      borderRadius: '1.5px',
+      borderRadius: '2.5px',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)',
       cursor: 'pointer',
       width: quarterSize ? '120px' : '240px',
@@ -125,7 +125,7 @@ let styles = {
       display: 'inline-block',
       marginRight: '0.5em',
       marginBottom: '0.5em',
-      backgroundColor: 'rgba(255,255,255, 0.1)',
+      backgroundColor: 'rgba(255,255,255, 0.2)',
       backgroundSize: 'cover',
       backgroundImage: `url(${image})`,
       textAlign: "center",

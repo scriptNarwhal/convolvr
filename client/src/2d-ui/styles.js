@@ -15,7 +15,7 @@ export let modalStyle = (mobile) => {
         borderRadius: '0.2em',
         border: '0.15em solid rgb(60,60,60)',
         borderTop: 'rgb(51, 51, 51) 1em solid',
-        backgroundColor: "rgba(14, 14, 14, 0.96)",
+        backgroundColor: "rgb(41, 42, 46)",
         boxShadow: "0px 10px 100px rgba(0, 0, 0, 0.92)"
     }
 }
@@ -43,9 +43,9 @@ export let textAreaStyle = (mobile) => {
         marginBottom: '0.5em',
         padding: '0.5em',
         fontSize: '14px',
-        border: '0.22em solid #494949',
+        border: '0.22em solid rgb(41, 42, 46)',
         borderRadius: '0.22em',
-        background: 'rgba(0, 0, 0, 0.16)'
+        background: 'rgba(0, 0, 0, 0.16) none repeat scroll 0% 0%'
     }
 }
 
