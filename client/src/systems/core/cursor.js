@@ -180,9 +180,10 @@ export default class CursorSystem {
                 component,
                 componentPath: component ? component.path : []
             }
-            cursor.mesh.material.color.set(0x00ff00);
+            // if (obj.distance > -10) 
+            //     _changeCursorColor( cursor, true )
         } else {
-            cursor.mesh.material.color.set(0xffffff);
+            // _changeCursorColor( cursor, false )
             newCursorState = {
                 distance: 2,
                 mesh: null,
@@ -190,7 +191,6 @@ export default class CursorSystem {
                 faceIndex: -1,
                 componentPath: [],
             }
-
         }
 
         newCursorState.entity = noRayCast ? cursorState.cursor.entity : entity
@@ -262,4 +262,16 @@ export default class CursorSystem {
         // implement
 
     }
+}
+
+var cursorColorTimeouts = [];
+
+function _changeCursorColor ( cursor, selected ) {
+    let cursorColor = cursor.mesh.material.color;
+    cursorColorTimeouts.forEach( c=> clearTimeout( c ) )
+    cursorColorTimeouts = [
+        setTimeout(() => {
+            cursorColor.set( selected ? 0x00ff00 : 0xf5f5f5 )
+        }, 150)
+    ]
 }
