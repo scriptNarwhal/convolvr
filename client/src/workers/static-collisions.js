@@ -91,19 +91,20 @@ self.checkStaticCollisions = ( voxel, position ) => {
 		}
 		if (distance3dCompare(
 			position,
-			[ent.position[0] - entRadius, ent.position[1],
-			ent.position[2] - entRadius], (entRadius * 1.6 || 3) + 2.5
+			[ent.position[0] - entRadius/2.0, ent.position[1],
+			ent.position[2] - entRadius/2.0], (entRadius * 1.6 || 3) + 2.5
 		)) {
 
 			ent.components.map(entComp => {
 				let boundingRadius = entComp.boundingRadius * 1.2 ||
-				    Math.max(entComp.props.geometry.size[0], entComp.props.geometry.size[2]) * 1.4
+				    Math.max(entComp.props.geometry.size[0], entComp.props.geometry.size[2]) * 1.2
 
 				if (!!entComp.props.floor) {
+					let rootPos = ent.position.map( v => v-ent.boundingRadius / 2.0 )
 					if (distance2dCompare(
 						position,
-						[ent.position[0] + entComp.position[0], 0, ent.position[2] + entComp.position[2]],
-						boundingRadius * 2.2
+						[rootPos[0] + entComp.position[0], 0, rootPos[2] + entComp.position[2]],
+						boundingRadius * 1.7
 					)) {
 						let verticalOffset = (position[1] + 2 - (entComp.position[1] + ent.position[1] )) //  + entComp.geometry ? entComp.geometry.size[1] : 1
 						if (verticalOffset > 0 && verticalOffset < 5) {

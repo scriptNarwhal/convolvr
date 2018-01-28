@@ -76,6 +76,8 @@ export default class ToolActionHandler {
                 case "Grab Entity":
                 console.log("Network Grab Entity: data.user", data.user, "user.name", user.name)
                     if (data.user != user.name) {
+                
+                    console.log("Network Grab Entity: actually replacing")
                         remoteUser = world.users["user" + data.userId]
                         userHand = remoteUser.avatar.componentsByProp.hand[data.hand]
                         voxel.entities.map(voxelEnt => {
@@ -97,7 +99,7 @@ export default class ToolActionHandler {
                 console.log("Network Replace Entity: data.user", data.user, "user.name", user.name)
                    
                     if (data.user != user.name) {
-
+                        console.log("Network Replace Entity: actually replacing")
                         remoteUser = world.users["user" + data.userId],
                             avatar = remoteUser.avatar,
                             userHand = avatar.componentsByProp.hand[data.hand]

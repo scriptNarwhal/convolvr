@@ -302,7 +302,7 @@ export default class ToolboxSystem {
           entityId, 
           null, 
           null, 
-          handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
+          avatar.position.toArray().map((v,i) => Math.round(v/GRID_SIZE[i])) //handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
         )
       }
   
