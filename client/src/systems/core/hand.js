@@ -58,6 +58,7 @@ export default class HandSystem {
                     entity = state.hand.grabbedEntity
         
                     if ( entity ) {
+                        oldVoxel = [...entity.voxel];
                         component.mesh.remove(entity.mesh)
                         three.scene.add(entity.mesh)
                         if ( state.hand.trackedHands ) {
@@ -70,7 +71,7 @@ export default class HandSystem {
                         entity.mesh.translateZ( -entity.boundingRadius )
                         entity.mesh.updateMatrix()
                         entity.position = entity.mesh.position.toArray()
-                        entity.getVoxel( false, true )
+                        entity.getVoxel( true, true )
                         entity.save( oldVoxel )
                         state.hand = Object.assign({}, state.hand, { grabbedEntity: false })
                     }

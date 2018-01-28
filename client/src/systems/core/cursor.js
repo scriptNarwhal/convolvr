@@ -47,48 +47,37 @@ export default class CursorSystem {
         }
 
         raycaster.set( { ...position, x: position.x, y: position.y-0.12 }, handDirection )
-    
         coords = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), 0, Math.floor( position.z / GRID_SIZE[ 2 ] ) ]
         raycaster.ray.far = 100000
         castObjects = this.getSurroundingVoxels( voxels, coords )
-
         //octreeObjects = world.octree.search( raycaster.ray.origin, raycaster.ray.far, true, raycaster.ray.direction )
         intersections = raycaster.intersectObjects( castObjects ) //octreeObjects ) intersectOctreeObjects
-
         i = intersections.length -1
         component = null
 
         if ( i > 0 ) { //console.log( i+1, " intersections")
-
             while ( i > -1 ) {
-
                 obj = intersections[ i ]
                 entity = obj.object.userData.entity
-
                 if ( !! entity && entity.componentsByProp.terrain ) {
                     i -= 1
                     continue
                 }
 
                 if ( !!entity && obj.distance < 50 ) {
-
                     if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
                         component = entity.allComponents[ 0 ]; //console.log("one component: ", component ? Object.keys(component.props).join("-") : "")
                     } else { 
                         component = entity.getComponentByFace( obj.faceIndex ); //console.log("closest", component ? Object.keys(component.props).join("-") : "")
                     }
-
                 }
-
                 callback( cursor, hand, world, obj, entity, component )
                 i -= 1
-
             }
 
         } else {
             callback( cursor, hand, world, null, null, null )
         }
-
     }
 
     getSurroundingVoxels ( voxels, coords ) {
@@ -116,10 +105,8 @@ export default class CursorSystem {
         if ( voxels[ "0.1.0" ] != null )
 
             castObjects = castObjects.concat(voxels[ "0.1.0" ].meshes )
-
-            
+    
         while ( i < castObjects.length ) {
-
              if ( !!!castObjects[ i ] ) {
 
                 castObjects.splice( i, 1 )
@@ -143,36 +130,25 @@ export default class CursorSystem {
                 cursorMesh = cursor.mesh
             
             cursorSystem._animateCursors( world, input, cursorSystem, cursor, cursorMesh, state, i, cursorIndex )
-
             if ( i > 0 ) { // possibly refactor this to stop hands from lagging behind at high speed*
-
                 handMesh = cursors[i].mesh.parent
                 !!handMesh && handMesh.updateMatrix()
-
             }
 
             if ( i == cursorIndex ) // ray cast from one cursor at a time to save CPU
-                
                 cursorSystem.rayCast( world, camera, cursor, i -1, handMesh, cursorSystem._cursorCallback )
 
-            
         })
 
-
         if ( cursorSystem.entityCoolDown  > -3 )
-        
             cursorSystem.entityCoolDown -= 2
 
-        
         cursorIndex += 1
 
         if ( cursorIndex == cursors.length )
-
             cursorIndex = 0
 
-
         return cursorIndex
-
     }
 
     _cursorCallback ( cursor, hand, world, obj, entity, component ) {
@@ -251,7 +227,9 @@ export default class CursorSystem {
             cursorSpeed = (cursorState.speed || 0 +(cursorState.speed || 0 +( state.distance - cursorPos.z ) / 8) / 2.0)/2.0,
             trackedControls = ( input.trackedControls || input.leapMotion )
             
+        cursorSpeed *= state.entity ? 1 : 0.9;
         cursorState.speed = cursorSpeed;
+
         cursorMesh.updateMatrix()
         cursorMesh.updateMatrixWorld()
 
