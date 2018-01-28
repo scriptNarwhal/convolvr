@@ -150,7 +150,7 @@ export default class ComponentTool extends Tool {
         }
       })
 
-      cursorSystem.entityCoolDown = 100
+      cursorSystem.entityCoolDown = 50
 
       return {
         coords,
