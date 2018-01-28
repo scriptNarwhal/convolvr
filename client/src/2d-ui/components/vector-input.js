@@ -78,16 +78,21 @@ let styles = {
     display: 'inline-block',
     height: '20px',
     paddingBottom: '0.5em',
-    paddingLeft: '0.75em'
+    paddingLeft: '0.75em',
+    marginBottom: '0.25em'
   },
   numeric: {
     display: 'inline-block',
     marginRight: '1em',
     width: '80px',
-    background: '#202020',
     color: "white",
     padding: '0.5em',
-    border: '1px solid #808080'
+    border: '1px solid #808080',
+    background: 'rgba(2, 2, 2, 0.07) none repeat scroll 0% 0%',
+    border: 'medium none',
+    borderRadius: '0.15em',
+    fontSize: '0.9em',
+    boxShadow: 'inset 0 0 1em #0003'
   },
   inner: {
     transition: 'all 0.2s linear',
