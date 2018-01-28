@@ -65,7 +65,7 @@ export default class Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 0.333, 0.9, 0.5 ]
+                size: [ 0.333, 0.13, 0.05 ]
               },
               material: {
                 name: "plastic",

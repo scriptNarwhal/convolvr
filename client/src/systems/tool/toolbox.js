@@ -25,12 +25,14 @@ export default class ToolboxSystem {
         console.warn(this.user.avatar)
         this.currentTools = [ 0, 0 ]
         this.tools = []
+        this.toolboxComponents = [];
         this.fadeTimeout = 0
     }
 
     init ( component ) {        
+        this.toolboxComponents.push( component )
         return {
-                   
+
         }
     }
   
@@ -284,7 +286,8 @@ export default class ToolboxSystem {
   
         let hands = this.getUserHands(),
             hand   = hands[ handIndex ],
-            entityId = hand.state.hand.grip( value ),
+            handState = hand.state.hand,
+            entityId = handState.grip( value ),
             avatar = this.user.avatar.mesh
         console.log("send grip tool action")
         this.sendToolAction(
@@ -299,7 +302,7 @@ export default class ToolboxSystem {
           entityId, 
           null, 
           null, 
-          this.user.avatar.voxel 
+          handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
         )
       }
   

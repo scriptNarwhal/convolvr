@@ -220,12 +220,14 @@ export default class ToolSystem {
         if ( toolPanel ) {
             console.info("---"); console.warn("PANEL COLLISION CHECK");
             this.panels.map( (panel: Entity, i: number) => { 
-                console.log("panel distance ", toolPanel.mesh.position.sub( panel.mesh.position ).length());
-                let mesh = panel.mesh
-                if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 8 ) {
-                    mesh.translateX(7.5*i,0)
-                    mesh.translateZ(7.5*i,0)
-                    mesh.updateMatrix()
+                if (panel && panel.mesh) {
+                    console.log("panel distance ", toolPanel.mesh.position.sub( panel.mesh.position ).length());
+                    let mesh = panel.mesh
+                    if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 4000 ) {
+                        mesh.translateX(12.5*i,0)
+                        mesh.translateZ(12.5*i,0)
+                        mesh.updateMatrix()
+                    }
                 }
             })
         }

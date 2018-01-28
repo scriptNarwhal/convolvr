@@ -180,7 +180,7 @@ export default class Convolvr {
 		
 		let coords 	 	   = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
 			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.25 ),
-			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, config.light.intensity*1.1 ),
+			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, config.light.intensity ),
 			camera 		   = three.camera,
 			skyMaterial    = new THREE.MeshBasicMaterial( {color: 0x303030} ),
 			skyTexture     = null,

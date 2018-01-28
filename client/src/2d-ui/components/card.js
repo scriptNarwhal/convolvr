@@ -5,11 +5,8 @@ import ContextMenu from './context-menu'
 export default class Card extends Component {
 
   componentWillMount () {
-
     this.setState({
-     
     })
-
   }
 
   handleContextAction ( name, e ) {
@@ -18,26 +15,19 @@ export default class Card extends Component {
 
     // display a modal window here if needed.
     if ( name == "Rename" || name == "Edit" || name == "Delete" ) {
-
       data.filename = this.props.title
       data.username = this.props.username
-
     }
     
     if ( name == "Delete" ) {
-
       if ( confirm(`Delete ${data.filename}?`) ) {
         this.props.onContextMenu(name, data, e)
       } else {
         this.props.onContextMenu("", {}, {})
       }
-
     } else {
-
       this.props.onContextMenu(name, data, e)
-
     }
-
   }
 
   handleCardClick ( evt, title ) {
