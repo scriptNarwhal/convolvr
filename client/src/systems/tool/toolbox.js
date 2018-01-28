@@ -286,7 +286,7 @@ export default class ToolboxSystem {
             hand   = hands[ handIndex ],
             entityId = hand.state.hand.grip( value ),
             avatar = this.user.avatar.mesh
-        
+        console.log("send grip tool action")
         this.sendToolAction(
           true, 
           {

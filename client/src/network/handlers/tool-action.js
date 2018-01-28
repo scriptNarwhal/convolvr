@@ -74,6 +74,7 @@ export default class ToolActionHandler {
 
                     break
                 case "Grab Entity":
+                console.log("Network Grab Entity: data.user", data.user, "user.name", user.name)
                     if (data.user != user.name) {
                         remoteUser = world.users["user" + data.userId]
                         userHand = remoteUser.avatar.componentsByProp.hand[data.hand]
@@ -92,7 +93,9 @@ export default class ToolActionHandler {
                     }
                     break
                 case "Replace Entity":
-                    console.log("network: replace entity");
+                
+                console.log("Network Replace Entity: data.user", data.user, "user.name", user.name)
+                   
                     if (data.user != user.name) {
 
                         remoteUser = world.users["user" + data.userId],
