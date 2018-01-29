@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { browserHistory } from 'react-router'
 import { animate } from './render'
-import { 
+import {
 	API_SERVER,
 	APP_NAME,
 	GRID_SIZE
@@ -15,7 +15,7 @@ import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
 import SkyboxSystem from '../systems/environment/skybox'
 import Settings from './local-settings'
-import { 
+import {
 	compressFloatArray,
 	compressVector3,
 	compressVector4
@@ -25,7 +25,7 @@ import {
 let world = null
 
 export default class Convolvr {
-	
+
 	postProcessing:   PostProcessing
 	initialLoad: 	  boolean
 	loadedCallback:   Function
@@ -155,10 +155,10 @@ export default class Convolvr {
 		camera.add(this.systems.audio.listener)
 		this.socketHandlers = new SocketHandlers( this, socket )
 		window.addEventListener('resize', e => this.onWindowResize( e ), true)
-		this.onWindowResize()	
+		this.onWindowResize()
 		animate(this, 0, 0)
 		this.animate = animate;
-	
+
 		three.vrDisplay = null
 		window.navigator.getVRDisplays().then( displays => { console.log( "displays", displays )
 			if ( displays.length > 0 )
@@ -166,9 +166,9 @@ export default class Convolvr {
 
 		})
 		this.initialLoad = false
-		this.loadedCallback = () => { 
+		this.loadedCallback = () => {
 			loadedCallback( this );
-			 this.initialLoad = true;  
+			 this.initialLoad = true;
 		}
 	}
 
@@ -177,7 +177,7 @@ export default class Convolvr {
 	}
 
 	init ( config: Object, callback: Function ) {
-		
+
 		let coords 	 	   = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
 			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.25 ),
 			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, config.light.intensity ),
@@ -214,21 +214,21 @@ export default class Convolvr {
 			sunLight.castShadow = true
 			sunLight.shadowCameraVisible = true
 			shadowCam = sunLight.shadow.camera
-			sunLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)  
-			sunLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows) 
+			sunLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)
+			sunLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)
 			shadowCam.near = 0.5      // default
-			shadowCam.far = 1300000      
+			shadowCam.far = 1300000
 			shadowCam.left = -400
 			shadowCam.right = 400
 			shadowCam.top = 500
 			shadowCam.bottom = -500
 			three.scene.add(shadowCam)
-			
+
 			if  ( !this.shadowHelper ) {
 				this.shadowHelper = new THREE.CameraHelper( sunLight.shadow.camera );
 				three.scene.add( this.shadowHelper );
 			}
-		} 
+		}
 
 		if ( !!config && !!config.sky.photosphere ) { console.log("init world: photosphere: ", config.sky.photosphere)
 			this.systems.assets.envMaps.default = '/data/user/'+config.sky.photosphere
@@ -237,13 +237,13 @@ export default class Convolvr {
 			envURL = this.systems.assets.getEnvMapFromColor( r, g, b )
 			this.systems.assets.envMaps.default = envURL
 		}
-		
+
 		oldSkyMaterial = this.skyboxMesh.material
 		if (this.skyboxMesh.parent) {
 			three.scene.remove(this.skyboxMesh)
 		}
 		this.skyboxMesh = this.skybox.createSkybox( skySize, oldSkyMaterial )
-		
+
 		let deferWorldLoading = false,
 			world = this,
 			rebuildWorld = () => {
@@ -255,11 +255,11 @@ export default class Convolvr {
 				world.skyLight = skyLight
 				skyLight.position.set( 0, 5000, 0 )
 				sunLight.position.set( Math.sin(yaw)*1000, Math.sin(config.light.pitch)*1000, Math.cos(yaw)*1000)
-				
+
 				skyLight.lookAt(zeroZeroZero)
 				sunLight.lookAt(zeroZeroZero)
 				//sunLight.shadow.camera.lookAt(zeroZeroZero)
-			
+
 				world.skyboxMesh.position.set(camera.position.x, 0, camera.position.z)
 				callback()
 			}
@@ -267,11 +267,11 @@ export default class Convolvr {
 		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
 			this.skybox.loadShaderSky( config, oldConfig, world.skyboxMesh, ()=>{})
 		} else {
-			// load sky texture 
+			// load sky texture
 			deferWorldLoading = true
 			this.skybox.loadTexturedSky( config.sky, this.skyboxMesh, ()=> {
 				rebuildWorld()
-			}) 
+			})
 		}
 
 		if ( coords ) {
@@ -285,11 +285,11 @@ export default class Convolvr {
 	}
 
 	initRenderer ( renderer: any, id: string ) {
-		let pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1
-
 		renderer.setClearColor(0x1b1b1b)
 		// renderer.setPixelRatio(pixelRatio)
-		let dpr = window.devicePixelRatio;
+		let customDPI = this.settings.dpi,
+			dpr = customDPI ? customDPI : window.devicePixelRatio;
+
 		console.log("%device pixel ratio"+dpr, 'color:green;')
 		renderer.setSize(window.innerWidth * dpr, window.innerHeight * dpr)
 		document.body.appendChild( renderer.domElement )
@@ -299,12 +299,12 @@ export default class Convolvr {
 
 	load ( userName: string, name: string, callback: Function, readyCallback: Function ) { console.log("load world", userName, name)
 		let world = this
-		
+
 		this.name = name
 		this.userName = userName
 		console.log( this.systems.terrain )
 		this.systems.terrain.readyCallback = readyCallback
-	
+
 		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then( response => { // fix this... needs userName now
 			 this.init(response.data, ()=> { callback && callback(world) } )
 		}).catch(response => {
@@ -320,7 +320,7 @@ export default class Convolvr {
 
 		this.workers.staticCollisions.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		//this.workers.oimo.postMessage(JSON.stringify( { command: "clear", data: {}} ))
-		// problem here 
+		// problem here
 		console.info("reload ", this.skyboxMesh)
 		this.skybox.destroy()
 		this.load( user, name, () => {}, () => {} )
@@ -359,8 +359,8 @@ export default class Convolvr {
 					let hand = handComponent.mesh
 
 					hands.push({
-						pos: compressFloatArray(hand.position.toArray(), 4), 
-						quat: compressFloatArray(hand.quaternion.toArray(), 8) 
+						pos: compressFloatArray(hand.position.toArray(), 4),
+						quat: compressFloatArray(hand.quaternion.toArray(), 8)
 					})
 				})
 			}
@@ -391,21 +391,23 @@ export default class Convolvr {
 	}
 
 	onWindowResize () {
-		let dpr = window.devicePixelRatio
+		let customDPI = this.settings.dpi,
+			dpr = customDPI ? customDPI : window.devicePixelRatio;
+
 		this.screenResX = dpr * window.innerWidth
 		if ( this.mode != "stereo" ) {
 			three.renderer.setSize(window.innerWidth * dpr, window.innerHeight * dpr)
 			if ( this.postProcessing.enabled )
 				this.postProcessing.onResize(window.innerWidth * dpr, window.innerHeight * dpr)
-		
+
 		}
-			
+
 		three.camera.aspect = innerWidth / innerHeight
 		three.camera.updateProjectionMatrix()
 
-		if ( this.IOTMode ) 
+		if ( this.IOTMode )
 			animate( this, Date.now(), 0 )
-			
+
 	}
 
 	sendVideoFrame () { // probably going to remove this now that webrtc is in place
