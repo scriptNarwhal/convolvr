@@ -84,7 +84,7 @@ export default class HandSystem {
                     three.scene.remove( entity.mesh )
                     state.hand.grabbedEntity = entity
                     component.mesh.add( entity.mesh )
-                    entity.mesh.position.fromArray( [0, 0, Math.max(-entity.boundingRadius, -28)] )
+                    entity.mesh.position.fromArray( [0, 0, -Math.max(entity.boundingRadius, 28)] )
                     entity.mesh.quaternion.fromArray([0, 0, 0, 1])
                     entity.mesh.updateMatrix()
                 }

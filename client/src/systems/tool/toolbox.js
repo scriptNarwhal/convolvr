@@ -302,7 +302,8 @@ export default class ToolboxSystem {
           entityId, 
           null, 
           null, 
-          avatar.position.toArray().map((v,i) => Math.round(v/GRID_SIZE[i])) //handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
+          handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0],
+          // avatar.position.toArray().map((v,i) => Math.round(v/GRID_SIZE[i])) //handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
         )
       }
   
@@ -317,7 +318,7 @@ export default class ToolboxSystem {
         }
       }
   
-      sendToolAction ( primary, tool, hand, position, quaternion, entity, entityId = -1, components = [], componentPath = [], coords ) {
+      sendToolAction ( primary, tool, hand, position, quaternion, entity, entityId = -1, components = [], componentPath = [], coords, oldCoords ) {
   
         let camera = this.world.camera,
             cPos = camera.position,
@@ -346,6 +347,9 @@ export default class ToolboxSystem {
             entity,
             entityId,
             primary
+          }
+          if (oldCoords) {
+            actionData.oldCoords = oldCoords;
           }
         // console.log( "ACTION DATA ", actionData)
         send("tool action", actionData)

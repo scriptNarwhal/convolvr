@@ -36,7 +36,7 @@ export let detectWorldDetailsFromURL = () => {
     
     return worldDetails
 
-}
+} 
 
 export let clearOldData = () => {
 
