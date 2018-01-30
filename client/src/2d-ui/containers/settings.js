@@ -36,7 +36,8 @@ class Settings extends Component {
       blurEffect: localStorage.getItem("blurEffect") == "on" ? true : window.innerWidth > 720 ? true : false,
       viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0,
       fov: localStorage.getItem("fov") != null ? localStorage.getItem("fov") : 75,
-      manualLensDistance: localStorage.getItem("manualLensDistance") != null ? localStorage.getItem("manualLensDistance") : 0
+      manualLensDistance: localStorage.getItem("manualLensDistance") != null ? localStorage.getItem("manualLensDistance") : 0,
+      dpr: localStorage.getItem("dpr") !== null ? localStorage.getItem("dpr") : 0
     })
 
     this.props.fetchUniverseSettings()
@@ -77,7 +78,8 @@ class Settings extends Component {
     localStorage.setItem( 'viewDistance', this.state.viewDistance )
     localStorage.setItem( 'blurEffect', this.state.blurEffect)
     localStorage.setItem( 'manualLensDistance', this.state.manualLensDistance )
-    localStorage.setItem( 'fov', this.state.fov )
+    localStorage.setItem( 'fov', this.state.fov ),
+    localStorage.setItem( 'dpr', this.state.dpr )
     this.reload()
 
   }
@@ -136,7 +138,7 @@ class Settings extends Component {
             <div>
               <h1>Settings</h1>
             </div>
-            <div style={ { ...styles.even, ...styles.top } }>
+            <div style={ { ...styles.odd, ...styles.top } }>
             <h3 style={styles.h3}>View Distance</h3>
               <div style={styles.col}>
                 <input onChange={e=> {this.setState({viewDistance: parseInt(e.target.value)})}}
@@ -152,6 +154,19 @@ class Settings extends Component {
                 </span>
               </div>
             </div>
+            <div style={styles.even}>
+            <h3 style={styles.h3}>Resolution (DPI)</h3>
+            <div style={styles.col}>
+              <select onChange={e=> {this.setState({dpr: e.target.value})}}
+                      value={ this.state.dpr }
+                      style={ styles.select }
+              >
+                <option value="0">Highest (device pixels)</option>
+                <option value="1">Medium (display pixels)</option>
+                <option value="2">Low (scaled down to 50%)</option>
+              </select>
+            </div>
+          </div>
             <div style={styles.odd}>
             <h3 style={styles.h3}>Field Of View</h3>
               <div style={styles.col}>

@@ -8,9 +8,9 @@ export default class Settings {
 	constructor(world) {
 		this.world = world
 
-		let options = ["cameraMode", 'vrMovement', 'IOTMode', 'lighting', 'geometry','postProcessing', 'aa', 'shadows', 'floorHeight', 'viewDistance', 'leapMode', 'manualLensDistance', 'fov', 'blurEffect'],
-			types =   [ str,      str,          bool,      int,        int,       bool,             bool, int,       float,         int,            str,        float,                int,   bool],
-			defaults = ["fps",    "stick",      "off",     2,          window.innerWidth < 720 ? 1 : 2, "off", "off", 0, 0,         0,              "hybrid",   0,                    75,    "off"],
+		let options = ["cameraMode", 'vrMovement', 'IOTMode', 'lighting', 'geometry','postProcessing', 'aa', 'shadows', 'floorHeight', 'viewDistance', 'leapMode', 'manualLensDistance', 'fov', 'blurEffect', 'dpr'],
+			types =   [ str,      str,          bool,      int,        int,       bool,             bool, int,       float,         int,            str,        float,                int,       bool,         float],
+			defaults = ["fps",    "stick",      "off",     2,          window.innerWidth < 720 ? 1 : 2, "off", "off", 0, 0,         0,              "hybrid",   0,                    75,        "off",        0],
 			settings = this
 
 		options.map( (item, i) => {

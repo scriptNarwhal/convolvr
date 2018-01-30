@@ -287,8 +287,8 @@ export default class Convolvr {
 	initRenderer ( renderer: any, id: string ) {
 		renderer.setClearColor(0x1b1b1b)
 		// renderer.setPixelRatio(pixelRatio)
-		let customDPI = this.settings.dpi,
-			dpr = customDPI ? customDPI : window.devicePixelRatio;
+		let customDPR = this.settings.dpr, // dpr = 0 == use highest dpr
+			dpr = customDPR ? customDPR : window.devicePixelRatio;
 
 		console.log("%device pixel ratio"+dpr, 'color:green;')
 		renderer.setSize(window.innerWidth * dpr, window.innerHeight * dpr)
@@ -391,7 +391,7 @@ export default class Convolvr {
 	}
 
 	onWindowResize () {
-		let customDPI = this.settings.dpi,
+		let customDPI = this.settings.dpr,
 			dpr = customDPI ? customDPI : window.devicePixelRatio;
 
 		this.screenResX = dpr * window.innerWidth
