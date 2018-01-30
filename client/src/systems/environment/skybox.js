@@ -45,7 +45,7 @@ export default class SkyboxSystem {
 
         systems.assets.loadImage('/data/user/' + config.photosphere, {}, (texture) => {
 
-            let skySize = 1000 + ((world.viewDistance + 3.5) * 1.4) * 140,
+            let skySize = 1000 + ((world.settings.viewDistance + 3.5) * 1.4) * 140,
                 image = {},
                 oldMaterial = {},
                 material = {},

@@ -64,7 +64,7 @@ class Settings extends Component {
 
   save () {
 
-    localStorage.setItem( 'camera', this.state.camera )
+    localStorage.setItem( 'cameraMode', this.state.camera )
     localStorage.setItem( 'lighting', this.state.lighting )
     localStorage.setItem( 'aa', this.state.aa)
     localStorage.setItem( 'geometry', this.state.geometry )
