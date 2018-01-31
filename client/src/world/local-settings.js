@@ -22,12 +22,12 @@ export default class Settings {
 				settings.setValueWithType( item, setting, types[ i ] )
 			})
 
-		this.IOTMode = this.IOTMode == 'on'
 		world.userInput.leapMode = this.leapMode
 		this.gravity = 1
 	}
 
 	setValueWithType( key, value, type ) {
+
 		switch (type) {
 			case "boolean":
 				this[ key ] = value == "on" ? true : false;

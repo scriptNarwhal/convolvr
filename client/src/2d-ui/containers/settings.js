@@ -28,7 +28,7 @@ class Settings extends Component {
       postProcessing: localStorage.getItem("postProcessing") || 'off',
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa: localStorage.getItem("aa") || "on",
-      shadows: parseInt(localStorage.getItem("shadows")) || window.innerWidth < 720 ? 0 : 1,
+      shadows: localStorage.getItem("shadows") != null ? parseInt(localStorage.getItem("shadows")) : window.innerWidth < 720 ? 0 : 1,
       geometry: parseInt(localStorage.getItem("geometry") || 2),
       floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
       IOTMode: localStorage.getItem("IOTMode") || 'off',
@@ -37,7 +37,7 @@ class Settings extends Component {
       viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0,
       fov: localStorage.getItem("fov") != null ? localStorage.getItem("fov") : 75,
       manualLensDistance: localStorage.getItem("manualLensDistance") != null ? localStorage.getItem("manualLensDistance") : 0,
-      dpr: localStorage.getItem("dpr") !== null ? localStorage.getItem("dpr") : 0
+      dpr: localStorage.getItem("dpr") != null ? localStorage.getItem("dpr") : 0
     })
 
     this.props.fetchUniverseSettings()
@@ -155,15 +155,17 @@ class Settings extends Component {
               </div>
             </div>
             <div style={styles.even}>
-            <h3 style={styles.h3}>Resolution (DPI)</h3>
+            <h3 style={styles.h3}>Screen Resolution</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({dpr: e.target.value})}}
                       value={ this.state.dpr }
                       style={ styles.select }
               >
                 <option value="0">Highest (device pixels)</option>
-                <option value="1">Medium (display pixels)</option>
-                <option value="2">Low (scaled down to 50%)</option>
+                <option value="1">Automatic (display pixels)</option>
+                <option value="0.66">Medium (scaled to 66%)</option>
+                <option value="0.5">Low (scaled to 50%)</option>
+                <option value="0.33">Pixelated (scaled to 33%)</option>
               </select>
             </div>
           </div>
@@ -304,7 +306,7 @@ class Settings extends Component {
               </select>
             </div>
           </div>
-          <div style={styles.odd}>
+          <div  style={{ ...styles.even, ...styles.bottom }}>
             <h3 style={styles.h3}>Post Processing</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({postProcessing: e.target.value})}}
@@ -316,7 +318,7 @@ class Settings extends Component {
               </select>
             </div>
           </div>
-          <div style={{ ...styles.even, ...styles.bottom }}>
+          {/* <div style={{ ...styles.even, ...styles.bottom }}>
             <h3 style={styles.h3}>Menu Blur Effect</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({blurEffect: e.target.value})}}
@@ -327,7 +329,7 @@ class Settings extends Component {
                 <option value="off">Off (Better Performance)</option>
               </select>
             </div>
-          </div>
+          </div> */}
           <input style={styles.save}
                  type='submit'
                  value="Profile Settings"
