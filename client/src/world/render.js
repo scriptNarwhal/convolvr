@@ -3,6 +3,7 @@ export let animate = ( world, last, cursorIndex ) => {
   let mobile = world.mobile,
       camera = three.camera,
       mode = world.mode,
+      willRender = world.willRender,
       cPos = camera.position,
       delta = (Date.now() - last) / 0.080,
       time = Date.now(),
@@ -10,19 +11,20 @@ export let animate = ( world, last, cursorIndex ) => {
       cursors = !!user && !!user.avatar ? user.avatar.componentsByProp.cursor : [],
       hands = !!user ? user.avatar.hands : false
 
-  if (!! world.userInput) {
-    world.userInput.update( delta ) // Update keyboard / mouse / gamepad
-  }
+  if ( willRender && (mode == "3d" || mode == "web") ) {
+
+    if (!! world.userInput) {
+      world.userInput.update( delta ) // Update keyboard / mouse / gamepad
+    }
+
+    if (user && user.avatar && cursors) {
+      user.avatar.update( cPos.toArray(), camera.quaternion.toArray() )
+      cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
+    }
   
-  if (user && user.avatar && cursors) {
-    user.avatar.update( cPos.toArray(), camera.quaternion.toArray() )
-    cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
-  }
+    world.sendUserData()
+    world.systems.tick( delta, time )
 
-  world.sendUserData()
-  world.systems.tick( delta, time )
-
-  if ( mode == "3d" || mode == "web" ) {
     if (world.postProcessing.enabled) {
       world.postProcessing.composer.render()
     } else {

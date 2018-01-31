@@ -38,6 +38,7 @@ export default class Convolvr {
 	settings: 		  Settings
 	config: 		  Object
 	windowFocus: 	  boolean
+	willRender:       boolean
 	name: 			  string
 	userName: 		  string
 	mode: 			  string
@@ -78,8 +79,9 @@ export default class Convolvr {
 
 		this.store = store
 		this.mobile = mobile
+		this.willRender = true;
 		this.userInput = userInput
-		this.settings= new Settings( this )
+		this.settings = new Settings( this )
 		viewDist = [ 0.1, 2000 + (3+this.settings.viewDistance)*GRID_SIZE[0]*150 ]
 		usePostProcessing = this.settings.enablePostProcessing == 'on'
 		camera = new THREE.PerspectiveCamera( this.settings.fov, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )

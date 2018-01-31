@@ -13,27 +13,23 @@ import { API_SERVER } from '../../config.js'
 export function toggleMenu ( force ) {
     console.log("toggle menu ", force)
     let world = window.three.world,
+        url = window.location.href,
         mode = world.mode
 
     if ( mode != "stereo" ) {
 
         if ( force ) {
-
             mode = "web"
-
         } else if ( force !== undefined ) {
-
             mode = "3d"
-
         } else {
-
             mode = (mode == "3d" ? "web" : "3d")
-
         }
 
         world.mode = mode
-        if (world.settings.blurEffect) 
+        world.willRender = mode != "web" || url.indexOf("chat") > -1 || url.indexOf("login") > -1;
 
+        if (world.settings.blurEffect) 
             document.querySelector("#viewport").setAttribute("class", `viewport ${mode == "web" ? "blurred" : ""}`)
         
     } 
@@ -42,7 +38,6 @@ export function toggleMenu ( force ) {
         type: APP_TOGGLE_MENU,
         force
     }
-
 }
 
 export function toggleFullscreen ( force ) {
