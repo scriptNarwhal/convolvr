@@ -306,7 +306,7 @@ class Settings extends Component {
               </select>
             </div>
           </div>
-          <div  style={{ ...styles.even, ...styles.bottom }}>
+          <div  style={{ ...styles.odd, ...styles.bottom }}>
             <h3 style={styles.h3}>Post Processing</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({postProcessing: e.target.value})}}
