@@ -33,21 +33,15 @@ class Chat extends Component {
     let worldMode = three.world.mode
 
     if (worldMode != 'vr' && worldMode != 'stereo') {
-
       this.textInput.focus()
-
     }
 
     if (this.props.menuOpen == false) {
-
       this.props.toggleMenu(true)
-
     }
 
     if (this.props.chatOpen == false) {
-
       this.props.showChat()
-
     }
 
     setTimeout(()=> { this.scrollToBottom() },500)
@@ -100,9 +94,7 @@ class Chat extends Component {
     if (linkRegex.test(message)) {
 
       if (imageRegex.test(message)) {
-
         return (
-
             <Card image={message}
                   clickHandler={ (e, title) => {
                    let newWindow = window.open(message, "_blank")
@@ -112,25 +104,15 @@ class Chat extends Component {
                   showTitle={true}
                   title={ message.substring(0, 30) }
             />
-
         )
-
       } else {
-
         return (
-
           <a href={message} target="_blank">{message}</a>
-
         )
-
       }
-
     } else {
-
       return message
-
     }
-
   }
 
   render() {
@@ -182,24 +164,24 @@ class Chat extends Component {
 
                   })
                 }
-            </section>
-            <section style={styles.inputs(mobile)}>
-                <input type='text'
-                       ref={(input) => { this.textInput = input; }}
-                       onBlur={ (e)=> { this.setState({text: e.target.value }) }}
-                       onKeyDown={ (e)=> {
-                         if (e.which == 13) {
-                           this.send(e.target.value)
-                         }
-                       }}
-                       style={styles.text(mobile)} />
-                <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button} />
-                <Button title={"Upload Files"}
-                        onClick={(evt, title) => {  }}
-                        onFiles={ (files) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
-                        image={"/data/images/upload.png"}
-                        style={ styles.uploadStyle(mobile) }
-                  />
+                <section style={styles.inputs(mobile)}>
+                  <input type='text'
+                        ref={(input) => { this.textInput = input; }}
+                        onBlur={ (e)=> { this.setState({text: e.target.value }) }}
+                        onKeyDown={ (e)=> {
+                          if (e.which == 13) {
+                            this.send(e.target.value)
+                          }
+                        }}
+                        style={styles.text(mobile)} />
+                  <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button} />
+                  <Button title={"Upload Files"}
+                          onClick={(evt, title) => {  }}
+                          onFiles={ (files) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
+                          image={"/data/images/upload.png"}
+                          style={ styles.uploadStyle(mobile) }
+                    />
+              </section>
             </section>
           </span>
         </Shell>
@@ -262,6 +244,7 @@ export default connect(
   }
 )(Chat)
 
+
 let styles = {
   chat: {
       width: '100%'
@@ -273,17 +256,15 @@ let styles = {
   },
   text: (mobile) => {
     return {
-      width: (mobile ? 47: 70) + '%',
+      width: '95%',
       border: 'none',
-      background: 'rgba(0, 0, 0, 0.498039)',
+      background: 'rgba(0, 0, 0, 0)',
       color: 'white',
       fontSize: '1em',
-      marginLeft: '0.15em',
       padding: '0.5em',
-      boxShadow: 'inset 0px -1px 0px 1px rgba(255, 255, 255, 0.4)',
-      borderLeftTopRadius: '3px',
       borderTopLeftRadius: '3px',
-      borderBottomLeftRadius: '3px'
+      borderBottomleftRadius: '3px',
+      border: '0.1em solid #2c2c2c'
     }
   },
   button: {
@@ -293,8 +274,12 @@ let styles = {
       border: 'none',
       fontSize: '1em',
       padding: '0.5em',
+      borderBottomRightRadius: '3px',
       borderTopRightRadius: '3px',
-      borderBottomRightRadius: '3px'
+      position: 'absolute',
+      bottom: '5px',
+      right: '30px',
+      height: '44px'
   },
   message : {
     display: "block",
@@ -340,36 +325,46 @@ let styles = {
   },
   messageText: {
     paddingRight: '0.5em',
-    background: "#101010",
     padding: '0.25em',
     borderTopRightRadius: '2px',
     borderBottomRightRadius: '2px'
   },
   messages: (mobile) => {
     return {
-      width: '100%',
-      height: '92%',
-      minWidth: '410px',
+      width: mobile ? '100%' : '102vh',
+      height: '83vh', 
       margin: 'auto auto auto 0.5em',
       textAlign: 'left',
       position: 'fixed',
-      left: mobile ? 0 : '65px',
-      top: mobile ? '162px' : 0,
+      marginLeft: mobile ? 0 : '10px',
+      left: mobile ? 0 : '62px',
+      top: mobile ? '62px' : '68px',
       overflowY: 'auto',
       overflowX: 'hidden',
-      fontSize: '14pt'
+      fontSize: '13pt',
+      background: '#000000e6',
+      border: '0.1em solid #2c2c2c',
+      borderRadius: '0.4em',
+      borderBottomLeftRadius: '0.4em',
+      boxShadow: 'inset #0009 0 0 300px',
+      borderBottomLeftRadius: 0,
+      padding: '1em'
     }
   },
   inputs: (mobile) => {
     return {
-      minHeight: "2em",
-      minWidth: "320px",
-      position: "fixed",
-      bottom: mobile ? "0.4em" : "-20px",
-      width: (mobile ? 70: 70) + '%',
+      height:'2.75em',
+      position: "absolute",
+      bottom: mobile ? "4px" : "-20px",
+      width: (mobile ? 70: 100) + '%',
       textAlign: "left",
       left: mobile ? '56px' : '65px',
-      marginLeft: '0.5em'
+      marginLeft: '0.5em',
+      bottom: '8px',
+      width: '100%',
+      textAlign: 'left',
+      left: '0',
+      marginLeft: '0.85em'
     }
   },
   uploadStyle: ( mobile ) => {
@@ -378,7 +373,10 @@ let styles = {
       bottom: "1.75em",
       right: 0
     } : { 
-      marginRight: "0.25em", top: "-1.2em", position: "relative"
+      marginRight: "0.25em",
+      position: 'absolute',
+      bottom: '44px',
+      right: '13px'
     }
   }
 }
