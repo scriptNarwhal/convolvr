@@ -37,7 +37,6 @@ export default class ToolboxSystem {
     }
   
       allSystemsLoaded( ) {
-
         let world = this.world,
             user = world.user,
             toolbox = this
@@ -77,10 +76,9 @@ export default class ToolboxSystem {
       }
   
       nextTool( direction ) {
-  
-        let hand = 0
+        let hand = 0;
+
         this.showMenu()
-  
         while ( hand < 2) {
           this.currentTools[ hand ] += direction
           if ( this.currentTools[ hand ] < 0 ) {
@@ -139,7 +137,6 @@ export default class ToolboxSystem {
       }
   
       initActionTelemetry ( camera, useCursor, hand ) {
-  
         let position        = camera.position.toArray(),
             voxel           = [ position[0], 0, position[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) ),
             quaternion      = camera.quaternion.toArray(),
@@ -184,7 +181,6 @@ export default class ToolboxSystem {
       }
       
       usePrimary ( hand ) {
-  
         let toolIndex        = this.currentTools[ hand ],
             tool             = this.tools[ toolIndex ],
             camera           = this.world.camera,
@@ -244,8 +240,7 @@ export default class ToolboxSystem {
   
       }
   
-      useSecondary( hand, value ) {
-  
+      useSecondary(hand, value) {
         let tool            = this.tools[this.currentTools[hand]],
             camera          = this.world.camera,
             telemetry       = this.initActionTelemetry(camera, true, hand),
@@ -267,22 +262,20 @@ export default class ToolboxSystem {
         }
       }
   
-      preview ( handIndex ) {
-  
+      preview(handIndex) {
         let tool   = this.tools[ this.currentTools[ handIndex ] ],
             cursor = this.getCursor( handIndex )
   
         tool.preview( cursor[ 0 ] )
       }
   
-      hidePreview ( handIndex ) {
-  
+      hidePreview(handIndex) {
         let tool = this.tools[ this.currentTools[ handIndex ] ]
         
         tool.hidePreview()
       } 
   
-      grip ( handIndex, value ) {
+      grip(handIndex, value) {
   
         let hands = this.getUserHands(),
             hand   = hands[ handIndex ],
@@ -307,7 +300,7 @@ export default class ToolboxSystem {
         )
       }
   
-      setHandOrientation ( hand, position, orientation ) {
+      setHandOrientation(hand, position, orientation) {
   
         let hands = this.getUserHands(),
             userHand = hands[ hand ]
@@ -318,7 +311,7 @@ export default class ToolboxSystem {
         }
       }
   
-      sendToolAction ( primary, tool, hand, position, quaternion, entity, entityId = -1, components = [], componentPath = [], coords, oldCoords ) {
+      sendToolAction(primary, tool, hand, position, quaternion, entity, entityId = -1, components = [], componentPath = [], coords, oldCoords ) {
   
         let camera = this.world.camera,
             cPos = camera.position,
@@ -354,5 +347,4 @@ export default class ToolboxSystem {
         // console.log( "ACTION DATA ", actionData)
         send("tool action", actionData)
       }
-    
 }

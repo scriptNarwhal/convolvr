@@ -181,9 +181,9 @@ export default class CursorSystem {
                 componentPath: component ? component.path : []
             }
             // if (obj.distance > -10) 
-            //     _changeCursorColor( cursor, true )
+             _changeCursorColor( cursor, true )
         } else {
-            // _changeCursorColor( cursor, false )
+             _changeCursorColor( cursor, false )
             newCursorState = {
                 distance: 2,
                 mesh: null,
