@@ -45,13 +45,18 @@ export default class ToolboxSystem {
         setTimeout( ()=>{
           console.log("allSystemsLoaded init avatar")
           console.log(user.avatar)
-          user.avatar.addHandler("init", () => {
-           console.log("user avatar init event handler ", user.avatar)
-            user.avatar.componentsByProp.hand.map((m, i) => {
-              if (i < 3)
-                toolbox.hands.push(m)
-            })
-          })
+          if (user.avatar && user.avatar.addHandler) {
+            user.avatar.addHandler("init", () => {
+              console.log("user avatar init event handler ", user.avatar)
+               user.avatar.componentsByProp.hand.map((m, i) => {
+                 if (i < 3)
+                   toolbox.hands.push(m)
+               })
+             })
+          } else {
+            console.error("user.avatar hasn't loaded yet: User:", user)
+          }
+          
         }, 5000)
         
         console.info("user hands ", this.hands)

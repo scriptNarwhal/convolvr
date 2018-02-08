@@ -217,7 +217,7 @@ export default class AssetSystem {
     addUserComponents ( components ) {
         let assets = this
         components.map( comp => {
-            assets.userComponentsByName[ component.name ] = comp
+            assets.userComponentsByName[ comp.name ] = comp
         })
         this.userComponents = this.userComponents.concat( components )
     }

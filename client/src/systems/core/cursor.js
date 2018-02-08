@@ -16,7 +16,6 @@ export default class CursorSystem {
     }
     
     init ( component: Component ) {
-         
         return {
             distance: 32000
         }
@@ -107,10 +106,8 @@ export default class CursorSystem {
             castObjects = castObjects.concat(voxels[ "0.1.0" ].meshes )
     
         while ( i < castObjects.length ) {
-             if ( !!!castObjects[ i ] ) {
-
+            if ( !!!castObjects[ i ] ) {
                 castObjects.splice( i, 1 )
-
             } else {
                 i += 1
             }    
@@ -180,10 +177,7 @@ export default class CursorSystem {
                 component,
                 componentPath: component ? component.path : []
             }
-            // if (obj.distance > -10) 
-             _changeCursorColor( cursor, true )
         } else {
-             _changeCursorColor( cursor, false )
             newCursorState = {
                 distance: 2,
                 mesh: null,
@@ -195,7 +189,7 @@ export default class CursorSystem {
 
         newCursorState.entity = noRayCast ? cursorState.cursor.entity : entity
         newCursorState.lookingAtEntity = noRayCast ? cursorState.cursor.entity : entity
-
+        _changeCursorColor( cursor, newCursorState.entity && newCursorState.entity.componentsByProp.terrain == null )
         if ( !!!component && cursorState.cursor.component ) {
             if ( lookAway ) {
                 callbacks = cursorState.component.state.lookAway.callbacks
@@ -232,7 +226,7 @@ export default class CursorSystem {
 
         cursorMesh.updateMatrix()
         cursorMesh.updateMatrixWorld()
-
+        trackedControls && console.log("tracked controls")
         if ( i == 0 ) { // head cursor
             if ( trackedControls && cursorMesh.visible == true ) {
                 cursorMesh.visible = false

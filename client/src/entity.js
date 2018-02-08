@@ -282,7 +282,7 @@ export default class Entity {
     
   saveUpdatedEntity ( oldVoxel ) {
     let data = this.serialize()
-    console.info("save")
+    console.info("save", data)
     console.log("oldVoxel", oldVoxel, "newVoxel", this.voxel)
     axios.put(
       `${API_SERVER}/api/update-world-entity/${three.world.name}/${this.voxel.join("x")}/${oldVoxel.join("x")}`,
