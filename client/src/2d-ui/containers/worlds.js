@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router'
 import Card from '../components/card'
 import Shell from '../components/shell'
 import LocationBar from '../components/location-bar'
+import { isMobile } from '../../config'
 
 class Worlds extends Component {
 
@@ -96,7 +97,7 @@ class Worlds extends Component {
                         this.props.changeDirectory(path)
                      }}
         />
-        <span style={{ width: '100%', height: '100%', position:'fixed', top: 0, left: 0, marginTop: '80px'}}
+        <span style={styles.container(isMobile())}
               onClick={ (e) => { this.handleBGClick(e) } }
               id="bg-toggle-menu" 
         >
@@ -152,10 +153,20 @@ export default connect(
   }
 )(Worlds)
 
-const styles = {
+let styles = {
   worlds: {
     width: "100%",
     minWidth: "320px",
     margin: "auto"
+  },
+  container: (mobile) => {
+    return {
+      width: '100%',
+      height: '100%',
+      position:'fixed',
+      // top: 0,
+      left: 0, 
+      top: mobile ? '150px' : '72px'
+    }
   }
 }

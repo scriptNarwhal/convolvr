@@ -281,12 +281,12 @@ export default class ToolboxSystem {
       } 
   
       grip(handIndex, value) {
-  
         let hands = this.getUserHands(),
             hand   = hands[ handIndex ],
             handState = hand.state.hand,
             entityId = handState.grip( value ),
             avatar = this.user.avatar.mesh
+
         console.log("send grip tool action")
         this.sendToolAction(
           true, 
@@ -306,9 +306,9 @@ export default class ToolboxSystem {
       }
   
       setHandOrientation(hand, position, orientation) {
-  
         let hands = this.getUserHands(),
             userHand = hands[ hand ]
+
        // console.info( userHand, position, orientation )
         if ( !!userHand && position && orientation ) {
           // console.log("toolbox: setHandOrientation", position )
@@ -317,7 +317,6 @@ export default class ToolboxSystem {
       }
   
       sendToolAction(primary, tool, hand, position, quaternion, entity, entityId = -1, components = [], componentPath = [], coords, oldCoords ) {
-  
         let camera = this.world.camera,
             cPos = camera.position,
             toolName = tool.name
@@ -346,6 +345,7 @@ export default class ToolboxSystem {
             entityId,
             primary
           }
+          
           if (oldCoords) {
             actionData.oldCoords = oldCoords;
           }

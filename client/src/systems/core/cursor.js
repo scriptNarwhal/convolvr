@@ -189,7 +189,7 @@ export default class CursorSystem {
 
         newCursorState.entity = noRayCast ? cursorState.cursor.entity : entity
         newCursorState.lookingAtEntity = noRayCast ? cursorState.cursor.entity : entity
-        _changeCursorColor( cursor, newCursorState.entity && newCursorState.entity.componentsByProp.terrain == null )
+        //_changeCursorColor( cursor, newCursorState.entity && newCursorState.entity.componentsByProp.terrain == null )
         if ( !!!component && cursorState.cursor.component ) {
             if ( lookAway ) {
                 callbacks = cursorState.component.state.lookAway.callbacks
@@ -226,7 +226,6 @@ export default class CursorSystem {
 
         cursorMesh.updateMatrix()
         cursorMesh.updateMatrixWorld()
-        trackedControls && console.log("tracked controls")
         if ( i == 0 ) { // head cursor
             if ( trackedControls && cursorMesh.visible == true ) {
                 cursorMesh.visible = false

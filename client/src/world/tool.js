@@ -77,7 +77,9 @@ export default class Tool {
                 ]
               }
             },
-            position: [ 0.05, 0.08, 0.08 ],
+            // position: [ 0.15, 0.18, 0.18 ],
+            
+            position: [ 0.15, 0.18, -2.18 ],
             quaternion: [0, 0, 0, 1]
         }        
     }

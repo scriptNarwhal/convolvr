@@ -5,7 +5,7 @@ import Entity from '../../entity'
 
 export default class ToolActionHandler {
 
-    constructor( handlers, world, socket ) {
+    constructor(handlers, world, socket) {
 
         this.world = world
         this.handlers = handlers
@@ -22,7 +22,7 @@ export default class ToolActionHandler {
                 remoteUser = {},
                 userHand = {}
 
-            if ( voxel == null || voxel.loaded == false ) {
+            if (voxel == null || voxel.loaded == false) {
                 if (voxel)
                     world.systems.terrain.loadVoxel(coords)
 
@@ -30,7 +30,7 @@ export default class ToolActionHandler {
                 return
             }
 
-            switch ( data.tool ) {
+            switch (data.tool) {
                 case "Entity Tool":
                     let ent = data.entity,
                         entity = new Entity(ent.id, ent.components, data.position, data.quaternion, coords)
@@ -40,8 +40,10 @@ export default class ToolActionHandler {
                     break
                 case "Component Tool":
                     voxel.entities.map(voxelEnt => { // find & re-init entity
-                        if (voxelEnt.id == data.entityId) // console.log("got component tool message", data.entity.components); // concat with existing components array
-                            voxelEnt.update(false, false, voxelEnt.components.concat(data.entity.components), false, false, { ignoreRotation: true })
+                        if (voxelEnt.id == data.entityId) // concat with existing components array
+                            voxelEnt.update(
+                                false, false, voxelEnt.components.concat(data.entity.components),
+                                false, false, { ignoreRotation: true })
 
                     })
                     break;
@@ -52,7 +54,7 @@ export default class ToolActionHandler {
 
                     break
                 case "Update Tool":
-                    voxel.entities.map(voxelEnt => { // find & re-init entity.. also probably look up the right component to modify by id *******************
+                    voxel.entities.map(voxelEnt => { // find & re-init entity.. 
                         if (voxelEnt.id == data.entityId) {
                             //console.log("Update Tool message", data.components[0]) // concat with existing components array
                             voxelEnt.update(false, false, false, data.components[0], data.componentPath, { ignoreRotation: true })
@@ -74,10 +76,10 @@ export default class ToolActionHandler {
 
                     break
                 case "Grab Entity":
-                console.log("Network Grab Entity: data.user", data.user, "user.name", user.name)
+                    console.log("Network Grab Entity: data.user", data.user, "user.name", user.name)
                     if (data.user != user.name) {
-                
-                    console.log("Network Grab Entity: actually replacing")
+
+                        console.log("Network Grab Entity: actually replacing")
                         remoteUser = world.users["user" + data.userId]
                         userHand = remoteUser.avatar.componentsByProp.hand[data.hand]
                         voxel.entities.map(voxelEnt => {
@@ -95,9 +97,9 @@ export default class ToolActionHandler {
                     }
                     break
                 case "Replace Entity":
-                
-                console.log("Network Replace Entity: data.user", data.user, "user.name", user.name)
-                   
+
+                    console.log("Network Replace Entity: data.user", data.user, "user.name", user.name)
+
                     if (data.user != user.name) {
                         console.log("Network Replace Entity: actually replacing")
                         remoteUser = world.users["user" + data.userId],
@@ -121,7 +123,7 @@ export default class ToolActionHandler {
                             voxelEnt.position = voxelEnt.mesh.position.toArray()
                             voxelEnt.getVoxel()
                         } else {
-                         console.warn("no voxel ent to replace")
+                            console.warn("no voxel ent to replace")
                         }
                     }
                     break
