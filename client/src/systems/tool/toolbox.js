@@ -125,7 +125,6 @@ export default class ToolboxSystem {
       }
 
       getCursor ( hand ) {
-  
         let input    = this.world.userInput,
             user     = this.world.user,
             cursor   = null, 
@@ -154,7 +153,7 @@ export default class ToolboxSystem {
             componentPath   = [],
             cursorHand      = []
             
-        if ( useCursor ) {
+        if (useCursor) {
           cursorHand = this.getCursor( hand )
           cursor = cursorHand[ 0 ]
           handMesh = cursorHand[ 1 ]
@@ -185,7 +184,7 @@ export default class ToolboxSystem {
         }
       }
       
-      usePrimary ( hand ) {
+      usePrimary(hand: number) {
         let toolIndex        = this.currentTools[ hand ],
             tool             = this.tools[ toolIndex ],
             camera           = this.world.camera,
@@ -241,11 +240,14 @@ export default class ToolboxSystem {
           action = tool.primaryAction( telemetry )
         }
         if ( !!action )
-          this.sendToolAction( true, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.componentPath || componentPath, action.coords )
+          this.sendToolAction( 
+            true, tool, hand, position, quaternion, action.entity, action.entityId,
+            action.components, action.componentPath || componentPath, action.coords 
+          )
   
       }
   
-      useSecondary(hand, value) {
+      useSecondary(hand: number, value: any) {
         let tool            = this.tools[this.currentTools[hand]],
             camera          = this.world.camera,
             telemetry       = this.initActionTelemetry(camera, true, hand),
@@ -263,24 +265,27 @@ export default class ToolboxSystem {
         console.info( "Network Action: ", action )
   
         if ( !!action ) {
-          this.sendToolAction( false, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.componentPath || componentPath, action.coords )
+          this.sendToolAction( 
+            false, tool, hand, position, quaternion, action.entity, action.entityId,
+            action.components, action.componentPath || componentPath, action.coords
+          )
         }
       }
   
-      preview(handIndex) {
+      preview(handIndex: number) {
         let tool   = this.tools[ this.currentTools[ handIndex ] ],
             cursor = this.getCursor( handIndex )
   
         tool.preview( cursor[ 0 ] )
       }
   
-      hidePreview(handIndex) {
+      hidePreview(handIndex: number) {
         let tool = this.tools[ this.currentTools[ handIndex ] ]
         
         tool.hidePreview()
       } 
   
-      grip(handIndex, value) {
+      grip(handIndex: number, value) {
         let hands = this.getUserHands(),
             hand   = hands[ handIndex ],
             handState = hand.state.hand,
@@ -316,7 +321,19 @@ export default class ToolboxSystem {
         }
       }
   
-      sendToolAction(primary, tool, hand, position, quaternion, entity, entityId = -1, components = [], componentPath = [], coords, oldCoords ) {
+      sendToolAction(
+        primary: boolean, 
+        tool: number, 
+        hand: number, 
+        position: number[], 
+        quaternion: number[], 
+        entity, 
+        entityId = -1, 
+        components = [], 
+        componentPath = [], 
+        coords, 
+        oldCoords
+      ) {
         let camera = this.world.camera,
             cPos = camera.position,
             toolName = tool.name

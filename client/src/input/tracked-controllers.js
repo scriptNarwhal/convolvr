@@ -1,6 +1,6 @@
 export default class TrackedController {
 
-  constructor ( input, world ) {
+  constructor(input, world) {
 
     this.input = input
     this.world = world
@@ -13,7 +13,7 @@ export default class TrackedController {
 
   }
 
-  coolDown ( hand ) {
+  coolDown(hand) {
 
     this.stickCooldown = true
     clearTimeout(this.stickTimeout)
@@ -23,8 +23,7 @@ export default class TrackedController {
 
   }
 
-  handleOculusTouch ( gamepad )  {
-
+  handleOculusTouch(gamepad)  {
     let axes        = gamepad.axes,
         buttons     = gamepad.buttons,
         b           = buttons.length,
@@ -41,16 +40,13 @@ export default class TrackedController {
       tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
 
     if ( gamepad.hand == 'left' ) {
-
       if ( world.settings.vrMovement == 'stick' ) {
-
         if ( Math.abs(axes[0]) > 0.1 )
             input.moveVector.x = axes[0] * 2
 
         if ( Math.abs(axes[1]) > 0.1 )
             input.moveVector.z = axes[1] * 2
 
-        
       } else { // teleport mode
 
       }
@@ -67,7 +63,6 @@ export default class TrackedController {
       btnState = this.buttons.left = []
 
     } else { // use right stick to use adjust tool options // right triggers for primary tool
-
       let dir = Math.round(gamepad.axes[0]),
           toolOptionChange = Math.round(gamepad.axes[1])
 
@@ -92,17 +87,14 @@ export default class TrackedController {
         tools.grip( 0, -1 )
 
       btnState = this.buttons.right = []
-
     }
 
     gamepad.buttons.map(button=> {
       btnState.push( typeof button == 'object' ? button.pressed : button )
     })
-
   }
 
-  handleOpenVRGamepad ( gamepad )  {
-    
+  handleOpenVRGamepad(gamepad)  {
         let axes        = gamepad.axes,
             buttons     = gamepad.buttons,
             b           = buttons.length,
@@ -117,14 +109,11 @@ export default class TrackedController {
     
         //console.log("oculus touch handler ", a, b, buttons
     
-        if ( useTracking && gamepad.pose )
-        
+        if (useTracking && gamepad.pose)
           tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
     
         if ( gamepad.hand == 'left' ) {
-    
-          if ( world.vrMovement == 'stick' ) {
-    
+          if ( world.settings.vrMovement == 'stick' ) {
             if ( Math.abs(axes[0]) > 0.1 )
                 input.moveVector.x = axes[0] * 2
     
@@ -147,7 +136,6 @@ export default class TrackedController {
           btnState = this.buttons.left = []
     
         } else { // use right stick to use adjust tool options // right triggers for primary tool
-    
           let dir = Math.round(gamepad.axes[0]),
               toolOptionChange = Math.round(gamepad.axes[1])
     
@@ -184,8 +172,7 @@ export default class TrackedController {
 
       }
 
-  handleOculusRemote ( gamepad ) { // oculus remote
-
+  handleOculusRemote(gamepad) { // oculus remote
     let buttons = gamepad.buttons,
         b = buttons.length,
         i = 0,
@@ -205,16 +192,13 @@ export default class TrackedController {
 
   }
 
-  handleDaydreamController ( gamepad ) {
-
+  handleDaydreamController(gamepad) {
     let button = gamepad.buttons[0]
 
     if ( gamepad.pose )
-
       tools.setHandOrientation(0, [ 0, -0.5, 0.5 ], gamepad.pose.orientation)
   
     if ( this.buttonReleased( this.buttons.right[0] ) && this.buttonPressed( button ) )
-
         tools.usePrimary(0) // right hand
 
     this.buttons.right[0] = button
@@ -222,50 +206,41 @@ export default class TrackedController {
   }
 
   down ( buttons, hand, index ) {
-    
     let current = hand == 0 ? this.buttons.right : this.buttons.left,
         value = this.buttonPressed( buttons[ index ] ) && current[ index ] == false
 
-    //current[ index ] = this.buttonPressed( buttons[ index ] )
+    current[ index ] = this.buttonPressed( buttons[ index ] )
     return value
     
   }
     
   up ( buttons, hand, index ) {
-    
     let current = hand == 0 ? this.buttons.right : this.buttons.left,
         value = !this.buttonPressed( buttons[ index ] ) && current[ index ]
 
-    //current[ index ] = this.buttonPressed( buttons[ index ] )
+    current[ index ] = this.buttonPressed( buttons[ index ] )
     return value
         
   }
   
   buttonPressed (b) {
-
     if (typeof(b) == "object") {
       return b.pressed
     }
     return b == 1.0 || b > 0.8
-
   }
 
   buttonReleased (b) {
-
     if (typeof(b) == "object") {
       return !b.pressed
     }
     return b == 0.0 || b < 0.2
-
   }
 
   buttonValue (b) {
-
     if (typeof(b) == "object") {
       return b.pressed
     }
     return b
-    
   }
-
 }

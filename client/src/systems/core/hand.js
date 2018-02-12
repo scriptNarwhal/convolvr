@@ -108,13 +108,13 @@ export default class HandSystem {
     }
 
     toggleTrackedHands ( component, toggle = true ) {
-      
         let scene = window.three.scene,
             avatar = component.entity,
             position = null,
             cursors = avatar.componentsByProp.cursor,
             hands = avatar.componentsByProp.hand
 
+        console.log("this.toggleTrackedHands( ", toggle, " )")
         if (!avatar || !avatar.mesh) {
             console.warn("toggleTrackedHAnds FaileD!!")
             console.warn("No avatar entity for hand.toggleTrackedHands()")
@@ -125,39 +125,40 @@ export default class HandSystem {
             hands = avatar.componentsByProp.hand
         }
 
-      if ( cursors )
+      if ( cursors ) {
        cursors[0].mesh.visible = !toggle
+      }
 
       hands.map( ( handComponent, i ) => {
+        let hand = handComponent.mesh,
+            handState = handComponent.state.hand
 
-        let hand = handComponent.mesh
-
-        handComponent.state.hand.trackedHands = toggle
-
-        if ( toggle ) { 
+        if ( toggle && handState.trackedHands == false) { 
             //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
-            hand.parent.remove(hand)
+            if (hand.parent) {
+                hand.parent.remove(hand)
+            } else {
+                console.info("hand ", i, "not attached to anything yet")
+            }
             scene.add(hand)
             hand.position.set(position.x -0.7+ i*1.4, position.y -0.4, position.z -0.5)
-            
             if ( i > 0 ) {
               if ( !!hand.children[0] ) {
                 hand.children[0].visible = true
               }  
             } 
+            handState.trackedHands = toggle
         
-        } else {
-
+        } else if (handState.trackedHands) {
             avatar.mesh.add(hand)
-
             if ( i > 0 ) {
               if ( !!hand.children[0] ) {
                 hand.children[0].visible = false
               }  
             }
             hand.position.set(-0.7+ i*1.4, -0.35, -0.25)
+            handState.trackedHands = toggle
         }
-
         hand.updateMatrix()
       })
     }
