@@ -123,11 +123,7 @@ export default class TrackedController {
             useTracking = input.trackedControls,
             rotation    = input.rotationVector,
             tools       = world.systems.toolbox
-    
-        //console.log("oculus touch handler ", a, b, buttons
-      if (this.buttonPressed(buttons[1])) {
-        console.log(":buttons", buttons);
-      }
+      
         if (useTracking && gamepad.pose)
           tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
     
