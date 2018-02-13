@@ -138,7 +138,7 @@ export default class TrackedController {
           }
 
           if ( this.up( buttons, 1, 1 ) )
-            //tools.usePrimary(1)
+            tools.usePrimary(1)
 
           if ( this.down( buttons, 1, 2 ) )
             tools.grip(1, 1)
@@ -165,7 +165,7 @@ export default class TrackedController {
           }
 
           if ( this.up( buttons, 0, 1 ) )
-            //tools.usePrimary(0)
+            tools.usePrimary(0)
 
           if ( this.down( buttons, 0, 2 ) )
             tools.grip( 0, 1 )
@@ -199,7 +199,6 @@ export default class TrackedController {
         this.buttons.right[0] = button
         input.moveVector.x += gamepad.buttons[5].pressed * 10.1 - gamepad.buttons[4].pressed * 10.1
         input.moveVector.z += gamepad.buttons[3].pressed * 10.1 - gamepad.buttons[2].pressed * 10.1
-
   }
 
   handleDaydreamController(gamepad) {
@@ -212,7 +211,6 @@ export default class TrackedController {
         tools.usePrimary(0) // right hand
 
     this.buttons.right[0] = button
-
   }
 
   buttonPressed(b) {
@@ -230,7 +228,7 @@ export default class TrackedController {
   }
 
   buttonValue(b) {
-    if (typeof(b) != "boolean") {
+    if (typeof(b) == "object") {
       return b.pressed
     }
     return b
