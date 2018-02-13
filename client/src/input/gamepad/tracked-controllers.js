@@ -23,16 +23,14 @@ export default class TrackedController {
     let current = hand == 0 ? this.buttons.right : this.buttons.left,
         value = this.buttonPressed( buttons[ index ] ) && current[ index ] == false
 
-    //current[ index ] = this.buttonValue( buttons[ index ] )
     return value
   }
-    
+
   up( buttons, hand, index ) {
     let current = hand == 0 ? this.buttons.right : this.buttons.left,
         value = !this.buttonPressed( buttons[ index ] ) && current[ index ]
 
-    //current[ index ] = this.buttonValue( buttons[ index ] )
-    return value        
+    return value
   }
 
   handleOculusTouch(gamepad)  {
@@ -47,8 +45,8 @@ export default class TrackedController {
         useTracking = input.trackedControls,
         rotation    = input.rotationVector,
         tools       = world.systems.toolbox
-    
-    if ( useTracking && gamepad.pose )    
+
+    if ( useTracking && gamepad.pose )
       tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
 
     if ( gamepad.hand == 'left' ) {
@@ -62,7 +60,7 @@ export default class TrackedController {
       } else { // teleport mode
 
       }
-     
+
       if (this.up(buttons, 1, 1 ))
         tools.usePrimary(1)
 
@@ -93,7 +91,7 @@ export default class TrackedController {
         this.coolDown()
         tools.useSecondary(0, toolOptionChange)
       }
- 
+
       if ( this.up( buttons, 0, 1 ) )
         tools.usePrimary(0);
 
@@ -123,61 +121,63 @@ export default class TrackedController {
             useTracking = input.trackedControls,
             rotation    = input.rotationVector,
             tools       = world.systems.toolbox
-      
+
         if (useTracking && gamepad.pose)
           tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
-    
+
         if ( gamepad.hand == 'left' ) {
           if ( world.settings.vrMovement == 'stick' ) {
             if ( Math.abs(axes[0]) > 0.1 )
                 input.moveVector.x = axes[0] * 2
-    
+
             if ( Math.abs(axes[1]) > 0.1 )
                 input.moveVector.z = -axes[1] * 2
-            
+
           } else { // teleport mode
-    
+
           }
-         
+
           if ( this.up( buttons, 1, 1 ) )
             //tools.usePrimary(1)
-    
+
           if ( this.down( buttons, 1, 2 ) )
             tools.grip(1, 1)
-    
+
           if ( this.up( buttons, 1, 2 ) )
             tools.grip( 1, -1 )
-    
-          btnState = this.buttons.left = []
-    
+
+          this.buttons.left = [];
+          btnState = this.buttons.left;
+
         } else { // use right stick to use adjust tool options // right triggers for primary tool
           let dir = Math.round(gamepad.axes[0]),
               toolOptionChange = Math.round(gamepad.axes[1])
-    
+
           if (dir != 0 && this.stickCooldown == false) {
             this.coolDown()
             tools.nextTool(dir)
             tools.showMenu()
           }
-    
+
           if (toolOptionChange != 0 && this.stickCooldown == false) { // cycle through tool options
             this.coolDown()
             tools.useSecondary(0, toolOptionChange)
           }
-    
+
           if ( this.up( buttons, 0, 1 ) )
             //tools.usePrimary(0)
-          
+
           if ( this.down( buttons, 0, 2 ) )
             tools.grip( 0, 1 )
-          
+
           if ( this.up( buttons, 0, 2 ) )
             tools.grip( 0, -1 )
-    
-          btnState = this.buttons.right = []
+
+          this.buttons.right = [];
+          btnState = this.buttons.right;
         }
-    
-        gamepad.buttons.map(button=> {
+
+        buttons.map(button => {
           btnState.push( this.buttonValue(button) )
         })
       }
@@ -207,14 +207,14 @@ export default class TrackedController {
 
     if ( gamepad.pose )
       tools.setHandOrientation(0, [ 0, -0.5, 0.5 ], gamepad.pose.orientation)
-  
+
     if ( this.buttonReleased( this.buttons.right[0] ) && this.buttonPressed( button ) )
         tools.usePrimary(0) // right hand
 
     this.buttons.right[0] = button
 
   }
-  
+
   buttonPressed(b) {
     if (typeof(b) == "object") {
       return b.pressed
