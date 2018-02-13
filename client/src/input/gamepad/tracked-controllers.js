@@ -1,7 +1,6 @@
 export default class TrackedController {
 
   constructor(input, world) {
-
     this.input = input
     this.world = world
     this.buttons = {
@@ -10,17 +9,30 @@ export default class TrackedController {
     }
     this.stickCooldown = false
     this.stickTimeout = null
-
   }
 
   coolDown(hand) {
-
     this.stickCooldown = true
     clearTimeout(this.stickTimeout)
     this.stickTimeout = setTimeout(()=>{
       this.stickCooldown = false
     }, 50)
+  }
 
+  down( buttons, hand, index ) {
+    let current = hand == 0 ? this.buttons.right : this.buttons.left,
+        value = this.buttonPressed( buttons[ index ] ) && current[ index ] == false
+
+    //current[ index ] = this.buttonValue( buttons[ index ] )
+    return value
+  }
+    
+  up( buttons, hand, index ) {
+    let current = hand == 0 ? this.buttons.right : this.buttons.left,
+        value = !this.buttonPressed( buttons[ index ] ) && current[ index ]
+
+    //current[ index ] = this.buttonValue( buttons[ index ] )
+    return value        
   }
 
   handleOculusTouch(gamepad)  {
@@ -34,8 +46,8 @@ export default class TrackedController {
         btnState = [],
         useTracking = input.trackedControls,
         rotation    = input.rotationVector,
-        tools       = world.user.toolbox
-
+        tools       = world.systems.toolbox
+    
     if ( useTracking && gamepad.pose )    
       tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
 
@@ -51,16 +63,21 @@ export default class TrackedController {
 
       }
      
-      if ( this.up( buttons, 1, 1 ) )
+      if (this.up(buttons, 1, 1 ))
         tools.usePrimary(1)
 
-      if ( this.down( buttons, 1, 2 ) )
+      if (this.down(buttons, 1, 2 ))
         tools.grip(1, 1)
 
-      if ( this.up( buttons, 1, 2 ) )
+      if (this.up(buttons, 1, 2 ))
         tools.grip( 1, -1 )
 
-      btnState = this.buttons.left = []
+      i = 0;
+      while ( i < b ) {
+        btnState.push(buttonValue(buttons[ b ]))
+        i += 1;
+      }
+      this.buttons.left = btnState;
 
     } else { // use right stick to use adjust tool options // right triggers for primary tool
       let dir = Math.round(gamepad.axes[0]),
@@ -76,21 +93,21 @@ export default class TrackedController {
         this.coolDown()
         tools.useSecondary(0, toolOptionChange)
       }
-
+ 
       if ( this.up( buttons, 0, 1 ) )
-        tools.usePrimary(0)
-      
+        tools.usePrimary(0);
+
       if ( this.down( buttons, 0, 2 ) )
-        tools.grip( 0, 1 )
-      
+        tools.grip( 0, 1 );
+
       if ( this.up( buttons, 0, 2 ) )
-        tools.grip( 0, -1 )
+        tools.grip( 0, -1 );
 
       btnState = this.buttons.right = []
     }
 
     gamepad.buttons.map(button=> {
-      btnState.push( typeof button == 'object' ? button.pressed : button )
+      btnState.push( this.buttonValue(button) )
     })
   }
 
@@ -105,10 +122,12 @@ export default class TrackedController {
             btnState    = [],
             useTracking = input.trackedControls,
             rotation    = input.rotationVector,
-            tools       = world.user.toolbox
+            tools       = world.systems.toolbox
     
         //console.log("oculus touch handler ", a, b, buttons
-    
+      if (this.buttonPressed(buttons[1])) {
+        console.log(":buttons", buttons);
+      }
         if (useTracking && gamepad.pose)
           tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
     
@@ -125,7 +144,7 @@ export default class TrackedController {
           }
          
           if ( this.up( buttons, 1, 1 ) )
-            tools.usePrimary(1)
+            //tools.usePrimary(1)
     
           if ( this.down( buttons, 1, 2 ) )
             tools.grip(1, 1)
@@ -151,25 +170,20 @@ export default class TrackedController {
           }
     
           if ( this.up( buttons, 0, 1 ) )
-          
-            tools.usePrimary(0)
+            //tools.usePrimary(0)
           
           if ( this.down( buttons, 0, 2 ) )
-          
             tools.grip( 0, 1 )
           
           if ( this.up( buttons, 0, 2 ) )
-          
             tools.grip( 0, -1 )
     
           btnState = this.buttons.right = []
-
         }
     
         gamepad.buttons.map(button=> {
-          btnState.push( typeof button == 'object' ? button.value : button )
+          btnState.push( this.buttonValue(button) )
         })
-
       }
 
   handleOculusRemote(gamepad) { // oculus remote
@@ -204,41 +218,23 @@ export default class TrackedController {
     this.buttons.right[0] = button
 
   }
-
-  down ( buttons, hand, index ) {
-    let current = hand == 0 ? this.buttons.right : this.buttons.left,
-        value = this.buttonPressed( buttons[ index ] ) && current[ index ] == false
-
-    current[ index ] = this.buttonPressed( buttons[ index ] )
-    return value
-    
-  }
-    
-  up ( buttons, hand, index ) {
-    let current = hand == 0 ? this.buttons.right : this.buttons.left,
-        value = !this.buttonPressed( buttons[ index ] ) && current[ index ]
-
-    current[ index ] = this.buttonPressed( buttons[ index ] )
-    return value
-        
-  }
   
-  buttonPressed (b) {
+  buttonPressed(b) {
     if (typeof(b) == "object") {
       return b.pressed
     }
     return b == 1.0 || b > 0.8
   }
 
-  buttonReleased (b) {
+  buttonReleased(b) {
     if (typeof(b) == "object") {
       return !b.pressed
     }
     return b == 0.0 || b < 0.2
   }
 
-  buttonValue (b) {
-    if (typeof(b) == "object") {
+  buttonValue(b) {
+    if (typeof(b) != "boolean") {
       return b.pressed
     }
     return b

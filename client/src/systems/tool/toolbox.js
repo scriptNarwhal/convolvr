@@ -142,7 +142,7 @@ export default class ToolboxSystem {
   
       initActionTelemetry ( camera, useCursor, hand ) {
         let position        = camera.position.toArray(),
-            voxel           = [ position[0], 0, position[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) ),
+            voxel           = [ position[0], 0, position[2] ].map((c, i) => Math.floor( c/GRID_SIZE[ i ] )),
             quaternion      = camera.quaternion.toArray(),
             user            = this.world.user,
             cursor          = null,
@@ -207,7 +207,8 @@ export default class ToolboxSystem {
         
         tool.hidePreview()
   
-        if ( telemetry.cursor && cursorEntity ) { // check telemetry here to see if activate callbacks should fire instead of tool action
+        if ( telemetry.cursor && cursorEntity ) { 
+          // check telemetry here to see if activate callbacks should fire instead of tool action
           if ( cursorState.component && cursorState.component.props.activate ) { 
             !!cursorState.component && console.warn("Activate ", cursorState.component )
             !!cursorState.component && cursorState.component.state.activate.callbacks.map( (callback) => {
@@ -215,11 +216,10 @@ export default class ToolboxSystem {
             })
             return // cursor system has found the component ( provided all has gone according to plan.. )
           }
-          console.log("use Primary ", componentsByProp)
+          //console.log("use Primary ", componentsByProp)
           miniature = cursorEntity.componentsByProp.miniature
         
           if ( miniature && cursorComponent && cursorComponent.props.toolUI ) {
-            
             configureTool = componentsByProp.toolUI[ 0 ].props.toolUI.configureTool 
             console.log("ToolUI!", configureTool)
               if ( configureTool ) {
@@ -235,16 +235,15 @@ export default class ToolboxSystem {
   
         if ( tool.mesh == null )
           tool.equip(hand)        
-  
-        if (sendAction) {
-          action = tool.primaryAction( telemetry )
-        }
-        if ( !!action )
+        
+        action = tool.primaryAction(telemetry)
+
+        if ( action && sendAction ) {
           this.sendToolAction( 
             true, tool, hand, position, quaternion, action.entity, action.entityId,
             action.components, action.componentPath || componentPath, action.coords 
           )
-  
+        }
       }
   
       useSecondary(hand: number, value: any) {
@@ -262,7 +261,7 @@ export default class ToolboxSystem {
             tool.equip( hand )
         }
         action = tool.secondaryAction(telemetry, value)
-        console.info( "Network Action: ", action )
+        //console.info( "Network Action: ", action )
   
         if ( !!action ) {
           this.sendToolAction( 
@@ -306,7 +305,8 @@ export default class ToolboxSystem {
           null, 
           null, 
           handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0],
-          // avatar.position.toArray().map((v,i) => Math.round(v/GRID_SIZE[i])) //handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
+          // avatar.position.toArray().map((v,i) => Math.round(v/GRID_SIZE[i]))
+           //handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
         )
       }
   
@@ -344,7 +344,9 @@ export default class ToolboxSystem {
         if ( !!!coords )
             coords = [ Math.floor(cPos.x / GRID_SIZE[ 0 ]), 0, Math.floor(cPos.z / GRID_SIZE[ 2 ]) ]
   
-        if ( entity )  { entity.voxel = coords }
+        if ( entity )  { 
+          entity.voxel = coords 
+        }
   
         let actionData = {
             tool: toolName,

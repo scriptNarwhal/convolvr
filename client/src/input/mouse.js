@@ -63,18 +63,18 @@ export default class Mouse {
 
             document.addEventListener("mouseup", (e) => {
 
-                let user = this.input.user
+                let toolbox = this.world.systems.toolbox;
 
                 if ( world.mode != "web" && this.input.focus && e.target.tagName.toLowerCase() == "canvas" ) {
                     switch ( e.which ) {
                         case 1: // left mouse
-                            user.toolbox.usePrimary(0, 0) // right hand
+                            toolbox.usePrimary(0, 0) // right hand
                         break
                         case 2: // scroll wheel click
                             // tools.selectObject() .. might be handy
                         break
                         case 3: // right click
-                            user.toolbox.grip( 0, -1 )
+                            toolbox.grip( 0, -1 )
                         break
                     }
                 }

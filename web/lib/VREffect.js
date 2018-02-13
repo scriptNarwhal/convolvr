@@ -55,8 +55,7 @@ THREE.VREffect = function ( renderer, onError ) {
 	//
 
 	this.isPresenting = false;
-	this.scale = 1;
-	
+
 	var scope = this;
 
 	var rendererSize = renderer.getSize();
@@ -339,10 +338,8 @@ THREE.VREffect = function ( renderer, onError ) {
 				eyeTranslationL.fromArray( eyeParamsL.offset );
 				eyeTranslationR.fromArray( eyeParamsR.offset );
 
-				// cameraL.translateOnAxis( eyeTranslationL, cameraL.scale.x );
-				// cameraR.translateOnAxis( eyeTranslationR, cameraR.scale.x );
-				cameraL.translateOnAxis( eyeTranslationL, this.scale );
-				cameraR.translateOnAxis( eyeTranslationR, this.scale );
+				cameraL.translateOnAxis( eyeTranslationL, cameraL.scale.x );
+				cameraR.translateOnAxis( eyeTranslationR, cameraR.scale.x );
 
 			}
 
