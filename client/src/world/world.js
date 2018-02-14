@@ -87,7 +87,7 @@ export default class Convolvr {
 		camera = new THREE.PerspectiveCamera( this.settings.fov, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
 		this.onUserLogin = () => {}
 		this.initChatAndLoggedInUser = () => {}
-		let rendererOptions = { antialias: this.settings.aa != 'off' && !usePostProcessing }
+		let rendererOptions = { antialias: this.settings.aa && !usePostProcessing }
 
 		if ( usePostProcessing ) {
 			rendererOptions.alpha = true
