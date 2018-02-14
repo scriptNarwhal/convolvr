@@ -4,8 +4,7 @@ export default class HandSystem {
         this.world = world
     }
 
-    init ( component ) {
-         
+    init (component) {
         let userInput = this.world.userInput
 
         if ( component.props.hand == undefined || component.props.hand != undefined && userInput.trackedControls == false && userInput.leapMotion == false) {
@@ -13,7 +12,7 @@ export default class HandSystem {
                 this.toggleTrackedHands( component, false )
             }, 1500)
         }
-    
+
         return {
             trackedHands: false,
             toggleTrackedHands: ( toggle = true ) => {
@@ -28,8 +27,7 @@ export default class HandSystem {
         }
     }
 
-    grip( component, value ) {
-
+    grip(component, value) {
         let avatar = component.entity,
             cursors = !!avatar ? avatar.componentsByProp.cursor : false,
             entity = null, //hand.children[0].userData.component.props.,
@@ -37,17 +35,14 @@ export default class HandSystem {
             state = null,
             handPos = [0, 0, 0],
             avatarPos = [0, 0, 0],
-            oldVoxel = [0, 0, 0],
-            pos = [0, 0, 0]
-             //entity.mesh.position,
+            oldVoxel = [0, 0, 0];
 
         if ( component ) {
             state = component.state
-
-            if ( !state.hand.trackedHands && cursors ) {
-                cursor = cursors[ 0 ]
-            } else {
+            if ( state.hand.trackedHands && cursors ) {
                 cursor = component.allComponents[ 0 ]
+            } else {
+                cursor = cursors[ 0 ]
             }
         }
 
@@ -56,7 +51,7 @@ export default class HandSystem {
                 if ( state.hand.grabbedEntity ) {
                     console.info("Let Go")
                     entity = state.hand.grabbedEntity
-        
+
                     if ( entity ) {
                         oldVoxel = [...entity.voxel];
                         component.mesh.remove(entity.mesh)
@@ -66,7 +61,7 @@ export default class HandSystem {
                             entity.update( handPos.toArray(), component.mesh.quaternion.toArray() )
                         } else {
                             avatarPos = component.entity.mesh.position
-                            entity.update( avatarPos.toArray(), avatar.mesh.quaternion.toArray() )    
+                            entity.update( avatarPos.toArray(), avatar.mesh.quaternion.toArray() )
                         }
                         entity.mesh.translateZ( -entity.boundingRadius )
                         entity.mesh.updateMatrix()
@@ -80,7 +75,7 @@ export default class HandSystem {
                 entity = cursor.state.cursor.entity
 
                 if (!!entity && !!!state.hand.grabbedEntity) {
-                    let zPosition = -entity.boundingRadius || 10;
+                    let zPosition = -entity.boundingRadius || -10;
                     console.info("Pick Up")
                     three.scene.remove( entity.mesh )
                     state.hand.grabbedEntity = entity
@@ -94,7 +89,6 @@ export default class HandSystem {
     }
 
     setHandOrientation ( component, position, rotation, index ) {
-
         let mesh = component.mesh
 
         if ( mesh ) {
@@ -133,7 +127,7 @@ export default class HandSystem {
         let hand = handComponent.mesh,
             handState = handComponent.state.hand
 
-        if ( toggle && handState.trackedHands == false) { 
+        if ( toggle && handState.trackedHands == false) {
             //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
             if (hand.parent) {
                 hand.parent.remove(hand)
@@ -145,16 +139,16 @@ export default class HandSystem {
             if ( i > 0 ) {
               if ( !!hand.children[0] ) {
                 hand.children[0].visible = true
-              }  
-            } 
+              }
+            }
             handState.trackedHands = toggle
-        
+
         } else if (handState.trackedHands) {
             avatar.mesh.add(hand)
             if ( i > 0 ) {
               if ( !!hand.children[0] ) {
                 hand.children[0].visible = false
-              }  
+              }
             }
             hand.position.set(-0.7+ i*1.4, -0.35, -0.25)
             handState.trackedHands = toggle
