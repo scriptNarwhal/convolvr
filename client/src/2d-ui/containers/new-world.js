@@ -258,41 +258,45 @@ class NewWorld extends Component {
                 </td>
               </tr>
                <tr>
-                <td>Light Color: Red</td>
+                <td>Light Color</td>
+                <td>Red</td>
                 <td>Green</td>
                 <td>Blue</td>
               </tr>
               <tr>
+                <td></td>
                 <td>
                   <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/> 
-                  { this.state.red }
+                  <span>{ this.state.red }</span>
                   </td>
                 <td>
                   <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/> 
-                   { this.state.green }
+                  <span>{ this.state.green }</span>
                 </td>
                 <td>
                   <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} /> 
-                   { this.state.blue }
+                  <span>{ this.state.blue }</span>
                 </td>
               </tr>
                <tr>
-                <td>Terrain Color: Red</td>
+                 <td>Terrain Color</td>
+                <td>Red</td>
                 <td>Green</td>
                 <td>Blue</td>
               </tr>
               <tr>
+                <td></td>
                 <td>
                   <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({terrainRed: e.target.value })}}/> 
-                  { this.state.terrainRed }
+                  <span>{ this.state.terrainRed }</span>
                   </td>
                 <td>
                   <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({terrainGreen: e.target.value })}}/> 
-                   { this.state.terrainGreen }
+                  <span>{ this.state.terrainGreen }</span>
                 </td>
                 <td>
                   <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({terrainBlue: e.target.value })}} /> 
-                   { this.state.terrainBlue }
+                  <span>{ this.state.terrainBlue }</span>
                 </td>
               </tr>
               <tr>
@@ -537,7 +541,7 @@ export default connect(
 const styles = {
   modal: () => {
     return Object.assign({}, modalStyle(isMobile()), {
-        maxWidth: '1080px',
+        maxWidth: '960px',
         bottom: undefined,
         top: '1em',
         height: '120vh',
