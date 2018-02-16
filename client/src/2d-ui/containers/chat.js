@@ -256,19 +256,20 @@ let styles = {
   },
   text: (mobile) => {
     return {
-      width: '95%',
+      width: '100%',
       border: 'none',
-      background: 'rgba(0, 0, 0, 0)',
+      background: '#0b1c4d',
       color: 'white',
       fontSize: '1em',
-      padding: '0.5em',
-      borderTopLeftRadius: '3px',
-      borderBottomleftRadius: '3px',
-      border: '0.1em solid #2c2c2c'
+      padding: '11px',
+      borderRadius: '3px',
+      // borderTopLeftRadius: '3px',
+      // borderBottomleftRadius: '3px',
+      border: 'none'
     }
   },
-  button: {
-      background: "rgb(29, 29, 29)",
+  button:  {
+      background: "hsla(225, 75%, 45%, 1)",
       color: "white",
       width: '100px',
       border: 'none',
@@ -277,9 +278,9 @@ let styles = {
       borderBottomRightRadius: '3px',
       borderTopRightRadius: '3px',
       position: 'absolute',
-      bottom: '5px',
-      right: '30px',
-      height: '44px'
+      bottom: '4px',
+      right: '0px',
+      height: '39px'
   },
   message : {
     display: "block",
@@ -298,7 +299,6 @@ let styles = {
     }
 
     if ( !!avatar ) {
-      
       return {
         ...usernameStyle,
         paddingLeft: '72px',
@@ -310,18 +310,14 @@ let styles = {
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat'
       }
-
     } else {
-      
       return {
         ...usernameStyle,
-        background: "#101010",
-        borderTopLeftRadius: '2px',
-        borderBottomLeftRadius: '2px'
+        background: "hsl(225, 82%, 26%)",
+        borderBottom: "#0b1c4d 2px solid",
+        borderRadius: "3px"
       }
-
     }
-
   },
   messageText: {
     paddingRight: '0.5em',
@@ -332,22 +328,21 @@ let styles = {
   messages: (mobile) => {
     return {
       width: mobile ? '100%' : '102vh',
-      height: '83vh', 
+      height: '86vh',
+      minWidth: '40vw',
+      maxHeight: '82vh', 
       margin: 'auto auto auto 0.5em',
       textAlign: 'left',
       position: 'fixed',
       marginLeft: mobile ? 0 : '10px',
       left: mobile ? 0 : '62px',
-      top: mobile ? '62px' : '68px',
+      bottom: mobile ? '58px' : '25px',
       overflowY: 'auto',
       overflowX: 'hidden',
-      fontSize: '13pt',
-      background: '#000000e6',
-      border: '0.1em solid #2c2c2c',
-      borderRadius: '0.4em',
-      borderBottomLeftRadius: '0.4em',
-      boxShadow: 'inset #0009 0 0 300px',
-      borderBottomLeftRadius: 0,
+      fontSize: '12pt',
+      background: 'hsl(224, 66%, 9%)',
+      borderRadius: '0.5em',
+      boxShadow: 'rgba(0, 0, 0, 0.65) 0em 0.75em 5em, rgba(0,0,0,0.65) 0em 0.2em 0.25em',
       padding: '1em'
     }
   },
@@ -356,21 +351,20 @@ let styles = {
       height:'2.75em',
       position: "absolute",
       bottom: mobile ? "4px" : "-20px",
-      width: (mobile ? 70: 100) + '%',
+      width: (mobile ? 100: 96) + '%',
       textAlign: "left",
-      left: mobile ? '56px' : '65px',
-      marginLeft: '0.5em',
-      bottom: '8px',
-      width: '100%',
+      left: mobile ? '0px' : '0',
+      bottom: mobile ? '2px' : '32px',
+      minWidth: '42vw',
       textAlign: 'left',
-      left: '0',
-      marginLeft: '0.85em'
+      marginLeft: '2%',
+      marginRight: '2%'
     }
   },
   uploadStyle: ( mobile ) => {
     return mobile ? {
       position: "fixed",
-      bottom: "1.75em",
+      bottom: "96px",
       right: 0
     } : { 
       marginRight: "0.25em",
