@@ -1,12 +1,13 @@
 export default class TextSystem {
 
     constructor ( ) {
-
-        this.mappedColors = ["#505050", "#ffffff", "#ffff00", "#ff0020", "#0080ff", "#ff3000", "#ffb000", "#7000ef", "#00a0ff", "#505050" ]
-
+        this.mappedColors = [
+            "#505050", "#ffffff", "#ffff00", "#ff0020", "#0080ff", 
+            "#ff3000", "#ffb000", "#7000ef", "#00a0ff", "#505050" 
+        ]
     }
 
-    init ( component: Component ) {
+    init (component: Component) {
 
         let prop = component.props.text,
             text = prop.lines,
@@ -28,7 +29,7 @@ export default class TextSystem {
         this._renderText(context, text, color, background, canvasSize, config )
         
         textTexture = new THREE.Texture( textCanvas )
-        textTexture.anisotropy = three.renderer.getMaxAnisotropy()
+        textTexture.anisotropy = three.renderer.capabilities.getMaxAnisotropy()
         textMaterial = new THREE.MeshBasicMaterial({
             map: textTexture,
             side: 0
@@ -58,13 +59,13 @@ export default class TextSystem {
         }
     }
 
-    _write ( component: Component, text: string ) {
+    _write (component: Component, text: string) {
 
         component.props.text.lines.push( text )
 
     }
 
-    _update ( component: Component ) {
+    _update (component: Component) {
 
         let prop         = component.props.text,
             state        = component.state.text,

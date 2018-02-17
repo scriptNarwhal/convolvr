@@ -243,9 +243,9 @@ export default class CursorSystem {
 
         if ( !!state ) { // animate cursor (in / out)
             if ( state.distance-0.33 < (-cursorPos.z) && (cursorPos.z < 4 - cursorSpeed) ) { // near bound of allowed movement
-                cursorPos.z += cursorSpeed
+                cursorPos.z += cursorSpeed;
             } else if ( state.distance-0.33 > (-cursorPos.z) && (cursorPos.z > -3 + cursorSpeed) ) { // far bound of allowed movement
-                cursorPos.z -= cursorSpeed
+                cursorPos.z -= cursorSpeed;
             }
         }
     }

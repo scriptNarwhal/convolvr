@@ -30,6 +30,7 @@ export default class HandSystem {
     grip(component, value) {
         let avatar = component.entity,
             cursors = !!avatar ? avatar.componentsByProp.cursor : false,
+            cursorMesh = null,
             entity = null, //hand.children[0].userData.component.props.,
             cursor = null,
             state = null,
@@ -40,30 +41,33 @@ export default class HandSystem {
         if ( component ) {
             state = component.state
             if ( state.hand.trackedHands && cursors ) {
-                cursor = component.allComponents[ 0 ]
+                cursor = component.allComponents[ 0 ];
             } else {
-                cursor = cursors[ 0 ]
+                cursor = cursors[ 0 ];
             }
+            cursorMesh = cursor.mesh;
         }
 
-        if ( cursor ) {
-            if ( Math.round(value) == -1 ) {
-                if ( state.hand.grabbedEntity ) {
+        if (cursor) {
+            console.log("cursorMesh", cursorMesh)
+            if (Math.round(value) == -1) {
+                if (state.hand.grabbedEntity) {
                     console.info("Let Go")
                     entity = state.hand.grabbedEntity
 
-                    if ( entity ) {
+                    if (entity) {
                         oldVoxel = [...entity.voxel];
-                        component.mesh.remove(entity.mesh)
-                        three.scene.add(entity.mesh)
-                        if ( state.hand.trackedHands ) {
+                        // component.mesh.remove(entity.mesh);
+                        cursorMesh.remove(entity.mesh);
+                        three.scene.add(entity.mesh);
+                        if (state.hand.trackedHands) {
                             handPos = component.mesh.position
                             entity.update( handPos.toArray(), component.mesh.quaternion.toArray() )
                         } else {
-                            avatarPos = component.entity.mesh.position
+                            avatarPos = cursorMesh.position //component.entity.mesh.position
                             entity.update( avatarPos.toArray(), avatar.mesh.quaternion.toArray() )
                         }
-                        entity.mesh.translateZ( -entity.boundingRadius )
+                        entity.mesh.translateZ(-entity.boundingRadius*1.5)
                         entity.mesh.updateMatrix()
                         entity.position = entity.mesh.position.toArray()
                         entity.getVoxel( true, true )
@@ -75,14 +79,16 @@ export default class HandSystem {
                 entity = cursor.state.cursor.entity
 
                 if (!!entity && !!!state.hand.grabbedEntity) {
-                    let zPosition = -entity.boundingRadius || -10;
+                    let zPosition = entity.boundingRadius || 12;
                     console.info("Pick Up")
-                    three.scene.remove( entity.mesh )
+                    three.scene.remove(entity.mesh);
                     state.hand.grabbedEntity = entity
-                    component.mesh.add( entity.mesh )
-                    entity.mesh.position.fromArray( [0, 0, zPosition] )
-                    entity.mesh.quaternion.fromArray([0, 0, 0, 1])
-                    entity.mesh.updateMatrix()
+                    // component.mesh.add( entity.mesh )
+                    cursorMesh.add(entity.mesh);
+                    entity.mesh.position.fromArray([0, 0, -zPosition-5]);
+                    entity.mesh.quaternion.fromArray([0, 0, 0, 1]);
+                    // entity.mesh.translateZ(-zPosition-5);
+                    entity.mesh.updateMatrix();
                 }
             }
         }
