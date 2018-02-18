@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { isMobile } from '../../config'
 import Button from '../components/button'
 import Card from '../components/card'
 import EntityEditor from '../components/data/entity-editor'
@@ -10,17 +11,13 @@ import InventoryExport from '../components/data/inventory-export'
 export default class InventoryList extends Component {
 
   componentWillMount () {
-
     this.setState({
       activated: false
     })
-    
   }
 
   handleContextAction ( action, data, e ) {
-
     if ( this.props.onAction ) 
-
       this.props.onAction( action, data, e )
 
   }
@@ -111,8 +108,8 @@ let styles = {
       // borderBottomLeftRadius: '0.25em',
       // backgroundColor: 'rgba(255, 255, 255, 0.17)',
       cursor: 'pointer',
-      width: '32%',
-      minWidth: '320px',
+      width: isMobile() ? '100%' : '32%',
+      minWidth: '240px',
       display: 'inline-block',
       marginRight: '0.5em',
       marginLeft: '8px',

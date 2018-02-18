@@ -18,22 +18,17 @@ class Inventory extends Component {
   }
 
   componentWillMount () {
-
     this.refreshInventory()
-
     this.setState({
       
     })
-
   }
 
   componentWillReceiveProps ( nextProps ) {
-
     let userNameChanged = nextProps.username != this.props.username,
         inventoryUpdated = this.props.inventoryUpdating && nextProps.inventoryUpdating == false
 
     if ( inventoryUpdated )
-
       this.refreshInventory()
 
   }
@@ -46,13 +41,10 @@ class Inventory extends Component {
 
   componentWillUpdate (nextProps, nextState) {
 
-
   }
 
   onContextAction ( name, data, e ) {
-    
         switch ( name ) {
-    
           case "Add To World":
             this.props.launchImportToWorld( this.props.username, data.itemIndex, data.itemData )
           break;
@@ -62,9 +54,7 @@ class Inventory extends Component {
           case "Export JSON":
             this.props.launchInventoryExport( this.props.username, data.category, data.itemId, data.itemIndex, data.itemData )
           break;
-    
         }
-    
       }
 
   render() {
@@ -72,11 +62,19 @@ class Inventory extends Component {
     return (
         <Shell className="data-view" 
                style={ isMobile() ? { paddingTop: '60px' } : { paddingTop: '0px' } }
-               innerStyle={ { paddingTop: isMobile() ? '72px' : 0, paddingLeft: isMobile() ? '10px' : '72px' }  }       
+               innerStyle={ { paddingTop: isMobile() ? '82px' : 0, paddingLeft: isMobile() ? '10px' : '72px' }  }       
         >
-        <span style={{ width: '100%', height: '100%', position:'fixed', top: 0, left: 0, paddingLeft: '60px'}}
-              onClick={ (e) => { this.handleBGClick(e) } }
-              id="bg-toggle-menu" 
+        <span style={{ 
+            width: '100%', 
+            height: '100%', 
+            position:'fixed', 
+            top: 0, 
+            left: 0, 
+            paddingTop: isMobile() ? '86px' : 0,
+            paddingLeft:  isMobile() ? 0 : '60px'
+          }}
+          onClick={ (e) => { this.handleBGClick(e) } }
+          id="bg-toggle-menu" 
         >
         {
           true ? [[this.props.inventoryEntities,   "Entities"  ], 
@@ -106,9 +104,7 @@ class Inventory extends Component {
         </span>
         </Shell>
     )
-
-  }
-
+  } 
 }
 
 Inventory.defaultProps = {

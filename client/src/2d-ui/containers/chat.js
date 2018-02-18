@@ -174,7 +174,7 @@ class Chat extends Component {
                           }
                         }}
                         style={styles.text(mobile)} />
-                  <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button} />
+                  <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button(mobile)} />
                   <Button title={"Upload Files"}
                           onClick={(evt, title) => {  }}
                           onFiles={ (files) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
@@ -268,7 +268,8 @@ let styles = {
       border: 'none'
     }
   },
-  button:  {
+  button: (mobile) => {
+    return {
       background: "hsla(225, 75%, 45%, 1)",
       color: "white",
       width: '100px',
@@ -277,10 +278,11 @@ let styles = {
       padding: '0.5em',
       borderBottomRightRadius: '3px',
       borderTopRightRadius: '3px',
-      position: 'absolute',
-      bottom: '4px',
+      position: mobile ? 'fixed' : 'absolute',
+      bottom: mobile ? '65px' : '4px',
       right: '0px',
       height: '39px'
+    }
   },
   message : {
     display: "block",
@@ -328,7 +330,7 @@ let styles = {
   messages: (mobile) => {
     return {
       width: mobile ? '100%' : '102vh',
-      height: '86vh',
+      height: mobile ? '76vh' : '86vh',
       minWidth: '40vw',
       maxHeight: '82vh', 
       margin: 'auto auto auto 0.5em',
@@ -349,12 +351,13 @@ let styles = {
   inputs: (mobile) => {
     return {
       height:'2.75em',
-      position: "absolute",
+      position: "fixed",
       bottom: mobile ? "4px" : "-20px",
-      width: (mobile ? 100: 96) + '%',
+      width: (mobile ? '100%': '103vh'),
+      maxWidth: mobile ? '100%' : '88vw',
       textAlign: "left",
-      left: mobile ? '0px' : '0',
-      bottom: mobile ? '2px' : '32px',
+      left: mobile ? '0px' : '64px',
+      bottom: mobile ? '60px' : '32px',
       minWidth: '42vw',
       textAlign: 'left',
       marginLeft: '2%',
