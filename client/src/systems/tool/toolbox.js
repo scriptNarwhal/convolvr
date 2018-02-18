@@ -221,7 +221,7 @@ export default class ToolboxSystem {
         
           if ( miniature && cursorComponent && cursorComponent.props.toolUI ) {
             configureTool = componentsByProp.toolUI[ 0 ].props.toolUI.configureTool 
-            console.log("ToolUI!", configureTool)
+            console.log("ToolUI! configure tool", configureTool)
               if ( configureTool ) {
                 if ( toolIndex != configureTool.tool ) {
                   this.currentTools[ hand ] = configureTool.tool
@@ -284,30 +284,32 @@ export default class ToolboxSystem {
         tool.hidePreview()
       } 
   
-      grip(handIndex: number, value) {
+      grip(handIndex: number, value: number) {
         let hands = this.getUserHands(),
             hand   = hands[ handIndex ],
             handState = hand.state.hand,
             entityId = handState.grip( value ),
-            avatar = this.user.avatar.mesh
+            avatar = this.user.avatar.mesh;
 
-        console.log("send grip tool action")
-        this.sendToolAction(
-          true, 
-          {
-             name: value < 0 ? "Replace Entity" : "Grab Entity"
-          }, 
-          handIndex, 
-          avatar.position.toArray(), 
-          avatar.quaternion.toArray(), 
-          null, 
-          entityId, 
-          null, 
-          null, 
-          handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0],
-          // avatar.position.toArray().map((v,i) => Math.round(v/GRID_SIZE[i]))
-           //handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
-        )
+        if (handState.grabbedEntity) {
+          console.log("send grip tool action")
+          this.sendToolAction(
+            true, 
+            {
+              name: value < 0 ? "Replace Entity" : "Grab Entity"
+            }, 
+            handIndex, 
+            avatar.position.toArray(), 
+            avatar.quaternion.toArray(), 
+            null, 
+            entityId, 
+            null, 
+            null, 
+            handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0],
+            // avatar.position.toArray().map((v,i) => Math.round(v/GRID_SIZE[i]))
+            //handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
+          )
+        }
       }
   
       setHandOrientation(hand, position, orientation) {
@@ -336,7 +338,7 @@ export default class ToolboxSystem {
       ) {
         let camera = this.world.camera,
             cPos = camera.position,
-            toolName = tool.name
+            toolName = tool.name;
   
         if ( toolName == "Geometry Tool" || toolName == "Material Tool" || toolName == "System Tool" )
           toolName = "Update Tool"
@@ -363,7 +365,7 @@ export default class ToolboxSystem {
             entity,
             entityId,
             primary
-          }
+          };
           
           if (oldCoords) {
             actionData.oldCoords = oldCoords;
