@@ -4,7 +4,8 @@ import { animate } from './render'
 import {
 	API_SERVER,
 	APP_NAME,
-	GRID_SIZE
+	GRID_SIZE,
+	isMobile
 } from '../config.js'
 import { send } from '../network/socket'
 import User from './user'
@@ -66,7 +67,7 @@ export default class Convolvr {
 
 	constructor( user: User, userInput: UserInput, socket: any, store: any, loadedCallback: Function ) {
 
-		let mobile = window.innerWidth < 480 || (window.innerWidth < 1024 && window.devicePixelRatio >= 1.5),
+		let mobile = isMobile(),
 			scene = new THREE.Scene(),
 			camera = null,
 			screenResX = window.devicePixelRatio * window.innerWidth,

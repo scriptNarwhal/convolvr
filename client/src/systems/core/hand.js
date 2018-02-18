@@ -58,8 +58,6 @@ export default class HandSystem {
 
                     if (entity) {
                         oldVoxel = [...entity.voxel];
-            
-                        
                         if (state.hand.trackedHands) {
                             component.mesh.remove(entity.mesh);
                             handPos = component.mesh.position
@@ -94,13 +92,13 @@ export default class HandSystem {
                     if (state.hand.trackedHands) {
                         entity.mesh.position.fromArray([0, 0, 0]);
                         component.mesh.add(entity.mesh);
-                        entity.mesh.translateZ(zPosition-2);
                     } else {
                         console.log("not tracked hands");
-                        entity.mesh.position.fromArray([0, -zPosition, zPosition-2]);
+                        entity.mesh.position.fromArray([0, 0,0]);
                         cursorMesh.add(entity.mesh);
                     }
                     entity.mesh.updateMatrix();
+                    entity.mesh.translateZ(zPosition-2);
                 }
             }
         }

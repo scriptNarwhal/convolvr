@@ -21,38 +21,35 @@ export let detectWorldDetailsFromURL = () => {
     })
 
     if ( params.length > 2 )
-
         worldDetails = [ params[1], params[2] ]
-
     
     if ( params.length > 4 && url.search( 'at/*\.*\.*' ) > -1 ) 
-
         coords = params[4].split(".").map( v => parseInt(v) )
 
     if ( isWorld && slashes >= 2 )
-        
         worldDetails = [params[1], params[2], isWorld, coords]
-        
-    
+            
     return worldDetails
-
 } 
 
 export let clearOldData = () => {
-
   if (localStorage.getItem("postProcessing") != null) {
-
     if (localStorage.getItem("version0.55") == null) {
-
         localStorage.clear();
         localStorage.setItem("version0.55", "1")
-
     }
-
   }
-
 }
 
-export let isMobile = () => window.innerWidth < 640 || window.devicePixelRatio >= 1.5 && window.innerWidth < 1280
+export let isMobile = () => {
+    let ratio = window.devicePixelRatio,
+        width = window.innerWidth;
+
+    if (ratio >= 2.5) {
+        return width <   window.innerHeight;
+    } else {
+        return width <= 480 || window.ratio >= 1.25 && width <= 720;
+    }
+}
 
 export let isVRMode = ( mode ) => (mode == "3d" || mode == "stereo")

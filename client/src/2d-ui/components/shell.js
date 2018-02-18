@@ -167,7 +167,7 @@ export default connect(
 
 let styles = {
   shell: ( hasMenu, menuOpen, menuOnly, noBackground, droppingFile ) => {
-    let mobile = window.innerWidth <= 640
+    let mobile = isMobile()
     return {
       margin: 'auto',
       position: 'fixed',
