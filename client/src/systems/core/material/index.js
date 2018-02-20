@@ -143,15 +143,12 @@ export default class MaterialSystem {
                 }
 
                 if ( prop.alphaMap || prop.bumpMap ) {
-
                   this._loadAlphaMap( prop, textureConfig, material, assets, () => {
                     if ( !!!prop.bumpMap ) { onMapsLoaded( material ) } // cache material for later
                   })
-
                   this._loadBumpMap( prop, textureConfig, material, assets, () => {
                     onMapsLoaded( material ) // cache material for later
                   })
-
                 } else {
                   onMapsLoaded( material ) 
                 }
@@ -175,7 +172,6 @@ export default class MaterialSystem {
             !!prop.map && assets.loadImage( prop.map, textureConfig, texture => { 
 
               if ( !!prop.repeat )
-
                 this._setTextureRepeat( texture, prop.repeat )
 
               texture.anisotropy = anisotropy
@@ -195,21 +191,24 @@ export default class MaterialSystem {
               })
 
             } else {
-              
               onMapsLoaded( material ) 
-
             }
-
           } 
-
         } else {
           material = assets.materials[ materialCode ]
         }
 
       return {
           material,
-          materialCode
+          materialCode,
+          getTextureCode: (mapType: string) => {
+            this._getTextureCode(prop, mapType)
+          }
       }
+    }
+
+    _getTextureCode( prop, mapType: string ) {
+     return `${prop[mapType]}:${prop.repeat ? prop.repeat.join(".") : ""}`;
     }
 
     _loadAlphaMap ( prop, textureConfig, material, assets, callback ) {
@@ -219,7 +218,6 @@ export default class MaterialSystem {
         let renderer = this.world.three.renderer
 
         if ( !!prop.repeat )
-        
           this._setTextureRepeat( texture, prop.repeat )
         
         texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
@@ -237,7 +235,6 @@ export default class MaterialSystem {
               let renderer = this.world.three.renderer
       
               if ( !!prop.repeat )
-              
                 this._setTextureRepeat( texture, prop.repeat )
               
               texture.anisotropy = renderer.capabilities.getMaxAnisotropy()

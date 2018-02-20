@@ -1,5 +1,7 @@
 export default class TextSystem {
-    constructor ( ) {
+    constructor ( world ) {
+        this.world = world;
+        this.systems = world.systems;
         this.mappedColors = [
             "#505050", "#ffffff", "#ffff00", "#ff0020", "#0080ff", 
             "#ff3000", "#ffb000", "#7000ef", "#00a0ff", "#505050" 
@@ -24,6 +26,17 @@ export default class TextSystem {
         textCanvas.height = canvasSize[1]
         document.body.appendChild(textCanvas)
         context = textCanvas.getContext("2d")
+
+        //get old diffuse map / color
+        let oldDiffuseCode = component.state.material.getTextureCode("map"),
+            oldMapImg = this.systems.assets.textures[ oldDiffuseCode ]
+
+        if (oldMapImg) {
+            oldMapImg = oldMapImg.image;
+            config.noBackground = true;
+            this._renderBackground(oldMapImg, context);
+        }
+
         this._renderText(context, text, color, background, canvasSize, config )
         
         textTexture = new THREE.Texture( textCanvas )
@@ -55,6 +68,10 @@ export default class TextSystem {
                 this._write( component, text )
             }
         }
+    }
+
+    _renderBackground(image, context) {
+        context.drawImage(image, 0, 0)
     }
 
     _resizeComponent(component: Component, size: number[]) {
@@ -101,9 +118,10 @@ export default class TextSystem {
             lines = 0,
             line = '',
             l = 0
-
-        context.fillStyle = background
-        context.fillRect(0, 0, canvasSize[0], canvasSize[1])
+        if (!!!config.noBackground) {
+            context.fillStyle = background
+            context.fillRect(0, 0, canvasSize[0], canvasSize[1])
+        }
         context.font = config.fontFamily ? config.fontFamily : "10px Roboto"
         context.font = "10px Roboto"
         context.font = context.font.replace(/\d+px/, fontSize+"px");
@@ -153,7 +171,7 @@ export default class TextSystem {
             if (parsed || parsed === 0) {
                 context.fillStyle = this.mappedColors[ parsed ]
             }
-            context.fillText(letter, -16+lIndex*22, 960-((lines-l)*lineHeight))
+            context.fillText(letter, -22+lIndex*22, 960-((lines-l)*lineHeight))
         })
         context.fillStyle = textState.fillStyle;
     }

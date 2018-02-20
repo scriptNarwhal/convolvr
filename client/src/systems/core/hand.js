@@ -69,7 +69,7 @@ export default class HandSystem {
                              let newEntPos = avatarPos.toArray();
                             // newEntPos[2] += cursorMesh.position.z;
                             entity.update(newEntPos, avatar.mesh.quaternion.toArray())
-                            entity.mesh.translateZ(-entity.boundingRadius+cursorMesh.position.z)
+                            entity.mesh.translateZ(-entity.boundingRadius+cursorMesh.position.z+1)
                         }
                         three.scene.add(entity.mesh);
                         
