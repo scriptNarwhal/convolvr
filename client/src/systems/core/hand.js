@@ -49,7 +49,6 @@ export default class HandSystem {
         }
 
         if (cursor) {
-            console.log("cursorMesh", cursorMesh)
             avatarPos = component.entity.mesh.position
             if (Math.round(value) == -1) {
                 if (state.hand.grabbedEntity) {
@@ -58,6 +57,7 @@ export default class HandSystem {
 
                     if (entity) {
                         oldVoxel = [...entity.voxel];
+                        entity.removeTag("no-raycast");
                         if (state.hand.trackedHands) {
                             component.mesh.remove(entity.mesh);
                             handPos = component.mesh.position
@@ -66,7 +66,9 @@ export default class HandSystem {
                         } else {
                             cursorMesh.remove(entity.mesh);
                              // cursorMesh.position // 
-                            entity.update(avatarPos.toArray(), avatar.mesh.quaternion.toArray())
+                             let newEntPos = avatarPos.toArray();
+                            // newEntPos[2] += cursorMesh.position.z;
+                            entity.update(newEntPos, avatar.mesh.quaternion.toArray())
                             entity.mesh.translateZ(-entity.boundingRadius+cursorMesh.position.z)
                         }
                         three.scene.add(entity.mesh);
@@ -84,17 +86,16 @@ export default class HandSystem {
                 if (!!entity && !!!state.hand.grabbedEntity) {
                     let zPosition = -entity.boundingRadius || -12;
                     
-                    console.info("Pick Up")
                     three.scene.remove(entity.mesh);
                     state.hand.grabbedEntity = entity; 
+                    entity.addTag("no-raycast");
                     entity.mesh.quaternion.fromArray([0, 0, 0, 1]);
 
                     if (state.hand.trackedHands) {
                         entity.mesh.position.fromArray([0, 0, 0]);
                         component.mesh.add(entity.mesh);
                     } else {
-                        console.log("not tracked hands");
-                        entity.mesh.position.fromArray([0, 0,0]);
+                        entity.mesh.position.fromArray([0, 0, 0]);
                         cursorMesh.add(entity.mesh);
                     }
                     entity.mesh.updateMatrix();
@@ -104,7 +105,7 @@ export default class HandSystem {
         }
     }
 
-    setHandOrientation ( component, position, rotation, index ) {
+    setHandOrientation(component, position, rotation, index) {
         let mesh = component.mesh
 
         if ( mesh ) {
@@ -124,7 +125,6 @@ export default class HandSystem {
             cursors = avatar.componentsByProp.cursor,
             hands = avatar.componentsByProp.hand
 
-        console.log("this.toggleTrackedHands( ", toggle, " )")
         if (!avatar || !avatar.mesh) {
             console.warn("toggleTrackedHAnds FaileD!!")
             console.warn("No avatar entity for hand.toggleTrackedHands()")
@@ -135,15 +135,15 @@ export default class HandSystem {
             hands = avatar.componentsByProp.hand
         }
 
-      if ( cursors ) {
+      if (cursors) {
        cursors[0].mesh.visible = !toggle
       }
 
-      hands.map( ( handComponent, i ) => {
+      hands.map((handComponent, i) => {
         let hand = handComponent.mesh,
             handState = handComponent.state.hand
 
-        if ( toggle && handState.trackedHands == false) {
+        if (toggle && handState.trackedHands == false) {
             //this.headMountedCursor.mesh.visible = false // activate under certain conditions..
             if (hand.parent) {
                 hand.parent.remove(hand)
@@ -152,7 +152,7 @@ export default class HandSystem {
             }
             scene.add(hand)
             hand.position.set(position.x -0.7+ i*1.4, position.y -0.4, position.z -0.5)
-            if ( i > 0 ) {
+            if (i > 0) {
               if ( !!hand.children[0] ) {
                 hand.children[0].visible = true
               }

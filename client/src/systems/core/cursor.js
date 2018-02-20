@@ -6,23 +6,20 @@ let handDirection = new THREE.Vector3(0, 0, 0),
 
 export default class CursorSystem {
 
-    constructor ( world: Convolvr ) {
-
+    constructor (world: Convolvr) {
         this.world = world
         this.entityCoolDown = -1
         this.resetEntityTimeout = null
         this.selectAnimTimeout = null
-
     }
     
-    init ( component: Component ) {
+    init (component: Component) {
         return {
             distance: 32000
         }
     }
 
     rayCast ( world, camera, cursor, hand, handMesh, callback ) { // public method; will use from other systems
-
         let voxels = world.systems.terrain.voxels,
             raycaster = world.raycaster,
             coords = [ 0, 0, 0 ],
@@ -56,9 +53,9 @@ export default class CursorSystem {
 
         if ( i > 0 ) { //console.log( i+1, " intersections")
             while ( i > -1 ) {
-                obj = intersections[ i ]
-                entity = obj.object.userData.entity
-                if ( !! entity && entity.componentsByProp.terrain ) {
+                obj = intersections[ i ];
+                entity = obj.object.userData.entity;
+                if (entity && (entity.componentsByProp.terrain || entity.hasTag("no-raycast"))) {
                     i -= 1
                     continue
                 }
@@ -80,17 +77,16 @@ export default class CursorSystem {
     }
 
     getSurroundingVoxels ( voxels, coords ) {
-
         let castObjects = [],
             key = "",
             x = -1,
             z = -1,
             i = 0
 
-        while ( x < 2 ) {
-            while ( z < 2 ) {
+        while (x < 2) {
+            while (z < 2) {
                 key = [ coords[ 0 ] + x, 0, coords[ 2 ] + z ].join(".")
-                if ( typeof voxels[ key ] == 'object' ) { //console.warn("Empty Voxel! ", key, voxels[ key ] ) }
+                if ( typeof voxels[ key ] == 'object') { //console.warn("Empty Voxel! ", key, voxels[ key ] ) }
                     castObjects = castObjects.concat( !!voxels[ key ] ? voxels[ key ].meshes : [] )
                 } else {
                     //console.warn(key, 'notloaded')
@@ -101,11 +97,10 @@ export default class CursorSystem {
             x ++
         }
         
-        if ( voxels[ "0.1.0" ] != null )
-
+        if (voxels[ "0.1.0" ] != null)
             castObjects = castObjects.concat(voxels[ "0.1.0" ].meshes )
     
-        while ( i < castObjects.length ) {
+        while (i < castObjects.length) {
             if ( !!!castObjects[ i ] ) {
                 castObjects.splice( i, 1 )
             } else {
@@ -116,24 +111,23 @@ export default class CursorSystem {
     }
 
     handleCursors ( cursors, cursorIndex, hands, camera, world ) {
-
         let handMesh = null,
             input = world.userInput,
             cursorSystem = world.systems.cursor
 
-        cursors.map(( cursor, i ) => { // animate cursors & raycast scene
+        cursors.map((cursor, i) => { // animate cursors & raycast scene
 
             let state = cursor.state.cursor,
                 cursorMesh = cursor.mesh
             
-            cursorSystem._animateCursors( world, input, cursorSystem, cursor, cursorMesh, state, i, cursorIndex )
-            if ( i > 0 ) { // possibly refactor this to stop hands from lagging behind at high speed*
+            cursorSystem._animateCursors(world, input, cursorSystem, cursor, cursorMesh, state, i, cursorIndex)
+            if (i > 0) { // possibly refactor this to stop hands from lagging behind at high speed*
                 handMesh = cursors[i].mesh.parent
                 !!handMesh && handMesh.updateMatrix()
             }
 
-            if ( i == cursorIndex ) // ray cast from one cursor at a time to save CPU
-                cursorSystem.rayCast( world, camera, cursor, i -1, handMesh, cursorSystem._cursorCallback )
+            if (i == cursorIndex) // ray cast from one cursor at a time to save CPU
+                cursorSystem.rayCast(world, camera, cursor, i -1, handMesh, cursorSystem._cursorCallback)
 
         })
 
@@ -149,7 +143,6 @@ export default class CursorSystem {
     }
 
     _cursorCallback ( cursor, hand, world, obj, entity, component ) {
-
         let cursorState = cursor.state,
             distance = !!cursorState.cursor ? cursorState.cursor.distance : 2,
             props = !!component ? component.props : false,
@@ -163,10 +156,8 @@ export default class CursorSystem {
             comp = false,
             cb = 0
 
-        if ( !!obj ) {
-
+        if (!!obj) {
             if ( !!!cursorState.cursor.entity && !!! noRayCast )
-
                 window.navigator.vibrate && window.navigator.vibrate(25)
 
             newCursorState = {
@@ -215,7 +206,6 @@ export default class CursorSystem {
     }
 
     _animateCursors ( world, input, cursorSystem, cursor, cursorMesh, state, i, cursorIndex ) {
-
         let cursorState = cursor.state.cursor,
             cursorPos = cursorMesh.position,
             cursorSpeed = (cursorState.speed || 0 +(cursorState.speed || 0 +( state.distance - cursorPos.z ) / 8) / 2.0)/2.0,

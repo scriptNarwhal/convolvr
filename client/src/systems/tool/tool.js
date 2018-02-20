@@ -18,7 +18,6 @@ export default class ToolSystem {
     }
 
     init ( component: Component ) { 
-
         let prop = component.props.tool,
             toolSystem = this,
             contentProps = {},
@@ -66,8 +65,7 @@ export default class ToolSystem {
         }
     }
 
-    _initPanelUIEntity( panelProp: Object, contentProps: Object ) {
-
+    _initPanelUIEntity(panelProp: Object, contentProps: Object) {
         return new Entity(-1, [ // move panels to asset system perhaps.. or define below*
             {
                 position: [0, 0, 0],
@@ -143,16 +141,15 @@ export default class ToolSystem {
                 }),
                 components: []
             }
-        ], [0, -0.75, 0], [0,0,0,1], GLOBAL_SPACE )
+        ], [0, -0.75, 0], [0,0,0,1], GLOBAL_SPACE)
     }
 
-    _showPreview ( component: Component, cursor: Component ) {
-
+    _showPreview(component: Component, cursor: Component) {
         let previewBox = component.state.tool.preview ? component.state.tool.preview.box : null,
             assets = this.world.systems.assets,
             preview = null
 
-        if ( previewBox == null && cursor ) {
+        if (previewBox == null && cursor) {
 
             preview = assets.makeEntity( "preview-box", true, {}, component.entity.voxel )
             preview.components[0].props.noRaycast = {}
@@ -165,7 +162,6 @@ export default class ToolSystem {
     }
 
     _hidePreview ( component: Component ) {
-
         let previewBox = component.state.tool.preview ? component.state.tool.preview.box : null
         
         if ( previewBox != null )
@@ -173,7 +169,6 @@ export default class ToolSystem {
     }
 
     _positionToolPanel( toolPanel: Entity, userPos: Array<number>, index: number ) {
-        
         let userPosition = [userPos[0], userPos[ 1 ] + 2.25, userPos[2]],
             mesh = toolPanel.mesh
 
@@ -185,7 +180,6 @@ export default class ToolSystem {
     }
 
     _equip ( component: Component, hand: number ) { // refactor for panels[]
-        
         let hands:            Array<Component> = this.world.user.avatar.componentsByProp.hand, //this.toolbox.hands,
             componentsByProp: any              = component.entity.componentsByProp,
             input                              = this.world.userInput,
@@ -195,8 +189,8 @@ export default class ToolSystem {
             toolMesh:         any              = component.entity.mesh,
             userPos:          Array<number>    = this.world.user.avatar.mesh.position.toArray()
 
-        if ( !input.trackedControls && !input.leapMotion ) {
-            this.world.user.mesh.add( toolMesh )
+        if (!input.trackedControls && !input.leapMotion) {
+            this.world.user.avatar.mesh.add( toolMesh )
             toolMesh.position.set( 0.05-( 0.08 * hand ), -0.333, -0.05 )
         } else {
             hands[ hand ].mesh.add( toolMesh ) // add to respective hand 
@@ -234,7 +228,6 @@ export default class ToolSystem {
     }
 
     _unequip ( component: Component, hand: number ) {
-
         let compMesh = component.mesh
 
         if ( compMesh != null && compMesh.parent != null )

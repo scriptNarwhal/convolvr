@@ -30,6 +30,7 @@ export default class Entity {
       this.name = name || `entity${this.id}:${this.voxel.join("x")}`
       this.lastFace = 0
       this._compPos = new THREE.Vector3()
+      this.tags = tags ? tags : [];
       this.handlers = {
         init: [],
         update: [],
@@ -47,6 +48,7 @@ export default class Entity {
       position: this.position,
       quaternion: this.quaternion,
       voxel: this.voxel,
+      tags: this.tags,
       boundingRadius: this.boundingRadius
     }
   }
@@ -85,16 +87,37 @@ export default class Entity {
     this.callHandlers("update")
   }
 
-  addHandler(type: string, handler: Function) {
+  addHandler(type: string, handler: Function): void {
     this.handlers[ type ].push( handler );
   }
 
-  callHandlers(type: string) {
+  callHandlers(type: string): void {
     let ent = this;
 
     this.handlers[ type ].forEach( handler => {
       handler( ent )
     })
+  }
+
+  addTag(tagName: string): void {
+    if (!this.hasTag(tagName)) {
+      this.tags.push(tagName);
+    }
+  }
+
+  removeTag(tagName: string): void {
+    let tagIndex = this._getTagIndex(tagName)
+    if (tagIndex > -1) {
+      this.tags.splice(tagIndex, 1);
+    }
+  }
+
+  hasTag(tagName: string): boolean {
+    return this._getTagIndex(tagName) > -1;
+  }
+
+  _getTagIndex(tagName: string) {
+    return this.tags.indexOf(tagName);
   }
 
   reInit( ) {

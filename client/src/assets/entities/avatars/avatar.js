@@ -5,9 +5,8 @@ import chatText from '../../components/chat-text'
 // default avatar
 let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 'vr hands'
 
-  console.log("init avatar, assetSystem ", assetSystem )
-
-        var mesh = null, // new THREE.Object3D();
+  console.log("init avatar: config: ", config )
+        let mesh = null, // new THREE.Object3D();
             entity = null,
             component = null,
             componentB = null,
@@ -17,11 +16,16 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
             cursorAxis = new THREE.Vector3( 1, 0, 0 ),
             wholeBody = !!config ? config.wholeBody : false,
             id = !!config && !!config.id ? config.id : assetSystem.autoEntityID(),
-            userData = { id, data: assetSystem.world.user.data ? assetSystem.world.user.data : { avatar: "default" } },
+            userData = { 
+              id: config.userId, 
+              name: config.userName ? config.userName : id,
+              data: assetSystem.world.user.data ? 
+                assetSystem.world.user.data : 
+                { avatar: "default" } 
+            },
             n = 2
         
         console.log("init avatar ", id)
-
         cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
         cursorComponent = (spotLight = false) => {
           return {
@@ -49,7 +53,6 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
         }
 
       if ( wholeBody ) {
-
         component = {
              props: { 
                 geometry: {
@@ -87,7 +90,6 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
          n = 0
       
         while (n < 2) {
-
           components.push(Object.assign({}, {
             props: {
               noRaycast: true,
@@ -105,11 +107,8 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
             components: []
           }))
           ++n
-
         }
-
       } else {
-
         components.push(Object.assign({}, {
           props: {
             geometry: {
@@ -128,13 +127,9 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
             Object.assign( {}, cursorComponent(false) )
           ]
         }))
-
       }
-
-      n = 0
-
+      n = 0;
       while (n < 2) {
-
         components.push(Object.assign({}, {
           props: {
             hand: n,
@@ -156,13 +151,11 @@ let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not jus
           ]
         }))
         ++n
-
       }
     components.push( chatText(config) )
     entity = new Entity( id, components, [0,0,0], [0,0,0,1], voxel )
-  
-    return entity
 
+    return entity
 }
 
 export default avatar

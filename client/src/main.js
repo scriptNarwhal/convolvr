@@ -68,13 +68,22 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       altitude:  number        = systems.terrain.voxels[ voxelKey ].data.altitude
 
   world.onUserLogin = newUser => { // 
-    avatar = systems.assets.makeEntity(  newUser.data.avatar || "default-avatar", true, { userId: newUser.name, wholeBody: false }, coords ) // entity id can be passed into config object
+    avatar = systems.assets.makeEntity(  
+      newUser.data.avatar || "default-avatar", 
+      true, 
+      { 
+        userId: newUser.id, 
+        userName: newUser.name,
+        wholeBody: false 
+      }, 
+      coords 
+    ) // entity id can be passed into config object
     avatar.init( scene )
     user.useAvatar( avatar )
     world.user = user
     user.toolbox = world.systems.toolbox
     
-    toolMenu = systems.assets.makeEntity( "tool-menu", true, {}, GLOBAL_SPACE ) // method for spawning built in entities
+    toolMenu = systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) // method for spawning built in entities
     user.hud = toolMenu
     toolMenu.init( scene, {}, (menu: Entity) => { 
       menu.componentsByProp.toolUI[0].state.toolUI.updatePosition()

@@ -5,9 +5,7 @@ import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 export default class EntityTool extends Tool  {
 
   constructor ( data, world, toolbox ) {
-
     super(data, world, toolbox)
-
     let assets = world.systems.assets,
         allEntities = assets.entitiesByName,
         allOptions = [],
@@ -32,10 +30,11 @@ export default class EntityTool extends Tool  {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 0.08, 0.05, 0.333 ]
+                size: [ 0.3, 0.2, 0.433 ]
               },
               material: {
-                name: "metal"
+                name: "metal",
+                color: 0x000000
               },
               tool: {
                 panels: [
@@ -86,7 +85,6 @@ export default class EntityTool extends Tool  {
     }
 
     primaryAction ( telemetry, params = {} ) { // place entity
-      
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
           systems = this.world.systems,
@@ -96,14 +94,25 @@ export default class EntityTool extends Tool  {
           quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
           user = this.world.user,
-          entity =  params.entity ? params.entity : assetSystem.makeEntity( this.options.entityType, null, {}, telemetry.voxel ),
+          entity =  params.entity ? 
+            params.entity : 
+            assetSystem.makeEntity( 
+              this.options.entityType, 
+              null, 
+              {}, 
+              telemetry.voxel 
+            ),
           tooManyComponents = !!selected && selected.components.length >= 48,
           pointingAtTerrain = !!selected && selected.componentsByProp.terrain
   
       console.log( "( Entity Tool )", telemetry, params, entity )
 
       if ( ! tooManyComponents ) {
-        if ( selected && selected.componentsByProp && !!!selected.componentsByProp.miniature && (cursorState.distance < 100) ) { // switch to component tool
+        if ( 
+          selected && selected.componentsByProp &&
+          !!!selected.componentsByProp.miniature && 
+          (cursorState.distance < 100)
+        ) { // switch to component tool
             user.toolbox.useTool( 1, telemetry.hand, false )
             user.hud.componentsByProp.toolUI[0].state.toolUI.show()
             //user.toolbox.usePrimary( telemetry.hand )
@@ -123,24 +132,20 @@ export default class EntityTool extends Tool  {
     }
 
     secondaryAction ( telemetry, value ) {
-      
       this.current += value // cycle entities
-
       if ( this.current >= this.all.length ) {
         this.current = 0
       } else if ( this.current < 0 ) {
         this.current = this.all.length -1
       }
-
       this.selectedEntity = null
       this.options.entityType = this.all[ this.current ]
-
       if ( this.entity.componentsByProp ) {
-        this.entity.componentsByProp.text[ 0 ].state.text.update( this.options.entityType )
+        this.entity.componentsByProp.text[ 0 ].state.text.update( 
+          this.options.entityType 
+        )
       }
-
       return false // no socket event
-
     }
     
     configure ( config ) {

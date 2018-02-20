@@ -8,7 +8,7 @@ let chatScreen = {
                         shape: "box",
                         size: [ 3, 3, 0.25 ]
                     },
-                        material: {
+                    material: {
                         color: 0x808080,
                         name: "plastic"
                     },

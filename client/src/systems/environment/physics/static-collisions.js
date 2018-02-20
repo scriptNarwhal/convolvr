@@ -1,7 +1,7 @@
 //@flow
-import Convolvr from '../../world/world'
-import Component from '../../component'
-import Entity from '../../entity'
+import Convolvr from '../../../world/world'
+import Component from '../../../component'
+import Entity from '../../../entity'
 import * as THREE from 'three'
 
 

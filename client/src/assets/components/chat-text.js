@@ -8,9 +8,15 @@ let chatText = (config) => {
                 size: [4, 0.8, 1.2],
                 shape: "box"
             },
+            material: {
+                color: 0x808080,
+                 name: "plastic"
+            },
             text: {
                 label: true,
-                lines: ["..."]
+                lines: ["..."],
+                color: "#00ff00",
+                background: "#000000"
             },
             chat: {
                 displayMessages: true,

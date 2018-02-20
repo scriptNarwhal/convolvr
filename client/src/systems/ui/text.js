@@ -1,5 +1,4 @@
 export default class TextSystem {
-
     constructor ( ) {
         this.mappedColors = [
             "#505050", "#ffffff", "#ffff00", "#ff0020", "#0080ff", 
@@ -7,8 +6,7 @@ export default class TextSystem {
         ]
     }
 
-    init (component: Component) {
-
+    init(component: Component) {
         let prop = component.props.text,
             text = prop.lines,
             color = prop.color,
@@ -16,7 +14,8 @@ export default class TextSystem {
             textTexture = null,
             textMaterial = null,
             textCanvas = document.createElement("canvas"),
-            canvasSize = !!prop.label ? [512, 128] : [1024, 1024],
+            canvasSizePOT = !!prop.canvasSize ? prop.canvasSize : [10, 10],
+            canvasSize = !!prop.label ? [512, 128] : [Math.pow(2, canvasSizePOT[0]), Math.pow(2, canvasSizePOT[1])],
             context = null,
             config = { label: !!prop.label, fontSize: prop.fontSize != 0 ? prop.fontSize : -1 }
 
@@ -25,7 +24,6 @@ export default class TextSystem {
         textCanvas.height = canvasSize[1]
         document.body.appendChild(textCanvas)
         context = textCanvas.getContext("2d")
-        
         this._renderText(context, text, color, background, canvasSize, config )
         
         textTexture = new THREE.Texture( textCanvas )
@@ -34,10 +32,11 @@ export default class TextSystem {
             map: textTexture,
             side: 0
         })
-      
         textMaterial.map.needsUpdate = true
         component.mesh.material = textMaterial
-
+        if (canvasSize[0] != canvasSize[1]) {
+            this._resizeComponent(component, canvasSize)
+        }
         return {
             textMaterial,
             textMesh: component.mesh,
@@ -47,7 +46,6 @@ export default class TextSystem {
             context,
             config,
             update: ( textProp ) => {
-
                 if ( !!textProp )
                     component.props.text = Object.assign( {}, component.props.text, textProp )
 
@@ -59,14 +57,18 @@ export default class TextSystem {
         }
     }
 
-    _write (component: Component, text: string) {
-
-        component.props.text.lines.push( text )
-
+    _resizeComponent(component: Component, size: number[]) {
+        let geomProp = component.props.geometry,
+            currentSize = geomProp.size;
+        
+        
     }
 
-    _update (component: Component) {
+    _write(component: Component, text: string) {
+        component.props.text.lines.push( text )
+    }
 
+    _update(component: Component) {
         let prop         = component.props.text,
             state        = component.state.text,
             text         = prop.lines,
@@ -83,8 +85,7 @@ export default class TextSystem {
         textTexture.needsUpdate = true   
     }
 
-    _renderText ( context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: Object ) {
-
+    _renderText(context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: Object) {
         let textLine = '',
             fontSize = (config.fontSize > 0 ? config.fontSize : (label ? 58 : 39)),
             lineHeight = fontSize*1.35,
@@ -103,14 +104,14 @@ export default class TextSystem {
 
         context.fillStyle = background
         context.fillRect(0, 0, canvasSize[0], canvasSize[1])
-        context.font = config.fontFamily ? config.fontFamily : "10px Droid Sans Mono"
-        context.font = "10px Droid Sans Mono"
+        context.font = config.fontFamily ? config.fontFamily : "10px Roboto"
+        context.font = "10px Roboto"
         context.font = context.font.replace(/\d+px/, fontSize+"px");
         context.textBaseline = "top"
         context.fillStyle = color
         lines = text.length
 
-        while ( l < text.length ) {
+        while (l < text.length) {
             line = text[ l ]
             if ( line.length > (42) * (canvasSize[0]/1024) ) {
                 let multiLines = line.match(/.{1,42}/g)
@@ -120,24 +121,24 @@ export default class TextSystem {
             ++l
         }
 
-        if ( label ) {
+        if (label) {
             text.map(( line, l ) => { 
                 context.fillText( line, 12, 12 )
             })
         } else {
-            text.map(( line, l ) => { 
+            text.forEach(( line, l ) => { 
                 this._highlightMarkdown( l, line, lines, context, textRenderState ) // markdown
                 if (line[0] == '%' || /^.*\:\s\%/.test(line) ) {
-                    this._highlightSynesthesia( l, line, lines, context, textRenderState )
+                    let outputLine = " "+line.substr(1, line.length-1)
+                    this._highlightSynesthesia(l, outputLine, lines, context, textRenderState)
                 } else {
-                    context.fillText( line, 16, 960-(1 + (lines-l)*lineHeight) )
+                    context.fillText(line, 16, 960-(1 + (lines-l)*lineHeight))
                 }
             })
         }
     }
 
-    _highlightSynesthesia ( l: number, line: string, lines: number, context: any, textState: Object ) {
-
+    _highlightSynesthesia(l: number, line: string, lines: number, context: any, textState: Object) {
         let xSize = textState.canvasSize[0],
             lineHeight = textState.fontSize*1.35,
             height = 960-(1 + (lines-l)*lineHeight),
@@ -145,21 +146,19 @@ export default class TextSystem {
             len = 0
       
         letters = line.split("")
-            len = letters.length
-
-            line.split("").map( (letter, lIndex) => {
-                let parsed = parseInt( letter );
-                
-                if ( parsed || parsed === 0) {
-                    context.fillStyle = this.mappedColors[ parsed ]
-                }
-                context.fillText( letter, lIndex*22, 960-((lines-l)*lineHeight) )
-            })
+        len = letters.length
+        line.split("").map((letter, lIndex) => {
+            let parsed = parseInt(letter);
+            
+            if (parsed || parsed === 0) {
+                context.fillStyle = this.mappedColors[ parsed ]
+            }
+            context.fillText(letter, -16+lIndex*22, 960-((lines-l)*lineHeight))
+        })
         context.fillStyle = textState.fillStyle;
     }
 
     _highlightMarkdown( l, line, lines, context, textState ) {
-
         let xSize = textState.canvasSize[0],
             lineHeight = textState.fontSize,
             height = 960-(1 + (lines-l)*lineHeight),
