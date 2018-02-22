@@ -1,4 +1,4 @@
- import { 
+ import {
   GRID_SIZE,
   API_SERVER
  } from './config'
@@ -54,13 +54,13 @@ export default class Entity {
   }
 
   update( position, quaternion = false, components, component, componentPath, config = {} ) {
-    let entityConfig = Object.assign({}, config, { updateWorkers: true } )
+    let entityConfig = Object.assign({}, config, { updateWorkers: true } );
 
-    if ( !! componentPath ) {
+    if ( !! componentPath && componentPath.length > 0 ) {
       this.updateComponentAtPath( component, componentPath )
       this.init( this.anchor, entityConfig )
     }
-    if ( !! components ) {
+    if ( !! components && components.length > 0) {
       this.components = components
       this.init( this.anchor, entityConfig )
     }
@@ -71,11 +71,12 @@ export default class Entity {
       }
       if ( !!quaternion ) {
         this.quaternion = quaternion
-        this.mesh.quaternion.fromArray( quaternion )  
+        this.mesh.quaternion.fromArray( quaternion )
       }
+
       this.updateWorkers(
-        "update-telemetry", 
-        three.world.systems, 
+        "update-telemetry",
+        three.world.systems,
         {
           oldCoords: this.oldCoords
         }
@@ -149,9 +150,9 @@ export default class Entity {
         s = 0
 
     this.lastFace = 0
-    this.componentsByProp = {} // reset before (re)registering components 
+    this.componentsByProp = {} // reset before (re)registering components
     this.allComponents = []
-    
+
     if ( this.mesh != null ) {
 
       world.octree.remove( this.mesh )
@@ -169,8 +170,8 @@ export default class Entity {
       workerUpdate = !! config && config.updateWorkers ? "add" : workerUpdate
     }
 
-    this.anchor = parent 
-    
+    this.anchor = parent
+
     if ( this.components.length == 0 ) {
       console.warn("Entity must have at least 1 component")
       return false
@@ -180,15 +181,15 @@ export default class Entity {
 
         comp = new Component( this.components[ c ], this, systems, { mobile, index: c, path: [ c ] } ) // use simpler shading for mobile gpus
         compMesh = comp.mesh
-        if ( !!!compMesh || !!!compMesh.geometry.computeBoundingSphere ) { 
-          console.error("no geometry; aborting", c, this) 
+        if ( !!!compMesh || !!!compMesh.geometry.computeBoundingSphere ) {
+          console.error("no geometry; aborting", c, this)
         }
- 
+
         compMesh.geometry.computeBoundingSphere() // check bounding radius
-        compRadius = compMesh.geometry.boundingSphere.radius 
+        compRadius = compMesh.geometry.boundingSphere.radius
         dimensions = [
           Math.max( dimensions[ 0 ], Math.abs( compMesh.position.x ) + compRadius ),
-          Math.max( dimensions[ 1 ], Math.abs( compMesh.position.y ) + compRadius ), 
+          Math.max( dimensions[ 1 ], Math.abs( compMesh.position.y ) + compRadius ),
           Math.max( dimensions[ 2 ], Math.abs( compMesh.position.z ) + compRadius )
         ]
 
@@ -201,13 +202,13 @@ export default class Entity {
             component: comp,
             from: this.lastFace,
             to: toFace
-          })  
+          })
           this.lastFace = toFace
-          
+
         }
 
         if ( comp.merged ) {
-          
+
           this.combinedComponents.push( comp )
           materials.push( compMesh.material )
           compMesh.updateMatrix()
@@ -261,7 +262,7 @@ export default class Entity {
 
     !! this.position && mesh.position.fromArray( this.position )
 
-    mesh.userData = { 
+    mesh.userData = {
       entity: this,
       compsByFaceIndex: this.compsByFaceIndex
     }
@@ -273,7 +274,7 @@ export default class Entity {
     if ( (!!!config || !!!config.noVoxel) && addToOctree )
       this.addToVoxel( this.voxel, mesh )
 
-    
+
     mesh.matrixAutoUpdate = false
     mesh.updateMatrix()
     !! callback && callback( this )
@@ -289,7 +290,7 @@ export default class Entity {
     }
     this.callHandlers("save")
   }
-    
+
   saveNewEntity () {
     let data = this.serialize()
 
@@ -302,7 +303,7 @@ export default class Entity {
       console.error("Entity failed to save", response)
     })
   }
-    
+
   saveUpdatedEntity ( oldVoxel ) {
     let data = this.serialize()
     console.info("save", data)
@@ -314,7 +315,7 @@ export default class Entity {
       console.info("Entity Updated", this)
     }).catch( response => {
       console.error("Entity failed to send update", response)
-    })   
+    })
   }
 
   getVoxel ( initial, check ) {
@@ -326,7 +327,7 @@ export default class Entity {
       coords = [Math.floor( position[ 0 ] / GRID_SIZE[ 0 ] ), 0, Math.floor( position[ 2 ] / GRID_SIZE[ 2 ] )]
     } else {
       coords = this.voxel
-    }        
+    }
     if (check) {
       if (this.voxel[0] != coords[0] || this.voxel[1] != coords[1] || this.voxel[2] != coords[2]) {
         this.onVoxelChanged(coords)
@@ -347,8 +348,8 @@ export default class Entity {
   addToVoxel ( coords, mesh ) {
     let ent = this;
 
-    this.getVoxelForUpdate( coords, addTo => { 
-      addTo.meshes.push( mesh ) 
+    this.getVoxelForUpdate( coords, addTo => {
+      addTo.meshes.push( mesh )
       addTo.entities.push( ent )
     })
     this.callHandlers("addToVoxel")
@@ -428,7 +429,7 @@ export default class Entity {
 
         if ( oldState.tool || oldState.toolUI )
           sanitizedState = { tool: {}, toolUI: {} }
-        
+
         component.state = Object.assign({}, oldState, component.state || {}, sanitizedState )
       }
 
@@ -437,7 +438,7 @@ export default class Entity {
       } else {
         components[ path[ pathIndex ] ] = component
       }
-    }   
+    }
   }
 
   updateWorkers ( mode, systems, config = {} ) {
@@ -464,7 +465,7 @@ export default class Entity {
     } else if ( mode == "update") {
       message = JSON.stringify({
         command: "update entity",
-        data: { 
+        data: {
           entityId: this.id,
           coords: this.voxel,
           entity: entityData
@@ -481,13 +482,13 @@ export default class Entity {
           oldCoords: config.oldCoords,
           position: entityData.position,
           quaternion: entityData.quaternion
-        } 
+        }
       })
     }
   }
 
   getClosestComponent( position, recursive = true ) {
-    let compPos = this._compPos, 
+    let compPos = this._compPos,
         entMesh = this.mesh,
         worldCompPos = null,
         distance = 0.0900,
@@ -505,7 +506,7 @@ export default class Entity {
       compPos.setFromMatrixPosition( component.mesh.matrixWorld ) // get world position
       newDist = compPos.distanceTo( position )
 
-      if ( newDist < distance ) { 
+      if ( newDist < distance ) {
         distance = newDist
         closest = component
       }
@@ -520,8 +521,8 @@ export default class Entity {
           compPos.fromArray( component.data.position )
           worldCompPos = entMesh.localToWorld( compPos )
           newDist = worldCompPos.distanceTo( position ) //console.log("compPos", compPos, "worldCompPos", worldCompPos, "newDist", newDist)
-          
-          if ( newDist < distance ) {  
+
+          if ( newDist < distance ) {
             distance = newDist
             closest = component
           }
@@ -542,7 +543,7 @@ export default class Entity {
     this.compsByFaceIndex.forEach((comp) => {
       if ( face >= comp.from && face <= comp.to ) {
         component = comp.component
-      } 
+      }
     })
 
     return component

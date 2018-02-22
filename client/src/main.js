@@ -67,7 +67,8 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       voxelKey:  string        = coords.join("."),
       altitude:  number        = systems.terrain.voxels[ voxelKey ].data.altitude
 
-  world.onUserLogin = newUser => { // 
+  world.onUserLogin = newUser => {
+    console.log("on user login: ", newUser)
     avatar = systems.assets.makeEntity(  
       newUser.data.avatar || "default-avatar", 
       true, 
@@ -97,8 +98,8 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       pos.set( pos.x -25+Math.random()*50, pos.y + 25, pos.z -25+Math.random()*50 )
       
   }
-   world.initChatAndLoggedInUser( localStorage.getItem("username") != null )    
   
+  world.initChatAndLoggedInUser( localStorage.getItem("username") != null )    
   
   chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( scene )

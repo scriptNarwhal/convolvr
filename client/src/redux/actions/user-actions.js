@@ -137,7 +137,7 @@ export function login ( user, pass, email, data ) {
 }
 
 export function loginDone ( response ) {
-
+    
     setTimeout(()=>{
         let data = response.data,
         worldUser = three.world.user

@@ -45,32 +45,32 @@ self.update = ( ) => {
 		voxel = voxelList[ i ]
 
 		if ( !!!voxel || !!!voxel.position) continue
-		if ( !!voxel && distance2dCompare( position, voxel.position, 180 ) ) { 	// do collisions on voxels & structures... just walls at first..		
+		if ( !!voxel && distance2dCompare( position, voxel.position, 180 ) ) { 	// do collisions on voxels & structures... just walls at first..
 			if ( voxel.loaded == undefined ) {
 				voxel.loaded = true
 				self.postMessage('{"command": "load entities", "data":{"coords":"'+voxel.cell[0]+'.'+voxel.cell[1]+'.'+voxel.cell[2]+'"}}');
 			}
 			if ( distance2dCompare( position, voxel.position, 60 ) ) {
-					
+
 				let alt = voxel.altitude || 0
-				
+
 				yPos = voxel.position[1]
 				if ( distance2dCompare( position, voxel.position, 24.5 ) ) {
 					if ( position[1] > yPos - 21 + vrHeight  && position[1] < 14.25+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
 						collision = true
 						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
 					}
-				}	
+				}
 				if ( !!voxel.entities && voxel.entities.length > 0 ) {
 					collision = self.checkStaticCollisions( voxel, position )
-				}	
+				}
 			}
 		}
 	}
 
 	if ( !collision )
 		observer.prevPos = [ observer.position[0], observer.position[1], observer.position[2] ]
-	
+
 	self.postMessage('{"command": "update"}')
 	self.updateLoop = setTimeout( () => {
 		self.update()
@@ -133,7 +133,7 @@ self.checkStaticCollisions = ( voxel, position ) => {
 	return collision
 }
 
-self.onmessage = ( event ) => { 
+self.onmessage = ( event ) => {
 
 	var message  = JSON.parse( event.data ),
 		data 	 = message.data,
@@ -144,7 +144,7 @@ self.onmessage = ( event ) => {
 		entities = [],
 		c 		 = 0,
 		p 		 = 0
-		
+
 	if ( message.command == "update" ) {
 		// user.prevPos = [user.position[0], user.position[1], user.position[2]];
 		user.position = data.position
@@ -192,15 +192,15 @@ self.removeVoxels = ( message, data ) => {
 		voxel = null,
 		c 		 = 0,
 		p 		 = data.length -1
-	
+
 	while ( p >= 0 ) {
 		toRemove = data[p]
 		c = voxelList.length-1
-		
+
 		while ( c >= 0 ) {
 			voxel = voxelList[ c ]
-			if ( voxel != null && voxel.cell[0] == toRemove.cell[0] && voxel.cell[1] == toRemove.cell[1]  
-																	&& voxel.cell[2] == toRemove.cell[2] ) {	
+			if ( voxel != null && voxel.cell[0] == toRemove.cell[0] && voxel.cell[1] == toRemove.cell[1]
+																	&& voxel.cell[2] == toRemove.cell[2] ) {
 				voxelList.splice( c, 1 )
 				voxels[ voxel.cell.join(".")] = null
 			}
@@ -226,7 +226,7 @@ self.removeEntity = ( message, data ) => {
 	let entities = voxels[ data.coords.join(".") ].entities
 	if ( entities != null ) {
 		let c = entities.length-1
-		
+
 		while ( c >= 0 ) {
 			if ( entities[c].id == data.entityId ) {
 				voxels[ data.coords.join(".") ].entities.splice(c, 1)
@@ -254,7 +254,7 @@ self.updateEntity = ( message, data ) => {
 		let c = entities.length-1
 		while ( c >= 0 ) {
 			if (entities[ c ].id == data.entityId) {
-				entities[ c ] = data.entity			
+				entities[ c ] = data.entity
 				c = -1
 			}
 			c--
@@ -272,6 +272,7 @@ self.updateTelemetry = ( message, data ) => {
 		console.warn("can't update entity with no voxel")
 		return
 	}
+	console.log("physics worker: updateTelemetry()", message, data)
 	let entities = voxels[ cell ].entities,
 		oldCell = message.data.oldCoords.join("."),
 		oldEntities = voxels[oldCell];
@@ -281,9 +282,9 @@ self.updateTelemetry = ( message, data ) => {
 		while (c >= 0) {
 			let movedEnt = oldEntities[c]
 			if (movedEnt.id == data.entityId) {
-				oldEntities.splice(oldEntities.indedOf(movedEnt), 1)
+				oldEntities.splice(oldEntities.indexOf(movedEnt), 1)
 				entities.push(movedEnt)
-				console.log("update telemetry: moved between voxels")
+				console.log("physics worker: update telemetry: moved between voxels")
 				movedEnt.position = data.position
 				if (data.quaternion) {
 					movedEnt.quaternion = data.quaternion;
@@ -297,7 +298,7 @@ self.updateTelemetry = ( message, data ) => {
 			c = entities.length - 1
 			while (c >= 0) {
 				if (entities[c].id == data.entityId) {
-					console.info("update telemetry")
+					console.info("physics worker: update telemetry")
 					entities[c].position = data.position
 					if (data.quaternion) {
 						entities[c].quaternion = data.quaternion;
