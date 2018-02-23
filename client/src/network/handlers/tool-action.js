@@ -78,7 +78,6 @@ export default class ToolActionHandler {
                 case "Grab Entity":
                     console.log("Network Grab Entity: data.user", data.user, "user.name", user.name)
                     if (data.user != user.name) {
-
                         console.log("Network Grab Entity: actually replacing")
                         remoteUser = world.users["user" + data.userId]
                         userHand = remoteUser.avatar.componentsByProp.hand[data.hand]

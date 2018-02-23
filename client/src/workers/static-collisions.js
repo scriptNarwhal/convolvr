@@ -239,7 +239,7 @@ self.removeEntity = ( message, data ) => {
 
 self.updateEntity = ( message, data ) => {
 	let cell =  data.coords.join(".")
-
+	console.log("physics worker: updateEntity()", message, data)
 	if (!data || !data.coords) {
 		console.warn("no data to update entity")
 		return

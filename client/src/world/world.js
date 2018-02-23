@@ -31,7 +31,8 @@ export default class Convolvr {
 	initialLoad: 	  boolean
 	loadedCallback:   Function
 	sendUpdatePacket: number
-	three:            Object
+	three:            any
+	THREE:			  any
 	socket: 		  any
 	store: 			  any
 	mobile: 		  boolean
@@ -137,7 +138,7 @@ export default class Convolvr {
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
 		this.raycaster.near = 0.25
-
+		this.THREE = THREE
 		three = this.three = {
 			world: this,
 			scene,

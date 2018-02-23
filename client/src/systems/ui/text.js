@@ -1,6 +1,19 @@
+//@flow
+// import * as THREEJS from 'three' 
+import Convolvr from '../../world/world'
+import Component from '../../component'
+
+let _THREE
+
 export default class TextSystem {
-    constructor ( world ) {
+
+    mappedColors: string[]
+    world: Convolvr
+    systems: any
+
+    constructor ( world: Convolvr ) {
         this.world = world;
+        _THREE = world.THREE;
         this.systems = world.systems;
         this.mappedColors = [
             "#505050", "#ffffff", "#ffff00", "#ff0020", "#0080ff", 
@@ -19,12 +32,12 @@ export default class TextSystem {
             canvasSizePOT = !!prop.canvasSize ? prop.canvasSize : [10, 10],
             canvasSize = !!prop.label ? [512, 128] : [Math.pow(2, canvasSizePOT[0]), Math.pow(2, canvasSizePOT[1])],
             context = null,
-            config = { label: !!prop.label, fontSize: prop.fontSize != 0 ? prop.fontSize : -1 }
+            config: any = { label: !!prop.label, fontSize: prop.fontSize != 0 ? prop.fontSize : -1 }
 
         textCanvas.setAttribute("style", "display:none")
         textCanvas.width = canvasSize[0]
         textCanvas.height = canvasSize[1]
-        document.body.appendChild(textCanvas)
+        document != null && document.body != null && document.body.appendChild(textCanvas)
         context = textCanvas.getContext("2d")
 
         //get old diffuse map / color
@@ -39,12 +52,12 @@ export default class TextSystem {
 
         this._renderText(context, text, color, background, canvasSize, config )
         
-        textTexture = new THREE.Texture( textCanvas )
-        textTexture.anisotropy = three.renderer.capabilities.getMaxAnisotropy()
-        textMaterial = new THREE.MeshBasicMaterial({
+        textTexture = new _THREE.Texture( textCanvas )
+        textTexture.anisotropy = this.world.three.renderer.capabilities.getMaxAnisotropy()
+        textMaterial = new _THREE.MeshBasicMaterial({
             map: textTexture,
             side: 0
-        })
+        });
         textMaterial.map.needsUpdate = true
         component.mesh.material = textMaterial
         if (canvasSize[0] != canvasSize[1]) {
@@ -58,19 +71,19 @@ export default class TextSystem {
             canvasSize,
             context,
             config,
-            update: ( textProp ) => {
+            update: ( textProp: any ) => {
                 if ( !!textProp )
                     component.props.text = Object.assign( {}, component.props.text, textProp )
 
                 this._update( component )
             },
-            write: ( text ) => {
+            write: ( text: string ) => {
                 this._write( component, text )
             }
         }
     }
 
-    _renderBackground(image, context) {
+    _renderBackground(image: any, context: any) {
         context.drawImage(image, 0, 0)
     }
 
@@ -96,14 +109,15 @@ export default class TextSystem {
             textCanvas   = state.textCanvas,
             canvasSize   = state.canvasSize,
             context      = state.context,
-            config       = state.config
+            config       = state.config;
         
         this._renderText( context, text, color, background, canvasSize, config )
         textTexture.needsUpdate = true   
     }
 
-    _renderText(context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: Object) {
+    _renderText(context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: any) {
         let textLine = '',
+            label = config.label,
             fontSize = (config.fontSize > 0 ? config.fontSize : (label ? 58 : 39)),
             lineHeight = fontSize*1.35,
             textRenderState = {
@@ -114,10 +128,10 @@ export default class TextSystem {
                 fillStyle: background,
                 color
             },
-            label = config.label,
             lines = 0,
             line = '',
-            l = 0
+            l = 0;
+            
         if (!!!config.noBackground) {
             context.fillStyle = background
             context.fillRect(0, 0, canvasSize[0], canvasSize[1])
@@ -132,7 +146,7 @@ export default class TextSystem {
         while (l < text.length) {
             line = text[ l ]
             if ( line.length > (42) * (canvasSize[0]/1024) ) {
-                let multiLines = line.match(/.{1,42}/g)
+                let multiLines: any = line.match(/.{1,42}/g)
                 text.splice(l, 1, ...multiLines)
                 lines = text.length
             }
@@ -147,7 +161,8 @@ export default class TextSystem {
             text.forEach(( line, l ) => { 
                 this._highlightMarkdown( l, line, lines, context, textRenderState ) // markdown
                 if (line[0] == '%' || /^.*\:\s\%/.test(line) ) {
-                    let outputLine = " "+line.substr(1, line.length-1)
+                    let outputLine = " "+line.substr(1, line.length-1);
+
                     this._highlightSynesthesia(l, outputLine, lines, context, textRenderState)
                 } else {
                     context.fillText(line, 16, 960-(1 + (lines-l)*lineHeight))
@@ -156,12 +171,12 @@ export default class TextSystem {
         }
     }
 
-    _highlightSynesthesia(l: number, line: string, lines: number, context: any, textState: Object) {
+    _highlightSynesthesia(l: number, line: string, lines: number, context: any, textState: any) {
         let xSize = textState.canvasSize[0],
             lineHeight = textState.fontSize*1.35,
             height = 960-(1 + (lines-l)*lineHeight),
             letters = [],
-            len = 0
+            len = 0;
       
         letters = line.split("")
         len = letters.length
@@ -176,11 +191,11 @@ export default class TextSystem {
         context.fillStyle = textState.fillStyle;
     }
 
-    _highlightMarkdown( l, line, lines, context, textState ) {
+    _highlightMarkdown(l: number, line: string, lines: number, context: any, textState: any) {
         let xSize = textState.canvasSize[0],
             lineHeight = textState.fontSize,
             height = 960-(1 + (lines-l)*lineHeight),
-            toggleCodeBlock = line.indexOf('```') > -1
+            toggleCodeBlock = line.indexOf('```') > -1;
           
         if ( line[0] == '#' ) { // markdown heading
             context.fillStyle = '#ffffff'
