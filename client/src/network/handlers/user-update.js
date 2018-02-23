@@ -47,7 +47,7 @@ export default class UserUpdateHandler {
                                 h += 1
                             }
                         }
-                        user.avatar.update([pos.x, pos.y, pos.z], [quat.x, quat.y, quat.z, quat.w])
+                        user.avatar.update([pos.x, pos.y, pos.z], [quat.x, quat.y, quat.z, quat.w], false, false, false, { updateWorkers: false })
                     }
                 }
             }

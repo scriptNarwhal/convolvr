@@ -180,14 +180,14 @@ self.onmessage = ( event ) => {
 	}
 };
 
-self.addVoxels = ( message, data ) => {
+self.addVoxels = (message, data) => {
 	voxelList = voxelList.concat(data)
 	data.map( v => {
 		voxels[ v.cell.join(".") ] = v
 	})
 }
 
-self.removeVoxels = ( message, data ) => {
+self.removeVoxels = (message, data) => {
 	let toRemove = null,
 		voxel = null,
 		c 		 = 0,
@@ -210,7 +210,7 @@ self.removeVoxels = ( message, data ) => {
 	}
 }
 
-self.addEntity = ( message, data ) => {
+self.addEntity = (message, data) => {
 	if (!data) {
 		console.warn("no data for addEntity")
 		return
@@ -218,14 +218,16 @@ self.addEntity = ( message, data ) => {
 	if (!!! voxels[data.coords.join(".")]) {
 		voxels[data.coords.join(".")] = { entities: [], cell: data.coords }
 	}
-	let entities = voxels[data.coords.join(".")].entities
+	let entities = voxels[data.coords.join(".")].entities;
+
 	entities.push( data.entity )
 }
 
 self.removeEntity = ( message, data ) => {
-	let entities = voxels[ data.coords.join(".") ].entities
+	let entities = voxels[ data.coords.join(".") ].entities;
+
 	if ( entities != null ) {
-		let c = entities.length-1
+		let c = entities.length-1;
 
 		while ( c >= 0 ) {
 			if ( entities[c].id == data.entityId ) {
@@ -237,9 +239,9 @@ self.removeEntity = ( message, data ) => {
 	}
 }
 
-self.updateEntity = ( message, data ) => {
-	let cell =  data.coords.join(".")
-	console.log("physics worker: updateEntity()", message, data)
+self.updateEntity = (message, data) => {
+	let cell =  data.coords.join(".");
+
 	if (!data || !data.coords) {
 		console.warn("no data to update entity")
 		return
@@ -251,7 +253,8 @@ self.updateEntity = ( message, data ) => {
 	let entities = voxels[ cell ].entities
 
 	if ( entities != null ) {
-		let c = entities.length-1
+		let c = entities.length-1;
+
 		while ( c >= 0 ) {
 			if (entities[ c ].id == data.entityId) {
 				entities[ c ] = data.entity
@@ -262,23 +265,26 @@ self.updateEntity = ( message, data ) => {
 	}
 }
 
-self.updateTelemetry = ( message, data ) => {
+self.updateTelemetry = (message, data) => {
+	
+	console.warn("physics worker: updateTelemetry()", message, data)
 	if (!data || !data.coords) {
 		console.warn("no data to update entity")
 		return
 	}
-	let cell =  data.coords.join(".")
+	let cell =  data.coords.join(".");
+
 	if ( !voxels[cell] ) {
 		console.warn("can't update entity with no voxel")
 		return
 	}
-	console.log("physics worker: updateTelemetry()", message, data)
 	let entities = voxels[ cell ].entities,
 		oldCell = message.data.oldCoords.join("."),
 		oldEntities = voxels[oldCell];
 
 	if (oldCell != cell) {
-		c = oldEntities.length - 1
+		let c = oldEntities.length - 1;
+
 		while (c >= 0) {
 			let movedEnt = oldEntities[c]
 			if (movedEnt.id == data.entityId) {
@@ -295,7 +301,7 @@ self.updateTelemetry = ( message, data ) => {
 
 	} else {
 		if (entities != null) {
-			c = entities.length - 1
+			let c = entities.length - 1
 			while (c >= 0) {
 				if (entities[c].id == data.entityId) {
 					console.info("physics worker: update telemetry")

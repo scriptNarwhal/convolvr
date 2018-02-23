@@ -72,14 +72,13 @@ export default class Entity {
         this.quaternion = quaternion
         this.mesh.quaternion.fromArray( quaternion )
       }
-
-      this.updateWorkers(
-        "update-telemetry",
-        three.world.systems,
-        {
-          oldCoords: this.oldCoords
-        }
-      )
+      if (config.updateWorkers !== false) {
+        this.updateWorkers(
+          "update-telemetry",
+          three.world.systems,
+          { oldCoords: this.oldCoords }
+        )
+      } 
       this.updateOldCoords()
     }
 
@@ -433,7 +432,7 @@ export default class Entity {
         boundingRadius: this.boundingRadius,
         boundingBox: this.boundingBox
       },
-      message = ""
+      message = "";
 
     if ( mode == "add" ) {
       message = JSON.stringify({
@@ -443,8 +442,6 @@ export default class Entity {
           entity: entityData
         }
       })
-      systems.staticCollisions.worker.postMessage( message )
-      //systems.oimo.worker.postMessage( message )
     } else if ( mode == "update") {
       message = JSON.stringify({
         command: "update entity",
@@ -454,8 +451,6 @@ export default class Entity {
           entity: entityData
         }
       })
-      systems.staticCollisions.worker.postMessage( message )
-      //systems.oimo.worker.postMessage( message )
     } else if ( mode == "update-telemetry" ) {
       message = JSON.stringify({
         command: "update telemetry",
@@ -468,6 +463,8 @@ export default class Entity {
         }
       })
     }
+    systems.staticCollisions.worker.postMessage( message )
+    //systems.oimo.worker.postMessage( message )
   }
 
   getClosestComponent( position, recursive = true ) {

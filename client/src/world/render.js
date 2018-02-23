@@ -18,7 +18,7 @@ export let animate = ( world, last, cursorIndex, forceRender ) => {
     }
 
     if (user && user.avatar && cursors) {
-      user.avatar.update( cPos.toArray(), camera.quaternion.toArray() )
+      user.avatar.update( cPos.toArray(), camera.quaternion.toArray(), false, false, false, { updateWorkers: false } )
       cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
     }
   

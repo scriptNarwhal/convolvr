@@ -18,7 +18,6 @@ export default class SkyboxSystem {
     }
 
     createSkybox(skySize, oldSkyMaterial, cylinderMode = false) {
-
         let skybox = null
 
         if ( cylinderMode ) {
@@ -39,7 +38,6 @@ export default class SkyboxSystem {
     }
 
     loadTexturedSky(config, mesh, skySize, callback) {
-
         let world = this.world,
             systems = world.systems
 
@@ -70,14 +68,12 @@ export default class SkyboxSystem {
     }
 
     loadShaderSky(config, oldConfig, mesh, callback) {
-
         let systems = this.world.systems,
             starMatProp = systems.assets.getMaterialProp("stars"),
             starSkyTexture = systems.material.procedural.generateTexture(starMatProp),
             world = this.world
 
         systems.assets.loadShaders("/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl", (vert, frag) => {
-
             let skyMaterial = new THREE.ShaderMaterial({
                 side: 1,
                 fog: false,
@@ -106,7 +102,6 @@ export default class SkyboxSystem {
     }
 
     followUser(delta, position) {
-
         let camera = three.camera,
             world = this.world,
             terrainEnt = world.terrain.distantTerrain,
@@ -141,7 +136,7 @@ export default class SkyboxSystem {
         }
 
         if (terrainEnt)
-            terrainEnt.update([camera.position.x, terrainEnt.mesh.position.y, camera.position.z])
+            terrainEnt.update([camera.position.x, terrainEnt.mesh.position.y, camera.position.z], false, false, false, false, { updateWorkers: false })
 
     }
 }
