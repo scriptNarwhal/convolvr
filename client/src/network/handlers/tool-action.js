@@ -82,6 +82,7 @@ export default class ToolActionHandler {
                         remoteUser = world.users["user" + data.userId]
                         userHand = remoteUser.avatar.componentsByProp.hand[data.hand]
                         voxel.entities.map(voxelEnt => {
+                            console.log("checking which entity to grab", voxelEnt.id, data.entityId)
                             if (voxelEnt.id == data.entityId) {
                                 three.scene.remove(voxelEnt.mesh)
                                 userHand.state.hand.grabbedEntity = voxelEnt
@@ -107,15 +108,15 @@ export default class ToolActionHandler {
 
                         let handState = userHand.state.hand,
                             voxelEnt = handState.grabbedEntity,
-                            handPos = []
+                            handPos = [],
+                            avatarMesh = avatar.mesh
 
                         if (voxelEnt) {
                             if (handState.trackedHands) {
                                 handPos = userHand.mesh.position
-                                entity.update(handPos.toArray(), userHand.mesh.quaternion.toArray())
+                                voxelEnt.update(handPos.toArray(), userHand.mesh.quaternion.toArray())
                             } else {
-                                avatarPos = avatar.mesh.position
-                                entity.update(avatarPos.toArray(), avatar.mesh.quaternion.toArray())
+                                voxelEnt.update(avatar.mesh.position.toArray(), avatar.mesh.quaternion.toArray())
                             }
                             voxelEnt.mesh.translateZ(-voxelEnt.boundingRadius)
                             voxelEnt.mesh.updateMatrix()

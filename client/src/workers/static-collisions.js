@@ -301,7 +301,8 @@ self.updateTelemetry = (message, data) => {
 
 	} else {
 		if (entities != null) {
-			let c = entities.length - 1
+			let c = entities.length - 1;
+			
 			while (c >= 0) {
 				if (entities[c].id == data.entityId) {
 					console.info("physics worker: update telemetry")

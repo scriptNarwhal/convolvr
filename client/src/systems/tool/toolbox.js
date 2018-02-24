@@ -258,7 +258,7 @@ export default class ToolboxSystem {
             action = false
             
         if ( tool.mesh == null ) {
-            tool.equip( hand )
+            tool.equip(hand)
         }
         action = tool.secondaryAction(telemetry, value)
         //console.info( "Network Action: ", action )
@@ -288,8 +288,9 @@ export default class ToolboxSystem {
         let hands = this.getUserHands(),
             hand   = hands[ handIndex ],
             handState = hand.state.hand,
-            entityId = handState.grip( value ),
-            avatar = this.user.avatar.mesh;
+            entityId = handState.grip(value),
+            avatar = this.user.avatar.mesh,
+            voxel = handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0];
 
         if (handState.grabbedEntity) {
           console.log("send grip tool action")
@@ -305,7 +306,7 @@ export default class ToolboxSystem {
             entityId, 
             null, 
             null, 
-            handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0],
+            voxel,
             // avatar.position.toArray().map((v,i) => Math.round(v/GRID_SIZE[i]))
             //handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
           )

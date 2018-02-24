@@ -27,7 +27,7 @@ export default class HandSystem {
         }
     }
 
-    grip(component, value) {
+    grip(component: Component, value: number): number {
         let avatar = component.entity,
             cursors = !!avatar ? avatar.componentsByProp.cursor : false,
             cursorMesh = null,
@@ -78,8 +78,10 @@ export default class HandSystem {
                         entity.getVoxel( true, true )
                         entity.save( oldVoxel )
                         state.hand = Object.assign({}, state.hand, { grabbedEntity: false })
+                        return entity.id;
                     }
                 }
+                return -1;
             } else {
                 entity = cursor.state.cursor.entity
 
@@ -103,18 +105,18 @@ export default class HandSystem {
                 }
             }
         }
+        return -1;
     }
 
-    setHandOrientation(component, position, rotation, index) {
-        let mesh = component.mesh
+    setHandOrientation(component, position, rotation) {
+        let mesh = component.mesh;
 
-        if ( mesh ) {
-            mesh.autoUpdateMatrix = false
-            mesh.position.fromArray(position).add(this.world.camera.position)
-            //mesh.translateX(0.3+ index*-0.5)
+        if (mesh) {
+            mesh.autoUpdateMatrix = false;
+            mesh.position.fromArray(position).add(this.world.camera.position);
             mesh.position.y += this.world.settings.floorHeight
-            mesh.quaternion.fromArray(rotation)
-            mesh.updateMatrix()
+            mesh.quaternion.fromArray(rotation);
+            mesh.updateMatrix();
         }
     }
 
