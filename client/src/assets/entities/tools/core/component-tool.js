@@ -1,6 +1,6 @@
 import Tool from '../../../../world/tool'
-import Component from '../../../../component'
-import Entity from '../../../../entity'
+import Component from '../../../../core/component'
+import Entity from '../../../../core/entity'
 import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
 export default class ComponentTool extends Tool {

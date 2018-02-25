@@ -1,11 +1,17 @@
+//@flow
 import { animate } from '../../world/render'
 import { GRID_SIZE } from '../../config'
 import Avatar from '../../assets/entities/avatars/avatar'
-import Entity from '../../entity'
+import Entity from '../../core/entity';
+import Voxel from '../../core/voxel';
+import Convolvr from '../../world/world';
 
 export default class UserUpdateHandler {
 
-    constructor( handlers, world, socket ) {
+    world: Convolvr
+    handlers: any
+
+    constructor( handlers: any, world: Convolvr, socket: any ) {
         this.world = world
         this.handlers = handlers
         socket.on("update", packet => {
@@ -54,23 +60,23 @@ export default class UserUpdateHandler {
         })
     }
 
-    loadPlayerAvatar ( entity, userVoxel, coords, data ) {
+    loadPlayerAvatar(entity: Entity, userVoxel: Voxel, coords: number[], data: any ) {
         if ( this.isEntityLoaded( entity.avatar ) ) {
             console.log("entity is loaded")
-            this.addAvatarToVoxel( entity, userVoxel, coords, data )
+            this.addAvatarToVoxel(entity, userVoxel, coords, data )
         } else {
             console.log("entity is not loaded")
             if ( !!!this.world.systems.assets.loadingItemsById.entities[ entity.avatar ] ) {
-                this.world.systems.assets.loadInventoryEntity( entity.username, entity.avatar).then(()=>{
+                this.world.systems.assets.loadInventoryEntity(entity.username, entity.avatar).then(()=>{
                     console.info("loadPlayerAvatar loadInventory callback")
                    // this.world.systems.assets.userEntities
-                    this.addAvatarToVoxel( entity, userVoxel, coords, data )
+                    this.addAvatarToVoxel(entity, userVoxel, coords, data )
                 })
             }
         }
     }
 
-    addAvatarToVoxel ( entity, userVoxel, coords, data ) {
+    addAvatarToVoxel(entity: Entity, userVoxel: Voxel, coords: number[], data: any ) {
         console.log("add avatar to voxel")
         let world = this.world,
             avatar = world.systems.assets.makeEntity(entity.avatar, true, { wholeBody: true, id: entity.id }, coords),
@@ -96,7 +102,7 @@ export default class UserUpdateHandler {
         }
     }
 
-    initPlayerAvatar (avatar, newUser, newData) {
+    initPlayerAvatar(avatar: Entity, newUser: any, newData: any) {
         console.log("initPlayerAvatar")
         console.info("[Remote] User avatar init")
         avatar.init(window.three.scene)
@@ -108,7 +114,7 @@ export default class UserUpdateHandler {
             }, 1000)
     }
 
-    isEntityLoaded ( entityName ) {
+    isEntityLoaded(entityName: string) {
         let assets = this.world.systems.assets
         
         return assets.isEntityLoaded( entityName )   

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 
-import Entity from '../../entity'
-import BuiltinProps from '../../assets/props'
+import Entity from '../../core/entity'
+import BuiltinProps from '../../assets/attributes'
 import avatar from '../../assets/entities/avatars/avatar'
 import hero from '../../assets/entities/avatars/hero'
 import toolMenu from '../../assets/entities/tools/core/tool-menu'

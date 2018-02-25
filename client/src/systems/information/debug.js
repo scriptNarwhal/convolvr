@@ -1,6 +1,6 @@
 //@flow
 import Convolvr from '../../world/world'
-import Component from '../../component'
+import Component from '../../core/component'
 
 export default class DebugSystem { // gather helpful info & display as text
     

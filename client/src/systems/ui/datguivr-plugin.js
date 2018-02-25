@@ -1,6 +1,6 @@
 //@flow
 import Convolvr from '../../world/world'
-import Component from '../../component'
+import Component from '../../core/component'
 import { THREE } from 'three'
 import { dat } from 'datguivr'
 

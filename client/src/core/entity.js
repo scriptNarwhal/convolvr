@@ -1,7 +1,7 @@
  import {
   GRID_SIZE,
   API_SERVER
- } from './config'
+ } from '../config'
 import Component from './component'
 import axios from 'axios'
 

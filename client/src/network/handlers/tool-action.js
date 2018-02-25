@@ -1,7 +1,7 @@
 import { animate } from '../../world/render'
 import { GRID_SIZE } from '../../config'
 import Avatar from '../../assets/entities/avatars/avatar'
-import Entity from '../../entity'
+import Entity from '../../core/entity'
 
 export default class ToolActionHandler {
 
@@ -20,7 +20,7 @@ export default class ToolActionHandler {
                 voxel = world.terrain.voxels[coords[0] + ".0." + coords[2]],
                 quat = data.quaternion,
                 remoteUser = {},
-                userHand = {}
+                userHand = {};
 
             if (voxel == null || voxel.loaded == false) {
                 if (voxel)
@@ -33,7 +33,7 @@ export default class ToolActionHandler {
             switch (data.tool) {
                 case "Entity Tool":
                     let ent = data.entity,
-                        entity = new Entity(ent.id, ent.components, data.position, data.quaternion, coords)
+                        entity = new Entity(ent.id, ent.components, data.position, data.quaternion, coords);
 
                     voxel.entities.push(entity)
                     entity.init(three.scene)
@@ -43,8 +43,8 @@ export default class ToolActionHandler {
                         if (voxelEnt.id == data.entityId) // concat with existing components array
                             voxelEnt.update(
                                 false, false, voxelEnt.components.concat(data.entity.components),
-                                false, false, { ignoreRotation: true })
-
+                                false, false, { ignoreRotation: true }
+                            );
                     })
                     break;
                 case "Custom Tool":
@@ -85,7 +85,7 @@ export default class ToolActionHandler {
                             console.log("checking which entity to grab", voxelEnt.id, data.entityId)
                             if (voxelEnt.id == data.entityId) {
                                 three.scene.remove(voxelEnt.mesh)
-                                userHand.state.hand.grabbedEntity = voxelEnt
+                                userHand.state.hand.grabbedEntity = voxelEnt;
                                 voxelEnt.updateOldCoords()
                                 userHand.mesh.add(voxelEnt.mesh)
                                 voxelEnt.mesh.position.fromArray([0, 0, -voxelEnt.boundingRadius])
@@ -109,7 +109,7 @@ export default class ToolActionHandler {
                         let handState = userHand.state.hand,
                             voxelEnt = handState.grabbedEntity,
                             handPos = [],
-                            avatarMesh = avatar.mesh
+                            avatarMesh = avatar.mesh;
 
                         if (voxelEnt) {
                             if (handState.trackedHands) {

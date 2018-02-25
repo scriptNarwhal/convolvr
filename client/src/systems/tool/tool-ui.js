@@ -1,4 +1,4 @@
-import Component from '../../component'
+import Component from '../../core/component'
 import Convolvr from '../../world/world'
 
 export default class ToolUISystem {

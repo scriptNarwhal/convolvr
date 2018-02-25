@@ -10,7 +10,7 @@ import {
 import { send } from '../network/socket'
 import User from './user'
 import Avatar from '../assets/entities/avatars/avatar'
-import Entity from '../entity'
+import Entity from '../core/entity'
 import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'

@@ -32,7 +32,7 @@ import Systems from './systems/index'
 import { events } from './network/socket'
 import UserInput from './input/user-input'
 import User from './world/user'
-import Entity from './entity'
+import Entity from './core/entity'
 //import ProgressBar from 'progressbardottop'
 
 let store:        Object = makeStore(routerReducer),

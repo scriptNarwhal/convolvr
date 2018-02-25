@@ -1,7 +1,7 @@
-//@flow
+// not using flow yet..
 import Convolvr from '../../world/world'
-import Component from '../../component'
-import { THREE } from 'three'
+import Component from '../../core/component'
+// import { THREE } from 'three'
 
 export default class FBXPluginSystem { // allows use of imported .fbx models
 
@@ -52,59 +52,40 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
            url: prop.url,
            fbx: null
         }
-        
     }
 
     play ( component: Component, animationIndex: number = 0 ) {
-
         this._getClipAction( component, animationIndex ).play()
-
     }
 
     stop ( component: Component, animationIndex: number = 0 ) {
-
         this._getClipAction( component, animationIndex ).stop()
-
     }
 
     tick ( delta: number, time: number ) {
-
-        let mixers = this.mixers
+        let mixers = this.mixers;
 
         if ( mixers.length > 0 ) {
-
 			for ( let i = 0; i < mixers.length; i ++ ) {
-
 				mixers[ i ].update( delta )
-
 			}
-
 		}
-
     }
 
     _getClipAction ( component: Component, index: number ) {
-
         let model: Object = component.state.fbx.fbx
         
         return model.mixer.clipAction( model.animations[ index ] )
-
     } 
 
     _onProgress ( xhr: Object ) {
-
 		if ( xhr.lengthComputable ) {
-
 			let percentComplete = xhr.loaded / xhr.total * 100
 			console.log( Math.round( percentComplete ) + '% done loading model' )
-
 		}
-
     }
         
     _onError ( xhr: Object ) {
-
 		console.error( xhr )
-
 	}
 }

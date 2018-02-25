@@ -1,7 +1,7 @@
 //@flow
 // import * as THREEJS from 'three' 
 import Convolvr from '../../world/world'
-import Component from '../../component'
+import Component from '../../core/component'
 
 let _THREE
 
@@ -95,6 +95,12 @@ export default class TextSystem {
     }
 
     _write(component: Component, text: string) {
+        if (component.props.text.label) {
+            component.props.text.lines = [];
+            if (text.indexOf(":") > 0) {
+                text = [...text.split(":").shift()].join("")
+            }
+        }
         component.props.text.lines.push( text )
     }
 
@@ -128,6 +134,7 @@ export default class TextSystem {
                 fillStyle: background,
                 color
             },
+            cols = (canvasSize[0] / 24) / label ? 1.487 : 1,
             lines = 0,
             line = '',
             l = 0;
@@ -144,8 +151,8 @@ export default class TextSystem {
         lines = text.length
 
         while (l < text.length) {
-            line = text[ l ]
-            if ( line.length > (42) * (canvasSize[0]/1024) ) {
+            line = text[ l ];
+            if ( line.length > cols ) {
                 let multiLines: any = line.match(/.{1,42}/g)
                 text.splice(l, 1, ...multiLines)
                 lines = text.length
@@ -155,7 +162,7 @@ export default class TextSystem {
 
         if (label) {
             text.map(( line, l ) => { 
-                context.fillText( line, 12, 12 )
+                context.fillText( line, 12, 12+l*lineHeight )
             })
         } else {
             text.forEach(( line, l ) => { 

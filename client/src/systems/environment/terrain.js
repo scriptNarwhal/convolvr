@@ -1,8 +1,8 @@
 import { browserHistory } from 'react-router'
 import axios from 'axios'
-import Voxel from '../../world/voxel'
+import Voxel from '../../core/voxel'
 import { animate } from '../../world/render'
-import Entity from '../../entity'
+import Entity from '../../core/entity'
 import { 
   GLOBAL_SPACE,
   GRID_SIZE,

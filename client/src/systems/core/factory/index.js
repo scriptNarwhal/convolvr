@@ -1,7 +1,7 @@
 //@flow
 import Convolvr from '../../../world/world'
-import Component from '../../../component'
-import Entity from '../../../entity'
+import Component from '../../../core/component'
+import Entity from '../../../core/entity'
 import * as THREE from 'three'
 
 export default class FactorySystem {
@@ -17,7 +17,6 @@ export default class FactorySystem {
         let prop = component.props.factory
 
         if ( prop.autoGenerate !== false )
-
             setTimeout(()=>{ this.generate( component )}, 1000)
         
         return {
@@ -28,7 +27,6 @@ export default class FactorySystem {
     }
 
     generate(component: Component, menuItem: boolean = true) {
-
         let prop:       Object           = component.props.factory,
             position:   THREE.Vector3    = component.entity.mesh.position,
             voxel:      Array<number>    = component.entity.voxel,
@@ -40,7 +38,8 @@ export default class FactorySystem {
             data:       Object           = prop.data,
             quat:       Array<number>    = data ? data.quaternion : [0,0,0,1],
             components: Array<Component> = data ? data.components : [],
-            created:    Entity           = null
+            created:    Entity           = null;
+
         if (!data) {
             console.warn("No data for factory to generate with")
             return
@@ -93,7 +92,6 @@ export default class FactorySystem {
     }
 
     _generateEntity(menuItem: boolean, components: Array<Component>, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
-
         let ent: Entity = null;
 
         if ( !! components && components.length > 0 ) {
@@ -116,7 +114,6 @@ export default class FactorySystem {
     }
 
     _generateComponent(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
-
         let newComponent = {
                 ...data,
                 props: {
@@ -137,7 +134,6 @@ export default class FactorySystem {
     }
 
     _generateGeometry(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
-
         return new Entity(-1, [{
                 props: Object.assign({}, {geometry: data}, {
                     mixin: true,
@@ -161,7 +157,6 @@ export default class FactorySystem {
     }
 
     _generateSystem(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
-
         return new Entity(-1, [{
             props: Object.assign({}, data, {
                     mixin: true,

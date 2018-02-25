@@ -1,6 +1,6 @@
 //@flow
-import Entity from '../../entity'
-import Component from '../../component'
+import Entity from '../../core/entity'
+import Component from '../../core/component'
 import { 
     GLOBAL_SPACE,
     GRID_SIZE 
