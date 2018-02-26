@@ -13,7 +13,7 @@ let chatScreen = {
                         name: "plastic"
                     },
                     chat: {
-                        userId: "all",
+                        userName: "all",
                         displayMessages: true
                     },
                     text: {

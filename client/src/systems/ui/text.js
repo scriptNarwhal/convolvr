@@ -30,10 +30,10 @@ export default class TextSystem {
             textMaterial = null,
             textCanvas = document.createElement("canvas"),
             canvasSizePOT = !!prop.canvasSize ? prop.canvasSize : [10, 10],
-            canvasSize = !!prop.label ? [512, 128] : [Math.pow(2, canvasSizePOT[0]), Math.pow(2, canvasSizePOT[1])],
+            canvasSize = !!prop.label && !!!prop.canvasSize ? [512, 128] : [Math.pow(2, canvasSizePOT[0]), Math.pow(2, canvasSizePOT[1])],
             context = null,
             config: any = { label: !!prop.label, fontSize: prop.fontSize != 0 ? prop.fontSize : -1 }
-
+        
         textCanvas.setAttribute("style", "display:none")
         textCanvas.width = canvasSize[0]
         textCanvas.height = canvasSize[1]
@@ -56,7 +56,8 @@ export default class TextSystem {
         textTexture.anisotropy = this.world.three.renderer.capabilities.getMaxAnisotropy()
         textMaterial = new _THREE.MeshBasicMaterial({
             map: textTexture,
-            side: 0
+            side: 0,
+            transparent: background.length == 9
         });
         textMaterial.map.needsUpdate = true
         component.mesh.material = textMaterial
@@ -98,7 +99,10 @@ export default class TextSystem {
         if (component.props.text.label) {
             component.props.text.lines = [];
             if (text.indexOf(":") > 0) {
-                text = [...text.split(":").shift()].join("")
+                let filteredText = [...text.split(":")];
+                
+                filteredText.shift();
+                text = filteredText.join("");
             }
         }
         component.props.text.lines.push( text )
@@ -153,14 +157,16 @@ export default class TextSystem {
         while (l < text.length) {
             line = text[ l ];
             if ( line.length > cols ) {
-                let multiLines: any = line.match(/.{1,42}/g)
-                text.splice(l, 1, ...multiLines)
-                lines = text.length
+                let multiLines: any = line.match( label ? /.{1,17}/g : /.{1,42}/g );
+
+                text.splice(l, 1, ...multiLines);
+                lines = text.length;
             }
             ++l
         }
 
         if (label) {
+            context.clearRect(0,0,canvasSize[0],canvasSize[1]);
             text.map(( line, l ) => { 
                 context.fillText( line, 12, 12+l*lineHeight )
             })

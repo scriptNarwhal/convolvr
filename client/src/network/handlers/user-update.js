@@ -38,7 +38,7 @@ export default class UserUpdateHandler {
                     quat = update.quaternion
                     user = world.users["user" + update.id]
                     if (user == null) {
-                        this.loadPlayerAvatar( update, userVoxel, coords, data )
+                        this.loadPlayerAvatar(update, userVoxel, coords, data)
                     } else if (user && user.mesh) {
                         if (update.hands.length > 0) {
                             hands = user.avatar.componentsByProp.hand
@@ -60,7 +60,7 @@ export default class UserUpdateHandler {
         })
     }
 
-    loadPlayerAvatar(entity: Entity, userVoxel: Voxel, coords: number[], data: any ) {
+    loadPlayerAvatar(entity: any, userVoxel: Voxel, coords: number[], data: any ) {
         if ( this.isEntityLoaded( entity.avatar ) ) {
             console.log("entity is loaded")
             this.addAvatarToVoxel(entity, userVoxel, coords, data )
@@ -76,10 +76,10 @@ export default class UserUpdateHandler {
         }
     }
 
-    addAvatarToVoxel(entity: Entity, userVoxel: Voxel, coords: number[], data: any ) {
-        console.log("add avatar to voxel")
+    addAvatarToVoxel(entity: any, userVoxel: Voxel, coords: number[], data: any ) {
+        console.log("add avatar to voxel data:", entity)
         let world = this.world,
-            avatar = world.systems.assets.makeEntity(entity.avatar, true, { wholeBody: true, id: entity.id }, coords),
+            avatar = world.systems.assets.makeEntity(entity.avatar, true, { wholeBody: true, userName: entity.username, id: entity.id }, coords),
             user = world.users["user" + entity.id] = {
                 id: entity.id,
                 avatar,

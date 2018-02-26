@@ -74,7 +74,7 @@ void main( void ) {
 
         color = vec4( newColor, 1.0 );
         glow += sin( abs(vUv.x * PI -lightYaw  )  );
-        gl_FragColor = (color * vec4(0.1+1.0*glow, 0.1+1.0*glow, 0.1+1.0*glow, 1.0)) + 
+        gl_FragColor = (color * vec4(0.1+1.2*glow, 0.1+1.2*glow, 0.1+1.2*glow, 1.0)) + 
                        texture2D(starTexture, fract(vec2(vUv.x*8.0, vUv.y*4.0)));
      } else {    
 

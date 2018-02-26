@@ -452,13 +452,19 @@ export default class Entity {
         }
       })
     } else if ( mode == "update-telemetry" ) {
+      // make position not offset and actually lined up properly
+      let newPosition = [ ...entityData.position ];
+      
+      newPosition[0] -= this.boundingRadius / 2.0;
+      newPosition[1] -= this.boundingRadius / 2.0;
+
       message = JSON.stringify({
         command: "update telemetry",
         data: {
           entityId: this.id,
           coords: this.voxel,
           oldCoords: config.oldCoords,
-          position: entityData.position,
+          position: newPosition,
           quaternion: entityData.quaternion
         }
       })

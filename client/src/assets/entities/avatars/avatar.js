@@ -4,7 +4,7 @@ import chatText from '../../components/chat-text'
 
 // default avatar
 let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 'vr hands'
-
+  
   console.log("init avatar: config: ", config )
         let mesh = null, // new THREE.Object3D();
             entity = null,

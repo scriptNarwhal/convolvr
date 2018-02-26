@@ -5,38 +5,40 @@ import Entity from '../../core/entity';
 export default class ChatSystem {
 
     world: Convolvr
-    componentsByUserId: Object
+    componentsByUserId: any
+    componentsByUserName: any
     lastSender: string
     chatModal: Entity
 
     constructor (world: Convolvr) {
         this.world = world;
         this.componentsByUserId = { all: [] };
+        this.componentsByUserName = { all: [] };
         this.lastSender = "";
 
-        let byUserId = this.componentsByUserId,
+        let byUserName = this.componentsByUserName,
             currentUser = this.world.user.name,
             chat = this
 
         events.on("chat message", message => {
             let chatMessage = JSON.parse( message.data )
           
-             Object.keys( byUserId ).map( userId => {
+             Object.keys( byUserName ).map(userName => {
 
-                 byUserId[ userId ].map( comp => {
+                 byUserName[userName].map(comp => {
                     let props = comp.props,
                         from = '';
                     
                     if ( props.chat.displayMessages ) {
                         console.log("display messages")
                         console.log(props.chat)
-                        if ( userId == "all" ) {
+                        if ( userName == "all" ) {
                             if ( chatMessage.from != chat.lastSender ) {
                                 from = `${chatMessage.from}: `
                             }
                             comp.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
                             comp.state.text.update()
-                        } else if ( userId == props.chat.userId  && props.text ) {
+                        } else if ( userName == props.chat.userName && props.text ) {
                              comp.state.text.write(`${chatMessage.from}${chatMessage.message}`) // can batch this without re-rendering each time
                              comp.state.text.update()  
                         }
@@ -56,17 +58,17 @@ export default class ChatSystem {
 
     init(component: Component) { 
         let prop = component.props.chat,
-            userId = prop.userId || "",
+            userName = prop.userName || "",
             world = prop.world || "";
+        console.log("init chat component, userName", prop.userName)
+        prop.userName = prop.userName || "all"
 
-        prop.userId = prop.userId || "all"
-
-        if ( this.componentsByUserId[ prop.userId ] == null ) {
-            this.componentsByUserId[ prop.userId ] = []
+        if ( this.componentsByUserName[ prop.userName ] == null ) {
+            this.componentsByUserName[ prop.userName ] = []
         }
        
-        if ( !this.containsObject( component, this.componentsByUserId[ prop.userId ] ) ) {
-            this.componentsByUserId[ prop.userId ].push( component )
+        if ( !this.containsObject( component, this.componentsByUserName[ prop.userName ] ) ) {
+            this.componentsByUserName[ prop.userName ].push( component )
         }
         
         if ( prop.sendMessage ) {
@@ -102,12 +104,12 @@ export default class ChatSystem {
     }
 
     initChatModal() {
-        let chatModal = this.world.systems.assets.makeEntity("help-screen", true),
+        let chatModal = this.world.systems.assets.makeEntity("help-screen", true, {}, [0,1,0]),
             cPos = three.camera.position;
 
         chatModal.components[0].props.text.lines = ["Welcome"]
         chatModal.init(three.scene, false, ()=>{})
-        chatModal.update(cPos.x, cPos.y - 1, cPos.z - 0.7)
+        chatModal.update(cPos.x, cPos.y - 1, cPos.z - 1.7)
         this.chatModal = chatModal
     }
 
@@ -131,6 +133,9 @@ export default class ChatSystem {
     }
 
     containsObject ( obj, list ) {
+       if (list.length == 0) {
+           return false;
+       }
        for ( let i = list.length - 1; i >= 0; i-- ) {
 
             if ( list[ i ] === obj ) {
