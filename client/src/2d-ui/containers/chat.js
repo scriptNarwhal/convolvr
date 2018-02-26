@@ -33,21 +33,15 @@ class Chat extends Component {
     let worldMode = three.world.mode
 
     if (worldMode != 'vr' && worldMode != 'stereo') {
-
       this.textInput.focus()
-
     }
 
     if (this.props.menuOpen == false) {
-
       this.props.toggleMenu(true)
-
     }
 
     if (this.props.chatOpen == false) {
-
       this.props.showChat()
-
     }
 
     setTimeout(()=> { this.scrollToBottom() },500)
@@ -100,9 +94,7 @@ class Chat extends Component {
     if (linkRegex.test(message)) {
 
       if (imageRegex.test(message)) {
-
         return (
-
             <Card image={message}
                   clickHandler={ (e, title) => {
                    let newWindow = window.open(message, "_blank")
@@ -112,25 +104,15 @@ class Chat extends Component {
                   showTitle={true}
                   title={ message.substring(0, 30) }
             />
-
         )
-
       } else {
-
         return (
-
           <a href={message} target="_blank">{message}</a>
-
         )
-
       }
-
     } else {
-
       return message
-
     }
-
   }
 
   render() {
@@ -182,24 +164,24 @@ class Chat extends Component {
 
                   })
                 }
-            </section>
-            <section style={styles.inputs(mobile)}>
-                <input type='text'
-                       ref={(input) => { this.textInput = input; }}
-                       onBlur={ (e)=> { this.setState({text: e.target.value }) }}
-                       onKeyDown={ (e)=> {
-                         if (e.which == 13) {
-                           this.send(e.target.value)
-                         }
-                       }}
-                       style={styles.text(mobile)} />
-                <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button} />
-                <Button title={"Upload Files"}
-                        onClick={(evt, title) => {  }}
-                        onFiles={ (files) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
-                        image={"/data/images/upload.png"}
-                        style={ styles.uploadStyle(mobile) }
-                  />
+                <section style={styles.inputs(mobile)}>
+                  <input type='text'
+                        ref={(input) => { this.textInput = input; }}
+                        onBlur={ (e)=> { this.setState({text: e.target.value }) }}
+                        onKeyDown={ (e)=> {
+                          if (e.which == 13) {
+                            this.send(e.target.value)
+                          }
+                        }}
+                        style={styles.text(mobile)} />
+                  <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button(mobile)} />
+                  <Button title={"Upload Files"}
+                          onClick={(evt, title) => {  }}
+                          onFiles={ (files) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
+                          image={"/data/images/upload.png"}
+                          style={ styles.uploadStyle(mobile) }
+                    />
+              </section>
             </section>
           </span>
         </Shell>
@@ -262,6 +244,7 @@ export default connect(
   }
 )(Chat)
 
+
 let styles = {
   chat: {
       width: '100%'
@@ -273,28 +256,33 @@ let styles = {
   },
   text: (mobile) => {
     return {
-      width: (mobile ? 47: 70) + '%',
+      width: '100%',
       border: 'none',
-      background: 'rgba(0, 0, 0, 0.498039)',
+      background: '#0b1c4d',
       color: 'white',
       fontSize: '1em',
-      marginLeft: '0.15em',
-      padding: '0.5em',
-      boxShadow: 'inset 0px -1px 0px 1px rgba(255, 255, 255, 0.4)',
-      borderLeftTopRadius: '3px',
-      borderTopLeftRadius: '3px',
-      borderBottomLeftRadius: '3px'
+      padding: '11px',
+      borderRadius: '3px',
+      // borderTopLeftRadius: '3px',
+      // borderBottomleftRadius: '3px',
+      border: 'none'
     }
   },
-  button: {
-      background: "rgb(29, 29, 29)",
+  button: (mobile) => {
+    return {
+      background: "hsla(225, 75%, 45%, 1)",
       color: "white",
       width: '100px',
       border: 'none',
       fontSize: '1em',
       padding: '0.5em',
+      borderBottomRightRadius: '3px',
       borderTopRightRadius: '3px',
-      borderBottomRightRadius: '3px'
+      position: mobile ? 'fixed' : 'absolute',
+      bottom: mobile ? '65px' : '4px',
+      right: '0px',
+      height: '39px'
+    }
   },
   message : {
     display: "block",
@@ -313,7 +301,6 @@ let styles = {
     }
 
     if ( !!avatar ) {
-      
       return {
         ...usernameStyle,
         paddingLeft: '72px',
@@ -325,60 +312,68 @@ let styles = {
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat'
       }
-
     } else {
-      
       return {
         ...usernameStyle,
-        background: "#101010",
-        borderTopLeftRadius: '2px',
-        borderBottomLeftRadius: '2px'
+        background: "hsl(225, 82%, 26%)",
+        borderBottom: "#0b1c4d 2px solid",
+        borderRadius: "3px"
       }
-
     }
-
   },
   messageText: {
     paddingRight: '0.5em',
-    background: "#101010",
     padding: '0.25em',
     borderTopRightRadius: '2px',
     borderBottomRightRadius: '2px'
   },
   messages: (mobile) => {
     return {
-      width: '100%',
-      height: '92%',
-      minWidth: '410px',
+      width: mobile ? '100%' : '102vh',
+      height: mobile ? '76vh' : '86vh',
+      minWidth: '40vw',
+      maxHeight: '82vh', 
       margin: 'auto auto auto 0.5em',
       textAlign: 'left',
       position: 'fixed',
-      left: mobile ? 0 : '65px',
-      top: mobile ? '162px' : 0,
+      marginLeft: mobile ? 0 : '10px',
+      left: mobile ? 0 : '62px',
+      bottom: mobile ? '58px' : '25px',
       overflowY: 'auto',
       overflowX: 'hidden',
-      fontSize: '14pt'
+      fontSize: '12pt',
+      background: 'hsl(224, 66%, 9%)',
+      borderRadius: '0.5em',
+      boxShadow: 'rgba(0, 0, 0, 0.65) 0em 0.75em 5em, rgba(0,0,0,0.65) 0em 0.2em 0.25em',
+      padding: '1em'
     }
   },
   inputs: (mobile) => {
     return {
-      minHeight: "2em",
-      minWidth: "320px",
+      height:'2.75em',
       position: "fixed",
-      bottom: mobile ? "0.4em" : "-20px",
-      width: (mobile ? 70: 70) + '%',
+      bottom: mobile ? "4px" : "-20px",
+      width: (mobile ? '100%': '103vh'),
+      maxWidth: mobile ? '100%' : '88vw',
       textAlign: "left",
-      left: mobile ? '56px' : '65px',
-      marginLeft: '0.5em'
+      left: mobile ? '0px' : '64px',
+      bottom: mobile ? '60px' : '32px',
+      minWidth: '42vw',
+      textAlign: 'left',
+      marginLeft: '2%',
+      marginRight: '2%'
     }
   },
   uploadStyle: ( mobile ) => {
     return mobile ? {
       position: "fixed",
-      bottom: "1.75em",
+      bottom: "96px",
       right: 0
     } : { 
-      marginRight: "0.25em", top: "-1.2em", position: "relative"
+      marginRight: "0.25em",
+      position: 'absolute',
+      bottom: '44px',
+      right: '13px'
     }
   }
 }

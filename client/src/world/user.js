@@ -7,7 +7,7 @@ export default class User {
     this.data = data ? data.data : {}
     this.hud = null
     this.cursor = null
-    this.name = data ? data.name : "Human"
+    this.name = data ? data.name : "Human_"+this.id
     this.toolbox = null
     this.mesh = new THREE.Object3D()
     this.velocity = new THREE.Vector3(0, -0.0001, 0)

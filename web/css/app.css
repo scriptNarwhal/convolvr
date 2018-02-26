@@ -1,11 +1,12 @@
 /* app.css */
 @font-face {
-  font-family: 'droid_sans_monoregular';
-  /* src: url(/data/fonts/Roboto-Light.ttf); */
-  src: url(/data/fonts/DroidSansMono-webfont.ttf);
+    font-family: 'Roboto';
+    font-weight: 200;
+    src: url(/data/fonts/Roboto-Light.ttf);
+    /* src: url(/data/fonts/DroidSansMono-webfont.ttf); */
 }
 body {
-  font-family: droid_sans_monoregular, sans-serif, monospace;
+  font-family: 'Roboto', sans-serif, monospace;
 }
 a, a:visited {
     color: #00e200

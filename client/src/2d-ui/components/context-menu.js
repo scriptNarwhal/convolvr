@@ -76,7 +76,7 @@ export default class ContextMenu extends Component {
         <Button image="/data/images/configure.png"
                 title="File Options"
                 onClick={ e=> this.toggle() }
-                style={ styles.button( this.props.compact, this.props.isImage, false ) }
+                style={ styles.button( this.props.compact, this.props.isImage, false, this.props.isHovering ) }
         />
       )
 
@@ -91,6 +91,7 @@ ContextMenu.defaultProps = {
     dir: "",
     username: "",
     showTitle: false,
+    isHovering: false,
     color: '#252525',
     compact: false,
     isImage: false,
@@ -108,12 +109,12 @@ let styles = {
       position: 'relative',
       cursor: 'pointer',
       width: '224px',
-      height: '204px',
+      height: '220px',
       display: 'inline-block',
       marginRight: '0.5em',
       marginLeft: '8px',
       marginBottom: '0.5em',
-      backgroundColor: 'rgba(236, 236, 236, 1)',
+      backgroundColor: 'rgb(203, 203, 203)',
       textAlign: "center",
       borderRadius: "5px",
       color: "black",
@@ -137,12 +138,12 @@ let styles = {
     paddingTop:'0.4em',
     fontSize: '17px'
   },
-  button: ( compact, image, close ) => {
+  button: ( compact, image, close, isHovering ) => {
     return {
       position: 'relative',
       top: compact ? '-50px' : close ? '-50px' : '-48px',
       right: close ? '-16px' : '-104px',
-      opacity: close ? 1 : image ? 0.5 : 0.33,
+      opacity: isHovering ? (close ? 1 : image ? 0.5 : 0.33) : 0,
       float: close ? 'right' : 'none'
     }
   },

@@ -25,17 +25,18 @@ export default class ToolboxSystem {
         console.warn(this.user.avatar)
         this.currentTools = [ 0, 0 ]
         this.tools = []
+        this.toolboxComponents = [];
         this.fadeTimeout = 0
     }
 
     init ( component ) {        
+        this.toolboxComponents.push( component )
         return {
-                   
+
         }
     }
   
       allSystemsLoaded( ) {
-
         let world = this.world,
             user = world.user,
             toolbox = this
@@ -44,13 +45,18 @@ export default class ToolboxSystem {
         setTimeout( ()=>{
           console.log("allSystemsLoaded init avatar")
           console.log(user.avatar)
-          user.avatar.addHandler("init", () => {
-           console.log("user avatar init event handler ", user.avatar)
-            user.avatar.componentsByProp.hand.map((m, i) => {
-              if (i < 3)
-                toolbox.hands.push(m)
-            })
-          })
+          if (user.avatar && user.avatar.addHandler) {
+            user.avatar.addHandler("init", () => {
+              console.log("user avatar init event handler ", user.avatar)
+               user.avatar.componentsByProp.hand.map((m, i) => {
+                 if (i < 3)
+                   toolbox.hands.push(m)
+               })
+             })
+          } else {
+            console.error("user.avatar hasn't loaded yet: User:", user)
+          }
+          
         }, 5000)
         
         console.info("user hands ", this.hands)
@@ -75,10 +81,9 @@ export default class ToolboxSystem {
       }
   
       nextTool( direction ) {
-  
-        let hand = 0
+        let hand = 0;
+
         this.showMenu()
-  
         while ( hand < 2) {
           this.currentTools[ hand ] += direction
           if ( this.currentTools[ hand ] < 0 ) {
@@ -120,7 +125,6 @@ export default class ToolboxSystem {
       }
 
       getCursor ( hand ) {
-  
         let input    = this.world.userInput,
             user     = this.world.user,
             cursor   = null, 
@@ -137,9 +141,8 @@ export default class ToolboxSystem {
       }
   
       initActionTelemetry ( camera, useCursor, hand ) {
-  
         let position        = camera.position.toArray(),
-            voxel           = [ position[0], 0, position[2] ].map( (c, i) => Math.floor( c / GRID_SIZE[ i ] ) ),
+            voxel           = [ position[0], 0, position[2] ].map((c, i) => Math.floor( c/GRID_SIZE[ i ] )),
             quaternion      = camera.quaternion.toArray(),
             user            = this.world.user,
             cursor          = null,
@@ -150,7 +153,7 @@ export default class ToolboxSystem {
             componentPath   = [],
             cursorHand      = []
             
-        if ( useCursor ) {
+        if (useCursor) {
           cursorHand = this.getCursor( hand )
           cursor = cursorHand[ 0 ]
           handMesh = cursorHand[ 1 ]
@@ -181,8 +184,7 @@ export default class ToolboxSystem {
         }
       }
       
-      usePrimary ( hand ) {
-  
+      usePrimary(hand: number) {
         let toolIndex        = this.currentTools[ hand ],
             tool             = this.tools[ toolIndex ],
             camera           = this.world.camera,
@@ -205,7 +207,8 @@ export default class ToolboxSystem {
         
         tool.hidePreview()
   
-        if ( telemetry.cursor && cursorEntity ) { // check telemetry here to see if activate callbacks should fire instead of tool action
+        if ( telemetry.cursor && cursorEntity ) { 
+          // check telemetry here to see if activate callbacks should fire instead of tool action
           if ( cursorState.component && cursorState.component.props.activate ) { 
             !!cursorState.component && console.warn("Activate ", cursorState.component )
             !!cursorState.component && cursorState.component.state.activate.callbacks.map( (callback) => {
@@ -213,13 +216,12 @@ export default class ToolboxSystem {
             })
             return // cursor system has found the component ( provided all has gone according to plan.. )
           }
-          console.log("use Primary ", componentsByProp)
+          //console.log("use Primary ", componentsByProp)
           miniature = cursorEntity.componentsByProp.miniature
         
           if ( miniature && cursorComponent && cursorComponent.props.toolUI ) {
-            
             configureTool = componentsByProp.toolUI[ 0 ].props.toolUI.configureTool 
-            console.log("ToolUI!", configureTool)
+            console.log("ToolUI! configure tool", configureTool)
               if ( configureTool ) {
                 if ( toolIndex != configureTool.tool ) {
                   this.currentTools[ hand ] = configureTool.tool
@@ -233,17 +235,18 @@ export default class ToolboxSystem {
   
         if ( tool.mesh == null )
           tool.equip(hand)        
-  
-        if (sendAction) {
-          action = tool.primaryAction( telemetry )
+        
+        action = tool.primaryAction(telemetry)
+
+        if ( action && sendAction ) {
+          this.sendToolAction( 
+            true, tool, hand, position, quaternion, action.entity, action.entityId,
+            action.components, action.componentPath || componentPath, action.coords 
+          )
         }
-        if ( !!action )
-          this.sendToolAction( true, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.componentPath || componentPath, action.coords )
-  
       }
   
-      useSecondary( hand, value ) {
-  
+      useSecondary(hand: number, value: any) {
         let tool            = this.tools[this.currentTools[hand]],
             camera          = this.world.camera,
             telemetry       = this.initActionTelemetry(camera, true, hand),
@@ -255,45 +258,65 @@ export default class ToolboxSystem {
             action = false
             
         if ( tool.mesh == null ) {
-            tool.equip( hand )
+            tool.equip(hand)
         }
         action = tool.secondaryAction(telemetry, value)
-        console.info( "Network Action: ", action )
+        //console.info( "Network Action: ", action )
   
         if ( !!action ) {
-          this.sendToolAction( false, tool, hand, position, quaternion, action.entity, action.entityId, action.components, action.componentPath || componentPath, action.coords )
+          this.sendToolAction( 
+            false, tool, hand, position, quaternion, action.entity, action.entityId,
+            action.components, action.componentPath || componentPath, action.coords
+          )
         }
       }
   
-      preview ( handIndex ) {
-  
+      preview(handIndex: number) {
         let tool   = this.tools[ this.currentTools[ handIndex ] ],
             cursor = this.getCursor( handIndex )
   
         tool.preview( cursor[ 0 ] )
       }
   
-      hidePreview ( handIndex ) {
-  
+      hidePreview(handIndex: number) {
         let tool = this.tools[ this.currentTools[ handIndex ] ]
         
         tool.hidePreview()
       } 
   
-      grip ( handIndex, value ) {
-  
+      grip(handIndex: number, value: number) {
         let hands = this.getUserHands(),
             hand   = hands[ handIndex ],
-            entityId = hand.state.hand.grip( value ),
-            avatar = this.user.avatar.mesh
-        
-        this.sendToolAction(true, { name: value < 0 ? "Replace Entity" : "Grab Entity"}, handIndex, avatar.position.toArray(), avatar.quaternion.toArray(), null, entityId, null, null, this.user.avatar.voxel )
+            handState = hand.state.hand,
+            entityId = handState.grip(value),
+            avatar = this.user.avatar.mesh,
+            voxel = handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0];
+
+        if (handState.grabbedEntity) {
+          console.log("send grip tool action")
+          this.sendToolAction(
+            true, 
+            {
+              name: value < 0 ? "Replace Entity" : "Grab Entity"
+            }, 
+            handIndex, 
+            avatar.position.toArray(), 
+            avatar.quaternion.toArray(), 
+            null, 
+            entityId, 
+            null, 
+            null, 
+            voxel,
+            // avatar.position.toArray().map((v,i) => Math.round(v/GRID_SIZE[i]))
+            //handState.grabbedEntity ? handState.grabbedEntity.voxel : [0,1,0]
+          )
+        }
       }
   
-      setHandOrientation ( hand, position, orientation ) {
-  
+      setHandOrientation(hand, position, orientation) {
         let hands = this.getUserHands(),
             userHand = hands[ hand ]
+
        // console.info( userHand, position, orientation )
         if ( !!userHand && position && orientation ) {
           // console.log("toolbox: setHandOrientation", position )
@@ -301,21 +324,32 @@ export default class ToolboxSystem {
         }
       }
   
-      sendToolAction ( primary, tool, hand, position, quaternion, entity, entityId = -1, components = [], componentPath = [], coords ) {
-  
+      sendToolAction(
+        primary: boolean, 
+        tool: number, 
+        hand: number, 
+        position: number[], 
+        quaternion: number[], 
+        entity, 
+        entityId = -1, 
+        components = [], 
+        componentPath = [], 
+        coords, 
+        oldCoords
+      ) {
         let camera = this.world.camera,
             cPos = camera.position,
-            toolName = tool.name
+            toolName = tool.name;
   
         if ( toolName == "Geometry Tool" || toolName == "Material Tool" || toolName == "System Tool" )
-  
           toolName = "Update Tool"
   
         if ( !!!coords )
-  
             coords = [ Math.floor(cPos.x / GRID_SIZE[ 0 ]), 0, Math.floor(cPos.z / GRID_SIZE[ 2 ]) ]
   
-        if ( entity )  { entity.voxel = coords }
+        if ( entity )  { 
+          entity.voxel = coords 
+        }
   
         let actionData = {
             tool: toolName,
@@ -332,9 +366,12 @@ export default class ToolboxSystem {
             entity,
             entityId,
             primary
+          };
+          
+          if (oldCoords) {
+            actionData.oldCoords = oldCoords;
           }
-          // console.log( "ACTION DATA ", actionData)
+        // console.log( "ACTION DATA ", actionData)
         send("tool action", actionData)
       }
-    
 }

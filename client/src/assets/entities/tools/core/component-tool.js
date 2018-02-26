@@ -1,6 +1,6 @@
 import Tool from '../../../../world/tool'
-import Component from '../../../../component'
-import Entity from '../../../../entity'
+import Component from '../../../../core/component'
+import Entity from '../../../../core/entity'
 import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
 export default class ComponentTool extends Tool {
@@ -31,7 +31,7 @@ export default class ComponentTool extends Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 0.5, 0.5, 0.333 ]
+                size: [ 0.1, 0.14, 0.333 ]
               },
               material: {
                 name: "metal"
@@ -150,7 +150,7 @@ export default class ComponentTool extends Tool {
         }
       })
 
-      cursorSystem.entityCoolDown = 100
+      cursorSystem.entityCoolDown = 50
 
       return {
         coords,

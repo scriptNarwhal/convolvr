@@ -3,8 +3,8 @@ import { browserHistory } from 'react-router'
 import FileButton from './file-button'
 import { rgba, rgb } from '../../../util'
 import { isMobile } from '../../../config'
-import BuiltinProps from '../../../assets/props'
-import { getPropsList } from '../../../assets/props'
+import BuiltinProps from '../../../assets/attributes'
+import { getPropsList } from '../../../assets/attributes'
 import { 
   textAreaStyle,
   lightboxStyle, 

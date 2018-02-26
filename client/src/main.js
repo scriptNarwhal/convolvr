@@ -32,7 +32,7 @@ import Systems from './systems/index'
 import { events } from './network/socket'
 import UserInput from './input/user-input'
 import User from './world/user'
-import Entity from './entity'
+import Entity from './core/entity'
 //import ProgressBar from 'progressbardottop'
 
 let store:        Object = makeStore(routerReducer),
@@ -67,14 +67,24 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       voxelKey:  string        = coords.join("."),
       altitude:  number        = systems.terrain.voxels[ voxelKey ].data.altitude
 
-  world.onUserLogin = newUser => { // 
-    avatar = systems.assets.makeEntity(  newUser.data.avatar || "default-avatar", true, { userId: newUser.name, wholeBody: false }, coords ) // entity id can be passed into config object
+  world.onUserLogin = newUser => {
+    console.log("on user login: ", newUser)
+    avatar = systems.assets.makeEntity(  
+      newUser.data.avatar || "default-avatar", 
+      true, 
+      { 
+        userId: newUser.id, 
+        userName: newUser.name,
+        wholeBody: false 
+      }, 
+      coords 
+    ) // entity id can be passed into config object
     avatar.init( scene )
     user.useAvatar( avatar )
     world.user = user
     user.toolbox = world.systems.toolbox
     
-    toolMenu = systems.assets.makeEntity( "tool-menu", true, {}, GLOBAL_SPACE ) // method for spawning built in entities
+    toolMenu = systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) // method for spawning built in entities
     user.hud = toolMenu
     toolMenu.init( scene, {}, (menu: Entity) => { 
       menu.componentsByProp.toolUI[0].state.toolUI.updatePosition()
@@ -88,8 +98,8 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       pos.set( pos.x -25+Math.random()*50, pos.y + 25, pos.z -25+Math.random()*50 )
       
   }
-   world.initChatAndLoggedInUser( localStorage.getItem("username") != null )    
   
+  world.initChatAndLoggedInUser( localStorage.getItem("username") != null )    
   
   chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].props.speech = {}
   chatScreen.init( scene )

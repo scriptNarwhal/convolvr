@@ -36,7 +36,6 @@ export default class Tool {
       let components = this.entity.componentsByProp
       
       if ( components && components.tool )
-
         this.entity.componentsByProp.tool[0].state.tool.preview.show( cursor )
 
     }
@@ -46,7 +45,6 @@ export default class Tool {
       let components = this.entity.componentsByProp
 
       if ( components && components.tool )
-      
         components.tool[0].state.tool.preview.hide()
       
     }
@@ -54,7 +52,6 @@ export default class Tool {
     unequip ( hand ) {
 
       if ( this.mesh != null && this.mesh.parent != null )
-       
           this.mesh.parent.remove( this.mesh )
 
     }
@@ -65,7 +62,7 @@ export default class Tool {
             props: {
               geometry: {
                 shape: "box",
-                size: [ 0.333, 0.9, 0.5 ]
+                size: [ 0.333, 0.13, 0.05 ]
               },
               material: {
                 name: "plastic",
@@ -80,7 +77,9 @@ export default class Tool {
                 ]
               }
             },
-            position: [ 0.05, 0.08, 0.08 ],
+            // position: [ 0.15, 0.18, 0.18 ],
+            
+            position: [ 0.15, 0.18, -2.18 ],
             quaternion: [0, 0, 0, 1]
         }        
     }

@@ -1,5 +1,5 @@
-import Entity from '../../../entity'
-import Component from '../../../component'
+import Entity from '../../../core/entity'
+import Component from '../../../core/component'
 /* battleship.. multiple decks, turrets, multiple occupants, vehicle factory / bay, runway */
 
 let cursorAxis = new THREE.Vector3( 1, 0, 0 )

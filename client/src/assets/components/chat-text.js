@@ -1,20 +1,28 @@
 
 let chatText = (config) => {
+    console.log(config.userName);
     return {
-        position: [0, 4, 0],
+        position: [0, 2.5, 0],
         quaternion: [0,0,0,1],
         props: {
             geometry: {
-                size: [4, 0.8, 1.2],
+                size: [4, 2, 1],
                 shape: "box"
             },
+            material: {
+                color: 0x808080,
+                 name: "plastic"
+            },
             text: {
+                canvasSize: [9, 8],
                 label: true,
-                lines: ["..."]
+                lines: ["..."],
+                color: "#ffff00",
+                background: "#00000000"
             },
             chat: {
                 displayMessages: true,
-                userId: config.userId
+                userName: config.userName
             }
         }
     }

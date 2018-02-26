@@ -5,11 +5,8 @@ import ContextMenu from './context-menu'
 export default class Card extends Component {
 
   componentWillMount () {
-
     this.setState({
-     
     })
-
   }
 
   handleContextAction ( name, e ) {
@@ -18,26 +15,19 @@ export default class Card extends Component {
 
     // display a modal window here if needed.
     if ( name == "Rename" || name == "Edit" || name == "Delete" ) {
-
       data.filename = this.props.title
       data.username = this.props.username
-
     }
     
     if ( name == "Delete" ) {
-
       if ( confirm(`Delete ${data.filename}?`) ) {
         this.props.onContextMenu(name, data, e)
       } else {
         this.props.onContextMenu("", {}, {})
       }
-
     } else {
-
       this.props.onContextMenu(name, data, e)
-
     }
-
   }
 
   handleCardClick ( evt, title ) {
@@ -50,11 +40,25 @@ export default class Card extends Component {
 
   }
 
+  onMouseEnter( evt ) {
+    this.setState({
+      isHovering: true
+    })
+  }
+
+  onMouseLeave( evt ) {
+    this.setState({
+      isHovering: false
+    })
+  }
+
   render() {
 
     return (
         <div style={styles.card(this.props.image, this.props.color, this.props.compact, this.props.quarterSize)}
              onClick={ evt => this.handleCardClick( evt ) }
+             onMouseMove={ evt => this.onMouseEnter( evt ) }
+             onMouseLeave={ evt => this.onMouseLeave( evt ) }
              title={this.props.title }
              className={"ui-card-outer"}
         >
@@ -71,6 +75,7 @@ export default class Card extends Component {
                              onAction={ (name, e) => this.handleContextAction( name, e ) }
                              compact={ this.props.compact }
                              title={ this.props.title }
+                             isHovering={ this.state.isHovering }
                              isImage={ this.props.image != "" }
                              username={ this.props.username }
                              category={ this.props.category }
@@ -117,7 +122,7 @@ Card.defaultProps = {
 let styles = {
   card: (image, color, compact, quarterSize) => {
     return {
-      borderRadius: '1.5px',
+      borderRadius: '2.5px',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)',
       cursor: 'pointer',
       width: quarterSize ? '120px' : '240px',
@@ -125,7 +130,7 @@ let styles = {
       display: 'inline-block',
       marginRight: '0.5em',
       marginBottom: '0.5em',
-      backgroundColor: 'rgba(255,255,255, 0.1)',
+      backgroundColor: 'rgba(255,255,255, 0.2)',
       backgroundSize: 'cover',
       backgroundImage: `url(${image})`,
       textAlign: "center",

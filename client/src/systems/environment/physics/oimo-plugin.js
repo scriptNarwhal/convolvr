@@ -1,8 +1,8 @@
 //@flow
-import Convolvr from '../../world/world'
-import Component from '../../component'
-import Entity from '../../entity'
-import Voxel from '../../world/voxel'
+import Convolvr from '../../../world/world'
+import Component from '../../../core/component'
+import Entity from '../../../core/entity'
+import Voxel from '../../../core/voxel'
 import { THREE } from 'three'
 
 export default class OimoPluginSystem {

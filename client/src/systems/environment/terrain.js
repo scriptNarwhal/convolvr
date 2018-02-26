@@ -1,8 +1,8 @@
 import { browserHistory } from 'react-router'
 import axios from 'axios'
-import Voxel from '../../world/voxel'
+import Voxel from '../../core/voxel'
 import { animate } from '../../world/render'
-import Entity from '../../entity'
+import Entity from '../../core/entity'
 import { 
   GLOBAL_SPACE,
   GRID_SIZE,
@@ -14,7 +14,6 @@ export default class TerrainSystem {
   live: boolean
 
     constructor ( world ) {
-
       this.world            = world
       this.config           = world.config.terrain
       this.octree           = world.octree
@@ -44,8 +43,7 @@ export default class TerrainSystem {
       this.voxels[ GLOBAL_SPACE.join(".") ] = globalVoxel
     }
 
-    init ( component ) {
-
+    init (component) {
         let prop = component.props.tab,
             state = {}
             
@@ -58,7 +56,6 @@ export default class TerrainSystem {
     }
 
     initTerrain ( config ) {
-
       let world = this.world,
           terrainSystem = this,
           materials = world.systems.material
@@ -82,7 +79,7 @@ export default class TerrainSystem {
         this.distantTerrain = null
       }
 
-      if ( type != 'empty' ) {
+      if (type != 'empty') {
         yPosition = type == 'plane' || type == "both" ? -120 / this.config.flatness : 0
         distantTerrain = new Entity( -1, [{
             props: {
@@ -128,36 +125,27 @@ export default class TerrainSystem {
   }
 
   loadVoxel ( coords, callback ) {
-
     let voxels     = this.voxels,
         voxelList  = this.voxelList,
         voxelKey   = coords[0]+".0."+coords[2], // debugging this.. 
         voxelData  = { cell: [coords[0], 0, coords[2]], name: "unloaded voxel", visible: true, altitude: 0, entities: [] },
-        v          = null
+        v          = null;
     
     if ( voxels[ voxelKey ] == null ) {
-
         v = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world )
         voxels[ voxelKey ] = v
         voxelList.push( v )
-
     } else {
-
       v = voxels[ voxelKey ]
-
     }
 
     if ( v.loaded == false )
-
       v.fetchData( callback )
 
-
     return v
-
   }
 
   bufferVoxels ( force, phase ) {
-
     let voxels              = this.voxels,
         voxelList           = this.voxelList,
         config              = this.config,
@@ -210,7 +198,7 @@ export default class TerrainSystem {
           if (!!!voxel.cleanUp && (pCell[0] <= coords[0] - removeDistance || pCell[0] >= coords[0] + removeDistance ||
             pCell[2] <= coords[2] - removeDistance || pCell[2] >= coords[2] + removeDistance)) { 	// mark voxels for removal
 
-            voxel.cleanUp = true
+            voxel.cleanUp = true;
             this.cleanUpChunks.push({
               physics: {
                 cell: [pCell[0], 0, pCell[2]]

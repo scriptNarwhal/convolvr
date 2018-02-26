@@ -21,7 +21,7 @@ export default class MaterialSystem {
             mat = { color: prop.color || 0xffffff },
             assets = this.world.systems.assets,
             renderer = three.renderer,
-            anisotropy = renderer.getMaxAnisotropy() / ( mobile ? 2 : 1 ),
+            anisotropy = renderer.capabilities.getMaxAnisotropy() / ( mobile ? 2 : 1 ),
             path = '/data',
             material = null,
             basic = false,
@@ -67,7 +67,7 @@ export default class MaterialSystem {
               assets.loadImage( prop.roughnessMap, textureConfig, ( roughnessMap ) => {
 
                 !!prop.repeat && this._setTextureRepeat( roughnessMap, prop.repeat )
-                roughnessMap.anisotropy = renderer.getMaxAnisotropy()
+                roughnessMap.anisotropy = renderer.capabilities.getMaxAnisotropy()
                 mat.roughnessMap = roughnessMap
                 
                 let roughnessCallback = roughnessMap => { 
@@ -143,15 +143,12 @@ export default class MaterialSystem {
                 }
 
                 if ( prop.alphaMap || prop.bumpMap ) {
-
                   this._loadAlphaMap( prop, textureConfig, material, assets, () => {
                     if ( !!!prop.bumpMap ) { onMapsLoaded( material ) } // cache material for later
                   })
-
                   this._loadBumpMap( prop, textureConfig, material, assets, () => {
                     onMapsLoaded( material ) // cache material for later
                   })
-
                 } else {
                   onMapsLoaded( material ) 
                 }
@@ -166,7 +163,7 @@ export default class MaterialSystem {
             prop.specularMap && assets.loadImage( prop.specularMap, textureConfig, specularMap => { 
 
               specularMap.wrapS = specularMap.wrapT = THREE.ClampToEdgeWrapping
-              specularMap.anisotropy = renderer.getMaxAnisotropy()
+              specularMap.anisotropy = anisotropy
               material.specularMap = specularMap
               material.needsUpdate = true 
 
@@ -175,10 +172,9 @@ export default class MaterialSystem {
             !!prop.map && assets.loadImage( prop.map, textureConfig, texture => { 
 
               if ( !!prop.repeat )
-
                 this._setTextureRepeat( texture, prop.repeat )
 
-              texture.anisotropy = renderer.getMaxAnisotropy()
+              texture.anisotropy = anisotropy
               material.map = texture
               material.needsUpdate = true 
 
@@ -195,21 +191,24 @@ export default class MaterialSystem {
               })
 
             } else {
-              
               onMapsLoaded( material ) 
-
             }
-
           } 
-
         } else {
           material = assets.materials[ materialCode ]
         }
 
       return {
           material,
-          materialCode
+          materialCode,
+          getTextureCode: (mapType: string) => {
+            this._getTextureCode(prop, mapType)
+          }
       }
+    }
+
+    _getTextureCode( prop, mapType: string ) {
+     return `${prop[mapType]}:${prop.repeat ? prop.repeat.join(".") : ""}`;
     }
 
     _loadAlphaMap ( prop, textureConfig, material, assets, callback ) {
@@ -219,10 +218,9 @@ export default class MaterialSystem {
         let renderer = this.world.three.renderer
 
         if ( !!prop.repeat )
-        
           this._setTextureRepeat( texture, prop.repeat )
         
-        texture.anisotropy = renderer.getMaxAnisotropy()
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
         material.alphaMap = texture
         material.needsUpdate = true 
         callback()
@@ -237,10 +235,9 @@ export default class MaterialSystem {
               let renderer = this.world.three.renderer
       
               if ( !!prop.repeat )
-              
                 this._setTextureRepeat( texture, prop.repeat )
               
-              texture.anisotropy = renderer.getMaxAnisotropy()
+              texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
               material.bumpMap = texture
               material.needsUpdate = true 
               callback()

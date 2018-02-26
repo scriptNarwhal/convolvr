@@ -1,5 +1,5 @@
 import Tool from '../../../../world/tool'
-import Entity from '../../../../entity'
+import Entity from '../../../../core/entity'
 import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
 export default class SocialTool extends Tool {

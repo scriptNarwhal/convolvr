@@ -18,7 +18,6 @@ export default class SkyboxSystem {
     }
 
     createSkybox(skySize, oldSkyMaterial, cylinderMode = false) {
-
         let skybox = null
 
         if ( cylinderMode ) {
@@ -39,13 +38,12 @@ export default class SkyboxSystem {
     }
 
     loadTexturedSky(config, mesh, skySize, callback) {
-
         let world = this.world,
             systems = world.systems
 
         systems.assets.loadImage('/data/user/' + config.photosphere, {}, (texture) => {
 
-            let skySize = 1000 + ((world.viewDistance + 3.5) * 1.4) * 140,
+            let skySize = 1000 + ((world.settings.viewDistance + 3.5) * 1.4) * 140,
                 image = {},
                 oldMaterial = {},
                 material = {},
@@ -70,14 +68,12 @@ export default class SkyboxSystem {
     }
 
     loadShaderSky(config, oldConfig, mesh, callback) {
-
         let systems = this.world.systems,
             starMatProp = systems.assets.getMaterialProp("stars"),
             starSkyTexture = systems.material.procedural.generateTexture(starMatProp),
             world = this.world
 
         systems.assets.loadShaders("/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl", (vert, frag) => {
-
             let skyMaterial = new THREE.ShaderMaterial({
                 side: 1,
                 fog: false,
@@ -106,7 +102,6 @@ export default class SkyboxSystem {
     }
 
     followUser(delta, position) {
-
         let camera = three.camera,
             world = this.world,
             terrainEnt = world.terrain.distantTerrain,
@@ -127,20 +122,21 @@ export default class SkyboxSystem {
 
                 world.skyboxMesh.position.set(camera.position.x, camera.position.y, camera.position.z)
 
-                if (sunLight.castShadow) {
-                    sunLight.shadow.camera.position.set(sunLight.position.x, 2800, sunLight.position.z)
-                    sunLight.shadow.camera.updateMatrix()
-                }
+               
 
                 skyLight.position.set(camera.position.x, 2000 + camera.position.y, camera.position.z)
                 sunLight.position.set(camera.position.x - Math.sin(yaw) * 2001, 2800, camera.position.z - Math.cos(yaw) * 2001) // y  // +camera.position.y+ Math.sin(pitch)*801
                 //console.log(skyLight.position, sunLight.position)
                 //this.skyLight.shadow.camera.lookAt( skyLight )
+                if (sunLight.castShadow) {
+                   // sunLight.shadow.camera.position.set(sunLight.position.x, 2800, sunLight.position.z)
+                    //sunLight.shadow.camera.updateMatrix()
+                }
             }
         }
 
         if (terrainEnt)
-            terrainEnt.update([camera.position.x, terrainEnt.mesh.position.y, camera.position.z])
+            terrainEnt.update([camera.position.x, terrainEnt.mesh.position.y, camera.position.z], false, false, false, false, { updateWorkers: false })
 
     }
 }

@@ -6,23 +6,17 @@ import { isMobile } from '../../config'
 class SideMenu extends Component {
 
   componentWillMount () {
-
     this.setState({
       menuHover: false
     })
-
   }
 
   toggleMenu ( force ) {
-
       this.props.toggleMenu(force)
-
   }
 
   toggleVRMode () {
-
       this.props.toggleVRMode()
-
   }
 
   navigate ( evt, url ) {
@@ -32,23 +26,18 @@ class SideMenu extends Component {
   }
 
   onMouseOver ( evt ) {
-
     this.setState({
       menuHover: ! isMobile()
     })
-
   }
 
   onMouseOut ( evt ) {
-    
     this.setState({
       menuHover: false
     })
-
   }
 
   render() {
-
     return (
         <div style={styles.sideMenu()} >
           <div style={styles.inner()} onMouseOver={ e=> this.onMouseOver(e) } onMouseOut={ e=> this.onMouseOut(e) }>
@@ -64,7 +53,7 @@ class SideMenu extends Component {
                  image="/data/images/plus.png"
                  title="New"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/worlds") }}
+            <Tab clickHandler={ e => { this.navigate(e, "/worlds") }}  
                  image="/data/images/circle-a.png"
                  showTitle={ this.state.menuHover }
                  compact={ isMobile() }
@@ -126,9 +115,7 @@ class SideMenu extends Component {
           </div>
         </div>
     )
-
   }
-
 }
 
 SideMenu.defaultProps = {

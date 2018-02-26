@@ -20,6 +20,7 @@ class Login extends Component {
       loginError: "",
       remember: false
     }
+    window.three.world.willRender = true;
   }
 
   logIn () {

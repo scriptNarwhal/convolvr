@@ -18,23 +18,17 @@ class Shell extends Component {
   }
 
   uploadFiles ( files ) {
-
     let dir = this.props.cwd.join("/"); console.log("upload files dir ", dir)
     
     if ( !!this.props.currentWorld ) {
-
       if ( (dir == "/" || dir == "") && this.props.worldUser == this.props.username ) {
-
         dir = "/worlds/"+this.props.currentWorld
-
       } 
-
     }
-
     if (this.props.reactPath.indexOf("/chat") > -1) {
       dir = "chat-uploads"
     }
-		console.log("uploading files")
+
 		let xhr = new XMLHttpRequest(),
 			  formData = new FormData(),
 			  ins = files.length,
@@ -65,7 +59,8 @@ class Shell extends Component {
 		if ("upload" in new XMLHttpRequest) { // add upload progress event
 				xhr.upload.onprogress = function ( event ) {
 				if (event.lengthComputable) {
-					let complete = (event.loaded / event.total * 100 | 0);
+          let complete = (event.loaded / event.total * 100 | 0);
+          
 					console.log(complete)
           if (complete == 100) {
             if (window.location.href.indexOf("/chat") > -1) {
@@ -79,6 +74,7 @@ class Shell extends Component {
 		}
     xhr.send(formData)
     let from = this.props.username
+
     this.setDropBackground(false)
   }
 
@@ -171,7 +167,7 @@ export default connect(
 
 let styles = {
   shell: ( hasMenu, menuOpen, menuOnly, noBackground, droppingFile ) => {
-    let mobile = window.innerWidth <= 640
+    let mobile = isMobile()
     return {
       margin: 'auto',
       position: 'fixed',

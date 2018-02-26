@@ -1,8 +1,9 @@
-export let animate = ( world, last, cursorIndex ) => {
+export let animate = ( world, last, cursorIndex, forceRender ) => {
 
   let mobile = world.mobile,
       camera = three.camera,
       mode = world.mode,
+      willRender = world.willRender || forceRender,
       cPos = camera.position,
       delta = (Date.now() - last) / 0.080,
       time = Date.now(),
@@ -10,19 +11,20 @@ export let animate = ( world, last, cursorIndex ) => {
       cursors = !!user && !!user.avatar ? user.avatar.componentsByProp.cursor : [],
       hands = !!user ? user.avatar.hands : false
 
-  if (!! world.userInput) {
-    world.userInput.update( delta ) // Update keyboard / mouse / gamepad
-  }
+  if ( willRender && (mode == "3d" || mode == "web") ) {
+
+    if (!! world.userInput) {
+      world.userInput.update( delta ) // Update keyboard / mouse / gamepad
+    }
+
+    if (user && user.avatar && cursors) {
+      user.avatar.update( cPos.toArray(), camera.quaternion.toArray(), false, false, false, { updateWorkers: false } )
+      cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
+    }
   
-  if (user && user.avatar && cursors) {
-    user.avatar.update( cPos.toArray(), camera.quaternion.toArray() )
-    cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
-  }
+    world.sendUserData()
+    world.systems.tick( delta, time )
 
-  world.sendUserData()
-  world.systems.tick( delta, time )
-
-  if ( mode == "3d" || mode == "web" ) {
     if (world.postProcessing.enabled) {
       world.postProcessing.composer.render()
     } else {
@@ -31,7 +33,7 @@ export let animate = ( world, last, cursorIndex ) => {
     world.octree.update()
   }
 
-  if ( mode != "stereo" && !world.IOTMode ) {
+  if ( mode != "stereo" && !world.IOTMode && !forceRender ) {
     requestAnimationFrame( () => { animate( world, time, cursorIndex ) } )
   }
 }
@@ -53,6 +55,7 @@ export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
       vrPos = [],
       vrWorldPos = []
 
+    camera.matrixAutoUpdate = false;
     if ( world.HMDMode != "flymode" ) {  // room scale + gamepad movement
         camera.position.set(cPos.x - oldPos[0], cPos.y - oldPos[1], cPos.z -oldPos[2])
     } else {
@@ -65,16 +68,15 @@ export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
     vrWorldPos =  [ vrPos[0], (vrPos[1]+floorHeight), vrPos[2] ]
     camera.quaternion.fromArray( frame.pose.orientation )
     world.userInput.update(delta)
-    
     user.mesh.quaternion.fromArray( frame.pose.orientation )
     user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
     user.mesh.updateMatrix()
     camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
-    
-    
+
     cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
     world.sendUserData()
     world.systems.tick( delta, time )
+    camera.updateMatrix();
     t.vrEffect.render(t.scene, t.camera) // Render the scene.
     world.octree.update()
     display.requestAnimationFrame(()=> { vrAnimate( display, now, vrWorldPos, cursorIndex) }) // Keep looping.

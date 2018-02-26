@@ -273,7 +273,7 @@ export default connect(
 const styles = {
   modal: () => {
     return Object.assign({}, modalStyle(isMobile()), {
-        maxWidth: '1080px',
+        maxWidth: '720px',
         bottom: undefined,
         top: '1em',
         height: '85vh',

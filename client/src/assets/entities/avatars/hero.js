@@ -1,5 +1,5 @@
-import Entity from '../../../entity'
-import Component from '../../../component'
+import Entity from '../../../core/entity'
+import Component from '../../../core/component'
 import chatText from '../../components/chat-text'
 
 let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 'vr hands'

@@ -1,6 +1,6 @@
 //@flow
 import Convolvr from '../../world/world'
-import Component from '../../component'
+import Component from '../../core/component'
 
 export default class VirtualDeviceSystem { // renders graphics to canvas via 2d api or glsl
     

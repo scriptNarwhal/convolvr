@@ -5,6 +5,7 @@
 /convolvr.exe~
 /convolvr
 /web/js/app.js
+/web/js/workers/*
 .*js/app.js
 _out
 *.pem

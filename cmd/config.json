@@ -17,5 +17,12 @@
     "app": {
       "name": "Convolvr",
 	    "htmlDir": "world.html"
+    },
+    "universe": {
+      "gridSize": {
+        "x": 42.18181818181818, 
+        "y": 42.18181818181818,
+        "z": 36.698181818181816
+      }
     }
 }

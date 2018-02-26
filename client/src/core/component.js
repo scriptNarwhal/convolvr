@@ -2,7 +2,7 @@ export default class Component {
 
   constructor ( data, entity, systems, config = false, parent = false ) {
 
-      var quaternion = data.quaternion ? data.quaternion : false,
+      let quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : [ 0, 0, 0 ],
           path = config && config.path ? config.path : [],
           props = data.props,
@@ -14,10 +14,8 @@ export default class Component {
       this.path = []
 
       while ( p < pl ) {
-
         this.path.push( path[ p ] )
         p += 1
-
       }
       
       this.entity = entity
@@ -36,27 +34,20 @@ export default class Component {
       this.parent = parent ? parent : null
 
       if ( !!! props ) {
-        
         this.props = props = {} 
         console.warn("Component must have props")
-
       }
 
       if ( props.geometry == undefined ) {
-
         props.geometry = {
           shape: "box",
           size: [ 0.333, 0.333, 0.333 ]
         }
-
       } else if ( props.geometry.merge === true ) {
-
           this.merged = true
-
       }
 
       if ( props.material == undefined )
-        
         props.material = {
           name: 'wireframe',
           color: 0xffffff
@@ -70,22 +61,17 @@ export default class Component {
       }
 
       !! quaternion && mesh.quaternion.set( quaternion[0], quaternion[1], quaternion[2], quaternion[3] )
-
       mesh.position.set( position[0], position[1], position[2] )
       mesh.updateMatrix()
 
       if ( this.props.hand != undefined )
-
         this.detached = true
 
-
       this.components.length > 0 && this.initSubComponents( this.components, entity, systems, config )
-
   }
 
   initSubComponents( components, entity, systems, config ) {
-
-    var base = new THREE.Geometry(),
+    let base = new THREE.Geometry(),
         three = window.three,
         mobile = !!config ? config.mobile : three.world.mobile,
         ncomps = components.length,
@@ -99,22 +85,19 @@ export default class Component {
         comp = null,
         combined = null,
         c = 0,
-        s = 0
+        s = 0;
 
     this.lastFace = 0
         
     while ( c < ncomps ) {
-
         comp = new Component( components[ c ], entity, systems, { mobile, path: this.path.concat([c]), index: c }, this ) // use simpler shading for mobile gpus
 
         if ( comp.props.noRaycast === true )
-
           addToOctree = false
       
         compMesh = comp.mesh
 
         if ( comp.props.geometry ) { // this keeps happening.. arrays are geometrically filling up too quickly
-
           faces = compMesh.geometry.faces
           face = faces.length-1
           toFace = this.lastFace + face
@@ -124,37 +107,28 @@ export default class Component {
             to: toFace
           })  
           this.lastFace = toFace
-
         }
 
         if ( comp.merged ) {
-
           this.combinedComponents.push( comp )
           materials.push( compMesh.material )
           compMesh.updateMatrix()
 
           while ( face > -1 ) {
-
               faces[ face ].materialIndex = s
               face --
-
           }
-
           base.merge( compMesh.geometry, compMesh.matrix )
           s ++
-
         } else {
-
           nonMerged.push( comp.mesh )
-
         }
 
         this.allComponents.push( comp )
         c ++
     }
     
-    if ( s > 0 ) {
-
+    if (s > 0) {
       combined = new THREE.Mesh( base, materials ) //new THREE.MultiMaterial( materials ) )
       combined.userData = {
         compsByFaceIndex: this.compsByFaceIndex,
@@ -162,24 +136,16 @@ export default class Component {
         entity
       }
       this.mesh.add( combined )
-
     } else {
-
       while ( s < nonMerged.length ) { // these might thow things off /wrt face index / ray casting
-
           this.mesh.add( nonMerged[ s ] )
           s ++
-
       }
-
     }
-
     this.mesh.userData.compsByFaceIndex = this.compsByFaceIndex     
-
   }
 
   getClosestComponent( position, recursive = false ) {
- 
     let compPos = this._compPos, 
         entMesh = this.mesh,
         parentMesh = this.parent ? this.parent.mesh : false,
@@ -197,10 +163,8 @@ export default class Component {
       newDist = compPos.distanceTo( position )
 
       if ( newDist < distance ) { 
-
         distance = newDist
         closest = component
-
       }
 
     })
@@ -220,35 +184,26 @@ export default class Component {
         newDist = worldCompPos.distanceTo( position ); console.log("newDist", newDist)
         
         if ( newDist < distance ) {  
-
           distance = newDist
           closest = component
-
         }
 
       })
-
     }
     !!closest && console.log(closest.props.geometry.size, closest, closest.entity)
     return closest
-
   }
 
   getComponentByFace ( face ) {
-    
     let component = false
 
     this.compsByFaceIndex.forEach(( comp ) => {
-
       if ( face >= comp.from && face <= comp.to )
-
         component = comp.component
-
 
     })
 
     return component
-
   }
 
 }
