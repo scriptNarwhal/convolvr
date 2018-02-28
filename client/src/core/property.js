@@ -8,7 +8,7 @@ export const PROPERTY_TYPES = {
     ARRAY: "array",
     OBJECT: "object",
     COMPONENT: "component",
-    PROPERTY: "prop",
+    PROPERTY: "attr",
     ATTRIBUTE: "attr",
     ANY: "any"
 };

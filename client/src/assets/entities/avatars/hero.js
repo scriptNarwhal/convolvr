@@ -32,7 +32,7 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
         cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
         cursorComponent = (spotLight = false) => {
           return {
-            props: {
+            attrs: {
               cursor: true,
               geometry: {
                 shape: "open-cylinder", // "open-box",
@@ -58,7 +58,7 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
       if ( wholeBody ) {
 
         component = {
-             props: { 
+             attrs: { 
                 geometry: {
                   shape: "box",
                   size: [ 1.5, 1.5, 0.01 ]
@@ -77,7 +77,7 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
        cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
        
        componentB = {
-             props: { 
+             attrs: { 
                 geometry: {
                   shape: "box",
                   size: [ 0.01, 1.5, 1.5 ],
@@ -93,7 +93,7 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
          components.push( componentB )
         
          components.push({
-            props: { 
+            attrs: { 
               geometry: {
                 shape: "box",
                 size: [ 1.5, 1.5, 0.01 ],
@@ -111,7 +111,7 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
       } else {
 
         components.push(Object.assign({}, {
-          props: {
+          attrs: {
             geometry: {
                 shape: "box",
                 size: [ 0.25, 0.25, 0.25 ],
@@ -136,7 +136,7 @@ let hero = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 
       while (n < 2) {
 
         components.push(Object.assign({}, {
-          props: {
+          attrs: {
             hand: n,
             noRaycast: true,
             geometry: {

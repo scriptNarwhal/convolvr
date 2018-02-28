@@ -9,7 +9,7 @@ export default class PortalSystem {
         return {
             teleport: () => {
 
-                let config = component.props.portal,
+                let config = component.attrs.portal,
                     state = component.state.portal,
                     user = config.user,
                     worldName = config.world,

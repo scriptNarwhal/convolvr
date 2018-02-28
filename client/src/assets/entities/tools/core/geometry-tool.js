@@ -18,7 +18,7 @@ export default class GeometryTool extends Tool {
       }
       this.entity = new Entity(-1, [
           {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [ 0.5, 0.5, 0.4 ]
@@ -31,11 +31,11 @@ export default class GeometryTool extends Tool {
                   title: "Geometries",
                   color: 0xff8007,
                   content: {
-                    props: {
+                    attrs: {
                       metaFactory: { // generates factory for each item in dataSource
-                        type: "prop", // entity, prop
-                        propName: "geometry",
-                        dataSource: this.world.systems.assets.props.geometry
+                        type: "attr", // entity, attr
+                        attrName: "geometry",
+                        dataSource: this.world.systems.assets.attrs.geometry
                       },
                       layout: {
                         type: "grid",
@@ -70,7 +70,7 @@ export default class GeometryTool extends Tool {
           quat            = telemetry.quaternion,
           selected        = !!cursorState.entity ? cursorState.entity : false,
           coords          = telemetry.voxel,
-          props           = {},
+          attrs           = {},
           components      = [ ],
           component       = {}, 
           cursorComponent = cursorState.component,
@@ -80,9 +80,9 @@ export default class GeometryTool extends Tool {
           
       console.log(" ( Geometry Tool ) ", componentPath )
       
-      props = selected.componentsByProp
+      attrs = selected.componentsByProp
       
-      if ( !!!selected || props.miniature || props.activate ) {
+      if ( !!!selected || attrs.miniature || attrs.activate ) {
           console.warn("no tool action, calling activation callbacks")
           return false 
       } else {
@@ -94,14 +94,14 @@ export default class GeometryTool extends Tool {
         component = Object.assign({}, {
           position: cursorComponent.data.position,
           quaternion: cursorComponent.data.quaternion,
-          props: cursorComponent.props,
+          attrs: cursorComponent.attrs,
           components: cursorComponent.components
         })
         console.log("set geometry", component)
-        if (component.props.geometry.size) {
-          component.props.geometry = Object.assign( {}, cursorComponent.props.geometry, this.options, { size: component.props.geometry.size } )  
+        if (component.attrs.geometry.size) {
+          component.attrs.geometry = Object.assign( {}, cursorComponent.attrs.geometry, this.options, { size: component.attrs.geometry.size } )  
         } else {
-          component.props.geometry = Object.assign( {}, cursorComponent.props.geometry, this.options ) 
+          component.attrs.geometry = Object.assign( {}, cursorComponent.attrs.geometry, this.options ) 
         }
         components = [ component ]
       } else {
@@ -134,8 +134,8 @@ export default class GeometryTool extends Tool {
         console.log("Configuring tool ", this.options)
         oldComp = this.entity.components[0]
         newComp = Object.assign( {}, oldComp, {
-          props: Object.assign( {}, oldComp.props, {
-            geometry: Object.assign( {}, oldComp.props.geometry, this.options )
+          attrs: Object.assign( {}, oldComp.attrs, {
+            geometry: Object.assign( {}, oldComp.attrs.geometry, this.options )
           })
         })
         this.entity.update( false, false, false, newComp, [0] )

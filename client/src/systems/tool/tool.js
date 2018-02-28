@@ -18,7 +18,7 @@ export default class ToolSystem {
     }
 
     init ( component: Component ) { 
-        let prop = component.props.tool,
+        let attr = component.attrs.tool,
             toolSystem = this,
             contentProps = {},
             factories = null,
@@ -26,15 +26,15 @@ export default class ToolSystem {
             panel = null,
             newPanel = null
 
-        if ( prop.panel ) {
-            contentProps = prop.panel && prop.panel.content ? prop.panel.content.props : {}
-            panel = this._initPanelUIEntity( prop.panel, contentProps )
+        if ( attr.panel ) {
+            contentProps = attr.panel && attr.panel.content ? attr.panel.content.attrs : {}
+            panel = this._initPanelUIEntity( attr.panel, contentProps )
             this.panels.push( panel )
         }
 
-        if ( prop.panels )
-            prop.panels.map( ( newPanel, p) => { console.info("init multiple panels", newPanel);
-                contentProps = newPanel && newPanel.content ? newPanel.content.props : {}
+        if ( attr.panels )
+            attr.panels.map( ( newPanel, p) => { console.info("init multiple panels", newPanel);
+                contentProps = newPanel && newPanel.content ? newPanel.content.attrs : {}
                 let panelEnt = toolSystem._initPanelUIEntity( newPanel, contentProps )
                 console.info("panel ent ", panelEnt)
                 panels.push( panelEnt )
@@ -69,7 +69,7 @@ export default class ToolSystem {
         return new Entity(-1, [ // move panels to asset system perhaps.. or define below*
             {
                 position: [0, 0, 0],
-                props: { // colored top bar                      
+                attrs: { // colored top bar                      
                     geometry: {
                         shape: "box",
                         detail: [4,2,2],
@@ -83,7 +83,7 @@ export default class ToolSystem {
                     components: [
                         {
                             position: [ 0, 0, 0],
-                            props: { // title for top bar
+                            attrs: { // title for top bar
                                 text: {
                                     label: true,
                                     lines: [ panelProp.title ],
@@ -104,7 +104,7 @@ export default class ToolSystem {
                         },
                         {
                             position: [ 0, 0, 0],
-                            props: { // title for top bar
+                            attrs: { // title for top bar
                                 text: {
                                     label: true,
                                     lines: [ panelProp.title ],
@@ -129,7 +129,7 @@ export default class ToolSystem {
             },
             {
                 position: [0, -2.25, 0], // position & init the panel once the tool is equipped
-                props: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel
+                attrs: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel
                     geometry: {
                         shape: "box",
                         size: [ 3, 4, 0.1 ]
@@ -152,7 +152,7 @@ export default class ToolSystem {
         if (previewBox == null && cursor) {
 
             preview = assets.makeEntity( "preview-box", true, {}, component.entity.voxel )
-            preview.components[0].props.noRaycast = {}
+            preview.components[0].attrs.noRaycast = {}
             preview.init( cursor.mesh, {} )
             component.state.tool.preview.box = preview
             // preview = this.generatePreview( component, preset, data )
@@ -237,7 +237,7 @@ export default class ToolSystem {
     initLabel ( component: Component, value: any ) {
 
         return {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [ 0.6, 0.2, 0.2 ]

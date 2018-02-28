@@ -11,25 +11,25 @@ export default class FileSystem {
 
     init ( component: Component ) { 
 
-        let prop = component.props.file,
+        let attr = component.attrs.file,
             defaultCallbacks = [],
             params = {},
             res = {}
 
-        if ( prop.listFiles ) { // init logic here... only read methods; (write logic triggered by events)
-            params = prop.listFiles
+        if ( attr.listFiles ) { // init logic here... only read methods; (write logic triggered by events)
+            params = attr.listFiles
             this._listFiles( component, params.username, params.dir )
         }
-        if ( prop.listDirectories ) {
-            params = prop.listDirectories
+        if ( attr.listDirectories ) {
+            params = attr.listDirectories
             this._listDirectories( component, params.username, params.dir )
         }
-        if ( prop.readText ) {
-            params = prop.readText
+        if ( attr.readText ) {
+            params = attr.readText
             this._readText( component, params.filename, params.username, params.dir )
         }
 
-        if ( prop.refresh !== false )
+        if ( attr.refresh !== false )
 
             // defaultCallbacks.push( () => {
             //     component.entity.updateComponentAtPath( component, component.path )
@@ -124,10 +124,10 @@ export default class FileSystem {
             entity = component.entity,
             fileViewer = {
                 ...component.data,
-                props: {
-                    ...component.data.props,
+                attrs: {
+                    ...component.data.attrs,
                     metaFactory: { // generates factory for each item in dataSource
-                        type: "file", // entity, prop, place, world, user, file, directory
+                        type: "file", // entity, attr, place, world, user, file, directory
                         dataSource: files
                     }
                 }
@@ -143,10 +143,10 @@ export default class FileSystem {
             entity = component.entity,
             directoryViewer = {
                 ...component.data,
-                props: {
-                    ...component.data.props,
+                attrs: {
+                    ...component.data.attrs,
                     metaFactory: { // generates factory for each item in dataSource
-                        type: "directory", // entity, prop, place, world, user, file, directory
+                        type: "directory", // entity, attr, place, world, user, file, directory
                         dataSource: dirs
                     }
                 }

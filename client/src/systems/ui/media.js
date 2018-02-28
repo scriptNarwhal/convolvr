@@ -8,17 +8,17 @@ export default class MediaSystem {
 
     init ( component ) {
 
-        let prop = component.props.media
+        let attr = component.attrs.media
 
-        if ( prop.playPause ) {
+        if ( attr.playPause ) {
 
-        } else if ( prop.title ) {
+        } else if ( attr.title ) {
 
-        } else if ( prop.queue ) {
+        } else if ( attr.queue ) {
 
-        } else if ( prop.add ) {
+        } else if ( attr.add ) {
             
-        } else if ( prop.remove ) {
+        } else if ( attr.remove ) {
 
         }
 

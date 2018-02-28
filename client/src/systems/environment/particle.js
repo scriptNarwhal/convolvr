@@ -14,21 +14,21 @@ export default class ParticleSystem {
 
     init (component) { 
 
-        let prop = component.props.particles, 
+        let attr = component.attrs.particles, 
             ps = new THREE.GPUParticleSystem( {
-                    maxParticles: prop.maxParticles  || 0.4
+                    maxParticles: attr.maxParticles  || 0.4
             }),
             options = {
                     position: new THREE.Vector3(),
-                    positionRandomness: prop.positionRandomness || 0.08,
+                    positionRandomness: attr.positionRandomness || 0.08,
                     velocity: new THREE.Vector3(),
                     velocityRandomness: .5,
-                    color: prop.color || 0xffffff,
-                    colorRandomness: prop.colorRandomness || .2,
-                    turbulence: prop.turbulence || 100,
-                    lifetime: prop.lifetime || 2,
-                    size: prop.size || 500,
-                    sizeRandomness: prop.sizeRandomness || .5
+                    color: attr.color || 0xffffff,
+                    colorRandomness: attr.colorRandomness || .2,
+                    turbulence: attr.turbulence || 100,
+                    lifetime: attr.lifetime || 2,
+                    size: attr.size || 500,
+                    sizeRandomness: attr.sizeRandomness || .5
             }
 
         component.mesh.add(ps)

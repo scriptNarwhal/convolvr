@@ -4,7 +4,7 @@ export default class ConveyorSystem {
     }
 
     init (component) { 
-        let prop = component.props.propulsion
+        let attr = component.attrs.propulsion
         // use in conjunction with entity physics
         
         return {

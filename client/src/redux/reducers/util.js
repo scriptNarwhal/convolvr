@@ -80,7 +80,7 @@ module.exports = function app (state = {
         itemId: "",
         source: "inventory"
     },
-    propertyEdit: {
+    attrertyEdit: {
         windowsOpen: 0,
         activated: false,
         username: "",
@@ -92,7 +92,7 @@ module.exports = function app (state = {
         activated: {
             entity: false,
             component: false,
-            property: false
+            attrerty: false
         },
         username: "",
         category: "",
@@ -100,12 +100,12 @@ module.exports = function app (state = {
         data: {
             entity: false,
             component: false,
-            property: false
+            attrerty: false
         },
         source: {
             entity: "inventory",
             component: "inventory",
-            property: "inventory"
+            attrerty: "inventory"
         }
     }
 }, action) {
@@ -185,12 +185,12 @@ module.exports = function app (state = {
                     }
                 }
             break;
-            case "propertyEdit":
+            case "attrertyEdit":
                 newState = {
                     ...newState,
-                    propertyEdit: {
-                        ...newState.propertyEdit,
-                        windowsOpen: newState.propertyEdit.windowsOpen + 1
+                    attrertyEdit: {
+                        ...newState.attrertyEdit,
+                        windowsOpen: newState.attrertyEdit.windowsOpen + 1
                     }
                 }
             break;
@@ -299,9 +299,9 @@ module.exports = function app (state = {
     case UTIL_LAUNCH_PROPERTY_EDITOR:
         return {
             ...state,
-            propertyEdit: {
-                ...state.propertyEdit,
-                windowsOpen: state.propertyEdit.windowsOpen + 1,
+            attrertyEdit: {
+                ...state.attrertyEdit,
+                windowsOpen: state.attrertyEdit.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 itemId: action.itemId,
@@ -326,9 +326,9 @@ module.exports = function app (state = {
                 source.component = action.source
             break
             case "Properties":
-                data.property = action.data
-                activated.property = true
-                source.property = action.source
+                data.attrerty = action.data
+                activated.attrerty = true
+                source.attrerty = action.source
             break
         }
 
@@ -442,9 +442,9 @@ module.exports = function app (state = {
     case UTIL_CLOSE_PROPERTY_EDITOR:
         return {
             ...state,
-            propertyEdit: {
-                ...state.propertyEdit,
-                windowsOpen: state.propertyEdit.windowsOpen - 1,
+            attrertyEdit: {
+                ...state.attrertyEdit,
+                windowsOpen: state.attrertyEdit.windowsOpen - 1,
                 activated: false
             },
             loadedItemEdit: {
@@ -452,7 +452,7 @@ module.exports = function app (state = {
                 windowsOpen: state.loadedItemEdit.windowsOpen - 1,
                 data: {
                     ...state.loadedItemEdit.data,
-                    property: null
+                    attrerty: null
                 }
             }
         }

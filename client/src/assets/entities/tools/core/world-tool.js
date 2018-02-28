@@ -19,7 +19,7 @@ export default class WorldTool extends Tool {
 
       this.entity = new Entity(-1, [
           {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [ 0.1, 0.1, 0.4 ]
@@ -32,10 +32,10 @@ export default class WorldTool extends Tool {
                   title: "Worlds",
                   color: 0x07ff07,
                   content: {
-                    props: {
+                    attrs: {
                       metaFactory: { // generates factory for each item in dataSource
-                        type: "world", // entity, prop, place, world, user, file, directory
-                        //propName: "geometry",
+                        type: "world", // entity, attr, place, world, user, file, directory
+                        //attrName: "geometry",
                         dataSource: this.world.systems.assets.worlds
                       }
                     }

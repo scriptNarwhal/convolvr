@@ -7,19 +7,19 @@ export default class MiniatureSystem {
 
     init ( component ) { 
 
-        let prop = component.props.miniature
+        let attr = component.attrs.miniature
 
-        if ( !!! prop) {
+        if ( !!! attr) {
             return
         }
 
-        if ( !!!prop.fullSize ) {
+        if ( !!!attr.fullSize ) {
             setTimeout(()=>{
-                this.miniaturize( component, false, prop.scale )
+                this.miniaturize( component, false, attr.scale )
             }, 500)
         }
 
-        component.props.miniature = undefined // destroy this, since it gives the other components cancer ☠️
+        component.attrs.miniature = undefined // destroy this, since it gives the other components cancer ☠️
 
         return {
             fullSize: false,

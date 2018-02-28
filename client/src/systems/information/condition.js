@@ -8,7 +8,7 @@ export default class ConditionSystem {
 
     init ( component: Component ) {
 
-        let prop = component.props.condition,
+        let attr = component.attrs.condition,
             state = {}
 
         return state

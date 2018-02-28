@@ -21,7 +21,7 @@ export default class DeleteTool extends Tool  {
       }
       this.entity = new Entity(-1, [
           {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [ 0.1, 0.1, 0.4 ]

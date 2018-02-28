@@ -62,9 +62,9 @@ export default class CursorSystem {
 
                 if ( !!entity && obj.distance < 50 ) {
                     if ( entity.components.length == 1 ) { //console.log("raycasting component: ", obj.faceIndex )
-                        component = entity.allComponents[ 0 ]; //console.log("one component: ", component ? Object.keys(component.props).join("-") : "")
+                        component = entity.allComponents[ 0 ]; //console.log("one component: ", component ? Object.keys(component.attrs).join("-") : "")
                     } else { 
-                        component = entity.getComponentByFace( obj.faceIndex ); //console.log("closest", component ? Object.keys(component.props).join("-") : "")
+                        component = entity.getComponentByFace( obj.faceIndex ); //console.log("closest", component ? Object.keys(component.attrs).join("-") : "")
                     }
                 }
                 callback( cursor, hand, world, obj, entity, component )
@@ -145,10 +145,10 @@ export default class CursorSystem {
     _cursorCallback ( cursor, hand, world, obj, entity, component ) {
         let cursorState = cursor.state,
             distance = !!cursorState.cursor ? cursorState.cursor.distance : 2,
-            props = !!component ? component.props : false,
-            hover = !!props ? props.hover : false,
-            lookAway = !!props ? props.lookAway : false,
-            activate = !!props ? props.activate : false,
+            attrs = !!component ? component.attrs : false,
+            hover = !!attrs ? attrs.hover : false,
+            lookAway = !!attrs ? attrs.lookAway : false,
+            activate = !!attrs ? attrs.activate : false,
             cursorSystem = world.systems.cursor,
             newCursorState = null,
             noRayCast = entity && entity.componentsByProp.noRayCast,

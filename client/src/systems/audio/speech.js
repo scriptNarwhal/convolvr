@@ -14,13 +14,13 @@ export default class SpeechSystem {
 
     init ( component ) {
         
-        let prop = component.props.speech
+        let attr = component.attrs.speech
 
-        if ( prop.readText !== false ) {
+        if ( attr.readText !== false ) {
 
-            if ( component.props.text ) { // speak text
+            if ( component.attrs.text ) { // speak text
 
-                this.speak(component.props.text.lines.join(". "), false, 0)
+                this.speak(component.attrs.text.lines.join(". "), false, 0)
 
             }
         }

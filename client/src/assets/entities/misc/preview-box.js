@@ -3,7 +3,7 @@ let previewBox = {
             name: "preview-box",
             components: [
                 {
-                    props: {
+                    attrs: {
                         geometry: {
                             shape: "node",
                             size: [1, 1, 1]
@@ -19,7 +19,7 @@ let previewBox = {
                     components: []
                 },
                 {
-                    props: {
+                    attrs: {
                         geometry: {
                             shape: "box",
                             size: [0.05, 0.050, 0.050]
@@ -34,7 +34,7 @@ let previewBox = {
                     components: []
                 },
                 {
-                    props: {
+                    attrs: {
                         geometry: {
                             shape: "box",
                             size: [0.05, 0.050, 0.050]

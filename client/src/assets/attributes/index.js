@@ -1,12 +1,12 @@
-export function getPropsList ( props ) {
+export function getPropsList ( attrs ) {
 
     let out = []
 
-    props.geometry.map( (data, d) => {
+    attrs.geometry.map( (data, d) => {
         out.push({ name: `geometry.${d}`, data })
     })  
     
-    props.material.map( (data, d) => {
+    attrs.material.map( (data, d) => {
         out.push({ name: `material.${d}`, data })
     })
 
@@ -14,7 +14,7 @@ export function getPropsList ( props ) {
 
     systems.map( cat => {
 
-        let category = props.systems[ cat ]
+        let category = attrs.systems[ cat ]
 
         Object.keys(category).map( key => {  
             category[ key ].map( (dat, d) => {
@@ -80,7 +80,7 @@ export default function BuiltinProps () {
             { path: "/data/images/photospheres/sky-reflection-r.jpg" },  
             { path: "/data/images/photospheres/sky-reflection-o.jpg" }
         ],
-        systems: { // load these from ../assets/props eventually
+        systems: { // load these from ../assets/attrs eventually
             structures: {
                 floor: [{}],
                 wall: [{}],

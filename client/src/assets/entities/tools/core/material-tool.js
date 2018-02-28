@@ -21,7 +21,7 @@ export default class MaterialTool extends Tool {
     }
 
       this.entity = new Entity(-1, [{
-          props: {
+          attrs: {
             geometry: {
               shape: "box",
               size: [0.08, 0.05, 0.333]
@@ -34,11 +34,11 @@ export default class MaterialTool extends Tool {
                 title: "Materials",
                 color: 0x07ffff,
                 content: {
-                  props: {
+                  attrs: {
                     metaFactory: { // generates factory for each item in dataSource
-                      type: "prop", // entity, prop
-                      propName: "material",
-                      dataSource: this.world.systems.assets.props.material
+                      type: "attr", // entity, attr
+                      attrName: "material",
+                      dataSource: this.world.systems.assets.attrs.material
                     },
                     layout: {
                       type: "grid",
@@ -74,7 +74,7 @@ export default class MaterialTool extends Tool {
           quat            = telemetry.quaternion,
           selected        = !!cursorState.entity ? cursorState.entity : false,
           coords          = telemetry.voxel,
-          props           = {},
+          attrs           = {},
           components      = [ ],
           component       = {}, 
           cursorComponent = cursorState.component,
@@ -83,9 +83,9 @@ export default class MaterialTool extends Tool {
           
 
       console.log(" ( Material Tool ) ", componentPath )
-      props = selected.componentsByProp
+      attrs = selected.componentsByProp
       
-      if ( !!!selected || props.miniature || props.activate ) {
+      if ( !!!selected || attrs.miniature || attrs.activate ) {
           console.warn("no tool action, calling activation callbacks")
           return false 
       
@@ -101,11 +101,11 @@ export default class MaterialTool extends Tool {
         component = Object.assign({}, {
           position: cursorComponent.data.position,
           quaternion: cursorComponent.data.quaternion,
-          props: cursorComponent.props,
+          attrs: cursorComponent.attrs,
           components: cursorComponent.components
         })
         console.log("set material", component)
-        component.props.material = Object.assign( {}, component.props.material, this.options )
+        component.attrs.material = Object.assign( {}, component.attrs.material, this.options )
         components = [ component ]
 
       } else {
@@ -138,7 +138,7 @@ export default class MaterialTool extends Tool {
         this.options = Object.assign( {}, this.options, config.data )
         console.log("Configuring tool ", this.options)
         newComp = Object.assign({}, this.entity.components[0], {
-          props: Object.assign({}, this.entity.components[0].props, {
+          attrs: Object.assign({}, this.entity.components[0].attrs, {
               material: this.options
           })
         })

@@ -1,8 +1,8 @@
-export let _initMaterialProp = (prop, simpleShading) => { // material presets & configuration
+export let _initMaterialProp = (attr, simpleShading) => { // material presets & configuration
 
   let basic = false
 
-  switch (prop.name) {
+  switch (attr.name) {
 
     case "wireframe":
       basic = true
@@ -13,162 +13,162 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
     case "terrain":
       if (!simpleShading) {
 
-        //prop.metalnessMap = "/data/images/textures/tiles.png" 
-        prop.roughnessMap = '/data/images/textures/terrain5.jpg'
-        prop.map = !!!prop.map ? '/data/images/textures/terrain4.jpg' : prop.map
+        //attr.metalnessMap = "/data/images/textures/tiles.png" 
+        attr.roughnessMap = '/data/images/textures/terrain5.jpg'
+        attr.map = !!!attr.map ? '/data/images/textures/terrain4.jpg' : attr.map
 
       } else {
 
-        prop.map = '/data/images/textures/terrain4.jpg'
-        prop.envMap = 'none'
+        attr.map = '/data/images/textures/terrain4.jpg'
+        attr.envMap = 'none'
 
       }
 
-      prop.repeat = ['wrapping', 10, 10]
+      attr.repeat = ['wrapping', 10, 10]
       break
     case "terrain2":
       if (!simpleShading) {
 
-        prop.map = !!!prop.map ? '/data/images/textures/terrain1.jpg' : prop.map
+        attr.map = !!!attr.map ? '/data/images/textures/terrain1.jpg' : attr.map
 
       } else {
 
-        prop.map = '/data/images/textures/terrain1.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
-        prop.envMap = 'none'
+        attr.map = '/data/images/textures/terrain1.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
+        attr.envMap = 'none'
 
       }
-      prop.repeat = ['wrapping', 8, 8]
+      attr.repeat = ['wrapping', 8, 8]
       break
     case "terrain3":
       if (!simpleShading) {
 
-        prop.map = !!!prop.map ? '/data/images/textures/terrain4.jpg' : prop.map
-        //prop.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
+        attr.map = !!!attr.map ? '/data/images/textures/terrain4.jpg' : attr.map
+        //attr.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
 
       } else {
 
-        prop.map = '/data/images/textures/terrain4.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
-        prop.envMap = 'none'
+        attr.map = '/data/images/textures/terrain4.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
+        attr.envMap = 'none'
 
       }
 
-      prop.repeat = ['wrapping', 10, 10]
+      attr.repeat = ['wrapping', 10, 10]
       break
     case "terrain4":
       if (!simpleShading) {
 
-        prop.metalnessMap = "/data/images/textures/terrain3.jpg"
-        prop.map = !!!prop.map ? '/data/images/textures/terrain3.jpg' : prop.map
+        attr.metalnessMap = "/data/images/textures/terrain3.jpg"
+        attr.map = !!!attr.map ? '/data/images/textures/terrain3.jpg' : attr.map
 
       } else {
 
-        prop.map = '/data/images/textures/terrain3.jpg'
-        prop.envMap = 'none'
+        attr.map = '/data/images/textures/terrain3.jpg'
+        attr.envMap = 'none'
 
       }
 
-      prop.repeat = ['wrapping', 10, 10]
+      attr.repeat = ['wrapping', 10, 10]
       break
     case "organic":
       if (!simpleShading) {
 
-        prop.roughnessMap = "/data/images/textures/tiles-light.png"
-        prop.map = !!!prop.map ? '/data/images/textures/tiles-light.png' : prop.map
+        attr.roughnessMap = "/data/images/textures/tiles-light.png"
+        attr.map = !!!attr.map ? '/data/images/textures/tiles-light.png' : attr.map
 
       } else {
 
-        prop.map = '/data/images/textures/tiles-light.png' // /data/images/textures/gplaypattern_@2X-2.png'
-        prop.envMap = 'none'
+        attr.map = '/data/images/textures/tiles-light.png' // /data/images/textures/gplaypattern_@2X-2.png'
+        attr.envMap = 'none'
 
       }
 
-      prop.repeat = ['wrapping', 6, 6]
+      attr.repeat = ['wrapping', 6, 6]
       break
     case "tree":
       if (!simpleShading) {
 
-        //prop.roughnessMap = "/data/images/textures/tiles-light.png"
-        prop.map = !!!prop.map ? '/data/images/textures/foliage1.jpg' : prop.map
-       // prop.alphaMap = !!!prop.map ? "/data/images/textures/surface03.jpg" : prop.map
+        //attr.roughnessMap = "/data/images/textures/tiles-light.png"
+        attr.map = !!!attr.map ? '/data/images/textures/foliage1.jpg' : attr.map
+       // attr.alphaMap = !!!attr.map ? "/data/images/textures/surface03.jpg" : attr.map
 
       } else {
 
-        prop.map = '/data/images/textures/foliage1.jpg'
-        prop.envMap = 'none'
+        attr.map = '/data/images/textures/foliage1.jpg'
+        attr.envMap = 'none'
 
       }
 
-      prop.repeat = ['wrapping', 6, 6]
+      attr.repeat = ['wrapping', 6, 6]
       break
     case "metal":
-      prop.repeat = !!!prop.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
+      attr.repeat = !!!attr.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
 
       if (!simpleShading)
 
-        prop.metalnessMap = "/data/images/textures/metal4.jpg"
+        attr.metalnessMap = "/data/images/textures/metal4.jpg"
 
 
-      prop.map = !!!prop.map ? '/data/images/textures/metal4.jpg' : prop.map
+      attr.map = !!!attr.map ? '/data/images/textures/metal4.jpg' : attr.map
       break
     case "metal2":
-      prop.repeat = !!!prop.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
+      attr.repeat = !!!attr.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
 
       if (!simpleShading) {
 
-        prop.alphaMap = "/data/images/textures/metal2.png"
-        prop.map = !!!prop.map ? '/data/images/textures/metal3.png' : prop.map
+        attr.alphaMap = "/data/images/textures/metal2.png"
+        attr.map = !!!attr.map ? '/data/images/textures/metal3.png' : attr.map
 
       } else {
 
-        prop.map = !!!prop.map ? '/data/images/textures/metal3.png' : prop.map
+        attr.map = !!!attr.map ? '/data/images/textures/metal3.png' : attr.map
 
       }
       break
       case "metal3":
-      prop.repeat = !!!prop.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
+      attr.repeat = !!!attr.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
 
       if (!simpleShading) {
 
-        prop.metalnessMap = "/data/images/textures/metal5.jpg"
-        prop.map = !!!prop.map ? '/data/images/textures/metal5.jpg' : prop.map
+        attr.metalnessMap = "/data/images/textures/metal5.jpg"
+        attr.map = !!!attr.map ? '/data/images/textures/metal5.jpg' : attr.map
 
       } else {
 
-        prop.map = !!!prop.map ? '/data/images/textures/metal5.jpg' : prop.map
+        attr.map = !!!attr.map ? '/data/images/textures/metal5.jpg' : attr.map
 
       }
       break
     case "glass":
-      prop.repeat = ['wrapping', 18, 18]
+      attr.repeat = ['wrapping', 18, 18]
 
       if (!simpleShading) {
 
-        prop.metalnessMap = '/data/images/textures/shattered_@2X-2.png'
+        attr.metalnessMap = '/data/images/textures/shattered_@2X-2.png'
 
       } else {
 
-        prop.specularMap = '/data/images/textures/tiles.png'
+        attr.specularMap = '/data/images/textures/tiles.png'
 
       }
       break
     case "hard-light":
-      prop.map = '/data/images/textures/surface03.jpg'
+      attr.map = '/data/images/textures/surface03.jpg'
 
       if (!simpleShading)
 
-        prop.metalnessMap = '/data/images/textures/surface03.jpg'
+        attr.metalnessMap = '/data/images/textures/surface03.jpg'
 
       break
     case "plastic":
-      prop.repeat = ['wrapping', 2, 2]
-      prop.map = !!!prop.map ? '/data/images/textures/gplaypattern_@2X-2.png' : prop.map
+      attr.repeat = ['wrapping', 2, 2]
+      attr.map = !!!attr.map ? '/data/images/textures/gplaypattern_@2X-2.png' : attr.map
 
       if (!simpleShading)
 
-        prop.metalnessMap = "/data/images/textures/tiles.png"
+        attr.metalnessMap = "/data/images/textures/tiles.png"
     break
     case "stars":
-      prop.repeat = ['wrapping', 4, 2]
+      attr.repeat = ['wrapping', 4, 2]
     break
     default:
       break
@@ -177,7 +177,7 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
 
   if (simpleShading)
 
-    prop.envMap = 'none'
+    attr.envMap = 'none'
 
 
   return basic
@@ -185,13 +185,13 @@ export let _initMaterialProp = (prop, simpleShading) => { // material presets & 
 }
 
 
-export let _initMaterialConfig = ( prop, mat, shading, basic, mobile  ) => {
+export let _initMaterialConfig = ( attr, mat, shading, basic, mobile  ) => {
     
   if ( mobile ) 
 
     shading = "standard"
 
-  switch ( prop.name ) { // material presets
+  switch ( attr.name ) { // material presets
     
     case "wireframe":
         mat.wireframe = true
@@ -246,7 +246,7 @@ export let _initMaterialConfig = ( prop, mat, shading, basic, mobile  ) => {
         mat.transparent = !mobile
       break
       case "hard-light":
-        if (!mobile && prop.bumpMap ) {
+        if (!mobile && attr.bumpMap ) {
 
           mat = Object.assign({}, mat, {
                     color: 0x0040ff,

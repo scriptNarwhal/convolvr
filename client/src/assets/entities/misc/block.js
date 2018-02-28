@@ -2,7 +2,7 @@ let block = {
         id: -1,
         name: "block",
         components: [{
-            props: {
+            attrs: {
                 geometry: {
                 merge: true,
                     shape: "box",

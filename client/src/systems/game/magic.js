@@ -8,7 +8,7 @@ export default class MagicSystem {
     
         init ( component ) {
             
-            let prop = component.props.magic,
+            let attr = component.attrs.magic,
                 state = {}
     
             //TODO: implement

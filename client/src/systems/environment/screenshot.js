@@ -11,7 +11,7 @@ export default class ScreenshotSystem {
         // generate cube maps for portals
         // also allow narrow / traditional screenshots, accesible via file, media systems, etc
 
-        if ( prop.mode == "narrow" ) {
+        if ( attr.mode == "narrow" ) {
 
             // implement
 

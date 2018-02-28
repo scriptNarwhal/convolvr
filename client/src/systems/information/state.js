@@ -12,7 +12,7 @@ export default class StateSystem {
 
     init ( component: Component ) { 
         
-        let prop = component.props.state
+        let attr = component.attrs.state
 
         //TODO: implement
 
@@ -28,13 +28,13 @@ export default class StateSystem {
 
     set ( component: Component, key: string, value: any ) {
 
-        let prop = component.props.emote
+        let attr = component.attrs.emote
         component.state.state[ key ] = value
     }
 
     get ( component: Component, key: string ): any {
         
-        let prop = component.props.emote
+        let attr = component.attrs.emote
         return component.state.state[ key ]
     }
 

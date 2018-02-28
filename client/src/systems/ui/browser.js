@@ -8,9 +8,9 @@ export default class BrowserSystem {
 
     init ( component: Component ) { 
         
-        let prop = component.props.browser
+        let attr = component.attrs.browser
 
-        switch ( prop.type ) {
+        switch ( attr.type ) {
 
             case "files":
 
@@ -39,7 +39,7 @@ export default class BrowserSystem {
             case "components":
 
             break
-            case "props":
+            case "attrs":
 
             break
             case "users":
@@ -69,7 +69,7 @@ export default class BrowserSystem {
             refresh: ( url ) => {
                 this.refresh( component )
             },
-            type: prop.type
+            type: attr.type
         }
     }
 

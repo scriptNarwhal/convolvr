@@ -8,19 +8,19 @@ export default class GraphSystem {
 
     init ( component ) {
         
-        let prop = component.props.graph,
+        let attr = component.attrs.graph,
             state = {}
 
-        if ( prop.type === "line" ) { // display data as simple line graph
+        if ( attr.type === "line" ) { // display data as simple line graph
 
             // use display adapter system
             //TODO: implement
 
-        } else if ( prop.type === "node" ) { // display data as 3d node graph
+        } else if ( attr.type === "node" ) { // display data as 3d node graph
 
 
 
-        } else if ( prop.type === "edge" ) { // display connections between nodes
+        } else if ( attr.type === "edge" ) { // display connections between nodes
 
 
 

@@ -3,7 +3,7 @@ let videoChat = {
         name: "video-chat",
         components: [
             {
-                props: {
+                attrs: {
                     geometry: {
                         shape: "box",
                         size: [ 3, 3, 0.25 ]
@@ -27,7 +27,7 @@ let videoChat = {
                 position: [ 0, 0, -0.25]
             },
             {
-                props: {
+                attrs: {
                     geometry: {
                         shape: "box",
                         size: [ 3, 3, 0.25 ]

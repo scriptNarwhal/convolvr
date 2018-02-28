@@ -2,7 +2,7 @@ let block = {
     id: -1,
     name: "file-browser",
     components: [{
-        props: {
+        attrs: {
             geometry: {
                 shape: "box",
                 size: [ 2, 2, 2 ]

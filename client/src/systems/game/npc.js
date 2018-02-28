@@ -7,7 +7,7 @@ export default class NPCSystem { // for client side aspects of npcs
 
     init ( component ) {
 
-        let prop = component.props.npc
+        let attr = component.attrs.npc
 
         
          

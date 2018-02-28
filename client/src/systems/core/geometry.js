@@ -16,17 +16,17 @@ export default class GeometrySystem {
 
   init ( component: Component ) { 
 
-        let prop:         Object        = component.props.geometry,
+        let attr:         Object        = component.attrs.geometry,
             geometry:     Object        = {},
-            size:         Array<number> = prop.size,
+            size:         Array<number> = attr.size,
             assets:       Object        = this.world.systems.assets,
-            detail:       Array<number> = prop.detail || [this.detail, this.detail, this.detail],
-            geometryCode: string        = `${prop.shape}:${size.join(':')}:${detail.join(':')}`,
+            detail:       Array<number> = attr.detail || [this.detail, this.detail, this.detail],
+            geometryCode: string        = `${attr.shape}:${size.join(':')}:${detail.join(':')}`,
             faceNormals:  boolean       = false
         
         if ( assets.geometries[ geometryCode ] == null ) {
 
-          switch (prop.shape) {
+          switch (attr.shape) {
             case "node":
               geometry = this.nodeGeom
             break
@@ -71,15 +71,15 @@ export default class GeometrySystem {
               geometry = new THREE.CylinderGeometry( size[0], size[0] * (2/3), size[0], 4, 1 )
             break
             case "extrude":
-              geometry = this._extrudeGeometry( prop )
+              geometry = this._extrudeGeometry( attr )
             break
             case "lathe":
-              geometry = this._latheGeometry( prop )
+              geometry = this._latheGeometry( attr )
             break
             // define more mappings here..
           }
 
-          if ( geometry.computeVertexNormals && faceNormals && (prop.faceNormals === true || prop.faceNormals === undefined )) {
+          if ( geometry.computeVertexNormals && faceNormals && (attr.faceNormals === true || attr.faceNormals === undefined )) {
             geometry.computeVertexNormals()
           }
           assets.geometries[ geometryCode ] = geometry
@@ -93,17 +93,17 @@ export default class GeometrySystem {
         }
     }
 
-    _extrudeGeometry ( prop: Object ) { // prop.size, shape, settings
+    _extrudeGeometry ( attr: Object ) { // attr.size, shape, settings
 
-      let length = prop.size[2], 
-          width = prop.size[0],
+      let length = attr.size[2], 
+          width = attr.size[0],
           shape = new THREE.Shape()
 
-      if ( prop.shape ) {
+      if ( attr.shape ) {
 
-        shape.moveTo( prop.shape[0][0], prop.shape[0][1] )
+        shape.moveTo( attr.shape[0][0], attr.shape[0][1] )
 
-        prop.shape.map( (point, i) => {
+        attr.shape.map( (point, i) => {
 
           if ( i > 0 ) {
 
@@ -131,24 +131,24 @@ export default class GeometrySystem {
         bevelThickness: 1,
         bevelSize: 10,
         bevelSegments: 1
-      }, prop.settings || {})
+      }, attr.settings || {})
 
-      return new THREE.ExtrudeGeometry( shape, Object.assign({}, extrudeSettings, prop.extrudeSettings) )
+      return new THREE.ExtrudeGeometry( shape, Object.assign({}, extrudeSettings, attr.extrudeSettings) )
 
     }
 
-    _latheGeometry ( prop: Object ) { // prop.size, shape, settings
+    _latheGeometry ( attr: Object ) { // attr.size, shape, settings
 
-      let segments = 8 || prop.segments,
-          phiStart = prop.phiStart ? prop.phiStart : 0,
-          phiLength = prop.phiLength ? prop.phiLength : 2 * Math.PI,
-          propPoints = prop.points,
+      let segments = 8 || attr.segments,
+          phiStart = attr.phiStart ? attr.phiStart : 0,
+          phiLength = attr.phiLength ? attr.phiLength : 2 * Math.PI,
+          attrPoints = attr.points,
           points = [],
           p = 0
 
-      if ( !!! propPoints ) {
+      if ( !!! attrPoints ) {
 
-        propPoints = [
+        attrPoints = [
           [0.75, 0.01], 
           [0.05, 0.01],
           [0.05, 0.5],
@@ -158,11 +158,11 @@ export default class GeometrySystem {
 
       }
 
-      p = propPoints.length -1
+      p = attrPoints.length -1
 
       while ( p >= 0 ) {
 
-        points.push( new THREE.Vector2( propPoints[p][0], propPoints[p][1] ) )
+        points.push( new THREE.Vector2( attrPoints[p][0], attrPoints[p][1] ) )
         p -= 1
       
       }

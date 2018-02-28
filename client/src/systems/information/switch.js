@@ -8,7 +8,7 @@ export default class SwitchSystem {
 
     init ( component ) {
         
-        let prop = component.props.switch,
+        let attr = component.attrs.switch,
             state = {}
 
         //TODO: implement

@@ -28,7 +28,7 @@ export default class ComponentTool extends Tool {
         this.current = 2
         this.entity = new Entity(-1, [
           {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [ 0.1, 0.14, 0.333 ]
@@ -42,9 +42,9 @@ export default class ComponentTool extends Tool {
                     title: "Components",
                     color: 0x003bff,
                     content: {
-                      props: {
+                      attrs: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "component", // component, entity, prop
+                          type: "component", // component, entity, attr
                           dataSource: this.world.systems.assets.componentsByName //componentsByName
                         },
                         layout: {
@@ -58,9 +58,9 @@ export default class ComponentTool extends Tool {
                     title: "My Components",
                     color: 0x003bff,
                     content: {
-                      props: {
+                      attrs: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "component", // component, entity, prop
+                          type: "component", // component, entity, attr
                           dataSource: this.world.systems.assets.userComponents
                         },
                         layout: {
@@ -100,7 +100,7 @@ export default class ComponentTool extends Tool {
           tooManyComponents = !!selected && selected.components.length >= 48,
           pointingAtTerrain = !!selected && selected.componentsByProp.terrain,
           coords = telemetry.voxel,
-          props = {},
+          attrs = {},
           components = [],
           entityId = -1,
           entity = null //console.log("Selected ", tooManyComponents, selected, selected.components)
@@ -125,7 +125,7 @@ export default class ComponentTool extends Tool {
       if ( components.length == 0 )
         components = [ component ]
       
-      props = selected.componentsByProp
+      attrs = selected.componentsByProp
 
       if ( !!!selected ) { //
         console.warn("Component Tool: no entity selected")

@@ -59,7 +59,7 @@ export default class Tool {
     initLabel ( component, value ) {
 
       return {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [ 0.333, 0.13, 0.05 ]

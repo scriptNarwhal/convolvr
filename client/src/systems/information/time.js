@@ -6,7 +6,7 @@ export default class TimeSystem {
 
     init ( component ) { 
 
-        let prop = component.props.time
+        let attr = component.attrs.time
 
         return {
             open: false,

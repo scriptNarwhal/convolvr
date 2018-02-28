@@ -5,7 +5,7 @@ export default class Component {
       let quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : [ 0, 0, 0 ],
           path = config && config.path ? config.path : [],
-          props = data.props,
+          attrs = data.attrs,
           mesh = null,
           pl = path.length,
           p = 0
@@ -20,7 +20,7 @@ export default class Component {
       
       this.entity = entity
       this.data = data
-      this.props = data.props || {}
+      this.attrs = data.attrs || {}
       this.state = {}
       this.components = data.components || []
       this.compsByFaceIndex = []
@@ -33,22 +33,22 @@ export default class Component {
       this._compPos = new THREE.Vector3()
       this.parent = parent ? parent : null
 
-      if ( !!! props ) {
-        this.props = props = {} 
-        console.warn("Component must have props")
+      if ( !!! attrs ) {
+        this.attrs = attrs = {} 
+        console.warn("Component must have attrs")
       }
 
-      if ( props.geometry == undefined ) {
-        props.geometry = {
+      if ( attrs.geometry == undefined ) {
+        attrs.geometry = {
           shape: "box",
           size: [ 0.333, 0.333, 0.333 ]
         }
-      } else if ( props.geometry.merge === true ) {
+      } else if ( attrs.geometry.merge === true ) {
           this.merged = true
       }
 
-      if ( props.material == undefined )
-        props.material = {
+      if ( attrs.material == undefined )
+        attrs.material = {
           name: 'wireframe',
           color: 0xffffff
         }
@@ -64,7 +64,7 @@ export default class Component {
       mesh.position.set( position[0], position[1], position[2] )
       mesh.updateMatrix()
 
-      if ( this.props.hand != undefined )
+      if ( this.attrs.hand != undefined )
         this.detached = true
 
       this.components.length > 0 && this.initSubComponents( this.components, entity, systems, config )
@@ -92,12 +92,12 @@ export default class Component {
     while ( c < ncomps ) {
         comp = new Component( components[ c ], entity, systems, { mobile, path: this.path.concat([c]), index: c }, this ) // use simpler shading for mobile gpus
 
-        if ( comp.props.noRaycast === true )
+        if ( comp.attrs.noRaycast === true )
           addToOctree = false
       
         compMesh = comp.mesh
 
-        if ( comp.props.geometry ) { // this keeps happening.. arrays are geometrically filling up too quickly
+        if ( comp.attrs.geometry ) { // this keeps happening.. arrays are geometrically filling up too quickly
           faces = compMesh.geometry.faces
           face = faces.length-1
           toFace = this.lastFace + face
@@ -190,7 +190,7 @@ export default class Component {
 
       })
     }
-    !!closest && console.log(closest.props.geometry.size, closest, closest.entity)
+    !!closest && console.log(closest.attrs.geometry.size, closest, closest.entity)
     return closest
   }
 

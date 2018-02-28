@@ -48,7 +48,7 @@ export default class ToolActionHandler {
                     })
                     break;
                 case "Custom Tool":
-                    // check tool functionality from tool prop
+                    // check tool functionality from tool attr
                     break
                 case "Voxel Tool":
 

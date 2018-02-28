@@ -66,7 +66,7 @@ export default class OimoPluginSystem {
     */
     init ( component: Component ) { 
         
-        let prop: Object = component.props.oimo
+        let attr: Object = component.attrs.oimo
 
         //TODO: implement
 
