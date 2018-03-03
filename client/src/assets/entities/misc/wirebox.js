@@ -3,7 +3,7 @@ let wirebox = {
     name: "wirebox",
     components: [
         {
-            props: {
+            attrs: {
                 geometry: {
                     merge: true,
                     shape: "hexagon",
@@ -18,7 +18,7 @@ let wirebox = {
             position: [0, 0, 0]
         },
         {
-            props: {
+            attrs: {
                 geometry: {
                     merge: true,
                     shape: "torus",

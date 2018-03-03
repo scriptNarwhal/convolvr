@@ -47,12 +47,12 @@ export default class AssetSystem {
 
         this.userEntitiesByName   = {}
         this.userComponentsByName = {}
-        this.loadingItemsById   = { entities: {}, components: {}, properties: {}}
+        this.loadingItemsById   = { entities: {}, components: {}, attrerties: {}}
         this.userEntities         = []
         this.userComponents       = []
         this.places               = []
         this.worlds               = []
-        this.props                = BuiltinProps()
+        this.attrs                = BuiltinProps()
         this.files                = [] // user's files; separate from entity file systems
         this.directories          = [] // user's directories
         this.textureLoader        = new THREE.TextureLoader()
@@ -63,7 +63,7 @@ export default class AssetSystem {
 
     init ( component ) { 
 
-        let prop = component.props.assets
+        let attr = component.attrs.assets
 
         return {
             
@@ -109,7 +109,7 @@ export default class AssetSystem {
 
         // implement
         // check format from file extension
-        // use appropriate loader..
+        // use apattrriate loader..
         // fire callback
     }
 
@@ -222,8 +222,8 @@ export default class AssetSystem {
         this.userComponents = this.userComponents.concat( components )
     }
 
-    addUserProperties ( properties ) {
-        this.userProperties = this.userProperties.concat( properties )
+    addUserProperties ( attrerties ) {
+        this.userProperties = this.userProperties.concat( attrerties )
     }
 
     addUserAssets ( assets ) {
@@ -273,15 +273,15 @@ export default class AssetSystem {
 
     getMaterialProp ( name ) {
 
-        let prop = null
+        let attr = null
         
-        this.props.material.map(( mat, i ) => {
+        this.attrs.material.map(( mat, i ) => {
             if ( mat.name == name ) 
-                prop = mat
+                attr = mat
             
         })
 
-        return { ...prop }
+        return { ...attr }
     }
 
     autoEntityID ( ) {
@@ -347,7 +347,7 @@ export default class AssetSystem {
         } else {
 
             button = { // TODO: come back to this
-                props: {
+                attrs: {
                     // activate: true,
                     // hover: true,
                     // lookAway,
@@ -370,7 +370,7 @@ export default class AssetSystem {
     
        
         // button.components.push({ // back plate, behind icon
-        //         props: {
+        //         attrs: {
         //             geometry: {
         //                 merge: false,
         //                 size: [ 0.4, 0.4, 0.09 ],

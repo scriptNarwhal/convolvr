@@ -116,7 +116,7 @@ export default class ToolboxSystem {
   
       addTool ( data ) {
         this.tools.push( new CustomTool( data ) )
-        // use tool prop of.. component / entity that is tool that is being added
+        // use tool attr of.. component / entity that is tool that is being added
         // implement this
       }
   
@@ -209,18 +209,18 @@ export default class ToolboxSystem {
   
         if ( telemetry.cursor && cursorEntity ) { 
           // check telemetry here to see if activate callbacks should fire instead of tool action
-          if ( cursorState.component && cursorState.component.props.activate ) { 
+          if ( cursorState.component && cursorState.component.attrs.activate ) { 
             !!cursorState.component && console.warn("Activate ", cursorState.component )
             !!cursorState.component && cursorState.component.state.activate.callbacks.map( (callback) => {
-                callback() // action is handled by checking component props ( besides .activate )
+                callback() // action is handled by checking component attrs ( besides .activate )
             })
             return // cursor system has found the component ( provided all has gone according to plan.. )
           }
           //console.log("use Primary ", componentsByProp)
           miniature = cursorEntity.componentsByProp.miniature
         
-          if ( miniature && cursorComponent && cursorComponent.props.toolUI ) {
-            configureTool = componentsByProp.toolUI[ 0 ].props.toolUI.configureTool 
+          if ( miniature && cursorComponent && cursorComponent.attrs.toolUI ) {
+            configureTool = componentsByProp.toolUI[ 0 ].attrs.toolUI.configureTool 
             console.log("ToolUI! configure tool", configureTool)
               if ( configureTool ) {
                 if ( toolIndex != configureTool.tool ) {

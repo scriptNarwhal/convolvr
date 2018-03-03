@@ -9,7 +9,7 @@ export default class WeaponSystem
     
         init ( component ) {
             
-            let prop = component.props.weapon,
+            let attr = component.attrs.weapon,
                 state = {}
     
             //TODO: implement

@@ -26,19 +26,19 @@ export default class ChatSystem {
              Object.keys( byUserName ).map(userName => {
 
                  byUserName[userName].map(comp => {
-                    let props = comp.props,
+                    let attrs = comp.attrs,
                         from = '';
                     
-                    if ( props.chat.displayMessages ) {
+                    if ( attrs.chat.displayMessages ) {
                         console.log("display messages")
-                        console.log(props.chat)
+                        console.log(attrs.chat)
                         if ( userName == "all" ) {
                             if ( chatMessage.from != chat.lastSender ) {
                                 from = `${chatMessage.from}: `
                             }
                             comp.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
                             comp.state.text.update()
-                        } else if ( userName == props.chat.userName && props.text ) {
+                        } else if ( userName == attrs.chat.userName && attrs.text ) {
                              comp.state.text.write(`${chatMessage.from}${chatMessage.message}`) // can batch this without re-rendering each time
                              comp.state.text.update()  
                         }
@@ -57,25 +57,25 @@ export default class ChatSystem {
     }
 
     init(component: Component) { 
-        let prop = component.props.chat,
-            userName = prop.userName || "",
-            world = prop.world || "";
-        console.log("init chat component, userName", prop.userName)
-        prop.userName = prop.userName || "all"
+        let attr = component.attrs.chat,
+            userName = attr.userName || "",
+            world = attr.world || "";
+        console.log("init chat component, userName", attr.userName)
+        attr.userName = attr.userName || "all"
 
-        if ( this.componentsByUserName[ prop.userName ] == null ) {
-            this.componentsByUserName[ prop.userName ] = []
+        if ( this.componentsByUserName[ attr.userName ] == null ) {
+            this.componentsByUserName[ attr.userName ] = []
         }
        
-        if ( !this.containsObject( component, this.componentsByUserName[ prop.userName ] ) ) {
-            this.componentsByUserName[ prop.userName ].push( component )
+        if ( !this.containsObject( component, this.componentsByUserName[ attr.userName ] ) ) {
+            this.componentsByUserName[ attr.userName ].push( component )
         }
         
-        if ( prop.sendMessage ) {
+        if ( attr.sendMessage ) {
 
         }
 
-        if ( prop.enterMessage ) {
+        if ( attr.enterMessage ) {
 
         }
 
@@ -107,7 +107,7 @@ export default class ChatSystem {
         let chatModal = this.world.systems.assets.makeEntity("help-screen", true, {}, [0,1,0]),
             cPos = three.camera.position;
 
-        chatModal.components[0].props.text.lines = ["Welcome"]
+        chatModal.components[0].attrs.text.lines = ["Welcome"]
         chatModal.init(three.scene, false, ()=>{})
         chatModal.update(cPos.x, cPos.y - 1, cPos.z - 1.7)
         this.chatModal = chatModal

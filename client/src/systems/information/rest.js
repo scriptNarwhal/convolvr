@@ -10,21 +10,21 @@ export default class RESTSystem {
 
     init (component) { 
 
-        let prop = component.props.rest, // specify url, method, etc
+        let attr = component.attrs.rest, // specify url, method, etc
             rest = this
 
         let getCallback = (response, component) => {
 
                 component.state.rest.getResponse = response
 
-                if ( !!component.props.text ) { // abstract this logic away some how.. and make it scriptable
+                if ( !!component.attrs.text ) { // abstract this logic away some how.. and make it scriptable
 
                     let responseLines = JSON.stringify(response.data).match(/(.|[\r\n]){1,42}/g)
 
-                    component.props.text.lines = responseLines
+                    component.attrs.text.lines = responseLines
                     component.state.text.update()
 
-                    if ( !!component.props.speech ) {
+                    if ( !!component.attrs.speech ) {
 
                         component.state.speech.speakAll( responseLines, false, 0)
 
@@ -44,12 +44,12 @@ export default class RESTSystem {
             }
 
 
-        if ( prop.get ) {
-            this.getRequest( component, prop.get.url, getCallback, getError )
+        if ( attr.get ) {
+            this.getRequest( component, attr.get.url, getCallback, getError )
         }
 
-        if ( prop.post ) {
-            this.postRequest( component, prop.post.url, prop.post.data )
+        if ( attr.post ) {
+            this.postRequest( component, attr.post.url, attr.post.data )
         }
 
         // add init logic... // other systems can call these methods too*

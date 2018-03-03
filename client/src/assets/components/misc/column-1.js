@@ -1,5 +1,5 @@
 let column1Comp = {
-        props: {
+        attrs: {
             geometry: {
                 merge: true,
                 shape: "hexagon",

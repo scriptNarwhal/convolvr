@@ -20,7 +20,7 @@ export default class Entity {
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
       this.boundingRadius = 0.5 // set in init()
-      this.componentsByProp = {} // arrays are defined here with key of prop
+      this.componentsByProp = {} // arrays are defined here with key of attr
       this.compsByFaceIndex = [] // possibly deprecated
       this.allComponents = []
       this.combinedComponents = []
@@ -186,7 +186,7 @@ export default class Entity {
           Math.max( dimensions[ 2 ], Math.abs( compMesh.position.z ) + compRadius )
         ]
 
-        if ( comp.props.geometry ) {
+        if ( comp.attrs.geometry ) {
           faces = compMesh.geometry.faces;
           face = faces.length-1;
           toFace = this.lastFace + face;
@@ -452,7 +452,7 @@ export default class Entity {
         }
       })
     } else if ( mode == "update-telemetry" ) {
-      // make position not offset and actually lined up properly
+      // make position not offset and actually lined up attrerly
       let newPosition = [ ...entityData.position ];
       
       newPosition[0] -= this.boundingRadius / 2.0;

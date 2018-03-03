@@ -6,21 +6,21 @@ export default class LayoutSystem {
 
     init ( component ) { 
         
-        let ownProp = component.props.layout,
-            prop = component.parent && component.parent.props.layout ? component.parent.props.layout : false,
+        let ownProp = component.attrs.layout,
+            attr = component.parent && component.parent.attrs.layout ? component.parent.attrs.layout : false,
             siblings = component.parent && component.parent.components.length,
             position = [ 0, 0, 0 ], // use parent layout to position child
             index = component.index
 
-        if ( (prop && !!!prop.mode) && ownProp.mode != "factory" ) {
-            prop.gridSize = prop.gridSize == null ? 3 : 0
-            position = this.useLayout( prop.type, component, position, index, prop.axis, prop.columns, prop.gridSize, prop.isometric)
+        if ( (attr && !!!attr.mode) && ownProp.mode != "factory" ) {
+            attr.gridSize = attr.gridSize == null ? 3 : 0
+            position = this.useLayout( attr.type, component, position, index, attr.axis, attr.columns, attr.gridSize, attr.isometric)
             component.mesh.position.fromArray( position )
             component.mesh.updateMatrix()
         }
 
         return {
-            type: prop.type
+            type: attr.type
         }
     }
 

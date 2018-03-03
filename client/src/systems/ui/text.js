@@ -22,17 +22,17 @@ export default class TextSystem {
     }
 
     init(component: Component) {
-        let prop = component.props.text,
-            text = prop.lines,
-            color = prop.color,
-            background = prop.background,
+        let attr = component.attrs.text,
+            text = attr.lines,
+            color = attr.color,
+            background = attr.background,
             textTexture = null,
             textMaterial = null,
             textCanvas = document.createElement("canvas"),
-            canvasSizePOT = !!prop.canvasSize ? prop.canvasSize : [10, 10],
-            canvasSize = !!prop.label && !!!prop.canvasSize ? [512, 128] : [Math.pow(2, canvasSizePOT[0]), Math.pow(2, canvasSizePOT[1])],
+            canvasSizePOT = !!attr.canvasSize ? attr.canvasSize : [10, 10],
+            canvasSize = !!attr.label && !!!attr.canvasSize ? [512, 128] : [Math.pow(2, canvasSizePOT[0]), Math.pow(2, canvasSizePOT[1])],
             context = null,
-            config: any = { label: !!prop.label, fontSize: prop.fontSize != 0 ? prop.fontSize : -1 }
+            config: any = { label: !!attr.label, fontSize: attr.fontSize != 0 ? attr.fontSize : -1 }
         
         textCanvas.setAttribute("style", "display:none")
         textCanvas.width = canvasSize[0]
@@ -74,7 +74,7 @@ export default class TextSystem {
             config,
             update: ( textProp: any ) => {
                 if ( !!textProp )
-                    component.props.text = Object.assign( {}, component.props.text, textProp )
+                    component.attrs.text = Object.assign( {}, component.attrs.text, textProp )
 
                 this._update( component )
             },
@@ -89,15 +89,15 @@ export default class TextSystem {
     }
 
     _resizeComponent(component: Component, size: number[]) {
-        let geomProp = component.props.geometry,
+        let geomProp = component.attrs.geometry,
             currentSize = geomProp.size;
         
         
     }
 
     _write(component: Component, text: string) {
-        if (component.props.text.label) {
-            component.props.text.lines = [];
+        if (component.attrs.text.label) {
+            component.attrs.text.lines = [];
             if (text.indexOf(":") > 0) {
                 let filteredText = [...text.split(":")];
                 
@@ -105,15 +105,15 @@ export default class TextSystem {
                 text = filteredText.join("");
             }
         }
-        component.props.text.lines.push( text )
+        component.attrs.text.lines.push( text )
     }
 
     _update(component: Component) {
-        let prop         = component.props.text,
+        let attr         = component.attrs.text,
             state        = component.state.text,
-            text         = prop.lines,
-            color        = prop.color,
-            background   = prop.background,
+            text         = attr.lines,
+            color        = attr.color,
+            background   = attr.background,
             textTexture  = state.textTexture,
             textMaterial = null,
             textCanvas   = state.textCanvas,

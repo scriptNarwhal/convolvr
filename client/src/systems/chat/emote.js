@@ -12,7 +12,7 @@ export default class EmoteSystem {
 
     init ( component: Component ) { 
         
-        let prop = component.props.emote
+        let attr = component.attrs.emote
 
         //TODO: implement
 
@@ -23,19 +23,19 @@ export default class EmoteSystem {
 
     use ( component: Component ) {
 
-        let prop = component.props.emote
+        let attr = component.attrs.emote
         //TODO: implement
     }
 
     permutate ( component: Component ) {
         
-        let prop = component.props.emote
+        let attr = component.attrs.emote
         //TODO: implement
     }
 
     record ( component: Component ) {
         
-        let prop = component.props.emote 
+        let attr = component.attrs.emote 
         //TODO: implement 
     }
 }

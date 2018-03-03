@@ -19,7 +19,7 @@ let car = ( assetSystem, config, voxel ) => {  // implement
 
         cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
         cursorComponent = {
-          props: {
+          attrs: {
               cursor: true,
               geometry: {
                 shape: "open-box",
@@ -41,7 +41,7 @@ let car = ( assetSystem, config, voxel ) => {  // implement
         }
 
         components.push(Object.assign({}, {
-          props: {
+          attrs: {
             geometry: {
                 shape: "box",
                 size: [ 15000, 0.09, 0.10 ],

@@ -12,7 +12,7 @@ export default class HandSystem {
     init (component: Component) {
         let userInput = this.world.userInput
 
-        if ( component.props.hand == undefined || component.props.hand != undefined && userInput.trackedControls == false && userInput.leapMotion == false) {
+        if ( component.attrs.hand == undefined || component.attrs.hand != undefined && userInput.trackedControls == false && userInput.leapMotion == false) {
             setTimeout(()=>{
                 this.toggleTrackedHands( component, false )
             }, 1500)
@@ -36,7 +36,7 @@ export default class HandSystem {
         let avatar = component.entity,
             cursors = !!avatar ? avatar.componentsByProp.cursor : false,
             cursorMesh = null,
-            entity = null, //hand.children[0].userData.component.props.,
+            entity = null, //hand.children[0].userData.component.attrs.,
             cursor = null,
             state = null,
             handPos = [0, 0, 0],

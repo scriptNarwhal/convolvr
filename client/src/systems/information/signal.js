@@ -19,40 +19,40 @@ export default class SignalSystem { // system for passing signals between entiti
 
     init ( component ) { 
 
-        let prop = component.props.signal,
+        let attr = component.attrs.signal,
             osc = null,
             state = {
-                value: prop.value ? prop.value : 0,
-                type: prop.type || "number",
+                value: attr.value ? attr.value : 0,
+                type: attr.type || "number",
                 in: null,
                 out: null
             }
         
-        if ( prop.wire == true ) {
-            // handle propagation 
+        if ( attr.wire == true ) {
+            // handle attragation 
         }
         
-        if ( prop.in ) {
+        if ( attr.in ) {
 
             
 
         }
 
-        if ( prop.out ) {
+        if ( attr.out ) {
 
 
 
         }
 
-        if ( prop.oscillator ) {
+        if ( attr.oscillator ) {
 
-            osc = this._initOscillator( component, prop, state, prop.oscillator )
+            osc = this._initOscillator( component, attr, state, attr.oscillator )
             state.oscillator = osc
         }
 
-        if ( prop.modulate ) {
+        if ( attr.modulate ) {
 
-            value = this._modulateSignal( component, prop, state, prop.modulate )
+            value = this._modulateSignal( component, attr, state, attr.modulate )
 
         }
         

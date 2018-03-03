@@ -6,19 +6,19 @@ export default class InputSystem {
 
     init (component) {
         
-        let prop = component.props.input
+        let attr = component.attrs.input
         
-        if ( prop.button ) {
+        if ( attr.button ) {
 
-        } else if ( prop.keyboard ) {
+        } else if ( attr.keyboard ) {
 
-        } else if ( prop.controlStick ) { 
+        } else if ( attr.controlStick ) { 
             
-        } else if ( prop.webcam ) {
+        } else if ( attr.webcam ) {
 
-        } else if ( prop.speech ) {
+        } else if ( attr.speech ) {
             
-        } else if ( prop.authentication ) { // authenticate button / use userId
+        } else if ( attr.authentication ) { // authenticate button / use userId
 
         }
 

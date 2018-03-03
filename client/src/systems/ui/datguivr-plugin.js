@@ -16,24 +16,24 @@ export default class DatGUIVRPluginSystem {
 
     init ( component: Component ) { 
         
-        let prop = component.props.datgui,
+        let attr = component.attrs.datgui,
             path = "",
             gui = null,
             state = null,
-            property = [],
+            attrerty = [],
             controller = null,
             controllerData = null,
-            controllers = prop.controllers,
+            controllers = attr.controllers,
             c = 0
 
         // implement updating entities for changes requiring re-init
 
-        if ( prop.gui ) {
+        if ( attr.gui ) {
 
-            gui = dat.GUIVR.create( prop.gui.name )
+            gui = dat.GUIVR.create( attr.gui.name )
             this.world.three.scene.add( gui )
 
-        } else if ( component.parent && component.parent.props.datgui && component.parent.props.datgui.gui ) {
+        } else if ( component.parent && component.parent.attrs.datgui && component.parent.attrs.datgui.gui ) {
 
             gui = component.parent.state.datgui.gui
 
@@ -52,30 +52,30 @@ export default class DatGUIVRPluginSystem {
                 if ( controllerData.value.statePath ) {
 
                     path = controllerData.value.statePath
-                    property = path.splice( path.length-1, 1 )
+                    attrerty = path.splice( path.length-1, 1 )
                     state = this.getByPath( component.state, path )
 
-                } else if ( controllerData.value.propsPath ) {
+                } else if ( controllerData.value.attrsPath ) {
 
-                    path = controllerData.value.propsPath
-                    property = path.splice( path.length-1, 1 )
-                    state = this.getByPath( component.props, path )
+                    path = controllerData.value.attrsPath
+                    attrerty = path.splice( path.length-1, 1 )
+                    state = this.getByPath( component.attrs, path )
 
                 } else {
 
                     path = controllerData.value.path
-                    property = path.splice( path.length-1, 1 )
+                    attrerty = path.splice( path.length-1, 1 )
                     state = this.getByPath( component, path )
 
                 }
 
-                if ( typeof state[ property ] == 'boolean' || typeof state[ property ] == 'function' ) {
+                if ( typeof state[ attrerty ] == 'boolean' || typeof state[ attrerty ] == 'function' ) {
 
-                    controller = gui.add( state, property );
+                    controller = gui.add( state, attrerty );
 
-                } else if ( typeof state[ property ] == 'number' ) {
+                } else if ( typeof state[ attrerty ] == 'number' ) {
 
-                    controller = gui.add( state, property, controllerData.min, controllerData.max );
+                    controller = gui.add( state, attrerty, controllerData.min, controllerData.max );
 
                 }
 

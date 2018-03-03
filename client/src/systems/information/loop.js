@@ -8,7 +8,7 @@ export default class LoopSystem {
 
     init ( component ) {
 
-        let prop = component.props.loop,
+        let attr = component.attrs.loop,
             state = {}
 
         return state

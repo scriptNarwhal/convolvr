@@ -8,7 +8,7 @@ export default class FactionSystem {
     
         init ( component ) {
             
-            let prop = component.props.faction,
+            let attr = component.attrs.faction,
                 state = {}
     
             //TODO: implement

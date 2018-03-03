@@ -45,7 +45,7 @@ export default class VirtualMachine {
 
         let stack = state.stack
         // implement
-        // .. this should use an IOController prop in an adjacent component
+        // .. this should use an IOController attr in an adjacent component
 
     }
 

@@ -26,31 +26,31 @@ export default class DebugSystem { // gather helpful info & display as text
 
     _updateInfo ( component: Component ) {
 
-        let prop = component.props.debug,
+        let attr = component.attrs.debug,
             text = component.state.text,
-            cursorIndex = prop.cursorIndex,
+            cursorIndex = attr.cursorIndex,
             entity = component.entity,
             lines = []
 
-        if ( prop.user ) { // check the following, assuming the entity is the user's avatar
+        if ( attr.user ) { // check the following, assuming the entity is the user's avatar
 
             entity = this.world.user.avatar
 
         }
         
-        if ( prop.position ) {
+        if ( attr.position ) {
 
             text.write( 'position: '+ entity.mesh.position.toArray().join(' : ') )
 
         }
 
-        if ( prop.voxel ) {
+        if ( attr.voxel ) {
 
             text.write( 'voxel:    '+ entity.getVoxel().join('.') )
 
         }
 
-        if ( prop.cursors ) {
+        if ( attr.cursors ) {
 
             text.write( 'cursors: ')
             entity.componentsByProp.cursor.map( ( cursor, c ) => {

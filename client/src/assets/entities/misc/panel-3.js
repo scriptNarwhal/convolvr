@@ -3,7 +3,7 @@ let panel3 = {
             name: "panel3",
             components: [
                 {
-                    props: {
+                    attrs: {
                         geometry: {
                         merge: true,
                             shape: "box",
@@ -19,7 +19,7 @@ let panel3 = {
                     components: []
                 },
                 {
-                    props: {
+                    attrs: {
                         geometry: {
                         merge: true,
                             shape: "hexagon",
@@ -35,7 +35,7 @@ let panel3 = {
                     components: []
                 },
                 {
-                    props: {
+                    attrs: {
                         geometry: {
                         merge: true,
                             shape: "box",
@@ -51,7 +51,7 @@ let panel3 = {
                     components: []
                 },
                 {
-                    props: {
+                    attrs: {
                         geometry: {
                         merge: true,
                             shape: "hexagon",

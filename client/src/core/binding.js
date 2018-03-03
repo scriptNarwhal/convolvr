@@ -2,7 +2,7 @@
 
 export const BINDING_TYPES = {
     ATTRIBUTE: "attr",
-    PROPERTY: "prop",
+    PROPERTY: "attr",
     STATE: "state",
     MESH: "mesh"
 }

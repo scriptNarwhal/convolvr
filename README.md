@@ -3,7 +3,7 @@
 - [Component](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/component.js) [Entity](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/entity.js) [System](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/systems/index.js) [Framework](https://github.com/Convolvr/convolvr/wiki) built on [Three.js](https://github.com/mrdoob/three.js)
 - Multiplayer telemetry, chat, action & asset persistence provided by server using [Nexus](https://github.com/ds0nt/nexus)
 - Built in tools to build world entities from components
-- Tools to visually build components from props (geometries, materials & other systems)
+- Tools to visually build components from attrs (geometries, materials & other systems)
 - Handles user input from keyboard/mouse, touch, tracked controllers
 - Supports infinite, configurable, procedural worlds 
 - Mesh based VR UI; Multiline text rendering
@@ -38,7 +38,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
   userInput.init( world, world.camera, user )
 
   let chatScreen = world.systems.assets.makeEntity( "chat-screen", true )
-  chatScreen.components[0].props.speech = {} // make the textbox read out loud
+  chatScreen.components[0].attrs.speech = {} // make the textbox read out loud
   chatScreen.init( three.scene )
   chatScreen.update( [ 0, 50000, 0 ] )  
 
@@ -52,7 +52,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
   name: "chat-screen",
   components: [
     {
-      props: {
+      attrs: {
           geometry: {
               shape: "box",
               size: [ 3, 3, 0.25 ]

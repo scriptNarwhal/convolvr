@@ -97,9 +97,9 @@ self.checkStaticCollisions = ( voxel, position ) => {
 
 			ent.components.map(entComp => {
 				let boundingRadius = entComp.boundingRadius * 1.2 ||
-				    Math.max(entComp.props.geometry.size[0], entComp.props.geometry.size[2]) * 1.2
+				    Math.max(entComp.attrs.geometry.size[0], entComp.attrs.geometry.size[2]) * 1.2
 
-				if (!!entComp.props.floor) {
+				if (!!entComp.attrs.floor) {
 					let rootPos = ent.position.map( v => v-ent.boundingRadius / 2.0 )
 					if (distance2dCompare(
 						position,
@@ -111,7 +111,7 @@ self.checkStaticCollisions = ( voxel, position ) => {
 							self.postMessage(JSON.stringify({
 								command: "floor collision", data: {
 									position: entComp.position,
-									floorData: entComp.props.floor
+									floorData: entComp.attrs.floor
 								}
 							}))
 							collision = true

@@ -23,7 +23,7 @@ export default class SystemTool extends Tool {
     
     this.entity = new Entity(-1, [
           {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [0.08, 0.5, 2]
@@ -37,11 +37,11 @@ export default class SystemTool extends Tool {
                     title: "Systems",
                     color: 0xff0707,
                     content: {
-                      props: {
+                      attrs: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "prop", // entity, component, prop
-                          propName: "structures",
-                          dataSource: this.world.systems.assets.props.systems
+                          type: "attr", // entity, component, attr
+                          attrName: "structures",
+                          dataSource: this.world.systems.assets.attrs.systems
                         },
                         layout: {
                           type: "grid",
@@ -55,11 +55,11 @@ export default class SystemTool extends Tool {
                     title: "Vehicular",
                     color: 0xff0707,
                     content: {
-                      props: {
+                      attrs: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "prop", // entity, component, prop
-                          propName: "vehicles",
-                          dataSource: this.world.systems.assets.props.systems
+                          type: "attr", // entity, component, attr
+                          attrName: "vehicles",
+                          dataSource: this.world.systems.assets.attrs.systems
                         },
                         layout: {
                           type: "grid",
@@ -73,11 +73,11 @@ export default class SystemTool extends Tool {
                     title: "Media",
                     color: 0xff0707,
                     content: {
-                      props: {
+                      attrs: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "prop", // entity, component, prop
-                          propName: "media",
-                          dataSource: this.world.systems.assets.props.systems
+                          type: "attr", // entity, component, attr
+                          attrName: "media",
+                          dataSource: this.world.systems.assets.attrs.systems
                         },
                         layout: {
                           type: "grid",
@@ -91,11 +91,11 @@ export default class SystemTool extends Tool {
                     title: "Interactivity",
                     color: 0xff0707,
                     content: {
-                      props: {
+                      attrs: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "prop", // entity, component, prop
-                          propName: "interactivity",
-                          dataSource: this.world.systems.assets.props.systems
+                          type: "attr", // entity, component, attr
+                          attrName: "interactivity",
+                          dataSource: this.world.systems.assets.attrs.systems
                         },
                         layout: {
                           type: "grid",
@@ -130,7 +130,7 @@ export default class SystemTool extends Tool {
           quat            = telemetry.quaternion,
           selected        = !!cursorState.entity ? cursorState.entity : false,
           coords          = telemetry.voxel,
-          props           = {},
+          attrs           = {},
           components      = [ ],
           component       = {},
           cursorComponent = cursorState.component,
@@ -139,9 +139,9 @@ export default class SystemTool extends Tool {
       
       if ( options.system && options.system.none ) return
 
-      props = selected.componentsByProp
+      attrs = selected.componentsByProp
       
-      if ( !!!selected || props.miniature || props.activate ) {
+      if ( !!!selected || attrs.miniature || attrs.activate ) {
           console.warn("no tool action, calling activation callbacks")
           return false 
       
@@ -155,11 +155,11 @@ export default class SystemTool extends Tool {
         component = Object.assign({}, {
           position: cursorComponent.data.position,
           quaternion: cursorComponent.data.quaternion,
-          props: cursorComponent.props,
+          attrs: cursorComponent.attrs,
           components: cursorComponent.components
         })
         console.log("set system", this.preset, this.options, component)
-        component.props[ this.preset ] = this.options
+        component.attrs[ this.preset ] = this.options
         components = [ component ]
 
       } else {

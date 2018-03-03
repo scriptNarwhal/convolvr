@@ -12,20 +12,20 @@ export default class ToolUISystem {
 
     init ( component: Component ) { // allows component to cycle tools / select one for the user 
 
-        let props = component.props,
+        let attrs = component.attrs,
             state = component.state,
-            prop = props.toolUI,
-            hover = props.hover,
-            activate = props.activate,  // add hover / activation callbacks
-            lookAway = props.lookAway
+            attr = attrs.toolUI,
+            hover = attrs.hover,
+            activate = attrs.activate,  // add hover / activation callbacks
+            lookAway = attrs.lookAway
 
-        if ( prop.menu ) {
+        if ( attr.menu ) {
 
-        } else if ( prop.toolIndex != undefined ) {
+        } else if ( attr.toolIndex != undefined ) {
             console.log( "adding switch tool callback", activate)
             activate && state.activate.callbacks.push( () => {
                 console.info("Switch tool callback")
-                this.switchTool( component, prop.toolIndex, typeof prop.toolHand == 'number' ? prop.toolHand : 0 )
+                this.switchTool( component, attr.toolIndex, typeof attr.toolHand == 'number' ? attr.toolHand : 0 )
             })
 
             hover && state.hover.callbacks.push( () => {
@@ -38,7 +38,7 @@ export default class ToolUISystem {
                 component.mesh.material.wireframe = false
             })
 
-        } else if ( prop.currentTool != undefined ) {
+        } else if ( attr.currentTool != undefined ) {
 
             // some kind of init needed here? 
           
@@ -65,13 +65,13 @@ export default class ToolUISystem {
         let toolbox = this.world.user.toolbox,
             currentTools = toolbox.currentTools,
             tools = toolbox.tools,
-            props = component.props,
+            attrs = component.attrs,
             state = component.state,
             entity = component.entity,
             toolUIs = entity.componentsByProp.toolUI
         
         toolUIs.forEach( ui => {
-            if ( ui.props.toolUI.currentTool ) {
+            if ( ui.attrs.toolUI.currentTool ) {
                 ui.mesh.position.set( -0.050 + 0.3333 * hand, 0, -0.3333 )
                 //ui.mesh.updateMatrix()
             }

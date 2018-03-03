@@ -12,19 +12,19 @@ export default class MetaFactorySystem {
 
         this.world = world
         // This system will add factory components for sets of entities, components, systems by category.. 
-        // Alternately a prop.source of "self" can be specified, in which case data is pulled from system prop.type if it exists in the component. 
-        // TODO: implement prop.source == "component" and prop.componentPath = [1, 0... ]
+        // Alternately a attr.source of "self" can be specified, in which case data is pulled from system attr.type if it exists in the component. 
+        // TODO: implement attr.source == "component" and attr.componentPath = [1, 0... ]
     }
 
     init ( component: Component ) { 
         
         let components:     Array<Component> = component.components,
-            prop:           Object           = component.props.metaFactory,
-            assetType:      string           = prop.type,
-            category:       string           = prop.propName,
-            gridWidth:      number           = prop.gridWidth || 3,
-            gridSize:       number           = prop.gridSize || 1,
-            vOffset:        number           = prop.vOffset || -1.2,
+            attr:           Object           = component.attrs.metaFactory,
+            assetType:      string           = attr.type,
+            category:       string           = attr.attrName,
+            gridWidth:      number           = attr.gridWidth || 3,
+            gridSize:       number           = attr.gridSize || 1,
+            vOffset:        number           = attr.vOffset || -1.2,
             sourceCategory: any              = "none",
             factories:      Array<Object>    = [],
             presets:        Array<any>       = [],
@@ -36,14 +36,14 @@ export default class MetaFactorySystem {
             y:              number           = 0
 
         if ( assetType == "component" ) {
-            Object.keys( prop.dataSource ).map( name => {
+            Object.keys( attr.dataSource ).map( name => {
                 presets.push( name )
-                source.push( prop.dataSource[ name ] )  
+                source.push( attr.dataSource[ name ] )  
             })
         } else { 
-            source = prop.dataSource
+            source = attr.dataSource
         }
-        //console.info("init metafactory prop ", prop)
+        //console.info("init metafactory attr ", attr)
         if (typeof source == 'string' && source == 'self' ) {
             console.info( "source is string", source)
             if ( assetType == "file" )
@@ -71,7 +71,7 @@ export default class MetaFactorySystem {
             })
             
         } else { // map through system categories
-            source = prop.dataSource
+            source = attr.dataSource
             sourceCategory = this._getSourceCategory( source, category ) // structures, vehicles, media, interactivity
         
             Object.keys( sourceCategory ).map( ( key, a ) => { // vehicle, propulsion, control, etc
@@ -132,9 +132,9 @@ export default class MetaFactorySystem {
             systems: Object        = this.world.systems,
             pos:     Array<number> = [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 0.120 ]
 
-        if ( component.props.layout ) {
+        if ( component.attrs.layout ) {
             pos = [ 0, vOffset, 0.1 ]
-            layout = component.props.layout
+            layout = component.attrs.layout
             pos = systems.layout.useLayout( layout.type, component, pos, i, layout.axis, layout.columns || 3, layout.gridSize || gridSize, layout.isometric )
         }
 
@@ -145,12 +145,12 @@ export default class MetaFactorySystem {
         }
 
         addTo.push({
-                props: {
+                attrs: {
                     factory: {
                         type: assetType,
                         data: factoryItem,
                         preset,
-                        propName: assetCategory,
+                        attrName: assetCategory,
                         anchorOutput: true
                     },
                     geometry: {

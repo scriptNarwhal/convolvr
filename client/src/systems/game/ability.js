@@ -8,7 +8,7 @@ export default class AbilitySystem {
     
         init ( component ) {
             
-            let prop = component.props.ability,
+            let attr = component.attrs.ability,
                 state = {}
     
             //TODO: implement

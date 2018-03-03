@@ -185,26 +185,26 @@ export default class Systems {
     }
 
 	/**
-	*  Reads component props, registers with systems and populates state with the resulting data
+	*  Reads component attrs, registers with systems and populates state with the resulting data
 	**/
     registerComponent ( component: Component) {
 
         let componentsByProp = component.entity.componentsByProp,
 			entity = component.entity,
 			stateByProp = entity.stateByProp,
-            props = component.props,
+            attrs = component.attrs,
             state = component.state,
             deferredSystems = [],
             mesh = null
 
-        Object.keys( props ).map( prop => {
+        Object.keys( attrs ).map( attr => {
 
-            if ( this[ prop ] != null ) {
+            if ( this[ attr ] != null ) {
 				
-				// if ( prop == "material" ) {
-				// 	if (!props.assets) {
+				// if ( attr == "material" ) {
+				// 	if (!attrs.assets) {
 
-				// 		let assets = state[ prop ].assets;
+				// 		let assets = state[ attr ].assets;
 				// 		// roughnessMap
 				// 		// map
 				// 		// metalnessMap
@@ -214,17 +214,17 @@ export default class Systems {
 				// 	}
 				// }
 
-				if ( !!this.deffered[ prop ] ) { /* add other systems here */
-					deferredSystems.push( prop )
+				if ( !!this.deffered[ attr ] ) { /* add other systems here */
+					deferredSystems.push( attr )
                 } else {
-                    state[ prop ] = this[ prop ].init( component )
+                    state[ attr ] = this[ attr ].init( component )
 				}
 				
-				if ( !!!componentsByProp[ prop ] ) {
-                    componentsByProp[ prop ] = []
+				if ( !!!componentsByProp[ attr ] ) {
+                    componentsByProp[ attr ] = []
 				}
 				
-				componentsByProp[ prop ].push( component )
+				componentsByProp[ attr ].push( component )
             }
         })
     
@@ -234,8 +234,8 @@ export default class Systems {
         mesh.matrixAutoUpdate = false
         component.mesh = mesh
 
-        deferredSystems.map( prop => {
-            state[ prop ] = this[ prop ].init( component )
+        deferredSystems.map( attr => {
+            state[ attr ] = this[ attr ].init( component )
         })
 
         return mesh

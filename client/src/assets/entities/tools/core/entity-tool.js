@@ -27,7 +27,7 @@ export default class EntityTool extends Tool  {
       this.current = 3
       this.entity = new Entity(-1, [
           {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [ 0.3, 0.2, 0.433 ]
@@ -42,10 +42,10 @@ export default class EntityTool extends Tool  {
                     title: "Entities",
                     color: 0x07ff00,
                     content: {
-                      props: {
+                      attrs: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "entity", // component, prop
-                          // propName: "userEntities", // toggle to user's entities
+                          type: "entity", // component, attr
+                          // attrName: "userEntities", // toggle to user's entities
                           dataSource: this.world.systems.assets.entities
                         },
                         layout: {
@@ -59,10 +59,10 @@ export default class EntityTool extends Tool  {
                     title: "My Entities",
                     color: 0x07ff00,
                     content: {
-                      props: {
+                      attrs: {
                         metaFactory: { // generates factory for each item in dataSource
-                          type: "entity", // component, prop
-                          // propName: "userEntities", // toggle to user's entities
+                          type: "entity", // component, attr
+                          // attrName: "userEntities", // toggle to user's entities
                           dataSource: this.world.systems.assets.userEntities
                         },
                         layout: {

@@ -19,7 +19,7 @@ export default class PlaceTool extends Tool {
 
       this.entity = new Entity(-1, [
           {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [ 0.1, 0.1, 0.4 ]
@@ -32,10 +32,10 @@ export default class PlaceTool extends Tool {
                   title: "Places",
                   color: 0x07ff07,
                   content: {
-                    props: {
+                    attrs: {
                       metaFactory: { // generates factory for each item in dataSource
-                        type: "place", // entity, prop, place, world, user, file, directory
-                        //propName: "geometry",
+                        type: "place", // entity, attr, place, world, user, file, directory
+                        //attrName: "geometry",
                         dataSource: this.world.systems.assets.places
                       },
                       layout: {

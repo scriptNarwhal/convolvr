@@ -8,7 +8,7 @@ export default class QuestSystem {
     
         init ( component ) {
             
-            let prop = component.props.quest,
+            let attr = component.attrs.quest,
                 state = {}
     
             //TODO: implement

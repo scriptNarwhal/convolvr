@@ -3,7 +3,7 @@ let column1 = {
     name: "column1",
     components: [
         {
-            props: {
+            attrs: {
                 geometry: {
                 merge: true,
                     shape: "box",
@@ -18,7 +18,7 @@ let column1 = {
             position: [ 0, 0, 0 ]
         },
         {
-            props: {
+            attrs: {
                 geometry: {
                     merge: true,
                     shape: "hexagon",
@@ -33,7 +33,7 @@ let column1 = {
             position: [ 0, -0.080, 0 ]
         },
         {
-            props: {
+            attrs: {
                 geometry: {
                     merge: true,
                     shape: "hexagon",

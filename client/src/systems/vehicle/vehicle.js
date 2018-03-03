@@ -5,7 +5,7 @@ export default class VehicleSystem {
     }
 
     init (component) { 
-        let prop = component.props.seat
+        let attr = component.attrs.seat
 
         return {
             enterVehicle: (entity) => {
@@ -19,14 +19,14 @@ export default class VehicleSystem {
 
     enterVehicle (component, entity) {
 
-        let prop = component.props.vehicle,
+        let attr = component.attrs.vehicle,
             state = component.state.vehicle
             
     }
     
     exitVehicle (component, entity) {
 
-        let prop = component.props.vehicle,
+        let attr = component.attrs.vehicle,
             state = component.state.vehicle
 
     }

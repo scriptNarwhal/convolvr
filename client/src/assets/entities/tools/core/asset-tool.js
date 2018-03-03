@@ -19,7 +19,7 @@ export default class AssetTool extends Tool {
 
       this.entity = new Entity(-1, [
           {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [0.08, 0.05, 0.333]
@@ -32,11 +32,11 @@ export default class AssetTool extends Tool {
                   title: "Assets",
                   color: 0x07ffff,
                   content: {
-                    props: {
+                    attrs: {
                       metaFactory: { // generates factory for each item in dataSource
-                        type: "prop", // entity, prop
-                        propName: "assets",
-                        dataSource: this.world.systems.assets.props.assets
+                        type: "attr", // entity, attr
+                        attrName: "assets",
+                        dataSource: this.world.systems.assets.attrs.assets
                       },
                       layout: {
                         type: "grid",

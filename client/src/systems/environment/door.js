@@ -14,7 +14,7 @@ export default class DoorSystem {
 
     init ( component: Component ) { 
 
-        let prop = component.props.door
+        let attr = component.attrs.door
 
         return {
             open: false,

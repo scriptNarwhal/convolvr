@@ -8,7 +8,7 @@ export default class StatSystem {
     
         init ( component ) {
             
-            let prop = component.props.stat,
+            let attr = component.attrs.stat,
                 state = {}
     
             //TODO: implement

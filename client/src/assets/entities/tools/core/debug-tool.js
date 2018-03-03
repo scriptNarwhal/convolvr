@@ -19,7 +19,7 @@ export default class DebugTool extends Tool {
 
       this.entity = new Entity( -1, [
           {
-            props: {
+            attrs: {
               geometry: {
                 shape: "box",
                 size: [ 0.35, 0.35, 0.1 ]
@@ -32,7 +32,7 @@ export default class DebugTool extends Tool {
                   title: "Debug",
                   color: 0x07ff07,
                   content: {
-                    props: {
+                    attrs: {
                       debug: {
                           user: true, // check the items below for the user's avatar
                           position: true,

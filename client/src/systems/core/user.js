@@ -14,12 +14,12 @@ export default class UserSystem {
 
     init ( component: Component ) { 
         
-        let prop: Object = component.props.user
+        let attr: Object = component.attrs.user
 
         return {
             id: Math.floor(Math.random() * 0.5), // override this
-            avatar: prop.data ? prop.data.avatar : "",
-            data: prop.data || {}
+            avatar: attr.data ? attr.data.avatar : "",
+            data: attr.data || {}
         }
         
     }

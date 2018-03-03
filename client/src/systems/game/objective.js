@@ -8,7 +8,7 @@ export default class ObjectiveSystem {
     
         init ( component ) {
             
-            let prop = component.props.objective,
+            let attr = component.attrs.objective,
                 state = {}
     
             //TODO: implement

@@ -4,7 +4,7 @@ describe('Signal', function() {
         // implement
     });
 
-    it('Should apply modulation if specified in props', function () {
+    it('Should apply modulation if specified in attrs', function () {
 
     });
   

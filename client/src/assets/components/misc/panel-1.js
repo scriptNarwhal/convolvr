@@ -1,5 +1,5 @@
 let panel1Comp = {
-    props: {
+    attrs: {
         geometry: {
             merge: true,
             shape: "box",

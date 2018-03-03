@@ -25,16 +25,16 @@ module.exports = function places (state = {
     items: {
         entities: [],
         components: [],
-        properties: []
+        attrerties: []
     },
     itemFetching: false,
     entitiesFetching: false,
     componentsFetching: false,
-    propertiesFetching: false,
+    attrertiesFetching: false,
     item: {
         component: false,
         entity: false,
-        property: false
+        attrerty: false
     },
     updated: false,
     created: false,
@@ -71,7 +71,7 @@ module.exports = function places (state = {
             newState.componentsFetching = isFetching
           break
           case "Properties":
-            newState.propertiesFetching = isFetching
+            newState.attrertiesFetching = isFetching
           break
       }
 
@@ -102,9 +102,9 @@ module.exports = function places (state = {
             return Object.assign({}, state, {
                 items: {
                     ...state.items,
-                    properties: action.data
+                    attrerties: action.data
                 },
-                propertiesFetching: false
+                attrertiesFetching: false
             })
           break
       }
@@ -141,7 +141,7 @@ module.exports = function places (state = {
             return Object.assign({}, state, {
                 item: {
                     ...state.item,
-                    property: action.data
+                    attrerty: action.data
                 },
                 itemFetching: false
             })

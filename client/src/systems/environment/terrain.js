@@ -44,7 +44,7 @@ export default class TerrainSystem {
     }
 
     init (component) {
-        let prop = component.props.tab,
+        let attr = component.attrs.tab,
             state = {}
             
         return state
@@ -82,7 +82,7 @@ export default class TerrainSystem {
       if (type != 'empty') {
         yPosition = type == 'plane' || type == "both" ? -120 / this.config.flatness : 0
         distantTerrain = new Entity( -1, [{
-            props: {
+            attrs: {
               geometry: {
                 shape: "plane",
                 size: [ (64+world.settings.viewDistance)*GRID_SIZE[0]*2, (64+world.settings.viewDistance)*GRID_SIZE[0]*2, 0 ]

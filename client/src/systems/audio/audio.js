@@ -16,32 +16,32 @@ export default class AudioSystem {
 
     init ( component: Component ) { 
 
-        let prop = component.props.audio,
+        let attr = component.attrs.audio,
             assets = this.world.systems.assets,
             sound = null,
             element = null
         // find out what kind of node...
 
-        if ( prop.type == 'stereo') {
+        if ( attr.type == 'stereo') {
           
             element = document.createElement("audio")
-            element.setAttribute("src", prop.asset)
-            element.setAttribute("autoplay", prop.autoPlay ? "on" : "off")
+            element.setAttribute("src", attr.asset)
+            element.setAttribute("autoplay", attr.autoPlay ? "on" : "off")
             element.setAttribute("style", "display: none;")
             document.body.appendChild(element)
 
-        } else { // if (prop.type == 'positional')
+        } else { // if (attr.type == 'positional')
             
             sound = new THREE.PositionalAudio( this.listener ) //Create the PositionalAudio object (passing in the listener)
             
-            assets.loadSound(prop.asset, sound, () => {
+            assets.loadSound(attr.asset, sound, () => {
 
                 if ( sound != null ) {
 
                     component.mesh.add(sound)
                     sound.setRefDistance( 5000 )
                     sound.setMaxDistance(0.0800)
-                    prop.autoPlay !== false && sound.play()
+                    attr.autoPlay !== false && sound.play()
 
                 }
                 

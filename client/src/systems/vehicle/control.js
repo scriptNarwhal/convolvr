@@ -8,14 +8,14 @@ export default class ControlSystem {
 
     init ( component: Component ) { 
         
-        let prop = component.props.control
+        let attr = component.attrs.control
         // check if it's a position or orientation control
         
-        if ( prop.type == "position" ) {
+        if ( attr.type == "position" ) {
 
 
 
-        } else if ( prop.type == "orientation" ) {
+        } else if ( attr.type == "orientation" ) {
 
 
         }

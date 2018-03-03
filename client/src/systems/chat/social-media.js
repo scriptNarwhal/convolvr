@@ -9,7 +9,7 @@ export default class SocialMediaSystem {
 
     init ( component ) { 
         
-        let prop = component.props.socialMedia
+        let attr = component.attrs.socialMedia
 
         //TODO: implement
 

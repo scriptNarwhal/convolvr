@@ -3,7 +3,7 @@ let chatScreen = {
         name: "chat-screen",
         components: [
             {
-                props: {
+                attrs: {
                     geometry: {
                         shape: "box",
                         size: [ 3, 3, 0.25 ]

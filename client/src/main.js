@@ -101,7 +101,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
   
   world.initChatAndLoggedInUser( localStorage.getItem("username") != null )    
   
-  chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].props.speech = {}
+  chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].attrs.speech = {}
   chatScreen.init( scene )
   chatScreen.update( [ pos.x, altitude + 21, pos.z+10] )  
   world.chat = chatScreen
@@ -146,7 +146,7 @@ ReactDOM.render(
 function _initVideoChat ( world: Convolvr, helpScreen: Entity, voxel: Array<number> ) {
 
   let videoChat = world.systems.assets.makeEntity( "video-chat", true, {}, voxel ) // simple example of displaying GET response from server
-  // videoChat.components[0].props.particles = {}
+  // videoChat.components[0].attrs.particles = {}
   videoChat.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
   videoChat.update( [ -8, 0, 0 ] )
 
@@ -155,7 +155,7 @@ function _initVideoChat ( world: Convolvr, helpScreen: Entity, voxel: Array<numb
 function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: Array<number> ) {
 
   let httpClient = world.systems.assets.makeEntity( "help-screen", true, {}, voxel ), // simple example of displaying GET response from server
-      compProps = httpClient.components[0].props
+      compProps = httpClient.components[0].attrs
 
   compProps.rest = {
     get: {

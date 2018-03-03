@@ -9,12 +9,12 @@ export default class ObjPluginSystem { // allows use of imported .obj meshes
 
     init ( component ) { 
         
-        let prop = component.props.obj
+        let attr = component.attrs.obj
 
         this.loader = this.loader || new THREE.OBJLoader()
 
         this.loader.load(
-			prop.url,
+			attr.url,
 			 obj => {
                 component.mesh.add( obj )
                 component.state.obj.obj = obj
@@ -22,7 +22,7 @@ export default class ObjPluginSystem { // allows use of imported .obj meshes
 		);
 
         return {
-           url: prop.url,
+           url: attr.url,
            obj: null
         }
         

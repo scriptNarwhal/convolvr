@@ -91,7 +91,7 @@ let update = () => {
 
         entity.components.map( comp => {
 
-            if ( comp.props.oimo && comp.props.oimo.velocity ) {
+            if ( comp.attrs.oimo && comp.attrs.oimo.velocity ) {
                 // set velocity
             }
 

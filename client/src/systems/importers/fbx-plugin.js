@@ -24,7 +24,7 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
         
         let manager = this.manager || new THREE.LoadingManager(),
             mixers = this.mixers,
-            prop = component.props.fbx
+            attr = component.attrs.fbx
 
 		manager.onProgress = ( item, loaded, total ) => {
 
@@ -34,7 +34,7 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
         
         this.loader = this.loader ||  new THREE.FBXLoader( manager );
         this.manager = manager
-		this.loader.load( prop.url, fbx => {
+		this.loader.load( attr.url, fbx => {
 
 			fbx.mixer = new THREE.AnimationMixer( fbx )
 			mixers.push( fbx.mixer )
@@ -49,7 +49,7 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
 		}, this._onProgress, this._onError );
 
         return {
-           url: prop.url,
+           url: attr.url,
            fbx: null
         }
     }

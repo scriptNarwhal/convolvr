@@ -22,7 +22,7 @@ let toolMenu = (assetSystem, config, voxel) => {
     toolColors.map(( color, i ) => {
 
         let iconCube = {
-            props: Object.assign({}, assetSystem.initIconProps(color, iconTextures[i]), {
+            attrs: Object.assign({}, assetSystem.initIconProps(color, iconTextures[i]), {
                 toolUI: {
                     toolIndex: i
                 },
@@ -45,7 +45,7 @@ let toolMenu = (assetSystem, config, voxel) => {
     })
 
     let currentIndicator = {
-        props: {
+        attrs: {
             geometry: {
                 shape: "box",
                 size: [ 0.75, 0.25, 0.75 ]
@@ -60,7 +60,7 @@ let toolMenu = (assetSystem, config, voxel) => {
         },
         components: [
             {
-                props: {
+                attrs: {
                     geometry: {
                         shape: "node",
                         size: [ 1, 1, 1 ]
@@ -87,7 +87,7 @@ let toolMenu = (assetSystem, config, voxel) => {
         components: [
             //currentIndicator,
             {
-                props: {
+                attrs: {
                     geometry: {
                         shape: "box",
                         size: [ 3, 0.1, 0.15 ]

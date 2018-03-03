@@ -24,7 +24,7 @@ let monster = ( assetSystem, config, voxel ) => { // wholeBody == true == not ju
         cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
         cursorComponent = (spotLight = false) => {
           return {
-            props: {
+            attrs: {
               cursor: true,
               geometry: {
                 shape: "open-cylinder", // "open-box",
@@ -50,7 +50,7 @@ let monster = ( assetSystem, config, voxel ) => { // wholeBody == true == not ju
       if ( wholeBody ) {
 
         component = {
-             props: { 
+             attrs: { 
                 geometry: {
                   shape: "box",
                   size: [ 0.12, 0.18, 0.26 ]
@@ -69,7 +69,7 @@ let monster = ( assetSystem, config, voxel ) => { // wholeBody == true == not ju
        cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
        
        componentB = {
-             props: { 
+             attrs: { 
                 geometry: {
                   shape: "frustum",
                   size: [ 0.2, 0.2, 0.2 ],
@@ -88,7 +88,7 @@ let monster = ( assetSystem, config, voxel ) => { // wholeBody == true == not ju
         while (n < 2) {
 
           components.push(Object.assign({}, {
-            props: {
+            attrs: {
               noRaycast: true,
               geometry: {
                 size: [ 0.11, 0.22, 0.33 ],
@@ -110,7 +110,7 @@ let monster = ( assetSystem, config, voxel ) => { // wholeBody == true == not ju
       } else {
 
         components.push(Object.assign({}, {
-          props: {
+          attrs: {
             geometry: {
                 shape: "box",
                 size: [ 1, 1, 1 ],
@@ -135,7 +135,7 @@ let monster = ( assetSystem, config, voxel ) => { // wholeBody == true == not ju
       while (n < 2) {
 
         components.push(Object.assign({}, {
-          props: {
+          attrs: {
             hand: n,
             noRaycast: true,
             geometry: {
