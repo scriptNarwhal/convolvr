@@ -12,16 +12,12 @@ export default class SpeechSystem {
         //     voices[i].name + ' (' + voices[i].lang + ')'
     }
 
-    init ( component ) {
-        
-        let attr = component.attrs.speech
+    init (component) {
+        let attr = component.attrs.speech;
 
         if ( attr.readText !== false ) {
-
             if ( component.attrs.text ) { // speak text
-
                 this.speak(component.attrs.text.lines.join(". "), false, 0)
-
             }
         }
         return {
@@ -36,26 +32,16 @@ export default class SpeechSystem {
     }
 
     speak (text, voiceName, voiceIndex) {
-
-        let utterThis = new SpeechSynthesisUtterance(text),
-            i = 0
+        let utterThis = new SpeechSynthesisUtterance(text);
 
         if ( voiceName ) {
-
-            for ( i = 0; i < this.voices.length; i++ ) {
-
+            for (let i = 0; i < this.voices.length; i++ ) {
                 if ( this.voices[i].name === voiceName ) {
-
                     utterThis.voice = this.voices[i]
-
                 }
-
             }
-
         } else {
-
             utterThis.voice = this.voices[ voiceIndex ]
-
         }
         
         this.synth.speak( utterThis )
