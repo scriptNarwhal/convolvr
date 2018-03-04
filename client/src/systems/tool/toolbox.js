@@ -165,7 +165,7 @@ export default class ToolboxSystem {
   
           cursor.mesh.updateMatrixWorld()
           !!cursor.mesh.parent && cursor.mesh.parent.updateMatrix()
-          cursorPos = cursor.mesh.localToSpace( new THREE.Vector3() )
+          cursorPos = cursor.mesh.localToWorld( new THREE.Vector3() )
           position = cursorPos.toArray()
   
           if ( handMesh != null )
@@ -353,7 +353,7 @@ export default class ToolboxSystem {
   
         let actionData = {
             tool: toolName,
-            world: this.world.name,
+            space: this.world.name,
             user: this.user.name,
             userId: this.user.id,
             hand,

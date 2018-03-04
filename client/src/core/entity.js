@@ -504,7 +504,7 @@ export default class Entity {
       this.combinedComponents.map( component => {
         if ( component.data ) {
           compPos.fromArray( component.data.position )
-          worldCompPos = entMesh.localToSpace( compPos )
+          worldCompPos = entMesh.localToWorld( compPos )
           newDist = worldCompPos.distanceTo( position ) //console.log("compPos", compPos, "worldCompPos", worldCompPos, "newDist", newDist)
 
           if ( newDist < distance ) {
