@@ -67,7 +67,7 @@ export function launchImportToInventory ( username: string, dir: string, filenam
     }
 }
 
-export function launchImportToWorld ( username: string, itemIndex: number, itemData: Object ) {
+export function launchImportToSpace ( username: string, itemIndex: number, itemData: Object ) {
     return {
         type: UTIL_LAUNCH_IMPORT_TO_WORLD,
         username,
@@ -172,7 +172,7 @@ export function closeImportToInventory ( ) {
     }
 }
 
-export function closeImportToWorld ( ) {
+export function closeImportToSpace ( ) {
     return {
         type: UTIL_CLOSE_IMPORT_TO_WORLD,
     }

@@ -45,8 +45,8 @@ class Inventory extends Component {
 
   onContextAction ( name, data, e ) {
         switch ( name ) {
-          case "Add To World":
-            this.props.launchImportToWorld( this.props.username, data.itemIndex, data.itemData )
+          case "Add To Space":
+            this.props.launchImportToSpace( this.props.username, data.itemIndex, data.itemData )
           break;
           case "Edit":
             this.props.editLoadedItem( data.source, this.props.username, data.category, data.itemIndex, data.itemData )
@@ -129,12 +129,12 @@ import {
   addInventoryItem,
   updateInventoryItem,
   removeInventoryItem,
-  addItemToWorld,
+  addItemToSpace,
 } from '../../redux/actions/inventory-actions'
 import {
   launchEditLoadedItem,
   launchInventoryExport,
-  launchImportToWorld
+  launchImportToSpace
 } from '../../redux/actions/util-actions'
 import {
   toggleMenu
@@ -159,8 +159,8 @@ export default connect(
       toggleMenu: (force) => {
         dispatch( toggleMenu( force ) )
       },
-      launchImportToWorld: (username, index, data) => {
-        dispatch( launchImportToWorld(username, index, data))
+      launchImportToSpace: (username, index, data) => {
+        dispatch( launchImportToSpace(username, index, data))
       },
       launchInventoryExport: (username, category, itemId, itemIndex, itemData) => {
         dispatch( launchInventoryExport(username, category, itemId, itemIndex, itemData))

@@ -5,7 +5,7 @@ import Shell from '../components/shell'
 import Button from '../components/button'
 import { vrAnimate } from '../../world/render'
 import { 
-  detectWorldDetailsFromURL,
+  detectSpaceDetailsFromURL,
   GRID_SIZE,
   APP_NAME
 } from '../../config'
@@ -19,13 +19,13 @@ class App extends Component {
       lastSender: ''
     }
 
-    this.props.fetchWorlds()
+    this.props.fetchSpaces()
     this.props.getInventory(this.props.username, "Entities")
     this.props.getInventory(this.props.username, "Components")
     this.props.getInventory(this.props.username, "Properties")
 
     let world = three.world, 
-        worldDetails = detectWorldDetailsFromURL()
+        worldDetails = detectSpaceDetailsFromURL()
 
     events.on("chat message", message => {
 
@@ -121,7 +121,7 @@ class App extends Component {
 
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
 
-    let showMenuURLs = [ "chat", "login", "worlds", "files", "places", "inventory", "settings", "network", "new-world" ]
+    let showMenuURLs = [ "chat", "login", "spaces", "files", "places", "inventory", "settings", "network", "new-world" ]
     showMenuURLs.map( (menuUrl) => {
 
       window.location.pathname.indexOf(`/${menuUrl}`) > -1 && this.props.toggleMenu(true)
@@ -186,26 +186,26 @@ class App extends Component {
 
   componentWillReceiveProps ( nextProps ) {
 
-    let newWorld = ["world", "Convolvr"],
+    let newSpace = ["world", "Convolvr"],
         userNameChanged = nextProps.username != this.props.username,
         pathChange = nextProps.url.pathname.indexOf("/at") > -1 ? false : nextProps.url.pathname != this.props.url.pathname
 
     if ( pathChange ) {
-      newWorld = detectWorldDetailsFromURL()
+      newSpace = detectSpaceDetailsFromURL()
       
-      if ( newWorld[ 2 ] == true && !!newWorld[ 0 ] && !!newWorld[ 1 ] ) { // not navigating to built in ui / page
-          if ( newWorld[ 0 ] != nextProps.worldUser || newWorld[ 1 ] != nextProps.world ) {
+      if ( newSpace[ 2 ] == true && !!newSpace[ 0 ] && !!newSpace[ 1 ] ) { // not navigating to built in ui / page
+          if ( newSpace[ 0 ] != nextProps.worldUser || newSpace[ 1 ] != nextProps.world ) {
           
-          if (newWorld[ 1 ] != nextProps.world || newWorld[ 0 ] != nextProps.worldUser ) {
-            three.world.reload ( newWorld[ 0 ], newWorld[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
+          if (newSpace[ 1 ] != nextProps.world || newSpace[ 0 ] != nextProps.worldUser ) {
+            three.world.reload ( newSpace[ 0 ], newSpace[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
 
           }
         }
       }
 
-    } else if ( newWorld.length >= 4 ) {
-      console.warn("detected world voxel coords ", newWorld[3])
-      three.camera.position.set( newWorld[3][0] * GRID_SIZE[0], newWorld[3][1] * GRID_SIZE[1], newWorld[3][2] * GRID_SIZE[2] )
+    } else if ( newSpace.length >= 4 ) {
+      console.warn("detected world voxel coords ", newSpace[3])
+      three.camera.position.set( newSpace[3][0] * GRID_SIZE[0], newSpace[3][1] * GRID_SIZE[1], newSpace[3][2] * GRID_SIZE[2] )
     }
 
     if ( userNameChanged ) {
@@ -234,7 +234,7 @@ class App extends Component {
   }
 
   goBack () {
-    let worldURL = detectWorldDetailsFromURL()
+    let worldURL = detectSpaceDetailsFromURL()
 
     browserHistory.push(`/${worldURL[0]}/${worldURL[1]}`)
   }
@@ -422,8 +422,8 @@ import {
   showChat
 } from '../../redux/actions/app-actions'
 import {
-  fetchWorlds,
-  setCurrentWorld,
+  fetchSpaces,
+  setCurrentSpace,
   fetchUniverseSettings
 } from '../../redux/actions/world-actions'
 import {
@@ -449,8 +449,8 @@ export default connect(
       menuOpen: state.app.menuOpen,
       stereoMode: state.app.vrMode,
       focus: state.app.windowFocus,
-      world: state.worlds.current,
-      worldUser: state.worlds.worldUser
+      world: state.spaces.current,
+      worldUser: state.spaces.worldUser
     }
   },
   dispatch => {
@@ -477,11 +477,11 @@ export default connect(
           //window.three.world.mode = force ? "3d" : "web"
           dispatch(toggleMenu(force))
       },
-      fetchWorlds: () => {
-          dispatch(fetchWorlds())
+      fetchSpaces: () => {
+          dispatch(fetchSpaces())
       },
-      setCurrentWorld: (world) => {
-        dispatch(setCurrentWorld(world))
+      setCurrentSpace: (world) => {
+        dispatch(setCurrentSpace(world))
       },
       setWindowFocus: (t) => {
         dispatch(setWindowFocus(t))

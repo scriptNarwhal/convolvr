@@ -19,7 +19,7 @@ import {
     INVENTORY_ADD_TO_WORLD_DONE,
     INVENTORY_ADD_TO_WORLD_FAIL
 } from '../constants/action-types'
-import { detectWorldDetailsFromURL } from '../../config'
+import { detectSpaceDetailsFromURL } from '../../config'
 
 module.exports = function places (state = {
     items: {
@@ -39,7 +39,7 @@ module.exports = function places (state = {
     updated: false,
     created: false,
     deleted: false,
-    addedToWorld: false,
+    addedToSpace: false,
     error: false,
     fetching: false
 }, action) {
@@ -180,11 +180,11 @@ module.exports = function places (state = {
     case INVENTORY_ADD_TO_WORLD_FETCH:
       return Object.assign({}, state, {
           fetching: true,
-          addedToWorld: false
+          addedToSpace: false
       })
     case INVENTORY_ADD_TO_WORLD_DONE:
       return Object.assign({}, state, {
-          addedToWorld: action.data,
+          addedToSpace: action.data,
           fetching: false
       })
     case INVENTORY_ADD_TO_WORLD_FAIL:

@@ -489,7 +489,7 @@ export default class Entity {
         return false
       }
 
-      compPos.setFromMatrixPosition( component.mesh.matrixWorld ) // get world position
+      compPos.setFromMatrixPosition( component.mesh.matrixSpace ) // get world position
       newDist = compPos.distanceTo( position )
 
       if ( newDist < distance ) {

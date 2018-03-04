@@ -117,7 +117,7 @@ export default function BuiltinProps () {
                 ],
                 portal: [
                     { newPlace: true },
-                    { newWorld: true },
+                    { newSpace: true },
                     { coords: [0, 0, 0] },
                     { worldName: "" },
                     { place: "" },

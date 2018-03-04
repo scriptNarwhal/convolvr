@@ -16,9 +16,9 @@ import {
 } from './config'
 import App from './2d-ui/containers/app' // 2D UI
 import Data from './2d-ui/containers/data'
-import Worlds from './2d-ui/containers/worlds'
+import Spaces from './2d-ui/containers/worlds'
 import Places from './2d-ui/containers/places'
-import NewWorld from './2d-ui/containers/new-world'
+import NewSpace from './2d-ui/containers/new-world'
 import Settings from './2d-ui/containers/settings'
 import Inventory from './2d-ui/containers/inventory'
 import Network from './2d-ui/containers/network'
@@ -26,7 +26,7 @@ import Login from './2d-ui/containers/login'
 import Chat from './2d-ui/containers/chat'
 import Profile from './2d-ui/containers/profile'
 import HUD from './2d-ui/containers/hud'
-import { THREE } from 'three' // 3D World
+import { THREE } from 'three' // 3D Space
 import Convolvr from './world/world'
 import Systems from './systems/index'
 import { events } from './network/socket'
@@ -41,7 +41,7 @@ let store:        Object = makeStore(routerReducer),
     userInput:    UserInput,
     //progressBar:  ProgressBar,
     user:         User     = new User(),
-    loadingWorld: Convolvr = null,
+    loadingSpace: Convolvr = null,
     avatar:       Entity   = null, 
     toolMenu:     Entity   = null, // built in ui entities
     helpScreen:   Entity   = null, 
@@ -58,7 +58,7 @@ clearOldData()
 // })
 userInput = new UserInput()
 
-loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) => {
+loadingSpace = new Convolvr( user, userInput, socket, store, (world: Convolvr) => {
 
   let systems:   Systems       = world.systems,
       scene:     Object        = world.three.scene,  
@@ -116,7 +116,7 @@ loadingWorld = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
   
 })
 
-//loadingWorld.progressBar = progressBar
+//loadingSpace.progressBar = progressBar
 
 ReactDOM.render(
   (<Provider store={store}>
@@ -130,9 +130,9 @@ ReactDOM.render(
         <Route path={APP_ROOT+"/chat"} component={Chat} />
         <Route path={APP_ROOT+"/files"} component={Data} />
         <Route path={APP_ROOT+"/files/:username"} component={Data} />
-        <Route path={APP_ROOT+"/worlds"} component={Worlds} />
+        <Route path={APP_ROOT+"/spaces"} component={Spaces} />
         <Route path={APP_ROOT+"/places"} component={Places} />
-        <Route path={APP_ROOT+"/new-world"} component={NewWorld} />
+        <Route path={APP_ROOT+"/new-world"} component={NewSpace} />
         <Route path={APP_ROOT+"/settings"} component={Settings} />
         <Route path={APP_ROOT+"/inventory"} component={Inventory} />
         <Route path={APP_ROOT+"/network"} component={Network} />
@@ -159,10 +159,10 @@ function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: Array
 
   compProps.rest = {
     get: {
-      url: "/api/chunks/"+world.name+"/0x0x0,-1x0x0"
+      url: "/api/voxels/"+world.name+"/0x0x0,-1x0x0"
     }
   }
-  compProps.text.lines = ["/api/chunks/overworld/0x0x0,-1x0x0"] // really just clearing the default text until something loads
+  compProps.text.lines = ["/api/voxels/overworld/0x0x0,-1x0x0"] // really just clearing the default text until something loads
   compProps.text.color = "#f0f0f0"
   httpClient.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
   httpClient.update( [ -12, 0, 0 ] )

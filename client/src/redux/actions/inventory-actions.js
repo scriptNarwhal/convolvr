@@ -143,7 +143,7 @@ import {
   
   }
   
-  export function addItemToWorld ( userId, category, itemId, world, coords, itemData ) {
+  export function addItemToSpace ( userId, category, itemId, world, coords, itemData ) {
     
         return dispatch => {
             itemData.voxel = coords.split("x").map( v=> parseInt(v) )

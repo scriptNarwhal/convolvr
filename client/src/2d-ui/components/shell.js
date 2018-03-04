@@ -20,9 +20,9 @@ class Shell extends Component {
   uploadFiles ( files ) {
     let dir = this.props.cwd.join("/"); console.log("upload files dir ", dir)
     
-    if ( !!this.props.currentWorld ) {
+    if ( !!this.props.currentSpace ) {
       if ( (dir == "/" || dir == "") && this.props.worldUser == this.props.username ) {
-        dir = "/worlds/"+this.props.currentWorld
+        dir = "/spaces/"+this.props.currentSpace
       } 
     }
     if (this.props.reactPath.indexOf("/chat") > -1) {
@@ -141,8 +141,8 @@ export default connect(
   state => {
     return {
       cwd: state.files.listDirectories.workingPath,
-      currentWorld: state.worlds.current,
-      worldUser: state.worlds.worldUser,
+      currentSpace: state.spaces.current,
+      worldUser: state.spaces.worldUser,
       username: state.users.loggedIn != false ? state.users.loggedIn.name : "Human",
       users: state.users,
       menuOpen: state.app.menuOpen,

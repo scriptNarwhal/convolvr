@@ -19,11 +19,11 @@ import {
     PLACE_FETCH_DONE,
     PLACE_FETCH_FAIL
 } from '../constants/action-types'
-import { detectWorldDetailsFromURL } from '../../config'
+import { detectSpaceDetailsFromURL } from '../../config'
 
 module.exports = function places (state = {
-    current: detectWorldDetailsFromURL()[1],
-    placeUser: detectWorldDetailsFromURL()[0],
+    current: detectSpaceDetailsFromURL()[1],
+    placeUser: detectSpaceDetailsFromURL()[0],
     all: [],
     data: false,
     userPlaces: [],

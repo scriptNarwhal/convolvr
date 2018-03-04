@@ -11322,14 +11322,14 @@
 	 * @author lo-th
 	 */
 
-	 // timestep, broadphase, iterations, worldscale, random, stat
+	 // timestep, broadphase, iterations, spacescale, random, stat
 
 	function World ( o ) {
 
 	    if( !(o instanceof Object) ) o = {};
 
 	    // this world scale defaut is 0.1 to 10 meters max for dynamique body
-	    this.scale = o.worldscale || 1;
+	    this.scale = o.spacescale || 1;
 	    this.invScale = 1/this.scale;
 
 	    // The time between each step

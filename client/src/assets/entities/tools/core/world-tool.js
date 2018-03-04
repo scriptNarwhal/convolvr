@@ -2,7 +2,7 @@ import Tool from '../../../../world/tool'
 import Entity from '../../../../core/entity'
 import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
-export default class WorldTool extends Tool {
+export default class SpaceTool extends Tool {
 
   constructor ( data, world, toolbox ) {
 
@@ -12,7 +12,7 @@ export default class WorldTool extends Tool {
         coords = GLOBAL_SPACE
 
       this.mesh = null
-      this.name = "World Tool"
+      this.name = "Space Tool"
       this.options = {
 
       }
@@ -29,14 +29,14 @@ export default class WorldTool extends Tool {
               },
               tool: {
                 panel: {
-                  title: "Worlds",
+                  title: "Spaces",
                   color: 0x07ff07,
                   content: {
                     attrs: {
                       metaFactory: { // generates factory for each item in dataSource
                         type: "world", // entity, attr, place, world, user, file, directory
                         //attrName: "geometry",
-                        dataSource: this.world.systems.assets.worlds
+                        dataSource: this.world.systems.assets.spaces
                       }
                     }
                   }
@@ -44,7 +44,7 @@ export default class WorldTool extends Tool {
               }
             },
             components: [
-              this.initLabel( false, "Worlds")
+              this.initLabel( false, "Spaces")
             ]
           }
         ], [0,0,0], [0,0,0,1], coords)
@@ -62,10 +62,10 @@ export default class WorldTool extends Tool {
     configure ( config ) {
       
       if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
-        let newWorld = [ config.userName, config.name ]
-        if ( !!newWorld[ 0 ] && !!newWorld[ 1 ] ) { // not navigating to built in ui / page
+        let newSpace = [ config.userName, config.name ]
+        if ( !!newSpace[ 0 ] && !!newSpace[ 1 ] ) { // not navigating to built in ui / page
 
-            three.world.reload ( newWorld[ 0 ], newWorld[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
+            three.world.reload ( newSpace[ 0 ], newSpace[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
         }
       }
         // make this use the item as a portal for now

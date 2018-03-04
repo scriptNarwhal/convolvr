@@ -226,8 +226,8 @@ import {
   logOut 
 } from '../../redux/actions/user-actions'
 import {
-  fetchWorlds,
-  setCurrentWorld,
+  fetchSpaces,
+  setCurrentSpace,
   fetchUniverseSettings,
   updateUniverseSettings
 } from '../../redux/actions/world-actions'
@@ -235,9 +235,9 @@ import {
 export default connect(
   (state, ownProps) => {
     return {
-        fetchingSettings: state.worlds.fetchingSettings,
-        settings: state.worlds.universeSettings,
-        worlds: state.worlds.all,
+        fetchingSettings: state.spaces.fetchingSettings,
+        settings: state.spaces.universeSettings,
+        spaces: state.spaces.all,
         user: state.users.loggedIn,
         entities: state.inventory.items.entities ?  state.inventory.items.entities : [],
         entitiesFetching: state.inventory.fetching,
@@ -259,8 +259,8 @@ export default connect(
       sendMessage: (message, from) => {
           dispatch(sendMessage(message, from))
       },
-      setCurrentWorld: (world) => {
-          dispatch(setCurrentWorld(world))
+      setCurrentSpace: (world) => {
+          dispatch(setCurrentSpace(world))
       },
       uploadFile: (file, username, dir) => {
         dispatch(uploadFile(file, username, dir))

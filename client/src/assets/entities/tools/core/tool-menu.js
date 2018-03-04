@@ -10,7 +10,7 @@ let toolMenu = (assetSystem, config, voxel) => {
             '/data/images/textures/icons/systems.png',
             '/data/images/textures/icons/geometries.png',
             '/data/images/textures/icons/materials.png',
-            // '/data/images/textures/icons/worlds.png',
+            // '/data/images/textures/icons/spaces.png',
             // '/data/images/textures/icons/places.png',
             // '/data/images/textures/icons/assets.png',
             // '/data/images/textures/icons/files.png',

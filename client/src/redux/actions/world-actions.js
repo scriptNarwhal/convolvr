@@ -26,17 +26,17 @@ import axios from 'axios'
 import { browserHistory } from 'react-router'
 import { API_SERVER } from '../../config.js'
 
-export function fetchWorlds () {
+export function fetchSpaces () {
     return dispatch => {
      dispatch({
         type: WORLDS_FETCH
      })
-     return axios.get(API_SERVER+"/api/worlds")
+     return axios.get(API_SERVER+"/api/spaces")
         .then(res => {
-            three.world.systems.assets.setWorlds( res.data )
+            three.world.systems.assets.setSpaces( res.data )
             dispatch({
                 type: WORLDS_FETCH_DONE,
-                worlds: res.data
+                spaces: res.data
             })
         }).catch(res => {
             dispatch({
@@ -46,13 +46,13 @@ export function fetchWorlds () {
         });
    }
 }
-export function fetchUserWorlds (userId) {
+export function fetchUserSpaces (userId) {
     return dispatch => {
      dispatch({
         type: USER_WORLDS_FETCH,
         userId
      })
-     return axios.get(API_SERVER+"/api/worlds/user/"+userId)
+     return axios.get(API_SERVER+"/api/spaces/user/"+userId)
         .then(res => {
             dispatch({
                 type: USER_WORLDS_FETCH_DONE,
@@ -77,7 +77,7 @@ export function fetchUniverseSettings () {
                 console.log("got universe settings.. setting current world")
               dispatch({
                 type: WORLD_SET_CURRENT,
-                current: response.data.defaultWorld,
+                current: response.data.defaultSpace,
                 userName: "space" 
               })
             }
@@ -95,63 +95,63 @@ export function fetchUniverseSettings () {
    }
 }
 
-export function createWorld (data) {
+export function createSpace (data) {
     return dispatch => {
      dispatch({
         type: WORLDS_FETCH,
         data
      })
-     return axios.post(API_SERVER+"/api/worlds", data)
+     return axios.post(API_SERVER+"/api/spaces", data)
         .then(response => {
-            dispatch(createWorldDone(response))
+            dispatch(createSpaceDone(response))
             //three.world.reload( data.userName, data.name, false, false ) // until this works perfectly, refresh the page
             browserHistory.push("/"+data.userName+"/"+data.name)
             window.location.href = window.location.href  /* work around */
         }).catch(response => {
-            dispatch(createWorldFail(response))
+            dispatch(createSpaceFail(response))
         });
    }
 }
-export function createWorldDone (res) {
+export function createSpaceDone (res) {
     return {
         type: WORLD_CREATE_DONE,
         created: res.data
     }
 }
-export function createWorldFail (err) {
+export function createSpaceFail (err) {
     return {
         type: WORLD_CREATE_FAIL,
         err
     }
 }
-export function setCurrentWorld (userName, world) {
+export function setCurrentSpace (userName, world) {
   return {
     type: WORLD_SET_CURRENT,
     current: world,
     userName
   }
 }
-export function updateWorld (id, data) {
+export function updateSpace (id, data) {
     return dispatch => {
      dispatch({
         type: WORLD_UPDATE_FETCH,
         id: id
      })
-     return axios.post(API_SERVER+"/api/worlds/"+id, data)
+     return axios.post(API_SERVER+"/api/spaces/"+id, data)
         .then(response => {
-            dispatch(updateWorldDone(response))
+            dispatch(updateSpaceDone(response))
         }).catch(response => {
-            dispatch(updateWorldFail(response))
+            dispatch(updateSpaceFail(response))
         });
    }
 }
-export function updateWorldDone (res) {
+export function updateSpaceDone (res) {
     return {
         type: WORLD_UPDATE_DONE,
         updated: res.data
     }
 }
-export function updateWorldFail (err) {
+export function updateSpaceFail (err) {
     return {
         type: WORLD_UPDATE_FAIL,
         err
@@ -178,27 +178,27 @@ export function updateUniverseSettings (data, password) {
    }
 }
 
-export function deleteWorld (id, data) {
+export function deleteSpace (id, data) {
     return dispatch => {
      dispatch({
         type: WORLD_DELETE_FETCH,
         id: id
      })
-     return axios.post(API_SERVER+"/api/worlds/delete/"+id)
+     return axios.post(API_SERVER+"/api/spaces/delete/"+id)
         .then(response => {
-            dispatch(deleteWorldDone(response))
+            dispatch(deleteSpaceDone(response))
         }).catch(response => {
-            dispatch(deleteWorldFail(response))
+            dispatch(deleteSpaceFail(response))
         });
    }
 }
-export function deleteWorldDone (res) {
+export function deleteSpaceDone (res) {
     return {
         type: WORLD_DELETE_DONE,
         details: res.data
     }
 }
-export function deleteWorldFail (err) {
+export function deleteSpaceFail (err) {
     return {
         type: WORLD_DELETE_FAIL,
         err

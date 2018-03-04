@@ -45,7 +45,7 @@ export default class BrowserSystem {
             case "users":
 
             break
-            case "worlds":
+            case "spaces":
 
             break
             case "places":

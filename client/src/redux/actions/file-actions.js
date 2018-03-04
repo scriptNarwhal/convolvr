@@ -136,11 +136,11 @@ export function uploadFiles ( files, username, dir ) {
          dir
      }) 
 
-     if ( !!state.worlds.current ) {
+     if ( !!state.spaces.current ) {
 
-      if ( (dir == "/" || dir == "") && state.worlds.worldUser == state.users.loggedIn.name )
+      if ( (dir == "/" || dir == "") && state.spaces.worldUser == state.users.loggedIn.name )
 
-        dir = "/worlds/"+state.worlds.current
+        dir = "/spaces/"+state.spaces.current
 
 
     }

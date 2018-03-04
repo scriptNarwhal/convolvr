@@ -51,7 +51,7 @@ export default class AssetSystem {
         this.userEntities         = []
         this.userComponents       = []
         this.places               = []
-        this.worlds               = []
+        this.spaces               = []
         this.attrs                = BuiltinProps()
         this.files                = [] // user's files; separate from entity file systems
         this.directories          = [] // user's directories
@@ -159,8 +159,8 @@ export default class AssetSystem {
         return `${envURL}.jpg`
     }
 
-    setWorlds ( worlds ) {
-        this.worlds = worlds
+    setSpaces ( spaces ) {
+        this.spaces = spaces
     }
 
     setPlaces ( places ) {
@@ -328,9 +328,9 @@ export default class AssetSystem {
         this.places = places
     }
 
-    _loadWorlds ( worlds ) { 
+    _loadSpaces ( spaces ) { 
         // implement call this from redux action
-        this.worlds = worlds
+        this.spaces = spaces
     }
 
     _initButton ( component, data ) {

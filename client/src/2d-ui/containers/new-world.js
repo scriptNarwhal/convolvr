@@ -5,7 +5,7 @@ import {
 } from '../styles'
 import { isMobile } from '../../config'
 
-class NewWorld extends Component {
+class NewSpace extends Component {
 
   constructor () {
     super()
@@ -50,7 +50,7 @@ class NewWorld extends Component {
 
   }
 
-  createWorld() {
+  createSpace() {
 
     let lightColor = [ parseFloat(this.state.red), parseFloat(this.state.green), parseFloat(this.state.blue) ],
         data = {
@@ -106,11 +106,11 @@ class NewWorld extends Component {
     data.userId = this.props.loggedInUser != false ? this.props.loggedInUser.id : -1
     if ( this.state.name != "" || this.state.description == "" ) {
 
-      this.props.createWorld( data )
+      this.props.createSpace( data )
 
     } else {
 
-      alert("World name & description are required.")
+      alert("Space name & description are required.")
 
     }
 
@@ -182,12 +182,12 @@ class NewWorld extends Component {
         <Shell className="login">
           <div style={styles.modal()}>
             <div style={styles.title}>
-              Create New World
+              Create New Space
             </div>
             <table className="table new-world" style={{ paddingLeft: "1em", width: "95%" }}>
               <tbody>
               <tr>
-                <td>World Name</td>
+                <td>Space Name</td>
                 <td>
                   <input autoComplete="false"
                          key={"worldName"}
@@ -200,7 +200,7 @@ class NewWorld extends Component {
                 <td></td>
               </tr>
               <tr>
-                <td>World Description</td>
+                <td>Space Description</td>
                 <td colSpan="2">
                   <input autoComplete="false"
                          key={"worldDescription"}
@@ -494,7 +494,7 @@ class NewWorld extends Component {
                     <input type="button"
                             value="Create"
                             style={styles.signInButton}
-                            onClick={e=> { this.createWorld() } }
+                            onClick={e=> { this.createSpace() } }
                     />
                   </div>
                 </td>
@@ -509,11 +509,11 @@ class NewWorld extends Component {
   }
 }
 
-NewWorld.defaultProps = {
+NewSpace.defaultProps = {
 }
 
 import { connect } from 'react-redux'
-import { createWorld } from '../../redux/actions/world-actions'
+import { createSpace } from '../../redux/actions/world-actions'
 import { uploadFile } from '../../redux/actions/file-actions'
 export default connect(
   state => {
@@ -528,15 +528,15 @@ export default connect(
   },
   dispatch => {
     return {
-      createWorld: (data) => {
-        dispatch(createWorld(data))
+      createSpace: (data) => {
+        dispatch(createSpace(data))
       },
       uploadFile: (file, username, dir) => {
         dispatch(uploadFile(file, username, dir))
       }
     }
   }
-)(NewWorld)
+)(NewSpace)
 
 const styles = {
   modal: () => {

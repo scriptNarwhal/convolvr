@@ -5,10 +5,10 @@
 - Built in tools to build world entities from components
 - Tools to visually build components from attrs (geometries, materials & other systems)
 - Handles user input from keyboard/mouse, touch, tracked controllers
-- Supports infinite, configurable, procedural worlds 
+- Supports infinite, configurable, procedural spaces 
 - Mesh based VR UI; Multiline text rendering
 
-![infinite procedural worlds](web/images/insta.gif)
+![infinite procedural spaces](web/images/insta.gif)
 
 ## Installation
 ```shell
@@ -24,7 +24,7 @@
 
 ### Client Example [full code here](https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
 ```js
-loadingWorld = new Convolvr( user, userInput, socket, store, ( world ) => {
+loadingSpace = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   let avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) 
   avatar.init( three.scene )
