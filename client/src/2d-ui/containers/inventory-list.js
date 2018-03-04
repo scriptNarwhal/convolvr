@@ -4,7 +4,7 @@ import Button from '../components/button'
 import Card from '../components/card'
 import EntityEditor from '../components/data/entity-editor'
 import ComponentEditor from '../components/data/component-editor'
-import PropertyEditor from '../components/data/property-editor'
+import AttributeEditor from '../components/data/attribute-editor'
 import ImportToSpace from '../components/data/import-to-world'
 import InventoryExport from '../components/data/inventory-export'
 
@@ -44,7 +44,7 @@ export default class InventoryList extends Component {
                                   entityEditMode={false}
                   />
                 ) : (
-                  <PropertyEditor username={this.props.username}
+                  <AttributeEditor username={this.props.username}
                                   entityEditMode={false}
                   />
                 )

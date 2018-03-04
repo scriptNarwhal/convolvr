@@ -3,20 +3,20 @@ import {
     UTIL_LAUNCH_RENAME_FILE,
     UTIL_LAUNCH_SHARING_SETTINGS,
     UTIL_LAUNCH_IMPORT_TO_INVENTORY,
-    UTIL_LAUNCH_IMPORT_TO_WORLD,
+    UTIL_LAUNCH_IMPORT_TO_SPACE,
     UTIL_LAUNCH_ENTITY_EDITOR,
     UTIL_LAUNCH_INVENTORY_EXPORT,
     UTIL_LAUNCH_COMPONENT_EDITOR,
-    UTIL_LAUNCH_PROPERTY_EDITOR,
+    UTIL_LAUNCH_ATTRIBUTE_EDITOR,
     UTIL_CLOSE_TEXT_EDIT,
     UTIL_CLOSE_RENAME_FILE,
     UTIL_CLOSE_SHARING_SETTINGS,
     UTIL_CLOSE_IMPORT_TO_INVENTORY,
-    UTIL_CLOSE_IMPORT_TO_WORLD,
+    UTIL_CLOSE_IMPORT_TO_SPACE,
     UTIL_CLOSE_ENTITY_EDITOR,
     UTIL_CLOSE_INVENTORY_EXPORT,
     UTIL_CLOSE_COMPONENT_EDITOR,
-    UTIL_CLOSE_PROPERTY_EDITOR,
+    UTIL_CLOSE_ATTRIBUTE_EDITOR,
     UTIL_LAUNCH_EDIT_LOADED_ITEM,
     UTIL_ACTIVATE_MODAL
 } from '../constants/action-types';
@@ -80,7 +80,7 @@ module.exports = function app (state = {
         itemId: "",
         source: "inventory"
     },
-    attrertyEdit: {
+    attributeEdit: {
         windowsOpen: 0,
         activated: false,
         username: "",
@@ -92,7 +92,7 @@ module.exports = function app (state = {
         activated: {
             entity: false,
             component: false,
-            attrerty: false
+            attribute: false
         },
         username: "",
         category: "",
@@ -100,12 +100,12 @@ module.exports = function app (state = {
         data: {
             entity: false,
             component: false,
-            attrerty: false
+            attribute: false
         },
         source: {
             entity: "inventory",
             component: "inventory",
-            attrerty: "inventory"
+            attribute: "inventory"
         }
     }
 }, action) {
@@ -185,12 +185,12 @@ module.exports = function app (state = {
                     }
                 }
             break;
-            case "attrertyEdit":
+            case "attributeEdit":
                 newState = {
                     ...newState,
-                    attrertyEdit: {
-                        ...newState.attrertyEdit,
-                        windowsOpen: newState.attrertyEdit.windowsOpen + 1
+                    attributeEdit: {
+                        ...newState.attributeEdit,
+                        windowsOpen: newState.attributeEdit.windowsOpen + 1
                     }
                 }
             break;
@@ -245,7 +245,7 @@ module.exports = function app (state = {
                 dir: action.dir
             }
         }
-    case UTIL_LAUNCH_IMPORT_TO_WORLD:
+    case UTIL_LAUNCH_IMPORT_TO_SPACE:
         return {
             ...state,
             importToSpace: {
@@ -296,12 +296,12 @@ module.exports = function app (state = {
                 source: action.source
             }
         }
-    case UTIL_LAUNCH_PROPERTY_EDITOR:
+    case UTIL_LAUNCH_ATTRIBUTE_EDITOR:
         return {
             ...state,
-            attrertyEdit: {
-                ...state.attrertyEdit,
-                windowsOpen: state.attrertyEdit.windowsOpen + 1,
+            attributeEdit: {
+                ...state.attributeEdit,
+                windowsOpen: state.attributeEdit.windowsOpen + 1,
                 activated: true,
                 username: action.username,
                 itemId: action.itemId,
@@ -326,9 +326,9 @@ module.exports = function app (state = {
                 source.component = action.source
             break
             case "Properties":
-                data.attrerty = action.data
-                activated.attrerty = true
-                source.attrerty = action.source
+                data.attribute = action.data
+                activated.attribute = true
+                source.attribute = action.source
             break
         }
 
@@ -387,7 +387,7 @@ module.exports = function app (state = {
                 activated: false
             }
         }
-    case UTIL_CLOSE_IMPORT_TO_WORLD:
+    case UTIL_CLOSE_IMPORT_TO_SPACE:
         return {
             ...state,
             importToSpace: {
@@ -439,12 +439,12 @@ module.exports = function app (state = {
                 }
             }
         }
-    case UTIL_CLOSE_PROPERTY_EDITOR:
+    case UTIL_CLOSE_ATTRIBUTE_EDITOR:
         return {
             ...state,
-            attrertyEdit: {
-                ...state.attrertyEdit,
-                windowsOpen: state.attrertyEdit.windowsOpen - 1,
+            attributeEdit: {
+                ...state.attributeEdit,
+                windowsOpen: state.attributeEdit.windowsOpen - 1,
                 activated: false
             },
             loadedItemEdit: {
@@ -452,7 +452,7 @@ module.exports = function app (state = {
                 windowsOpen: state.loadedItemEdit.windowsOpen - 1,
                 data: {
                     ...state.loadedItemEdit.data,
-                    attrerty: null
+                    attribute: null
                 }
             }
         }

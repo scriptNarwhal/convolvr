@@ -1,20 +1,20 @@
 import {
-  WORLD_SET_CURRENT,
-  WORLD_CREATE_FETCH,
-  WORLD_CREATE_DONE,
-  WORLD_CREATE_FAIL,
-  WORLDS_FETCH,
-  WORLDS_FETCH_DONE,
-  WORLDS_FETCH_FAIL,
-  USER_WORLDS_FETCH,
-  USER_WORLDS_FETCH_FAIL,
-  USER_WORLDS_FETCH_DONE,
-  WORLD_UPDATE_FETCH,
-  WORLD_UPDATE_DONE,
-  WORLD_UPDATE_FAIL,
-  WORLD_DELETE_FETCH,
-  WORLD_DELETE_DONE,
-  WORLD_DELETE_FAIL,
+  SPACE_SET_CURRENT,
+  SPACE_CREATE_FETCH,
+  SPACE_CREATE_DONE,
+  SPACE_CREATE_FAIL,
+  SPACES_FETCH,
+  SPACES_FETCH_DONE,
+  SPACES_FETCH_FAIL,
+  USER_SPACES_FETCH,
+  USER_SPACES_FETCH_FAIL,
+  USER_SPACES_FETCH_DONE,
+  SPACE_UPDATE_FETCH,
+  SPACE_UPDATE_DONE,
+  SPACE_UPDATE_FAIL,
+  SPACE_DELETE_FETCH,
+  SPACE_DELETE_DONE,
+  SPACE_DELETE_FAIL,
   UNIVERSE_SETTINGS_FETCH,
   UNIVERSE_SETTINGS_FETCH_DONE,
   UNIVERSE_SETTINGS_FETCH_FAIL,
@@ -29,18 +29,18 @@ import { API_SERVER } from '../../config.js'
 export function fetchSpaces () {
     return dispatch => {
      dispatch({
-        type: WORLDS_FETCH
+        type: SPACES_FETCH
      })
      return axios.get(API_SERVER+"/api/spaces")
         .then(res => {
             three.world.systems.assets.setSpaces( res.data )
             dispatch({
-                type: WORLDS_FETCH_DONE,
+                type: SPACES_FETCH_DONE,
                 spaces: res.data
             })
         }).catch(res => {
             dispatch({
-                type: WORLDS_FETCH_FAIL,
+                type: SPACES_FETCH_FAIL,
                 err: err
             })
         });
@@ -49,18 +49,18 @@ export function fetchSpaces () {
 export function fetchUserSpaces (userId) {
     return dispatch => {
      dispatch({
-        type: USER_WORLDS_FETCH,
+        type: USER_SPACES_FETCH,
         userId
      })
      return axios.get(API_SERVER+"/api/spaces/user/"+userId)
         .then(res => {
             dispatch({
-                type: USER_WORLDS_FETCH_DONE,
+                type: USER_SPACES_FETCH_DONE,
                 data: res.data
             })
         }).catch(err => {
             dispatch({
-                type: USER_WORLDS_FETCH_FAIL,
+                type: USER_SPACES_FETCH_FAIL,
                 err: err
             })
         });
@@ -76,7 +76,7 @@ export function fetchUniverseSettings () {
             if ( window.location.pathname == "/" ) {
                 console.log("got universe settings.. setting current world")
               dispatch({
-                type: WORLD_SET_CURRENT,
+                type: SPACE_SET_CURRENT,
                 current: response.data.defaultSpace,
                 userName: "space" 
               })
@@ -98,7 +98,7 @@ export function fetchUniverseSettings () {
 export function createSpace (data) {
     return dispatch => {
      dispatch({
-        type: WORLDS_FETCH,
+        type: SPACES_FETCH,
         data
      })
      return axios.post(API_SERVER+"/api/spaces", data)
@@ -114,19 +114,19 @@ export function createSpace (data) {
 }
 export function createSpaceDone (res) {
     return {
-        type: WORLD_CREATE_DONE,
+        type: SPACE_CREATE_DONE,
         created: res.data
     }
 }
 export function createSpaceFail (err) {
     return {
-        type: WORLD_CREATE_FAIL,
+        type: SPACE_CREATE_FAIL,
         err
     }
 }
 export function setCurrentSpace (userName, world) {
   return {
-    type: WORLD_SET_CURRENT,
+    type: SPACE_SET_CURRENT,
     current: world,
     userName
   }
@@ -134,7 +134,7 @@ export function setCurrentSpace (userName, world) {
 export function updateSpace (id, data) {
     return dispatch => {
      dispatch({
-        type: WORLD_UPDATE_FETCH,
+        type: SPACE_UPDATE_FETCH,
         id: id
      })
      return axios.post(API_SERVER+"/api/spaces/"+id, data)
@@ -147,13 +147,13 @@ export function updateSpace (id, data) {
 }
 export function updateSpaceDone (res) {
     return {
-        type: WORLD_UPDATE_DONE,
+        type: SPACE_UPDATE_DONE,
         updated: res.data
     }
 }
 export function updateSpaceFail (err) {
     return {
-        type: WORLD_UPDATE_FAIL,
+        type: SPACE_UPDATE_FAIL,
         err
     }
 }
@@ -181,7 +181,7 @@ export function updateUniverseSettings (data, password) {
 export function deleteSpace (id, data) {
     return dispatch => {
      dispatch({
-        type: WORLD_DELETE_FETCH,
+        type: SPACE_DELETE_FETCH,
         id: id
      })
      return axios.post(API_SERVER+"/api/spaces/delete/"+id)
@@ -194,13 +194,13 @@ export function deleteSpace (id, data) {
 }
 export function deleteSpaceDone (res) {
     return {
-        type: WORLD_DELETE_DONE,
+        type: SPACE_DELETE_DONE,
         details: res.data
     }
 }
 export function deleteSpaceFail (err) {
     return {
-        type: WORLD_DELETE_FAIL,
+        type: SPACE_DELETE_FAIL,
         err
     }
 }

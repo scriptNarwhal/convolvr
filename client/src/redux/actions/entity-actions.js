@@ -5,9 +5,9 @@ import {
     ENTITIES_FETCH_FAILED,
     UPDATE_ENTITY,
     DELETE_ENTITY,
-    ENTITY_IMPORT_TO_WORLD_FETCH,
-    ENTITY_IMPORT_TO_WORLD_DONE,
-    ENTITY_IMPORT_TO_WORLD_FAIL
+    ENTITY_IMPORT_TO_SPACE_FETCH,
+    ENTITY_IMPORT_TO_SPACE_DONE,
+    ENTITY_IMPORT_TO_SPACE_FAIL
 } from '../constants/action-types';
 import axios from 'axios';
 import { API_SERVER } from '../../config.js'

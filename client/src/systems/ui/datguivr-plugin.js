@@ -20,7 +20,7 @@ export default class DatGUIVRPluginSystem {
             path = "",
             gui = null,
             state = null,
-            attrerty = [],
+            attribute = [],
             controller = null,
             controllerData = null,
             controllers = attr.controllers,
@@ -52,30 +52,30 @@ export default class DatGUIVRPluginSystem {
                 if ( controllerData.value.statePath ) {
 
                     path = controllerData.value.statePath
-                    attrerty = path.splice( path.length-1, 1 )
+                    attribute = path.splice( path.length-1, 1 )
                     state = this.getByPath( component.state, path )
 
                 } else if ( controllerData.value.attrsPath ) {
 
                     path = controllerData.value.attrsPath
-                    attrerty = path.splice( path.length-1, 1 )
+                    attribute = path.splice( path.length-1, 1 )
                     state = this.getByPath( component.attrs, path )
 
                 } else {
 
                     path = controllerData.value.path
-                    attrerty = path.splice( path.length-1, 1 )
+                    attribute = path.splice( path.length-1, 1 )
                     state = this.getByPath( component, path )
 
                 }
 
-                if ( typeof state[ attrerty ] == 'boolean' || typeof state[ attrerty ] == 'function' ) {
+                if ( typeof state[ attribute ] == 'boolean' || typeof state[ attribute ] == 'function' ) {
 
-                    controller = gui.add( state, attrerty );
+                    controller = gui.add( state, attribute );
 
-                } else if ( typeof state[ attrerty ] == 'number' ) {
+                } else if ( typeof state[ attribute ] == 'number' ) {
 
-                    controller = gui.add( state, attrerty, controllerData.min, controllerData.max );
+                    controller = gui.add( state, attribute, controllerData.min, controllerData.max );
 
                 }
 

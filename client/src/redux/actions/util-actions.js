@@ -5,21 +5,21 @@ import {
     UTIL_LAUNCH_RENAME_FILE,
     UTIL_LAUNCH_SHARING_SETTINGS,
     UTIL_LAUNCH_IMPORT_TO_INVENTORY,
-    UTIL_LAUNCH_IMPORT_TO_WORLD,
+    UTIL_LAUNCH_IMPORT_TO_SPACE,
     UTIL_LAUNCH_ENTITY_EDITOR,
     UTIL_LAUNCH_INVENTORY_EXPORT,
     UTIL_LAUNCH_COMPONENT_EDITOR,
-    UTIL_LAUNCH_PROPERTY_EDITOR,
+    UTIL_LAUNCH_ATTRIBUTE_EDITOR,
     UTIL_LAUNCH_EDIT_LOADED_ITEM,
     UTIL_CLOSE_TEXT_EDIT,
     UTIL_CLOSE_RENAME_FILE,
     UTIL_CLOSE_SHARING_SETTINGS,
     UTIL_CLOSE_IMPORT_TO_INVENTORY,
-    UTIL_CLOSE_IMPORT_TO_WORLD,
+    UTIL_CLOSE_IMPORT_TO_SPACE,
     UTIL_CLOSE_ENTITY_EDITOR,
     UTIL_CLOSE_INVENTORY_EXPORT,
     UTIL_CLOSE_COMPONENT_EDITOR,
-    UTIL_CLOSE_PROPERTY_EDITOR,
+    UTIL_CLOSE_ATTRIBUTE_EDITOR,
     UTIL_ACTIVATE_MODAL
 } from '../constants/action-types';
 import { API_SERVER } from '../../config.js'
@@ -69,7 +69,7 @@ export function launchImportToInventory ( username: string, dir: string, filenam
 
 export function launchImportToSpace ( username: string, itemIndex: number, itemData: Object ) {
     return {
-        type: UTIL_LAUNCH_IMPORT_TO_WORLD,
+        type: UTIL_LAUNCH_IMPORT_TO_SPACE,
         username,
         itemIndex,
         itemData
@@ -107,9 +107,9 @@ export function launchComponentEditor ( username: string, itemId: number, source
     }
 }
 
-export function launchPropertyEditor ( username: string, itemId: number, source: string = "inventory" ) {
+export function launchAttributeEditor ( username: string, itemId: number, source: string = "inventory" ) {
     return {
-        type: UTIL_LAUNCH_PROPERTY_EDITOR,
+        type: UTIL_LAUNCH_ATTRIBUTE_EDITOR,
         username,
         category: "Properties",
         itemId,
@@ -140,7 +140,7 @@ export function launchEditLoadedItem ( source: string, username: string, categor
 
         } else if (category == "Properties") {
 
-            dispatch(launchPropertyEditor(username, index))
+            dispatch(launchAttributeEditor(username, index))
 
         }
 
@@ -174,7 +174,7 @@ export function closeImportToInventory ( ) {
 
 export function closeImportToSpace ( ) {
     return {
-        type: UTIL_CLOSE_IMPORT_TO_WORLD,
+        type: UTIL_CLOSE_IMPORT_TO_SPACE,
     }
 }
 
@@ -196,8 +196,8 @@ export function closeComponentEditor ( ) {
     }
 }
 
-export function closePropertyEditor ( ) {
+export function closeAttributeEditor ( ) {
     return {
-        type: UTIL_CLOSE_PROPERTY_EDITOR,
+        type: UTIL_CLOSE_ATTRIBUTE_EDITOR,
     }
 }

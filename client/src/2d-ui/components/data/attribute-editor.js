@@ -11,7 +11,7 @@ import {
   textTitleInputStyle,
   modalStyle 
 } from '../../styles'
-class PropertyEditor extends Component {
+class AttributeEditor extends Component {
 
   constructor () {
     super()
@@ -70,7 +70,7 @@ class PropertyEditor extends Component {
 
   loadPropertyData ( props, nextProps ) {
 
-    console.info("propertyEditor edit load property data: editSource, editData, ", nextProps.editSource, nextProps.loadedItemData)
+    console.info("attributeEditor edit load property data: editSource, editData, ", nextProps.editSource, nextProps.loadedItemData)
     if ( nextProps.editSource == "componentEdit" ) { // load from component in inventory
       if ( nextProps.loadedItemData ) {
 
@@ -200,7 +200,7 @@ class PropertyEditor extends Component {
   toggleModal () {
 
     if ( this.state.activated) {
-      this.props.closePropertyEditor()
+      this.props.closeAttributeEditor()
     }
     this.setState({
       activated: !this.state.activated
@@ -216,7 +216,7 @@ class PropertyEditor extends Component {
        <div style={ styles.lightbox }>
           <div style={ styles.modal() } >
             <div style={ styles.header }>
-              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Property Edit</span> 
+              <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Attribute Edit</span> 
                 { !this.state.refreshing ? 
                   <input type="text" defaultValue={ this.state.name }  style={ styles.text } 
                          onChange={ (e) => { this.handleTextChange(e) }} 
@@ -257,7 +257,7 @@ class PropertyEditor extends Component {
   }
 }
 
-PropertyEditor.defaultProps = {
+AttributeEditor.defaultProps = {
   title: "New Property",
   source: "inventory",
   convolvrProps: getPropsList( BuiltinProps() )
@@ -274,7 +274,7 @@ import {
     updateInventoryItem
 } from '../../../redux/actions/inventory-actions'
 import {
-    closePropertyEditor
+    closeAttributeEditor
 } from '../../../redux/actions/util-actions'
 
 export default connect(
@@ -283,13 +283,13 @@ export default connect(
         section: state.routing.locationBeforeTransitions.pathname,
         menuOpen: state.app.menuOpen,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
-        activated: state.util.propertyEdit.activated,
-        itemId: state.util.propertyEdit.itemId,
+        activated: state.util.attributeEdit.activated,
+        itemId: state.util.attributeEdit.itemId,
         properties: state.inventory.items.properties,
         editLoadedItemActivated: state.util.loadedItemEdit.activated.property && state.util.loadedItemEdit.category == "Properties",
         loadedItemIndex: state.util.loadedItemEdit.index,
         loadedItemData: state.util.loadedItemEdit.data.property,
-        instances: state.util.propertyEdit.windowsOpen,
+        instances: state.util.attributeEdit.windowsOpen,
         editSource: state.util.loadedItemEdit.source.property,
         category: state.util.loadedItemEdit.category
     }
@@ -308,12 +308,12 @@ export default connect(
       updateInventoryItem: (userId, category, data) => {
         dispatch(updateInventoryItem(userId, category, data))
       },
-      closePropertyEditor: () => {
-        dispatch( closePropertyEditor() )
+      closeAttributeEditor: () => {
+        dispatch( closeAttributeEditor() )
       }
     }
   }
-)(PropertyEditor)
+)(AttributeEditor)
 
 let styles = {
   modal: () => {

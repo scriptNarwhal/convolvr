@@ -14,9 +14,9 @@ import {
     INVENTORY_DELETE_FETCH,
     INVENTORY_DELETE_DONE,
     INVENTORY_DELETE_FAIL,
-    INVENTORY_ADD_TO_WORLD_FETCH,
-    INVENTORY_ADD_TO_WORLD_DONE,
-    INVENTORY_ADD_TO_WORLD_FAIL
+    INVENTORY_ADD_TO_SPACE_FETCH,
+    INVENTORY_ADD_TO_SPACE_DONE,
+    INVENTORY_ADD_TO_SPACE_FAIL
   } from '../constants/action-types'
   import axios from 'axios'
   import { browserHistory } from 'react-router'
@@ -148,7 +148,7 @@ import {
         return dispatch => {
             itemData.voxel = coords.split("x").map( v=> parseInt(v) )
          dispatch({
-            type: INVENTORY_ADD_TO_WORLD_FETCH,
+            type: INVENTORY_ADD_TO_SPACE_FETCH,
             userId,
             category,
             itemId,
@@ -159,12 +159,12 @@ import {
          return axios.put(API_SERVER+`/api/import-to-world/${world}/${coords}`, itemData)
             .then(response => {
                 dispatch({
-                  type: INVENTORY_ADD_TO_WORLD_DONE,
+                  type: INVENTORY_ADD_TO_SPACE_DONE,
                   updated: response.data
               })
             }).catch(response => {
                 dispatch({
-                      type: INVENTORY_ADD_TO_WORLD_FAIL,
+                      type: INVENTORY_ADD_TO_SPACE_FAIL,
                       err: response.err
                   })
             });

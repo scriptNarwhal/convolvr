@@ -15,9 +15,9 @@ import {
     INVENTORY_DELETE_FETCH,
     INVENTORY_DELETE_DONE,
     INVENTORY_DELETE_FAIL,
-    INVENTORY_ADD_TO_WORLD_FETCH,
-    INVENTORY_ADD_TO_WORLD_DONE,
-    INVENTORY_ADD_TO_WORLD_FAIL
+    INVENTORY_ADD_TO_SPACE_FETCH,
+    INVENTORY_ADD_TO_SPACE_DONE,
+    INVENTORY_ADD_TO_SPACE_FAIL
 } from '../constants/action-types'
 import { detectSpaceDetailsFromURL } from '../../config'
 
@@ -34,7 +34,7 @@ module.exports = function places (state = {
     item: {
         component: false,
         entity: false,
-        attrerty: false
+        attribute: false
     },
     updated: false,
     created: false,
@@ -141,7 +141,7 @@ module.exports = function places (state = {
             return Object.assign({}, state, {
                 item: {
                     ...state.item,
-                    attrerty: action.data
+                    attribute: action.data
                 },
                 itemFetching: false
             })
@@ -177,17 +177,17 @@ module.exports = function places (state = {
           error: action.err,
           fetching: false
       })
-    case INVENTORY_ADD_TO_WORLD_FETCH:
+    case INVENTORY_ADD_TO_SPACE_FETCH:
       return Object.assign({}, state, {
           fetching: true,
           addedToSpace: false
       })
-    case INVENTORY_ADD_TO_WORLD_DONE:
+    case INVENTORY_ADD_TO_SPACE_DONE:
       return Object.assign({}, state, {
           addedToSpace: action.data,
           fetching: false
       })
-    case INVENTORY_ADD_TO_WORLD_FAIL:
+    case INVENTORY_ADD_TO_SPACE_FAIL:
       return Object.assign({}, state, {
           error: action.err,
           fetching: false
