@@ -52,7 +52,7 @@ export default class MetaFactorySystem {
                 // entity will re-init after files load              
         }
 
-        if (typeof source.map == 'function') { // array of geometries / materials, components, entities, worlds, places, files, (directories could use source[category])
+        if (typeof source.map == 'function') { // array of geometries / materials, components, entities, spaces, places, files, (directories could use source[category])
             //console.info( "metafactory source is ", source)
             source.map( (item, i) => {
                 if ( assetType == 'entity' && typeof item == 'function' )

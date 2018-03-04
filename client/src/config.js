@@ -4,19 +4,19 @@ export const GRID_SIZE =  [ 42.18181818181818, 42.18181818181818, 36.69818181818
 export const GLOBAL_SPACE = [ 0, 1, 0 ]
 export const APP_NAME = "Convolvr"
 
-export let detectWorldDetailsFromURL = () => {
+export let detectSpaceDetailsFromURL = () => {
 
     let url = window.location.pathname,
         params = url.split("/"),
         slashes = params.length -1,
         coords = [0,0,0],
-        nonWorlds = ["login", "network", "chat", "files", "settings", "worlds", "new-world"],
-        isWorld = true,
+        nonSpaces = ["login", "network", "chat", "files", "settings", "spaces", "new-world"],
+        isSpace = true,
         worldDetails = [ "world", APP_NAME ]
 
-    nonWorlds.map( nWorld => {
-        if ( url.indexOf(`/${nWorld}`) == 0 ) {
-            isWorld = false
+    nonSpaces.map( nSpace => {
+        if ( url.indexOf(`/${nSpace}`) == 0 ) {
+            isSpace = false
         }
     })
 
@@ -26,8 +26,8 @@ export let detectWorldDetailsFromURL = () => {
     if ( params.length > 4 && url.search( 'at/*\.*\.*' ) > -1 ) 
         coords = params[4].split(".").map( v => parseInt(v) )
 
-    if ( isWorld && slashes >= 2 )
-        worldDetails = [params[1], params[2], isWorld, coords]
+    if ( isSpace && slashes >= 2 )
+        worldDetails = [params[1], params[2], isSpace, coords]
             
     return worldDetails
 } 

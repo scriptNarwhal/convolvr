@@ -14,7 +14,7 @@ module.exports = function entities (state = {
     current: null,
     fetching: false,
     error: false,
-    addedToWorld: false
+    addedToSpace: false
 }, action) {
   switch (action.type) {
     case ENTITY_ADD:
@@ -40,12 +40,12 @@ module.exports = function entities (state = {
         })
     case ENTITY_IMPORT_TO_WORLD_FETCH:
         return Object.assign({}, state, {
-            addedToWorld: false,
+            addedToSpace: false,
             fetching: true
         })
     case ENTITY_IMPORT_TO_WORLD_DONE:
         return Object.assign({}, state, {
-            addedToWorld: action.data,
+            addedToSpace: action.data,
             fetching: false
         })
     case ENTITY_IMPORT_TO_WORLD_FAIL:

@@ -53,11 +53,11 @@ class SideMenu extends Component {
                  image="/data/images/plus.png"
                  title="New"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/worlds") }}  
+            <Tab clickHandler={ e => { this.navigate(e, "/spaces") }}  
                  image="/data/images/circle-a.png"
                  showTitle={ this.state.menuHover }
                  compact={ isMobile() }
-                 title="Worlds"
+                 title="Spaces"
             />
             <Tab clickHandler={ e => { this.navigate(e, "/places") }}
                  showTitle={ this.state.menuHover }
@@ -131,8 +131,8 @@ import {
 export default connect(
   (state, ownProps) => {
     return {
-        world: state.worlds.current,
-        worldUser: state.worlds.worldUser,
+        world: state.spaces.current,
+        worldUser: state.spaces.worldUser,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen
     }

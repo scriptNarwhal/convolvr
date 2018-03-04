@@ -170,7 +170,7 @@ export default class UserInput {
 		this.camera.matrix.makeRotationFromQuaternion( this.camera.quaternion )
 		this.cameraPos.set( velocity.x*delta*0.00001, velocity.y*delta*0.00001, velocity.z*delta*0.00001 )
 		this.camera.matrix.setPosition( this.camera.position.add( this.cameraPos ) );
-		this.camera.matrixWorldNeedsUpdate = true
+		this.camera.matrixSpaceNeedsUpdate = true
 
 		if ( this.camera.position.y < bottom + 0.3330 ) {
 			velocity.y *= this.keys.shift ? -0.80 : -0.25

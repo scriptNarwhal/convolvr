@@ -51,7 +51,7 @@ export default class ContextMenu extends Component {
           <div style={styles.options}>
             {
               this.props.options.map((opt, i) =>{
-                if ( nonEntity && opt.name =="Add To World")
+                if ( nonEntity && opt.name =="Add To Space")
                   return ""
                 
                 return (

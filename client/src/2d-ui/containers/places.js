@@ -20,13 +20,13 @@ class Places extends Component {
     }
     browserHistory.push(userName+"/"+world+"/"+name)
     window.location.href = window.location.href // workaround..
-    // this.props.setCurrentWorld(name)
+    // this.props.setCurrentSpace(name)
     // three.world.reload(name)
   }
 
   render() {
     return (
-        <Shell className="worlds">
+        <Shell className="spaces">
         <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
                      label="Places"
                      username={this.props.username}
@@ -41,7 +41,7 @@ class Places extends Component {
               onClick={ (e) => { this.handleBGClick(e) } }
               id="bg-toggle-menu" 
         >
-        <div style={styles.worlds}>
+        <div style={styles.spaces}>
           {
             this.props.userPlaces.map((place, i) => {
               let thumb = ''
@@ -59,7 +59,7 @@ class Places extends Component {
             })
           }
           </div>
-          <div style={styles.worlds}>
+          <div style={styles.spaces}>
           {
             this.props.places.map((world, i) => {
               let thumb = ''
@@ -107,14 +107,14 @@ export default connect(
         dispatch( toggleMenu( force ) )
       },
       setCurrentPlace: (user, world, place) => {
-          dispatch(setCurrentWorld(user, world, place))
+          dispatch(setCurrentSpace(user, world, place))
       }
     }
   }
 )(Places)
 
 const styles = {
-  worlds: {
+  spaces: {
     width: "100%",
     minWidth: "320px",
     margin: "auto"

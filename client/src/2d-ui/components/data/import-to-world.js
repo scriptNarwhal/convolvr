@@ -10,7 +10,7 @@ import {
   modalStyle 
 } from '../../styles'
 
-class ImportToWorld extends Component {
+class ImportToSpace extends Component {
 
   constructor () {
 
@@ -72,7 +72,7 @@ class ImportToWorld extends Component {
 
   }
 
-  handleWorldChange ( event ) {
+  handleSpaceChange ( event ) {
 
     this.setState({
       world: event.target.value
@@ -86,9 +86,9 @@ class ImportToWorld extends Component {
         itemData = Object.assign({}, this.props.itemData),
         data = {}
 
-    itemData.world = this.props.currentWorld
+    itemData.world = this.props.currentSpace
 
-    this.props.addItemToWorld( this.props.username, "Entities", this.props.itemData.id, this.state.world, this.state.coords.join("x"), itemData )
+    this.props.addItemToSpace( this.props.username, "Entities", this.props.itemData.id, this.state.world, this.state.coords.join("x"), itemData )
     this.toggleModal()
 
   }
@@ -110,14 +110,14 @@ class ImportToWorld extends Component {
           <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> 
-                <span style={{marginRight: '0.5em'}}>Import To World</span> 
+                <span style={{marginRight: '0.5em'}}>Import To Space</span> 
                 <input type="text" disabled onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
               </span>
               <div style={styles.basicInput}>
                 Select world to import into
-                <select onChange={ e=> this.handleWorldChange(e) }>
+                <select onChange={ e=> this.handleSpaceChange(e) }>
                   {
-                    this.props.worlds.map( (world, w) => {
+                    this.props.spaces.map( (world, w) => {
                        
                       return (
                         <option key={w}value={world.name}>{world.name}</option>
@@ -151,16 +151,16 @@ class ImportToWorld extends Component {
   }
 }
 
-ImportToWorld.defaultProps = {
+ImportToSpace.defaultProps = {
 
 }
 
 import { connect } from 'react-redux'
 import {
-  addItemToWorld
+  addItemToSpace
 } from '../../../redux/actions/inventory-actions'
 import {
-    closeImportToWorld
+    closeImportToSpace
 } from '../../../redux/actions/util-actions'
 
 export default connect(
@@ -171,27 +171,27 @@ export default connect(
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         vrMode: state.app.vrMode,
-        currentWorld: state.worlds.current,
-        worlds: state.worlds.all,
+        currentSpace: state.spaces.current,
+        spaces: state.spaces.all,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
-        activated: state.util.importToWorld.activated,
-        itemId: state.util.importToWorld.itemId,
-        itemData: state.util.importToWorld.itemData,
-        dir: state.util.importToWorld.dir,
-        instances: state.util.importToWorld.windowsOpen
+        activated: state.util.importToSpace.activated,
+        itemId: state.util.importToSpace.itemId,
+        itemData: state.util.importToSpace.itemData,
+        dir: state.util.importToSpace.dir,
+        instances: state.util.importToSpace.windowsOpen
     }
   },
   dispatch => {
     return {
-      addItemToWorld: ( userId, category, itemId, world, coords, itemData ) => {
-        dispatch( addItemToWorld( userId, category, itemId, world, coords, itemData ) )
+      addItemToSpace: ( userId, category, itemId, world, coords, itemData ) => {
+        dispatch( addItemToSpace( userId, category, itemId, world, coords, itemData ) )
       },
-      closeImportToWorld: () => {
-        dispatch( closeImportToWorld() )
+      closeImportToSpace: () => {
+        dispatch( closeImportToSpace() )
       }
     }
   }
-)(ImportToWorld)
+)(ImportToSpace)
 
 let styles = {
   modal: () => {

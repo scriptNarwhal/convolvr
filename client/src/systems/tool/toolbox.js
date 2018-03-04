@@ -8,7 +8,7 @@ import AssetTool from '../../assets/entities/tools/core/asset-tool'
 import GeometryTool from '../../assets/entities/tools/core/geometry-tool'
 import SystemTool from '../../assets/entities/tools/core/system-tool'
 import PlaceTool from '../../assets/entities/tools/core/place-tool'
-import WorldTool from '../../assets/entities/tools/core/world-tool'
+import SpaceTool from '../../assets/entities/tools/core/world-tool'
 import FileTool from '../../assets/entities/tools/core/file-tool'
 import SocialTool from '../../assets/entities/tools/core/social-tool'
 import DebugTool from '../../assets/entities/tools/core/debug-tool.js'
@@ -66,7 +66,7 @@ export default class ToolboxSystem {
           new SystemTool({}, world, this),
           new GeometryTool({}, world, this),
           new MaterialTool({}, world, this),
-          new WorldTool({}, world, this),
+          new SpaceTool({}, world, this),
           new PlaceTool({}, world, this),
           new AssetTool({}, world, this),
           new FileTool({}, world, this),
@@ -165,7 +165,7 @@ export default class ToolboxSystem {
   
           cursor.mesh.updateMatrixWorld()
           !!cursor.mesh.parent && cursor.mesh.parent.updateMatrix()
-          cursorPos = cursor.mesh.localToWorld( new THREE.Vector3() )
+          cursorPos = cursor.mesh.localToSpace( new THREE.Vector3() )
           position = cursorPos.toArray()
   
           if ( handMesh != null )

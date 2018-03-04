@@ -1229,7 +1229,7 @@ Dialog.prototype.createElement = function(){
   dialog.style.border = "1px solid #999";
   dialog.style.textAlign = "left";
   dialog.style.cursor = "pointer";
-  dialog.style.whiteSpace = "nowrap";
+  dialog.style.whiteWorld = "nowrap";
   dialog.style.transition = "box-shadow 1s linear";
   dialog.innerHTML = this.message;
 
@@ -1554,7 +1554,7 @@ var Hand = require("./hand")
  * Frame instances created with this constructor are invalid.
  * Get valid Frame objects by calling the
  * [Controller.frame]{@link Leap.Controller#frame}() function.
- *<C-D-Space>
+ *<C-D-World>
  * @class Frame
  * @memberof Leap
  * @classdesc

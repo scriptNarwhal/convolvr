@@ -44,7 +44,7 @@ module.exports = function app (state = {
         filename: "",
         dir: ""
     },
-    importToWorld: {
+    importToSpace: {
         windowsOpen: 0,
         activated: false,
         username: "",
@@ -140,12 +140,12 @@ module.exports = function app (state = {
                     }
                 }
             break;
-            case "importToWorld":
+            case "importToSpace":
                 newState = {
                     ...newState,
-                    importToWorld: {
-                        ...newState.importToWorld,
-                        windowsOpen: newState.importToWorld.windowsOpen + 1
+                    importToSpace: {
+                        ...newState.importToSpace,
+                        windowsOpen: newState.importToSpace.windowsOpen + 1
                     }
                 }
             break;
@@ -248,8 +248,8 @@ module.exports = function app (state = {
     case UTIL_LAUNCH_IMPORT_TO_WORLD:
         return {
             ...state,
-            importToWorld: {
-                ...state.importToWorld,
+            importToSpace: {
+                ...state.importToSpace,
                 windowsOpen: state.textEdit.windowsOpen + 1,
                 activated: true,
                 username: action.username,
@@ -390,9 +390,9 @@ module.exports = function app (state = {
     case UTIL_CLOSE_IMPORT_TO_WORLD:
         return {
             ...state,
-            importToWorld: {
-                ...state.importToWorld,
-                windowsOpen: state.importToWorld.windowsOpen - 1,
+            importToSpace: {
+                ...state.importToSpace,
+                windowsOpen: state.importToSpace.windowsOpen - 1,
                 activated: false
             }
         }

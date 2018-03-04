@@ -20,7 +20,7 @@ class Settings extends Component {
   componentWillMount () {
 
     this.setState({
-      defaultWorld: 'overworld',
+      defaultSpace: 'overworld',
       welcomeMessage: 'Welcome to Convolvr!',
       network: [],
       camera: localStorage.getItem("camera") || 'fps',
@@ -49,7 +49,7 @@ class Settings extends Component {
     if (this.props.fetchingSettings == true && nextProps.fetchingSettings == false && nextProps.settings != null) {
       console.log("Done Loading Universe Settings")
       this.setState({
-        defaultWorld: nextProps.settings.defaultWorld,
+        defaultSpace: nextProps.settings.defaultSpace,
         welcomeMessage: nextProps.settings.welcomeMessage,
         network: nextProps.settings.network || []
       })
@@ -88,7 +88,7 @@ class Settings extends Component {
 
     let data = {
       id: 1,
-      defaultWorld: this.state.defaultWorld,
+      defaultSpace: this.state.defaultSpace,
       welcomeMessage: this.state.welcomeMessage,
       network: this.state.network
     }
@@ -350,14 +350,14 @@ class Settings extends Component {
             <div style={styles.admin}>
               <h2 style={{marginTop: '1em'}}>Admin Settings</h2>
               <div>
-                <h3 style={styles.h3}>Default World</h3>
+                <h3 style={styles.h3}>Default Space</h3>
                 <div style={styles.col}>
-                  <select onChange={e=> { this.setState({defaultWorld: e.target.value})}}
-                            value={ this.state.defaultWorld }
+                  <select onChange={e=> { this.setState({defaultSpace: e.target.value})}}
+                            value={ this.state.defaultSpace }
                             style={ styles.select }
                     >
                     {
-                      this.props.worlds.map( (world, i) => {
+                      this.props.spaces.map( (world, i) => {
                         return (
                           <option value={world.name} key={i}>{world.name}</option>
                         )
@@ -444,8 +444,8 @@ import {
     sendMessage
 } from '../../redux/actions/message-actions'
 import {
-  fetchWorlds,
-  setCurrentWorld,
+  fetchSpaces,
+  setCurrentSpace,
   fetchUniverseSettings,
   updateUniverseSettings
 } from '../../redux/actions/world-actions'
@@ -453,9 +453,9 @@ import {
 export default connect(
   (state, ownProps) => {
     return {
-        fetchingSettings: state.worlds.fetchingSettings,
-        settings: state.worlds.universeSettings,
-        worlds: state.worlds.all,
+        fetchingSettings: state.spaces.fetchingSettings,
+        settings: state.spaces.universeSettings,
+        spaces: state.spaces.all,
         user: state.users.loggedIn
     }
   },
@@ -464,8 +464,8 @@ export default connect(
       sendMessage: (message, from) => {
           dispatch(sendMessage(message, from))
       },
-      setCurrentWorld: (world) => {
-          dispatch(setCurrentWorld(world))
+      setCurrentSpace: (world) => {
+          dispatch(setCurrentSpace(world))
       },
       updateUniverseSettings: (data, password) => {
           dispatch(updateUniverseSettings(data, password))

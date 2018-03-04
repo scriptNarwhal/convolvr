@@ -205,7 +205,7 @@ export default class Convolvr {
 		this.skyLight.intensity = config.light.intensity / 1.2
 		this.sunLight.intensity = config.light.intensity
 
-		this.config = config; console.info("World config: ", config)
+		this.config = config; console.info("Space config: ", config)
 		this.terrain.initTerrain(config.terrain)
 		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 1.1)
 		this.ambientLight.color.set( config.light.ambientColor )
@@ -248,9 +248,9 @@ export default class Convolvr {
 		}
 		this.skyboxMesh = this.skybox.createSkybox( skySize, oldSkyMaterial )
 
-		let deferWorldLoading = false,
+		let deferSpaceLoading = false,
 			world = this,
-			rebuildWorld = () => {
+			rebuildSpace = () => {
 
 				let yaw = config.light.yaw - Math.PI / 2.0,
 					zeroZeroZero = new THREE.Vector3(0,0,0)
@@ -272,9 +272,9 @@ export default class Convolvr {
 			this.skybox.loadShaderSky( config, oldConfig, world.skyboxMesh, ()=>{})
 		} else {
 			// load sky texture
-			deferWorldLoading = true
+			deferSpaceLoading = true
 			this.skybox.loadTexturedSky( config.sky, this.skyboxMesh, ()=> {
-				rebuildWorld()
+				rebuildSpace()
 			})
 		}
 
@@ -285,7 +285,7 @@ export default class Convolvr {
 		}
 
 		document.title = config.name.toLowerCase() == 'overworld' && config.userName == APP_NAME.toLowerCase() ? APP_NAME : config.name // make "Convolvr" default configurable via admin settings
-		false == deferWorldLoading && rebuildWorld()
+		false == deferSpaceLoading && rebuildSpace()
 	}
 
 	initRenderer ( renderer: any, id: string ) {
@@ -309,10 +309,10 @@ export default class Convolvr {
 		console.log( this.systems.terrain )
 		this.systems.terrain.readyCallback = readyCallback
 
-		axios.get(`${API_SERVER}/api/worlds/name/${name}`).then( response => { // fix this... needs userName now
+		axios.get(`${API_SERVER}/api/spaces/name/${name}`).then( response => { // fix this... needs userName now
 			 this.init(response.data, ()=> { callback && callback(world) } )
 		}).catch(response => {
-			console.log("World Error", response)
+			console.log("Space Error", response)
 		})
 	}
 

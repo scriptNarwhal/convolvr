@@ -16,7 +16,7 @@
     },
     "app": {
       "name": "Convolvr",
-	    "htmlDir": "world.html"
+	    "htmlDir": "space.html"
     },
     "universe": {
       "gridSize": {

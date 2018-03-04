@@ -489,7 +489,7 @@ export default class Entity {
         return false
       }
 
-      compPos.setFromMatrixPosition( component.mesh.matrixWorld ) // get world position
+      compPos.setFromMatrixPosition( component.mesh.matrixSpace ) // get world position
       newDist = compPos.distanceTo( position )
 
       if ( newDist < distance ) {
@@ -504,7 +504,7 @@ export default class Entity {
       this.combinedComponents.map( component => {
         if ( component.data ) {
           compPos.fromArray( component.data.position )
-          worldCompPos = entMesh.localToWorld( compPos )
+          worldCompPos = entMesh.localToSpace( compPos )
           newDist = worldCompPos.distanceTo( position ) //console.log("compPos", compPos, "worldCompPos", worldCompPos, "newDist", newDist)
 
           if ( newDist < distance ) {

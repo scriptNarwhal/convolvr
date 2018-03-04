@@ -66,7 +66,7 @@ export default class FactorySystem {
             }
 
         } else if ( type == "world" ) {
-            created = this._generateWorld( menuItem, data, voxel, entityPos, quat )
+            created = this._generateSpace( menuItem, data, voxel, entityPos, quat )
         } else if ( type == "place" ) {
             created = this._generatePlace( menuItem, data, voxel, entityPos, quat )
         } else if ( type == "file" ) {
@@ -247,7 +247,7 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generateWorld(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateSpace(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
         return new Entity(-1, [{
             attrs: Object.assign({}, data, {

@@ -18,7 +18,7 @@ import {
     LOGIN_FAIL
 } from '../constants/action-types';
 import { API_SERVER } from '../../config.js'
-import { fetchUserWorlds } from './world-actions'
+import { fetchUserSpaces } from './world-actions'
 export function addUser () {
     return {
         type: USER_ADD
@@ -128,7 +128,7 @@ export function login ( user, pass, email, data ) {
              console.info("ACTION LOGIN: USER USER LOGIN ", window.three.world.onUserLogin)
              window.three.world.onUserLogin( response )
              dispatch(loginDone(response))
-             dispatch(fetchUserWorlds(response.data.id))
+             dispatch(fetchUserSpaces(response.data.id))
              
           }).catch(response => {
               dispatch(loginFailed(response))

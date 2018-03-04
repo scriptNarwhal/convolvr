@@ -136,7 +136,7 @@ export default class ComponentTool extends Tool {
       }
 
       !!selected && !!selected.mesh && selected.mesh.updateMatrixWorld()
-      let selectedPos = !!selected && !!selected.mesh ? selected.mesh.localToWorld( new THREE.Vector3() ) : false
+      let selectedPos = !!selected && !!selected.mesh ? selected.mesh.localToSpace( new THREE.Vector3() ) : false
       
       components.map( ( comp, i ) => { // apply transformation and offset to components
         if ( !!comp ) {

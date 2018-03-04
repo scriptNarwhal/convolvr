@@ -33,7 +33,7 @@ class Network extends Component {
 
   render() {
     return (
-        <Shell className="worlds">
+        <Shell className="spaces">
         <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
                      label="Network"
                      username={this.props.username}
@@ -45,7 +45,7 @@ class Network extends Component {
               onClick={ (e) => { this.handleBGClick(e) } }
               id="bg-toggle-menu" 
         >
-          <div style={styles.worlds}>
+          <div style={styles.spaces}>
           {
             this.props.settings != undefined && this.props.settings.network != undefined &&
               this.props.settings.network.map((domain, i) => {
@@ -83,8 +83,8 @@ import {
 export default connect(
   (state, ownProps) => {
     return {
-        fetchingSettings: state.worlds.fetchingSettings,
-        settings: state.worlds.universeSettings,
+        fetchingSettings: state.spaces.fetchingSettings,
+        settings: state.spaces.universeSettings,
     }
   },
   dispatch => {
@@ -100,7 +100,7 @@ export default connect(
 )(Network)
 
 const styles = {
-  worlds: {
+  spaces: {
     width: "100%",
     minWidth: "320px",
     margin: "auto"

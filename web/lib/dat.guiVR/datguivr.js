@@ -877,8 +877,8 @@ function createFolder() {
 
   function performLayout() {
     var spacingPerController = Layout.PANEL_HEIGHT + Layout.PANEL_SPACING;
-    var emptyFolderSpace = Layout.FOLDER_HEIGHT + Layout.PANEL_SPACING;
-    var totalSpacing = emptyFolderSpace;
+    var emptyFolderWorld = Layout.FOLDER_HEIGHT + Layout.PANEL_SPACING;
+    var totalSpacing = emptyFolderWorld;
 
     collapseGroup.children.forEach(function (c) {
       c.visible = !state.collapsed;
@@ -890,7 +890,7 @@ function createFolder() {
       downArrow.rotation.z = 0;
 
       var y = 0,
-          lastHeight = emptyFolderSpace;
+          lastHeight = emptyFolderWorld;
 
       collapseGroup.children.forEach(function (child) {
         var h = child.spacing ? child.spacing : spacingPerController;
@@ -901,7 +901,7 @@ function createFolder() {
         if (child.isFolder) {
           // For folders, the origin isn't in the middle of the entire height of the folder,
           // but just the middle of the top panel.
-          var offset = 0.5 * (lastHeight + emptyFolderSpace);
+          var offset = 0.5 * (lastHeight + emptyFolderWorld);
           child.position.y = y - offset;
         } else {
           child.position.y = y - spacing;
@@ -3911,7 +3911,7 @@ TextLayout.prototype.update = function(opt) {
   var glyphs = this.glyphs
   var text = opt.text||'' 
   var font = opt.font
-  this._setupSpaceGlyphs(font)
+  this._setupWorldGlyphs(font)
   
   var lines = wordWrap.lines(text, opt)
   var minWidth = opt.width || 0
@@ -3989,10 +3989,10 @@ TextLayout.prototype.update = function(opt) {
   this._linesTotal = lines.length;
 }
 
-TextLayout.prototype._setupSpaceGlyphs = function(font) {
+TextLayout.prototype._setupWorldGlyphs = function(font) {
   //These are fallbacks, when the font doesn't include
   //' ' or '\t' glyphs
-  this._fallbackSpaceGlyph = null
+  this._fallbackWorldGlyph = null
   this._fallbackTabGlyph = null
 
   if (!font.chars || font.chars.length === 0)
@@ -4007,7 +4007,7 @@ TextLayout.prototype._setupSpaceGlyphs = function(font) {
 
   //and create a fallback for tab
   var tabWidth = this._opt.tabSize * space.xadvance
-  this._fallbackSpaceGlyph = space
+  this._fallbackWorldGlyph = space
   this._fallbackTabGlyph = xtend(space, {
     x: 0, y: 0, xadvance: tabWidth, id: TAB_ID, 
     xoffset: 0, yoffset: 0, width: 0, height: 0
@@ -4021,7 +4021,7 @@ TextLayout.prototype.getGlyph = function(font, id) {
   else if (id === TAB_ID) 
     return this._fallbackTabGlyph
   else if (id === SPACE_ID) 
-    return this._fallbackSpaceGlyph
+    return this._fallbackWorldGlyph
   return null
 }
 

@@ -26,8 +26,8 @@ export default class TerrainSystem {
       this.voxelList        = [] // map of coord strings to voxels
       this.lastChunkCoords  = [ 0, 0, 0 ]
       this.chunkCoords      = [ 0, 0, 0 ]
-      this.cleanUpChunks    = []
-      this.reqChunks        = []
+      this.cleanUpVoxels    = []
+      this.reqVoxels        = []
       this.loadedVoxels     = []
       this.loaded           = false
       this.live             = true
@@ -155,7 +155,7 @@ export default class TerrainSystem {
         systems             = world.systems,
         octree              = world.octree,
         voxel               = null,
-        removePhysicsChunks = [],
+        removePhysicsVoxels = [],
         cleanUpVoxels       = [],
         loadedVoxels        = [],
         chunkPos            = [],
@@ -188,7 +188,7 @@ export default class TerrainSystem {
 
           browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
 
-        force = false 	// remove old chunks
+        force = false 	// remove old voxels
 
         for (var v in voxelList) {
 
@@ -199,7 +199,7 @@ export default class TerrainSystem {
             pCell[2] <= coords[2] - removeDistance || pCell[2] >= coords[2] + removeDistance)) { 	// mark voxels for removal
 
             voxel.cleanUp = true;
-            this.cleanUpChunks.push({
+            this.cleanUpVoxels.push({
               physics: {
                 cell: [pCell[0], 0, pCell[2]]
               },
@@ -213,86 +213,63 @@ export default class TerrainSystem {
       }
 
       c = 0
-      cleanUpVoxels = this.cleanUpChunks
+      cleanUpVoxels = this.cleanUpVoxels
       loadedVoxels = this.loadedVoxels
 
-      this.cleanUpChunks.map(( cleanUp, i ) => {
+      this.cleanUpVoxels.map(( cleanUp, i ) => {
 
         if ( c < 3 && cleanUp ) {
 
           terrainChunk = voxels[ cleanUp.cell ]
 
           if ( terrainChunk && terrainChunk.entities ) {
-          
             terrainChunk.entities.map( e => {
-
               if ( !!e && !!e.mesh ) {
-
                 octree.remove( e.mesh )
                 three.scene.remove( e.mesh )
-
               } 
-
             })
 
-            removePhysicsChunks.push( cleanUp.physics )
+            removePhysicsVoxels.push( cleanUp.physics )
             voxelList.splice( voxelList.indexOf( terrainChunk ), 1)
             delete voxels[ cleanUp.cell ]
             cleanUpVoxels.splice( i, 1 )
-
-          }
-              
+          }   
           c += 1
-
         }
-
       })
 
       c = 0
       
       while ( x <= endCoords[ 0 ] && c < 2 ) { // load new terrain voxels
-
         while ( y <= endCoords[ 1 ] ) {
-
           if ( voxels[x+".0."+y] == null ) { // only if its not already loaded
-              
             this.initializeVoxel( [ x, 0, y ], x+".0."+y )
-
             c += 1
-            this.reqChunks.push( x+"x0x"+y )
-      
+            this.reqVoxels.push( x+"x0x"+y )
           }
-
           y += 1
-
         }
-
         y = coords[2]-viewDistance
         x += 1
-
       }
 
-      if ( this.reqChunks.length >= 6 ) {
+      if ( this.reqVoxels.length >= 6 ) {
 
-        let chunks = ""
+        let voxels = ""
 
-        this.reqChunks.map( ( rc, i ) => {
-
+        this.reqVoxels.map( ( rc, i ) => {
           if ( i > 0 )
-
-            chunks += ","
+            voxels += ","
           
-          chunks += rc
-
+          voxels += rc
         })
 
-        this.reqChunks = []
-        axios.get(`${API_SERVER}/api/chunks/${this.world.name}/${chunks}`).then( response => {
+        this.reqVoxels = []
+        axios.get(`${API_SERVER}/api/voxels/${this.world.name}/${voxels}`).then( response => {
 
           typeof response.data.map == 'function' && response.data.map( c => {
-
                 terrain.loadedVoxels.push( c )
-
           })
 
         }).catch(response => {
@@ -301,12 +278,11 @@ export default class TerrainSystem {
 
       }
 
-      if ( removePhysicsChunks.length > 0 ) {
+      if ( removePhysicsVoxels.length > 0 ) {
+        let removeChunkData = JSON.stringify(removePhysicsVoxels);
 
-        let removeChunkData = JSON.stringify(removePhysicsChunks)
         this.StaticCollisions.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
         //this.Oimo.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
-        
       }
 
       this.initializeEntities( config )
@@ -325,7 +301,6 @@ export default class TerrainSystem {
         this.physicsVoxels = []
 
         if ( world.settings.IOTMode ) 
-
           animate(world, Date.now(), 0)
 
       }
@@ -345,7 +320,6 @@ export default class TerrainSystem {
     }
 
     initializeVoxel ( cell, key ) {
-
       let emptyVoxel = new Voxel( { 
         cell, 
         name: "empty voxel", 

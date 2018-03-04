@@ -27688,7 +27688,7 @@ ExtrudeBufferGeometry.prototype.addShape = function ( shape, options ) {
 	var splineTube, binormal, normal, position2;
 	if ( extrudePath ) {
 
-		extrudePts = extrudePath.getSpacedPoints( steps );
+		extrudePts = extrudePath.getWorlddPoints( steps );
 
 		extrudeByPath = true;
 		bevelEnabled = false; // bevels not supported for path extrusion
@@ -31372,7 +31372,7 @@ Object.assign( TextureLoader.prototype, {
  * Some common of curve methods:
  * .getPoint( t, optionalTarget ), .getTangent( t )
  * .getPointAt( u, optionalTarget ), .getTangentAt( u )
- * .getPoints(), .getSpacedPoints()
+ * .getPoints(), .getWorlddPoints()
  * .getLength()
  * .updateArcLengths()
  *
@@ -31450,7 +31450,7 @@ Object.assign( Curve.prototype, {
 
 	// Get sequence of points using getPointAt( u )
 
-	getSpacedPoints: function ( divisions ) {
+	getWorlddPoints: function ( divisions ) {
 
 		if ( divisions === undefined ) divisions = 5;
 
@@ -32966,7 +32966,7 @@ CurvePath.prototype = Object.assign( Object.create( Curve.prototype ), {
 
 	},
 
-	getSpacedPoints: function ( divisions ) {
+	getWorlddPoints: function ( divisions ) {
 
 		if ( divisions === undefined ) divisions = 40;
 
@@ -44123,13 +44123,13 @@ Object.assign( CurvePath.prototype, {
 
 	},
 
-	createSpacedPointsGeometry: function ( divisions ) {
+	createWorlddPointsGeometry: function ( divisions ) {
 
-		console.warn( 'THREE.CurvePath: .createSpacedPointsGeometry() has been removed. Use new THREE.Geometry().setFromPoints( points ) instead.' );
+		console.warn( 'THREE.CurvePath: .createWorlddPointsGeometry() has been removed. Use new THREE.Geometry().setFromPoints( points ) instead.' );
 
 		// generate geometry from equidistant sampling along the path
 
-		var pts = this.getSpacedPoints( divisions );
+		var pts = this.getWorlddPoints( divisions );
 		return this.createGeometry( pts );
 
 	},

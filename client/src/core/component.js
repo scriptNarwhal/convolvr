@@ -159,7 +159,7 @@ export default class Component {
 
       if ( !! component.merged ) return false
 
-      compPos.setFromMatrixPosition( component.mesh.matrixWorld ) // get world position
+      compPos.setFromMatrixPosition( component.mesh.matrixSpace ) // get world position
       newDist = compPos.distanceTo( position )
 
       if ( newDist < distance ) { 
@@ -177,7 +177,7 @@ export default class Component {
         console.log("Finding Combined Component: ")
         compPos.fromArray( component.data.position ); console.log("compPos", compPos)
         if ( parentMesh ) {
-          worldCompPos = parentMesh.localToWorld( compPos ); console.log("worldCompPos", worldCompPos )
+          worldCompPos = parentMesh.localToSpace( compPos ); console.log("worldCompPos", worldCompPos )
         } else {
           worldCompPos = new THREE.Vector3().fromArray(this.entity.position).add( compPos )
         }

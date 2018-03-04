@@ -53,7 +53,7 @@ export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
       cursor = !!cursors ? cursors[cursorIndex] : false,
       hands = !!user && !!user.avatar ? user.avatar.componentsByProp.hand : false,
       vrPos = [],
-      vrWorldPos = []
+      vrSpacePos = []
 
     camera.matrixAutoUpdate = false;
     if ( world.HMDMode != "flymode" ) {  // room scale + gamepad movement
@@ -65,13 +65,13 @@ export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
     display.getFrameData( frame )
       
     vrPos = !!frame && !!frame.pose && !!frame.pose.position ? frame.pose.position : [ 0,0,0 ]
-    vrWorldPos =  [ vrPos[0], (vrPos[1]+floorHeight), vrPos[2] ]
+    vrSpacePos =  [ vrPos[0], (vrPos[1]+floorHeight), vrPos[2] ]
     camera.quaternion.fromArray( frame.pose.orientation )
     world.userInput.update(delta)
     user.mesh.quaternion.fromArray( frame.pose.orientation )
-    user.mesh.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+    user.mesh.position.set(cPos.x + vrSpacePos[0], cPos.y + vrSpacePos[1], cPos.z + vrSpacePos[2])
     user.mesh.updateMatrix()
-    camera.position.set(cPos.x + vrWorldPos[0], cPos.y + vrWorldPos[1], cPos.z + vrWorldPos[2])
+    camera.position.set(cPos.x + vrSpacePos[0], cPos.y + vrSpacePos[1], cPos.z + vrSpacePos[2])
 
     cursorIndex = world.systems.cursor.handleCursors( cursors, cursorIndex, hands, camera, world )
     world.sendUserData()
@@ -79,5 +79,5 @@ export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
     camera.updateMatrix();
     t.vrEffect.render(t.scene, t.camera) // Render the scene.
     world.octree.update()
-    display.requestAnimationFrame(()=> { vrAnimate( display, now, vrWorldPos, cursorIndex) }) // Keep looping.
+    display.requestAnimationFrame(()=> { vrAnimate( display, now, vrSpacePos, cursorIndex) }) // Keep looping.
 }

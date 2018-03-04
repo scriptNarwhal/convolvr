@@ -5,7 +5,7 @@ import Shell from '../components/shell'
 import LocationBar from '../components/location-bar'
 import { isMobile } from '../../config'
 
-class Worlds extends Component {
+class Spaces extends Component {
 
   handleBGClick (e) {
     if (e.target.getAttribute("id") == "bg-toggle-menu") {
@@ -15,21 +15,21 @@ class Worlds extends Component {
     }
   }
 
-  switchWorlds ( userName, name ) {
+  switchSpaces ( userName, name ) {
 
     if (userName == '') {
       userName = 'space'
     }
     //browserHistory.push(userName+"/"+name)
     //window.location.href = window.location.href // workaround..
-    this.props.setCurrentWorld( userName, name )
+    this.props.setCurrentSpace( userName, name )
     three.world.reload( userName, name, false, false )
     this.props.toggleMenu(false)
   }
 
-  _renderWorlds ( worlds ) {
+  _renderSpaces ( spaces ) {
 
-    return worlds.map((world, i) => {
+    return spaces.map((world, i) => {
 
         let thumb = ''
 
@@ -43,7 +43,7 @@ class Worlds extends Component {
 
         return (
           <Card clickHandler={(e, v) => {
-                  this.switchWorlds(world.userName, world.name)
+                  this.switchSpaces(world.userName, world.name)
                 }}
                 color={`#${(world.light.color).toString(16)}`}
                 image={world.sky.photosphere != '' ? `/data/user/${thumb}` : ""}
@@ -60,35 +60,35 @@ class Worlds extends Component {
 
   render() {
 
-    let worlds = [], // this.props.worlds
-        worldsWithSkyboxes = [],
-        userWorlds = [], // this.props.userWorlds
-        userWorldsWithSkyboxes = []
+    let spaces = [], // this.props.spaces
+        spacesWithSkyboxes = [],
+        userSpaces = [], // this.props.userSpaces
+        userSpacesWithSkyboxes = []
 
-        !!this.props.worlds && this.props.worlds.map( (world) => {
+        !!this.props.spaces && this.props.spaces.map( (world) => {
 
           if ( !!world.sky.photosphere ) {
-            worldsWithSkyboxes.push( world )
+            spacesWithSkyboxes.push( world )
           } else {
-            worlds.push( world )            
+            spaces.push( world )            
           }
 
         })
 
-        !!this.props.userWorlds && this.props.userWorlds.map( (world) => {
+        !!this.props.userSpaces && this.props.userSpaces.map( (world) => {
           
           if ( !!world.sky.photosphere ) {
-            userWorldsWithSkyboxes.push( world )
+            userSpacesWithSkyboxes.push( world )
           } else {
-            userWorlds.push( world )            
+            userSpaces.push( world )            
           }
 
         })
 
     return (
-        <Shell className="worlds">
+        <Shell className="spaces">
         <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
-                     label="Worlds"
+                     label="Spaces"
                      username={this.props.username}
                      onItemSelect={  (item, index, length) => {
                         console.log("changing dir from location bar")
@@ -101,17 +101,17 @@ class Worlds extends Component {
               onClick={ (e) => { this.handleBGClick(e) } }
               id="bg-toggle-menu" 
         >
-          <div style={styles.worlds}>
-            { this._renderWorlds( userWorldsWithSkyboxes ) }
+          <div style={styles.spaces}>
+            { this._renderSpaces( userSpacesWithSkyboxes ) }
           </div>
-          <div style={styles.worlds}>
-            { this._renderWorlds( userWorlds ) }
+          <div style={styles.spaces}>
+            { this._renderSpaces( userSpaces ) }
           </div>
-          <div style={styles.worlds}>
-            { this._renderWorlds( worldsWithSkyboxes ) }
+          <div style={styles.spaces}>
+            { this._renderSpaces( spacesWithSkyboxes ) }
           </div>
-          <div style={styles.worlds}>
-            { this._renderWorlds( worlds ) }
+          <div style={styles.spaces}>
+            { this._renderSpaces( spaces ) }
           </div>
         </span>
       </Shell>
@@ -119,7 +119,7 @@ class Worlds extends Component {
   }
 }
 
-Worlds.defaultProps = {
+Spaces.defaultProps = {
 
 }
 import { connect } from 'react-redux';
@@ -129,13 +129,13 @@ import {
 import {
   toggleMenu
 } from '../../redux/actions/app-actions'
-import { fetchWorlds, setCurrentWorld } from '../../redux/actions/world-actions'
+import { fetchSpaces, setCurrentSpace } from '../../redux/actions/world-actions'
 
 export default connect(
   (state, ownProps) => {
     return {
-        worlds: state.worlds.all,
-        userWorlds: state.worlds.userWorlds
+        spaces: state.spaces.all,
+        userSpaces: state.spaces.userSpaces
     }
   },
   dispatch => {
@@ -146,15 +146,15 @@ export default connect(
       sendMessage: (message, from) => {
           dispatch(sendMessage(message, from))
       },
-      setCurrentWorld: (world) => {
-          dispatch(setCurrentWorld(world))
+      setCurrentSpace: (world) => {
+          dispatch(setCurrentSpace(world))
       }
     }
   }
-)(Worlds)
+)(Spaces)
 
 let styles = {
-  worlds: {
+  spaces: {
     width: "100%",
     minWidth: "320px",
     margin: "auto"

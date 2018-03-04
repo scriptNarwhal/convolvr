@@ -22,22 +22,22 @@ import {
     UNIVERSE_SETTINGS_UPDATE_DONE,
     UNIVERSE_SETTINGS_UPDATE_FAIL
 } from '../constants/action-types'
-import { detectWorldDetailsFromURL } from '../../config'
+import { detectSpaceDetailsFromURL } from '../../config'
 
-function worlds (state = {
-    current: detectWorldDetailsFromURL()[1],
-    worldUser: detectWorldDetailsFromURL()[0],
+function spaces (state = {
+    current: detectSpaceDetailsFromURL()[1],
+    worldUser: detectSpaceDetailsFromURL()[0],
     all: [],
-    userWorlds: [],
+    userSpaces: [],
     updated: false,
     created: false,
     error: false,
     fetching: false,
-    fetchingUserWorlds: false,
+    fetchingUserSpaces: false,
     fetchingSettings: false,
     universeSettings: {
       id: 1,
-      defaultWorld: "Overworld",
+      defaultSpace: "Overworld",
       welcomeMessage: "Welcome to Convolvr!"
     }
 }, action) {
@@ -71,22 +71,22 @@ function worlds (state = {
       })
     case WORLDS_FETCH_DONE:
       return Object.assign({}, state, {
-          all: action.worlds,
+          all: action.spaces,
           fetching: false
       })
     case USER_WORLDS_FETCH:
       return Object.assign({}, state, {
-          fetchingUserWorlds: true
+          fetchingUserSpaces: true
       })
     case USER_WORLDS_FETCH_FAIL:
       return Object.assign({}, state, {
-          fetchingUserWorlds: false,
+          fetchingUserSpaces: false,
           error: action.err
       })
     case USER_WORLDS_FETCH_DONE:
       return Object.assign({}, state, {
-          userWorlds: action.data,
-          fetchingUserWorlds: false
+          userSpaces: action.data,
+          fetchingUserSpaces: false
       })
     case WORLD_UPDATE_FETCH:
       return Object.assign({}, state, {
@@ -134,4 +134,4 @@ function worlds (state = {
   }
 }
 
-export default worlds
+export default spaces
