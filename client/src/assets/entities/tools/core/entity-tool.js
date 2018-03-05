@@ -103,18 +103,18 @@ export default class EntityTool extends Tool  {
               telemetry.voxel 
             ),
           tooManyComponents = !!selected && selected.components.length >= 48,
-          pointingAtTerrain = !!selected && selected.componentsByProp.terrain
+          pointingAtTerrain = !!selected && selected.componentsByAttr.terrain
   
       console.log( "( Entity Tool )", telemetry, params, entity )
 
       if ( ! tooManyComponents ) {
         if ( 
-          selected && selected.componentsByProp &&
-          !!!selected.componentsByProp.miniature && 
+          selected && selected.componentsByAttr &&
+          !!!selected.componentsByAttr.miniature && 
           (cursorState.distance < 100)
         ) { // switch to component tool
             user.toolbox.useTool( 1, telemetry.hand, false )
-            user.hud.componentsByProp.toolUI[0].state.toolUI.show()
+            user.hud.componentsByAttr.toolUI[0].state.toolUI.show()
             //user.toolbox.usePrimary( telemetry.hand )
             return false
         }
@@ -140,8 +140,8 @@ export default class EntityTool extends Tool  {
       }
       this.selectedEntity = null
       this.options.entityType = this.all[ this.current ]
-      if ( this.entity.componentsByProp ) {
-        this.entity.componentsByProp.text[ 0 ].state.text.update( 
+      if ( this.entity.componentsByAttr ) {
+        this.entity.componentsByAttr.text[ 0 ].state.text.update( 
           this.options.entityType 
         )
       }

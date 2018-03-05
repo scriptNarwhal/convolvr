@@ -20,7 +20,7 @@ export default class Entity {
       this.quaternion = quaternion ? quaternion : false
       this.mesh = null
       this.boundingRadius = 0.5 // set in init()
-      this.componentsByProp = {} // arrays are defined here with key of attr
+      this.componentsByAttr = {} // arrays are defined here with key of attr
       this.compsByFaceIndex = [] // possibly deprecated
       this.allComponents = []
       this.combinedComponents = []
@@ -148,7 +148,7 @@ export default class Entity {
         s = 0
 
     this.lastFace = 0
-    this.componentsByProp = {} // reset before (re)registering components
+    this.componentsByAttr = {} // reset before (re)registering components
     this.allComponents = []
 
     if ( this.mesh != null ) {
@@ -215,7 +215,7 @@ export default class Entity {
         c += 1
     }
 
-    addToOctree = this.componentsByProp.terrain != true && this.componentsByProp.noRaycast != true
+    addToOctree = this.componentsByAttr.terrain != true && this.componentsByAttr.noRaycast != true
     this.boundingRadius = Math.max( dimensions[0], dimensions[1], dimensions[2] )
     this.boundingBox = dimensions
     !! workerUpdate && this.updateWorkers( workerUpdate, systems )
@@ -295,7 +295,7 @@ export default class Entity {
     console.info("save", data)
     console.log("oldVoxel", oldVoxel, "newVoxel", this.voxel)
     axios.put(
-      `${API_SERVER}/api/update-world-entity/${three.world.name}/${this.voxel.join("x")}/${oldVoxel.join("x")}`,
+      `${API_SERVER}/api/update-space-entity/${three.world.name}/${this.voxel.join("x")}/${oldVoxel.join("x")}`,
        data
     ).then( response => {
       console.info("Entity Updated", this)

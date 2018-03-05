@@ -48,7 +48,7 @@ export default class ToolboxSystem {
           if (user.avatar && user.avatar.addHandler) {
             user.avatar.addHandler("init", () => {
               console.log("user avatar init event handler ", user.avatar)
-               user.avatar.componentsByProp.hand.map((m, i) => {
+               user.avatar.componentsByAttr.hand.map((m, i) => {
                  if (i < 3)
                    toolbox.hands.push(m)
                })
@@ -77,7 +77,7 @@ export default class ToolboxSystem {
       }
   
       showMenu() { 
-        this.user.hud.componentsByProp.toolUI[0].state.toolUI.updatePosition()
+        this.user.hud.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
       }
   
       nextTool( direction ) {
@@ -102,7 +102,7 @@ export default class ToolboxSystem {
   
         if ( !!!noHUDUpdate ) {
           this.showMenu()
-          this.user.hud.componentsByProp.toolUI[ 0 ].state.toolUI.switchTool( index, hand )
+          this.user.hud.componentsByAttr.toolUI[ 0 ].state.toolUI.switchTool( index, hand )
         }
       }
   
@@ -129,7 +129,7 @@ export default class ToolboxSystem {
             user     = this.world.user,
             cursor   = null, 
             handMesh = null,
-            cursors  = user.avatar.componentsByProp.cursor
+            cursors  = user.avatar.componentsByAttr.cursor
   
         if ( input.trackedControls || input.leapMotion ) { // set position from tracked controller
           cursor = cursors[ hand + 1 ]
@@ -198,7 +198,7 @@ export default class ToolboxSystem {
             cursorEntity     = !!telemetry.cursor ? telemetry.cursor.state.cursor.entity : false,
             cursorComponent  = !!cursorEntity ? telemetry.cursor.state.cursor.component: false,
             cursorState      = !!telemetry.cursor ? telemetry.cursor.state : false,
-            componentsByProp = !!cursorEntity ? cursorEntity.componentsByProp : {},
+            componentsByAttr = !!cursorEntity ? cursorEntity.componentsByAttr : {},
             configureTool    = null,
             action           = null,
             miniature        = null,
@@ -216,11 +216,11 @@ export default class ToolboxSystem {
             })
             return // cursor system has found the component ( provided all has gone according to plan.. )
           }
-          //console.log("use Primary ", componentsByProp)
-          miniature = cursorEntity.componentsByProp.miniature
+          //console.log("use Primary ", componentsByAttr)
+          miniature = cursorEntity.componentsByAttr.miniature
         
           if ( miniature && cursorComponent && cursorComponent.attrs.toolUI ) {
-            configureTool = componentsByProp.toolUI[ 0 ].attrs.toolUI.configureTool 
+            configureTool = componentsByAttr.toolUI[ 0 ].attrs.toolUI.configureTool 
             console.log("ToolUI! configure tool", configureTool)
               if ( configureTool ) {
                 if ( toolIndex != configureTool.tool ) {

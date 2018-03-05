@@ -80,7 +80,7 @@ export default class GeometryTool extends Tool {
           
       console.log(" ( Geometry Tool ) ", componentPath )
       
-      attrs = selected.componentsByProp
+      attrs = selected.componentsByAttr
       
       if ( !!!selected || attrs.miniature || attrs.activate ) {
           console.warn("no tool action, calling activation callbacks")

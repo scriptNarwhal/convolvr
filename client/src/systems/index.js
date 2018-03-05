@@ -189,7 +189,7 @@ export default class Systems {
 	**/
     registerComponent ( component: Component) {
 
-        let componentsByProp = component.entity.componentsByProp,
+        let componentsByAttr = component.entity.componentsByAttr,
 			entity = component.entity,
 			stateByProp = entity.stateByProp,
             attrs = component.attrs,
@@ -220,11 +220,11 @@ export default class Systems {
                     state[ attr ] = this[ attr ].init( component )
 				}
 				
-				if ( !!!componentsByProp[ attr ] ) {
-                    componentsByProp[ attr ] = []
+				if ( !!!componentsByAttr[ attr ] ) {
+                    componentsByAttr[ attr ] = []
 				}
 				
-				componentsByProp[ attr ].push( component )
+				componentsByAttr[ attr ].push( component )
             }
         })
     

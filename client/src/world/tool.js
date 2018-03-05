@@ -15,8 +15,8 @@ export default class Tool {
     equip ( hand ) {
       
       let input = this.world.userInput,
-          hands = this.world.user.avatar.componentsByProp.hand, //this.toolbox.hands,
-          //toolPanel = this.entity.componentsByProp.tool ? this.entity.componentsByProp.tool[0].state.tool.panel : false,
+          hands = this.world.user.avatar.componentsByAttr.hand, //this.toolbox.hands,
+          //toolPanel = this.entity.componentsByAttr.tool ? this.entity.componentsByAttr.tool[0].state.tool.panel : false,
           component = null,
           toolMesh = null
 
@@ -27,22 +27,22 @@ export default class Tool {
         toolMesh.visible = true
       }
 
-      component = this.entity.componentsByProp.tool[0]
+      component = this.entity.componentsByAttr.tool[0]
       component.state.tool.equip( hand )
     }
 
     preview ( cursor ) {
 
-      let components = this.entity.componentsByProp
+      let components = this.entity.componentsByAttr
       
       if ( components && components.tool )
-        this.entity.componentsByProp.tool[0].state.tool.preview.show( cursor )
+        this.entity.componentsByAttr.tool[0].state.tool.preview.show( cursor )
 
     }
 
     hidePreview (  ) {
       
-      let components = this.entity.componentsByProp
+      let components = this.entity.componentsByAttr
 
       if ( components && components.tool )
         components.tool[0].state.tool.preview.hide()

@@ -180,12 +180,12 @@ export default class ToolSystem {
     }
 
     _equip ( component: Component, hand: number ) { // refactor for panels[]
-        let hands:            Array<Component> = this.world.user.avatar.componentsByProp.hand, //this.toolbox.hands,
-            componentsByProp: any              = component.entity.componentsByProp,
+        let hands:            Array<Component> = this.world.user.avatar.componentsByAttr.hand, //this.toolbox.hands,
+            componentsByAttr: any              = component.entity.componentsByAttr,
             input                              = this.world.userInput,
             toolSystem                         = this,
-            toolPanel:        Entity           = componentsByProp.tool[0].state.tool.panel,
-            toolPanels:       Array<Entity>    = componentsByProp.tool[0].state.tool.panels,
+            toolPanel:        Entity           = componentsByAttr.tool[0].state.tool.panel,
+            toolPanels:       Array<Entity>    = componentsByAttr.tool[0].state.tool.panels,
             toolMesh:         any              = component.entity.mesh,
             userPos:          Array<number>    = this.world.user.avatar.mesh.position.toArray()
 

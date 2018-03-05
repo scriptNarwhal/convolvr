@@ -22,7 +22,8 @@ module.exports = function messages (state = {
                   message: action.message,
                   from: action.from,
                   files: action.files,
-                  avatar: action.avatar
+                  avatar: action.avatar,
+                  space: action.space
                 }
             ]
       })

@@ -139,7 +139,7 @@ export default class SystemTool extends Tool {
       
       if ( options.system && options.system.none ) return
 
-      attrs = selected.componentsByProp
+      attrs = selected.componentsByAttr
       
       if ( !!!selected || attrs.miniature || attrs.activate ) {
           console.warn("no tool action, calling activation callbacks")

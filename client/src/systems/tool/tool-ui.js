@@ -68,7 +68,7 @@ export default class ToolUISystem {
             attrs = component.attrs,
             state = component.state,
             entity = component.entity,
-            toolUIs = entity.componentsByProp.toolUI
+            toolUIs = entity.componentsByAttr.toolUI
         
         toolUIs.forEach( ui => {
             if ( ui.attrs.toolUI.currentTool ) {

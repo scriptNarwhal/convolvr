@@ -34,7 +34,7 @@ export default class HandSystem {
 
     grip(component: Component, value: number): number {
         let avatar = component.entity,
-            cursors = !!avatar ? avatar.componentsByProp.cursor : false,
+            cursors = !!avatar ? avatar.componentsByAttr.cursor : false,
             cursorMesh = null,
             entity = null, //hand.children[0].userData.component.attrs.,
             cursor = null,
@@ -129,8 +129,8 @@ export default class HandSystem {
         let scene = this.world.three.scene,
             avatar = component.entity,
             position = null,
-            cursors = avatar.componentsByProp.cursor,
-            hands = avatar.componentsByProp.hand;
+            cursors = avatar.componentsByAttr.cursor,
+            hands = avatar.componentsByAttr.hand;
 
         if (!avatar || !avatar.mesh) {
             console.warn("toggleTrackedHAnds FaileD!!")
@@ -138,8 +138,8 @@ export default class HandSystem {
             return
         } else {
             position = avatar.mesh.position
-            cursors = avatar.componentsByProp.cursor,
-            hands = avatar.componentsByProp.hand
+            cursors = avatar.componentsByAttr.cursor,
+            hands = avatar.componentsByAttr.hand
         }
 
       if (cursors) {

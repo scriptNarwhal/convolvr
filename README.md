@@ -33,7 +33,7 @@ loadingSpace = new Convolvr( user, userInput, socket, store, ( world ) => {
 
   let toolMenu = world.systems.assets.makeEntity( "tool-menu", true ); user.hud = toolMenu
   toolMenu.init( three.scene, {}, menu => {
-    menu.componentsByProp.toolUI[0].state.toolUI.updatePosition() 
+    menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition() 
   }) 
   userInput.init( world, world.camera, user )
 

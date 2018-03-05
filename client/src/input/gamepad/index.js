@@ -101,7 +101,7 @@ export default class GamePad {
         if ( trackedControls && input.trackedControls == false && world.mode == "stereo" ) {
 
           input.trackedControls = true
-          setTimeout(()=>{ world.user.avatar.componentsByProp.hand[0].state.hand.toggleTrackedHands(true) }, 500 )
+          setTimeout(()=>{ world.user.avatar.componentsByAttr.hand[0].state.hand.toggleTrackedHands(true) }, 500 )
 
         } 
 

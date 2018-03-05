@@ -75,7 +75,7 @@ class Chat extends Component {
       let from = this.props.username,
           avatar = this.props.user.data.profilePicture
       console.warn("send chat message ", avatar)
-      this.props.sendMessage(message || this.state.text, from, files, avatar)
+      this.props.sendMessage(message || this.state.text, from, files, avatar, window.three.world.name)
       this.setState({
         text: ""
       })
@@ -118,7 +118,8 @@ class Chat extends Component {
   render() {
 
     let lastSender = '',
-        mobile = window.innerWidth <= 720
+        mobile = window.innerWidth <= 720,
+        currentSpace = window.three.world.name;
 
     return (
         <Shell className="chat"
@@ -134,6 +135,9 @@ class Chat extends Component {
                         let fromLabel = m.from != lastSender || (m.files != null && m.files.length > 0) ?
                             (<span style={styles.username(m.avatar)} >{m.from}:</span>) : ''
                         lastSender = m.from
+                        // if (m.space != currentSpace) {
+                        //   return "";
+                        // }
                         return (
                         <span key={i} style={styles.message} >
                           <span style={styles.innerMessage}>
@@ -224,12 +228,13 @@ export default connect(
   },
   dispatch => {
     return {
-      sendMessage: (message, from, files, avatar) => {
+      sendMessage: (message, from, files, avatar, space) => {
           // if (message == "" && files.length == 0) {
           //   dispatch(toggleMenu())
           //   return
           // }
-          dispatch(sendMessage(message, from, files, avatar))
+          console.log("send message", message. space)
+          dispatch(sendMessage(message, from, files, avatar, space))
       },
       uploadMultiple: ( files, username, dir ) => {
         dispatch( uploadFiles( files, username, dir ) )
