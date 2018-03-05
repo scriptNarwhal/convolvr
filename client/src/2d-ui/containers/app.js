@@ -34,6 +34,7 @@ class App extends Component {
           chatText = chatUI ? chatUI.componentsByAttr.text[ 0 ] : "",
           worldName = '',
           from = ''
+
       if (!!!m.space || m.space != this.props.world) {
         return
       }
@@ -167,13 +168,10 @@ class App extends Component {
           uInput = window.three.world.userInput
       event.preventDefault()
       if (!uInput.fullscreen) {
-
           three.world.mode = "3d"
 						elem.requestPointerLock()
             this.props.toggleMenu(false)
-
       }
-      
     }
   }
 
@@ -454,8 +452,8 @@ export default connect(
       login: (user, pass, email, data) => {
             dispatch(login(user, pass, email, data))
       },
-      getMessage: (message, from, files, avatar) => {
-          dispatch(getMessage(message, from, files, avatar))
+      getMessage: (message, from, files, avatar, space) => {
+          dispatch(getMessage(message, from, files, avatar, space))
       },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))

@@ -3,7 +3,8 @@ import {
     MESSAGE_GET,
     CHAT_HISTORY_FETCH,
     CHAT_HISTORY_DONE,
-    CHAT_HISTORY_FAIL
+    CHAT_HISTORY_FAIL,
+    CHAT_HISTORY_CLEAR
 } from '../constants/action-types';
 
 module.exports = function messages (state = {
@@ -41,6 +42,11 @@ module.exports = function messages (state = {
       return Object.assign({}, state, {
         historyErr: action.data
       })
+    case CHAT_HISTORY_CLEAR:
+      return {
+        ...state,
+        messages: []
+      }
     default:
       return state;
   }

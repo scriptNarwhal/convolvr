@@ -20,11 +20,13 @@ import {
   UNIVERSE_SETTINGS_FETCH_FAIL,
   UNIVERSE_SETTINGS_UPDATE_FETCH,
   UNIVERSE_SETTINGS_UPDATE_DONE,
-  UNIVERSE_SETTINGS_UPDATE_FAIL
+  UNIVERSE_SETTINGS_UPDATE_FAIL,
+  CHAT_HISTORY_CLEAR
 } from '../constants/action-types'
 import axios from 'axios'
 import { browserHistory } from 'react-router'
 import { API_SERVER } from '../../config.js'
+import { getChatHistory } from './message-actions'
 
 export function fetchSpaces () {
     return dispatch => {
@@ -124,12 +126,16 @@ export function createSpaceFail (err) {
         err
     }
 }
-export function setCurrentSpace (userName, world) {
-  return {
-    type: SPACE_SET_CURRENT,
-    current: world,
-    userName
-  }
+export function setCurrentSpace(userName, world) {
+    return dispatch => {
+        dispatch({ type: CHAT_HISTORY_CLEAR });
+        dispatch(getChatHistory( world, 0 ));
+        return {
+            type: SPACE_SET_CURRENT,
+            current: world,
+            userName
+        }
+    }
 }
 export function updateSpace (id, data) {
     return dispatch => {

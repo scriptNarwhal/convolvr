@@ -70,12 +70,10 @@ class Chat extends Component {
   }
 
   send (message, files = []) {
-
-      console.log("send button")
       let from = this.props.username,
           avatar = this.props.user.data.profilePicture
-      console.warn("send chat message ", avatar)
-      this.props.sendMessage(message || this.state.text, from, files, avatar, window.three.world.name)
+
+      this.props.sendMessage(message || this.state.text, from, files, avatar, this.props.space)
       this.setState({
         text: ""
       })
@@ -119,7 +117,7 @@ class Chat extends Component {
 
     let lastSender = '',
         mobile = window.innerWidth <= 720,
-        currentSpace = window.three.world.name;
+        currentSpace = this.props.space;
 
     return (
         <Shell className="chat"
@@ -223,7 +221,8 @@ export default connect(
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         chatOpen: state.app.chatOpen,
-        vrMode: state.app.vrMode
+        vrMode: state.app.vrMode,
+        space: state.spaces.current
     }
   },
   dispatch => {

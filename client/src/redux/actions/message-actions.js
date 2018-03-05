@@ -44,7 +44,7 @@ export function getMessage (message, from, files, avatar, space) {
 }
 
 export function getChatHistory (spaceName, skip) {
-
+    console.warn("getChatHistory", spaceName)
     return dispatch => {
 
      dispatch({
