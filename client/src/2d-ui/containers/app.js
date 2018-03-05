@@ -29,23 +29,26 @@ class App extends Component {
 
     events.on("chat message", message => {
 
-      let chatMessage = JSON.parse( message.data ),
+      let m = JSON.parse( message.data ),
           chatUI = three.world.chat,
-          chatText = chatUI ? chatUI.componentsByProp.text[ 0 ] : "",
+          chatText = chatUI ? chatUI.componentsByAttr.text[ 0 ] : "",
           worldName = '',
           from = ''
 
-    	this.props.getMessage(chatMessage.message, chatMessage.from, chatMessage.files, chatMessage.avatar)
+      if (!!!m.space || m.space != this.props.world) {
+        return
+      }
+    	this.props.getMessage(m.message, m.from, m.files, m.avatar, m.space)
 
-      if (this.state.lastSender != chatMessage.from || (chatMessage.files != null && chatMessage.files.length > 0)) {
-        from = `${chatMessage.from}: `
+      if (this.state.lastSender != m.from || (m.files != null && m.files.length > 0)) {
+        from = `${m.from}: `
       }
 
       this.setState({
-        lastSender: chatMessage.from
+        lastSender: m.from
       })
 
-      this.notify(chatMessage.message, chatMessage.from)
+      this.notify(m.message, m.from)
       worldName = this.props.world.toLowerCase() == "overworld" ? APP_NAME : this.props.world
 
       if ( this.props.focus == false ) {
@@ -65,7 +68,7 @@ class App extends Component {
 
       if ( !this.props.menuOpen ) {
         // TODO: implement show chat modal
-        // world.chatModal.componentsByProp.text[0].state.text. 
+        // world.chatModal.componentsByAttr.text[0].state.text. 
       }
     })
 
@@ -91,7 +94,7 @@ class App extends Component {
     }, 100)
 
     world.initChatAndLoggedInUser = ( doLogin = false ) => {
-      this.props.getChatHistory(0) // wait a fraction of a second for the world to load / to show in 3d too
+      this.props.getChatHistory(world.name, 0) // wait a fraction of a second for the world to load / to show in 3d too
       if ( doLogin ) {
         let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...
         username = '',
@@ -99,15 +102,11 @@ class App extends Component {
         autoSignIn = false
   
         if (rememberUser != null) {
-  
           username = localStorage.getItem("username") // refactor this to be more secure before beta 0.6
           password = localStorage.getItem("password")
-  
           if (username != null && username != '') {
-  
             autoSignIn = true
             this.props.login(username, password, "", {})
-  
           }
         }
   
@@ -156,15 +155,10 @@ class App extends Component {
             console.log("vrdisplayactivate: found display: ", displays[0])
             //three.vrDisplay = displays[0]
             //this.initiateVRMode()
-            
 
           }
-          
         })
-
       }
-      
-
     })
 
     let renderCanvas = document.querySelector("#viewport")
@@ -174,13 +168,10 @@ class App extends Component {
           uInput = window.three.world.userInput
       event.preventDefault()
       if (!uInput.fullscreen) {
-
           three.world.mode = "3d"
 						elem.requestPointerLock()
             this.props.toggleMenu(false)
-
       }
-      
     }
   }
 
@@ -461,8 +452,8 @@ export default connect(
       login: (user, pass, email, data) => {
             dispatch(login(user, pass, email, data))
       },
-      getMessage: (message, from, files, avatar) => {
-          dispatch(getMessage(message, from, files, avatar))
+      getMessage: (message, from, files, avatar, space) => {
+          dispatch(getMessage(message, from, files, avatar, space))
       },
       getInventory: (userId, category) => {
         dispatch(getInventory(userId, category))
@@ -470,8 +461,8 @@ export default connect(
       showChat: () => {
         dispatch(showChat())
       },
-      getChatHistory: (skip) => {
-        dispatch(getChatHistory(skip))
+      getChatHistory: (spaceName, skip) => {
+        dispatch(getChatHistory(spaceName, skip))
       },
       toggleMenu: (force) => {
           //window.three.world.mode = force ? "3d" : "web"

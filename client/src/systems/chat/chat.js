@@ -1,6 +1,10 @@
 import { events } from '../../network/socket'
 import Convolvr from '../../world/world';
 import Entity from '../../core/entity';
+import {
+    getChatHistory,
+    sendMessage
+  } from '../../redux/actions/message-actions'
 
 export default class ChatSystem {
 
@@ -80,16 +84,18 @@ export default class ChatSystem {
         }
 
         return {
+            username: attr.userName,
+            space: this.world.name,
             sendMessage: (message) => {
-                this.sendMessage(message)
+                this.sendMessage(component, message)
             },
             hide: (delay = 0) => {
                 setTimeout(()=>{
-                    this._hide( component )
+                    this._hide(component)
                 }, delay)
             },
             show: () => {
-                this._show( component )
+                this._show(component)
             },
 
         }
@@ -128,8 +134,10 @@ export default class ChatSystem {
         this.chatModal.mesh.visible = true
     }
 
-    sendMessage (message) {
-        
+    sendMessage (component, message) {
+        let state = component.state.chat;
+
+        this.world.store.dispatch(sendMessage(message, state.username, [], null, state.space))
     }
 
     containsObject ( obj, list ) {

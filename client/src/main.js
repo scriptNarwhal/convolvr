@@ -87,7 +87,7 @@ loadingSpace = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
     toolMenu = systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) // method for spawning built in entities
     user.hud = toolMenu
     toolMenu.init( scene, {}, (menu: Entity) => { 
-      menu.componentsByProp.toolUI[0].state.toolUI.updatePosition()
+      menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
     }) 
     
     userInput.init( world, world.camera, user )

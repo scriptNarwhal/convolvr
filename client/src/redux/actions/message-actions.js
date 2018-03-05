@@ -9,13 +9,13 @@ import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 import { send } from '../../network/socket.js'
 
-export function sendMessage (message, from, files, avatar) {
-
+export function sendMessage (message, from, files, avatar, space) {
     send('chat message', {
         message,
         from,
         files,
-        avatar
+        avatar,
+        space
     })
 
     return {
@@ -23,25 +23,23 @@ export function sendMessage (message, from, files, avatar) {
         message,
         from,
         files,
-        avatar
+        avatar,
+        space
     }
-
 }
 
-export function getMessage (message, from, files, avatar) {
-
+export function getMessage (message, from, files, avatar, space) {
     return {
         type: MESSAGE_GET,
         message,
         from,
         files,
-        avatar
+        avatar,
+        space
     }
-    
 }
 
-export function getChatHistory (skip) {
-
+export function getChatHistory (spaceName, skip) {
     return dispatch => {
 
      dispatch({
@@ -49,7 +47,7 @@ export function getChatHistory (skip) {
          skip
      })
 
-     return axios.get(API_SERVER+"/api/chat-history/"+skip)
+     return axios.get(`${API_SERVER}/api/chat-history/${spaceName}/${skip}`)
         .then(response => {
 
             let chatUI = three.world.chat,
@@ -57,11 +55,11 @@ export function getChatHistory (skip) {
                 lastSender = '',
                 populateVRChat = data => {
 
-                    let chatUIText = null
-                    console.warn("Chat History: ", chatUI)
+                    let chatUIText = null;
+
                     if ( chatUI ) {
 
-                        chatUIText = chatUI.componentsByProp.text[0].state.text
+                        chatUIText = chatUI.componentsByAttr.text[0].state.text
                         data.map( msg =>{
 
                             let newMessage = JSON.parse(msg.message),

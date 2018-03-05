@@ -1,20 +1,20 @@
 import {
-    WORLD_SET_CURRENT,
-    WORLD_CREATE_FETCH,
-    WORLD_CREATE_DONE,
-    WORLD_CREATE_FAIL,
-    WORLDS_FETCH,
-    WORLDS_FETCH_DONE,
-    WORLDS_FETCH_FAIL,
-    USER_WORLDS_FETCH,
-    USER_WORLDS_FETCH_DONE,
-    USER_WORLDS_FETCH_FAIL,
-    WORLD_UPDATE_FETCH,
-    WORLD_UPDATE_DONE,
-    WORLD_UPDATE_FAIL,
-    WORLD_DELETE_FETCH,
-    WORLD_DELETE_DONE,
-    WORLD_DELETE_FAIL,
+    SPACE_SET_CURRENT,
+    SPACE_CREATE_FETCH,
+    SPACE_CREATE_DONE,
+    SPACE_CREATE_FAIL,
+    SPACES_FETCH,
+    SPACES_FETCH_DONE,
+    SPACES_FETCH_FAIL,
+    USER_SPACES_FETCH,
+    USER_SPACES_FETCH_DONE,
+    USER_SPACES_FETCH_FAIL,
+    SPACE_UPDATE_FETCH,
+    SPACE_UPDATE_DONE,
+    SPACE_UPDATE_FAIL,
+    SPACE_DELETE_FETCH,
+    SPACE_DELETE_DONE,
+    SPACE_DELETE_FAIL,
     UNIVERSE_SETTINGS_FETCH,
     UNIVERSE_SETTINGS_FETCH_DONE,
     UNIVERSE_SETTINGS_FETCH_FAIL,
@@ -42,62 +42,62 @@ function spaces (state = {
     }
 }, action) {
   switch (action.type) {
-    case WORLD_SET_CURRENT:
+    case SPACE_SET_CURRENT:
       return Object.assign({}, state, {
           current: action.current
       })
-    case WORLD_CREATE_FETCH:
+    case SPACE_CREATE_FETCH:
       return Object.assign({}, state, {
           fetching: true
       })
-    case WORLD_CREATE_DONE:
+    case SPACE_CREATE_DONE:
       return Object.assign({}, state, {
           created: action.created,
           fetching: false
       })
-    case WORLD_CREATE_FAIL:
+    case SPACE_CREATE_FAIL:
       return Object.assign({}, state, {
           fetching: false,
           error: action.err
       })
-    case WORLDS_FETCH:
+    case SPACES_FETCH:
       return Object.assign({}, state, {
           fetching: true
       })
-    case WORLDS_FETCH_FAIL:
+    case SPACES_FETCH_FAIL:
       return Object.assign({}, state, {
           fetching: false,
           error: action.err
       })
-    case WORLDS_FETCH_DONE:
+    case SPACES_FETCH_DONE:
       return Object.assign({}, state, {
           all: action.spaces,
           fetching: false
       })
-    case USER_WORLDS_FETCH:
+    case USER_SPACES_FETCH:
       return Object.assign({}, state, {
           fetchingUserSpaces: true
       })
-    case USER_WORLDS_FETCH_FAIL:
+    case USER_SPACES_FETCH_FAIL:
       return Object.assign({}, state, {
           fetchingUserSpaces: false,
           error: action.err
       })
-    case USER_WORLDS_FETCH_DONE:
+    case USER_SPACES_FETCH_DONE:
       return Object.assign({}, state, {
           userSpaces: action.data,
           fetchingUserSpaces: false
       })
-    case WORLD_UPDATE_FETCH:
+    case SPACE_UPDATE_FETCH:
       return Object.assign({}, state, {
           fetching: true
       })
-    case WORLD_UPDATE_DONE:
+    case SPACE_UPDATE_DONE:
       return Object.assign({}, state, {
           updated: action.updated,
           fetching: false
       })
-    case WORLD_UPDATE_FAIL:
+    case SPACE_UPDATE_FAIL:
       return Object.assign({}, state, {
           error: action.err,
           fetching: false

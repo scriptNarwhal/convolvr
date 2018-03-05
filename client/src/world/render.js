@@ -8,7 +8,7 @@ export let animate = ( world, last, cursorIndex, forceRender ) => {
       delta = (Date.now() - last) / 0.080,
       time = Date.now(),
       user = world.user != null ? world.user : false,
-      cursors = !!user && !!user.avatar ? user.avatar.componentsByProp.cursor : [],
+      cursors = !!user && !!user.avatar ? user.avatar.componentsByAttr.cursor : [],
       hands = !!user ? user.avatar.hands : false
 
   if ( willRender && (mode == "3d" || mode == "web") ) {
@@ -49,9 +49,9 @@ export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {
       frame = world.vrFrame,
       floorHeight = world.settings.floorHeight,
       user = world.user,
-      cursors = !!user ? user.avatar.componentsByProp.cursor : false,
+      cursors = !!user ? user.avatar.componentsByAttr.cursor : false,
       cursor = !!cursors ? cursors[cursorIndex] : false,
-      hands = !!user && !!user.avatar ? user.avatar.componentsByProp.hand : false,
+      hands = !!user && !!user.avatar ? user.avatar.componentsByAttr.hand : false,
       vrPos = [],
       vrSpacePos = []
 

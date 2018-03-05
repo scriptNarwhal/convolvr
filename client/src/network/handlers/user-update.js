@@ -41,7 +41,7 @@ export default class UserUpdateHandler {
                         this.loadPlayerAvatar(update, userVoxel, coords, data)
                     } else if (user && user.mesh) {
                         if (update.hands.length > 0) {
-                            hands = user.avatar.componentsByProp.hand
+                            hands = user.avatar.componentsByAttr.hand
                             for (let h = 0, nHands = hands.length; h < nHands; h += 1) {
                                 let hand = hands[h];
 
@@ -110,7 +110,7 @@ export default class UserUpdateHandler {
 
         if (newData.entity.hands.length > 0)
             setTimeout(() => {
-                avatar.componentsByProp.hand[1].state.hand.toggleTrackedHands(true)
+                avatar.componentsByAttr.hand[1].state.hand.toggleTrackedHands(true)
             }, 1000)
     }
 

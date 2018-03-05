@@ -91,7 +91,7 @@ export default class OimoPluginSystem {
 
     setInMotion ( entity: Entity ) {
 
-        let hasPhysics = entity.componentsByProp.oimo
+        let hasPhysics = entity.componentsByAttr.oimo
 
         if ( false == hasPhysics ) {
 
@@ -106,7 +106,7 @@ export default class OimoPluginSystem {
 
     makeStatic ( entity: Entity ) {
         
-        let hasPhysics = entity.componentsByProp.oimo
+        let hasPhysics = entity.componentsByAttr.oimo
 
         this.worker.postMessage( { action: "make static", entityId: entity.id, voxel: entity.voxel } ) 
 

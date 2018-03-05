@@ -70,12 +70,10 @@ class Chat extends Component {
   }
 
   send (message, files = []) {
-
-      console.log("send button")
       let from = this.props.username,
           avatar = this.props.user.data.profilePicture
-      console.warn("send chat message ", avatar)
-      this.props.sendMessage(message || this.state.text, from, files, avatar)
+
+      this.props.sendMessage(message || this.state.text, from, files, avatar, this.props.space)
       this.setState({
         text: ""
       })
@@ -118,7 +116,8 @@ class Chat extends Component {
   render() {
 
     let lastSender = '',
-        mobile = window.innerWidth <= 720
+        mobile = window.innerWidth <= 720,
+        currentSpace = this.props.space;
 
     return (
         <Shell className="chat"
@@ -134,6 +133,9 @@ class Chat extends Component {
                         let fromLabel = m.from != lastSender || (m.files != null && m.files.length > 0) ?
                             (<span style={styles.username(m.avatar)} >{m.from}:</span>) : ''
                         lastSender = m.from
+                        // if (m.space != currentSpace) {
+                        //   return "";
+                        // }
                         return (
                         <span key={i} style={styles.message} >
                           <span style={styles.innerMessage}>
@@ -219,17 +221,19 @@ export default connect(
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         chatOpen: state.app.chatOpen,
-        vrMode: state.app.vrMode
+        vrMode: state.app.vrMode,
+        space: state.spaces.current
     }
   },
   dispatch => {
     return {
-      sendMessage: (message, from, files, avatar) => {
+      sendMessage: (message, from, files, avatar, space) => {
           // if (message == "" && files.length == 0) {
           //   dispatch(toggleMenu())
           //   return
           // }
-          dispatch(sendMessage(message, from, files, avatar))
+          console.log("send message", message. space)
+          dispatch(sendMessage(message, from, files, avatar, space))
       },
       uploadMultiple: ( files, username, dir ) => {
         dispatch( uploadFiles( files, username, dir ) )

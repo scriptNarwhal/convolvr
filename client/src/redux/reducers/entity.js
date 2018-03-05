@@ -3,9 +3,9 @@ import {
     ENTITIES_FETCH,
     ENTITIES_FETCH_FAILED,
     ENTITIES_FETCH_DONE,
-    ENTITY_IMPORT_TO_WORLD_FETCH,
-    ENTITY_IMPORT_TO_WORLD_DONE,
-    ENTITY_IMPORT_TO_WORLD_FAIL
+    ENTITY_IMPORT_TO_SPACE_FETCH,
+    ENTITY_IMPORT_TO_SPACE_DONE,
+    ENTITY_IMPORT_TO_SPACE_FAIL
 } from '../constants/action-types';
 
 module.exports = function entities (state = {
@@ -38,17 +38,17 @@ module.exports = function entities (state = {
         return Object.assign({}, state, {
             error: action.err
         })
-    case ENTITY_IMPORT_TO_WORLD_FETCH:
+    case ENTITY_IMPORT_TO_SPACE_FETCH:
         return Object.assign({}, state, {
             addedToSpace: false,
             fetching: true
         })
-    case ENTITY_IMPORT_TO_WORLD_DONE:
+    case ENTITY_IMPORT_TO_SPACE_DONE:
         return Object.assign({}, state, {
             addedToSpace: action.data,
             fetching: false
         })
-    case ENTITY_IMPORT_TO_WORLD_FAIL:
+    case ENTITY_IMPORT_TO_SPACE_FAIL:
         return Object.assign({}, state, {
             error: action.err
         })   

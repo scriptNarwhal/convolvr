@@ -98,7 +98,7 @@ export default class ComponentTool extends Tool {
           componentType = !!params.component ? params.component : this.options.componentType,
           component = assetSystem.makeComponent( componentType ),
           tooManyComponents = !!selected && selected.components.length >= 48,
-          pointingAtTerrain = !!selected && selected.componentsByProp.terrain,
+          pointingAtTerrain = !!selected && selected.componentsByAttr.terrain,
           coords = telemetry.voxel,
           attrs = {},
           components = [],
@@ -115,7 +115,7 @@ export default class ComponentTool extends Tool {
       if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 100 || ( cursorState.distance < 100 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
         console.warn(" Problem ")
         user.toolbox.useTool( 0, telemetry.hand )
-        user.hud.componentsByProp.toolUI[ 0 ].state.toolUI.show()
+        user.hud.componentsByAttr.toolUI[ 0 ].state.toolUI.show()
         user.toolbox.usePrimary( telemetry.hand, entity  )
         return false
       }
@@ -125,7 +125,7 @@ export default class ComponentTool extends Tool {
       if ( components.length == 0 )
         components = [ component ]
       
-      attrs = selected.componentsByProp
+      attrs = selected.componentsByAttr
 
       if ( !!!selected ) { //
         console.warn("Component Tool: no entity selected")
@@ -173,8 +173,8 @@ export default class ComponentTool extends Tool {
       this.selectedComponent = null
       this.options.componentType = this.all[ this.current ]
 
-      if ( this.entity.componentsByProp ) {
-        this.entity.componentsByProp.text[ 0 ].state.text.update( this.options.componentType )
+      if ( this.entity.componentsByAttr ) {
+        this.entity.componentsByAttr.text[ 0 ].state.text.update( this.options.componentType )
       }
 
       return false // no socket event

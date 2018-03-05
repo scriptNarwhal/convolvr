@@ -83,7 +83,7 @@ export default class MaterialTool extends Tool {
           
 
       console.log(" ( Material Tool ) ", componentPath )
-      attrs = selected.componentsByProp
+      attrs = selected.componentsByAttr
       
       if ( !!!selected || attrs.miniature || attrs.activate ) {
           console.warn("no tool action, calling activation callbacks")

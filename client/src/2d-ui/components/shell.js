@@ -65,7 +65,7 @@ class Shell extends Component {
           if (complete == 100) {
             if (window.location.href.indexOf("/chat") > -1) {
               setTimeout(()=>{
-                shell.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames)
+                shell.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames, null, window.three.world.space.name)
               }, 500)
             }
           }
@@ -158,8 +158,8 @@ export default connect(
       toggleMenu: (force) => {
         dispatch(toggleMenu(force))
       },
-      sendMessage: (message, from, files) => {
-        dispatch(sendMessage(message, from, files))
+      sendMessage: (message, from, files, avatar, space) => {
+        dispatch(sendMessage(message, from, files, avatar, space))
       },
     }
   }

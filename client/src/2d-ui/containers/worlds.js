@@ -124,9 +124,6 @@ Spaces.defaultProps = {
 }
 import { connect } from 'react-redux';
 import {
-    sendMessage
-} from '../../redux/actions/message-actions'
-import {
   toggleMenu
 } from '../../redux/actions/app-actions'
 import { fetchSpaces, setCurrentSpace } from '../../redux/actions/world-actions'
@@ -143,11 +140,8 @@ export default connect(
       toggleMenu: (force) => {
         dispatch( toggleMenu( force ) )
       },
-      sendMessage: (message, from) => {
-          dispatch(sendMessage(message, from))
-      },
-      setCurrentSpace: (world) => {
-          dispatch(setCurrentSpace(world))
+      setCurrentSpace: (userName, world) => {
+          dispatch(setCurrentSpace(userName, world))
       }
     }
   }

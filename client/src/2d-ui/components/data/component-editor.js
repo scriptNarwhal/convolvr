@@ -7,7 +7,7 @@ import {
     rgb
 } from '../../../util'
 import { isMobile } from '../../../config'
-import PropertyEditor from './property-editor'
+import AttributeEditor from './attribute-editor'
 import VectorInput from '../vector-input'
 import { 
     textAreaStyle,
@@ -316,7 +316,7 @@ class ComponentEditor extends Component {
                         </span>
                         <div>
                             <h4 style={styles.h4}>Properties</h4>
-                            <PropertyEditor onSave={ data => this.onSaveProperty( data ) } 
+                            <AttributeEditor onSave={ data => this.onSaveProperty( data ) } 
                                             entityEditMode={true}
                                             source={"componentEdit"}
                                             username={ this.props.username }

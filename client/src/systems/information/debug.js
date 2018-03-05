@@ -53,7 +53,7 @@ export default class DebugSystem { // gather helpful info & display as text
         if ( attr.cursors ) {
 
             text.write( 'cursors: ')
-            entity.componentsByProp.cursor.map( ( cursor, c ) => {
+            entity.componentsByAttr.cursor.map( ( cursor, c ) => {
 
                 if ( cursorIndex == undefined || c == cursorIndex ) {
 
