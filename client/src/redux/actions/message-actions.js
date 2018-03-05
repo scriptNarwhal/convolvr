@@ -10,7 +10,6 @@ import { API_SERVER } from '../../config.js'
 import { send } from '../../network/socket.js'
 
 export function sendMessage (message, from, files, avatar, space) {
-
     send('chat message', {
         message,
         from,
@@ -27,11 +26,9 @@ export function sendMessage (message, from, files, avatar, space) {
         avatar,
         space
     }
-
 }
 
 export function getMessage (message, from, files, avatar, space) {
-
     return {
         type: MESSAGE_GET,
         message,
@@ -40,11 +37,9 @@ export function getMessage (message, from, files, avatar, space) {
         avatar,
         space
     }
-    
 }
 
 export function getChatHistory (spaceName, skip) {
-    console.warn("getChatHistory", spaceName)
     return dispatch => {
 
      dispatch({
@@ -60,8 +55,8 @@ export function getChatHistory (spaceName, skip) {
                 lastSender = '',
                 populateVRChat = data => {
 
-                    let chatUIText = null
-                    console.warn("Chat History: ", chatUI)
+                    let chatUIText = null;
+
                     if ( chatUI ) {
 
                         chatUIText = chatUI.componentsByAttr.text[0].state.text
