@@ -19,11 +19,16 @@ export default class Property  {
 
     type: PropertyType
     binding: Binding
+    bindingStr: string
     name: string
     
-    constructor(type: PropertyType, name: string, binding: Binding) {
+    constructor(type: PropertyType, name: string, binding: string) {
         this.type = type;
         this.name = name;
-        this.binding = binding;
+        this.bindingStr = binding;
+    }
+
+    bind() {
+        // implement creating the binding object 
     }
 };

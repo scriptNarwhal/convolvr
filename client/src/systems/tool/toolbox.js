@@ -4,9 +4,9 @@ import ComponentTool from '../../assets/entities/tools/core/component-tool'
 import EntityTool from '../../assets/entities/tools/core/entity-tool'
 import DeleteTool from '../../assets/entities/tools/core/delete-tool'
 import MaterialTool from '../../assets/entities/tools/core/material-tool'
-import AssetTool from '../../assets/entities/tools/core/asset-tool'
+import PropertyTool from '../../assets/entities/tools/core/property-tool'
 import GeometryTool from '../../assets/entities/tools/core/geometry-tool'
-import SystemTool from '../../assets/entities/tools/core/system-tool'
+import AttributeTool from '../../assets/entities/tools/core/attribute-tool'
 import PlaceTool from '../../assets/entities/tools/core/place-tool'
 import SpaceTool from '../../assets/entities/tools/core/world-tool'
 import FileTool from '../../assets/entities/tools/core/file-tool'
@@ -63,12 +63,12 @@ export default class ToolboxSystem {
         this.tools = [
           new EntityTool({}, world, this),
           new ComponentTool({}, world, this),
-          new SystemTool({}, world, this),
+          new AttributeTool({}, world, this),
           new GeometryTool({}, world, this),
           new MaterialTool({}, world, this),
           new SpaceTool({}, world, this),
           new PlaceTool({}, world, this),
-          new AssetTool({}, world, this),
+          new PropertyTool({}, world, this),
           new FileTool({}, world, this),
           new SocialTool({}, world, this),
           new DebugTool({}, world, this),

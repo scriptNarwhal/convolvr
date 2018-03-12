@@ -2,7 +2,7 @@ import Tool from '../../../../world/tool'
 import Entity from '../../../../core/entity'
 import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
-export default class SystemTool extends Tool {
+export default class AttributeTool extends Tool {
 
   constructor (data, world, toolbox) {
 
@@ -12,7 +12,7 @@ export default class SystemTool extends Tool {
         coords = GLOBAL_SPACE
 
     this.mesh = null;
-    this.name = "System Tool"
+    this.name = "Attribute Tool"
     this.options = {
       system: {
         none: true
@@ -34,7 +34,7 @@ export default class SystemTool extends Tool {
               tool: {
                 panels: [
                   {
-                    title: "Systems",
+                    title: "Attributes",
                     color: 0xff0707,
                     content: {
                       attrs: {
