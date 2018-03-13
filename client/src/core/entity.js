@@ -176,6 +176,7 @@ export default class Entity {
         compMesh = comp.mesh;
         if ( !!!compMesh || !!!compMesh.geometry.computeBoundingSphere ) {
           console.error("no geometry; aborting", c, this)
+          return;
         }
 
         compMesh.geometry.computeBoundingSphere() // check bounding radius

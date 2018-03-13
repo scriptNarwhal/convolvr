@@ -1,4 +1,4 @@
 {
  "presets": ["env", "react"],
- "plugins": ["syntax-dynamic-import", "transform-flow-strip-types", "transform-object-rest-spread"]
+ "plugins": [ "transform-flow-strip-types", "transform-object-rest-spread"]
 }

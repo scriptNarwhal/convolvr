@@ -51,7 +51,7 @@ export default class GeometryTool extends Tool {
               this.initLabel( false, "Geometry")
             ]
           }
-        ], coords )
+        ], [0,0,0], [0,0,0,1], coords )
     }
 
     primaryAction ( telemetry ) {

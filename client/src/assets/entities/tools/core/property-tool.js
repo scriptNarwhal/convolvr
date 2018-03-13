@@ -49,7 +49,7 @@ export default class PropertyTool extends Tool {
               }
             },
             components: [
-              this.initLabel( false, "Asset Tool")
+              this.initLabel( false, "Property Tool")
             ]
           }
       ], null, null, coords)

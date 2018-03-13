@@ -1,9 +1,9 @@
-export let animate = ( world, last, cursorIndex, forceRender ) => {
+export let animate = ( world, last, cursorIndex ) => {
 
   let mobile = world.mobile,
       camera = three.camera,
       mode = world.mode,
-      willRender = world.willRender || forceRender,
+      willRender = world.willRender,
       cPos = camera.position,
       delta = (Date.now() - last) / 0.080,
       time = Date.now(),
@@ -11,7 +11,7 @@ export let animate = ( world, last, cursorIndex, forceRender ) => {
       cursors = !!user && !!user.avatar ? user.avatar.componentsByAttr.cursor : [],
       hands = !!user ? user.avatar.hands : false
 
-  if ( willRender && (mode == "3d" || mode == "web") ) {
+  if ( willRender && mode != "stereo") {
 
     if (!! world.userInput) {
       world.userInput.update( delta ) // Update keyboard / mouse / gamepad
@@ -31,11 +31,11 @@ export let animate = ( world, last, cursorIndex, forceRender ) => {
       three.renderer.render( three.scene, camera )
     }
     world.octree.update()
+   
   }
 
-  if ( mode != "stereo" && !world.IOTMode && !forceRender ) {
-    requestAnimationFrame( () => { animate( world, time, cursorIndex ) } )
-  }
+ requestAnimationFrame( () => { animate( world, time, cursorIndex ) } )
+ 
 }
 
 export let vrAnimate = ( display, time, oldPos, cursorIndex ) => {

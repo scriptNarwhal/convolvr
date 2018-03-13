@@ -109,7 +109,7 @@ export default class AttributeTool extends Tool {
               }
             },
             components: [
-              this.initLabel( false, "System")
+              this.initLabel( false, "Attribute")
             ]
           }
         ], null, null, coords)

@@ -55,7 +55,7 @@ export default class MaterialTool extends Tool {
             this.initLabel( false, "Material")
           ]
         }
-      ], coords)
+      ], null, null, coords)
     }
 
     primaryAction ( telemetry ) {
