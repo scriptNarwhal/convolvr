@@ -44,22 +44,22 @@ export default function BuiltinProps () {
         material: [
             { name: "basic",     color: 0xffffff },
             { name: "plastic",   color: 0xffffff },
-            { name: "metal",     color: 0xffffff },
-            { name: "glass",     color: 0xffffff },
-            { name: "wireframe", color: 0xffffff },
-            { name: "stars",     color: 0xffffff, basic: true, procedural: {
-                    name: "stars",
-                    calls: [
-                        { call: 'fillStyle', params: [ '#000000' ] },
-                        { call: 'fillRect', params: [ 0, 0, 1024, 1024 ] },
-                        { call: 'fillStyle', params: [ '#ffffff' ] },
-                        { call: 'noise', params: [ 1024, 1024, 3, 3 ] },
-                        { call: 'loop', params: [ 0, '+', '<', 1000 ], calls : [
-                            { call: 'fillRect', params: [ 512, 512, 1, 1 ] },
-                        ]}
-                    ]
-                } 
-            },
+            // { name: "metal",     color: 0xffffff },
+            // { name: "glass",     color: 0xffffff },
+            // { name: "wireframe", color: 0xffffff },
+            // { name: "stars",     color: 0xffffff, basic: true, procedural: {
+            //         name: "stars",
+            //         calls: [
+            //             { call: 'fillStyle', params: [ '#000000' ] },
+            //             { call: 'fillRect', params: [ 0, 0, 1024, 1024 ] },
+            //             { call: 'fillStyle', params: [ '#ffffff' ] },
+            //             { call: 'noise', params: [ 1024, 1024, 3, 3 ] },
+            //             { call: 'loop', params: [ 0, '+', '<', 1000 ], calls : [
+            //                 { call: 'fillRect', params: [ 512, 512, 1, 1 ] },
+            //             ]}
+            //         ]
+            //     } 
+            // },
             { mixin: true,       color: 0xff0707 },
             { mixin: true,       color: 0x07ff07 },
             { mixin: true,       color: 0x0707ff }

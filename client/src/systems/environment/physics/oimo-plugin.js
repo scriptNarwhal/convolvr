@@ -12,7 +12,7 @@ export default class OimoPluginSystem {
     meshes: Array<THREE.Mesh>
     oimoInfo: Object
 
-    constructor ( world: Convolvr ) {
+    constructor( world: Convolvr ) {
         
         let worker: Object            = new Worker("/data/js/workers/oimo.js"),
             meshes: Array<THREE.Mesh> = this.meshes = [],
@@ -45,62 +45,44 @@ export default class OimoPluginSystem {
                 b = body[ id ]
 
                 if ( b !== null && minfo[ n+7 ] !==1 ) {
-                    
                     b.position.fromArray( minfo, n );
                     b.quaternion.fromArray( minfo, n+3 );
-                
                 }
 
                 id += 1
-
             }
-
         }
 
-        worker.postMessage({  N:N, dt:dt, oimoUrl: "/data/lib/oimo/oimo.min.js" } )
-
+        worker.postMessage({ N:N, dt:dt, oimoUrl: "/data/lib/oimo/oimo.min.js" } )
     }
 
     /**
      * Registers component with this system
     */
-    init ( component: Component ) { 
-        
+    init ( component: Component ) {         
         let attr: Object = component.attrs.oimo
 
         //TODO: implement
 
         return {
 
-
         }
-
     }
 
     addVoxels ( voxels: Array<Object> ) {
-
         this.worker.postMessage( { action: "add voxels", voxels } )  
-
     }
 
     addEntity ( entity: Object ) {
-
         this.worker.postMessage( { action: "add entity", entity: { id: entity.id, position: entity.position, quaternion: entity.quaternion, components: entity.components }} )
-
     }
 
     setInMotion ( entity: Entity ) {
-
         let hasPhysics = entity.componentsByAttr.oimo
 
         if ( false == hasPhysics ) {
-
             this.addEntity( entity )
-
         } 
-
-
-
 
     }
 
