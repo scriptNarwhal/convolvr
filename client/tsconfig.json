@@ -1,0 +1,17 @@
+{
+    "files": [
+        "src/main.ts"
+    ],
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "target": "es6",
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react",
+        "allowJs": true 
+    },
+    "exclude": [
+        "./node_modules/**/*"
+      ]
+}
