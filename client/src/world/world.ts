@@ -314,9 +314,9 @@ export default class Convolvr {
 		console.log( this.systems.terrain )
 		this.systems.terrain.readyCallback = readyCallback
 
-		axios.get(`${API_SERVER}/api/spaces/name/${name}`).then( response => { // fix this... needs userName now
+		axios.get(`${API_SERVER}/api/spaces/name/${name}`).then( (response: any) => { // fix this... needs userName now
 			 this.init(response.data, ()=> { callback && callback(world) } )
-		}).catch(response => {
+		}).catch((response: any) => {
 			console.log("Space Error", response)
 		})
 	}

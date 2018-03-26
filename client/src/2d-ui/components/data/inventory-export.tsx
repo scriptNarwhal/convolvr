@@ -11,11 +11,7 @@ import {
 
 class InventoryExport extends Component<any, any> {
 
-  constructor () {
 
-    super()
-
-  }
 
   componentWillMount () {
 
@@ -67,7 +63,7 @@ class InventoryExport extends Component<any, any> {
 
   }
 
-  handleTextChange (e) {
+  handleTextChange(e: any) {
 
     this.setState({
       name: e.target.value
@@ -75,7 +71,7 @@ class InventoryExport extends Component<any, any> {
 
   }
 
-  handleTextArea (e) {
+  handleTextArea(e: any) {
 
     this.setState({
       text: e.target.value

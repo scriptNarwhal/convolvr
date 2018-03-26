@@ -173,10 +173,10 @@ export default class AssetSystem {
         console.log("continuing to load")
         this.loadingItemsById.entities[ itemId ] = true
          return axios.get(API_SERVER+"/api/inventory/"+username+"/Entities/"+itemId)
-                .then(response => {
+                .then((response: any) => {
                     assets.addUserEntities( [ response.data ] )
                     assets.loadingItemsById.entities[ itemId ] = false
-                }).catch(response => {
+                }).catch((response: any) => {
                    console.error(response)
                 })
     }
@@ -186,10 +186,10 @@ export default class AssetSystem {
         if (this.loadingItemsById.components[ itemId ]) { return }
         this.loadingItemsById.components[ itemId ] = true
          return axios.get(API_SERVER+"/api/inventory/"+username+"/Components/"+itemId)
-                .then(response => {
+                .then((response: any) => {
                     assets.addUserComponents( [ response.data ] )
                     assets.loadingItemsById.components[ itemId ] = false
-                }).catch(response => {
+                }).catch((response: any) => {
                     console.error(response)
                 })
     }

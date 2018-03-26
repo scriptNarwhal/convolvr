@@ -50,9 +50,9 @@ export function fetchUsers (id) {
          id: id
      })
      return axios.get(API_SERVER+"/api/users/"+id)
-        .then(response => {
+        .then((response: any) => {
             dispatch(receiveUsers(response))
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch(failedFetchUsers(response))
         });
    }
@@ -82,9 +82,9 @@ export function updateUser ( id, name, pass, email, data ) {
             email,
             data
         })
-        .then(response => {
+        .then((response: any) => {
             dispatch(updateUserDone(response))
-         }).catch(response => {
+         }).catch((response: any) => {
             dispatch(updateUserFailed(response))
        });
   }
@@ -124,13 +124,13 @@ export function login ( user, pass, email, data ) {
              email: email,
              data: data
          })
-         .then(response => {
+         .then((response: any) => {
              console.info("ACTION LOGIN: USER USER LOGIN ", window.three.world.onUserLogin)
              window.three.world.onUserLogin( response )
              dispatch(loginDone(response))
              dispatch(fetchUserSpaces(response.data.id))
              
-          }).catch(response => {
+          }).catch((response: any) => {
               dispatch(loginFailed(response))
         });
    }

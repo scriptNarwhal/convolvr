@@ -29,9 +29,9 @@ export function fetchEntities (id) {
          id: id
      })
      return axios.get(API_SERVER+"/api/entities"+id)
-        .then(response => {
+        .then((response: any) => {
             dispatch(doneFetchEntities(response))
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch(failedFetchEntities(response))
         });
    }
@@ -57,12 +57,12 @@ export function importEntityToSpace ( world, coords, data ) {
             id: id
          })
          return axios.put(API_SERVER+`/api/import-to-world/${userId}/${category}/${itemId}/${world}/${coords}`, {})
-            .then(response => {
+            .then((response: any) => {
                 dispatch({
                   type: INVENTORY_UPDATE_DONE,
                   updated: response.data
               })
-            }).catch(response => {
+            }).catch((response: any) => {
                 dispatch({
                       type: INVENTORY_UPDATE_FAIL,
                       err: response.err

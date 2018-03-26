@@ -12,12 +12,6 @@ import {
 
 class ImportToSpace extends Component<any, any> {
 
-  constructor () {
-
-    super()
-
-  }
-
   componentWillMount () {
 
     this.setState({
@@ -56,7 +50,7 @@ class ImportToSpace extends Component<any, any> {
 
   }
 
-  handleTextChange (e) {
+  handleTextChange(e: any) {
 
     this.setState({
       name: e.target.value

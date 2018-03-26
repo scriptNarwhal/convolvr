@@ -15,7 +15,7 @@ module.exports = function avatars (state: any = {
 }, action: any) {
   switch (action.type) {
     case ADD_AVATAR:
-    return Object.assign({}, avatar, {
+    return Object.assign({}, state.avatar, {
       types: [
         ...state,
         {

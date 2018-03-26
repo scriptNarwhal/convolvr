@@ -2,6 +2,18 @@ import Entity from "./entity";
 
 const THREE = (window as any).THREE;
 
+export type DBComponent = {
+  id:         number
+  name:       string
+  components: DBComponent[]
+  position:   number[]
+  quaternion: number[]
+  props:      { [key: string]: any }
+  attrs:      { [key: string]: any }
+  state:      { [key: string]: any }
+  tags:       string[]
+}
+
 export default class Component {
 
   public entity:             any
@@ -42,7 +54,7 @@ export default class Component {
       this.entity = entity
       this.data = data
       this.attrs = data.attrs || {}
-      this.state: any = {}
+      this.state = {}
       this.components = data.components || []
       this.compsByFaceIndex = []
       this.allComponents = []

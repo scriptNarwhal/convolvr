@@ -266,13 +266,13 @@ export default class TerrainSystem {
         })
 
         this.reqVoxels = []
-        axios.get(`${API_SERVER}/api/voxels/${this.world.name}/${voxels}`).then( response => {
+        axios.get(`${API_SERVER}/api/voxels/${this.world.name}/${voxels}`).then( (response: any) => {
 
           typeof response.data.map == 'function' && response.data.map( c => {
                 terrain.loadedVoxels.push( c )
           })
 
-        }).catch(response => {
+        }).catch((response: any) => {
           console.error("Voxel Error", coords, response)
         })
 

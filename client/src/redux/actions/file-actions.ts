@@ -49,7 +49,7 @@ import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 import { sendMessage } from './message-actions'
 
-export function listFiles (username, dir) {
+export function listFiles (username: string, dir: string) {
 
     return (dispatch: any) => {
      dispatch({
@@ -58,13 +58,13 @@ export function listFiles (username, dir) {
          dir
      })
      return axios.get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir="+dir : ''}`)
-        .then(response => {
-            window.three.world.systems.assets.setUserFiles( response.data )
+        .then((response: any) => {
+            (window as any).three.world.systems.assets.setUserFiles( response.data )
             dispatch({
                 type: FILES_LIST_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: FILES_LIST_FAIL,
                 error: response
@@ -74,7 +74,7 @@ export function listFiles (username, dir) {
 
 }
 
-export function listDirectories (username, dir) {
+export function listDirectories (username: string, dir: string) {
     return (dispatch: any) => {
      dispatch({
          type: DIRECTORIES_LIST_FETCH,
@@ -82,13 +82,13 @@ export function listDirectories (username, dir) {
          dir
      })
      return axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir="+dir : ''}`)
-        .then(response => {
-            window.three.world.systems.assets.setUserDirectories( response.data )
+        .then((response: any) => {
+            (window as any).three.world.systems.assets.setUserDirectories( response.data )
             dispatch({
                 type: DIRECTORIES_LIST_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: DIRECTORIES_LIST_FAIL,
                 error: response
@@ -97,7 +97,7 @@ export function listDirectories (username, dir) {
    }
 }
 
-export function uploadFile ( fileusername: string, dir ) {
+export function uploadFile ( fileusername: string, dir: string) {
 
     return (dispatch: any) => {
      dispatch({
@@ -109,12 +109,12 @@ export function uploadFile ( fileusername: string, dir ) {
      dir = !!dir ? "?dir="+dir : ""
 
      return axios.post(API_SERVER+"/api/files/upload/"+username+dir, file)
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: FILE_UPLOAD_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: FILE_UPLOAD_FAIL,
                 error: response
@@ -124,9 +124,9 @@ export function uploadFile ( fileusername: string, dir ) {
 
 }
 
-export function uploadFiles ( filesusername: string, dir ) {
+export function uploadFiles ( filesusername: string, dir: string) {
     
-    return (dispatch, getState) => {
+    return (dispatch: any, getState: any) => {
 
     let state = getState()
 
@@ -224,7 +224,7 @@ export function uploadFiles ( filesusername: string, dir ) {
 
 }
 
-export function createFile (username, dir) {
+export function createFile (username, dir: string) {
     return (dispatch: any) => {
      dispatch({
          type: FILE_CREATE_FETCH,
@@ -232,12 +232,12 @@ export function createFile (username, dir) {
          dir
      })
      return axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+dir : ''}`, {})
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: FILE_CREATE_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: FILE_CREATE_FAIL,
                 error: response.data
@@ -254,12 +254,12 @@ export function createDirectory ( username, dir ) {
          dir
      })
      return axios.post(`${API_SERVER}/api/directories/${username}?dir=${dir}`, {})
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: DIRECTORY_MAKE_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: DIRECTORY_MAKE_FAIL,
                 error: response.data
@@ -276,12 +276,12 @@ export function moveFile ( username, dir, file, targetDir, targetFile ) {
     })
 
     return axios.put(`${API_SERVER}/api/files/move/${username}?dir=${dir}&file=${file}&dstDir=${targetDir}&dstFile=${targetFile}`, {} )
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: FILE_MOVE_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: FILE_MOVE_FAIL,
                 error: response.data
@@ -290,7 +290,7 @@ export function moveFile ( username, dir, file, targetDir, targetFile ) {
    }
 }
 
-export function deleteFile ( username, dir, filename ) {
+export function deleteFile ( username: string, dir, filename ) {
     return (dispatch: any) => {
      
     dispatch({
@@ -299,12 +299,12 @@ export function deleteFile ( username, dir, filename ) {
      })
 
      return axios.put(`${API_SERVER}/api/files/delete/${username}?dir=${dir}&file=${filename}`, {} )
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: FILE_DELETE_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: FILE_DELETE_FAIL,
                 error: response.data
@@ -313,21 +313,21 @@ export function deleteFile ( username, dir, filename ) {
    }
 }
 
-export function readText ( filenameusername: string, dir ) {
+export function readText ( filename: string, username: string, dir ) {
     return (dispatch: any) => {
      dispatch({
          type: TEXT_READ_FETCH,
-         username,
+         username: string,
          dir
      })
      return axios.get(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`)
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: TEXT_READ_DONE,
                 data: response.data,
                 dir
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: TEXT_READ_FAIL,
                 error: response,
@@ -337,24 +337,24 @@ export function readText ( filenameusername: string, dir ) {
    }
 }
 
-export function writeText (text, filenameusername: string, dir) {
+export function writeText (text, filename: string, username: string, dir: string) {
     return (dispatch: any) => {
      
     dispatch({
          type: TEXT_WRITE_FETCH,
-         username,
+         username: string,
          dir
      })
 
-     let data = { text, username, name: filename, path: dir }
+     let data = { text, username: string, name: filename: string, path: dir }
 
      return axios.post(`${API_SERVER}/api/documents/${username}/${filename}`, data )
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: TEXT_WRITE_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: TEXT_WRITE_FAIL,
                 error: response.data
@@ -370,12 +370,12 @@ export function getShare (id, username) {
          username
      })
      return axios.get(`${API_SERVER}/api/shares/${username}/${id}`)
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: SHARE_GET_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: SHARE_GET_FAIL,
                 error: response
@@ -391,12 +391,12 @@ export function listShares (username) {
          username
      })
      return axios.get(`${API_SERVER}/api/shares/${username}`)
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: SHARES_LIST_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: SHARES_LIST_FAIL,
                 error: response
@@ -414,12 +414,12 @@ export function createShare (username: string, data: any) {
      })
 
      return axios.post(`${API_SERVER}/api/shares/${username}`, data )
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: SHARE_CREATE_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: SHARE_CREATE_FAIL,
                 error: response.data
@@ -437,12 +437,12 @@ export function updateShare (username: string, data: any) {
      })
 
      return axios.post(`${API_SERVER}/api/shares/${username}`, data )
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: SHARE_UPDATE_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: SHARE_UPDATE_FAIL,
                 error: response.data
@@ -460,12 +460,12 @@ export function deleteShare (username: string, data: any) {
      })
 
      return axios.put(`${API_SERVER}/api/shares/${username}`, data )
-        .then(response => {
+        .then((response: any) => {
             dispatch({
                 type: SHARE_DELETE_DONE,
                 data: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
                 type: SHARE_DELETE_FAIL,
                 error: response.data

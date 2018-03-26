@@ -23,9 +23,9 @@ export function fetchComponents (id) {
          id: id
      })
      return axios.get(API_SERVER+"/api/components"+id)
-        .then(response => {
+        .then((response: any) => {
             dispatch(doneFetchComponents(response))
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch(failedFetchComponents(response))
         });
    }

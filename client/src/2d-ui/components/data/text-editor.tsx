@@ -14,11 +14,7 @@ import {
 
 class TextEditor extends Component<any, any> {
 
-  constructor () {
 
-    super()
-
-  }
 
   componentWillMount () {
 
@@ -78,7 +74,7 @@ class TextEditor extends Component<any, any> {
 
   }
 
-  handleTextChange (e) {
+  handleTextChange(e: any) {
 
     this.setState({
       name: e.target.value
@@ -86,7 +82,7 @@ class TextEditor extends Component<any, any> {
 
   }
 
-  handleTextArea (e) {
+  handleTextArea(e: any) {
 
     this.setState({
       text: e.target.value
@@ -127,7 +123,7 @@ class TextEditor extends Component<any, any> {
     if ( this.state.activated ) {
 
       return (
-       <div style={ styles.lightbox }>
+       <div style={ styles.lightbox as any}>
           <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
@@ -154,10 +150,6 @@ class TextEditor extends Component<any, any> {
     }
     
   }
-}
-
-TextEditor.defaultProps = {
-
 }
 
 import { connect } from 'react-redux'
@@ -191,16 +183,16 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      readText: (filenameusername: string, dir) => {
+      readText: (filename: string, username: string, dir: string) => {
         dispatch( readText (filename, username, dir) )
       },
-      writeText: (text, filenameusername: string, dir) => {
-        dispatch( writeText (text, filenameusername: string, dir) )
+      writeText: (text: string, filename: string, username: string, dir: string) => {
+        dispatch( writeText (text, filename, username, dir) )
       },
       closeTextEdit: () => {
         dispatch( closeTextEdit() )
       },
-      listFiles: (username, dir) => {
+      listFiles: (username: string, dir: string) => {
         dispatch(listFiles(username, dir))
       },
     }

@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
     APP_TOGGLE_MENU,
     APP_TOGGLE_VR,
+    APP_SHOW_LOGIN,
     APP_SHOW_CHAT,
     APP_HIDE_CHAT,
     APP_HIDE_LOGIN,
@@ -10,9 +11,9 @@ import {
 } from '../constants/action-types';
 import { API_SERVER } from '../../config.js'
 
-export function toggleMenu ( force ) {
+export function toggleMenu ( force?: boolean ) {
     console.log("toggle menu ", force)
-    let world = window.three.world,
+    let world = (window as any).three.world,
         url = window.location.href,
         mode = world.mode
 
@@ -40,44 +41,44 @@ export function toggleMenu ( force ) {
     }
 }
 
-export function toggleFullscreen ( force ) {
+export function toggleFullscreen ( force?: boolean ) {
     return {
         type: APP_TOGGLE_FULLSCREEN,
         force: force || false
     }
 }
 
-export function toggleVR ( id ) {
+export function toggleVR ( ) {
     return {
         type: APP_TOGGLE_VR
     }
 }
 
-export function showChat ( id ) {
+export function showChat ( ) {
     return {
         type: APP_SHOW_CHAT
     }
 }
 
-export function hideChat ( id ) {
+export function hideChat ( ) {
     return {
         type: APP_HIDE_CHAT
     }
 }
 
-export function showLogin ( id ) {
+export function showLogin ( ) {
     return {
         type: APP_SHOW_LOGIN
     }
 }
 
-export function hideLogin ( id ) {
+export function hideLogin ( ) {
     return {
         type: APP_HIDE_LOGIN
     }
 }
 
-export function setWindowFocus ( focus ) {
+export function setWindowFocus ( focus?: boolean ) {
     return {
         type: APP_SET_WINDOW_FOCUS,
         focus

@@ -160,7 +160,7 @@ export default class FileSystem {
 
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
-        axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+outDir : ''}`, {}).then(response => {
+        axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+outDir : ''}`, {}).then((response: any) => {
            this._handleResponse( 'createFile', response.data )
         }).catch(err => {
            component.state.file.res.createFile.error = err 
@@ -171,7 +171,7 @@ export default class FileSystem {
 
         let outDir = !!dir ? "?dir="+dir : ""
 
-        axios.post(`${API_SERVER}/api/files/upload/${username}${outDir}`, file).then(response => {
+        axios.post(`${API_SERVER}/api/files/upload/${username}${outDir}`, file).then((response: any) => {
             this._handleResponse( 'uploadFile', response.data )
         }).catch(err => {
             component.state.file.res.uploadFile.error = err
@@ -182,7 +182,7 @@ export default class FileSystem {
 
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
-        axios.post(`${API_SERVER}/api/directories/${username}/${dir != null ? "?dir="+outDir : ''}`, {}).then(response => {
+        axios.post(`${API_SERVER}/api/directories/${username}/${dir != null ? "?dir="+outDir : ''}`, {}).then((response: any) => {
             this._handleResponse( 'createDirectory', response.data )
         }).catch(err => {
            component.state.file.res.createDirectory.error = err 
@@ -191,7 +191,7 @@ export default class FileSystem {
 
     _listFiles ( componentusername: string, dir ) {
 
-        axios.get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir="+dir : ''}`).then(response => {
+        axios.get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir="+dir : ''}`).then((response: any) => {
             this._handleResponse( 'listFiles', response.data )
         }).catch(err => {
            component.state.file.res.listFiles.error = err
@@ -200,7 +200,7 @@ export default class FileSystem {
 
     _listDirectories ( componentusername: string, dir) {
 
-        axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir="+dir : ''}`).then(response => {
+        axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir="+dir : ''}`).then((response: any) => {
            
             this._handleResponse( 'listDirectories', response.data )
           
@@ -222,7 +222,7 @@ export default class FileSystem {
 
     _readText ( component, filenameusername: string, dir ) {
 
-        axios.get(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`).then(response => {
+        axios.get(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`).then((response: any) => {
             this._handleResponse( 'readText', response.data )
         }).catch(err => {
           component.state.file.res.readText.error = err  
@@ -233,7 +233,7 @@ export default class FileSystem {
 
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
-        axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+outDir : ''}`, {text: text}).then(response => {
+        axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+outDir : ''}`, {text: text}).then((response: any) => {
             this._handleResponse( 'writeText', response.data )
         }).catch(err => {
            component.state.file.res.writeText.error = err

@@ -81,12 +81,12 @@ import {
           data
        })
        return axios.post(API_SERVER+`/api/inventory/${userId}/${category}`, data)
-          .then(response => {
+          .then((response: any) => {
               dispatch({
                     type: INVENTORY_ADD_DONE,
                     created: response.data
                 })
-          }).catch(response => {
+          }).catch((response: any) => {
                 dispatch({
                     type: INVENTORY_ADD_FAIL,
                     err: response.error
@@ -104,12 +104,12 @@ import {
           id: id
        })
        return axios.post(API_SERVER+`/api/inventory/${userId}/${category}`, data)
-          .then(response => {
+          .then((response: any) => {
               dispatch({
                 type: INVENTORY_UPDATE_DONE,
                 updated: response.data
             })
-          }).catch(response => {
+          }).catch((response: any) => {
               dispatch({
                     type: INVENTORY_UPDATE_FAIL,
                     err: response.err
@@ -128,12 +128,12 @@ import {
           id: id
        })
        return axios.put(API_SERVER+`/api/inventory/${userId}/${category}/${itemId}`, {})
-          .then(response => {
+          .then((response: any) => {
               dispatch({
                 type: INVENTORY_DELETE_DONE,
                 details: response.data
             })
-          }).catch(response => {
+          }).catch((response: any) => {
               dispatch({
                     type: INVENTORY_DELETE_FAIL,
                     err: response.error
@@ -157,12 +157,12 @@ import {
             coords
          })
          return axios.put(API_SERVER+`/api/import-to-world/${world}/${coords}`, itemData)
-            .then(response => {
+            .then((response: any) => {
                 dispatch({
                   type: INVENTORY_ADD_TO_SPACE_DONE,
                   updated: response.data
               })
-            }).catch(response => {
+            }).catch((response: any) => {
                 dispatch({
                       type: INVENTORY_ADD_TO_SPACE_FAIL,
                       err: response.err

@@ -16,6 +16,13 @@ import {
 
 class EntityEditor extends Component<any, any> {
 
+  private defaultProps = {
+    contextMenuOptions: [
+      { name: "Edit" },
+      { name: "Delete"}
+    ]
+  }
+
   componentWillMount () {
     this.setState({
       activated: false,
@@ -67,7 +74,7 @@ class EntityEditor extends Component<any, any> {
   }
 
   useTemplate(name: string): string {
-    let template = ""
+    let template: any = ""
 
     switch ( name ) {
       case "Wireframe Box":
@@ -127,29 +134,25 @@ class EntityEditor extends Component<any, any> {
     return JSON.stringify( template )
   }
 
-  public handleContextAction( action: string, data: Object, e: Object ) {
-    
+  public handleContextAction( action: string, data: any, e: any ): void {
     let index:          number        = data.componentIndex,
-        components:     Array<Object> = this.state.components,
-        componentData:  Object        = components[ index ]
+        components:     any[] = this.state.components,
+        componentData:  any        = components[ index ]
 
-    if ( action == "Delete" ) {
-            
+    if ( action == "Delete" ) {   
         components.splice( index, 1 )
         this.setState({ components })
             
     } else if (action == "Edit") {
         console.info("EDITING COMPONENT~ ", componentData, index)
         this.props.editLoadedItem("entityEdit", this.props.username, "Components", index, componentData)
-
     }
-    
   }
 
-  public save() {
+  public save(): void {
     let name = this.state.name,
         newId = typeof this.props.components == 'object' ? this.props.components.length : 0,
-        data = {}
+        data: any = {}
 
     if ( name == "" )  {
       alert("Name is required.")
@@ -177,9 +180,9 @@ class EntityEditor extends Component<any, any> {
     this.toggleModal()
   }
 
-  validate( ): boolean {
-             
+  validate( ): boolean {     
     let valid = null
+
     return valid
   }
 
@@ -204,22 +207,19 @@ class EntityEditor extends Component<any, any> {
     })
   }
 
-  onNameChange(e) {
+  onNameChange(e: any) {
     this.setState({
       name: e.target.value
     })
   }
 
-  onIdChange(e) {
-
+  onIdChange(e: any) {
     this.setState({
       id: parseInt(e.target.value)
     })
-
   }
 
-  onSaveComponent( data: Object ) {
-
+  onSaveComponent(data: any) {
     let components = []
 
     components = this.state.components
@@ -306,13 +306,6 @@ class EntityEditor extends Component<any, any> {
   }
 }
 
-EntityEditor.defaultProps = {
-  contextMenuOptions: [
-    { name: "Edit" },
-    { name: "Delete"}
-  ]
-}
-
 import { connect } from 'react-redux'
 import {
   readText,
@@ -355,19 +348,19 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      editLoadedItem: ( source: string, username: string, category, index, data ) => {
-        dispatch(launchEditLoadedItem( source: string, username: string, category, index, data ))
+      editLoadedItem: ( source: string, username: string, category: string, index: number, data: any ) => {
+        dispatch(launchEditLoadedItem( source, username, category, index, data ))
       },
-      getInventory: (userId, category) => {
+      getInventory: (userId: number, category: string) => {
         dispatch(getInventory(userId, category))
       },
-      getInventoryItem: (userId, category, itemId ) => {
+      getInventoryItem: (userId: number, category: string, itemId: number) => {
         dispatch(getInventoryItem( userId, category, itemId ))
       },
-      addInventoryItem: (userId, category, data) => {
+      addInventoryItem: (userId: number, category: string, data: any) => {
           dispatch(addInventoryItem(userId, category, data))
       },
-      updateInventoryItem: (userId, category, data) => {
+      updateInventoryItem: (userId: number, category: string, data: any) => {
       dispatch(updateInventoryItem(userId, category, data))
       },
       closeEntityEditor: () => {

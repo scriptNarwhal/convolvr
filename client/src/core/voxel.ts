@@ -78,7 +78,7 @@ export default class Voxel {
         }
 
         this.fetching = true
-        axios.get(`${API_SERVER}/api/voxels/${worldName}/${coords.join("x")}`).then(response => {
+        axios.get(`${API_SERVER}/api/voxels/${worldName}/${coords.join("x")}`).then((response: any) => {
             let physicsVoxels = []
             typeof response.data.map == 'function' && response.data.map(c => {
                 v.setData(c)
@@ -93,7 +93,7 @@ export default class Voxel {
                 //     data: physicsVoxels
                 // }))
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             v.fetching = false
             console.log("Load Voxel Error", response)
         })

@@ -74,7 +74,7 @@ export function fetchUniverseSettings () {
         type: UNIVERSE_SETTINGS_FETCH
      })
      return axios.get(API_SERVER+"/api/universe-settings")
-        .then(response => {
+        .then((response: any) => {
             if ( window.location.pathname == "/" ) {
                 console.log("got universe settings.. setting current world")
               dispatch({
@@ -88,7 +88,7 @@ export function fetchUniverseSettings () {
               type: UNIVERSE_SETTINGS_FETCH_DONE,
               settings: response.data
             })
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch({
               type: UNIVERSE_SETTINGS_FETCH_FAIL,
               err: response
@@ -104,12 +104,12 @@ export function createSpace (data) {
         data
      })
      return axios.post(API_SERVER+"/api/spaces", data)
-        .then(response => {
+        .then((response: any) => {
             dispatch(createSpaceDone(response))
             //three.world.reload( data.userName, data.name, false, false ) // until this works perfectly, refresh the page
             browserHistory.push("/"+data.userName+"/"+data.name)
             window.location.href = window.location.href  /* work around */
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch(createSpaceFail(response))
         });
    }
@@ -144,9 +144,9 @@ export function updateSpace (id, data) {
         id: id
      })
      return axios.post(API_SERVER+"/api/spaces/"+id, data)
-        .then(response => {
+        .then((response: any) => {
             dispatch(updateSpaceDone(response))
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch(updateSpaceFail(response))
         });
    }
@@ -191,9 +191,9 @@ export function deleteSpace (id, data) {
         id: id
      })
      return axios.post(API_SERVER+"/api/spaces/delete/"+id)
-        .then(response => {
+        .then((response: any) => {
             dispatch(deleteSpaceDone(response))
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch(deleteSpaceFail(response))
         });
    }

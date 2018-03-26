@@ -18,12 +18,17 @@ import {
 
 class ComponentEditor extends Component<any, any> {
 
-    constructor () {
-        super()
+    private defaultProps = {
+        title: "New Component",
+        source: "inventory",
+        entityEditMode: true,
+        contextMenuOptions: [
+            { name: "Edit" },
+            { name: "Delete"}
+        ]
     }
 
     componentWillMount () {
-
         this.setState({
             activated: false,
             text: "",
@@ -41,7 +46,6 @@ class ComponentEditor extends Component<any, any> {
     }
 
     componentWillReceiveProps(nextProps: Object) {
-
         const editSourceMatches = nextProps.editSource == nextProps.source
 
         if (editSourceMatches) {
@@ -106,8 +110,7 @@ class ComponentEditor extends Component<any, any> {
     }
 
     useTemplate( name: string ) {
-
-        let template = ""
+        let template: any = ""
 
         switch ( name ) {
             case "Wireframe Box":
@@ -151,7 +154,7 @@ class ComponentEditor extends Component<any, any> {
         return JSON.stringify(template)
     }
 
-    handlePropertyAction ( action: string, data: Object, e: any ) {
+    handlePropertyAction ( action: string, data: any, e: any ) {
     
         let index = data.propertyIndex,
             properties = this.state.properties,
@@ -222,8 +225,9 @@ class ComponentEditor extends Component<any, any> {
         this.toggleModal()
     }
 
-    validate() {
+    validate(): boolean {
         let valid = null
+
         return valid
     }
 
@@ -293,10 +297,9 @@ class ComponentEditor extends Component<any, any> {
         })
     }
 
-    render() {
+    render(): any {
 
         if ( this.state.activated ) {
-
             return (
             <div style={ styles.lightbox }>
                 <div style={ styles.modal() } >
@@ -378,26 +381,12 @@ class ComponentEditor extends Component<any, any> {
                 </div>
                 </div>
             )
-
         } else {
-
             return (
                 <FileButton title={this.props.title} onClick={ () => { this.toggleModal(); this.setState({editMode: false})} } />
             )
-
-        }
-        
+        } 
     }
-}
-
-ComponentEditor.defaultProps = {
-    title: "New Component",
-    source: "inventory",
-    entityEditMode: true,
-    contextMenuOptions: [
-        { name: "Edit" },
-        { name: "Delete"}
-    ]
 }
 
 import { connect } from 'react-redux'
@@ -433,16 +422,16 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      editLoadedItem: ( source: string, username: string, category, index, data ) => {
-        dispatch(launchEditLoadedItem( source: string, username: string, category, index, data ))
+      editLoadedItem: ( source: string, username: string, category: string, index: number, data: any ) => {
+        dispatch(launchEditLoadedItem( source, username, category, index, data ))
       },
-      getInventory: (userId, category) => {
+      getInventory: (userId: number, category: string) => {
         dispatch(getInventory(userId, category))
       },
-      addInventoryItem: (userId, category, data) => {
+      addInventoryItem: (userId: number, category: string, data: any) => {
         dispatch(addInventoryItem(userId, category, data))
       },
-      updateInventoryItem: (userId, category, data) => {
+      updateInventoryItem: (userId: number, category: string, data: any) => {
         dispatch(updateInventoryItem(userId, category, data))
       },
       closeComponentEditor: () => {

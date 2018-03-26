@@ -5,12 +5,6 @@ import { rgba, rgb } from '../../../util'
 
 class NewFolder extends Component<any, any> {
 
-  constructor () {
-
-    super()
-    
-  }
-
   componentWillMount () {
 
     this.setState({
@@ -28,7 +22,6 @@ class NewFolder extends Component<any, any> {
       this.props.listDirectories( nextProps.username, nextProps.cwd.join("/") )
 
     }
-
   }
 
   componentWillUpdate ( nextProps: any, nextState: any ) {
@@ -37,24 +30,19 @@ class NewFolder extends Component<any, any> {
   }
 
   toggleModal () {
-
     this.setState({
       name: "",
       activated: !this.state.activated
     })
-
   }
 
-  handleTextChange (e) {
-
+  handleTextChange(e: any) {
     this.setState({
       name: e.target.value
     })
-
   }
 
   make () {
-
     let cwd = this.props.cwd.join("/"),
         dirName = this.state.name.indexOf(' ') > -1 ? this.state.name.split(' ').join('-') : this.state.name,
         name = this.state.name
@@ -73,7 +61,6 @@ class NewFolder extends Component<any, any> {
   }
 
   render() {
-
     let cwd = !! this.props.cwd ? this.props.cwd.join("/") : "",
         resultingPath = `${this.props.username}${cwd}/${this.state.name.split(' ').join('-')}`
 
@@ -108,9 +95,6 @@ class NewFolder extends Component<any, any> {
   }
 }
 
-NewFolder.defaultProps = {
-
-}
 
 import { connect } from 'react-redux'
 import {

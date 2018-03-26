@@ -42,7 +42,7 @@ class Shell extends Component<any, any> {
         thumbs = [],
         images = /(\.jpg|\.jpeg|\.png|\.webp)$/i,
         username = this.props.username,
-        fileNames = [],
+        fileNames: string[] = [],
         shell = this
 
     if (username == 'Human') {
@@ -85,7 +85,7 @@ class Shell extends Component<any, any> {
     this.setDropBackground(false)
   }
 
-  setDropBackground ( mode ) {
+  setDropBackground (mode: boolean) {
     this.setState({
       droppingFile: mode
     })
@@ -166,7 +166,7 @@ export default connect(
 )(Shell)
 
 let styles = {
-  shell: ( hasMenu, menuOpen, menuOnly, noBackground, droppingFile ) => {
+  shell: (hasMenu: boolean, menuOpen: boolean, menuOnly: boolean, noBackground: boolean, droppingFile: boolean ) => {
     let mobile = isMobile()
     return {
       margin: 'auto',

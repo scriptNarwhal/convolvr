@@ -33,21 +33,16 @@ class SharingSettings extends Component<any, any> {
   }
 
   componentWillReceiveProps ( nextProps: any) {
-
     if ( this.props.sharesFetching && nextProps.sharesFetching == false && !!nextProps.readText ) {
-
       this.setState({
         text: nextProps.readText
       })
-
     }
 
     if ( this.props.activated == false && nextProps.activated == true ) {
-      
       this.setState({
         activated: true
       })
-      
     }
 
   }
@@ -56,7 +51,7 @@ class SharingSettings extends Component<any, any> {
 
   }
 
-  handleTextChange (e) {
+  handleTextChange(e: any) {
 
     this.setState({
       name: e.target.value
@@ -65,7 +60,6 @@ class SharingSettings extends Component<any, any> {
   }
 
   remove ( index ) {
-
     let data = {
       id: this.props.shares[ index ].id
     }
@@ -86,23 +80,18 @@ class SharingSettings extends Component<any, any> {
   }
 
   save ( id ) {
-
     let name = this.state.name,
         data = {}
 
     if ( id ) {
-
         this.props.shares.map( s => { 
           if ( s.id == id ) 
             data = s
         })
         data = Object.assign({}, data, this.state.data )
         this.props.updateShare(  this.props.username, data )
-     
     } else {
-
         this.props.createShare(  this.props.username, this.state.data )
-
     }
 
   }
@@ -116,11 +105,9 @@ class SharingSettings extends Component<any, any> {
   }
 
   render() {
-
     if ( this.state.activated ) {
-
       return (
-       <div style={ styles.lightbox }>
+       <div style={ styles.lightbox as any }>
           <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Shared Folders</span> </span>
@@ -155,15 +142,11 @@ class SharingSettings extends Component<any, any> {
           </div>
         </div>
       )
-
     } else {
-
       return (
         <span></span>
       )
-
     }
-    
   }
 }
 

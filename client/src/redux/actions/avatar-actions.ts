@@ -22,9 +22,9 @@ export function fetchAvatars (id) {
             id: id
         })
      return axios.get(API_SERVER+"/api/avatars"+id)
-        .then(response => {
+        .then((response: any) => {
             dispatch(receiveAvatars(response))
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch(failedFetchAvatars(response))
         });
    }

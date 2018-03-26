@@ -7,21 +7,16 @@ import { rgba, rgb } from '../../../util'
 class MoveFile extends Component<any, any> {
 
   componentWillMount () {
-
     this.setState({
       activated: false,
       resultingPath: "",
       name: ""
     })
-
   }
 
   componentWillReceiveProps ( nextProps: any ) {
-
     if ( this.props.creatingDir && nextProps.creatingDir == false ) {
-
       this.props.listDirectories( nextProps.username, nextProps.cwd.join("/") )
-
     }
 
     if ( this.props.activated == false && nextProps.activated == true )
@@ -30,9 +25,6 @@ class MoveFile extends Component<any, any> {
         activated: true,
         name: nextProps.filename
       })
-
-    
-
   }
 
   componentWillUpdate ( nextProps: any, nextState: any ) {
@@ -41,44 +33,33 @@ class MoveFile extends Component<any, any> {
   }
 
   toggleModal () {
-
     this.props.closeRenameFile()
     this.setState({
       name: "",
       activated: !this.state.activated
     })
-
   }
 
-  handleTextChange (e) {
-
+  handleTextChange(e: any) {
     this.setState({
       name: e.target.value
     })
-
   }
 
   rename () {
-
     let cwd = this.props.cwd.join("/"),
         dirName = this.state.name.indexOf(' ') > -1 ? this.state.name.split(' ').join('-') : this.state.name,
         name = this.state.name
 
     if ( name != "" ) {
-
       this.props.moveFile( this.props.username, cwd, this.props.filename, name, cwd )
       this.toggleModal()
-
     } else {
-
       alert("Name is required.")
-
     }
-
   }
 
   render() {
-
     let cwd = !! this.props.cwd ? this.props.cwd.join("/") : "",
         resultingPath = `${this.props.username}${cwd}/${this.state.name.split(' ').join('-')}`
 
@@ -113,9 +94,6 @@ class MoveFile extends Component<any, any> {
   }
 }
 
-MoveFile.defaultProps = {
-
-}
 
 import { connect } from 'react-redux'
 import {

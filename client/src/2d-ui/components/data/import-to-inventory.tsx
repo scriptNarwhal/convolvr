@@ -13,11 +13,6 @@ import {
 
 class ImportToInventory extends Component<any, any> {
 
-  constructor () {
-
-    super()
-
-  }
 
   componentWillMount () {
 
@@ -29,8 +24,6 @@ class ImportToInventory extends Component<any, any> {
       data: {},
       id: 0
     })
-
-    
   }
 
   componentWillReceiveProps ( nextProps: any) {
@@ -50,23 +43,19 @@ class ImportToInventory extends Component<any, any> {
 
   }
 
-  handleTextChange (e) {
-
+  handleTextChange(e: any) {
     this.setState({
       name: e.target.value
     })
-
   }
 
-  handleTextArea (e) {
-
+  handleTextArea(e: any) {
     this.setState({
       text: e.target.value
     })
-
   }
 
-  save ( id ) {
+  save ( ) {
 
     let name = this.state.name,
         data = {}
@@ -87,8 +76,8 @@ class ImportToInventory extends Component<any, any> {
     if ( this.state.activated ) {
 
       return (
-       <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
+       <div style={ styles.lightbox as any }>
+          <div style={ styles.modal as any } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>
                 Import To Inventory As Entity
@@ -119,10 +108,6 @@ class ImportToInventory extends Component<any, any> {
   }
 }
 
-ImportToInventory.defaultProps = {
-
-}
-
 import { connect } from 'react-redux'
 import {
     toggleMenu
@@ -134,6 +119,7 @@ import {
 import {
     closeImportToInventory
 } from '../../../redux/actions/util-actions'
+import { isMobile } from "../../../config";
   
 export default connect(
   (state: any, ownProps: any) => {

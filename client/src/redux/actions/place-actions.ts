@@ -99,12 +99,12 @@ export function createPlace( data ) {
         data
      })
      return axios.post(API_SERVER+"/api/places", data)
-        .then(response => {
+        .then((response: any) => {
             dispatch(createPlaceDone(response))
             browserHistory.push("/"+data.userName+"/"+data.name)
             window.location.href = window.location.href  /* work around */
             // this should.. work differently
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch(createPlaceFail(response))
         });
    }
@@ -143,9 +143,9 @@ export function updatePlace (id, data) {
         id: id
      })
      return axios.post(API_SERVER+"/api/places/"+id, data)
-        .then(response => {
+        .then((response: any) => {
             dispatch(updatePlaceDone(response))
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch(updatePlaceFail(response))
         });
    }
@@ -176,9 +176,9 @@ export function deletePlace (id, data) {
         id: id
      })
      return axios.post(API_SERVER+"/api/places/delete/"+id)
-        .then(response => {
+        .then((response: any) => {
             dispatch(deletePlaceDone(response))
-        }).catch(response => {
+        }).catch((response: any) => {
             dispatch(deletePlaceFail(response))
         });
    }
