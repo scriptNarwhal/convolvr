@@ -128,77 +128,70 @@ export function uploadFiles ( filesusername: string, dir: string) {
     
     return (dispatch: any, getState: any) => {
 
-    let state = getState()
+        let state = getState()
 
-     dispatch({
-         type: FILE_UPLOAD_FETCH,
-         username,
-         dir
-     }) 
+        dispatch({
+            type: FILE_UPLOAD_FETCH,
+            username,
+            dir
+        }) 
 
-     if ( !!state.spaces.current ) {
+        if ( !!state.spaces.current ) {
+        if ( (dir == "/" || dir == "") && state.spaces.worldUser == state.users.loggedIn.name )
+            dir = "/spaces/"+state.spaces.current
 
-      if ( (dir == "/" || dir == "") && state.spaces.worldUser == state.users.loggedIn.name )
+        }
 
-        dir = "/spaces/"+state.spaces.current
+        if ( window.location.href.indexOf("/chat") > -1 )
+        
+            dir = "chat-uploads"
+        
+            
+        let xhr = new XMLHttpRequest(),
+            formData = new FormData(),
+            ins = files.length,
+            thumbs = [],
+            images = /(\.jpg|\.jpeg|\.png|\.webp|\.gif|\.svg)$/i,
+            fileNames = [],
+            shell = this
 
+        if ( username == 'Human' )
 
-    }
+        username = 'public'
 
-    if ( window.location.href.indexOf("/chat") > -1 )
-    
-        dir = "chat-uploads"
-    
-		
-	let xhr = new XMLHttpRequest(),
-		formData = new FormData(),
-		ins = files.length,
-        thumbs = [],
-        images = /(\.jpg|\.jpeg|\.png|\.webp|\.gif|\.svg)$/i,
-        fileNames = [],
-        shell = this
+        for (let x = 0; x < ins; x++) {
 
-    if ( username == 'Human' )
+            if ( images.test(files[x].name) )
 
-      username = 'public'
+                thumbs.push(files[x])
+        
+            formData.append("files", files[x])
+            fileNames.push(files[x].name.replace(/\s/g, '-'))
 
-	for (let x = 0; x < ins; x++) {
+        }
+        
+        xhr.onload = () => {
 
-        if ( images.test(files[x].name) )
+            if ( xhr.status == 200 ) {
 
-            thumbs.push(files[x])
-	
-        formData.append("files", files[x])
-        fileNames.push(files[x].name.replace(/\s/g, '-'))
+                console.log("finished uploading")
 
-	}
-	
-    xhr.onload = () => {
+            }
 
-		if ( xhr.status == 200 ) {
+        }
 
-		    console.log("finished uploading")
-
-		}
-
-	}
-
-	xhr.open("POST", "/api/files/upload-multiple/"+username+"?dir="+dir, true);
+        xhr.open("POST", "/api/files/upload-multiple/"+username+"?dir="+dir, true);
 
 		//xhr.setRequestHeader("x-access-token", localStorage.getItem("token"));
-		if ("upload" in new XMLHttpRequest) { // add upload progress event
-			
+        if ("upload" in new XMLHttpRequest) { // add upload progress event
+                
             xhr.upload.onprogress = function ( event ) {
 
-				if (event.lengthComputable) {
-
-					let complete = (event.loaded / event.total * 100 | 0);
-					console.log(complete)
-
+                if (event.lengthComputable) {
+                    let complete = (event.loaded / event.total * 100 | 0);
+                    console.log(complete)
                     if (complete == 100) {
-
                         if (window.location.href.indexOf("/chat") > -1) {
-
                             setTimeout(()=>{
                                 dispatch(
                                     sendMessage(
@@ -207,24 +200,17 @@ export function uploadFiles ( filesusername: string, dir: string) {
                                         fileNames
                                     )
                                 ) 
-                        
                             }, 500)
-
                         }
-        
                     }
 				}
             }
-
 	    }
-        
         xhr.send(formData)
-
    }
-
 }
 
-export function createFile (username, dir: string) {
+export function createFile (username: string, dir: string) {
     return (dispatch: any) => {
      dispatch({
          type: FILE_CREATE_FETCH,
@@ -246,7 +232,7 @@ export function createFile (username, dir: string) {
    }
 }
 
-export function createDirectory ( username, dir ) {
+export function createDirectory ( username: string, dir: string ) {
     return (dispatch: any) => {
      dispatch({
          type: DIRECTORY_MAKE_FETCH,
@@ -268,7 +254,7 @@ export function createDirectory ( username, dir ) {
    }
 }
 
-export function moveFile ( username, dir, file, targetDir, targetFile ) {
+export function moveFile ( username: string, dir: string, file: string, targetDir: string, targetFile: string ) {
     return (dispatch: any) => {
     dispatch({
         type: FILE_MOVE_FETCH,
@@ -290,7 +276,7 @@ export function moveFile ( username, dir, file, targetDir, targetFile ) {
    }
 }
 
-export function deleteFile ( username: string, dir, filename ) {
+export function deleteFile ( username: string, dir: string, filename: string ) {
     return (dispatch: any) => {
      
     dispatch({
@@ -337,16 +323,16 @@ export function readText ( filename: string, username: string, dir ) {
    }
 }
 
-export function writeText (text, filename: string, username: string, dir: string) {
+export function writeText (text: string, filename: string, username: string, dir: string) {
     return (dispatch: any) => {
      
     dispatch({
          type: TEXT_WRITE_FETCH,
-         username: string,
+         username,
          dir
      })
 
-     let data = { text, username: string, name: filename: string, path: dir }
+     let data = { text, username, name: filename, path: dir }
 
      return axios.post(`${API_SERVER}/api/documents/${username}/${filename}`, data )
         .then((response: any) => {
@@ -363,7 +349,7 @@ export function writeText (text, filename: string, username: string, dir: string
    }
 }
 
-export function getShare (id, username) {
+export function getShare (id: number, username: string) {
     return (dispatch: any) => {
      dispatch({
          type: SHARE_GET_FETCH,
@@ -384,7 +370,7 @@ export function getShare (id, username) {
    }
 }
 
-export function listShares (username) {
+export function listShares (username: string) {
     return (dispatch: any) => {
      dispatch({
          type: SHARES_LIST_FETCH,
@@ -474,7 +460,7 @@ export function deleteShare (username: string, data: any) {
    }
 }
 
-export function changeDirectory (path) {
+export function changeDirectory (path: any) {
   return {
     type: CHANGE_DIRECTORY,
     path

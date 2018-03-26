@@ -45,7 +45,6 @@ class TextEditor extends Component<any, any> {
     if ( this.props.filename != nextProps.filename || this.props.dir != nextProps.dir ) {
 
       if ( nextProps.dir != "" && nextProps.filename != "" ) {
-
         this.props.readText( nextProps.filename, nextProps.fileUser, nextProps.dir )
         this.setState({
           name: nextProps.filename
@@ -55,19 +54,14 @@ class TextEditor extends Component<any, any> {
     }
 
     if ( this.props.activated == false && nextProps.activated == true ) {
-
       this.setState({
         activated: true
       })
-
     }
 
     if ( this.props.writeTextFetching && nextProps.writeTextFetching == false ) {
-      
       this.props.listFiles( nextProps.username, nextProps.cwd.join("/") )
-      
     }
-
   }
 
   componentWillUpdate ( nextProps: any, nextState: any ) {
@@ -75,19 +69,15 @@ class TextEditor extends Component<any, any> {
   }
 
   handleTextChange(e: any) {
-
     this.setState({
       name: e.target.value
     })
-
   }
 
   handleTextArea(e: any) {
-
     this.setState({
       text: e.target.value
     })
-
   }
 
   save () {
@@ -96,32 +86,23 @@ class TextEditor extends Component<any, any> {
         dir = this.props.activated ? this.props.dir : this.props.cwd.join("/") 
 
     if ( name != "" ) {
-
       this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir )
       this.toggleModal()
-
     } else {
-
       alert("Name is required.")
-
     }
-
   }
 
   toggleModal () {
-
     this.props.closeTextEdit()
     this.setState({
       activated: !this.state.activated
     })
-   
-
   }
 
   render() {
 
     if ( this.state.activated ) {
-
       return (
        <div style={ styles.lightbox as any}>
           <div style={ styles.modal() } >
@@ -142,13 +123,10 @@ class TextEditor extends Component<any, any> {
       )
 
     } else {
-
       return (
         <FileButton title="New File" onClick={ () => { this.toggleModal() } } />
       )
-
     }
-    
   }
 }
 
