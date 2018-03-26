@@ -9,10 +9,10 @@ import {
     DELETE_AVATAR
 } from '../constants/action-types';
 
-module.exports = function avatars (state = {
+module.exports = function avatars (state: any = {
     types: [],
     userAvatar: "default"
-}, action) {
+}, action: any) {
   switch (action.type) {
     case ADD_AVATAR:
     return Object.assign({}, avatar, {
@@ -40,7 +40,7 @@ module.exports = function avatars (state = {
             instances: action.instances
         })
     case UPDATE_AVATAR:
-    return state.map((avatar, index) => {
+    return state.map((avatar: any, index: number) => {
       if (avatar.id === action.id) {
         return Object.assign({}, avatar, {
             name: action.data.url,

@@ -3,7 +3,7 @@ import Convolvr from '../../world/world'
 import Component from '../../core/component'
 const THREE = (window as any).THREE;
 
-type FBXState = {
+type FBXstate: any = {
     url: string
     fbx: any
 }

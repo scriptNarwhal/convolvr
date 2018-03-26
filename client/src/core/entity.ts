@@ -390,8 +390,8 @@ export default class Entity {
   }
 
   updateComponentAtPath( component, path, pathIndex = 0, components = false, resetState = false ) {
-    let oldState = {},
-        sanitizedState = {}
+    let oldstate: any = {},
+        sanitizedstate: any = {}
 
     console.log( "update component at path", component, path, pathIndex, components )
 
@@ -411,7 +411,7 @@ export default class Entity {
         }
 
         if ( oldState.tool || oldState.toolUI )
-          sanitizedState = { tool: {}, toolUI: {} }
+          sanitizedstate: any = { tool: {}, toolUI: {} }
 
         component.state = Object.assign({}, oldState, component.state || {}, sanitizedState )
       }

@@ -11,7 +11,7 @@ export default class WeaponSystem {
         init(component: Component) {
             
             let attr = component.attrs.weapon,
-                state = {}
+                state: any = {}
     
             //TODO: implement
     

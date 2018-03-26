@@ -24,7 +24,7 @@ class Inventory extends Component<any, any> {
     })
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: any) {
     let userNameChanged = nextProps.username != this.props.username,
         inventoryUpdated = this.props.inventoryUpdating && nextProps.inventoryUpdating == false
 

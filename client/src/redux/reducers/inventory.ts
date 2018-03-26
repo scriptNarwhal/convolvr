@@ -21,7 +21,7 @@ import {
 } from '../constants/action-types'
 import { detectSpaceDetailsFromURL } from '../../config'
 
-module.exports = function places (state = {
+module.exports = function places (state: any = {
     items: {
         entities: [],
         components: [],
@@ -42,7 +42,7 @@ module.exports = function places (state = {
     addedToSpace: false,
     error: false,
     fetching: false
-}, action) {
+}, action: any) {
   switch (action.type) {
     case INVENTORY_ADD_FETCH:
       return Object.assign({}, state, {
@@ -60,7 +60,7 @@ module.exports = function places (state = {
       })
     case INVENTORY_FETCH:
     case INVENTORY_FETCH_FAIL:
-      let newState = {},
+      let newstate: any = {},
           isFetching = action.type == INVENTORY_FETCH
 
       switch ( action.category ) {

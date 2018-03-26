@@ -11,7 +11,7 @@ export default class SkillSystem {
         init(component: Component) {
             
             let attr = component.attrs.skill,
-                state = {}
+                state: any = {}
     
             //TODO: implement
     

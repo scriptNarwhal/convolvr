@@ -10,7 +10,7 @@ export default class RPGRaceSystem {
     init(component: Component) {
             
         let attr = component.attrs.rpgRace,
-            state = {}
+            state: any = {}
     
         //TODO: implement
     

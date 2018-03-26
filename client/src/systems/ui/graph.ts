@@ -11,7 +11,7 @@ export default class GraphSystem {
     init(component: Component) {
         
         let attr = component.attrs.graph,
-            state = {}
+            state: any = {}
 
         if ( attr.type === "line" ) { // display data as simple line graph
             // use display adapter system

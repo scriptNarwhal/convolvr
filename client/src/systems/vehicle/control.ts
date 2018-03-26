@@ -2,7 +2,6 @@ import Convolvr from "../../world/world";
 import Component from "../../core/component";
 
 export default class ControlSystem {
-
     private world: Convolvr
 
     constructor ( world: Convolvr ) {

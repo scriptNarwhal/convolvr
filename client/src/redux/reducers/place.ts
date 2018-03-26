@@ -21,7 +21,7 @@ import {
 } from '../constants/action-types'
 import { detectSpaceDetailsFromURL } from '../../config'
 
-module.exports = function places (state = {
+module.exports = function places (state: any = {
     current: detectSpaceDetailsFromURL()[1],
     placeUser: detectSpaceDetailsFromURL()[0],
     all: [],
@@ -31,7 +31,7 @@ module.exports = function places (state = {
     created: false,
     error: false,
     fetching: false
-}, action) {
+}, action: any) {
   switch (action.type) {
     case PLACE_SET_CURRENT:
       return Object.assign({}, state, {

@@ -9,14 +9,14 @@ import {
     APP_SET_WINDOW_FOCUS
 } from '../constants/action-types';
 
-module.exports = function app (state = {
+module.exports = function app (state: any = {
     menuOpen: false,
     vrMode: false,
     chatOpen: false,
     loginOpen: false,
     fullscreen: false,
     windowFocus: true
-}, action) {
+}, action: any) {
   switch (action.type) {
     case APP_TOGGLE_MENU:
         let force = action.force,

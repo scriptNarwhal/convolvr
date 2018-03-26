@@ -33,7 +33,7 @@ class ImportToInventory extends Component<any, any> {
     
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: any) {
 
     if ( this.props.activated == false && nextProps.activated == true ) {
       

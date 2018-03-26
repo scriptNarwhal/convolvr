@@ -6,12 +6,6 @@ import { rgba, rgb } from '../../../util'
 
 class MoveFile extends Component<any, any> {
 
-  constructor () {
-
-    super()
-    
-  }
-
   componentWillMount () {
 
     this.setState({
@@ -22,7 +16,7 @@ class MoveFile extends Component<any, any> {
 
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: any ) {
 
     if ( this.props.creatingDir && nextProps.creatingDir == false ) {
 

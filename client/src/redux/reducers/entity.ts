@@ -8,14 +8,14 @@ import {
     ENTITY_IMPORT_TO_SPACE_FAIL
 } from '../constants/action-types';
 
-module.exports = function entities (state = {
+module.exports = function entities (state: any = {
     all: [],
     userEntities: [],
     current: null,
     fetching: false,
     error: false,
     addedToSpace: false
-}, action) {
+}, action: any) {
   switch (action.type) {
     case ENTITY_ADD:
         return Object.assign({}, state, {

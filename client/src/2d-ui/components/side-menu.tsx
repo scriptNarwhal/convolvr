@@ -37,9 +37,9 @@ class SideMenu extends Component<any, any> {
 
   render() {
     return (
-        <div style={styles.sideMenu()} >
-          <div style={styles.inner()} onMouseOver={ e=> this.onMouseOver(e) } onMouseOut={ e=> this.onMouseOut(e) }>
-            <Tab clickHandler={ e => { this.toggleMenu(); this.navigate(e, "");  } }
+        <div style={styles.sideMenu() as any} >
+          <div style={styles.inner() as any} onMouseOver={ e=> this.onMouseOver(e) } onMouseOut={ e=> this.onMouseOut(e) }>
+            <Tab clickHandler={ (e: any) => { this.toggleMenu(); this.navigate(e, "");  } }
                  image="/data/images/convolvr2.png"
                  buttonStyle={{ backgroundSize: "100%" }}
                  showTitle={ false }
@@ -133,7 +133,7 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      toggleMenu: (force) => {
+      toggleMenu: (force?: boolean) => {
         dispatch(toggleMenu(force))
       },
       toggleVRMode: () => {

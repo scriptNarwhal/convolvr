@@ -29,7 +29,7 @@ class InventoryExport extends Component<any, any> {
     
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: any) {
 
     let data = {}
 

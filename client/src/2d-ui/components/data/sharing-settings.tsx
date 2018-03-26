@@ -17,12 +17,6 @@ class SharingSettings extends Component<any, any> {
 
   private defaultProps: any = {}
 
-  constructor () {
-
-    super()
-
-  }
-
   componentWillMount () {
 
     this.setState({
@@ -38,7 +32,7 @@ class SharingSettings extends Component<any, any> {
     
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: any) {
 
     if ( this.props.sharesFetching && nextProps.sharesFetching == false && !!nextProps.readText ) {
 

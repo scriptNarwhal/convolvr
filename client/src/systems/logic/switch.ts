@@ -9,7 +9,7 @@ export default class SwitchSystem {
     init(component: Component) {
         
         let attr = component.attrs.switch,
-            state = {}
+            state: any = {}
 
         //TODO: implement
 

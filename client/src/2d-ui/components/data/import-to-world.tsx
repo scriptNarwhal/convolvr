@@ -34,7 +34,7 @@ class ImportToSpace extends Component<any, any> {
     
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: any) {
 
     let data = {}
     
@@ -106,7 +106,7 @@ class ImportToSpace extends Component<any, any> {
     if ( this.state.activated ) {
 
       return (
-       <div style={ styles.lightbox }>
+       <div style={ styles.lightbox as any}>
           <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> 
@@ -149,10 +149,6 @@ class ImportToSpace extends Component<any, any> {
     }
     
   }
-}
-
-ImportToSpace.defaultProps = {
-
 }
 
 import { connect } from 'react-redux'

@@ -16,7 +16,7 @@ class Data extends Component<any, any> {
 
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: any) {
 
     let userNameChanged = nextProps.username != this.props.username,
         finishedFetchingDirs = this.props.dirsFetching == true && nextProps.dirsFetching == false,

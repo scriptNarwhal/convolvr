@@ -9,7 +9,7 @@ export default class LoopSystem {
     init(component: Component) {
 
         let attr = component.attrs.loop,
-            state = {}
+            state: any = {}
 
         return state
 

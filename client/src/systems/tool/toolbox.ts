@@ -14,11 +14,21 @@ import SocialTool from '../../assets/entities/tools/core/social-tool'
 import DebugTool from '../../assets/entities/tools/core/debug-tool.js'
 import CustomTool from '../../assets/entities/tools/core/custom-tool'
 import { GRID_SIZE } from '../../config'
+import Convolvr from '../../world/world';
+import User from '../../world/user';
 
 
 export default class ToolboxSystem {
     
-    constructor ( world ) {
+  private world: Convolvr
+  private user: User
+  private hands: any[]
+  private currentTools: number[]
+  private tools: any[]
+  private toolboxComponents: Component[]
+  private fadeTimeout: number
+
+    constructor (world: Convolvr) {
         this.world = world
         this.user = world.user
         this.hands = []
@@ -80,7 +90,7 @@ export default class ToolboxSystem {
         this.user.hud.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
       }
   
-      nextTool( direction ) {
+      nextTool(direction: number ) {
         let hand = 0;
 
         this.showMenu()
@@ -95,7 +105,7 @@ export default class ToolboxSystem {
         }
       }
   
-      useTool ( index, hand, noHUDUpdate ) {
+      useTool(index: number, hand: number, noHUDUpdate: boolean ) {
         this.tools[ this.currentTools[ hand ] ].unequip()
         this.currentTools[ hand ] = index
         this.tools[ index ].equip( hand )
@@ -106,15 +116,15 @@ export default class ToolboxSystem {
         }
       }
   
-      getTools () {
+      getTools() {
         return this.tools
       }
   
-      getCurrentTool ( hand ) {
+      getCurrentTool(hand: number) {
         return this.tools[ this.currentTools[ hand ] ]
       }
   
-      addTool ( data ) {
+      addTool(data: any) {
         this.tools.push( new CustomTool( data ) )
         // use tool attr of.. component / entity that is tool that is being added
         // implement this
@@ -124,7 +134,7 @@ export default class ToolboxSystem {
         return this.user.hands
       }
 
-      getCursor ( hand ) {
+      getCursor (hand: number) {
         let input    = this.world.userInput,
             user     = this.world.user,
             cursor   = null, 
@@ -140,7 +150,7 @@ export default class ToolboxSystem {
         return [ cursor, handMesh ]
       }
   
-      initActionTelemetry ( camera, useCursor, hand ) {
+      initActionTelemetry (camera: any, useCursor: boolean, hand: number) {
         let position        = camera.position.toArray(),
             voxel           = [ position[0], 0, position[2] ].map((c, i) => Math.floor( c/GRID_SIZE[ i ] )),
             quaternion      = camera.quaternion.toArray(),
@@ -296,9 +306,7 @@ export default class ToolboxSystem {
           console.log("send grip tool action")
           this.sendToolAction(
             true, 
-            {
-              name: value < 0 ? "Replace Entity" : "Grab Entity"
-            }, 
+            value < 0 ? "Replace Entity" : "Grab Entity", 
             handIndex, 
             avatar.position.toArray(), 
             avatar.quaternion.toArray(), 
@@ -313,7 +321,7 @@ export default class ToolboxSystem {
         }
       }
   
-      setHandOrientation(hand, position, orientation) {
+      setHandOrientation(hand: number, position: number[], orientation: number[]) {
         let hands = this.getUserHands(),
             userHand = hands[ hand ]
 
@@ -326,16 +334,16 @@ export default class ToolboxSystem {
   
       sendToolAction(
         primary: boolean, 
-        tool: number, 
+        tool: string, 
         hand: number, 
         position: number[], 
         quaternion: number[], 
-        entity, 
+        entity: any, 
         entityId = -1, 
-        components = [], 
-        componentPath = [], 
-        coords, 
-        oldCoords
+        components: any[] = [], 
+        componentPath: number[] = [], 
+        coords: number[], 
+        oldCoords?: number[]
       ) {
         let camera = this.world.camera,
             cPos = camera.position,
@@ -351,7 +359,7 @@ export default class ToolboxSystem {
           entity.voxel = coords 
         }
   
-        let actionData = {
+        let actionData: any = {
             tool: toolName,
             space: this.world.name,
             user: this.user.name,

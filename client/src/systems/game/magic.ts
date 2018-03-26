@@ -10,7 +10,7 @@ export default class MagicSystem {
     
         init(component: Component) {
             let attr = component.attrs.magic,
-                state = {}
+                state: any = {}
     
             //TODO: implement
     

@@ -9,7 +9,7 @@ export default class MethodSystem {
     init(component: Component) {
         
         let attr = component.attrs.methods,
-            state = {}
+            state: any = {}
 
         //TODO: implement
 

@@ -130,7 +130,7 @@ export default class TextSystem {
             label = config.label,
             fontSize = (config.fontSize > 0 ? config.fontSize : (label ? 58 : 39)),
             lineHeight = fontSize*1.35,
-            textRenderState = {
+            textRenderstate: any = {
                 codeBlock: false,
                 canvasSize,
                 fontSize: fontSize,

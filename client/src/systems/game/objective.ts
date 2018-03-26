@@ -11,7 +11,7 @@ export default class ObjectiveSystem {
         init(component: Component) {
             
             let attr = component.attrs.objective,
-                state = {}
+                state: any = {}
     
             //TODO: implement
     

@@ -44,7 +44,7 @@ import {
     CHANGE_DIRECTORY
 } from '../constants/action-types';
 
-module.exports = function files (state = {
+module.exports = function files (state: any = {
   list: {
     data: false,
     fetching: false,
@@ -116,7 +116,7 @@ module.exports = function files (state = {
     fetching: false,
     error: false
   }
-}, action) {
+}, action: any) {
   switch (action.type) {
     case FILE_DELETE_FETCH:
       return Object.assign({}, state, {

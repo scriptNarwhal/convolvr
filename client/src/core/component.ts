@@ -1,7 +1,28 @@
+import Entity from "./entity";
+
+const THREE = (window as any).THREE;
+
 export default class Component {
 
-  constructor (data: any, entity: Entity, systems: any, config = false, parent = false ) {
+  public entity:             any
+  public mesh:               any
+  public data:               any
+  public attrs:              any
+  public state:              any
+  public components:         any[]
+  public compsByFaceIndex:   any[]
+  public allComponents:      Component[]
+  public combinedComponents: Component[]
+  public lastFace:           number;
+  public detached:           boolean;
+  public merged:             boolean;
+  public isComponent:        boolean;
+  private _compPos:          any;
+  public parent:             Component | any
+  public index:              number
+  public path:               number[]
 
+  constructor (data: any, entity: Entity, systems: any, config: any = false, parent = false ) {
       let quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : [ 0, 0, 0 ],
           path = config && config.path ? config.path : [],
@@ -21,7 +42,7 @@ export default class Component {
       this.entity = entity
       this.data = data
       this.attrs = data.attrs || {}
-      this.state = {}
+      this.state: any = {}
       this.components = data.components || []
       this.compsByFaceIndex = []
       this.allComponents = []
@@ -70,13 +91,13 @@ export default class Component {
       this.components.length > 0 && this.initSubComponents( this.components, entity, systems, config )
   }
 
-  initProperties() {
+  initProperties(): void {
 
   }
 
-  initSubComponents(components: any[], entity: Entity, systems: any, config: { [key:string]: any } ) {
+  initSubComponents(components: any[], entity: Entity, systems: any, config: { [key:string]: any } ): void {
     let base = new THREE.Geometry(),
-        three = window.three,
+        three = (window as any).three,
         mobile = !!config ? config.mobile : three.world.mobile,
         ncomps = components.length,
         nonMerged = [],
@@ -149,7 +170,7 @@ export default class Component {
     this.mesh.userData.compsByFaceIndex = this.compsByFaceIndex     
   }
 
-  getClosestComponent( position, recursive = false ) {
+  getClosestComponent( position: number[], recursive = false ): Component {
     let compPos = this._compPos, 
         entMesh = this.mesh,
         parentMesh = this.parent ? this.parent.mesh : false,
@@ -198,16 +219,14 @@ export default class Component {
     return closest
   }
 
-  getComponentByFace(face: number) {
-    let component = false
+  getComponentByFace(face: number): Component | boolean {
+    let component: any = false
 
     this.compsByFaceIndex.forEach(( comp ) => {
       if ( face >= comp.from && face <= comp.to )
         component = comp.component
 
     })
-
     return component
   }
-
 }

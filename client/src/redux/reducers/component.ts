@@ -7,12 +7,12 @@ import {
     DELETE_COMPONENT
 } from '../constants/action-types';
 
-module.exports = function components (state = {
+module.exports = function components (state: any = {
     all: [],
     userComponents: [],
     current: null,
     fetching: false
-}, action) {
+}, action: any) {
   switch (action.type) {
     case COMPONENT_ADD:
       return [

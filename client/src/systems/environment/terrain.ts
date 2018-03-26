@@ -45,7 +45,7 @@ export default class TerrainSystem {
 
     init (component) {
         let attr = component.attrs.tab,
-            state = {}
+            state: any = {}
             
         return state
     }

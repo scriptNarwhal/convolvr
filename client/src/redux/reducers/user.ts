@@ -15,14 +15,14 @@ import {
     LOGIN_FAIL
 } from '../constants/action-types';
 
-module.exports = function users (state = {
+module.exports = function users (state: any = {
     loggedIn: false,
     loginError: false,
     all: [],
     fetching: false,
     updateFetching: false,
     updateError: false
-}, action) {
+}, action: any) {
   switch (action.type) {
     case USER_ADD:
 

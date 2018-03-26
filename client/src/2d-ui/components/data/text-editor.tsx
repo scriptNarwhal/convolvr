@@ -36,7 +36,7 @@ class TextEditor extends Component<any, any> {
     
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: any) {
 
     if ( this.props.readTextFetching && nextProps.readTextFetching == false && !!nextProps.textData ) {
 

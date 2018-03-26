@@ -9,6 +9,16 @@ import ImportToInventory from './data/import-to-inventory'
 import { isMobile } from '../../config'
 
 export default class LocationBar extends Component<any, any> {
+  private defaultProps: any = {
+    path: [],
+    username: "",
+    label: "",
+    style: {},
+    showFileOptions: false,
+    onOptionClick: (e, option) => {
+  
+    }
+  }
   componentWillMount () {
     this.setState({
 
@@ -37,7 +47,7 @@ export default class LocationBar extends Component<any, any> {
               })
             }
             { this.props.showFileOptions ? (
-              <div style={styles.fileOptions( isMobile() )}>
+              <div style={styles.fileOptions( isMobile() ) as any}>
                 
                 <TextEditor username={ this.props.username } path={ this.props.path } />
                 <NewFolder username={ this.props.username } path={ this.props.path } />
@@ -56,18 +66,6 @@ export default class LocationBar extends Component<any, any> {
     )
   }
 }
-//<UploadFiles username={ this.props.username } path={ this.props.path } />
-LocationBar.defaultProps = {
-  path: [],
-  username: "",
-  label: "",
-  style: {},
-  showFileOptions: false,
-  onOptionClick: (e, option) => {
-
-  }
-}
-
 
 let styles = {
   bar: () => {

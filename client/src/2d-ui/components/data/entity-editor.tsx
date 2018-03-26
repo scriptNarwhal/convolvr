@@ -16,12 +16,7 @@ import {
 
 class EntityEditor extends Component<any, any> {
 
-  constructor () {
-    super()
-  }
-
   componentWillMount () {
-
     this.setState({
       activated: false,
       position: [0,0,0],
@@ -33,7 +28,6 @@ class EntityEditor extends Component<any, any> {
     })
 
     if ( !this.props.itemId )
-    
       this.useTemplate("Wireframe Box")
     
   }
@@ -72,8 +66,7 @@ class EntityEditor extends Component<any, any> {
 
   }
 
-  useTemplate( name ) {
-
+  useTemplate(name: string): string {
     let template = ""
 
     switch ( name ) {
@@ -130,14 +123,11 @@ class EntityEditor extends Component<any, any> {
         }
       break
     }
-
     this.setState( template )
-
     return JSON.stringify( template )
-
   }
 
-  handleContextAction ( action: string, data: Object, e: Object ) {
+  public handleContextAction( action: string, data: Object, e: Object ) {
     
     let index:          number        = data.componentIndex,
         components:     Array<Object> = this.state.components,
@@ -156,8 +146,7 @@ class EntityEditor extends Component<any, any> {
     
   }
 
-  save () {
-
+  public save() {
     let name = this.state.name,
         newId = typeof this.props.components == 'object' ? this.props.components.length : 0,
         data = {}
@@ -188,7 +177,7 @@ class EntityEditor extends Component<any, any> {
     this.toggleModal()
   }
 
-  validate ( ) {
+  validate( ): boolean {
              
     let valid = null
     return valid

@@ -10,7 +10,7 @@ export default class FactionSystem {
     init(component: Component) {
             
         let attr = component.attrs.faction,
-            state = {}
+            state: any = {}
     
         //TODO: implement
     

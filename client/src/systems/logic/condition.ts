@@ -9,7 +9,7 @@ export default class ConditionSystem {
     init ( component: Component ) {
 
         let attr = component.attrs.condition,
-            state = {}
+            state: any = {}
 
         return state
         

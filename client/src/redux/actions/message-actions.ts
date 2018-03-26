@@ -9,7 +9,7 @@ import axios from 'axios';
 import { API_SERVER } from '../../config.js'
 import { send } from '../../network/socket.js'
 
-export function sendMessage (message, from, files, avatar, space) {
+export function sendMessage (message: string, from: string, files: any[], avatar: string, space: string) {
     send('chat message', {
         message,
         from,
@@ -28,7 +28,7 @@ export function sendMessage (message, from, files, avatar, space) {
     }
 }
 
-export function getMessage (message, from, files, avatar, space) {
+export function getMessage (message: string, from: string, files: any[], avatar: string, space: string) {
     return {
         type: MESSAGE_GET,
         message,
@@ -39,7 +39,7 @@ export function getMessage (message, from, files, avatar, space) {
     }
 }
 
-export function getChatHistory (spaceName, skip) {
+export function getChatHistory (spaceName: string, skip: number) {
     return (dispatch: any) => {
 
      dispatch({
@@ -48,19 +48,19 @@ export function getChatHistory (spaceName, skip) {
      })
 
      return axios.get(`${API_SERVER}/api/chat-history/${spaceName}/${skip}`)
-        .then(response => {
+        .then((response: any) => {
 
-            let chatUI = three.world.chat,
-                newMessages = [],
+            let chatUI = (window as any).three.world.chat,
+                newMessages: any[] = [],
                 lastSender = '',
-                populateVRChat = data => {
+                populateVRChat = (data: any) => {
 
-                    let chatUIText = null;
+                    let chatUIText: any = null;
 
                     if ( chatUI ) {
 
                         chatUIText = chatUI.componentsByAttr.text[0].state.text
-                        data.map( msg =>{
+                        data.map( (msg: any) =>{
 
                             let newMessage = JSON.parse(msg.message),
                                 sender = ''
@@ -95,7 +95,7 @@ export function getChatHistory (spaceName, skip) {
                 data: newMessages
             })
 
-        }).catch( response => {
+        }).catch( (response: any) => {
             dispatch({
                 type: CHAT_HISTORY_FAIL,
                 error: response.error

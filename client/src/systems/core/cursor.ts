@@ -168,7 +168,7 @@ export default class CursorSystem {
             if ( !!!cursorState.cursor.entity && !!! noRayCast )
                 window.navigator.vibrate && window.navigator.vibrate(25)
 
-            newCursorState = {
+            newCursorstate: any = {
                 distance: obj.distance || 2,
                 mesh: obj.object,
                 point: obj.point,
@@ -177,7 +177,7 @@ export default class CursorSystem {
                 componentPath: component ? component.path : []
             }
         } else {
-            newCursorState = {
+            newCursorstate: any = {
                 distance: 2,
                 mesh: null,
                 point: null,

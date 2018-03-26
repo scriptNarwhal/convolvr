@@ -10,7 +10,7 @@ export default class StatSystem {
         init(component: Component) {
             
             let attr = component.attrs.stat,
-                state = {}
+                state: any = {}
     
             //TODO: implement
     

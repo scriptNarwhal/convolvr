@@ -1,7 +1,7 @@
 import Convolvr from "../../world/world";
 import Component from "../../core/component";
 
-type SignalState = {
+type Signalstate: any = {
     oscillator: any,
     value: number,
     type: string,
@@ -37,7 +37,7 @@ export default class SignalSystem { // system for passing signals between entiti
 
         let attr = component.attrs.signal,
             osc = null,
-            state: SignalState = {
+            state: Signalstate: any = {
                 oscillator: null,
                 value: attr.value ? attr.value : 0,
                 type: attr.type || "number",

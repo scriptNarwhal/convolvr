@@ -42,7 +42,7 @@ class UploadFiles extends Component<any, any> {
     
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: any) {
 
   }
 

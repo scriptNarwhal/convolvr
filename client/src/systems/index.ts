@@ -153,7 +153,6 @@ export default class Systems {
 	public webrtc: 		  	 WebRTCSystem;
 	public weapon: 		  	 WeaponSystem;
 
-
 	/**
 			*  Initializes all systems before components can be registered
 	**/
@@ -238,21 +237,22 @@ export default class Systems {
 		}
 		this.systems = systems
 		this.liveSystems = []
+		let systemIndex = (this as any);
 
 		for (let s: number = 0; s < 2; s ++) {
 			Object.keys( systems ).map( system => {
 				if (s == 1) {
-					this[ system ].allSystemsLoaded && this[ system ].allSystemsLoaded()
+					systemIndex[ system ].allSystemsLoaded && systemIndex[ system ].allSystemsLoaded()
 				} else {
-					this[ system ] = systems[ system ]
-					if ( this[ system ].live ) {
-						this.liveSystems.push( this[ system ] )
+					systemIndex[ system ] = (systems as any)[ system ]
+					if ( systemIndex[ system ].live ) {
+						systemIndex.liveSystems.push( systemIndex[ system ] )
 					}
 				}
 			})
 		}
 
-		this.deffered = {
+		this.deferred = {
 			hand: true, light: true, particles: true, text: true, audio: true, video: true, metaFactory: true, miniature: true,
 			tool: true, toolUI: true, layout: true, datgui: true, obj: true, fbx: true
 		}
@@ -269,7 +269,8 @@ export default class Systems {
             attrs = component.attrs,
             state = component.state,
             deferredSystems: any[] = [],
-            mesh = null
+			mesh = null,
+			
 
         Object.keys( attrs ).map( attr => {
 
@@ -288,7 +289,7 @@ export default class Systems {
 				// 	}
 				// }
 
-				if ( !!this.deffered[ attr ] ) { /* add other systems here */
+				if ( !!this.deferred[ attr ] ) { /* add other systems here */
 					deferredSystems.push( attr )
                 } else {
                     state[ attr ] = this[ attr ].init( component )

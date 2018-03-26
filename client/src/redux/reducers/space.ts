@@ -24,7 +24,7 @@ import {
 } from '../constants/action-types'
 import { detectSpaceDetailsFromURL } from '../../config'
 
-function spaces (state = {
+function spaces (state: any = {
     current: detectSpaceDetailsFromURL()[1],
     worldUser: detectSpaceDetailsFromURL()[0],
     all: [],
@@ -40,7 +40,7 @@ function spaces (state = {
       defaultSpace: "Overworld",
       welcomeMessage: "Welcome to Convolvr!"
     }
-}, action) {
+}, action: any) {
   switch (action.type) {
     case SPACE_SET_CURRENT:
       return Object.assign({}, state, {

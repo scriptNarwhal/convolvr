@@ -175,7 +175,7 @@ class App extends Component<any, any> {
     }
   }
 
-  componentWillReceiveProps ( nextProps ) {
+  componentWillReceiveProps ( nextProps: any) {
 
     let newSpace = ["world", "Convolvr"],
         userNameChanged = nextProps.username != this.props.username,

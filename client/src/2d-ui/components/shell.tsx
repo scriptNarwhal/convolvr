@@ -12,6 +12,8 @@ class Shell extends Component<any, any> {
     innerStyle: {}
   }
 
+  public className: string
+
   componentWillMount () {
     this.setState({
       droppingFile: false
@@ -96,7 +98,7 @@ class Shell extends Component<any, any> {
         menuOpen = this.props.menuOpen,
         noBackground = this.props.noBackground
     return (
-        <div style={styles.shell(hasMenu, menuOpen, menuOnly, noBackground, this.state.droppingFile)}
+        <div style={styles.shell(hasMenu, menuOpen, menuOnly, noBackground, this.state.droppingFile) as any}
              onDrop={e=> {
                         e.stopPropagation()
                         e.preventDefault()
@@ -117,7 +119,7 @@ class Shell extends Component<any, any> {
               <SideMenu />
             ) : ''}
             {menuOnly ? '' : (
-              <div style={Object.assign({}, styles.inner(), this.props.innerStyle)}>
+              <div style={Object.assign({}, styles.inner(), this.props.innerStyle) as any}>
                   {this.props.children}
               </div>
             )}

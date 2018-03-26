@@ -11,7 +11,7 @@ export default class QuestSystem {
         init(component: Component) {
             
             let attr = component.attrs.quest,
-                state = {}
+                state: any = {}
     
             //TODO: implement
     

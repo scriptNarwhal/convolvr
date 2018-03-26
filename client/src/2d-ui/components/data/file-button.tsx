@@ -7,6 +7,12 @@ let styles = {
 
 export default class FileButton extends Component<any, any> {
 
+  private defaultProps = {
+    title: "Button",
+    style: {}
+  }
+
+
   render() {
     
     return (
@@ -20,10 +26,4 @@ export default class FileButton extends Component<any, any> {
         </div>
     )
   }
-
-}
-
-FileButton.defaultProps = {
-    title: "Button",
-    style: {}
 }
