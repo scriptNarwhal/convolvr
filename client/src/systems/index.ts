@@ -5,7 +5,6 @@ import AssetSystem from './core/assets'
 import BrowserSystem from './ui/browser'
 import CameraSystem from './video/camera'
 import ConditionSystem from './logic/condition'
-import ContainerSystem from './ui/container'
 import ConveyorSystem from './vehicle/conveyor'
 import ChatSystem from './chat/chat'
 import CursorSystem from './core/cursor'
@@ -77,9 +76,86 @@ export default class Systems {
 
 	world: Convolvr
 	liveSystems: Array<any>
+	systems: any
+	deferred: any
+
+	public ability: 		 AbilitySystem;
+	public activate: 		 ActivateSystem;
+	public audio: 			 AudioSystem;
+	public assets: 		  	 AssetSystem;
+	public browser: 		 BrowserSystem;
+	public camera: 		  	 CameraSystem;
+	public chat: 			 ChatSystem;
+	public condition: 		 ConditionSystem;
+	public control: 		 ControlSystem;
+	public conveyor: 		 ConveyorSystem;
+	public cursor: 		  	 CursorSystem;
+	public datgui: 		  	 DatGUIVRPluginSystem;
+	public destructable: 	 DestructableSystem;
+	public display: 		 DisplaySystem;
+	public virtualDevice: 	 VirtualDeviceSystem;
+	public door: 			 DoorSystem;
+	public drawing: 		 DrawingSystem;
+	public emote: 			 EmoteSystem;
+	public faction: 		 FactionSystem;
+	public factory: 		 FactorySystem;
+	public fbx: 			 FBXPluginSystem;
+	public file: 			 FileSystem;
+	public floor: 			 FloorSystem;
+	public geometry: 		 GeometrySystem;
+	public grab: 			 GrabSystem;
+	public graph: 			 GraphSystem;
+	public hand: 			 HandSystem;
+	public head: 			 HeadSystem;
+	public hover: 			 HoverSystem;
+	public input: 			 InputSystem;
+	public loop: 			 LoopSystem;
+	public light: 			 LightSystem;
+	public layout: 		  	 LayoutSystem;
+	public lookAway: 		 LookAwaySystem;
+	public magic: 			 MagicSystem;
+	public material: 		 MaterialSystem;
+	public media: 			 MediaSystem;
+	public metaFactory: 	 MetaFactorySystem;
+	public miniature: 		 MiniatureSystem;
+	public npc: 			 NPCSystem;
+	public obj: 			 ObjPluginSystem;
+	public oimo: 			 OimoPluginSystem;
+	public objective: 		 ObjectiveSystem;
+	public particles: 		 ParticleSystem;
+	public propulsion: 	  	 PropulsionSystem;
+	public portal: 		  	 PortalSystem;
+	public projectile: 	  	 ProjectileSystem;
+	public quest: 			 QuestSystem;
+	public rest: 			 RESTSystem;
+	public rpgRace: 		 RPGRaceSystem;
+	public signal: 		  	 SignalSystem;
+	public skill: 			 SkillSystem;
+	public skybox: 		  	 SkyboxSystem;
+	public screenshot: 	  	 ScreenshotSystem;
+	public socialMedia: 	 SocialMediaSystem;
+	public speech: 		  	 SpeechSystem;
+	public state: 			 StateSystem;
+	public stat: 			 StatSystem;
+	public staticCollisions: StaticCollisions;
+	public switch: 		  	 SwitchSystem;
+	public terrain: 		 TerrainSystem;
+	public text: 			 TextSystem;
+	public time: 			 TimeSystem;
+	public toolUI: 		  	 ToolUISystem;
+	public tool: 			 ToolSystem;
+	public toolbox: 		 ToolboxSystem;
+	public user: 			 UserSystem;
+	public vehicle: 		 VehicleSystem;
+	public video: 			 VideoSystem;
+	public virtualMachine:   VirtualMachineSystem;
+	public wall: 			 WallSystem;
+	public webrtc: 		  	 WebRTCSystem;
+	public weapon: 		  	 WeaponSystem;
+
 
 	/**
-	*  Initializes all systems before components can be registered
+			*  Initializes all systems before components can be registered
 	**/
     constructor ( world: Convolvr )  {
 
@@ -93,7 +169,6 @@ export default class Systems {
 			browser: 		  new BrowserSystem( world ),
 			camera: 		  new CameraSystem( world ),
 			chat: 			  new ChatSystem( world ),
-			container: 		  new ContainerSystem( world ),
 			condition: 		  new ConditionSystem( world ),
 			control: 		  new ControlSystem( world ),
 			conveyor: 		  new ConveyorSystem( world ),
@@ -141,7 +216,6 @@ export default class Systems {
 			skill: 			  new SkillSystem( world ),
 			skybox:           new SkyboxSystem( world ),
 			screenshot: 	  new ScreenshotSystem( world ),
-			skybox:           new SkyboxSystem( world ),
 			socialMedia: 	  new SocialMediaSystem( world ),
 			speech: 		  new SpeechSystem( world ),
 			state:            new StateSystem( world ),
@@ -194,7 +268,7 @@ export default class Systems {
 			stateByProp = entity.stateByProp,
             attrs = component.attrs,
             state = component.state,
-            deferredSystems = [],
+            deferredSystems: any[] = [],
             mesh = null
 
         Object.keys( attrs ).map( attr => {

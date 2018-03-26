@@ -14,8 +14,8 @@ import {
 } from '../../styles'
 class AttributeEditor extends Component<any, any> {
 
-  constructor () {
-    super()
+  constructor (...args: any[]) {
+    super(args)
   }
 
   componentWillMount () {
@@ -29,23 +29,16 @@ class AttributeEditor extends Component<any, any> {
     })
 
     if ( !this.props.editLoadedItemActivated )
-    
       this.useTemplate("geometry.0")
-
   }
 
-  componentWillReceiveProps ( nextProps: any ) {
-
+  componentWillReceiveProps(nextProps: any) {
     if ( nextProps.source == nextProps.editSource ) {
-
       if (this.props.itemId != nextProps.itemId || this.props.category != nextProps.category) {
-
         this.loadPropertyData(this.props, nextProps)
-
       }
 
       if (this.props.activated == false && nextProps.activated == true)
-
         this.setState({
           activated: true
         })
@@ -64,13 +57,10 @@ class AttributeEditor extends Component<any, any> {
         })
 
       }
-
     }
-    
   }
 
   loadPropertyData ( props: any, nextProps: any ) {
-
     console.info("attributeEditor edit load property data: editSource, editData, ", nextProps.editSource, nextProps.loadedItemData)
     if ( nextProps.editSource == "componentEdit" ) { // load from component in inventory
       if ( nextProps.loadedItemData ) {
@@ -99,7 +89,6 @@ class AttributeEditor extends Component<any, any> {
 
       }
     }
-
   }
 
   componentWillUpdate ( nextProps: any, nextState: any ) {
@@ -107,7 +96,6 @@ class AttributeEditor extends Component<any, any> {
   }
 
   useTemplate( name: string ) {
-
     let template: any = "",
         propName: string = ""
 
@@ -115,11 +103,9 @@ class AttributeEditor extends Component<any, any> {
 
     propName = name.split(".")[0]
     this.setText( propName, template.data, true )
-
   }
 
   setText ( propName: string, data: Object, addName: boolean ) {
-
     this.setState({
       name: propName,
       text: JSON.stringify( addName ? { [propName]: data } : data, null, "\t"),
@@ -129,27 +115,21 @@ class AttributeEditor extends Component<any, any> {
         refreshing: false
       })
     })
-
   }
 
-  handleTextChange (e) {
-
+  handleTextChange(e: any) {
     this.setState({
       name: e.target.value
     })
-
   }
 
-  handleTextArea (e) {
-
+  handleTextArea(e: any) {
     this.setState({
       text: e.target.value
     })
-
   }
 
     save () {
-
         let name: string = this.state.name,
             newId: number = typeof this.props.properties == 'object' ? this.props.properties.length : 0
 
@@ -171,19 +151,14 @@ class AttributeEditor extends Component<any, any> {
         } else if (this.state.activated) {
 
           if ( this.state.id != -1) 
-
             newId = this.state.id
 
           this.props.addInventoryItem( this.props.username, "Properties", { id: newId, name, data: JSON.parse(this.state.text) } )
-
         }
-
         this.toggleModal()
-
     }
 
     validate() {
-
         let valid: boolean = null,
             output: Object = {}
 
@@ -195,11 +170,9 @@ class AttributeEditor extends Component<any, any> {
         }
 
         return valid
-
     }
 
   toggleModal () {
-
     if ( this.state.activated) {
       this.props.closeAttributeEditor()
     }
@@ -210,11 +183,10 @@ class AttributeEditor extends Component<any, any> {
   }
 
   render() {
-
     if ( this.state.activated ) {
 
       return (
-       <div style={ styles.lightbox }>
+       <div style={ styles.lightbox as any }>
           <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Attribute Edit</span> 
@@ -258,11 +230,6 @@ class AttributeEditor extends Component<any, any> {
   }
 }
 
-AttributeEditor.defaultProps = {
-  title: "New Property",
-  source: "inventory",
-  convolvrProps: getPropsList( BuiltinProps() )
-}
 
 import { connect } from 'react-redux'
 import {

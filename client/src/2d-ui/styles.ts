@@ -1,6 +1,6 @@
 import { rgba } from '../util'
 
-export let modalStyle = (mobile) => {
+export let modalStyle = (mobile: boolean) => {
     return {
         width: '100%',
         minWidth: '320px',
@@ -34,7 +34,7 @@ export let lightboxStyle = {
     // background: rgba(0, 0, 0, 0.1)
 }
 
-export let textAreaStyle = (mobile) => {
+export let textAreaStyle = (mobile: boolean) => {
     return {
         margin: '0px',
         width: '95%',
@@ -49,9 +49,9 @@ export let textAreaStyle = (mobile) => {
     }
 }
 
-let compactWidth = (compact) => compact ? '52px' : '60px'
+let compactWidth = (compact: boolean) => compact ? '52px' : '60px'
 
-export let tabStyle = (compact) => { 
+export let tabStyle = (compact: boolean) => { 
     let width = compactWidth(compact),
         top = compact ? "-3px" : 0,
         marginLeft = compact ? '-6px' : 0
@@ -68,7 +68,7 @@ export let tabStyle = (compact) => {
     }
 }
 
-export let tabTitleStyle = ( mobile ) => {
+export let tabTitleStyle = ( mobile: boolean ) => {
     return {
       transition: "all 0.3s linear",
       height: 0,
@@ -79,7 +79,7 @@ export let tabTitleStyle = ( mobile ) => {
     }
   }
 
-  export let buttonStyle = (compact) => { 
+  export let buttonStyle = (compact: boolean) => { 
     let width = compactWidth(compact)
     return {
         display: 'inline-block',
@@ -88,7 +88,7 @@ export let tabTitleStyle = ( mobile ) => {
     }
   }
 
-  export let buttonInnerStyle = (compact) => {
+  export let buttonInnerStyle = (compact: boolean) => {
     let width = compactWidth(compact)
     return {
         transition: 'all 0.2s linear',

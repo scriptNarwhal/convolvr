@@ -1,10 +1,22 @@
 import {send} from '../../network/socket'
+import Convolvr from '../../world/world';
+import Component from '../../core/component';
 //WebRTC boilerplate stuff based off of https://github.com/dimircea/WebRTC
 
 export default class WebRTCSystem {
 
-    constructor (world) {
+    private world: Convolvr
+    private localVideo: any
+    private remoteVideo: any
+    private peerConn: any;
+    private localVideoElem: any;
+    private remoteVideoElem: any;
+    private localVideoStream: any;
+    private peerConnCfg: any;
+    private videoCallButton: any;
+    private endCallButton: any;
 
+    constructor (world: Convolvr) {
         this.world = world
 
         let localVideoStream = null,
@@ -13,14 +25,16 @@ export default class WebRTCSystem {
                     {'url': 'stun:stun.services.mozilla.com'}, 
                     {'url': 'stun:stun.l.google.com:19302'}
                 ]
-            }
+            },
+            win = (window as any),
+            nav = (navigator as any);
 
-        navigator.getUserMedia = navigator.getUserMedia || navigator.mozGetUserMedia || navigator.webkitGetUserMedia
-        window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection
-        window.RTCIceCandidate = window.RTCIceCandidate || window.mozRTCIceCandidate || window.webkitRTCIceCandidate
-        window.RTCSessionDescription = window.RTCSessionDescription || window.mozRTCSessionDescription || window.webkitRTCSessionDescription
-        window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition 
-        || window.msSpeechRecognition || window.oSpeechRecognition
+        nav.getUserMedia = nav.getUserMedia || nav.mozGetUserMedia || nav.webkitGetUserMedia
+        win.RTCPeerConnection = win.RTCPeerConnection || win.mozRTCPeerConnection || win.webkitRTCPeerConnection
+        win.RTCIceCandidate = win.RTCIceCandidate || win.mozRTCIceCandidate || win.webkitRTCIceCandidate
+        win.RTCSessionDescription = win.RTCSessionDescription || win.mozRTCSessionDescription || win.webkitRTCSessionDescription
+        win.SpeechRecognition = win.SpeechRecognition || win.webkitSpeechRecognition || win.mozSpeechRecognition 
+        || win.msSpeechRecognition || win.oSpeechRecognition
 
         this.peerConnCfg = peerConnCfg
         this.localVideoElem = document.getElementById('localVideo')
@@ -29,43 +43,33 @@ export default class WebRTCSystem {
         this.endCallButton = document.getElementById("endCallButton")
             
         if ( navigator.getUserMedia && this.videoCallButton ) { // probably don't need a button to use this.. debug later
-
             this.videoCallButton.addEventListener("click", this.initiateCall)
             this.endCallButton.addEventListener("click", evt => {
                 send("rtc", {"closeConnection": true })
             })
-
         } else {
             console.log("Sorry, your browser does not support WebRTC!")
         }
-        
     }
 
-    prepareCall( component, params ) {
-
+    prepareCall(component: Component, params: any) {
         this.peerConn = new RTCPeerConnection( this.peerConnCfg )
         this.peerConn.onicecandidate = this.onIceCandidateHandler
         this.peerConn.onaddstream = this.onAddStreamHandler
-
     }
     
-    onIceCandidateHandler (evt) {
-
+    onIceCandidateHandler(evt: any) {
         if (!evt || !evt.candidate) return
         send("rtc", {"candidate": evt.candidate })
-
     }
 
-    onAddStreamHandler (evt) {
-
+    onAddStreamHandler(evt: any) {
         this.videoCallButton.setAttribute("disabled", true)
         this.endCallButton.removeAttribute("disabled")
         this.remoteVideo.src = URL.createObjectURL(evt.stream)
-
     }
 
-    createAndSendOffer( component, params ) {
-
+    createAndSendOffer(component: Component, params: any) {
         let connection = this.peerConn
         connection.createOffer(
             offer => {
@@ -79,58 +83,56 @@ export default class WebRTCSystem {
 
     }
 
-    createAndSendAnswer ( component, params ) {
-
+    createAndSendAnswer(component: Component, params: any) {
         let connection = this.peerConn
         connection.createAnswer(
-            answer => {
+            (answer: any) => {
                 let ans = new RTCSessionDescription(answer)
                 connection.setLocalDescription(ans, ()=>{ send("rtc", {"sdp": ans })}, error => {console.log(error)} )
             },
-            error => { 
+            (error: any) => { 
                 console.log(error)
             }
         )
 
     }
 
-    initiateCall ( component, params ) {
-
+    initiateCall(component: Component, params: any) {
         let connection = this.peerConn,
             localStream = this.localVideoStream,
             localVideo = this.localVideoElem,
             webrtc = this
 
-        prepareCall()
+        this.prepareCall(component, params);
         // get the local stream, show it in the local video element and send it
         navigator.getUserMedia({"audio": true, "video": true }, stream => {
             localStream = stream
-            localVideo.src = URL.createObjectURL(localVideoStream)
-            connection.addStream(localVideoStream)
-            webrtc.createAndSendOffer()
+            localVideo.src = URL.createObjectURL(localStream)
+            connection.addStream(localStream)
+            webrtc.createAndSendOffer(component, params)
         }, error => { console.log(error)})
 
     }
 
-    answerCall ( component, params ) {
+    answerCall(component: Component, params: any) {
 
         let connection = this.peerConn,
             localStream = this.localVideoStream,
             localVideo = this.localVideoElem,
-            webrtc = this
+            webrtc: WebRTCSystem = this
 
-        this.prepareCall()
+        this.prepareCall(component, params)
         // get the local stream, show it in the local video element and send it
         navigator.getUserMedia({"audio": true, "video": true }, stream => {
             localStream = stream
             localVideo.src = URL.createObjectURL(stream)
             connection.addStream(stream)
-            webrtc.createAndSendAnswer()
+            webrtc.createAndSendAnswer(component, params)
         }, error => { console.log(error) })
 
     }
 
-    endCall ( component, params ) {
+    endCall(component: Component, params: any) {
 
         this.peerConn.close()
         this.localVideoStream.getTracks().forEach(track => {
@@ -143,36 +145,28 @@ export default class WebRTCSystem {
 
     }
 
-    getVideo ( video ) {
-
+    getVideo(video: string) {
         if ( video == "local" ) {
-
             return this.localVideo
-
         } else {
-
             return this.remoteVideo
-
         }
-
     }
 
     init(component: Component) { 
-        
         return {
-            initiateCall: (params) => {
+            initiateCall: (params: any) => {
                 this.initiateCall( component, params)
             },
-            getVideo: ( video ) => {
-                this.getVideo( component, params )
+            getVideo: ( video: string ) => {
+                this.getVideo( video )
             },
-            answerCall: (params) => {
+            answerCall: (params: any) => {
                 this.answerCall( component, params )
             },
-            endCall: (params) => {
+            endCall: (params: any) => {
                 this.endCall( component, params )
-            },
-
+            }
         }
     }
 }

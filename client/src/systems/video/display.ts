@@ -1,18 +1,15 @@
-//@flow
 import Convolvr from '../../world/world'
 import Component from '../../core/component'
 
 export default class DisplaySystem {
 
-    world: Convolvr
+    private world: Convolvr
 
     constructor ( world: Convolvr ) {
-
         this.world = world
-
     }
 
-    init ( component: Component ) { 
+    init (component: Component ) { 
         
         return {
 

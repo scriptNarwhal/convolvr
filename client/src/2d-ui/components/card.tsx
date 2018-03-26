@@ -4,100 +4,7 @@ import ContextMenu from './context-menu'
 
 export default class Card extends Component<any, any> {
 
-  componentWillMount () {
-    this.setState({
-    })
-  }
-
-  handleContextAction ( name, e ) {
-
-    let data = {}
-
-    // display a modal window here if needed.
-    if ( name == "Rename" || name == "Edit" || name == "Delete" ) {
-      data.filename = this.props.title
-      data.username = this.props.username
-    }
-    
-    if ( name == "Delete" ) {
-      if ( confirm(`Delete ${data.filename}?`) ) {
-        this.props.onContextMenu(name, data, e)
-      } else {
-        this.props.onContextMenu("", {}, {})
-      }
-    } else {
-      this.props.onContextMenu(name, data, e)
-    }
-  }
-
-  handleCardClick ( evt, title ) {
-
-    let elemClass = evt.target && evt.target.getAttribute("class")
-
-    if ( elemClass == "ui-card-outer" || elemClass == "ui-card-title" ) // make sure the outer div was clicked
-
-      this.props.clickHandler( evt, this.props.title )
-
-  }
-
-  onMouseEnter( evt ) {
-    this.setState({
-      isHovering: true
-    })
-  }
-
-  onMouseLeave( evt ) {
-    this.setState({
-      isHovering: false
-    })
-  }
-
-  render() {
-
-    return (
-        <div style={styles.card(this.props.image, this.props.color, this.props.compact, this.props.quarterSize)}
-             onClick={ evt => this.handleCardClick( evt ) }
-             onMouseMove={ evt => this.onMouseEnter( evt ) }
-             onMouseLeave={ evt => this.onMouseLeave( evt ) }
-             title={this.props.title }
-             className={"ui-card-outer"}
-        >
-            {(this.props.showTitle ? (
-                <span style={styles.title(this.props.image, this.props.quarterSize)}
-                      className="ui-card-title"
-                >
-                { this.props.title }
-                </span>
-            ) : "")}
-            {
-              this.props.onContextMenu ? (
-                <ContextMenu options={this.props.contextMenuOptions} 
-                             onAction={ (name, e) => this.handleContextAction( name, e ) }
-                             compact={ this.props.compact }
-                             title={ this.props.title }
-                             isHovering={ this.state.isHovering }
-                             isImage={ this.props.image != "" }
-                             username={ this.props.username }
-                             category={ this.props.category }
-                             dir={ this.props.dir }
-                />
-              ) : ''
-            }
-            {
-              this.props.description != "" ? (
-                <div style={styles.description(this.props.compact)}>
-                  { this.props.description }
-                </div>
-              ) : ""
-            }
-        </div>
-    )
-
-  }
-
-}
-
-Card.defaultProps = {
+  private defaultProps = {
     title: "Menu Item",
     description: "",
     username: "",
@@ -119,8 +26,96 @@ Card.defaultProps = {
     ]
 }
 
+  componentWillMount () {
+    this.setState({
+    })
+  }
+
+  handleContextAction (name: string, e: any) {
+    let data: any = {}
+
+    // display a modal window here if needed.
+    if ( name == "Rename" || name == "Edit" || name == "Delete" ) {
+      data.filename = this.props.title
+      data.username = this.props.username
+    }
+    
+    if ( name == "Delete" ) {
+      if ( confirm(`Delete ${data.filename}?`) ) {
+        this.props.onContextMenu(name, data, e)
+      } else {
+        this.props.onContextMenu("", {}, {})
+      }
+    } else {
+      this.props.onContextMenu(name, data, e)
+    }
+  }
+
+  handleCardClick (evt: any) {
+    let elemClass = evt.target && evt.target.getAttribute("class")
+
+    if ( elemClass == "ui-card-outer" || elemClass == "ui-card-title" ) // make sure the outer div was clicked
+      this.props.clickHandler( evt, this.props.title )
+
+  }
+
+  onMouseEnter(evt: any) {
+    this.setState({
+      isHovering: true
+    })
+  }
+
+  onMouseLeave(evt: any) {
+    this.setState({
+      isHovering: false
+    })
+  }
+
+  render() {
+
+    return (
+        <div style={styles.card(this.props.image, this.props.color, this.props.compact, this.props.quarterSize)}
+             onClick={ evt => this.handleCardClick(evt) }
+             onMouseMove={ evt => this.onMouseEnter(evt) }
+             onMouseLeave={ evt => this.onMouseLeave(evt) }
+             title={this.props.title }
+             className={"ui-card-outer"}
+        >
+            {(this.props.showTitle ? (
+                <span style={styles.title(this.props.image, this.props.quarterSize)}
+                      className="ui-card-title"
+                >
+                { this.props.title }
+                </span>
+            ) : "")}
+            {
+              this.props.onContextMenu ? (
+                <ContextMenu options={this.props.contextMenuOptions} 
+                             onAction={ (name: string, e: any) => this.handleContextAction( name, e ) }
+                             compact={ this.props.compact }
+                             title={ this.props.title }
+                             isHovering={ this.state.isHovering }
+                             isImage={ this.props.image != "" }
+                             username={ this.props.username }
+                             category={ this.props.category }
+                             dir={ this.props.dir }
+                />
+              ) : ''
+            }
+            {
+              this.props.description != "" ? (
+                <div style={styles.description(this.props.compact)}>
+                  { this.props.description }
+                </div>
+              ) : ""
+            }
+        </div>
+    )
+  }
+}
+
 let styles = {
-  card: (image, color, compact, quarterSize) => {
+  card: (image: string, color: any, compact: boolean, quarterSize: boolean) => {
     return {
       borderRadius: '2.5px',
       boxShadow: '0 0.25em 0.5em 0px rgba(0, 0, 0, 0.3)',
@@ -137,12 +132,12 @@ let styles = {
       verticalAlign: "top",
     }
   },
-  description: ( compact ) => {
+  description: (compact: boolean) => {
     return {
       opacity: 0.8
     }
   },
-  title: (image, quarterSize) => {
+  title: (image: string, quarterSize: boolean) => {
     return {
       width: '100%',
       fontSize: quarterSize ? '12px' : '16px',

@@ -1,9 +1,9 @@
 export default class MediaSystem {
 
-    constructor (world) {
+    private world: Convolvr
 
+    constructor (world: Convolvr) {
         this.world = world
-
     }
 
     init(component: Component) {
@@ -25,7 +25,5 @@ export default class MediaSystem {
         return {
             
         }
-
     }
-    
 }

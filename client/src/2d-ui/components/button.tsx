@@ -13,7 +13,7 @@ let styles = {
 
 export default class Button extends Component<any, any> {
 
-  private props: any
+  public props: any
   private defaultProps: any = {
       title: "Button",
       style: false,
@@ -29,7 +29,7 @@ export default class Button extends Component<any, any> {
     innerStyle.backgroundImage = 'url('+(this.props.image != null ? this.props.image : "")+')';
 
     return (
-        <div style={style} className="ui-button">
+        <div style={style as any} className="ui-button">
             <div style={innerStyle}
                  title={this.props.title }
                  onClick={ (evt) => {
@@ -37,7 +37,8 @@ export default class Button extends Component<any, any> {
                  } }
             >
             { !!this.props.onFiles ? (
-                <input type="file" multiple onChange={ e=> this.props.onFiles( e.target.files ) } style={styles.file()} />
+                <input type="file" multiple onChange={ (e: any) => this.props.onFiles( e.target.files ) } 
+                       style={styles.file() as any} />
               ) : ""
             }
             </div>
