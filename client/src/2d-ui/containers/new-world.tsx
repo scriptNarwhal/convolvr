@@ -7,10 +7,6 @@ import { isMobile } from '../../config'
 
 class NewSpace extends Component<any, any> {
 
-  constructor () {
-    super()
-  }
-
   componentWillMount() {
 
     this.setState({
@@ -509,14 +505,11 @@ class NewSpace extends Component<any, any> {
   }
 }
 
-NewSpace.defaultProps = {
-}
-
 import { connect } from 'react-redux'
 import { createSpace } from '../../redux/actions/world-actions'
 import { uploadFile } from '../../redux/actions/file-actions'
 export default connect(
-  state => {
+  (state: any) => {
     return {
       tools: state.tools,
       users: state.users,
@@ -528,10 +521,10 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      createSpace: (data) => {
+      createSpace: (data: any) => {
         dispatch(createSpace(data))
       },
-      uploadFile: (fileusername: string, dir) => {
+      uploadFile: (file: string, username: string, dir: string) => {
         dispatch(uploadFile(file, username, dir))
       }
     }
