@@ -60,7 +60,7 @@ class Inventory extends Component<any, any> {
   render() {
 // false == this.props.inventoryUpdating
     return (
-        <Shell className="data-view" 
+        <Shell dataClassName="data-view"
                style={ isMobile() ? { paddingTop: '60px' } : { paddingTop: '0px' } }
                innerStyle={ { paddingTop: isMobile() ? '82px' : 0, paddingLeft: isMobile() ? '10px' : '72px' }  }       
         >

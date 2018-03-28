@@ -66,10 +66,10 @@ class MoveFile extends Component<any, any> {
     if ( this.state.activated ) {
 
       return (
-        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
-            <div style={ styles.header }>
-              <span style={ styles.title }> Rename File </span>
+        <div style={ styles.lightbox as any }>
+          <div style={ styles.modal as any } >
+            <div style={ styles.header as any }>
+              <span style={ styles.title as any }> Rename File </span>
             </div>
             <div style={ styles.body }>
               <input type="text" defaultValue={this.state.name} onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } />
@@ -123,13 +123,13 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      moveFile: ( username, dir, filename, targetDir, targetFile ) => {
+      moveFile: ( username: string, dir: string, filename: string, targetDir: string, targetFile: string ) => {
         dispatch( moveFile( username, dir, filename, targetFile, targetDir ) )
       },
       closeRenameFile: () => {
         dispatch(closeRenameFile())
       },
-      listDirectories: (username, dir) => {
+      listDirectories: (username: string, dir: string) => {
           dispatch(listDirectories(username, dir))
       }
     }

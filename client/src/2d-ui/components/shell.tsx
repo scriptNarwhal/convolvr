@@ -9,7 +9,8 @@ class Shell extends Component<any, any> {
 
   private defaultProps = {
     noBackground: false,
-    innerStyle: {}
+    innerStyle: {},
+    data
   }
 
   public className: string
@@ -102,13 +103,13 @@ class Shell extends Component<any, any> {
              onDrop={e=> {
                         e.stopPropagation()
                         e.preventDefault()
-                        this.uploadFiles(e.target.files || e.dataTransfer.files)}
+                        this.uploadFiles((e.target as any).files || e.dataTransfer.files)}
                     }
             onDragEnter={e=>{ console.log(e); e.preventDefault(); e.stopPropagation(); this.setDropBackground(true) }}
             onDragOver={e=> { console.log(e); e.preventDefault(); e.stopPropagation(); }}
             onDragLeave={e=>{ console.log(e); e.preventDefault(); e.stopPropagation(); this.setDropBackground(false) }}
           onClick={e=> {
-            if (e.target.getAttribute('id') == 'shell') {
+            if ((e.target as any).getAttribute('id') == 'shell') {
               this.props.toggleMenu(true)
             }
           }}

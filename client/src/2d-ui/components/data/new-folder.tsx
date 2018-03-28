@@ -67,10 +67,10 @@ class NewFolder extends Component<any, any> {
     if ( this.state.activated ) {
 
       return (
-        <div style={ styles.lightbox }>
-          <div style={ styles.modal } >
-            <div style={ styles.header }>
-              <span style={ styles.title }> New Folder </span>
+        <div style={ styles.lightbox as any }>
+          <div style={ styles.modal as any } >
+            <div style={ styles.header as any }>
+              <span style={ styles.title as any }> New Folder </span>
             </div>
             <div style={ styles.body }>
               <input type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } />

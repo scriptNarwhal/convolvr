@@ -27,7 +27,7 @@ class InventoryExport extends Component<any, any> {
 
   componentWillReceiveProps ( nextProps: any) {
 
-    let data = {}
+    let data: any = {}
 
     if ( this.props.activated == false && nextProps.activated == true ) {
 
@@ -64,37 +64,28 @@ class InventoryExport extends Component<any, any> {
   }
 
   handleTextChange(e: any) {
-
     this.setState({
       name: e.target.value
     })
-
   }
 
   handleTextArea(e: any) {
-
     this.setState({
       text: e.target.value
     })
-
   }
 
   save () {
-
     let name = this.state.name,
         dir = this.props.activated ? this.props.dir : this.props.cwd.join("/") 
 
     if ( name != "" ) {
-
       // initiate file download maybe
       this.toggleModal()
-
     } else {
-
       alert("Name is required.")
 
     }
-
   }
 
   toggleModal () {
@@ -106,18 +97,15 @@ class InventoryExport extends Component<any, any> {
 
   }
 
-  toFileName (s) {
-
+  toFileName (s: string) {
     return s.replace(/(ies)/, 'y').replace('ents', 'ent').toLowerCase().replace(/(\s|\n|\t)/g, '-')
-
   }
 
   render() {
 
     if ( this.state.activated ) {
-
       return (
-       <div style={ styles.lightbox }>
+       <div style={ styles.lightbox as any}>
           <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Export</span> 
@@ -146,9 +134,6 @@ class InventoryExport extends Component<any, any> {
   }
 }
 
-InventoryExport.defaultProps = {
-
-}
 
 import { connect } from 'react-redux'
 import {
@@ -182,16 +167,16 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      getInventory: (userId, category) => {
+      getInventory: (userId: number, category: string) => {
         dispatch(getInventory(userId, category))
       },
-      getInventoryItem: ( userId, category, itemId ) => {
+      getInventoryItem: ( userId: number, category: string, itemId: number ) => {
         dispatch(getInventoryItem( userId, category, itemId ))
       },
-      addInventoryItem: (userId, category, data) => {
+      addInventoryItem: (userId: number, category: string, data: any) => {
           dispatch(addInventoryItem(userId, category, data))
       },
-      updateInventoryItem: (userId, category, data) => {
+      updateInventoryItem: (userId: number, category: string, data: any) => {
       dispatch(updateInventoryItem(userId, category, data))
       },
       closeInventoryExport: () => {
@@ -230,7 +215,7 @@ let styles = {
       fontSize: '1em',
       color: 'white'
   },
-  textArea: (mobile) => { return {...textAreaStyle( mobile ), minHeight: '50vh' } },
+  textArea: (mobile: boolean) => { return {...textAreaStyle( mobile ), minHeight: '50vh' } },
   body: {
   },
   title: {
