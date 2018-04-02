@@ -30,7 +30,7 @@ class HUD extends Component<any, any> {
                     style={ Object.assign({}, styles.optionButton, {display: this.props.menuOpen ? "none" : "inline-block", backgroundColor: 'transparent'}) }
                     onClick={ (evt, title) => {
                         this.toggleMenu(true)
-                        //browserHistory.push("/menu")
+                        //this.props.history.push("/menu")
                     } }
             />) : ""}
           </div>

@@ -10,7 +10,7 @@ class Inventory extends Component<any, any> {
     handleBGClick(e: any) {
         if (e.target.getAttribute("id") == "bg-toggle-menu") {
             this.props.toggleMenu(false);
-            browserHistory.push("/");
+            this.props.history.push("/");
         }
     }
 

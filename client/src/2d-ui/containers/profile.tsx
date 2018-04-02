@@ -62,7 +62,7 @@ class Profile extends Component<any, any> {
       this.props.login( this.state.name, this.state.pass )
     }
     if ( this.props.loginFetching && nextProps.loginFetching == false ) {
-      browserHistory.push("/")
+      this.props.history.push("/")
     }
   }
 

@@ -45,7 +45,7 @@ class ComponentEditor extends Component<any, any> {
             this.useTemplate("Wireframe Box")            
     }
 
-    componentWillReceiveProps(nextProps: Object) {
+    componentWillReceiveProps(nextProps: any) {
         const editSourceMatches = nextProps.editSource == nextProps.source
 
         if (editSourceMatches) {
@@ -70,7 +70,7 @@ class ComponentEditor extends Component<any, any> {
         }
     }
 
-    loadComponentData(props: Object, nextProps: Object) {
+    loadComponentData(props: any, nextProps: any) {
         if (nextProps.source == nextProps.editSource) {
             if (nextProps.editSource == "entityEdit" || nextProps.editSource == "componentEdit") { // load from entity in inventory
 
@@ -92,7 +92,8 @@ class ComponentEditor extends Component<any, any> {
             }
 
             let convolvrProps = this.state.props,
-                propsList = []
+                propsList: any[] = [];
+
             Object.keys(convolvrProps).map(key => {
                 console.info("saving property ", key);
                 propsList.push({ name: key, data: { [key]: convolvrProps[key] } })
@@ -105,7 +106,7 @@ class ComponentEditor extends Component<any, any> {
         }
     }
 
-    componentWillUpdate ( nextProps: Object, nextState: Object ) {
+    componentWillUpdate ( nextProps: any, nextState: any ) {
 
     }
 
@@ -155,50 +156,45 @@ class ComponentEditor extends Component<any, any> {
     }
 
     handlePropertyAction ( action: string, data: any, e: any ) {
-    
         let index = data.propertyIndex,
             properties = this.state.properties,
-            propertyData = properties[index]
+            propertyData = properties[index];
+
         console.info("handlePropertyAction: propertyData: ", propertyData, properties )
         if ( action == "Delete" ) {
             properties.splice( index, 1 )
             this.setState({ properties })
-
         } else if ( action == "Edit" ) {
             this.props.editLoadedItem( "componentEdit", this.props.username, "Properties", index, propertyData )
-        
         }
     }
 
-    handleComponentAction ( action, data, e ) {
-        
+    handleComponentAction ( action: string, data: any, e: any) {
         let index = data.componentIndex,
             components = this.state.components,
-            componentData = components[index]
+            componentData = components[index];
+
         console.info("handleComponentAction: componentData: ", componentData, components )
         if ( action == "Delete" ) {
             components.splice( index, 1 )
             this.setState({ components })
-                
         } else if (action == "Edit") {
             this.props.editLoadedItem( "componentEdit", this.props.username, "Components", index, componentData)
-
         }
     }
 
     save () {
-
         let name = this.state.name,
             newId = -1,
-            data = {},
-            props = {}
+            data: any = {},
+            props = {};
 
         if ( name == "" )  {
             alert("Name is required.")
             return
         }
 
-        this.state.properties.map( prop => {
+        this.state.properties.map( (prop: any) => {
             console.log("Prop ", prop)
             props = Object.assign({}, props, prop.data )
         })
@@ -245,13 +241,13 @@ class ComponentEditor extends Component<any, any> {
         })
     }
   
-    onPositionChange ( value, event ) {
+    onPositionChange ( value: any, event: any ) {
         this.setState({
           position: value
         })
     }
     
-    onRotationChange ( value, event ) {
+    onRotationChange ( value: any, event: any ) {
         this.setState({
           quaternion: value
         })
@@ -269,8 +265,7 @@ class ComponentEditor extends Component<any, any> {
         })
     }
 
-    onSaveProperty( data ) {
-
+    onSaveProperty( data: any ) {
         let properties = []
 
         properties = this.state.properties
@@ -283,8 +278,7 @@ class ComponentEditor extends Component<any, any> {
         })
     }
 
-    onSaveComponent( data ) {
-
+    onSaveComponent( data: any ) {
         let components = []
 
         components = this.state.components
@@ -301,7 +295,7 @@ class ComponentEditor extends Component<any, any> {
 
         if ( this.state.activated ) {
             return (
-            <div style={ styles.lightbox }>
+            <div style={ styles.lightbox as any }>
                 <div style={ styles.modal() } >
                     <div style={ styles.header }>
                     <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Component Edit</span> 
@@ -311,15 +305,15 @@ class ComponentEditor extends Component<any, any> {
                     <div style={ styles.body }>
                         <span style={styles.basicInput} title='Position'>
                             <span>Position</span>
-                            <VectorInput axis={3} decimalPlaces={2} onChange={ (value, event) => { this.onPositionChange( value, event) }} />
+                            <VectorInput axis={3} decimalPlaces={2} onChange={ (value: any, event: any) => { this.onPositionChange( value, event) }} />
                         </span>
                         <span style={styles.basicInput} title='Rotation'>
                             <span>Rotation</span>
-                            <VectorInput axis={4} decimalPlaces={4} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
+                            <VectorInput axis={4} decimalPlaces={4} onChange={ (value: any, event: any) => { this.onRotationChange( value, event) }} />
                         </span>
                         <div>
                             <h4 style={styles.h4}>Properties</h4>
-                            <AttributeEditor onSave={ data => this.onSaveProperty( data ) } 
+                            <AttributeEditor onSave={ (data: any) => this.onSaveProperty( data ) } 
                                             entityEditMode={true}
                                             source={"componentEdit"}
                                             username={ this.props.username }
@@ -328,10 +322,10 @@ class ComponentEditor extends Component<any, any> {
                         </div>
                         <div style={ styles.components }>
                             {
-                            this.state.properties.map( (property, i) => {
+                            this.state.properties.map( (property: any, i: number) => {
                                 return (
-                                <Card clickHandler={ (e, name) => { this.handlePropertyAction("Edit", { propertyIndex: i}, e) } }
-                                      onContextMenu={ (name, data, e) => this.handlePropertyAction(name, {...data, propertyIndex: i }, e) }
+                                <Card clickHandler={ (e: any, name: string) => { this.handlePropertyAction("Edit", { propertyIndex: i}, e) } }
+                                      onContextMenu={ (name: string, data: any, e: any) => this.handlePropertyAction(name, {...data, propertyIndex: i }, e) }
                                       contextMenuOptions={ this.props.contextMenuOptions }
                                       showTitle={true}
                                       compact={true}
@@ -348,7 +342,7 @@ class ComponentEditor extends Component<any, any> {
                         </div>
                         <div>
                             <h4 style={styles.h4}>Components</h4>
-                            <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
+                            <ComponentEditor onSave={ (data: any) => this.onSaveComponent( data ) } 
                                             entityEditMode={true}
                                             source={"componentEdit"}
                                             username={ this.props.username }
@@ -357,10 +351,10 @@ class ComponentEditor extends Component<any, any> {
                         </div>
                         <div style={ styles.components }>
                             {
-                            this.state.components.map( (component, i) => {
+                            this.state.components.map( (component: any, i: number) => {
                                 return (
-                                <Card clickHandler={ (e, name) => { this.handleComponentAction("Edit", { componentIndex: i}, e) } }
-                                      onContextMenu={ (name, data, e) => this.handleComponentAction(name, {...data, componentIndex: i }, e) }
+                                <Card clickHandler={ (e: any, name: string) => { this.handleComponentAction("Edit", { componentIndex: i}, e) } }
+                                      onContextMenu={ (name: string, data: any, e: any) => this.handleComponentAction(name, {...data, componentIndex: i }, e) }
                                       contextMenuOptions={ this.props.contextMenuOptions }
                                       showTitle={true}
                                       compact={true}

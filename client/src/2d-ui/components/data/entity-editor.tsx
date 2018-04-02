@@ -39,7 +39,7 @@ class EntityEditor extends Component<any, any> {
     
   }
 
-  componentWillReceiveProps ( nextProps: Object ) {
+  componentWillReceiveProps ( nextProps: any ) {
 
     if ( this.props.itemId != nextProps.itemId || this.props.category != nextProps.category ) {
       if ( nextProps.category != "" && nextProps.itemId != "" )
@@ -69,7 +69,7 @@ class EntityEditor extends Component<any, any> {
     }
   }
 
-  componentWillUpdate ( nextProps: Object, nextState: Object ) {
+  componentWillUpdate ( nextProps: any, nextState: any ) {
 
   }
 
@@ -195,13 +195,13 @@ class EntityEditor extends Component<any, any> {
     })
   }
 
-  onPositionChange ( value: Array<number>, event: Object ) {
+  onPositionChange ( value: Array<number>, event: any ) {
     this.setState({
       position: value
     })
   }
 
-  onRotationChange ( value: Array<number>, event: Object ) {
+  onRotationChange ( value: Array<number>, event: any ) {
     this.setState({
       quaternion: value
     })
@@ -225,7 +225,6 @@ class EntityEditor extends Component<any, any> {
     components = this.state.components
 
     if ( data.id <= -1 )
-
       data.id = this.state.components.length
       
     
@@ -242,7 +241,7 @@ class EntityEditor extends Component<any, any> {
     if ( this.state.activated ) {
 
       return (
-       <div style={ styles.lightbox }>
+       <div style={ styles.lightbox as any }>
           <div style={ styles.modal() } >
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Entity Edit</span> 
@@ -254,21 +253,21 @@ class EntityEditor extends Component<any, any> {
             <div style={ styles.body }>
               <span style={styles.basicInput} title='Position'>
                 <span>Position</span> 
-                <VectorInput axis={3} decimalPlaces={2} onChange={ (value, event) => { this.onPositionChange( value, event) }} />
+                <VectorInput axis={3} decimalPlaces={2} onChange={ (value: any, event: any) => { this.onPositionChange( value, event) }} />
               </span>
               <span style={styles.basicInput} title='Rotation'>
                 <span>Rotation</span> 
-                <VectorInput axis={4} decimalPlaces={4} onChange={ (value, event) => { this.onRotationChange( value, event) }} />
+                <VectorInput axis={4} decimalPlaces={4} onChange={ (value: any, event: any) => { this.onRotationChange( value, event) }} />
               </span>
-              <div style={ styles.components }>
+              <div style={ styles.components as any }>
                 {
-                  this.state.components.map( (component, i) => {
+                  this.state.components.map( (component: any, i: number) => {
                     return (
-                      <Card clickHandler={ (e) => {
+                      <Card clickHandler={ (e: any) => {
                               console.log(e, component.name, "clicked")
                               this.handleContextAction("Edit",  { componentIndex: i }, {} )
                             }}
-                            onContextMenu={ (name, data, e) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
+                            onContextMenu={ (name: string, data: any, e: any) => this.handleContextAction(name, {...data, componentIndex: i }, e) }
                             contextMenuOptions={ this.props.contextMenuOptions }
                             showTitle={true}
                             compact={true}
@@ -283,7 +282,7 @@ class EntityEditor extends Component<any, any> {
                   })
                 }
               </div>
-              <ComponentEditor onSave={ data => this.onSaveComponent( data ) } 
+              <ComponentEditor onSave={ (data: any) => this.onSaveComponent( data ) } 
                                username={ this.props.username }
                                source={"entityEdit"}
                                title="Add Component"
@@ -387,6 +386,9 @@ let styles = {
     },
     cancelButton: {
         borderLeft: 'solid 0.2em #005aff'
+    },
+    components: {
+
     },
     header: {
         width: '100%',

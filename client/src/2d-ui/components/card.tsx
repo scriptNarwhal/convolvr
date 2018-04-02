@@ -4,19 +4,19 @@ import Button from './button'
 import ContextMenu from './context-menu'
 
 interface CardProps {
-  color: any
-  compact: boolean
-  quarterSize: boolean
+  color?: any
+  compact?: boolean
+  quarterSize?: boolean
   showTitle: boolean
-  description: string
+  description?: string
   title: string
   image?: string
   category?: string
   dir?: string
-  username: string
-  onContextMenu: Function
+  username?: string
+  onContextMenu?: Function
   clickHandler: Function
-  contextMenuOptions: Function
+  contextMenuOptions?: any[]
 }
 
 export default class Card extends Component<CardProps, any> {

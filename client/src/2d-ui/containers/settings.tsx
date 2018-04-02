@@ -333,7 +333,7 @@ class Settings extends Component<any, any> {
           <input style={styles.save}
                  type='submit'
                  value="Profile Settings"
-                 onClick={ e=> { browserHistory.push("/profile") } }
+                 onClick={ e=> { this.props.history.push("/profile") } }
           />
           <input style={styles.save}
                  type='submit'

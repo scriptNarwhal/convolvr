@@ -9,7 +9,7 @@ class Places extends Component<any, any> {
   handleBGClick (e: any) {
     if (e.target.getAttribute("id") == "bg-toggle-menu") {
       this.props.toggleMenu(false)
-      browserHistory.push("/")
+      this.props.history.push("/")
 
     }
   }
@@ -18,7 +18,7 @@ class Places extends Component<any, any> {
     if (userName == '') {
       userName = 'space'
     }
-    browserHistory.push(userName+"/"+world+"/"+name)
+    this.props.history.push(userName+"/"+world+"/"+name)
     window.location.href = window.location.href // workaround..
     // this.props.setCurrentSpace(name)
     // three.world.reload(name)

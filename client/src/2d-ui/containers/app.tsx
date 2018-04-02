@@ -24,13 +24,13 @@ class App extends Component<any, any> {
     this.props.getInventory(this.props.username, "Components")
     this.props.getInventory(this.props.username, "Properties")
 
-    let world = three.world, 
+    let world = (window as any).three.world, 
         worldDetails = detectSpaceDetailsFromURL()
 
     events.on("chat message", message => {
 
       let m = JSON.parse( message.data ),
-          chatUI = three.world.chat,
+          chatUI = (window as any).three.world.chat,
           chatText = chatUI ? chatUI.componentsByAttr.text[ 0 ] : "",
           worldName = '',
           from = ''
@@ -63,7 +63,7 @@ class App extends Component<any, any> {
         document.title = worldName
       }
 
-      let worldMode = three.world.mode,
+      let worldMode = (window as any).three.world.mode,
           worldUser = worldDetails[ 0 ]
 
       if ( !this.props.menuOpen ) {
@@ -82,9 +82,9 @@ class App extends Component<any, any> {
 
         if ( world.terrain.voxels[ voxelKey ] ) {
           altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
-          three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
+          (window as any).three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
         }
-        three.world.user.velocity.y = -1000
+        (window as any).three.world.user.velocity.y = -1000
       }
 
       world.load( worldDetails[ 0 ], worldDetails[ 1 ], () => { /* systems online */ }, ()=> { /* terrain finished loading */
@@ -111,7 +111,7 @@ class App extends Component<any, any> {
         }
   
         if (!autoSignIn && this.props.loggedIn == false && window.location.href.indexOf("/chat") >-1) {
-          browserHistory.push("/login")
+          this.props.history.push("/login")
         }
       } else {
         world.onUserLogin( world.user )
@@ -129,13 +129,13 @@ class App extends Component<any, any> {
 
     window.onblur = () => {
       this.props.setWindowFocus(false)
-      three.world.windowFocus = false
+      (window as any).three.world.windowFocus = false
     }
 
     window.onfocus = () => {
       this.props.setWindowFocus(true)
-      three.world.windowFocus = true
-      three.world.user.velocity.y = 0
+      (window as any).three.world.windowFocus = true;
+      (window as any).three.world.user.velocity.y = 0;
       this.setState({
         unread: 0
       })
@@ -161,14 +161,14 @@ class App extends Component<any, any> {
       }
     })
 
-    let renderCanvas = document.querySelector("#viewport")
+    let renderCanvas: any = document.querySelector("#viewport")
 
-    renderCanvas.onclick = (event) => {
+    renderCanvas.onclick = (event: any) => {
       let elem = event.target,
-          uInput = window.three.world.userInput
+          uInput = (window as any).three.world.userInput
       event.preventDefault()
       if (!uInput.fullscreen) {
-          three.world.mode = "3d"
+        (window as any).three.world.mode = "3d"
 						elem.requestPointerLock()
             this.props.toggleMenu(false)
       }
@@ -176,8 +176,7 @@ class App extends Component<any, any> {
   }
 
   componentWillReceiveProps ( nextProps: any) {
-
-    let newSpace = ["world", "Convolvr"],
+    let newSpace: any[] = ["world", "Convolvr"],
         userNameChanged = nextProps.username != this.props.username,
         pathChange = nextProps.url.pathname.indexOf("/at") > -1 ? false : nextProps.url.pathname != this.props.url.pathname
 
@@ -188,15 +187,15 @@ class App extends Component<any, any> {
           if ( newSpace[ 0 ] != nextProps.worldUser || newSpace[ 1 ] != nextProps.world ) {
           
           if (newSpace[ 1 ] != nextProps.world || newSpace[ 0 ] != nextProps.worldUser ) {
-            three.world.reload ( newSpace[ 0 ], newSpace[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
+            (window as any).three.world.reload ( newSpace[ 0 ], newSpace[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
 
           }
         }
       }
 
     } else if ( newSpace.length >= 4 ) {
-      console.warn("detected world voxel coords ", newSpace[3])
-      three.camera.position.set( newSpace[3][0] * GRID_SIZE[0], newSpace[3][1] * GRID_SIZE[1], newSpace[3][2] * GRID_SIZE[2] )
+      console.warn("detected world voxel coords ", newSpace[3]);
+      (window as any).three.camera.position.set( newSpace[3][0] * GRID_SIZE[0], newSpace[3][1] * GRID_SIZE[1], newSpace[3][2] * GRID_SIZE[2] )
     }
 
     if ( userNameChanged ) {
@@ -212,14 +211,13 @@ class App extends Component<any, any> {
   }
 
   handleKeyDown (e: any) {
-
     if (e.which == 27) {
       this.props.toggleMenu(true)
     }
     if (e.which == 13) {
       if (!this.props.menuOpen) {
         this.props.toggleMenu(true);
-        browserHistory.push("/chat")
+        this.props.history.push("/chat")
       }
     }
   }
@@ -227,16 +225,16 @@ class App extends Component<any, any> {
   goBack () {
     let worldURL = detectSpaceDetailsFromURL()
 
-    browserHistory.push(`/${worldURL[0]}/${worldURL[1]}`)
+    this.props.history.push(`/${worldURL[0]}/${worldURL[1]}`)
   }
 
-  notify (chatMessage, from) {
+  notify (chatMessage: string, from: string) {
 
     function doNotification() {
       function onNotifyShow() {
           console.log('notification was shown!');
       }
-      let Notify = window.Notify.default,
+      let Notify = (window as any).Notify.default,
           myNotification = new Notify(`Message from ${from}`, {
           body: chatMessage,
           notifyShow: onNotifyShow
@@ -250,38 +248,38 @@ class App extends Component<any, any> {
     function onPermissionDenied() {
         console.warn('Permission has been denied by the user');
     }
-    if (!Notify.needsPermission) {
+    if (!(window as any).Notify.needsPermission) {
         doNotification();
-    } else if (Notify.isSupported()) {
-        Notify.requestPermission(onPermissionGranted, onPermissionDenied);
+    } else if ((window as any).Notify.isSupported()) {
+      (window as any).Notify.requestPermission(onPermissionGranted, onPermissionDenied);
     }
   }
 
   initiateVRMode ( ) {
-
     this.props.toggleVRMode()
 
-    let renderer = three.renderer,
+    let three = (window as any).three,
+        renderer = three.renderer,
         ratio = window.devicePixelRatio || 1,
         camera = three.camera,
         scene = three.scene,
         world = three.world,
         controls = null,
-        effect = null
+        effect: any = null
 
         if (three.vrControls == null) {
 
-          window.WebVRConfig = {
+          (window as any).WebVRConfig = {
             MOUSE_KEYBOARD_CONTROLS_DISABLED: true,
             TOUCH_PANNER_DISABLED: true
           }
-          controls = new THREE.VRControls(camera)
+          controls = new (window as any).THREE.VRControls(camera)
 
           if (!three.world.mobile) {
             renderer.autoClear = false
           }
 
-          effect = new THREE.VREffect(renderer, world.postProcessing)
+          effect = new (window as any).THREE.VREffect(renderer, world.postProcessing)
           effect.scale = 1
           effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
           three.vrEffect = effect
@@ -314,10 +312,8 @@ class App extends Component<any, any> {
               three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
                 vrAnimate( three.vrDisplay, Date.now(), [0,0,0], 0)
               })
-            }).catch( err => {
-              
+            }).catch( (err: any) => {
               console.error( err )
-
             })
             
           } else {
@@ -331,7 +327,6 @@ class App extends Component<any, any> {
   }
 
   renderVRButtons () {
-
     return this.props.stereoMode ?
         [<Button title="Exit VR"
                 style={{
@@ -341,7 +336,7 @@ class App extends Component<any, any> {
                 }}
                 key='2'
                 image="/data/images/x.png"
-                onClick={ (evt, title) => {
+                onClick={ (evt: any, title: string) => {
                     this.props.toggleVRMode();
                 } }
         />]
@@ -354,7 +349,7 @@ class App extends Component<any, any> {
                       background: 'none'
                   }}
                   image="/data/images/vr.png"
-                  onClick={ (evt, title) => {
+                  onClick={ (evt: any, title: string) => {
                     this.initiateVRMode()
                   }
                 }
@@ -381,10 +376,10 @@ class App extends Component<any, any> {
                      background: 'transparent',
                      display: !this.props.menuOpen ? "none" : "inline-block"
                  }}
-                 onClick={ (evt, title) => {
+                 onClick={ (evt: any, title: string) => {
                      this.props.toggleMenu(false)
                      this.goBack()
-                     //browserHistory.push("/menu")
+                     //this.props.history.push("/menu")
                  } }
                  key={2}
          />
@@ -398,10 +393,6 @@ class App extends Component<any, any> {
         </div>
     )
   }
-
-}
-
-App.defaultProps = {
 
 }
 
@@ -430,7 +421,7 @@ import {
 } from '../../redux/actions/inventory-actions'
 
 export default connect(
-  state => {
+  (state: any) => {
     return {
       loggedIn: state.users.loggedIn,
       username: state.users.loggedIn != false ? state.users.loggedIn.name : "public",
@@ -449,32 +440,32 @@ export default connect(
       fetchUniverseSettings: ()=> {
         dispatch(fetchUniverseSettings())
       },
-      login: (user, pass, email, data) => {
+      login: (user: string, pass: string, email: string, data: any) => {
             dispatch(login(user, pass, email, data))
       },
-      getMessage: (message, from, files, avatar, space) => {
+      getMessage: (message: string, from: string, files: any[], avatar: string, space: string) => {
           dispatch(getMessage(message, from, files, avatar, space))
       },
-      getInventory: (userId, category) => {
+      getInventory: (userId: any, category: string) => {
         dispatch(getInventory(userId, category))
       },
       showChat: () => {
         dispatch(showChat())
       },
-      getChatHistory: (spaceName, skip) => {
+      getChatHistory: (spaceName: string, skip: number) => {
         dispatch(getChatHistory(spaceName, skip))
       },
-      toggleMenu: (force) => {
+      toggleMenu: (force: boolean) => {
           //window.three.world.mode = force ? "3d" : "web"
           dispatch(toggleMenu(force))
       },
       fetchSpaces: () => {
           dispatch(fetchSpaces())
       },
-      setCurrentSpace: (world) => {
-        dispatch(setCurrentSpace(world))
+      setCurrentSpace: (username: string, world: string) => {
+        dispatch(setCurrentSpace(username, world))
       },
-      setWindowFocus: (t) => {
+      setWindowFocus: (t: any) => {
         dispatch(setWindowFocus(t))
       },
       toggleVRMode: () => {

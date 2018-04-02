@@ -4,15 +4,15 @@ import FileButton from './file-button'
 import VectorInput from '../vector-input'
 import { rgba, rgb } from '../../../util'
 import { isMobile } from '../../../config'
-import { 
+import {
   textAreaStyle,
-  lightboxStyle, 
-  modalStyle 
+  lightboxStyle,
+  modalStyle
 } from '../../styles'
 
 class ImportToSpace extends Component<any, any> {
 
-  componentWillMount () {
+  componentWillMount() {
 
     this.setState({
       activated: false,
@@ -20,128 +20,106 @@ class ImportToSpace extends Component<any, any> {
       text: "",
       name: "",
       data: {},
-      coords: [0,0,0],
+      coords: [0, 0, 0],
       world: "Overworld",
       id: 0
     })
 
-    
   }
 
-  componentWillReceiveProps ( nextProps: any) {
-
+  componentWillReceiveProps(nextProps: any) {
     let data = {}
-    
-        if ( this.props.activated == false && nextProps.activated == true ) {
-    
-          this.setState({
-            activated: true
-          })
-    
-        }
 
-        if ( this.props.itemData == false && nextProps.itemData == true ) 
+    if (this.props.activated == false && nextProps.activated == true) {
+      this.setState({
+        activated: true
+      })
+    }
 
-          this.setState({name: nextProps.itemData.name})
-        
+    if (this.props.itemData == false && nextProps.itemData == true)
+      this.setState({ name: nextProps.itemData.name })
+
   }
 
-  componentWillUpdate ( nextProps: any, nextState: any ) {
+  componentWillUpdate(nextProps: any, nextState: any) {
 
   }
 
   handleTextChange(e: any) {
-
     this.setState({
       name: e.target.value
     })
-
   }
 
-  onCoordChange ( value, event ) {
-
+  onCoordChange(value: any, event: any) {
     this.setState({
       coords: value
     })
-
   }
 
-  handleSpaceChange ( event ) {
-
+  handleSpaceChange(event: any) {
     this.setState({
       world: event.target.value
     })
-
   }
 
-  save ( id ) {
-
+  save() {
     let name = this.state.name,
-        itemData = Object.assign({}, this.props.itemData),
-        data = {}
+      itemData = Object.assign({}, this.props.itemData),
+      data = {}
 
     itemData.world = this.props.currentSpace
 
-    this.props.addItemToSpace( this.props.username, "Entities", this.props.itemData.id, this.state.world, this.state.coords.join("x"), itemData )
+    this.props.addItemToSpace(this.props.username, "Entities", this.props.itemData.id, this.state.world, this.state.coords.join("x"), itemData)
     this.toggleModal()
 
   }
 
-  toggleModal () {
-
+  toggleModal() {
     this.setState({
       activated: !this.state.activated
     })
-
   }
 
   render() {
-
-    if ( this.state.activated ) {
-
+    if (this.state.activated) {
       return (
-       <div style={ styles.lightbox as any}>
-          <div style={ styles.modal() } >
-            <div style={ styles.header }>
-              <span style={ styles.title }> 
-                <span style={{marginRight: '0.5em'}}>Import To Space</span> 
-                <input type="text" disabled onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
+        <div style={styles.lightbox as any}>
+          <div style={styles.modal()} >
+            <div style={styles.header}>
+              <span style={styles.title}>
+                <span style={{ marginRight: '0.5em' }}>Import To Space</span>
+                <input type="text" disabled onChange={(e) => { this.handleTextChange(e) }} style={styles.text} />
               </span>
               <div style={styles.basicInput}>
                 Select world to import into
-                <select onChange={ e=> this.handleSpaceChange(e) }>
+                <select onChange={e => this.handleSpaceChange(e)}>
                   {
-                    this.props.spaces.map( (world, w) => {
-                       
+                    this.props.spaces.map((world: any, w: number) => {
                       return (
-                        <option key={w}value={world.name}>{world.name}</option>
+                        <option key={w} value={world.name}>{world.name}</option>
                       )
-
                     })
                   }
                 </select>
               </div>
               <div style={styles.basicInput}>
-                Specify coordinates: <VectorInput axis={3} decimalPlaces={0} onChange={ (value, event) => { this.onCoordChange( value, event) }} />
+                Specify coordinates: <VectorInput axis={3} decimalPlaces={0} onChange={(value: any, event: any) => { this.onCoordChange(value, event) }} />
               </div>
-              
+
             </div>
-            <div style={ styles.body }>
-              <FileButton title="Add" onClick={ () => { this.save() } } />
-              <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
+            <div style={styles.body}>
+              <FileButton title="Add" onClick={() => { this.save() }} />
+              <FileButton title="Cancel" onClick={() => { this.toggleModal() }} style={styles.cancelButton} />
             </div>
           </div>
         </div>
       )
-
     } else {
-
       return (
         <span></span>
       )
-
     }
-    
   }
 }
 
@@ -150,34 +128,34 @@ import {
   addItemToSpace
 } from '../../../redux/actions/inventory-actions'
 import {
-    closeImportToSpace
+  closeImportToSpace
 } from '../../../redux/actions/util-actions'
 
 export default connect(
   (state: any, ownProps: any) => {
     return {
-        cwd: state.files.listDirectories.workingPath,
-        section: state.routing.locationBeforeTransitions.pathname,
-        stereoMode: state.app.stereoMode,
-        menuOpen: state.app.menuOpen,
-        vrMode: state.app.vrMode,
-        currentSpace: state.spaces.current,
-        spaces: state.spaces.all,
-        username: state.users.loggedIn ? state.users.loggedIn.name : "public",
-        activated: state.util.importToSpace.activated,
-        itemId: state.util.importToSpace.itemId,
-        itemData: state.util.importToSpace.itemData,
-        dir: state.util.importToSpace.dir,
-        instances: state.util.importToSpace.windowsOpen
+      cwd: state.files.listDirectories.workingPath,
+      section: state.routing.locationBeforeTransitions.pathname,
+      stereoMode: state.app.stereoMode,
+      menuOpen: state.app.menuOpen,
+      vrMode: state.app.vrMode,
+      currentSpace: state.spaces.current,
+      spaces: state.spaces.all,
+      username: state.users.loggedIn ? state.users.loggedIn.name : "public",
+      activated: state.util.importToSpace.activated,
+      itemId: state.util.importToSpace.itemId,
+      itemData: state.util.importToSpace.itemData,
+      dir: state.util.importToSpace.dir,
+      instances: state.util.importToSpace.windowsOpen
     }
   },
   (dispatch: any) => {
     return {
-      addItemToSpace: ( userId, category, itemId, world, coords, itemData ) => {
-        dispatch( addItemToSpace( userId, category, itemId, world, coords, itemData ) )
+      addItemToSpace: (userId: any, category: string, itemId: any, world: string, coords: any[], itemData: any) => {
+        dispatch(addItemToSpace(userId, category, itemId, world, coords, itemData))
       },
       closeImportToSpace: () => {
-        dispatch( closeImportToSpace() )
+        dispatch(closeImportToSpace())
       }
     }
   }
@@ -186,9 +164,9 @@ export default connect(
 let styles = {
   modal: () => {
     return Object.assign({}, modalStyle(isMobile()), {
-        maxWidth: '1080px',
-        left: ! isMobile() ? '72px' : '0px'
-      })
+      maxWidth: '1080px',
+      left: !isMobile() ? '72px' : '0px'
+    })
   },
   lightbox: lightboxStyle,
   basicInput: {

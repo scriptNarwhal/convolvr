@@ -52,39 +52,34 @@ class SharingSettings extends Component<any, any> {
   }
 
   handleTextChange(e: any) {
-
     this.setState({
       name: e.target.value
     })
-
   }
 
-  remove ( index ) {
+  remove ( index: number ) {
     let data = {
       id: this.props.shares[ index ].id
     }
 
     this.props.deleteShare( this.props.username, data )
-
   }
 
   shareFolder () {
-
     let data = {
       username: this.props.username,
       directory: this.props.cwd.join("/")
     }
 
     this.props.createShare( this.props.username, data )
-
   }
 
-  save ( id ) {
+  save ( id: number ) {
     let name = this.state.name,
         data = {}
 
     if ( id ) {
-        this.props.shares.map( s => { 
+        this.props.shares.map( (s: any) => { 
           if ( s.id == id ) 
             data = s
         })
@@ -97,11 +92,9 @@ class SharingSettings extends Component<any, any> {
   }
 
   toggleModal () {
-
     this.setState({
       activated: !this.state.activated
     })
-
   }
 
   render() {
@@ -120,7 +113,7 @@ class SharingSettings extends Component<any, any> {
                   <th></th>
                 </tr>
                 {
-                    this.props.shares.map( (s,i) => {
+                    this.props.shares.map( (s: any , i: number) => {
                         return (
                             
                             <tr key={i}>
@@ -158,7 +151,8 @@ import {
   listShares,
   updateShare,
   createShare,
-  deleteShare
+  deleteShare,
+  writeText
 } from '../../../redux/actions/file-actions'
 import {
   closeSharingSettings
@@ -184,14 +178,14 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      listShares: (filename: string, username: string, dir: string) => {
-        dispatch( listShares(filename, username, dir) )
+      listShares: (username: string) => {
+        dispatch( listShares(username) )
       },
-      updateShare: (username: string, data) => {
-        dispatch ( writeText(username, data) )
+      updateShare: (username: string, data: any) => {
+        dispatch ( updateShare(username, data) )
       },
-      createShare: (username: string, data) => {
-        dispatch ( writeText(username, data) )
+      createShare: (username: string, data: any) => {
+        dispatch ( createShare(username, data) )
       },
       deleteShare: (username: string, data: any) => {
           dispatch(deleteShare(username, data))
@@ -203,7 +197,6 @@ export default connect(
   }
 )(SharingSettings)
 
-/** @type {{search: React.CSSProperties}} */
 let styles = {
   modal: () => {
     return Object.assign({}, modalStyle(isMobile()), {

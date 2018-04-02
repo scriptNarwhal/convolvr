@@ -15,7 +15,7 @@ export default class LocationBar extends Component<any, any> {
     label: "",
     style: {},
     showFileOptions: false,
-    onOptionClick: (e, option) => {
+    onOptionClick: (e: any, option: any) => {
   
     }
   }
@@ -35,7 +35,7 @@ export default class LocationBar extends Component<any, any> {
             </span>
           </div>
             {
-              this.props.path.map((opt, i) =>{
+              this.props.path.map((opt: any, i: number) =>{
                 return (
                   <div style={styles.option}
                        onClick={ e=> { this.props.onItemSelect(opt, i) } }
@@ -114,7 +114,7 @@ let styles = {
     display: 'inline-block',
     width: 'auto'
   },
-  fileOptions: (mobile) => {
+  fileOptions: (mobile: boolean) => {
     return mobile ? {
       position: 'fixed',
       right: '60px',

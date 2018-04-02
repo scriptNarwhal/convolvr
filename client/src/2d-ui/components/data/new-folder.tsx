@@ -97,9 +97,9 @@ class NewFolder extends Component<any, any> {
 
 
 import { connect } from 'react-redux'
-import {
-  closeNewFolder
-} from '../../../redux/actions/util-actions'
+// import {
+//   closeNewFolder
+// } from '../../../redux/actions/util-actions'
 import {
   createDirectory,
   listDirectories
@@ -119,10 +119,10 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      createDirectory: ( username, dir ) => {
+      createDirectory: ( username: string, dir: string ) => {
         dispatch( createDirectory( username, dir ) )
       },
-      listDirectories: (username, dir) => {
+      listDirectories: (username: string, dir: string) => {
           dispatch(listDirectories(username, dir))
       }
     }

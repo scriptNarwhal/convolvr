@@ -7,7 +7,7 @@ import { isMobile } from '../../config'
 
 interface ShellProps {
   dispatch?: (action: any) => void
-  cwd?: string
+  cwd?: any[]
   currentSpace?: string
   worldUser?: string
   username?: string
@@ -186,7 +186,7 @@ export default connect(
       },
     }
   }
-)(Shell)
+)(Shell as React.ComponentType<any>)
 
 let styles = {
   shell: (hasMenu: boolean, menuOpen: boolean, menuOnly: boolean, noBackground: boolean, droppingFile: boolean ) => {

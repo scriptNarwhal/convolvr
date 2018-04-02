@@ -37,7 +37,7 @@ class Login extends Component<any, any> {
   signUp () {
 
     this.props.logout()
-    browserHistory.push("/profile")
+    this.props.history.push("/profile")
 
   }
 

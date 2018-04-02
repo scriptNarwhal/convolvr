@@ -20,7 +20,7 @@ class SideMenu extends Component<any, any> {
   }
 
   navigate ( evt: any, url: string ) {
-    browserHistory.push( url )
+    this.props.history.push( url )
   }
 
   onMouseOver ( evt: any ) {
@@ -46,64 +46,64 @@ class SideMenu extends Component<any, any> {
                  compact={ isMobile() }
                  title="Home"
             /> 
-            <Tab clickHandler={ e => { this.navigate(e, "/new-world") } }
+            <Tab clickHandler={ (e: any) => { this.navigate(e, "/new-world") } }
                  showTitle={ this.state.menuHover }
                  image="/data/images/plus.png"
                  title="New"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/spaces") }}  
+            <Tab clickHandler={ (e: any) => { this.navigate(e, "/spaces") }}  
                  image="/data/images/circle-a.png"
                  showTitle={ this.state.menuHover }
                  compact={ isMobile() }
                  title="Spaces"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/places") }}
+            <Tab clickHandler={ (e: any) => { this.navigate(e, "/places") }}
                  showTitle={ this.state.menuHover }
                  image="/data/images/places-s.png"
                  style={ styles.mobileHidden() }
                  compact={ isMobile() }
                  title="Places"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/inventory") } }
+            <Tab clickHandler={ (e: any) => { this.navigate(e, "/inventory") } }
                  showTitle={ this.state.menuHover }
                  image="/data/images/entities.png"
                  compact={ isMobile() }
                  title="Inventory"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/chat") } }
+            <Tab clickHandler={ (e: any) => { this.navigate(e, "/chat") } }
                  showTitle={ this.state.menuHover }
                  image="/data/images/chat.png"
                  compact={ isMobile() }
                  title="Chat"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/files") }}
+            <Tab clickHandler={ (e: any) => { this.navigate(e, "/files") }}
                  showTitle={ this.state.menuHover }
                  image="/data/images/voxel-white.png"
                  compact={ isMobile() }
                  title="Data"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/network") }}
+            <Tab clickHandler={ (e: any) => { this.navigate(e, "/network") }}
                  showTitle={ this.state.menuHover }
                  image="/data/images/network.png"
                  style={ styles.mobileHidden() }
                  compact={ isMobile() }
                  title="Network"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/profile") } }
+            <Tab clickHandler={ (e: any) => { this.navigate(e, "/profile") } }
                  showTitle={ this.state.menuHover }
                  image="/data/images/person-s2.png"
                  compact={ isMobile() }
                  style={ styles.mobileHidden() }
                  title="Profile"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/login") } }
+            <Tab clickHandler={ (e: any) => { this.navigate(e, "/login") } }
                  showTitle={ this.state.menuHover }
                  title="Sign In"
                  style={ styles.mobileHidden() }
                  compact={ isMobile() }
                  image="/data/images/logout.png"
             />
-            <Tab clickHandler={ e => { this.navigate(e, "/settings") } }
+            <Tab clickHandler={ (e: any) => { this.navigate(e, "/settings") } }
                  image="/data/images/configure-h.png"
                  showTitle={ this.state.menuHover }
                  compact={ isMobile() }
@@ -141,7 +141,7 @@ export default connect(
       }
     }
   }
-)(SideMenu)
+)(withRouter(SideMenu) as React.ComponentType<any>)
 
 let styles = {
   sideMenu: () => {

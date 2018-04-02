@@ -12,18 +12,12 @@ let linkRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_
 
 class Chat extends Component<any, any> {
 
-  constructor() {
-    super()
-    this.state = {
-        text: ""
-    }
-    this.messageBody = null
-  }
+  public messageBody: string | null
 
   handleBGClick (e: any) {
     if (e.target.getAttribute("id") == "bg-toggle-menu") {
       this.props.toggleMenu(false)
-      browserHistory.push("/")
+      this.props.history.push("/")
 
     }
   }
@@ -51,25 +45,19 @@ class Chat extends Component<any, any> {
   scrollToBottom() {
 
     if ( this.messageBody ) {
-
       const scrollHeight = this.messageBody.scrollHeight,
       height = this.messageBody.clientHeight,
       maxScrollTop = scrollHeight - height
 
       this.messageBody.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0
-
     }
-    
-
   }
 
   componentDidUpdate() {
-
     this.scrollToBottom()
-
   }
 
-  send (message, files = []) {
+  send (message: string, files: any[] = []) {
       let from = this.props.username,
           avatar = this.props.user.data.profilePicture
 
@@ -90,11 +78,10 @@ class Chat extends Component<any, any> {
   renderMessage ( message ) {
 
     if (linkRegex.test(message)) {
-
       if (imageRegex.test(message)) {
         return (
             <Card image={message}
-                  clickHandler={ (e, title) => {
+                  clickHandler={ (e: any, title: string) => {
                    let newWindow = window.open(message, "_blank")
                     newWindow.focus()
                   }}
@@ -127,7 +114,7 @@ class Chat extends Component<any, any> {
               onClick={ (e) => { this.handleBGClick(e) } }
               id="bg-toggle-menu" 
         >
-            <section style={styles.messages(mobile)} ref={ r=> { this.messageBody = r} }>
+            <section style={styles.messages(mobile) as any} ref={ r=> { this.messageBody = r} }>
                 {
                     this.props.messages.map((m, i) => {
                         let fromLabel = m.from != lastSender || (m.files != null && m.files.length > 0) ?
@@ -188,13 +175,7 @@ class Chat extends Component<any, any> {
           </span>
         </Shell>
     )
-
   }
-
-}
-
-Chat.defaultProps = {
-
 }
 
 import { connect } from 'react-redux';
