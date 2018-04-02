@@ -127,11 +127,13 @@ export function createPlaceFail( err ) {
     }
 
 }
-export function setCurrentPlace( place ) {
+export function setCurrentPlace( world, user, place ) {
 
   return {
     type: PLACE_SET_CURRENT,
-    current: place
+    current: place,
+    world,
+    user
   }
 
 }
@@ -151,7 +153,7 @@ export function updatePlace (id, data) {
    }
 
 }
-export function updatePlaceDone (res) {
+export function updatePlaceDone (res: any) {
 
     return {
         type: PLACE_UPDATE_DONE,
@@ -159,7 +161,7 @@ export function updatePlaceDone (res) {
     }
 
 }
-export function updatePlaceFail (err) {
+export function updatePlaceFail(err: any) {
 
     return {
         type: PLACE_UPDATE_FAIL,
@@ -184,7 +186,7 @@ export function deletePlace (id, data) {
    }
 
 }
-export function deletePlaceDone (res) {
+export function deletePlaceDone (res: any) {
 
     return {
         type: PLACE_DELETE_DONE,
@@ -192,7 +194,7 @@ export function deletePlaceDone (res) {
     }
 
 }
-export function deletePlaceFail (err) {
+export function deletePlaceFail(err: any) {
 
     return {
         type: PLACE_DELETE_FAIL,

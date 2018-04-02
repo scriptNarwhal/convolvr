@@ -1,6 +1,6 @@
 import * as React from "react"; import { Component } from "react";
 import Shell from '../components/shell'
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { 
   modalStyle 
 } from '../styles'
@@ -67,7 +67,6 @@ class Profile extends Component<any, any> {
   }
 
   save ( ) {
-
     let data = this.state.data,
         error = null
 
@@ -85,8 +84,7 @@ class Profile extends Component<any, any> {
     }
   }
 
-  onAvatarChange( value ) {
-
+  onAvatarChange( value: any ) {
     this.setState({
       data: {
         ...this.state.data,
@@ -95,15 +93,13 @@ class Profile extends Component<any, any> {
     })
   }
 
-  updateField( field, e ) {
-
+  updateField( field: string, e: any ) {
     this.setState({
       [field]: e.target.value
     })
   }
 
-  validate ( data ) {
-
+  validate ( data: any ) {
     let error = null
 
     if ( data.name == "" )
@@ -115,8 +111,7 @@ class Profile extends Component<any, any> {
     return error
   }
 
-  upload ( e ) {
-
+  upload ( e: any ) {
     let data = new FormData(),
         username = this.props.user != false ? this.props.user.name : 'public',
         imageURL = ""
@@ -127,7 +122,7 @@ class Profile extends Component<any, any> {
       this.setState({
         profilePicture: imageURL
       })
-      this.props.uploadFile(datausername: string, "profile-images")
+      this.props.uploadFile(data, username, "profile-images")
     }
   }
   
@@ -136,7 +131,7 @@ class Profile extends Component<any, any> {
     let isAdmin = this.props.user.name == 'admin'
 
     return (
-        <Shell className="settings">
+        <Shell htmlClassName="settings">
           <div style={styles.modal()}>
             <div>
               <h1>Profile</h1>
@@ -179,7 +174,7 @@ class Profile extends Component<any, any> {
             <div style={styles.col}>
               <span style={{paddingLeft: '1em'}}>
                 <input onChange={ (e)=> this.upload(e) }
-                       style={styles.fileUpload} 
+                       style={styles.fileUpload as any} 
                        type='file' 
                 />
               </span>
@@ -212,9 +207,7 @@ class Profile extends Component<any, any> {
           </div>
         </Shell>
     )
-
   }
-
 }
 
 import { connect } from 'react-redux';
@@ -247,22 +240,22 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      login: (user, pass, email, data) => {
+      login: (user: string, pass: string, email: string, data: any) => {
         dispatch(login(user, pass, email, data))
       },
       logOut: () => {
-        dispatch( logOut( ) )
+        dispatch(logOut( ))
       },
-      updateUser: ( id, name, pass, email, data ) => {
-        dispatch( updateUser( id, name, pass, email, data ) )
+      updateUser: (id: number, name: string, pass: string, email: string, data: any) => {
+        dispatch(updateUser( id, name, pass, email, data ) )
       },
-      sendMessage: (message, from) => {
-          dispatch(sendMessage(message, from))
+      sendMessage: (message: string, from: string) => {
+          dispatch(sendMessage(message, from, []))
       },
-      setCurrentSpace: (world) => {
-          dispatch(setCurrentSpace(world))
+      setCurrentSpace: (username: string, world: string) => {
+          dispatch(setCurrentSpace(username, world))
       },
-      uploadFile: (fileusername: string, dir) => {
+      uploadFile: (file: string, username: string, dir: string) => {
         dispatch(uploadFile(file, username, dir))
       }
     }
@@ -285,6 +278,7 @@ const styles = {
     padding: '1em',
     color: "white"
   },
+  fileUpload: {},
   save: {
     float: 'right',
     marginRight: '2em',

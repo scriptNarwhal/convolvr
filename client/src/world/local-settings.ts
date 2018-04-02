@@ -1,3 +1,5 @@
+import Convolvr from '../world/world'
+
 const str = "string",
 	  int = "integer",
 	  float = "float",
@@ -5,7 +7,25 @@ const str = "string",
 
 export default class Settings {
 
-	constructor(world) {
+	public cameraMode: any
+	public vrMovement: string
+	public IOTMode: boolean
+	public lighting: number
+	public geometry: number
+	public postProcessing: any
+	public aa: any
+	public shadows: any
+	public floorHeight: any
+	public viewDistance: any
+	public leapMode: any
+	public manualLensDistance: any
+	public fov: any
+	public blurEffect: any
+	public dpr: any
+	public gravity: number
+	public world: Convolvr
+
+	constructor(world: Convolvr) {
 		this.world = world
 
 		let options = ["cameraMode", 'vrMovement', 'IOTMode', 'lighting', 'geometry','postProcessing', 'aa', 'shadows', 'floorHeight', 'viewDistance', 'leapMode', 'manualLensDistance', 'fov', 'blurEffect', 'dpr'],
@@ -14,7 +34,7 @@ export default class Settings {
 			settings = this
 
 		options.map( (item, i) => {
-				let setting = localStorage.getItem( item )
+				let setting: any = localStorage.getItem( item )
 				if (setting === null) {
 					setting = defaults[ i ];
 					localStorage.setItem( item, setting )
@@ -26,8 +46,7 @@ export default class Settings {
 		this.gravity = 1
 	}
 
-	setValueWithType( key, value, type ) {
-
+	setValueWithType( key: string, value: any, type: string ) {
 		switch (type) {
 			case "boolean":
 				this[ key ] = value == "on" ? true : false;

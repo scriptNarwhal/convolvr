@@ -1,8 +1,25 @@
-import * as React from "react"; import { Component } from "react";
+import * as React from "react"; 
+import { Component } from "react";
 import Button from './button'
 import ContextMenu from './context-menu'
 
-export default class Card extends Component<any, any> {
+interface CardProps {
+  color: any
+  compact: boolean
+  quarterSize: boolean
+  showTitle: boolean
+  description: string
+  title: string
+  image?: string
+  category?: string
+  dir?: string
+  username: string
+  onContextMenu: Function
+  clickHandler: Function
+  contextMenuOptions: Function
+}
+
+export default class Card extends Component<CardProps, any> {
 
   private defaultProps = {
     title: "Menu Item",
@@ -24,11 +41,12 @@ export default class Card extends Component<any, any> {
       { name: "Share" },
       { name: "Edit" },
     ]
-}
+  }
+
+  public props: CardProps
 
   componentWillMount () {
-    this.setState({
-    })
+   
   }
 
   handleContextAction (name: string, e: any) {

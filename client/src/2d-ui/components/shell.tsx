@@ -2,15 +2,37 @@
 import * as React from "react"; import { Component } from "react";
 import SideMenu from './side-menu'
 import Button from './button'
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { isMobile } from '../../config'
 
-class Shell extends Component<any, any> {
+interface ShellProps {
+  dispatch?: (action: any) => void
+  cwd?: string
+  currentSpace?: string
+  worldUser?: string
+  username?: string
+  reactPath?: string
+  users?: any[]
+  listFiles?: Function
+  sendMessage?: Function
+  toggleMenu?: Function
+  noBackground?: boolean
+  stereoMode?: boolean
+  htmlClassName?: string
+  innerStyle?: any
+  data?: any
+  hasMenu?: boolean
+  menuOnly?: boolean
+  menuOpen?: boolean
+}
+
+class Shell extends Component<ShellProps, any> {
 
   private defaultProps = {
     noBackground: false,
+    htmlClassName: "",
     innerStyle: {},
-    data
+    data: {}
   }
 
   public className: string
@@ -21,11 +43,11 @@ class Shell extends Component<any, any> {
     })
   }
 
-  componentWillUpdate( nextProps: any, nextState: any ) {
+  componentWillUpdate(nextProps: any, nextState: any) {
 
   }
 
-  uploadFiles ( files ) {
+  uploadFiles ( files: any[] ) {
     let dir = this.props.cwd.join("/"); console.log("upload files dir ", dir)
     
     if ( !!this.props.currentSpace ) {
@@ -73,7 +95,7 @@ class Shell extends Component<any, any> {
           if (complete == 100) {
             if (window.location.href.indexOf("/chat") > -1) {
               setTimeout(()=>{
-                shell.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames, null, window.three.world.space.name)
+                shell.props.sendMessage("Uploaded "+(ins > 1 ? ins+ " Files" : "a File"), from, fileNames, null, (window as any).three.world.space.name)
               }, 500)
             }
           }
@@ -105,15 +127,15 @@ class Shell extends Component<any, any> {
                         e.preventDefault()
                         this.uploadFiles((e.target as any).files || e.dataTransfer.files)}
                     }
-            onDragEnter={e=>{ console.log(e); e.preventDefault(); e.stopPropagation(); this.setDropBackground(true) }}
-            onDragOver={e=> { console.log(e); e.preventDefault(); e.stopPropagation(); }}
-            onDragLeave={e=>{ console.log(e); e.preventDefault(); e.stopPropagation(); this.setDropBackground(false) }}
+            onDragEnter={e=>{  e.preventDefault(); e.stopPropagation(); this.setDropBackground(true) }}
+            onDragOver={e=> {  e.preventDefault(); e.stopPropagation(); }}
+            onDragLeave={e=>{  e.preventDefault(); e.stopPropagation(); this.setDropBackground(false) }}
           onClick={e=> {
             if ((e.target as any).getAttribute('id') == 'shell') {
               this.props.toggleMenu(true)
             }
           }}
-          className='shell'
+          className={ this.props.htmlClassName || 'shell' }
           id='shell'
         >
             {hasMenu ? (
@@ -139,7 +161,7 @@ import {
 } from '../../redux/actions/file-actions'
 
 export default connect(
-  state => {
+  (state: any, ownProps: ShellProps) => {
     return {
       cwd: state.files.listDirectories.workingPath,
       currentSpace: state.spaces.current,
@@ -153,13 +175,13 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      listFiles: (username, dir) => {
+      listFiles: (username: string, dir: string) => {
           dispatch(listFiles(username, dir))
       },
-      toggleMenu: (force) => {
+      toggleMenu: (force: boolean) => {
         dispatch(toggleMenu(force))
       },
-      sendMessage: (message, from, files, avatar, space) => {
+      sendMessage: (message: string, from: string, files: any[], avatar: string, space: string) => {
         dispatch(sendMessage(message, from, files, avatar, space))
       },
     }

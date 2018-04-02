@@ -1,12 +1,12 @@
 import * as React from "react"; import { Component } from "react";
-import { browserHistory } from 'react-router'
+import { BrowserRouter, Link, withRouter } from 'react-router-dom';
 import Card from '../components/card'
 import Shell from '../components/shell'
 import LocationBar from '../components/location-bar'
 
 class Places extends Component<any, any> {
 
-  handleBGClick (e) {
+  handleBGClick (e: any) {
     if (e.target.getAttribute("id") == "bg-toggle-menu") {
       this.props.toggleMenu(false)
       browserHistory.push("/")
@@ -14,7 +14,7 @@ class Places extends Component<any, any> {
     }
   }
 
-  setCurrentPlace (userName, world, name) {
+  setCurrentPlace (userName: string, world: string, name: string) {
     if (userName == '') {
       userName = 'space'
     }
@@ -30,7 +30,7 @@ class Places extends Component<any, any> {
         <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
                      label="Places"
                      username={this.props.username}
-                     onItemSelect={  (item, index, length) => {
+                     onItemSelect={  (item: any, index: number, length: number) => {
                         console.log("changing dir from location bar")
                         let path = this.props.workingPath
                         path.splice(index+1)
@@ -61,11 +61,11 @@ class Places extends Component<any, any> {
           </div>
           <div style={styles.spaces}>
           {
-            this.props.places.map((world, i) => {
+            this.props.places.map((world: any, i: number) => {
               let thumb = ''
               
               return (
-                <Card clickHandler={(e, v) => {
+                <Card clickHandler={(e: any, v: any) => {
                         this.setCurrentPlace(place.userName, place.world, place.name)
                       }}
                       color={`#${(place.color).toString(16)}`}
@@ -84,9 +84,6 @@ class Places extends Component<any, any> {
   
 }
 
-Places.defaultProps = {
-
-}
 
 import { connect } from 'react-redux';
 import {
@@ -107,7 +104,7 @@ export default connect(
         dispatch( toggleMenu( force ) )
       },
       setCurrentPlace: (user, world, place) => {
-          dispatch(setCurrentSpace(user, world, place))
+          dispatch(setCurrentPlace(user, world, place))
       }
     }
   }

@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { API_SERVER } from '../../config.js'
+import Component from '../../core/component.js';
+import Convolvr from '../../world/world'
 
 export default class FileSystem {
 
@@ -12,9 +14,9 @@ export default class FileSystem {
     init ( component: Component ) { 
 
         let attr = component.attrs.file,
-            defaultCallbacks = [],
-            params = {},
-            res = {}
+            defaultCallbacks: any[] = [],
+            params: any = {},
+            res: any = {}
 
         if ( attr.listFiles ) { // init logic here... only read methods; (write logic triggered by events)
             params = attr.listFiles
@@ -34,7 +36,6 @@ export default class FileSystem {
             // defaultCallbacks.push( () => {
             //     component.entity.updateComponentAtPath( component, component.path )
             // })
-
         res = {
             createFile: {
                 data: null,
@@ -74,52 +75,50 @@ export default class FileSystem {
         }
 
         return {
-            workingPath: [],
+            workingPath: [] as any[],
             workingDirectory: "/",
             res,
             renderFiles: (username: string, dir: string) => {
-                this._renderFiles( componentusername: string, string )
+                this._renderFiles( component, username, dir)
             },
             renderDirectories: (username: string, dir: string) => {
-                this._renderDirectories( componentusername: string, string )
+                this._renderDirectories( component, username, dir)
             },
-            setWorkingDirectory: ( username, dir ) => {
-                this._setWorkingDirectory( componentusername: string, dir )
+            setWorkingDirectory: (username: string, dir: string ) => {
+                this._setWorkingDirectory( component, username, dir )
             },
-            createFile: ( username, dir ) => {
-                this._createFile( componentusername: string, dir )
+            createFile: (username: string, dir: string ) => {
+                this._createFile( component, username, dir )
             },
-            uploadFile: ( fileusername: string, dir ) => {
-                this._uploadFile( component, fileusername: string, dir )
+            uploadFile: (file: string, username: string, dir: string ) => {
+                this._uploadFile( component, file, username, dir )
             },
-            listFiles: ( username, dir ) => {
-                this._listFiles( componentusername: string, dir )
+            listFiles: (username: string, dir: string ) => {
+                this._listFiles( component, username, dir )
             },
-            listDirectories: ( username, dir ) => {
-                this._listDirectories ( componentusername: string, dir )
+            listDirectories: (username: string, dir: string ) => {
+                this._listDirectories ( component, username, dir )
             },
-            readText: ( filenameusername: string, dir ) => {
-                this._readText( component, filenameusername: string, dir )
+            readText: (filename: string, username: string, dir: string ) => {
+                this._readText(component, filename, username, dir )
             },
-            writeText: ( text, filenameusername: string, dir ) => {
-                this._writeText( component, text, filenameusername: string, dir )
+            writeText: (text: string, filename: string, username: string, dir: string ) => {
+                this._writeText(component, text, filename, username, dir )
             },
-            deleteFile: ( filenameusername: string, dir ) => {
-                this._deleteFile( component, filenameusername: string, dir )
+            deleteFile: (filename: string, username: string, dir: string ) => {
+                this._deleteFile(component, filename, username, dir )
             }
         }
     }
 
-    _handleResponse( type, data ) {
-
+    _handleResponse(component: Component, type: string, data: any) {
         component.state.file.res[ type ].data = data
-        component.state.file.res[ type ].callbacks.forEach( callBack => {
+        component.state.file.res[ type ].callbacks.forEach( (callBack: Function) => {
             callBack( data )
         })
     }
 
     _renderFiles( component: Component, username: string, dir: string ) {
-
         let files = component.state.file.res.listFiles.data,
             entity = component.entity,
             fileViewer = {
@@ -138,7 +137,6 @@ export default class FileSystem {
     }
 
     _renderDirectories( component: Component, username: string, dir: string ) {
-        
         let dirs = component.state.file.res.listDirectories.data,
             entity = component.entity,
             directoryViewer = {
@@ -156,86 +154,79 @@ export default class FileSystem {
         entity.reInit()
     }
 
-    _createFile ( componentusername: string, dir ) {
-
+    _createFile (component: Component, username: string, dir: string ) {
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
         axios.post(`${API_SERVER}/api/files/${username}/${dir != null ? "?dir="+outDir : ''}`, {}).then((response: any) => {
-           this._handleResponse( 'createFile', response.data )
-        }).catch(err => {
+           this._handleResponse(component,  'createFile', response.data )
+        }).catch((err: any) =>{
            component.state.file.res.createFile.error = err 
         })
     }
 
-    _uploadFile ( component, fileusername: string, dir ) {
-
+    _uploadFile (component: Component, file: string, username: string, dir: string ) {
         let outDir = !!dir ? "?dir="+dir : ""
 
         axios.post(`${API_SERVER}/api/files/upload/${username}${outDir}`, file).then((response: any) => {
-            this._handleResponse( 'uploadFile', response.data )
-        }).catch(err => {
+            this._handleResponse(component, 'uploadFile', response.data )
+        }).catch((err: any) =>{
             component.state.file.res.uploadFile.error = err
         })
     }
 
-    _createDirectory () {
-
+    _createDirectory (component: Component, username: string, dir: string) {
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
         axios.post(`${API_SERVER}/api/directories/${username}/${dir != null ? "?dir="+outDir : ''}`, {}).then((response: any) => {
-            this._handleResponse( 'createDirectory', response.data )
-        }).catch(err => {
+            this._handleResponse(component,  'createDirectory', response.data )
+        }).catch((err: any) =>{
            component.state.file.res.createDirectory.error = err 
         })
     }
 
-    _listFiles ( componentusername: string, dir ) {
-
+    _listFiles (component: Component, username: string, dir: string ) {
         axios.get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir="+dir : ''}`).then((response: any) => {
-            this._handleResponse( 'listFiles', response.data )
-        }).catch(err => {
+            this._handleResponse(component,  'listFiles', response.data )
+        }).catch((err: any) =>{
            component.state.file.res.listFiles.error = err
         })
     }
 
-    _listDirectories ( componentusername: string, dir) {
-
+    _listDirectories (component: Component, username: string, dir: string) {
         axios.get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir="+dir : ''}`).then((response: any) => {
            
-            this._handleResponse( 'listDirectories', response.data )
+            this._handleResponse(component,  'listDirectories', response.data )
           
-        }).catch(err => {
+        }).catch((err: any) =>{
           component.state.file.res.listDirectories.error = err 
         })
     }
 
-    _deleteFile (component, filenameusername: string, dir) {
+    _deleteFile (component: Component, filename: string, username: string, dir) {
 
         //TODO: implement
 
     }
 
-    _setWorkingDirectory ( componentusername: string, dir ) {
+    _setWorkingDirectory (component: Component, username: string, dir: string ) {
         component.state.file.workingDirectory = username+dir
         component.state.file.workingPath = (username+dir).split("/")
     }
 
-    _readText ( component, filenameusername: string, dir ) {
-
+    _readText (component: Component, filename: string, username: string, dir ) {
         axios.get(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`).then((response: any) => {
-            this._handleResponse( 'readText', response.data )
-        }).catch(err => {
+            this._handleResponse(component,  'readText', response.data )
+        }).catch((err: any) =>{
           component.state.file.res.readText.error = err  
         })
     }
 
-    _writeText ( component, text, filenameusername: string, dir ) {
-
+    _writeText (component: Component, text, filename: string, username: string, dir: string ) {
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
         axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+outDir : ''}`, {text: text}).then((response: any) => {
-            this._handleResponse( 'writeText', response.data )
-        }).catch(err => {
+            this._handleResponse(component,  'writeText', response.data )
+        }).catch((err: any) =>{
            component.state.file.res.writeText.error = err
         })
     }

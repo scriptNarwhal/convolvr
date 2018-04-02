@@ -1,7 +1,7 @@
 import Convolvr from "../../world/world";
 import Component from "../../core/component";
 
-type Signalstate: any = {
+type Signalstate = {
     oscillator: any,
     value: number,
     type: string,
@@ -10,14 +10,11 @@ type Signalstate: any = {
 }
 
 export default class SignalSystem { // system for passing signals between entities
-
     private world: Convolvr
     private oscillators: any
     private io: any
 
     constructor (world: Convolvr) {
-
-
         this.world = world
         this.oscillators = {
             sine: [],
@@ -30,14 +27,12 @@ export default class SignalSystem { // system for passing signals between entiti
 
         this.io = {} // map to maps of arrays of signals by entity { 0.0.0: { "125158": [ Input, Input, Input ] } }
         // needs to tie into terrain / voxel system, for global system state specific to voxel
-
     }
 
     public init (component: Component): SignalState { 
-
         let attr = component.attrs.signal,
             osc = null,
-            state: Signalstate: any = {
+            state: Signalstate = {
                 oscillator: null,
                 value: attr.value ? attr.value : 0,
                 type: attr.type || "number",
@@ -72,7 +67,6 @@ export default class SignalSystem { // system for passing signals between entiti
     }
 
     private _initOscillator (component: Component, signal: any, state: SignalState, osc: any) {
-
         let oscillator = Object.assign( { component }, osc )
 
         this.oscillators[ osc.type ].push( oscillator )
@@ -82,7 +76,6 @@ export default class SignalSystem { // system for passing signals between entiti
     }
 
     private _modulateSignal (component: Component, signal: any, state: SignalState, mod: any) {
-
         let value = state.value
 
         switch ( mod.type ) {
@@ -116,6 +109,5 @@ export default class SignalSystem { // system for passing signals between entiti
 
 
     }
-
 }
 

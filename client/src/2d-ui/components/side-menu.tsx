@@ -1,5 +1,5 @@
 import * as React from "react"; import { Component } from "react";
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import Tab from './tab'
 import { isMobile } from '../../config'
 
@@ -11,7 +11,7 @@ class SideMenu extends Component<any, any> {
     })
   }
 
-  toggleMenu ( force: boolean ) {
+  toggleMenu ( force?: boolean ) {
       this.props.toggleMenu(force)
   }
 

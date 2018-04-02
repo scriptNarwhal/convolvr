@@ -3,7 +3,7 @@ import * as React from "react"; import { Component } from "react";
 import Shell from '../components/shell'
 import Card from '../components/card'
 import Button from '../components/button'
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import LocationBar from '../components/location-bar'
 import { rgba, rgb } from '../../util'
 
@@ -20,7 +20,7 @@ class Chat extends Component<any, any> {
     this.messageBody = null
   }
 
-  handleBGClick (e) {
+  handleBGClick (e: any) {
     if (e.target.getAttribute("id") == "bg-toggle-menu") {
       this.props.toggleMenu(false)
       browserHistory.push("/")

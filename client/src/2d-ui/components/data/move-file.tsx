@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import FileButton from './file-button'
 import { rgba, rgb } from '../../../util'
 

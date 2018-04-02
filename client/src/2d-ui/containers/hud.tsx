@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 import Button from '../components/button'
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 
 const styles = {
     optionButton: {

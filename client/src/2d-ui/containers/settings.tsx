@@ -1,5 +1,5 @@
 import * as React from "react"; import { Component } from "react";
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import Shell from '../components/shell'
 import { 
   textAreaStyle,

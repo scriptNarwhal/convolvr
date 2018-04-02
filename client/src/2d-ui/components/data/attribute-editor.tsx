@@ -1,6 +1,6 @@
 import * as React from "react"; 
 import { Component } from "react";
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import FileButton from './file-button'
 import { rgba, rgb } from '../../../util'
 import { isMobile } from '../../../config'
@@ -13,10 +13,6 @@ import {
   modalStyle 
 } from '../../styles'
 class AttributeEditor extends Component<any, any> {
-
-  constructor (...args: any[]) {
-    super(args)
-  }
 
   componentWillMount () {
 
@@ -64,29 +60,21 @@ class AttributeEditor extends Component<any, any> {
     console.info("attributeEditor edit load property data: editSource, editData, ", nextProps.editSource, nextProps.loadedItemData)
     if ( nextProps.editSource == "componentEdit" ) { // load from component in inventory
       if ( nextProps.loadedItemData ) {
-
         this.setState( nextProps.loadedItemData )      
         this.setText( nextProps.loadedItemData.name, nextProps.loadedItemData.data, false )
-
       } else {
-
           console.warn("missing property action data")
           this.setState({activated: false})
-
       }
     } else { // load from inventory
       let inventoryData = nextProps.properties[ nextProps.itemIndex || nextProps.itemId ]
 
       if ( inventoryData ) {
-
         this.setState( inventoryData )         
         this.setText( inventoryData.name, inventoryData.data, false )
-
       } else {
-
         console.warn("missing property inventory data")
         this.setState({activated: false})
-
       }
     }
   }
@@ -100,7 +88,6 @@ class AttributeEditor extends Component<any, any> {
         propName: string = ""
 
     template = this.props.convolvrProps.find( (prop: any) => { return prop.name == name} )
-
     propName = name.split(".")[0]
     this.setText( propName, template.data, true )
   }
@@ -134,7 +121,6 @@ class AttributeEditor extends Component<any, any> {
             newId: number = typeof this.props.properties == 'object' ? this.props.properties.length : 0
 
         if ( name == "" ) {
-
             alert("Name is required.")
             return
         }
@@ -145,11 +131,8 @@ class AttributeEditor extends Component<any, any> {
         }
 
         if ( this.props.onSave ) {
-
           this.props.onSave( { name, data: JSON.parse(this.state.text) } )
-
         } else if (this.state.activated) {
-
           if ( this.state.id != -1) 
             newId = this.state.id
 
@@ -198,7 +181,7 @@ class AttributeEditor extends Component<any, any> {
                 } 
                 <select onChange={ e=> { this.useTemplate( e.target.value ) } } >
                   {
-                    this.props.convolvrProps.map( (prop, p) => {
+                    this.props.convolvrProps.map( (prop: any, p: number) => {
                       let propName = `${prop.name}`
                       return (
                         <option key={p} value={propName}>{propName}</option>

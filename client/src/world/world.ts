@@ -29,46 +29,53 @@ let world: any = null,
 
 export default class Convolvr {
 
-	postProcessing:   PostProcessing
-	initialLoad: 	  boolean
-	loadedCallback:   Function
-	sendUpdatePacket: number
-	three:            any
-	THREE:			  any
-	socket: 		  any
-	store: 			  any
-	mobile: 		  boolean
-	userInput: 		  UserInput
-	settings: 		  Settings
-	config: 		  Object
-	windowFocus: 	  boolean
-	willRender:       boolean
-	name: 			  string
-	userName: 		  string
-	mode: 			  string
-	rPos: 			  boolean
-	users: 			  Array<User>
-	user: 			  User
-	camera: 		  any
-	skyboxMesh: 	  any
-	skybox: 		  SkyboxSystem
-	vrFrame: 		  any
-	capturing: 		  boolean
-	webcamImage: 	  string
-	HMDMode:		  string
-	vrHeight: 		  number
-	screenResX: 	  number
-	octree: 		  any
-	raycaster: 		  any
-	systems: 		  Systems
-	terrain: 		  TerrainSystem
-	workers: 		  Object
-	skyBoxMesh:       any
-	skyLight:         any
-	sunLight:         any
-	shadowHelper:     any
-	animate: 				 Function
-	initChatAndLoggedInUser: Function
+	public postProcessing:   PostProcessing
+	public initialLoad: 	 boolean
+	public loadedCallback:   Function
+	public sendUpdatePacket: number
+
+	public three:        any
+	public THREE:		 any
+	public socket: 		 any
+	public store: 		 any
+	public mobile: 		 boolean
+	public userInput: 	 UserInput
+	public settings: 	 Settings
+	public config: 		 Object
+	public windowFocus:  boolean
+	public willRender:   boolean
+	public name: 	     string
+	public userName: 	 string
+	public mode: 	     string
+	public rPos: 	     boolean
+	public users: 		 Array<User>
+	public user: 		 User
+	public camera: 		 any
+	public skyboxMesh: 	 any
+	public help:         any
+	public skybox: 		 SkyboxSystem
+	public vrFrame: 	 any
+	public capturing: 	 boolean
+	public webcamImage:  string
+	public HMDMode:		 string
+	public IOTMode: 	 any
+	public vrHeight: 	 number
+	public screenResX: 	 number
+	public octree: 		 any
+	public raycaster: 	 any
+	public systems: 	 Systems
+	public terrain: 	 TerrainSystem
+	public workers: 	 Object
+	public skyBoxMesh:   any
+	public skyLight:     any
+	public sunLight:     any
+	public shadowHelper: any
+
+	public animate: 				Function
+	public initChatAndLoggedInUser: Function
+	public onUserLogin: 			Function
+	public ambientLight: any
+	public socketHandlers: any
 
 	constructor( user: User, userInput: UserInput, socket: any, store: any, loadedCallback: Function ) {
 
@@ -185,7 +192,7 @@ export default class Convolvr {
 		this.animate(this, 0, 0)
 	}
 
-	init ( config: Object, callback: Function ) {
+	init(config: any, callback: Function ) {
 
 		let coords: any    = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
 			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.25 ),
@@ -293,7 +300,7 @@ export default class Convolvr {
 		false == deferSpaceLoading && rebuildSpace()
 	}
 
-	initRenderer ( renderer: any, id: string ) {
+	initRenderer (renderer: any, id: string) {
 		renderer.setClearColor(0x1b1b1b)
 		// renderer.setPixelRatio(pixelRatio)
 		let customDPR = this.settings.dpr, // dpr = 0 == use highest dpr
@@ -306,7 +313,7 @@ export default class Convolvr {
 		renderer.domElement.setAttribute("id", id)
 	}
 
-	load ( userName: string, name: string, callback: Function, readyCallback: Function ) { console.log("load world", userName, name)
+	load (userName: string, name: string, callback: Function, readyCallback: Function) { console.log("load world", userName, name)
 		let world = this
 
 		this.name = name
@@ -321,7 +328,7 @@ export default class Convolvr {
 		})
 	}
 
-	reload ( user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean ) {
+	reload (user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean) {
 		let world = this,
 			octree = this.octree
 
@@ -363,7 +370,7 @@ export default class Convolvr {
 	  	this.sendUpdatePacket += 1
 	  	if ( this.sendUpdatePacket %((2+(2*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0 ) { // send packets faster / slower for all vr / mobile combinations
 			if ( input.trackedControls || input.leapMotion ) {
-				userHands.forEach( handComponent => {
+				userHands.forEach( (handComponent: Component) => {
 					let hand = handComponent.mesh
 
 					hands.push({

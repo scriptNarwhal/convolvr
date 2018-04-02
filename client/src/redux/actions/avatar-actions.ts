@@ -35,7 +35,7 @@ export function receiveAvatars (avatars) {
         avatars: avatars
     }
 }
-export function failedFetchAvatars (err) {
+export function failedFetchAvatars(err: any) {
     return {
         type: FAILED_FETCH_AVATARS,
         err: err

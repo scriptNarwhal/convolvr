@@ -1,11 +1,9 @@
-// @flow
 console.log('Convolvr Client Initializing')
 import ReactDOM from 'react-dom' // React
 import React, { Component, PropTypes } from 'react'
 import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 import { render } from 'react-dom' // Redux
-import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import makeStore from './redux/makeStore'
 import { 
@@ -14,19 +12,7 @@ import {
   GRID_SIZE,
   GLOBAL_SPACE 
 } from './config'
-import App from './2d-ui/containers/app' // 2D UI
-import Data from './2d-ui/containers/data'
-import Spaces from './2d-ui/containers/worlds'
-import Places from './2d-ui/containers/places'
-import NewSpace from './2d-ui/containers/new-world'
-import Settings from './2d-ui/containers/settings'
-import Inventory from './2d-ui/containers/inventory'
-import Network from './2d-ui/containers/network'
-import Login from './2d-ui/containers/login'
-import Chat from './2d-ui/containers/chat'
-import Profile from './2d-ui/containers/profile'
-import HUD from './2d-ui/containers/hud'
-import { THREE } from 'three' // 3D Space
+import Routes from './routes'
 import Convolvr from './world/world'
 import Systems from './systems/index'
 import { events } from './network/socket'
@@ -56,13 +42,13 @@ clearOldData()
 //   selector: "#progressbar",
 //   hideOnComplete: true,
 // })
-userInput = new UserInput()
+userInput = new UserInput(null)
 
 loadingSpace = new Convolvr( user, userInput, socket, store, (world: Convolvr) => {
 
   let systems:   Systems       = world.systems,
       scene:     Object        = world.three.scene,  
-      pos:       THREE.Vector3 = world.camera.position,
+      pos:       any           = world.camera.position,
       coords:    Array<number> = world.getVoxel( pos ),
       voxelKey:  string        = coords.join("."),
       altitude:  number        = systems.terrain.voxels[ voxelKey ].data.altitude
@@ -119,27 +105,7 @@ loadingSpace = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
 //loadingSpace.progressBar = progressBar
 
 ReactDOM.render(
-  (<Provider store={store}>
-		<Router history={history}>
-	  		<Route path={APP_ROOT+"/"} component={App} >
-				<IndexRoute component={HUD}/>
-        <Route path={APP_ROOT+"/:userName/:worldName"} component={HUD} />
-        <Route path={APP_ROOT+"/:userName/:worldName/at/:coords"} component={HUD} />
-        <Route path={APP_ROOT+"/:userName/:worldName/:placeName"} component={HUD} />
-        <Route path={APP_ROOT+"/login"} component={Login} />
-        <Route path={APP_ROOT+"/chat"} component={Chat} />
-        <Route path={APP_ROOT+"/files"} component={Data} />
-        <Route path={APP_ROOT+"/files/:username"} component={Data} />
-        <Route path={APP_ROOT+"/spaces"} component={Spaces} />
-        <Route path={APP_ROOT+"/places"} component={Places} />
-        <Route path={APP_ROOT+"/new-world"} component={NewSpace} />
-        <Route path={APP_ROOT+"/settings"} component={Settings} />
-        <Route path={APP_ROOT+"/inventory"} component={Inventory} />
-        <Route path={APP_ROOT+"/network"} component={Network} />
-        <Route path={APP_ROOT+"/profile"} component={Profile} />
-			</Route>
-		</Router>
-  </Provider>),
+  React.createElement(Routes, { store, history }),
   document.getElementsByTagName('main')[0]
 )
 

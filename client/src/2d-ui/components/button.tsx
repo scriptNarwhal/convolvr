@@ -13,7 +13,15 @@ let styles = {
 
 export default class Button extends Component<any, any> {
 
-  public props: any
+  public props: {
+    style?: any
+    innerStyle?: any
+    title?: string
+    image?: string
+    onClick?: Function
+    onFiles?: Function
+    compact?:boolean
+  }
   private defaultProps: any = {
       title: "Button",
       style: false,
@@ -21,7 +29,6 @@ export default class Button extends Component<any, any> {
   }
 
   render() {
-
     let compact =  this.props.compact,
         innerStyle = this.props.innerStyle != false ? { ...styles.inner(compact), ...this.props.innerStyle } : styles.inner(compact),
         style = this.props.style != false ? { ...styles.button(compact), ...this.props.style} : styles.button(compact)
@@ -45,6 +52,5 @@ export default class Button extends Component<any, any> {
         </div>
     )
   }
-
 }
 

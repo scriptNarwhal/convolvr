@@ -63,7 +63,7 @@ export function receiveUsers (users) {
         users: users
     }
 }
-export function failedFetchUsers (err) {
+export function failedFetchUsers(err: any) {
     return {
         type: USERS_FETCH_FAIL,
         err: err

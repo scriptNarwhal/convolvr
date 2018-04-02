@@ -1,48 +1,58 @@
-import * as React from "react"; import { Component } from "react";
-import { browserHistory } from 'react-router'
+import * as React from "react";
+import { Component } from "react";
+import { withRouter } from 'react-router-dom'
 import Card from '../components/card'
 import Shell from '../components/shell'
 import LocationBar from '../components/location-bar'
 import { isMobile } from '../../config'
 
-class Spaces extends Component<any, any> {
+interface SpacesProps {
+  setCurrentSpace: Function
+  changeDirectory: Function
+  toggleMenu: Function
+  history: any,
+  workingPath: any,
+  spaces: any[],
+  userSpaces: any[],
+  username: string
+}
 
-  handleBGClick (e) {
+class Spaces extends Component<SpacesProps, any> {
+
+  public props: SpacesProps
+
+  handleBGClick (e: any) {
     if (e.target.getAttribute("id") == "bg-toggle-menu") {
       this.props.toggleMenu(false)
-      browserHistory.push("/")
+      this.props.history.push("/")
 
     }
   }
 
-  switchSpaces ( userName, name ) {
-
+  switchSpaces ( userName: string, name: string ) {
     if (userName == '') {
       userName = 'space'
     }
     //browserHistory.push(userName+"/"+name)
     //window.location.href = window.location.href // workaround..
     this.props.setCurrentSpace( userName, name )
-    three.world.reload( userName, name, false, false )
+    (window as any).three.world.reload( userName, name, false, false )
     this.props.toggleMenu(false)
   }
 
   _renderSpaces ( spaces ) {
 
     return spaces.map((world, i) => {
-
         let thumb = ''
 
         if (world.sky.photosphere != '') {
-
           thumb = world.sky.photosphere.split("/")
           thumb.splice(thumb.length-1, 0, "thumbs")
           thumb = thumb.join("/")+'.jpg'
-
         }
 
         return (
-          <Card clickHandler={(e, v) => {
+          <Card clickHandler={(e: any, v: any) => {
                   this.switchSpaces(world.userName, world.name)
                 }}
                 color={`#${(world.light.color).toString(16)}`}
@@ -59,30 +69,25 @@ class Spaces extends Component<any, any> {
   }
 
   render() {
-
-    let spaces = [], // this.props.spaces
-        spacesWithSkyboxes = [],
-        userSpaces = [], // this.props.userSpaces
-        userSpacesWithSkyboxes = []
+    let spaces: any[] = [], // this.props.spaces
+        spacesWithSkyboxes: any[] = [],
+        userSpaces: any[] = [], // this.props.userSpaces
+        userSpacesWithSkyboxes: any[] = []
 
         !!this.props.spaces && this.props.spaces.map( (world) => {
-
           if ( !!world.sky.photosphere ) {
             spacesWithSkyboxes.push( world )
           } else {
             spaces.push( world )            
           }
-
         })
 
         !!this.props.userSpaces && this.props.userSpaces.map( (world) => {
-          
           if ( !!world.sky.photosphere ) {
             userSpacesWithSkyboxes.push( world )
           } else {
             userSpaces.push( world )            
           }
-
         })
 
     return (
@@ -97,7 +102,7 @@ class Spaces extends Component<any, any> {
                         this.props.changeDirectory(path)
                      }}
         />
-        <span style={styles.container(isMobile())}
+        <span style={styles.container(isMobile()) as any}
               onClick={ (e) => { this.handleBGClick(e) } }
               id="bg-toggle-menu" 
         >
@@ -119,9 +124,6 @@ class Spaces extends Component<any, any> {
   }
 }
 
-Spaces.defaultProps = {
-
-}
 import { connect } from 'react-redux';
 import {
   toggleMenu
@@ -137,15 +139,15 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      toggleMenu: (force) => {
+      toggleMenu: (force: boolean) => {
         dispatch( toggleMenu( force ) )
       },
-      setCurrentSpace: (userName, world) => {
+      setCurrentSpace: (userName: string, world: string) => {
           dispatch(setCurrentSpace(userName, world))
       }
     }
   }
-)(Spaces)
+)(withRouter(Spaces as React.ComponentClass<any>))
 
 let styles = {
   spaces: {

@@ -1,5 +1,5 @@
 import * as React from "react"; import { Component } from "react";
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import Card from '../components/card'
 import Shell from '../components/shell'
 import LocationBar from '../components/location-bar'
@@ -12,7 +12,7 @@ class Network extends Component<any, any> {
 
   }
 
-  handleBGClick (e) {
+  handleBGClick (e: any) {
     if (e.target.getAttribute("id") == "bg-toggle-menu") {
       this.props.toggleMenu(false)
       browserHistory.push("/")

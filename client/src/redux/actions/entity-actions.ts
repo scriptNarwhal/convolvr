@@ -42,7 +42,7 @@ export function doneFetchEntities (entities) {
         entities: entities
     }
 }
-export function failedFetchEntities (err) {
+export function failedFetchEntities(err: any) {
     return {
         type: ENTITIES_FETCH_FAILED,
         err: err

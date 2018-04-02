@@ -3,21 +3,19 @@ import Convolvr from '../../world/world'
 import Component from '../../core/component'
 const THREE = (window as any).THREE;
 
-type FBXstate: any = {
+type FBXstate = {
     url: string
     fbx: any
 }
 
 export default class FBXPluginSystem { // allows use of imported .fbx models
-
-    world: Convolvr
-    loader: any
-    manager: any
-    mixers: Array<Object>
-    live: boolean
+    public world: Convolvr
+    public loader: any
+    public manager: any
+    public mixers: Array<Object>
+    public live: boolean
 
     constructor ( world: Convolvr ) {
-
         this.world = world
         this.loader = {}
         this.manager = {}
@@ -25,8 +23,7 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
         this.live = true
     }
 
-    init ( component: Component ): FBXState { 
-        
+    init (component: Component ): FBXState { 
         let manager = this.manager || new THREE.LoadingManager(),
             mixers = this.mixers,
             attr = component.attrs.fbx
@@ -59,15 +56,15 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
         }
     }
 
-    play ( component: Component, animationIndex: number = 0 ) {
+    play (component: Component, animationIndex: number = 0 ) {
         this._getClipAction( component, animationIndex ).play()
     }
 
-    stop ( component: Component, animationIndex: number = 0 ) {
+    stop (component: Component, animationIndex: number = 0 ) {
         this._getClipAction( component, animationIndex ).stop()
     }
 
-    tick ( delta: number, time: number ) {
+    tick (delta: number, time: number ) {
         let mixers = this.mixers;
 
         if ( mixers.length > 0 ) {
@@ -77,20 +74,20 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
 		}
     }
 
-    _getClipAction ( component: Component, index: number ) {
+    _getClipAction (component: Component, index: number ) {
         let model: any = component.state.fbx.fbx
         
         return model.mixer.clipAction( model.animations[ index ] )
     } 
 
-    _onProgress ( xhr: any ) {
+    _onProgress (xhr: any ) {
 		if ( xhr.lengthComputable ) {
 			let percentComplete = xhr.loaded / xhr.total * 100
 			console.log( Math.round( percentComplete ) + '% done loading model' )
 		}
     }
         
-    _onError ( xhr: any ) {
+    _onError (xhr: any ) {
 		console.error( xhr )
 	}
 }

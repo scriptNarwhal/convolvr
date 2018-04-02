@@ -1,5 +1,5 @@
 import * as React from "react"; import { Component } from "react";
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import Shell from '../components/shell'
 import { 
   textAreaStyle,
@@ -41,13 +41,13 @@ class Login extends Component<any, any> {
 
   }
 
-  handleKeyDown (e) {
+  handleKeyDown (e: any) {
     if (e.which == 13) {
       this.signIn()
     }
   }
 
-  rememberUser (e) {
+  rememberUser (e: any) {
     localStorage.setItem("rememberUser", !this.state.remember)
     this.setState({
       remember: !this.state.remember

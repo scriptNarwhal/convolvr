@@ -17,6 +17,12 @@ let styles = {
 
 export default class Tab extends Component<any, any> {
 
+  public defaultProps = {
+    title: "Menu Item",
+    showTitle: false, 
+    compact: false
+  }
+
   render() {
 
     return (
@@ -28,18 +34,10 @@ export default class Tab extends Component<any, any> {
                     image={this.props.image}
                     compact={this.props.compact}
             />
-            <span style={ this.props.showTitle ? { ...styles.title(), ...styles.visible } : styles.title() }>
+            <span style={ this.props.showTitle ? { ...styles.title(), ...styles.visible } : styles.title() as any }>
                 { this.props.title }
             </span>
         </div>
     )
-    
   }
-
-}
-
-Tab.defaultProps = {
-    title: "Menu Item",
-    showTitle: false, 
-    compact: false
 }

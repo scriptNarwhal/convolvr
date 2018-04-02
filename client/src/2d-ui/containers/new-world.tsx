@@ -7,9 +7,8 @@ import { isMobile } from '../../config'
 
 class NewSpace extends Component<any, any> {
 
-  constructor () {
-    super()
-  }
+  private nameInput: any;
+  private descriptionInput: any;
 
   componentWillMount() {
 
@@ -53,7 +52,7 @@ class NewSpace extends Component<any, any> {
   createSpace() {
 
     let lightColor = [ parseFloat(this.state.red), parseFloat(this.state.green), parseFloat(this.state.blue) ],
-        data = {
+        data: any = {
           id: 0,
           name: this.state.name,
           description: this.state.description,
@@ -110,76 +109,73 @@ class NewSpace extends Component<any, any> {
 
     } else {
 
-      alert("Space name & description are required.")
+      alert("Name & Description are required.")
 
     }
 
   }
-  onToggle( group, which, e ) {
-    
-    let value = e.target.value,
-        state = this.state
-        
-    state[ which ] = value == 'yes' ? true : false
+  onToggle( group: string, which: string, e: any ) {
+    let value = e.target.value;
 
-    this.setState(state)
-
+    this.setState({
+      [which]: value == 'yes' ? true : false
+    })
   }
-  onSkyTypeChange (e) {
+  onSkyTypeChange (e: any) {
     let value = e.target.value
     this.setState({
       skyType: e.target.value
     })
   }
-  onTerrainTypeChange (e) {
+  onTerrainTypeChange (e: any) {
     let value = e.target.value
     this.setState({
       terrainType: e.target.value
     })
   }
-  onToggleTurbulentTerrain (e) {
+  onToggleTurbulentTerrain (e: any) {
     let value= e.target.value
     this.setState({
       turbulentTerrain: value == 'yes' ? true : false
     })
   }
-  onToggleFlatAreas ( e ) {
+  onToggleFlatAreas ( e: any ) {
     let value = e.target.value
     this.setState({
       flatAreas: value == 'yes' ? true : false
     })
   }
-  onToggleGravity (e) {
+  onToggleGravity (e: any) {
     let value= e.target.value
     this.setState({
       gravity: value == 'yes' ? 1.0 : 0.0
     })
   }
-  onToggleProtected (e) {
+  onToggleProtected (e: any) {
     let value= e.target.value
     this.setState({
       protected: value == 'yes' ? true : false
     })
   }
-  onToggleHighAltitudeGravity (e) {
+  onToggleHighAltitudeGravity (e: any) {
     let value = e.target.value
     this.setState({
       highAltitudeGravity: value == 'yes' ? true : false
     })
   }
-  upload (e) {
+  upload (e: any) {
     let data = new FormData(),
         username = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'public'
     data.append('file', e.target.files[0])
     this.setState({
       photosphere: username+"/"+e.target.files[0].name.replace(/\s/g, '-')
     })
-    this.props.uploadFile(datausername: string, "")
+    this.props.uploadFile(data, username, "")
   }
 
   render() {
     return (
-        <Shell className="login">
+        <Shell htmlClassName="login">
           <div style={styles.modal()}>
             <div style={styles.title}>
               Create New Space
@@ -509,14 +505,11 @@ class NewSpace extends Component<any, any> {
   }
 }
 
-NewSpace.defaultProps = {
-}
-
 import { connect } from 'react-redux'
 import { createSpace } from '../../redux/actions/world-actions'
 import { uploadFile } from '../../redux/actions/file-actions'
 export default connect(
-  state => {
+  (state: any) => {
     return {
       tools: state.tools,
       users: state.users,
@@ -528,10 +521,10 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      createSpace: (data) => {
+      createSpace: (data: any) => {
         dispatch(createSpace(data))
       },
-      uploadFile: (fileusername: string, dir) => {
+      uploadFile: (file: string, username: string, dir: string) => {
         dispatch(uploadFile(file, username, dir))
       }
     }

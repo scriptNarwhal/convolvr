@@ -114,13 +114,13 @@ export function createSpace (data) {
         });
    }
 }
-export function createSpaceDone (res) {
+export function createSpaceDone (res: any) {
     return {
         type: SPACE_CREATE_DONE,
         created: res.data
     }
 }
-export function createSpaceFail (err) {
+export function createSpaceFail(err: any) {
     return {
         type: SPACE_CREATE_FAIL,
         err
@@ -151,13 +151,13 @@ export function updateSpace (id, data) {
         });
    }
 }
-export function updateSpaceDone (res) {
+export function updateSpaceDone (res: any) {
     return {
         type: SPACE_UPDATE_DONE,
         updated: res.data
     }
 }
-export function updateSpaceFail (err) {
+export function updateSpaceFail(err: any) {
     return {
         type: SPACE_UPDATE_FAIL,
         err
@@ -198,13 +198,13 @@ export function deleteSpace (id, data) {
         });
    }
 }
-export function deleteSpaceDone (res) {
+export function deleteSpaceDone (res: any) {
     return {
         type: SPACE_DELETE_DONE,
         details: res.data
     }
 }
-export function deleteSpaceFail (err) {
+export function deleteSpaceFail(err: any) {
     return {
         type: SPACE_DELETE_FAIL,
         err

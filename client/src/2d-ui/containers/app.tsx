@@ -1,5 +1,5 @@
 import * as React from "react"; import { Component } from "react";
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { events } from '../../network/socket'
 import Shell from '../components/shell'
 import Button from '../components/button'
@@ -211,7 +211,7 @@ class App extends Component<any, any> {
 
   }
 
-  handleKeyDown (e) {
+  handleKeyDown (e: any) {
 
     if (e.which == 27) {
       this.props.toggleMenu(true)
@@ -291,7 +291,7 @@ class App extends Component<any, any> {
             let ratio = window.devicePixelRatio || 1
             effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
           }
-          function onVRDisplayPresentChange(e) {
+          function onVRDisplayPresentChange(e: any) {
             console.log('onVRDisplayPresentChange', e)
             onResize()
             

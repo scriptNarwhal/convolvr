@@ -72,12 +72,14 @@ import VirtualDeviceSystem from './logic/virtual-device'
 import VirtualMachineSystem from './logic/virtual-machine'
 import SkyboxSystem from './environment/skybox'
 
+import Convolvr from '../world/world'
+
 export default class Systems {
 
-	world: Convolvr
-	liveSystems: Array<any>
-	systems: any
-	deferred: any
+	public world: Convolvr
+	public liveSystems: Array<any>
+	public systems: any
+	public deferred: any
 
 	public ability: 		 AbilitySystem;
 	public activate: 		 ActivateSystem;
@@ -269,7 +271,7 @@ export default class Systems {
             attrs = component.attrs,
             state = component.state,
             deferredSystems: any[] = [],
-			mesh = null,
+			mesh = null;
 			
 
         Object.keys( attrs ).map( attr => {

@@ -1,92 +1,24 @@
-import * as React from "react"; import { Component } from "react";
+import * as React from "react"; 
+import { Component } from "react";
 import Button from './button'
 
-export default class ContextMenu extends Component<any, any> {
-
-  componentWillMount () {
-
-    this.setState({
-      activated: false
-    })
-    
-  }
-
-  toggle () {
-
-    this.setState({
-      activated: ! this.state.activated
-    })
-
-  }
-
-  handleContextAction ( action, evt ) {
-
-    if ( this.props.onAction )
-
-      this.props.onAction( action, evt )
-
-    this.toggle()
-
-  }
-
-  render() {
-
-    let username = this.props.username,
-        dir = this.props.dir,
-        numberOfOptions = this.props.options.length,
-        nonEntity = this.props.category && this.props.category == "Properties" || this.props.category == "Components"
-
-    if ( this.state.activated ) {
-
-      return (
-        <div style={styles.card(this.props.color, this.props.compact)} title={this.props.title }>
-          {(this.props.showTitle ? (
-            <span style={styles.title}>{ this.props.title }</span>
-          ) : "")}
-          <Button style={ styles.button( this.props.compact, this.props.isImage, true ) }
-                  image="/data/images/x.png"
-                  onClick={ e=> this.toggle() }
-                  title="Close"
-          />
-          <div style={styles.options}>
-            {
-              this.props.options.map((opt, i) =>{
-                if ( nonEntity && opt.name =="Add To Space")
-                  return ""
-                
-                return (
-                  <div onClick={ e=> this.handleContextAction( opt.name, e ) }
-                       style={ { ...styles.option, borderBottom: i < numberOfOptions -1 ? styles.option.borderBottom : 'none' } }
-                       key={i}
-                  >
-                    { opt.name == "Download" ? (
-                      <a title={this.props.title} style={styles.link} target="_blank" href={`/data/user/${username}${dir}/${this.props.title}`}>Download</a>
-                    ) : opt.name }
-                  </div>
-                )
-              })
-            }
-          </div>
-        </div>
-      )
-
-  } else {
-      
-      return (
-        <Button image="/data/images/configure.png"
-                title="File Options"
-                onClick={ e=> this.toggle() }
-                style={ styles.button( this.props.compact, this.props.isImage, false, this.props.isHovering ) }
-        />
-      )
-
-    }
-
-  }
-
+interface ContextMenuProps {
+  options: any
+  onAction: Function
+  compact: boolean
+  title: string
+  isHovering: any
+  isImage: boolean
+  username: string
+  category: string
+  dir: string
+  showTitle?: boolean
+  color?: any
 }
 
-ContextMenu.defaultProps = {
+export default class ContextMenu extends Component<ContextMenuProps, any> {
+
+  public defaultProps = {
     title: "File Options",
     dir: "",
     username: "",
@@ -101,10 +33,83 @@ ContextMenu.defaultProps = {
       { name: "Edit" },
       { name: "Delete" },
     ]
+  }
+
+  public props: ContextMenuProps
+
+  componentWillMount () {
+    this.setState({
+      activated: false
+    })
+  }
+
+  toggle () {
+    this.setState({
+      activated: ! this.state.activated
+    })
+  }
+
+  handleContextAction (action: any, evt: any) {
+    if (this.props.onAction)
+      this.props.onAction(action, evt)
+
+    this.toggle()
+
+  }
+
+  render() {
+    let username = this.props.username,
+        dir = this.props.dir,
+        numberOfOptions = this.props.options.length,
+        nonEntity = this.props.category && this.props.category == "Properties" || this.props.category == "Components"
+
+    if ( this.state.activated ) {
+      return (
+        <div style={styles.card(this.props.color, this.props.compact) as any} title={this.props.title }>
+          {(this.props.showTitle ? (
+            <span style={styles.title}>{ this.props.title }</span>
+          ) : "")}
+          <Button style={ styles.button(this.props.compact, "", true) as any }
+                  image="/data/images/x.png"
+                  onClick={ (e: any) => this.toggle() }
+                  title="Close"
+          />
+          <div style={styles.options}>
+            {
+              this.props.options.map((opt: any, i: number) =>{
+                if ( nonEntity && opt.name =="Add To Space")
+                  return ""
+                
+                return (
+                  <div onClick={ (e: any)=> this.handleContextAction( opt.name, e ) }
+                       style={ { ...styles.option, borderBottom: i < numberOfOptions -1 ? styles.option.borderBottom : 'none' } }
+                       key={i}
+                  >
+                    { opt.name == "Download" ? (
+                      <a title={this.props.title} style={styles.link} target="_blank" href={`/data/user/${username}${dir}/${this.props.title}`}>Download</a>
+                    ) : opt.name }
+                  </div>
+                )
+              })
+            }
+          </div>
+        </div>
+      )
+  } else {
+      return (
+        <Button image="/data/images/configure.png"
+                title="File Options"
+                onClick={ (e: any)=> this.toggle() }
+                style={ styles.button( this.props.compact, "", false, this.props.isHovering ) }
+        />
+      )
+    }
+  }
 }
 
+
 let styles = {
-  card: (color, compact) => {
+  card: (color: any, compact: boolean) => {
     return {
       position: 'relative',
       cursor: 'pointer',
@@ -138,7 +143,7 @@ let styles = {
     paddingTop:'0.4em',
     fontSize: '17px'
   },
-  button: ( compact, image, close, isHovering ) => {
+  button: (compact: boolean, image: string, close: boolean, isHovering?: boolean) => {
     return {
       position: 'relative',
       top: compact ? '-50px' : close ? '-50px' : '-48px',

@@ -3,7 +3,7 @@
         "src/main.ts"
     ],
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "es6",
         "moduleResolution": "node",
         "noImplicitAny": true,
         "target": "es6",

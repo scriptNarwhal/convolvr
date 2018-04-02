@@ -36,7 +36,7 @@ export function doneFetchComponents (components) {
         components: components
     }
 }
-export function failedFetchComponents (err) {
+export function failedFetchComponents(err: any) {
     return {
         type: COMPONENTS_FETCH_FAILED,
         err: err

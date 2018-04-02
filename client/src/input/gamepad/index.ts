@@ -40,8 +40,8 @@ export default class GamePad {
 
     }
 
-    window.addEventListener("gamepadconnected", function(e) { gamepadHandler( e, true ) }, false)
-    window.addEventListener("gamepaddisconnected", function(e) { gamepadHandler( e, false ) }, false)
+    window.addEventListener("gamepadconnected", function(e: any) { gamepadHandler( e, true ) }, false)
+    window.addEventListener("gamepaddisconnected", function(e: any) { gamepadHandler( e, false ) }, false)
 
   }
 

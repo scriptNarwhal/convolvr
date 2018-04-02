@@ -1,5 +1,5 @@
 import * as React from "react"; import { Component } from "react";
-import { browserHistory } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import FileButton from './file-button'
 import Card from '../card'
 import {
@@ -257,13 +257,13 @@ class ComponentEditor extends Component<any, any> {
         })
     }
 
-    onNameChange( e ) {
+    onNameChange( e: any ) {
         this.setState({
             name: e.target.value
         })
     }
 
-    onIdChange( e ) {
+    onIdChange( e: any ) {
         this.setState({
             id: parseInt(e.target.value)
         })
