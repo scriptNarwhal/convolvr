@@ -11,10 +11,10 @@ const styles = {
 
 class HUD extends Component<any, any> {
 
-    private props: any;
-    private state: any;
+    public props: any;
+    public state: any;
 
-    toggleMenu (force) {
+    toggleMenu (force: boolean) {
         this.props.toggleMenu(force);
     }
 
@@ -28,7 +28,7 @@ class HUD extends Component<any, any> {
             {this.props.fullscreen == false ? (<Button title="Options"
                     image="/data/images/configure-h.png"
                     style={ Object.assign({}, styles.optionButton, {display: this.props.menuOpen ? "none" : "inline-block", backgroundColor: 'transparent'}) }
-                    onClick={ (evt, title) => {
+                    onClick={ (evt: any, title: string) => {
                         this.toggleMenu(true)
                         //this.props.history.push("/menu")
                     } }
@@ -36,10 +36,6 @@ class HUD extends Component<any, any> {
           </div>
     )
   }
-}
-
-HUD.defaultProps = {
-
 }
 
 import { connect } from 'react-redux';
@@ -60,7 +56,7 @@ export default connect(
   },
   (dispatch: Function) => {
     return {
-      toggleMenu: (force) => {
+      toggleMenu: (force: boolean) => {
           dispatch(toggleMenu(force))
       },
       toggleVRMode: () => {

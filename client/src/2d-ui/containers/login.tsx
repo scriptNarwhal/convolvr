@@ -10,8 +10,12 @@ import {
 import { isMobile } from '../../config'
 
 class Login extends Component<any, any> {
+
+  public nameInput: any;
+  public passwordInput: any;
+
   componentDidMount() {
-    this.state = {
+    this.setState({
       username: "",
       password: "",
       email: "",
@@ -19,45 +23,42 @@ class Login extends Component<any, any> {
       world: "overworld",
       loginError: "",
       remember: false
-    }
-    window.three.world.willRender = true;
+    });
+    (window as any).three.world.willRender = true;
   }
 
   logIn () {
-
     this.props.login(this.state.username, this.state.password, this.state.email, this.state.data)
-
     if (this.state.remember) { // replace password with token before beta release
       localStorage.setItem("username", this.state.username)
       localStorage.setItem("password", this.state.password)
     }
-
   }
 
   signUp () {
-
     this.props.logout()
     this.props.history.push("/profile")
-
   }
 
   handleKeyDown (e: any) {
     if (e.which == 13) {
-      this.signIn()
+      this.logIn()
     }
   }
 
   rememberUser (e: any) {
-    localStorage.setItem("rememberUser", !this.state.remember)
+    let remember = !this.state.remember
     this.setState({
-      remember: !this.state.remember
+      remember
     })
+    localStorage.setItem("rememberUser", remember ? "true" : "false")
+   
   }
 
   render() {
 
     return (
-        <Shell className="login" noBackground={true}>
+        <Shell htmlClassName="login" noBackground={true}>
           <div style={styles.modal()}>
             <div style={styles.title}>
               Sign in to Convolvr Metaverse
@@ -116,12 +117,9 @@ class Login extends Component<any, any> {
           </div>
         </Shell>
     )
-
   }
-
 }
 
-Login.defaultProps = {}
 
 import { connect } from 'react-redux'
 import { 
@@ -130,7 +128,7 @@ import {
 } from '../../redux/actions/user-actions'
 
 export default connect(
-  state => {
+  (state: any) => {
     return {
       tools: state.tools,
       users: state.users,
@@ -143,7 +141,7 @@ export default connect(
       logout: () => {
         dispatch( logOut() )
       },
-      login: (user, pass, email, data) => {
+      login: (user: string, pass: string, email: string, data: any) => {
         dispatch(login(user, pass, email, data))
       }
     }

@@ -12,7 +12,8 @@ let linkRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_
 
 class Chat extends Component<any, any> {
 
-  public messageBody: string | null
+  public messageBody: any
+  public textInput: any
 
   handleBGClick (e: any) {
     if (e.target.getAttribute("id") == "bg-toggle-menu") {
@@ -24,7 +25,7 @@ class Chat extends Component<any, any> {
 
   componentDidMount () {
 
-    let worldMode = three.world.mode
+    let worldMode = (window as any).three.world.mode
 
     if (worldMode != 'vr' && worldMode != 'stereo') {
       this.textInput.focus()
@@ -57,7 +58,7 @@ class Chat extends Component<any, any> {
     this.scrollToBottom()
   }
 
-  send (message: string, files: any[] = []) {
+  send (message?: string, files: any[] = []) {
       let from = this.props.username,
           avatar = this.props.user.data.profilePicture
 
@@ -69,13 +70,13 @@ class Chat extends Component<any, any> {
 
   }
 
-  isImage (file) {
+  isImage (file: string) {
 
     return imageRegex.test(file)
 
   }
 
-  renderMessage ( message ) {
+  renderMessage (message: string) {
 
     if (linkRegex.test(message)) {
       if (imageRegex.test(message)) {
@@ -107,16 +108,16 @@ class Chat extends Component<any, any> {
         currentSpace = this.props.space;
 
     return (
-        <Shell className="chat"
+        <Shell htmlClassName="chat"
               noBackground={true}
         >
          <span style={{ width: '100%', height: '100%', position:'fixed', top: 0, left: 0}}
-              onClick={ (e) => { this.handleBGClick(e) } }
+              onClick={ (e: any) => { this.handleBGClick(e) } }
               id="bg-toggle-menu" 
         >
             <section style={styles.messages(mobile) as any} ref={ r=> { this.messageBody = r} }>
                 {
-                    this.props.messages.map((m, i) => {
+                    this.props.messages.map((m: any, i: number) => {
                         let fromLabel = m.from != lastSender || (m.files != null && m.files.length > 0) ?
                             (<span style={styles.username(m.avatar)} >{m.from}:</span>) : ''
                         lastSender = m.from
@@ -130,11 +131,11 @@ class Chat extends Component<any, any> {
                             <span style={styles.messageText}>{this.renderMessage(m.message)}</span>
                             { m.files != null ? <br style={{marginBottom: '0.5em'}} /> : '' }
                             {
-                              m.files != null && m.files.map((file, i) => {
+                              m.files != null && m.files.map((file: any, i: number) => {
                                   let userDir = m.from != 'Human' ? m.from : 'public'
                                   return (
                                     <Card image={this.isImage(file) ? `/data/user/${userDir}/chat-uploads/thumbs/${file}.jpg` : ''}
-                                          clickHandler={ (e, title) => {
+                                          clickHandler={ (e: any, title: string) => {
                                             console.log(e, title, "clicked")
                                             let newWindow = window.open(`/data/user/${userDir}/chat-uploads/${file}`, "_blank")
                                             newWindow.focus()
@@ -153,20 +154,20 @@ class Chat extends Component<any, any> {
 
                   })
                 }
-                <section style={styles.inputs(mobile)}>
+                <section style={styles.inputs(mobile) as any}>
                   <input type='text'
-                        ref={(input) => { this.textInput = input; }}
-                        onBlur={ (e)=> { this.setState({text: e.target.value }) }}
-                        onKeyDown={ (e)=> {
+                        ref={(input: any) => { this.textInput = input; }}
+                        onBlur={ (e: any)=> { this.setState({text: e.target.value }) }}
+                        onKeyDown={ (e: any)=> {
                           if (e.which == 13) {
-                            this.send(e.target.value)
+                            this.send((e.target as any).value)
                           }
                         }}
                         style={styles.text(mobile)} />
-                  <input type='button' onClick={ (e) => { this.send() } } value="Send" style={styles.button(mobile)} />
+                  <input type='button' onClick={ (e: any) => { this.send() } } value="Send" style={styles.button(mobile) as any} />
                   <Button title={"Upload Files"}
-                          onClick={(evt, title) => {  }}
-                          onFiles={ (files) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
+                          onClick={(evt: any, title: string) => {  }}
+                          onFiles={ (files: any[]) => { this.props.uploadMultiple( files, this.props.username, this.props.cwd.join("/")) }}
                           image={"/data/images/upload.png"}
                           style={ styles.uploadStyle(mobile) }
                     />
@@ -208,18 +209,18 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      sendMessage: (message, from, files, avatar, space) => {
+      sendMessage: (message: string, from: string, files: any[], avatar: string, space: string) => {
           // if (message == "" && files.length == 0) {
           //   dispatch(toggleMenu())
           //   return
           // }
-          console.log("send message", message. space)
+          console.log("send message", message, space)
           dispatch(sendMessage(message, from, files, avatar, space))
       },
-      uploadMultiple: ( filesusername: string, dir ) => {
+      uploadMultiple: ( files: any[], username: string, dir: string ) => {
         dispatch( uploadFiles( files, username, dir ) )
       },
-      toggleMenu: (toggle) => {
+      toggleMenu: (toggle: boolean) => {
         dispatch(toggleMenu(toggle))
       },
       showChat: () => {
@@ -239,7 +240,7 @@ let styles = {
       border: 0,
       borderBottom: "0.2em solid white"
   },
-  text: (mobile) => {
+  text: (mobile: boolean) => {
     return {
       width: '100%',
       border: 'none',
@@ -250,10 +251,9 @@ let styles = {
       borderRadius: '3px',
       // borderTopLeftRadius: '3px',
       // borderBottomleftRadius: '3px',
-      border: 'none'
     }
   },
-  button: (mobile) => {
+  button: (mobile: boolean) => {
     return {
       background: "hsla(225, 75%, 45%, 1)",
       color: "white",
@@ -277,8 +277,7 @@ let styles = {
   innerMessage: {
     color: "white"
   },
-  username: (avatar) => {
-
+  username: (avatar: string) => {
     const usernameStyle = {
       display: 'inline-block',
       padding: '0.25em',
@@ -312,7 +311,7 @@ let styles = {
     borderTopRightRadius: '2px',
     borderBottomRightRadius: '2px'
   },
-  messages: (mobile) => {
+  messages: (mobile: boolean) => {
     return {
       width: mobile ? '100%' : '102vh',
       height: mobile ? '76vh' : '86vh',
@@ -333,23 +332,22 @@ let styles = {
       padding: '1em'
     }
   },
-  inputs: (mobile) => {
+  inputs: (mobile: boolean) => {
     return {
       height:'2.75em',
       position: "fixed",
-      bottom: mobile ? "4px" : "-20px",
+      // bottom: mobile ? "4px" : "-20px",
       width: (mobile ? '100%': '103vh'),
       maxWidth: mobile ? '100%' : '88vw',
       textAlign: "left",
       left: mobile ? '0px' : '64px',
       bottom: mobile ? '60px' : '32px',
       minWidth: '42vw',
-      textAlign: 'left',
       marginLeft: '2%',
       marginRight: '2%'
     }
   },
-  uploadStyle: ( mobile ) => {
+  uploadStyle: (mobile: boolean) => {
     return mobile ? {
       position: "fixed",
       bottom: "96px",

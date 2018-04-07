@@ -6,12 +6,6 @@ import LocationBar from '../components/location-bar'
 
 class Network extends Component<any, any> {
 
-  constructor () {
-
-    super()
-
-  }
-
   handleBGClick (e: any) {
     if (e.target.getAttribute("id") == "bg-toggle-menu") {
       this.props.toggleMenu(false)
@@ -27,17 +21,17 @@ class Network extends Component<any, any> {
     }
   }
 
-  switchDomain (name) {
+  switchDomain (name: string) {
     window.location.href = name // workaround
   }
 
   render() {
     return (
-        <Shell className="spaces">
+        <Shell htmlClassName="spaces">
         <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
                      label="Network"
                      username={this.props.username}
-                     onItemSelect={  (item, index, length) => {
+                     onItemSelect={  (item: any, index: number, length: number) => {
                         
                      }}
         />
@@ -48,9 +42,9 @@ class Network extends Component<any, any> {
           <div style={styles.spaces}>
           {
             this.props.settings != undefined && this.props.settings.network != undefined &&
-              this.props.settings.network.map((domain, i) => {
+              this.props.settings.network.map((domain: any, i: number) => {
               return (
-                <Card clickHandler={(e, v) => {
+                <Card clickHandler={(e: any, v: any) => {
                         this.switchDomain(domain.name)
                       }}
                       compact={true}
@@ -68,9 +62,6 @@ class Network extends Component<any, any> {
   }
 }
 
-Network.defaultProps = {
-
-}
 import { connect } from 'react-redux';
 
 import {
@@ -89,7 +80,7 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      toggleMenu: (force) => {
+      toggleMenu: (force: boolean) => {
         dispatch( toggleMenu( force ) )
       },
       fetchUniverseSettings: () => {

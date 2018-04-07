@@ -10,77 +10,7 @@ import InventoryExport from '../components/data/inventory-export'
 
 export default class InventoryList extends Component<any, any> {
 
-  componentWillMount () {
-    this.setState({
-      activated: false
-    })
-  }
-
-  handleContextAction ( action, data, e ) {
-    if ( this.props.onAction ) 
-      this.props.onAction( action, data, e )
-
-  }
-
-  render() {
-
-    let username = this.props.username,
-        dir = this.props.dir
-
-    return (
-        <div style={Object.assign({}, styles.list(this.props.color, this.props.compact), this.props.style )} title={this.props.category }>
-          <span style={styles.title}>
-            { this.props.category }
-            <span style={styles.new}>
-              {
-                this.props.category == "Entities" ? (
-                  [
-                    <EntityEditor username={this.props.username} key="1" />,
-                    <ImportToSpace key="2" />,
-                    <InventoryExport key="3" />
-                  ]
-                ) : this.props.category == "Components" ? (
-                  <ComponentEditor username={this.props.username}
-                                  entityEditMode={false}
-                  />
-                ) : (
-                  <AttributeEditor username={this.props.username}
-                                  entityEditMode={false}
-                  />
-                )
-              }
-              
-            </span>
-          </span>
-      
-          <div style={styles.options}>
-            {
-              this.props.fetching == false && this.props.options && this.props.options.map((opt, i) =>{
-                return (
-                    <Card clickHandler={ (e, name) => { this.handleContextAction("Export JSON", { itemIndex: i}, e) }}
-                          onContextMenu={ (name, data, e) => { this.handleContextAction(name, {...data, itemIndex: i}, e) }}
-                          contextMenuOptions={ this.props.contextMenuOptions }
-                          showTitle={true}
-                          compact={true}
-                          image=''
-                          username={this.props.username}
-                          dir={this.props.dir}
-                          category={this.props.category}
-                          title={opt.name}
-                          key={i}
-                    />
-                )
-              })
-            }
-          </div>
-        </div>
-    )
-
-  }
-
-}
-
-InventoryList.defaultProps = {
+  public defaultProps = {
     title: "File Options",
     dir: "",
     username: "",
@@ -91,22 +21,85 @@ InventoryList.defaultProps = {
     color: '#252525',
     compact: false,
     isImage: false,
-    options: [],
+    options: [] as any[],
     contextMenuOptions: [
-        { name: "Add To Space" },
-        { name: "Export JSON"},
-        { name: "Edit" }
+      { name: "Add To Space" },
+      { name: "Export JSON" },
+      { name: "Edit" }
     ]
+  }
+
+  componentWillMount() {
+    this.setState({
+      activated: false
+    })
+  }
+
+  handleContextAction(action: any, data: any, e: any) {
+    if (this.props.onAction)
+      this.props.onAction(action, data, e)
+
+  }
+
+  render() {
+    let username = this.props.username,
+      dir = this.props.dir;
+
+    return (
+      <div style={Object.assign({}, styles.list(this.props.color, this.props.compact), this.props.style)} title={this.props.category}>
+        <span style={styles.title}>
+          {this.props.category}
+          <span style={styles.new}>
+            {
+              this.props.category == "Entities" ? (
+                [
+                  <EntityEditor username={this.props.username} key="1" />,
+                  <ImportToSpace key="2" />,
+                  <InventoryExport key="3" />
+                ]
+              ) : this.props.category == "Components" ? (
+                <ComponentEditor username={this.props.username}
+                  entityEditMode={false}
+                />
+              ) : (
+                    <AttributeEditor username={this.props.username}
+                      entityEditMode={false}
+                    />
+                  )
+            }
+
+          </span>
+        </span>
+
+        <div style={styles.options}>
+          {
+            this.props.fetching == false && this.props.options && this.props.options.map((opt: any, i: number) => {
+              return (
+                <Card clickHandler={(e: any, name: string) => { this.handleContextAction("Export JSON", { itemIndex: i }, e) }}
+                  onContextMenu={(name: string, data: any, e: any) => { this.handleContextAction(name, { ...data, itemIndex: i }, e) }}
+                  contextMenuOptions={this.props.contextMenuOptions}
+                  showTitle={true}
+                  compact={true}
+                  image=''
+                  username={this.props.username}
+                  dir={this.props.dir}
+                  category={this.props.category}
+                  title={opt.name}
+                  key={i}
+                />
+              )
+            })
+          }
+        </div>
+      </div>
+    )
+  }
 }
 
+
 let styles = {
-  list: (color, compact) => {
+  list: (color: string, compact: boolean) => {
     return {
-      //backgroundColor: 'rgb(24, 24, 24)',
-      // boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0.2em 5em 0px',
-      // borderBottomRightRadius: '0.25em',
-      // borderBottomLeftRadius: '0.25em',
-      // backgroundColor: 'rgba(255, 255, 255, 0.17)',
       cursor: 'pointer',
       width: isMobile() ? '100%' : '32%',
       minWidth: '240px',
@@ -124,9 +117,9 @@ let styles = {
     paddingBottom: '0.2em'
   },
   options: {
-    paddingTop:'0.4em'
+    paddingTop: '0.4em'
   },
-  button: ( compact, image, close ) => {
+  button: (compact: boolean, image: string, close: boolean) => {
     return {
       position: 'relative',
       top: compact ? '-50px' : close ? '-50px' : '-48px',

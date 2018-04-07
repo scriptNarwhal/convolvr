@@ -40,15 +40,16 @@ class Spaces extends Component<SpacesProps, any> {
     this.props.toggleMenu(false)
   }
 
-  _renderSpaces ( spaces ) {
+  _renderSpaces ( spaces: any[] ) {
 
-    return spaces.map((world, i) => {
-        let thumb = ''
+    return spaces.map((world: any, i: number) => {
+        let thumb = '',
+            thumbPath: string[] = [];
 
         if (world.sky.photosphere != '') {
-          thumb = world.sky.photosphere.split("/")
-          thumb.splice(thumb.length-1, 0, "thumbs")
-          thumb = thumb.join("/")+'.jpg'
+          thumbPath = world.sky.photosphere.split("/")
+          thumbPath.splice(thumbPath.length-1, 0, "thumbs")
+          thumb = thumbPath.join("/")+'.jpg'
         }
 
         return (
@@ -91,11 +92,11 @@ class Spaces extends Component<SpacesProps, any> {
         })
 
     return (
-        <Shell className="spaces">
+        <Shell htmlClassName="spaces">
         <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
                      label="Spaces"
                      username={this.props.username}
-                     onItemSelect={  (item, index, length) => {
+                     onItemSelect={  (item: any, index: number, length: string) => {
                         console.log("changing dir from location bar")
                         let path = this.props.workingPath
                         path.splice(index+1)
@@ -147,7 +148,7 @@ export default connect(
       }
     }
   }
-)(withRouter(Spaces as React.ComponentClass<any>))
+)(withRouter(Spaces as React.ComponentClass<any>) as React.ComponentClass<any> )
 
 let styles = {
   spaces: {
@@ -155,7 +156,7 @@ let styles = {
     minWidth: "320px",
     margin: "auto"
   },
-  container: (mobile) => {
+  container: (mobile: boolean) => {
     return {
       width: '100%',
       height: '100%',

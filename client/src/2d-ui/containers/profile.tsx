@@ -8,12 +8,7 @@ import { isMobile } from '../../config'
 
 class Profile extends Component<any, any> {
 
-  constructor () {
-    super()
-  }
-
   componentWillMount () {
-
     let user = this.props.user,
         email = "",
         pass = "",
@@ -39,11 +34,9 @@ class Profile extends Component<any, any> {
   }
 
   componentWillReceiveProps ( nextProps: any, nextState: any ) {
-
     let user = null
 
     if ( this.props.user == false && nextProps.user != false ) {
-
       user = nextProps.user
 
       console.log("Done Loading User")
@@ -54,7 +47,6 @@ class Profile extends Component<any, any> {
         data: user.data,
         id: user.id
       })
-
     }
 
     if ( this.props.updateFetching && nextProps.updateFetching == false ) {
@@ -127,7 +119,6 @@ class Profile extends Component<any, any> {
   }
   
   render() {
-
     let isAdmin = this.props.user.name == 'admin'
 
     return (
@@ -189,7 +180,7 @@ class Profile extends Component<any, any> {
                   <option value="hero">hero</option>
                   <option value="monster">monster</option>
                   {
-                    this.props.entities.map( (ent, i) => {
+                    this.props.entities.map( (ent: any, i: number) => {
                       return (
                         <option value={ent.name} key={i}>{ent.name}</option>
                       )

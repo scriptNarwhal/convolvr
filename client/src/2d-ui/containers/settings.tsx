@@ -11,12 +11,6 @@ import { isMobile } from '../../config'
 
 class Settings extends Component<any, any> {
 
-  constructor () {
-
-    super()
-
-  }
-
   componentWillMount () {
 
     this.setState({
@@ -29,8 +23,8 @@ class Settings extends Component<any, any> {
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa: localStorage.getItem("aa") || "on",
       shadows: localStorage.getItem("shadows") != null ? parseInt(localStorage.getItem("shadows")) : window.innerWidth < 720 ? 0 : 1,
-      geometry: parseInt(localStorage.getItem("geometry") || 2),
-      floorHeight: parseInt(localStorage.getItem("floorHeight") || 1),
+      geometry: parseInt(localStorage.getItem("geometry") || "2"),
+      floorHeight: parseInt(localStorage.getItem("floorHeight") || "1"),
       IOTMode: localStorage.getItem("IOTMode") || 'off',
       leapMode: localStorage.getItem("leapMode") || "hybrid",
       blurEffect: localStorage.getItem("blurEffect") == "on" ? true : window.innerWidth > 720 ? true : false,
@@ -38,14 +32,11 @@ class Settings extends Component<any, any> {
       fov: localStorage.getItem("fov") != null ? localStorage.getItem("fov") : 75,
       manualLensDistance: localStorage.getItem("manualLensDistance") != null ? localStorage.getItem("manualLensDistance") : 0,
       dpr: localStorage.getItem("dpr") != null ? localStorage.getItem("dpr") : 0
-    })
-
+    });
     this.props.fetchUniverseSettings()
-  
   }
 
   componentWillReceiveProps ( nextProps: any, nextState: any ) {
-  
     if (this.props.fetchingSettings == true && nextProps.fetchingSettings == false && nextProps.settings != null) {
       console.log("Done Loading Universe Settings")
       this.setState({
@@ -54,17 +45,13 @@ class Settings extends Component<any, any> {
         network: nextProps.settings.network || []
       })
     }
-  
   }
 
   reload () {
-
     window.location.href = window.location.href
-  
   }
 
   save () {
-
     localStorage.setItem( 'cameraMode', this.state.camera )
     localStorage.setItem( 'lighting', this.state.lighting )
     localStorage.setItem( 'aa', this.state.aa)
@@ -81,11 +68,9 @@ class Settings extends Component<any, any> {
     localStorage.setItem( 'fov', this.state.fov ),
     localStorage.setItem( 'dpr', this.state.dpr )
     this.reload()
-
   }
 
   updateUniverseSettings () {
-
     let data = {
       id: 1,
       defaultSpace: this.state.defaultSpace,
@@ -93,47 +78,40 @@ class Settings extends Component<any, any> {
       network: this.state.network
     }
     this.props.updateUniverseSettings(data, this.props.user.password)
-
   }
 
   addServer() {
+    let network = this.state.network;
 
-    let network = this.state.network
     network.push({domain: '', image: ''})
     this.setState({network})
-
   }
 
-  removeServer( index ) {
+  removeServer( index: number ) {
+    let network = this.state.network;
 
-    let network = this.state.network
     network.splice(index, 1)
     this.setState({network})
-
   }
 
-  updateServer ( index, name, image = '' ) {
+  updateServer ( index: number, name: string, image = '' ) {
+    let network = this.state.network;
 
-    let network = this.state.network
     network[index].name = name
     network[index].image = image
     this.setState({network})
-
   }
 
   resetToDefault () {
-
     window.localStorage.clear()
     window.location.href = window.location.href
-
   }
 
   render() {
-
     let isAdmin = this.props.user.name == 'admin'
 
     return (
-        <Shell className="settings">
+        <Shell htmlClassName="settings">
           <div style={styles.modal()}>
             <div>
               <h1>Settings</h1>
@@ -357,7 +335,7 @@ class Settings extends Component<any, any> {
                             style={ styles.select }
                     >
                     {
-                      this.props.spaces.map( (world, i) => {
+                      ((this.props as any).spaces as any).map( (world: any, i: number) => {
                         return (
                           <option value={world.name} key={i}>{world.name}</option>
                         )
@@ -386,19 +364,19 @@ class Settings extends Component<any, any> {
                       <input type='button'
                              value='Add Server'
                              onClick={e=> { this.addServer() }}
-                             style={styles.addServer}
+                             style={styles.addServer as any}
                       />
                     </td>
                   </tr>
                   <tr>
                     </tr>
                     {
-                      this.state.network.map((domain, index)=>{
+                      this.state.network.map((domain: any, index: number)=>{
                         return (
                           <tr key={index}>
                             <td>
                               <input type='text'
-                                     style={styles.domainName}
+                                     style={styles.domainName as any}
                                      value={domain.name}
                                      onBlur={e=> this.updateServer(index, e.target.value)}
                               />     
@@ -406,7 +384,7 @@ class Settings extends Component<any, any> {
                             <td>{
                               domain.image != '' ? ( // make this editable later
                                 <img src={`/data/public/${domain.image}`} 
-                                     style={styles.domainImage}
+                                     style={styles.domainImage as any}
                                      title={domain.name}
                                      alt={domain.name}
                                 />
@@ -416,7 +394,7 @@ class Settings extends Component<any, any> {
                               <input type='button'
                                      value='Remove'
                                      onClick={e=> { this.removeServer(index) }}
-                                     style={styles.addServer}
+                                     style={styles.addServer as any}
                               />
                             </td>
                           </tr>
@@ -445,7 +423,6 @@ import {
 } from '../../redux/actions/message-actions'
 import {
   fetchSpaces,
-  setCurrentSpace,
   fetchUniverseSettings,
   updateUniverseSettings
 } from '../../redux/actions/world-actions'
@@ -461,13 +438,10 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      sendMessage: (message, from) => {
-          dispatch(sendMessage(message, from))
+      sendMessage: (message: string, from: string) => {
+          dispatch(sendMessage(message, from, []))
       },
-      setCurrentSpace: (world) => {
-          dispatch(setCurrentSpace(world))
-      },
-      updateUniverseSettings: (data, password) => {
+      updateUniverseSettings: (data: any, password: string) => {
           dispatch(updateUniverseSettings(data, password))
       },
       fetchUniverseSettings: () => {
@@ -499,6 +473,15 @@ const styles = {
     padding: '0.5em',
     borderRadius: '3px',
     boxShadow: '0px 1px 3px rgba(0, 0, 0, 0.54)'
+  },
+  domainImage: {
+
+  },
+  addServer: {
+
+  },
+  domainName: {
+
   },
   top: {
     borderTopRightRadius: '0.2em',

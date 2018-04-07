@@ -15,13 +15,14 @@ import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
 import SkyboxSystem from '../systems/environment/skybox'
+import TerrainSystem from '../systems/environment/terrain'
 import Settings from './local-settings'
 import {
 	compressFloatArray,
 	compressVector3,
 	compressVector4
 } from '../network/util'
-
+import UserInput from '../input/user-input'
 
 let world: any = null,
 	THREE = (window as any).THREE,

@@ -26,7 +26,7 @@ class Inventory extends Component<any, any> {
         if (inventoryUpdated) this.refreshInventory();
     }
 
-    refreshInventory(opts) {
+    refreshInventory(opts?: any) {
         this.props.getInventory(this.props.username, "Entities");
         this.props.getInventory(this.props.username, "Components");
         this.props.getInventory(this.props.username, "Properties");
@@ -34,7 +34,7 @@ class Inventory extends Component<any, any> {
 
     componentWillUpdate(nextProps: any, nextState: any) {}
 
-    onContextAction(name, data, e) {
+    onContextAction(name: string, data: any, e: any) {
         switch (name) {
             case "Add To Space":
                 this.props.launchImportToSpace(this.props.username, data.itemIndex, data.itemData);
@@ -53,9 +53,9 @@ class Inventory extends Component<any, any> {
         return (
             <Shell
                 htmlClassName="data-view"
-                style={isMobile() ? { paddingTop: "60px" } : { paddingTop: "0px" }}
                 innerStyle={{ paddingTop: isMobile() ? "82px" : 0, paddingLeft: isMobile() ? "10px" : "72px" }}
             >
+                <div style={ isMobile() ? { paddingTop: "60px" } : { paddingTop: "0px" } }></div>
                 <span
                     style={{
                         width: "100%",

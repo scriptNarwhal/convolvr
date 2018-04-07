@@ -6,32 +6,27 @@ import LocationBar from '../components/location-bar'
 class Data extends Component<any, any> {
 
   componentWillMount () {
-
     this.props.listFiles(this.props.username, this.props.workingPath.join("/"))
     this.props.listDirectories(this.props.username, this.props.workingPath.join("/"))
     this.setState({
       update: 0,
       workingPath: []
     })
-
   }
 
   componentWillReceiveProps ( nextProps: any) {
-
     let userNameChanged = nextProps.username != this.props.username,
         finishedFetchingDirs = this.props.dirsFetching == true && nextProps.dirsFetching == false,
         finishedFetchingFiles = (this.props.filesFetching == true && nextProps.filesFetching == false)
 
     if ( nextProps.workingPath.length != this.props.workingPath.length || userNameChanged ) { console.log("changing directory...", nextProps.workingPath)
-
       this.props.listFiles(nextProps.username, nextProps.workingPath.join("/"))
       this.props.listDirectories(nextProps.username, nextProps.workingPath.join("/"))
-
     }
 
     if ( finishedFetchingFiles || finishedFetchingDirs ) {
-      let newPath = []
-      nextProps.workingPath.map(p=> {
+      let newPath: string[] = []
+      nextProps.workingPath.map((p: any) => {
         newPath.push(p)
       })
       this.setState({
@@ -47,20 +42,15 @@ class Data extends Component<any, any> {
 
   }
 
-  isImage (file) {
-
+  isImage (file: string) {
     return /(.png|.jpg|.jpeg|.gif|webp)/.test(file)
-
   }
 
-  isTextFile (file) {
-
+  isTextFile (file: string) {
     return /(^[^.]*$|\.md|\.js|\.json|\.htm|\.css|\.go|\.java|\.py|\.xml|\.yml|\.txt|\.doc|\.csv|\.gitignore)/.test(file)
-
   }
 
-  getFullPath (file, thumbnail) {
-
+  getFullPath (file: string, thumbnail?: boolean) {
     let username = this.props.username,
         workingPath = this.state.workingPath.join("/")
 
@@ -71,15 +61,15 @@ class Data extends Component<any, any> {
     }
   }
 
-  enterDirectory (dir) {
-    let path = this.state.workingPath
+  enterDirectory (dir: string) {
+    let path = this.state.workingPath;
+
     path.push(dir)
     this.props.changeDirectory(path)
   }
 
-  onContextAction ( name, data, e ) {
-
-    let dir = this.props.workingPath.join("/") || "/"
+  onContextAction ( name: string, data: any, e: any ) {
+    let dir = this.props.workingPath.join("/") || "/";
 
     switch( name ) {
 
@@ -110,15 +100,15 @@ class Data extends Component<any, any> {
 
   }
 
-  _renderFiles ( files, mobile, thumbs ) {
+  _renderFiles ( files: any[], mobile: boolean, thumbs: boolean ) {
 
     if ( !!files && !this.props.filesFetching) {
 
-      return files.map((file, i) => {
+      return files.map((file: string, i: number) => {
           console.info("file ", file)
               return (
                 <Card image={this.isImage(file) ? !thumbs && this.getFullPath(file, true) : ''}
-                      clickHandler={ (e, title) => {
+                      clickHandler={ (e: any, title: string) => {
                         console.log(e, title, "clicked");
                         if ( this.isTextFile( file ) ) {
                           this.onContextAction("Edit", { filename: file }, {})
@@ -130,7 +120,7 @@ class Data extends Component<any, any> {
                       }}
                       compact={thumbs || !this.isImage(file) }
                       quarterSize={mobile && this.isImage(file) }
-                      onContextMenu={ (name, data, e) => this.onContextAction(name, data, e) }
+                      onContextMenu={ (name: string, data: any, e: any) => this.onContextAction(name, data, e) }
                       showTitle={true}
                       username={this.props.username}
                       dir={this.props.workingPath.join("/")}
@@ -149,36 +139,30 @@ class Data extends Component<any, any> {
   }
 
   render() {
-
     let files = this.props.files,
         dirs = this.props.dirs,
         mobile = window.innerWidth <= 720,
-        imageFiles = [],
-        nonImages = []
+        imageFiles: string[] = [],
+        nonImages: string[] = []
 
-      !! files && files.map( ( file ) => {
-
+      !! files && files.map( ( file: string ) => {
         if ( this.isImage( file ) ) {
-
           imageFiles.push( file )
-
         } else {
-
           nonImages.push( file )
-
         }
-
       })
 
     let dirName = this.state.workingPath[ this.state.workingPath.length - 1 ]
 
     return (
-        <Shell className="data-view" style={ mobile ? { paddingTop: '100px' } : {} }>
+        <Shell htmlClassName="data-view">
+          <div style={ mobile ? { paddingTop: "60px" } : { paddingTop: "0px" } }></div>
           <LocationBar path={this.state.workingPath}
                        label="Data"
                        username={this.props.username}
                        showFileOptions={ true } // show Upload Files, New File, New Folder
-                       onItemSelect={  (item, index, length) => {
+                       onItemSelect={  (item: any, index: number, length: number) => {
                           console.log("changing dir from location bar")
                           let path = this.state.workingPath
                           path.splice(index+1)
@@ -187,10 +171,10 @@ class Data extends Component<any, any> {
           />
           {
             dirs !== false && !this.props.dirsFetching &&
-            dirs.map((dir, i) => {
+            dirs.map((dir: string, i: number) => {
               return (
                 <Card image={''}
-                      clickHandler={ (e, title) => {
+                      clickHandler={ (e: any, title: string) => {
                         console.log(e, title, "clicked")
                         this.enterDirectory(title)
                       }}
@@ -208,13 +192,7 @@ class Data extends Component<any, any> {
           { this.props.filesFetching == false && this._renderFiles( imageFiles, mobile, dirName == 'thumbs' ) }
         </Shell>
     )
-
   }
-
-}
-
-Data.defaultProps = {
-
 }
 
 import { connect } from 'react-redux';
@@ -230,6 +208,7 @@ import {
   listDirectories,
   changeDirectory,
   uploadFiles,
+  uploadFile,
   moveFile,
   deleteFile
 } from '../../redux/actions/file-actions'
@@ -260,37 +239,37 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      listFiles: (username, dir) => {
+      listFiles: (username: string, dir: string) => {
           dispatch(listFiles(username, dir))
       },
-      listDirectories: (username, dir) => {
+      listDirectories: (username: string, dir: string) => {
           dispatch(listDirectories(username, dir))
       },
-      changeDirectory: (path) => {
+      changeDirectory: (path: string[]) => {
         dispatch(changeDirectory(path))
       },
-      launchTextEdit: ( username, dir, filename ) => {
+      launchTextEdit: (username: string, dir: string, filename: string) => {
         dispatch(launchTextEdit( username, dir, filename ) )
       },
-      launchRenameFile: ( username, dir, filename ) => {
+      launchRenameFile: (username: string, dir: string, filename: string) => {
         dispatch(launchRenameFile( username, dir, filename ) )
       },
-      launchSharingSettings: ( username, dir, filename ) => {
+      launchSharingSettings: (username: string, dir: string, filename: string) => {
         dispatch(launchSharingSettings( username, dir, filename ) )
       },
-      launchImportToInventory: ( username, dir, filename ) => {
+      launchImportToInventory: (username: string, dir: string, filename: string) => {
         dispatch(launchImportToInventory( username, dir, filename ) )
       },
-      moveFile: (username, dir, file, targetDir, targetFile) => {
+      moveFile: (username: string, dir: string, file: string, targetDir: string, targetFile: string) => {
         dispatch(moveFile(username, dir, file, targetDir, targetFile))
       },
-      deleteFile: (username, dir, file) => {
+      deleteFile: (username: string, dir: string, file: string) => {
         dispatch(deleteFile(username, dir, file))
       },
-      toggleMenu: (toggle) => {
+      toggleMenu: (toggle: boolean) => {
         dispatch(toggleMenu(toggle))
       },
-      uploadFile: (fileusername: string, dir) => {
+      uploadFile: (file: string, username: string, dir: string) => {
         dispatch(uploadFile(file, username, dir))
       }
     }

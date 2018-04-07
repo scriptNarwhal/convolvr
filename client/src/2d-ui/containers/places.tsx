@@ -26,7 +26,7 @@ class Places extends Component<any, any> {
 
   render() {
     return (
-        <Shell className="spaces">
+        <Shell htmlClassName="spaces">
         <LocationBar path={[]} // nested place explorer would be cool (empty array for now)
                      label="Places"
                      username={this.props.username}
@@ -43,14 +43,14 @@ class Places extends Component<any, any> {
         >
         <div style={styles.spaces}>
           {
-            this.props.userPlaces.map((place, i) => {
+            this.props.userPlaces.map((place: any, i: number) => {
               let thumb = ''
              
               return (
-                <Card clickHandler={(e, v) => {
+                <Card clickHandler={(e: any, v: any) => {
                         this.setCurrentPlace(place.userName, place.world, place.name)
                       }}
-                      color={`#${(world.light.color).toString(16)}`}
+                      // color={`#${(place.light.color).toString(16)}`}
                       showTitle={true}
                       title={place.name}
                       key={i}
@@ -61,7 +61,7 @@ class Places extends Component<any, any> {
           </div>
           <div style={styles.spaces}>
           {
-            this.props.places.map((world: any, i: number) => {
+            this.props.places.map((place: any, i: number) => {
               let thumb = ''
               
               return (
@@ -100,10 +100,10 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      toggleMenu: (force) => {
+      toggleMenu: (force: boolean) => {
         dispatch( toggleMenu( force ) )
       },
-      setCurrentPlace: (user, world, place) => {
+      setCurrentPlace: (user: string, world: string, place: string) => {
           dispatch(setCurrentPlace(user, world, place))
       }
     }

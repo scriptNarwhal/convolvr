@@ -11,7 +11,6 @@ class NewSpace extends Component<any, any> {
   private descriptionInput: any;
 
   componentWillMount() {
-
     this.setState({
       name: "",
       userName: "space",
@@ -46,11 +45,9 @@ class NewSpace extends Component<any, any> {
       wheels: false,
       nets: false
     })
-
   }
 
   createSpace() {
-
     let lightColor = [ parseFloat(this.state.red), parseFloat(this.state.green), parseFloat(this.state.blue) ],
         data: any = {
           id: 0,
@@ -103,16 +100,11 @@ class NewSpace extends Component<any, any> {
 
     data.userName = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'space' // mark as public / not tied to user if no userName
     data.userId = this.props.loggedInUser != false ? this.props.loggedInUser.id : -1
-    if ( this.state.name != "" || this.state.description == "" ) {
-
+    if (this.state.name != "" || this.state.description == "") {
       this.props.createSpace( data )
-
     } else {
-
       alert("Name & Description are required.")
-
     }
-
   }
   onToggle( group: string, which: string, e: any ) {
     let value = e.target.value;
@@ -197,7 +189,7 @@ class NewSpace extends Component<any, any> {
               </tr>
               <tr>
                 <td>Space Description</td>
-                <td colSpan="2">
+                <td>
                   <input autoComplete="false"
                          key={"worldDescription"}
                          ref={(input) => { this.descriptionInput = input }}
@@ -210,7 +202,7 @@ class NewSpace extends Component<any, any> {
               <tr>
                   <td>Write Protected?</td>
                   <td>
-                  <select onChange={ e=> { this.onToggleProtected(e) }}>
+                  <select onChange={ (e: any)=> { this.onToggleProtected(e) }}>
                     <option value="no">No</option>
                     <option value="yes">Yes</option>
                   </select>
@@ -219,7 +211,7 @@ class NewSpace extends Component<any, any> {
               <tr>
                 <td>Skybox Type</td>
                 <td>
-                  <select onChange={ e=> { this.onSkyTypeChange(e) }}>
+                  <select onChange={ (e: any)=> { this.onSkyTypeChange(e) }}>
                     <option value="shader">Gradient Sky</option>
                     <option value="photosphere">Photosphere</option>
                   </select>
@@ -240,17 +232,17 @@ class NewSpace extends Component<any, any> {
               <tr>
                 <td>Light Intensity</td>
                 <td>
-                  <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({intensity: e.target.value })}}/> { this.state.intensity }
+                  <input type='range' min='0' max='2' step='0.001' onChange={(e: any)=> { this.setState({intensity: e.target.value })}}/> { this.state.intensity }
                 </td>
                 <td></td>
               </tr>
               <tr>
                 <td>Light Direction</td>
                 <td>
-                  Pitch <input type='range' min='0' max='3.14' step='0.001' onChange={e=> { this.setState({lightPitch: e.target.value })}}/> { this.state.lightPitch }
+                  Pitch <input type='range' min='0' max='3.14' step='0.001' onChange={(e: any)=> { this.setState({lightPitch: e.target.value })}}/> { this.state.lightPitch }
                 </td>
                 <td>
-                  Yaw <input type='range' min='0' max='6.28' step='0.001' onChange={e=> { this.setState({lightYaw: e.target.value })}}/> { this.state.lightYaw }
+                  Yaw <input type='range' min='0' max='6.28' step='0.001' onChange={(e: any)=> { this.setState({lightYaw: e.target.value })}}/> { this.state.lightYaw }
                 </td>
               </tr>
                <tr>
@@ -262,15 +254,15 @@ class NewSpace extends Component<any, any> {
               <tr>
                 <td></td>
                 <td>
-                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({red: e.target.value })}}/> 
+                  <input type='range' min='0' max='2' step='0.001'  onChange={(e: any)=> { this.setState({red: e.target.value })}}/> 
                   <span>{ this.state.red }</span>
                   </td>
                 <td>
-                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({green: e.target.value })}}/> 
+                  <input type='range' min='0' max='2' step='0.001'  onChange={(e: any)=> { this.setState({green: e.target.value })}}/> 
                   <span>{ this.state.green }</span>
                 </td>
                 <td>
-                  <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({blue: e.target.value })}} /> 
+                  <input type='range' min='0' max='2' step='0.001' onChange={(e: any)=> { this.setState({blue: e.target.value })}} /> 
                   <span>{ this.state.blue }</span>
                 </td>
               </tr>
@@ -283,22 +275,22 @@ class NewSpace extends Component<any, any> {
               <tr>
                 <td></td>
                 <td>
-                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({terrainRed: e.target.value })}}/> 
+                  <input type='range' min='0' max='2' step='0.001'  onChange={(e: any)=> { this.setState({terrainRed: e.target.value })}}/> 
                   <span>{ this.state.terrainRed }</span>
                   </td>
                 <td>
-                  <input type='range' min='0' max='2' step='0.001'  onChange={e=> { this.setState({terrainGreen: e.target.value })}}/> 
+                  <input type='range' min='0' max='2' step='0.001'  onChange={(e: any)=> { this.setState({terrainGreen: e.target.value })}}/> 
                   <span>{ this.state.terrainGreen }</span>
                 </td>
                 <td>
-                  <input type='range' min='0' max='2' step='0.001' onChange={e=> { this.setState({terrainBlue: e.target.value })}} /> 
+                  <input type='range' min='0' max='2' step='0.001' onChange={(e: any)=> { this.setState({terrainBlue: e.target.value })}} /> 
                   <span>{ this.state.terrainBlue }</span>
                 </td>
               </tr>
               <tr>
                 <td>Terrain Type</td>
                 <td>
-                  <select onChange={ e=> { this.onTerrainTypeChange(e) }}>
+                  <select onChange={ (e: any)=> { this.onTerrainTypeChange(e) }}>
                     <option value="both">Voxels + Plane</option>
                     <option value="voxels">Terrain Voxels</option>
                     <option value="plane">Ground Plane</option>
@@ -310,7 +302,7 @@ class NewSpace extends Component<any, any> {
               <tr>
                 <td>Flat Areas?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggleFlatAreas(e) }}>
+                  <select onChange={ (e: any)=> { this.onToggleFlatAreas(e) }}>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                   </select>
@@ -320,7 +312,7 @@ class NewSpace extends Component<any, any> {
               <tr>
                 <td>Turbulent Terrain?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggleTurbulentTerrain(e) }}>
+                  <select onChange={ (e: any)=> { this.onToggleTurbulentTerrain(e) }}>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                   </select>
@@ -330,14 +322,14 @@ class NewSpace extends Component<any, any> {
               <tr>
                 <td>Terrain Flatness</td>
                 <td>
-                  <input type='range' min='1' max='16' step='0.1'  onChange={e=> { this.setState({flatness: e.target.value })}}/>
+                  <input type='range' min='1' max='16' step='0.1'  onChange={(e: any)=> { this.setState({flatness: e.target.value })}}/>
                 </td>
                 <td></td>
               </tr>
               <tr>
                 <td>Use Gravity?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggleGravity(e) }}>
+                  <select onChange={ (e: any)=> { this.onToggleGravity(e) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>
@@ -347,7 +339,7 @@ class NewSpace extends Component<any, any> {
               <tr>
                 <td>(High Altitude) Zero Gravity?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggleHighAltitudeGravity(e) }}>
+                  <select onChange={ (e: any)=> { this.onToggleHighAltitudeGravity(e) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>
@@ -363,7 +355,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Trees?</td>
                   <td>
-                    <select onChange={ e=> { this.onToggle( 'spawn', 'trees', e ) }}>
+                    <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'trees', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>
@@ -373,7 +365,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Rocks?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'rocks', e) }}>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'rocks', e) }}>
                     <option value="no">No</option>
                     <option value="yes">Yes</option>
                   </select>
@@ -383,7 +375,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Roads?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'roads', e) }}>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'roads', e) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                     </select>
@@ -393,7 +385,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Buildings?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'structures', e ) }}>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'structures', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                   </select>
@@ -403,7 +395,7 @@ class NewSpace extends Component<any, any> {
               <td></td>
               <td>Generate Pylons?</td>
               <td>
-                <select onChange={ e=> { this.onToggle( 'spawn', 'pylons', e ) }}>
+                <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'pylons', e ) }}>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
                 </select>
@@ -413,7 +405,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Vehicles?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'vehicles', e ) }}>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'vehicles', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                   </select>
@@ -423,7 +415,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Tools?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'tools', e ) }}>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'tools', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                   </select>
@@ -438,7 +430,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Orbs?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'orbs', e ) }}>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'orbs', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                   </select>
@@ -448,7 +440,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Columns?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'columns', e ) }}>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'columns', e ) }}>
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                   </select>
@@ -458,7 +450,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Wheels?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'wheels', e) }}>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'wheels', e) }}>
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                   </select>
@@ -468,7 +460,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Pyramids?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'pyramids', e ) }}>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'pyramids', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
                   </select>
@@ -478,7 +470,7 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Indra's Net?</td>
                 <td>
-                  <select onChange={ e=> { this.onToggle( 'spawn', 'nets', e) }}>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'nets', e) }}>
                   <option value="no">No</option>
                   <option value="yes">Yes</option>
                   </select>
@@ -490,7 +482,7 @@ class NewSpace extends Component<any, any> {
                     <input type="button"
                             value="Create"
                             style={styles.signInButton}
-                            onClick={e=> { this.createSpace() } }
+                            onClick={(e: any)=> { this.createSpace() } }
                     />
                   </div>
                 </td>
