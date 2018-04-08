@@ -1,3 +1,5 @@
+import { DBComponent } from "../../../core/component";
+
 let block = {
         id: -1,
         name: "block",
@@ -15,7 +17,7 @@ let block = {
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [0, 0, 0],
-            components: []
+            components: [] as DBComponent[]
         }],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]

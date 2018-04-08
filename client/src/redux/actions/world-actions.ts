@@ -24,7 +24,6 @@ import {
   CHAT_HISTORY_CLEAR
 } from '../constants/action-types'
 import axios from 'axios'
-import { browserHistory } from 'react-router'
 import { API_SERVER } from '../../config.js'
 import { getChatHistory } from './message-actions'
 
@@ -35,20 +34,20 @@ export function fetchSpaces () {
      })
      return axios.get(API_SERVER+"/api/spaces")
         .then(res => {
-            three.world.systems.assets.setSpaces( res.data )
+            (window as any).three.world.systems.assets.setSpaces( res.data )
             dispatch({
                 type: SPACES_FETCH_DONE,
                 spaces: res.data
             })
-        }).catch(res => {
+        }).catch(err => {
             dispatch({
                 type: SPACES_FETCH_FAIL,
-                err: err
+                err
             })
         });
    }
 }
-export function fetchUserSpaces (userId) {
+export function fetchUserSpaces (userId: any) {
     return (dispatch: any) => {
      dispatch({
         type: USER_SPACES_FETCH,
@@ -63,7 +62,7 @@ export function fetchUserSpaces (userId) {
         }).catch(err => {
             dispatch({
                 type: USER_SPACES_FETCH_FAIL,
-                err: err
+                err
             })
         });
    }
@@ -88,16 +87,16 @@ export function fetchUniverseSettings () {
               type: UNIVERSE_SETTINGS_FETCH_DONE,
               settings: response.data
             })
-        }).catch((response: any) => {
+        }).catch((err: any) => {
             dispatch({
               type: UNIVERSE_SETTINGS_FETCH_FAIL,
-              err: response
+              err
             })
         });
    }
 }
 
-export function createSpace (data) {
+export function createSpace (data: any) {
     return (dispatch: any) => {
      dispatch({
         type: SPACES_FETCH,
@@ -106,9 +105,10 @@ export function createSpace (data) {
      return axios.post(API_SERVER+"/api/spaces", data)
         .then((response: any) => {
             dispatch(createSpaceDone(response))
-            //three.world.reload( data.userName, data.name, false, false ) // until this works perfectly, refresh the page
-            browserHistory.push("/"+data.userName+"/"+data.name)
-            window.location.href = window.location.href  /* work around */
+            (window as any).three.world.reload( data.userName, data.name, false, false ) // until this works perfectly, refresh the page
+            
+            //browserHistory.push("/"+data.userName+"/"+data.name)
+            //window.location.href = window.location.href  /* work around */
         }).catch((response: any) => {
             dispatch(createSpaceFail(response))
         });
@@ -126,7 +126,7 @@ export function createSpaceFail(err: any) {
         err
     }
 }
-export function setCurrentSpace(userName, world) {
+export function setCurrentSpace(userName: string, world: string) {
     return (dispatch: any) => {
         dispatch({ type: CHAT_HISTORY_CLEAR });
         dispatch(getChatHistory( world, 0 ));
@@ -137,7 +137,7 @@ export function setCurrentSpace(userName, world) {
         }
     }
 }
-export function updateSpace (id, data) {
+export function updateSpace (id: any, data: any) {
     return (dispatch: any) => {
      dispatch({
         type: SPACE_UPDATE_FETCH,
@@ -163,7 +163,7 @@ export function updateSpaceFail(err: any) {
         err
     }
 }
-export function updateUniverseSettings (data, password) {
+export function updateUniverseSettings (data: any, password: string) {
     return (dispatch: any) => {
      dispatch({
         type: UNIVERSE_SETTINGS_UPDATE_FETCH,
@@ -175,16 +175,16 @@ export function updateUniverseSettings (data, password) {
                 type: UNIVERSE_SETTINGS_UPDATE_DONE,
                 settings: res.data
             })
-        }).catch(res => {
+        }).catch((err: any) => {
             dispatch({
                 type: UNIVERSE_SETTINGS_UPDATE_FAIL,
-                err: res.error
+                err: err.error
             })
         });
    }
 }
 
-export function deleteSpace (id, data) {
+export function deleteSpace (id: any, data: any) {
     return (dispatch: any) => {
      dispatch({
         type: SPACE_DELETE_FETCH,

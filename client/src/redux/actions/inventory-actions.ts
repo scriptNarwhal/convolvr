@@ -19,11 +19,10 @@ import {
     INVENTORY_ADD_TO_SPACE_FAIL
   } from '../constants/action-types'
   import axios from 'axios'
-  import { browserHistory } from 'react-router'
   import { API_SERVER } from '../../config.js'
   
   
-  export function getInventory (userId, category) {
+  export function getInventory (userId: any, category: string) {
   
       return (dispatch: any) => {
        dispatch({
@@ -48,12 +47,13 @@ import {
   
   }
 
-  export function getInventoryItem ( userId, category, itemId ) {
+  export function getInventoryItem ( userId: any, category: string, itemId: any ) {
     
         return (dispatch: any) => {
          dispatch({
             type: INVENTORY_ITEM_FETCH,
-            userId
+            userId,
+            category
          })
          return axios.get(API_SERVER+`/api/inventory/${userId}/${category}/${itemId}`)
             .then( res => {
@@ -73,12 +73,13 @@ import {
     
     }
   
-  export function addInventoryItem ( userId, category, data ) {
+  export function addInventoryItem ( userId: any, category: string, data: any ) {
   
       return (dispatch: any) => {
        dispatch({
           type: INVENTORY_ADD_FETCH,
-          data
+          data,
+          category
        })
        return axios.post(API_SERVER+`/api/inventory/${userId}/${category}`, data)
           .then((response: any) => {
@@ -96,12 +97,13 @@ import {
   
   }
   
-  export function updateInventoryItem ( userId, category, data) {
+  export function updateInventoryItem ( userId: any, category: string, data: any) {
   
       return (dispatch: any) => {
        dispatch({
           type: INVENTORY_UPDATE_FETCH,
-          id: id
+          id: userId,
+          category
        })
        return axios.post(API_SERVER+`/api/inventory/${userId}/${category}`, data)
           .then((response: any) => {
@@ -120,12 +122,13 @@ import {
   }
 
   
-  export function removeInventoryItem ( userId, category, itemId,) {
+  export function removeInventoryItem ( userId: any, category: string, itemId: any) {
   
       return (dispatch: any) => {
        dispatch({
           type: INVENTORY_DELETE_FETCH,
-          id: id
+          id: userId,
+          itemId
        })
        return axios.put(API_SERVER+`/api/inventory/${userId}/${category}/${itemId}`, {})
           .then((response: any) => {
@@ -143,7 +146,7 @@ import {
   
   }
   
-  export function addItemToSpace ( userId, category, itemId, world, coords, itemData ) {
+  export function addItemToSpace ( userId: any, category: string, itemId: any, world: string, coords: string, itemData: any ) {
     
         return (dispatch: any) => {
             itemData.voxel = coords.split("x").map( v=> parseInt(v) )

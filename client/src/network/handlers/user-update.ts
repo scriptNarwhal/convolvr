@@ -14,10 +14,10 @@ export default class UserUpdateHandler {
     constructor( handlers: any, world: Convolvr, socket: any ) {
         this.world = world
         this.handlers = handlers
-        socket.on("update", packet => {
+        socket.on("update", (packet: any) => {
             let data = JSON.parse(packet.data),
                 world = this.world,
-                voxels = world.systems.terrain.voxels,
+                voxels = (world.systems.terrain as any).voxels,
                 coords = world.getVoxel(data.position),
                 cameraCoords = world.getVoxel(),
                 closeToCamera = Math.abs(cameraCoords[0] - coords[0]) < 3 && Math.abs(cameraCoords[2] - coords[2]) < 3,
@@ -30,13 +30,13 @@ export default class UserUpdateHandler {
                 mesh = null,
                 hands = [];
 
-            if (!!data.entity && world.terrain.loaded) {
+            if (!!data.entity && (world.terrain as any).loaded) {
                 update = data.entity
                 userVoxel = voxels[coords[0] + '.0.' + coords[2]]
                 if (update.id != world.user.id) { //  && closeToCamera == false 
                     pos = update.position
                     quat = update.quaternion
-                    user = world.users["user" + update.id]
+                    user = (world.users as any)["user" + update.id]
                     if (user == null) {
                         this.loadPlayerAvatar(update, userVoxel, coords, data)
                     } else if (user && user.mesh) {
@@ -80,18 +80,18 @@ export default class UserUpdateHandler {
         console.log("add avatar to voxel data:", entity)
         let world = this.world,
             avatar = world.systems.assets.makeEntity(entity.avatar, true, { wholeBody: true, userName: entity.username, id: entity.id }, coords),
-            user = world.users["user" + entity.id] = {
+            user = (world.users as any)["user" + entity.id] = {
                 id: entity.id,
                 avatar,
-                mesh: null
+                mesh: null as any
             }
 
         if (userVoxel == null) {
             console.warn("[Remote] Voxel not loaded", coords)
-            world.systems.terrain.loadVoxel(coords, loadedVoxel => { this.initPlayerAvatar(avatar, user, data) })
+            world.systems.terrain.loadVoxel(coords, (loadedVoxel: Voxel) => { this.initPlayerAvatar(avatar, user, data) })
         } else if (userVoxel.loaded == false && userVoxel.fetching == false) {
             console.info("[Remote] Voxel being loaded...", coords)
-            userVoxel.fetchData(loadedVoxel => { this.initPlayerAvatar(avatar, user, data) })
+            userVoxel.fetchData((loadedVoxel: Voxel) => { this.initPlayerAvatar(avatar, user, data) })
         } else if (userVoxel.fetching) {
             console.info("[Remote] Voxel already fetching...", coords)
             setTimeout(() => {
@@ -105,7 +105,7 @@ export default class UserUpdateHandler {
     initPlayerAvatar(avatar: Entity, newUser: any, newData: any) {
         console.log("initPlayerAvatar")
         console.info("[Remote] User avatar init")
-        avatar.init(window.three.scene)
+        avatar.init(this.world.three.scene)
         newUser.mesh = avatar.mesh
 
         if (newData.entity.hands.length > 0)

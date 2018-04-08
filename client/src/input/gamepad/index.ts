@@ -1,19 +1,27 @@
 import TrackedControllers from './tracked-controllers'
+import UserInput from '../user-input';
+import Convolvr from '../../world/world';
 
-export default class GamePad {
+export default class GamePadHandler {
 
-	constructor ( input ) {
+  public cooldown: boolean | number  = 0
+  public cooldownTimeout: boolean | any | number = 0
+  public bumperCooldown: boolean | number = 0
+  public bumperCooldownTimeout: boolean | any | number = 0
+  public buttons: number[]
+  public axes: number[]
+  public trackedControllers: TrackedControllers
 
+	constructor (input: UserInput) {
     let gamepads = input.gamepads
     
 		this.cooldownTimeout       = null
-		this.cooldown              = 0
 		this.bumperCooldown        = 0
 		this.bumperCooldownTimeout = null
-    this.trackedControllers    = new TrackedControllers( input, three.world )
+    this.trackedControllers    = new TrackedControllers( input, (window as any).three.world )
     this.buttons               = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
     this.axes                  = [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-    function gamepadHandler ( e, connecting ) {
+    function gamepadHandler (e: any, connecting: boolean) {
 
       let gamepad = e.gamepad;
 		      input.gamepadMode = true;
@@ -23,30 +31,21 @@ export default class GamePad {
                   gamepad.buttons.length, gamepad.axes.length)
                   
       if ( connecting ) {
-
         gamepads[ gamepad.index ] = gamepad
 
         if ( gamepad ) {
-
           let id = gamepad.id
-
         }
 
       } else {
-
         delete gamepads[gamepad.index]
-
       }
-
     }
-
     window.addEventListener("gamepadconnected", function(e: any) { gamepadHandler( e, true ) }, false)
     window.addEventListener("gamepaddisconnected", function(e: any) { gamepadHandler( e, false ) }, false)
-
   }
 
-  update ( input, world ) {
-
+  update (input: UserInput, world: Convolvr) {
     let g = 0,
         id = "",
         gamepad = null,
@@ -58,11 +57,8 @@ export default class GamePad {
     }
 
     while ( g < gamepads.length ) {
-
       gamepad = gamepads[g]
-
       if ( gamepad ) {
-
         id = gamepad.id
         if ( id.indexOf('Oculus Touch') > -1 ) {
 
@@ -70,57 +66,37 @@ export default class GamePad {
           trackedControls = true
 
         } else if ( id.indexOf('OpenVR Gamepad') > -1 ) {
-
           this.trackedControllers.handleOpenVRGamepad( gamepad )
           trackedControls = true
-
         } else if ( id.indexOf('Oculus Remote') > -1 ) {
-
           this.trackedControllers.handleOculusRemote( gamepad )
-
         } else if ( id.indexOf('Daydream Controller') > -1 ) {
-
           this.trackedControllers.handleDaydreamController( gamepad )
           trackedControls = true
-
         } else if ( id.toLowerCase().indexOf('xbox') > -1 ) {
-
-          this._handleXboxGamepad( input, world, gamepad )
-          
+          this.handleXboxGamepad( input, world, gamepad )
         } else if ( id.indexOf('Gamepad') > -1 ) { 
-
-          this._handleMobileGamepad( input, world, gamepad )
-
+          this.handleMobileGamepad( input, world, gamepad )
         }
         // } else {
-
         //   this._handleXboxGamepad( input, world, gamepad ) // assume generic dual analog controller
-
         // }
-
         if ( trackedControls && input.trackedControls == false && world.mode == "stereo" ) {
-
           input.trackedControls = true
-          setTimeout(()=>{ world.user.avatar.componentsByAttr.hand[0].state.hand.toggleTrackedHands(true) }, 500 )
-
+          setTimeout(()=>{ (world.user as any).avatar.componentsByAttr.hand[0].state.hand.toggleTrackedHands(true) }, 500 )
         } 
-
       }
-
-      g ++
-      
+      g ++;
     }
-
   }
 
-  _handleMobileGamepad ( input, world, gamepad ) {
-
+  private handleMobileGamepad (input: UserInput, world: Convolvr, gamepad: Gamepad) {
     let a = gamepad.axes.length,
         buttons = gamepad.buttons,
         b = buttons.length,
         i = 0,
 				rotation = input.rotationVector,
-				tools = world.user.toolbox
+				tools = (world.user as any).toolbox
     // implement..
     // 17 buttons
     // 4 axis
@@ -140,13 +116,10 @@ export default class GamePad {
     }
    
     if ( gamepad.axes[0] == 0 && gamepad.axes[2] == 0 && gamepad.axes[3] == 0) { // some cheap gamepads have fake axis
-
       if ( Math.abs(gamepad.axes[1]) > 0.1 ) { // create settings for stick configuration
           input.moveVector.z = gamepad.axes[0] * 0.090
       }
-
      } else {
-
         if (Math.abs(gamepad.axes[0]) > 0.1) {
           input.moveVector.x = gamepad.axes[0] * 0.090
         }
@@ -159,24 +132,22 @@ export default class GamePad {
         if (Math.abs(gamepad.axes[3]) > 0.10) {
           rotation.x += -gamepad.axes[3] / 20.0
         }
-
      }
 
-     let buttonState = this.buttons = []
-     gamepad.buttons.map(button=> {
+     let buttonState: number[] = this.buttons = []
+     gamepad.buttons.map((button: any) => {
        buttonState.push( typeof button == 'object' ? button.value : button )
      })
 
   }
 
-  _handleXboxGamepad ( input, world, gamepad ) {
-
+  private handleXboxGamepad (input: UserInput, world: Convolvr, gamepad: Gamepad) {
     let a = gamepad.axes.length,
         buttons = gamepad.buttons,
         b = buttons.length,
         i = 0,
-				rotation = input.rotationVector,
-				tools = world.user.toolbox
+				rotation = input.rotationVector as any,
+				tools = (world.user as any).toolbox
 
     if ( b > 8 ) {
       // face buttons: 0 1 2 3
@@ -229,61 +200,49 @@ export default class GamePad {
 
     }
 
-    let buttonState = this.buttons = []
+    let buttonState: any[] = this.buttons = []
     gamepad.buttons.map(button=> {
       buttonState.push( typeof button == 'object' ? button.value : button )
     })
 
   }
 
-  jump ( input ) {
-
+  jump ( input: UserInput ) {
     if ( !input.device.falling ) {
-      
       input.device.falling = true;
       input.device.velocity.y = 400
-      
     }
-
   }
 
-  down ( buttons, index ) {
-
+  down ( buttons: GamepadButton[], index: number ) {
     let value = this.buttonPressed( buttons[ index ] ) && !this.buttons[ index ]
    // this.buttons[ index ]  = this.buttonPressed( buttons[ index ] )
     return value
-
   }
 
-  up ( buttons, index ) {
-
+  up ( buttons: GamepadButton[], index: number ) {
     let value = !this.buttonPressed( buttons[ index ] ) && this.buttons[ index ]
     //this.buttons[ index ] = this.buttonPressed( buttons[ index ] )
     return value
-    
   }
 
 	triggerCooldown () {
-
 		this.cooldown = true
 		clearTimeout(this.cooldownTimeout)
 		this.cooldownTimeout = setTimeout(()=>{
 			this.cooldown = false
-		}, 40)
-
+		}, 40) as any;
 	}
 
 	bumperCoolDown () {
-
 		this.bumperCooldown = true
 		clearTimeout(this.bumperCooldownTimeout)
 		this.bumperCooldownTimeout = setTimeout(()=>{
 			this.bumperCooldown = false
-		}, 300)
-
+		}, 300) as any;
 	}
 
-  buttonPressed (b) {
+  buttonPressed (b: GamepadButton) {
     if (typeof(b) == "object") {
       return b.pressed;
     }

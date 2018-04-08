@@ -1,6 +1,11 @@
+import Convolvr from "../../world/world";
+import Component from "../../core/component";
+
 export default class GrabSystem { // respond to grab / drag events / register callbacks
     
-    constructor ( world ) {
+    private world: Convolvr
+
+    constructor ( world: Convolvr ) {
 
         this.world = world
 
@@ -8,7 +13,7 @@ export default class GrabSystem { // respond to grab / drag events / register ca
 
     init(component: Component) {
 
-        let callbacks = []
+        let callbacks: Function[] = []
 
         return {
             callbacks

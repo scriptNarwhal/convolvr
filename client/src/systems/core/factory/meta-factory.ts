@@ -1,14 +1,12 @@
-//@flow
 import Convolvr from '../../../world/world'
-import Component from '../../../core/component'
+import Component, { DBComponent } from '../../../core/component'
 import Entity from '../../../core/entity'
-import * as THREE from 'three'
 
 export default class MetaFactorySystem {
     
-    world: Convolvr
+    private world: Convolvr
 
-    constructor ( world: Convolvr ) {
+    constructor(world: Convolvr) {
 
         this.world = world
         // This system will add factory components for sets of entities, components, systems by category.. 
@@ -16,22 +14,22 @@ export default class MetaFactorySystem {
         // TODO: implement attr.source == "component" and attr.componentPath = [1, 0... ]
     }
 
-    init ( component: Component ) { 
+    public init(component: Component) { 
         
         let components:     Array<Component> = component.components,
-            attr:           Object           = component.attrs.metaFactory,
+            attr:           any           = component.attrs.metaFactory,
             assetType:      string           = attr.type,
             category:       string           = attr.attrName,
             gridWidth:      number           = attr.gridWidth || 3,
             gridSize:       number           = attr.gridSize || 1,
             vOffset:        number           = attr.vOffset || -1.2,
             sourceCategory: any              = "none",
-            factories:      Array<Object>    = [],
+            factories:      Array<any>    = [],
             presets:        Array<any>       = [],
             preset:         string           = "",
             source:         Array<any>       = [],
             index:          number           = 0,
-            keys:           Object           = {},
+            keys:           any           = {},
             x:              number           = 0,
             y:              number           = 0
 
@@ -59,8 +57,8 @@ export default class MetaFactorySystem {
                 
                     return
                 
-                preset = this._getPreset( assetType, item, i, presets ) 
-                this._addComponent( component, item, assetType, category, preset, x, y, index, gridSize, vOffset)
+                preset = this.getPreset( assetType, item, i, presets ) 
+                this.addComponent( component, item, assetType, category, preset, x, y, index, gridSize, vOffset)
                 x ++
 
                 if ( x >= gridWidth ) {
@@ -72,12 +70,12 @@ export default class MetaFactorySystem {
             
         } else { // map through system categories
             source = attr.dataSource
-            sourceCategory = this._getSourceCategory( source, category ) // structures, vehicles, media, interactivity
+            sourceCategory = this.getSourceCategory( source, category ) // structures, vehicles, media, interactivity
         
             Object.keys( sourceCategory ).map( ( key, a ) => { // vehicle, propulsion, control, etc
                 let categorySystems = sourceCategory[ key ]
                 Object.keys( categorySystems ).map( systemPreset => {
-                        this._addComponent( component, {[key]: categorySystems[systemPreset]}, assetType, "systems", key, x, y, index, gridSize, vOffset)
+                        this.addComponent( component, {[key]: categorySystems[systemPreset]}, assetType, "systems", key, x, y, index, gridSize, vOffset)
                         x += 1
                         index += 1
                         if ( x > gridWidth ) {
@@ -89,8 +87,7 @@ export default class MetaFactorySystem {
         }
     }
 
-    _getSourceCategory ( source: any, category: string ) {
-
+    private getSourceCategory(source: any, category: string) {
         let sourceCategory: any = ""
         
         switch( category ) {
@@ -103,8 +100,7 @@ export default class MetaFactorySystem {
         return sourceCategory
     }
 
-    _getPreset ( assetType: string, item: Object, i: number, presets: Array<any> ) {
-
+    private getPreset( assetType: string, item: any, i: number, presets: Array<any> ) {
         let preset: string = ""
 
         switch ( assetType ) {
@@ -125,11 +121,10 @@ export default class MetaFactorySystem {
         return preset
     }
 
-    _addComponent ( component: Component, factoryItem: any, assetType: string, assetCategory: string, preset: any, x: number, y: number, i: number, gridSize: number, vOffset: number ) {
-
-        let addTo:   Component     = null,
-            layout:  Object        = {},
-            systems: Object        = this.world.systems,
+    private addComponent(component: Component, factoryItem: any, assetType: string, assetCategory: string, preset: any, x: number, y: number, i: number, gridSize: number, vOffset: number ) {
+        let addTo:   DBComponent[] = null,
+            layout:  any         = {},
+            systems: any         = this.world.systems,
             pos:     Array<number> = [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 0.120 ]
 
         if ( component.attrs.layout ) {
@@ -145,6 +140,12 @@ export default class MetaFactorySystem {
         }
 
         addTo.push({
+                id: -1,
+                name: "",
+                components: [] as DBComponent[],
+                props: {},
+                state: {},
+                tags: [],
                 attrs: {
                     factory: {
                         type: assetType,
@@ -163,7 +164,7 @@ export default class MetaFactorySystem {
                     }
                 },
                 position:  pos,
-                quaternion: null
+                quaternion: [0, 0, 0, 1]
         })
 
     }

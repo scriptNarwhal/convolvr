@@ -11,11 +11,11 @@ socket.onopen = () => {
 socket.onclose = () => {
   connected = false
 }
-socket.onmessage = function(evt) {
+socket.onmessage = (evt: any) => {
   let data = JSON.parse(evt.data)
   events.emit(data.type, data)
 }
-export let send = (type,data) => {
+export let send = (type: string, data: any) => {
   if (!connected) {
     return;
   }

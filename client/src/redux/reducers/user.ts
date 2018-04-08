@@ -48,41 +48,34 @@ module.exports = function users (state: any = {
         return Object.assign({}, state, {
             loggedIn: false
         })
-    break
     case USERS_FETCH:
         return Object.assign({}, state, {
             fetching: true
         })
-    break
     case USERS_FETCH_DONE:
         return Object.assign({}, state, {
             fetching: false,
             all: action.data.users
         })
-    break
     case USERS_FETCH_FAIL:
         return Object.assign({}, state, {
             fetching: false,
             all: state.all
         })
-    break
     case UPDATE_USER_FETCH:
         return Object.assign({}, state, {
             updateFetching: true
         })
-    break
     case UPDATE_USER_DONE:
         return Object.assign({}, state, {
             updateFetching: false,
             updateError: false
         })
-    break
     case UPDATE_USER_FAIL:
         return Object.assign({}, state, {
             updateFetching: false,
             updateError: action.error
         })
-    break
     case LOGIN_FETCH:
         return Object.assign({}, state, {
             fetching: true,

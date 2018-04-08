@@ -30,11 +30,11 @@ export default class Component {
   public merged:             boolean;
   public isComponent:        boolean;
   private _compPos:          any;
-  public parent:             Component | any
+  public mount:             Component | Entity | null
   public index:              number
   public path:               number[]
 
-  constructor (data: any, entity: Entity, systems: any, config: any = false, parent = false ) {
+  constructor (data: any, entity: Entity, systems: any, config: any = false, parent?: Component | null ) {
       let quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : [ 0, 0, 0 ],
           path = config && config.path ? config.path : [],
@@ -64,7 +64,7 @@ export default class Component {
       this.merged = false
       this.isComponent = true
       this._compPos = new THREE.Vector3()
-      this.parent = parent ? parent : null
+      this.mount = parent ? parent : null
 
       if ( !!! attrs ) {
         this.attrs = attrs = {} 
@@ -185,11 +185,11 @@ export default class Component {
   getClosestComponent( position: number[], recursive = false ): Component {
     let compPos = this._compPos, 
         entMesh = this.mesh,
-        parentMesh = this.parent ? this.parent.mesh : false,
+        parentMesh = this.mount ? this.mount.mesh : false,
         worldCompPos = null,
         distance = 0.0900,
         newDist = 0,
-        closest = null;
+        closest: Component | null = null;
 
     parentMesh && parentMesh.updateMatrixWorld()
     this.allComponents.map( component => {

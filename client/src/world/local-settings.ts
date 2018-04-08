@@ -5,6 +5,12 @@ const str = "string",
 	  float = "float",
 	  bool = "boolean";
 
+enum SettingType {
+	str,
+	int,
+	float,
+	bool
+} 
 export default class Settings {
 
 	public cameraMode: any
@@ -28,9 +34,14 @@ export default class Settings {
 	constructor(world: Convolvr) {
 		this.world = world
 
-		let options = ["cameraMode", 'vrMovement', 'IOTMode', 'lighting', 'geometry','postProcessing', 'aa', 'shadows', 'floorHeight', 'viewDistance', 'leapMode', 'manualLensDistance', 'fov', 'blurEffect', 'dpr'],
-			types =   [ str,      str,          bool,      int,        int,       bool,             bool, int,       float,         int,            str,        float,                int,       bool,         float],
-			defaults = ["fps",    "stick",      "off",     2,          window.innerWidth < 720 ? 1 : 2, "off", "off", 0, 0,         0,              "hybrid",   0,                    75,        "off",        0],
+		let options: string[]   =  ["cameraMode", 	  'vrMovement',         'IOTMode',         'lighting',       'geometry',
+					  			    'postProcessing', 'aa', 		        'shadows',         'floorHeight',    'viewDistance', 
+					  			    'leapMode',       'manualLensDistance', 'fov',             'blurEffect',     'dpr'],
+			types: SettingType[] = [ SettingType.str,  SettingType.str,      SettingType.bool, SettingType.int,   SettingType.int,
+									 SettingType.bool, SettingType.bool, 	 SettingType.int,  SettingType.float, SettingType.int,            
+									 SettingType.str,  SettingType.float,    SettingType.int,  SettingType.bool,  SettingType.float],
+			defaults = ["fps",  "stick", "off", 2, window.innerWidth < 720 ? 1 : 2, 
+						"off",  "off",  0, 0, 0, "hybrid",  0, 75, "off", 0],
 			settings = this
 
 		options.map( (item, i) => {
@@ -39,27 +50,77 @@ export default class Settings {
 					setting = defaults[ i ];
 					localStorage.setItem( item, setting )
 				}
-				settings.setValueWithType( item, setting, types[ i ] )
+				settings.setValue( item, setting, types[ i ] )
 			})
 
 		world.userInput.leapMode = this.leapMode
 		this.gravity = 1
 	}
 
-	setValueWithType( key: string, value: any, type: string ) {
+	setValueWithType(value: any, type: SettingType ) {
 		switch (type) {
-			case "boolean":
-				this[ key ] = value == "on" ? true : false;
+			case SettingType.bool:
+				return value == "on" ? true : false;
 			break;
-			case "integer":
-				this[ key ] = parseInt( value );
+			case SettingType.int:
+				return parseInt( value );
 			break;
-			case "float":
-				this[ key ] = parseFloat( value );
+			case SettingType.float:
+				return parseFloat( value );
 			break;
-			case "string":
-				this[ key ] = value;
+			case SettingType.str:
+				return value;
 			break;
+		}
+	}
+
+	setValue( value: any, key: string, type: SettingType) {
+		switch (key) {
+			case "cameraMode":
+			this.cameraMode = this.setValueWithType(value, type)
+			break
+			case 'vrMovement':
+			this.vrMovement = this.setValueWithType(value, type)
+			break
+			case 'IOTMode':
+			this.IOTMode = this.setValueWithType(value, type)
+			break 
+			case 'lighting':
+			this.lighting = this.setValueWithType(value, type)
+			break
+			case 'geometry':
+			this.geometry = this.setValueWithType(value, type)
+			break
+			case 'postProcessing':
+			this.postProcessing = this.setValueWithType(value, type)
+			break
+			case 'aa':
+			this.aa = this.setValueWithType(value, type)
+			break
+			case 'shadows':
+			this.shadows = this.setValueWithType(value, type)
+			break
+			case 'floorHeight':
+			this.floorHeight = this.setValueWithType(value, type)
+			break
+			case 'viewDistance':
+			this.viewDistance = this.setValueWithType(value, type)
+			break
+			case 'leapMode':
+			this.leapMode = this.setValueWithType(value, type)
+			break
+			case 'manualLensDistance':
+			this.manualLensDistance = this.setValueWithType(value, type)
+			break
+			case 'fov':
+			this.fov = this.setValueWithType(value, type)
+			break
+			case 'blurEffect':
+			this.blurEffect = this.setValueWithType(value, type)
+			break
+			case 'dpr':
+			this.dpr = this.setValueWithType(value, type)
+			break
 		}
 	}
 }

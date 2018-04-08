@@ -1,6 +1,7 @@
 import { GRID_SIZE } from '../../config'
 import Convolvr from '../../world/world';
 import Component from '../../core/component';
+import Entity from '../../core/entity';
 const THREE: any = (window as any).THREE;
 
 let handDirection = new THREE.Vector3(0, 0, 0),
@@ -123,7 +124,7 @@ export default class CursorSystem {
             input = world.userInput,
             cursorSystem = world.systems.cursor
 
-        cursors.map((cursor, i) => { // animate cursors & raycast scene
+        cursors.map((cursor: Component, i: number) => { // animate cursors & raycast scene
 
             let state = cursor.state.cursor,
                 cursorMesh = cursor.mesh
@@ -158,7 +159,7 @@ export default class CursorSystem {
             lookAway = !!attrs ? attrs.lookAway : false,
             activate = !!attrs ? attrs.activate : false,
             cursorSystem = world.systems.cursor,
-            newCursorState = null,
+            newCursorState: any = null,
             noRayCast = entity && entity.componentsByAttr.noRayCast,
             callbacks = null,
             comp = false,
@@ -168,7 +169,7 @@ export default class CursorSystem {
             if ( !!!cursorState.cursor.entity && !!! noRayCast )
                 window.navigator.vibrate && window.navigator.vibrate(25)
 
-            newCursorstate: any = {
+                newCursorState = {
                 distance: obj.distance || 2,
                 mesh: obj.object,
                 point: obj.point,
@@ -177,7 +178,7 @@ export default class CursorSystem {
                 componentPath: component ? component.path : []
             }
         } else {
-            newCursorstate: any = {
+            newCursorState = {
                 distance: 2,
                 mesh: null,
                 point: null,
@@ -255,9 +256,9 @@ export default class CursorSystem {
     }
 }
 
-var cursorColorTimeouts = [];
+var cursorColorTimeouts: any[] = [];
 
-function _changeCursorColor ( cursor, selected ) {
+function _changeCursorColor ( cursor: Component, selected: boolean ) {
     let cursorColor = cursor.mesh.material.color;
     cursorColorTimeouts.forEach( c=> clearTimeout( c ) )
     cursorColorTimeouts = [

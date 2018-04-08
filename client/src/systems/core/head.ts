@@ -1,6 +1,10 @@
+import Convolvr from "../../world/world";
+import Component from "../../core/component";
+
 export default class HeadSystem { // decides where to position camera in user avatar
     
-    constructor ( world ) {
+    private world: Convolvr
+    constructor ( world: Convolvr ) {
         this.world = world
     }
 

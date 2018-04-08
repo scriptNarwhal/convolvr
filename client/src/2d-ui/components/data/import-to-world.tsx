@@ -20,7 +20,7 @@ class ImportToSpace extends Component<any, any> {
       text: "",
       name: "",
       data: {},
-      coords: [0, 0, 0],
+      coords: "0x0x0",
       world: "Overworld",
       id: 0
     })
@@ -53,7 +53,7 @@ class ImportToSpace extends Component<any, any> {
 
   onCoordChange(value: any, event: any) {
     this.setState({
-      coords: value
+      coords: value.join("x")
     })
   }
 
@@ -151,7 +151,7 @@ export default connect(
   },
   (dispatch: any) => {
     return {
-      addItemToSpace: (userId: any, category: string, itemId: any, world: string, coords: any[], itemData: any) => {
+      addItemToSpace: (userId: any, category: string, itemId: any, world: string, coords: string, itemData: any) => {
         dispatch(addItemToSpace(userId, category, itemId, world, coords, itemData))
       },
       closeImportToSpace: () => {

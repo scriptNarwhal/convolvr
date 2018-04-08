@@ -1,10 +1,11 @@
 console.log('Convolvr Client Initializing')
 import ReactDOM from 'react-dom' // React
-import React, { Component, PropTypes } from 'react'
-import { Router, Route, IndexRoute, browserHistory } from 'react-router'
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+import React, { Component } from 'react'
+import { Router, Route  } from 'react-router'
+import { routerReducer } from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory'
 import { render } from 'react-dom' // Redux
-import { createStore } from 'redux'
+import * as redux from 'redux'
 import makeStore from './redux/makeStore'
 import { 
   clearOldData, 
@@ -26,7 +27,7 @@ let store:        Object = makeStore(routerReducer),
     token:        string   = "", 
     userInput:    UserInput,
     //progressBar:  ProgressBar,
-    user:         User     = new User(),
+    user:         User     = new User({}),
     loadingSpace: Convolvr = null,
     avatar:       Entity   = null, 
     toolMenu:     Entity   = null, // built in ui entities
@@ -34,7 +35,7 @@ let store:        Object = makeStore(routerReducer),
     chatScreen:   Entity   = null,
     httpClient:   Entity   = null
 
-const history: Object = syncHistoryWithStore(browserHistory, store)
+const history = createHistory()
 
 token = localStorage.getItem("token") || ""
 clearOldData()
@@ -51,9 +52,9 @@ loadingSpace = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       pos:       any           = world.camera.position,
       coords:    Array<number> = world.getVoxel( pos ),
       voxelKey:  string        = coords.join("."),
-      altitude:  number        = systems.terrain.voxels[ voxelKey ].data.altitude
+      altitude:  number        = (systems.terrain as any).voxels[ voxelKey ].data.altitude
 
-  world.onUserLogin = newUser => {
+  world.onUserLogin = (newUser: any) => {
     console.log("on user login: ", newUser)
     avatar = systems.assets.makeEntity(  
       newUser.data.avatar || "default-avatar", 
@@ -74,7 +75,7 @@ loadingSpace = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
     user.hud = toolMenu
     toolMenu.init( scene, {}, (menu: Entity) => { 
       menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
-    }) 
+    }); 
     
     userInput.init( world, world.camera, user )
     userInput.rotationVector = { x: 0, y: 2.5, z: 0 }
@@ -85,17 +86,17 @@ loadingSpace = new Convolvr( user, userInput, socket, store, (world: Convolvr) =
       
   }
   
-  world.initChatAndLoggedInUser( localStorage.getItem("username") != null )    
+  world.initChatAndLoggedInUser( localStorage.getItem("username") != null );    
   
-  chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) //; chatScreen.components[0].attrs.speech = {}
-  chatScreen.init( scene )
-  chatScreen.update( [ pos.x, altitude + 21, pos.z+10] )  
-  world.chat = chatScreen
-  helpScreen = systems.assets.makeEntity( "help-screen", true, {}, coords )
+  chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ); //; chatScreen.components[0].attrs.speech = {}
+  chatScreen.init( scene );
+  chatScreen.update( [ pos.x, altitude + 21, pos.z+10] );  
+  (world as any).chat = chatScreen
+  helpScreen = systems.assets.makeEntity( "help-screen", true, {}, coords );
   helpScreen.init(scene, {}, (help: Entity) => { 
-    _initHTTPClientTest( world, help, coords ) 
-    _initFileSystemTest( world, help, coords ) 
-    _initVideoChat( world, help, coords ) 
+    _initHTTPClientTest( world, help, coords ); 
+    _initFileSystemTest( world, help, coords ); 
+    _initVideoChat( world, help, coords ); 
   })
   helpScreen.update( [ pos.x-4, altitude + 21, pos.z+10 ] )
   world.help = helpScreen

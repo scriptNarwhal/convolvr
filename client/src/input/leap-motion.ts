@@ -1,8 +1,11 @@
+import UserInput from "./user-input";
+import Convolvr from "../world/world";
+
 export default class LeapMotion {
 
-	constructor (uInput, world) {
+	constructor (uInput: UserInput, world: Convolvr) {
 
-    Leap.loop(function (frame) {
+    (window as any).Leap.loop(function (frame: any) {
 
       let mode = world.mode,
           input = uInput,
@@ -12,29 +15,25 @@ export default class LeapMotion {
         uInput.leapMotion = true
 
       if ( true ) { //isVRMode(mode)) { // if its VR mode and not chat mode
-
         if ( input.leapMode == "movement" ) {
-          frame.hands.forEach(( hand, index ) => {
-
+          frame.hands.forEach(( hand: any, index: number ) => {
             let position = hand.screenPosition()
+
             input.moveVector.x = (((-window.innerWidth / 2) + position[0])) * 30
             input.moveVector.z = (((-window.innerWidth / 2) + position[2])) * 30
             input.rotationVector.y -= 0.025 * hand.yaw() //((-window.innerWidth / 2) + position[0]) / 0.08;
             input.rotationVector.x += 0.015 * hand.pitch()
-
           })
 
         } else {
 
           if ( input.leapMode == "avatar" ) {
 
-            frame.hands.forEach( ( hand, index ) => {
-
+            frame.hands.forEach( ( hand: any, index: number ) => {
               let position = hand.screenPosition(),
                   handMesh = null
 
               if ( toolbox.hands[ index ] != null ) {
-
                 handMesh = toolbox.hands[ index ].mesh
                 handMesh.visible = true
                 handMesh.rotation.set( hand.pitch(), -hand.yaw(), 0 )
@@ -44,13 +43,9 @@ export default class LeapMotion {
                 // include logic for moving by grabbing..
                 // possibly modify this to work with teleporting 
               }
-
             })
-
           } else {
-
-            frame.hands.forEach( ( hand, index ) => {
-
+            frame.hands.forEach( ( hand: any, index: number ) => {
               let position = hand.screenPosition(),
                   handIndex = 0,
                   handMesh = null
@@ -61,26 +56,18 @@ export default class LeapMotion {
                 input.rotationVector.y -= 0.025 * hand.yaw() //((-window.innerWidth / 2) + position[0]) / 0.08;
                 input.rotationVector.x += 0.015 * hand.pitch()
               } else { // if its the second hand, control the hands/hands
-
                 while ( handIndex < 2 ) {
-                  
                   if ( toolbox.hands[ handIndex ] != null ) {
-                    
                     handMesh = toolbox.hands[ handIndex ].mesh
                     handMesh.visible = true
                     handMesh.rotation.set( hand.pitch(), -hand.yaw(), 0 )
                     handMesh.position.set( -0.333+((0.5*handIndex)+((-window.innerWidth / 20000) + position[0]) * 10), -0.1, -0.05 + position[2] * 10 )
                     handMesh.updateMatrix()
                     handIndex ++
-
                   }
-
                 }
-
               }
-
             })
-
           }
         }
       }

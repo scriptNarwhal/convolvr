@@ -1,4 +1,3 @@
-import { browserHistory } from 'react-router'
 import axios from 'axios'
 import Voxel from '../../core/voxel'
 import { animate } from '../../world/render'
@@ -8,12 +7,35 @@ import {
   GRID_SIZE,
   API_SERVER
 } from '../../config'
+import StaticCollisions from './physics/static-collisions';
+import Component from '../../core/component';
 
-export default class TerrainSystem {
+export default class SpaceSystem {
 
+  private world: Convolvr
+  config: any
   live: boolean
 
-    constructor ( world ) {
+  public octree: any
+  public mesh: any
+  public phase: number
+  public distantTerrain: any
+  public StaticCollisions: StaticCollisions
+
+  public loaded: boolean  
+  public readyCallback: Function
+
+  public lastChunkCoords: number[]
+  public chunkCoords: number[]
+
+  public cleanUpVoxels: any[]
+  public reqVoxels: any[]
+  public loadedVoxels: any[]
+  public physicsVoxels: any
+  public voxelList: any[]
+  public voxels: any
+
+    constructor ( world: Convolvr ) {
       this.world            = world
       this.config           = world.config.terrain
       this.octree           = world.octree
@@ -43,21 +65,21 @@ export default class TerrainSystem {
       this.voxels[ GLOBAL_SPACE.join(".") ] = globalVoxel
     }
 
-    init (component) {
+    init (component: Component) {
         let attr = component.attrs.tab,
             state: any = {}
             
         return state
     }
 
-    tick ( delta, time ) {
+    tick (delta: number, time: number) {
 
       this.bufferVoxels( false, this.phase )
     }
 
-    initTerrain ( config ) {
+    initTerrain (config: any) {
       let world = this.world,
-          terrainSystem = this,
+          SpaceSystem = this,
           materials = world.systems.material
 
       this.StaticCollisions = world.systems.staticCollisions
@@ -75,7 +97,7 @@ export default class TerrainSystem {
 
       if (!!this.mesh) {
         world.octree.remove(this.mesh)
-        three.scene.remove(this.mesh)
+        world.three.scene.remove(this.mesh)
         this.distantTerrain = null
       }
 
@@ -98,8 +120,8 @@ export default class TerrainSystem {
             quaternion: [0,0,0]
           }], [0, yPosition, 0], [0,0,0,1], world.getVoxel())
 
-        distantTerrain.init( three.scene, { noVoxel: true }, (terrainEnt) => {
-          terrainSystem.mesh = terrainEnt.mesh
+        distantTerrain.init( (window as any).three.scene, { noVoxel: true }, (terrainEnt: Entity) => {
+          SpaceSystem.mesh = terrainEnt.mesh
           terrainEnt.mesh.rotation.x = -Math.PI/2
           terrainEnt.mesh.updateMatrix()
         })
@@ -112,19 +134,19 @@ export default class TerrainSystem {
 			v.entities.map(e => {
 				if ( e.mesh ) {
 					this.world.octree.remove( e.mesh )
-					three.scene.remove( e.mesh )
+					this.world.three.scene.remove( e.mesh )
 				}					
 			})
 
 			if ( v.mesh )				
-				three.scene.remove( v.mesh )
+        this.world.three.scene.remove( v.mesh )
     })
-    this.platforms = []
+
 		this.voxels = {}
 		this.voxelList = []
   }
 
-  loadVoxel ( coords, callback ) {
+  loadVoxel ( coords: number[], callback: Function) {
     let voxels     = this.voxels,
         voxelList  = this.voxelList,
         voxelKey   = coords[0]+".0."+coords[2], // debugging this.. 
@@ -145,7 +167,7 @@ export default class TerrainSystem {
     return v
   }
 
-  bufferVoxels ( force, phase ) {
+  bufferVoxels (force: boolean, phase: number) {
     let voxels              = this.voxels,
         voxelList           = this.voxelList,
         config              = this.config,
@@ -155,8 +177,8 @@ export default class TerrainSystem {
         systems             = world.systems,
         octree              = world.octree,
         voxel               = null,
-        removePhysicsVoxels = [],
-        cleanUpVoxels       = [],
+        removePhysicsVoxels: any[] = [],
+        cleanUpVoxels: any[] = [],
         loadedVoxels        = [],
         chunkPos            = [],
         pCell               = [ 0, 0, 0 ],
@@ -185,8 +207,8 @@ export default class TerrainSystem {
             shortURLView = pageName.indexOf('/files') > -1 || pageName.indexOf('/inventory') > -1 || pageName.indexOf('/settings') > -1
 
         if ( phase > 0 && this.loaded && !shortURLView )
-
-          browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
+          console.warn("Call browserhistory redirect action bere!!")
+          //browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
 
         force = false 	// remove old voxels
 
@@ -226,7 +248,7 @@ export default class TerrainSystem {
             terrainChunk.entities.map( e => {
               if ( !!e && !!e.mesh ) {
                 octree.remove( e.mesh )
-                three.scene.remove( e.mesh )
+                (window as any).three.scene.remove( e.mesh )
               } 
             })
 
@@ -319,7 +341,7 @@ export default class TerrainSystem {
 
     }
 
-    initializeVoxel ( cell, key ) {
+    initializeVoxel ( cell: number[], key: string ) {
       let emptyVoxel = new Voxel( { 
         cell, 
         name: "empty voxel", 
@@ -335,13 +357,13 @@ export default class TerrainSystem {
 
     }
 
-    initializeEntities (config) {
+    initializeEntities (config: any) {
 
       let initialLoad   = this.world.initialLoad,
           showVoxels    = true,
           terrain       = this,
           loadedVoxels  = this.loadedVoxels,
-          cam           = three.camera,
+          cam           = (window as any).three.camera,
           cameraKey     = Math.floor(cam.position.x / GRID_SIZE[0]) + ".0." + Math.floor(cam.position.z / GRID_SIZE[2]),
           c             = 0
 

@@ -20,7 +20,6 @@ import {
   PLACE_FETCH_FAIL,
 } from '../constants/action-types'
 import axios from 'axios'
-import { browserHistory } from 'react-router'
 import { API_SERVER } from '../../config.js'
 
 export function fetchPlaces () {
@@ -30,13 +29,13 @@ export function fetchPlaces () {
         type: PLACES_FETCH
      })
      return axios.get(API_SERVER+"/api/places")
-        .then(res => {
-            three.world.systems.assets.setPlaces( res.data )
+        .then((res: any) => {
+            (window as any).three.world.systems.assets.setPlaces( res.data )
             dispatch({
                 type: PLACES_FETCH_DONE,
                 places: res.data
             })
-        }).catch(res => {
+        }).catch( (err: any) => {
             dispatch({
                 type: PLACES_FETCH_FAIL,
                 err: err
@@ -46,19 +45,19 @@ export function fetchPlaces () {
 
 }
 
-export function fetchPlace ( username, placename ) {
+export function fetchPlace ( username: string, placename: string) {
     
         return (dispatch: any) => {
          dispatch({
             type: PLACE_FETCH
          })
          return axios.get(API_SERVER+`/api/places/${username}/${placename}`)
-            .then(res => {
+            .then((res: any) => {
                 dispatch({
                     type: PLACE_FETCH_DONE,
                     data: res.data
                 })
-            }).catch(res => {
+            }).catch((err: any) => {
                 dispatch({
                     type: PLACE_FETCH_FAIL,
                     err: err
@@ -68,7 +67,7 @@ export function fetchPlace ( username, placename ) {
     
     }
 
-export function fetchUserPlaces( userId ) {
+export function fetchUserPlaces( userId: any ) {
 
     return (dispatch: any) => {
      dispatch({
@@ -91,7 +90,7 @@ export function fetchUserPlaces( userId ) {
 
 }
 
-export function createPlace( data ) {
+export function createPlace( data: any ) {
 
     return (dispatch: any) => {
      dispatch({
@@ -101,7 +100,7 @@ export function createPlace( data ) {
      return axios.post(API_SERVER+"/api/places", data)
         .then((response: any) => {
             dispatch(createPlaceDone(response))
-            browserHistory.push("/"+data.userName+"/"+data.name)
+            //browserHistory.push("/"+data.userName+"/"+data.name)
             window.location.href = window.location.href  /* work around */
             // this should.. work differently
         }).catch((response: any) => {
@@ -111,7 +110,7 @@ export function createPlace( data ) {
 
 }
 
-export function createPlaceDone( res ) {
+export function createPlaceDone( res: any ) {
 
     return {
         type: PLACE_CREATE_DONE,
@@ -119,7 +118,7 @@ export function createPlaceDone( res ) {
     }
 
 }
-export function createPlaceFail( err ) {
+export function createPlaceFail( err:any ) {
 
     return {
         type: PLACE_CREATE_FAIL,
@@ -127,7 +126,7 @@ export function createPlaceFail( err ) {
     }
 
 }
-export function setCurrentPlace( world, user, place ) {
+export function setCurrentPlace( world: string, user: string, place: string ) {
 
   return {
     type: PLACE_SET_CURRENT,
@@ -137,7 +136,7 @@ export function setCurrentPlace( world, user, place ) {
   }
 
 }
-export function updatePlace (id, data) {
+export function updatePlace (id: any, data: any) {
 
     return (dispatch: any) => {
      dispatch({
@@ -170,7 +169,7 @@ export function updatePlaceFail(err: any) {
 
 }
 
-export function deletePlace (id, data) {
+export function deletePlace (id: any, data: any) {
 
     return (dispatch: any) => {
      dispatch({

@@ -116,7 +116,6 @@ class Data extends Component<any, any> {
                           let newWindow = window.open(this.getFullPath(file), "_blank")
                           newWindow.focus()
                         }
-                        
                       }}
                       compact={thumbs || !this.isImage(file) }
                       quarterSize={mobile && this.isImage(file) }

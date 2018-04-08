@@ -14,12 +14,12 @@ export let _initMaterialProp = (attr, simpleShading) => { // material presets & 
       if (!simpleShading) {
 
         //attr.metalnessMap = "/data/images/textures/tiles.png" 
-        attr.roughnessMap = '/data/images/textures/terrain5.jpg'
-        attr.map = !!!attr.map ? '/data/images/textures/terrain4.jpg' : attr.map
+        attr.roughnessMap = '/data/images/textures/space5.jpg'
+        attr.map = !!!attr.map ? '/data/images/textures/space4.jpg' : attr.map
 
       } else {
 
-        attr.map = '/data/images/textures/terrain4.jpg'
+        attr.map = '/data/images/textures/space4.jpg'
         attr.envMap = 'none'
 
       }
@@ -29,11 +29,11 @@ export let _initMaterialProp = (attr, simpleShading) => { // material presets & 
     case "terrain2":
       if (!simpleShading) {
 
-        attr.map = !!!attr.map ? '/data/images/textures/terrain1.jpg' : attr.map
+        attr.map = !!!attr.map ? '/data/images/textures/space1.jpg' : attr.map
 
       } else {
 
-        attr.map = '/data/images/textures/terrain1.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
+        attr.map = '/data/images/textures/space1.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
         attr.envMap = 'none'
 
       }
@@ -42,12 +42,12 @@ export let _initMaterialProp = (attr, simpleShading) => { // material presets & 
     case "terrain3":
       if (!simpleShading) {
 
-        attr.map = !!!attr.map ? '/data/images/textures/terrain4.jpg' : attr.map
+        attr.map = !!!attr.map ? '/data/images/textures/space4.jpg' : attr.map
         //attr.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
 
       } else {
 
-        attr.map = '/data/images/textures/terrain4.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
+        attr.map = '/data/images/textures/space4.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
         attr.envMap = 'none'
 
       }
@@ -57,12 +57,12 @@ export let _initMaterialProp = (attr, simpleShading) => { // material presets & 
     case "terrain4":
       if (!simpleShading) {
 
-        attr.metalnessMap = "/data/images/textures/terrain3.jpg"
-        attr.map = !!!attr.map ? '/data/images/textures/terrain3.jpg' : attr.map
+        attr.metalnessMap = "/data/images/textures/space3.jpg"
+        attr.map = !!!attr.map ? '/data/images/textures/space3.jpg' : attr.map
 
       } else {
 
-        attr.map = '/data/images/textures/terrain3.jpg'
+        attr.map = '/data/images/textures/space3.jpg'
         attr.envMap = 'none'
 
       }

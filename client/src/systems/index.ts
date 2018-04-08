@@ -56,7 +56,7 @@ import StateSystem from './logic/state'
 import StatSystem from './game/stat'
 import StaticCollisions  from './environment/physics/static-collisions'
 import SwitchSystem from './logic/switch'
-import TerrainSystem from './environment/terrain'
+import SpaceSystem from './environment/space'
 import TextSystem from './ui/text'
 import ToolSystem from './tool/tool'
 import TimeSystem from './logic/time'
@@ -141,7 +141,7 @@ export default class Systems {
 	public stat: 			 StatSystem;
 	public staticCollisions: StaticCollisions;
 	public switch: 		  	 SwitchSystem;
-	public terrain: 		 TerrainSystem;
+	public terrain: 		 SpaceSystem;
 	public text: 			 TextSystem;
 	public time: 			 TimeSystem;
 	public toolUI: 		  	 ToolUISystem;
@@ -223,7 +223,7 @@ export default class Systems {
 			stat: 			  new StatSystem( world ),
 			staticCollisions: new StaticCollisions( world ),
 			switch: 		  new SwitchSystem( world ),
-			terrain: 		  new TerrainSystem( world ),
+			terrain: 		  new SpaceSystem( world ),
 			text: 			  new TextSystem( world ),
 			time: 			  new TimeSystem( world ),
 			toolUI: 		  new ToolUISystem( world ),

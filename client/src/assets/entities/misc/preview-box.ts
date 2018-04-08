@@ -1,3 +1,5 @@
+import { DBComponent } from "../../../core/component";
+
 let previewBox = {
             id: 0,
             name: "preview-box",
@@ -16,7 +18,7 @@ let previewBox = {
                     },
                     quaternion: [ 0, 0, 0, 1 ],
                     position: [ 0, 0, 0],
-                    components: []
+                    components: [] as DBComponent[]
                 },
                 {
                     attrs: {
@@ -29,9 +31,9 @@ let previewBox = {
                             name: "wireframe"
                         }
                     },
-                    quaternion: null,
+                    quaternion: [0, 0, 0, 1],
                     position: [ 0.25, -0.5, 0 ],
-                    components: []
+                    components: [] as DBComponent[]
                 },
                 {
                     attrs: {
@@ -44,7 +46,7 @@ let previewBox = {
                             name: "wireframe"
                         }
                     },
-                    quaternion: null,
+                    quaternion: [0, 0, 0, 1],
                     position: [ -0.25, -0.5, 0 ],
                     components: []
                 },

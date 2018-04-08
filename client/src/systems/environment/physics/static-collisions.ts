@@ -3,7 +3,7 @@ import Convolvr from '../../../world/world'
 import Component from '../../../core/component'
 import Entity from '../../../core/entity'
 
-
+const THREE = (window as any).THREE;
 let entPos = new THREE.Vector3()
 
 export default class StaticCollisions {

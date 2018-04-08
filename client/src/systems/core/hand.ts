@@ -26,8 +26,8 @@ export default class HandSystem {
             grip: (value: number): number => {
                 return this.grip(component, value)
             },
-            setHandOrientation: (position: number[], rotation: number[], index: number) => {
-                this.setHandOrientation(component, position, rotation, index)
+            setHandOrientation: (position: number[], rotation: number[]) => {
+                this.setHandOrientation(component, position, rotation)
             }
         }
     }
@@ -66,12 +66,12 @@ export default class HandSystem {
                         if (state.hand.trackedHands) {
                             component.mesh.remove(entity.mesh);
                             handPos = component.mesh.position
-                            entity.update( handPos.toArray(), component.mesh.quaternion.toArray())
+                            entity.update( (handPos as any).toArray(), component.mesh.quaternion.toArray())
                             entity.mesh.translateZ(-entity.boundingRadius-2)
                         } else {
                             cursorMesh.remove(entity.mesh);
                              //  // 
-                             let newEntPos = avatarPos.toArray();
+                             let newEntPos = (avatarPos as any).toArray();
                             // newEntPos[2] += cursorMesh.position.z;
                             entity.update(newEntPos, avatar.mesh.quaternion.toArray())
                             entity.mesh.translateZ(-entity.boundingRadius+cursorMesh.position.z)
@@ -128,7 +128,7 @@ export default class HandSystem {
     toggleTrackedHands(component: Component, toggle: boolean = true) {
         let scene = this.world.three.scene,
             avatar = component.entity,
-            position = null,
+            position: any = null,
             cursors = avatar.componentsByAttr.cursor,
             hands = avatar.componentsByAttr.hand;
 
@@ -146,7 +146,7 @@ export default class HandSystem {
        cursors[0].mesh.visible = !toggle
       }
 
-      hands.map((handComponent, i) => {
+      hands.map((handComponent: Component, i: number) => {
         let hand = handComponent.mesh,
             handState = handComponent.state.hand;
 

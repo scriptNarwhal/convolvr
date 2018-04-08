@@ -5,7 +5,7 @@ const THREE: any = (window as any).THREE;
 export default class GeometrySystem {
 
   world: Convolvr
-  nodeGeom: THREE.PlaneGeometry
+  nodeGeom: any //THREE.PlaneGeometry
   detail: number
 
   constructor ( world: Convolvr ) {
@@ -16,10 +16,10 @@ export default class GeometrySystem {
 
   init ( component: Component ) { 
 
-        let attr:         Object        = component.attrs.geometry,
-            geometry:     Object        = {},
+        let attr:         any        = component.attrs.geometry,
+            geometry:     any        = {},
             size:         Array<number> = attr.size,
-            assets:       Object        = this.world.systems.assets,
+            assets:       any        = this.world.systems.assets,
             detail:       Array<number> = attr.detail || [this.detail, this.detail, this.detail],
             geometryCode: string        = `${attr.shape}:${size.join(':')}:${detail.join(':')}`,
             faceNormals:  boolean       = false
@@ -93,7 +93,7 @@ export default class GeometrySystem {
         }
     }
 
-    _extrudeGeometry ( attr: Object ) { // attr.size, shape, settings
+    _extrudeGeometry ( attr: any ) { // attr.size, shape, settings
 
       let length = attr.size[2], 
           width = attr.size[0],
@@ -101,7 +101,7 @@ export default class GeometrySystem {
 
       if ( attr.shape ) {
         shape.moveTo( attr.shape[0][0], attr.shape[0][1] )
-        attr.shape.map( (point, i) => {
+        attr.shape.map( (point: any, i: number) => {
 
           if ( i > 0 ) {
             shape.lineTo( point[ 0 ], point[ 1 ] )
@@ -130,7 +130,7 @@ export default class GeometrySystem {
 
     }
 
-    _latheGeometry ( attr: Object ) { // attr.size, shape, settings
+    _latheGeometry ( attr: any ) { // attr.size, shape, settings
 
       let segments = 8 || attr.segments,
           phiStart = attr.phiStart ? attr.phiStart : 0,

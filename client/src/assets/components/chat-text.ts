@@ -1,5 +1,5 @@
 
-let chatText = (config) => {
+let chatText = (config: any) => {
     console.log(config.userName);
     return {
         position: [0, 2.5, 0],

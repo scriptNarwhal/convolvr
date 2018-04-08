@@ -1,19 +1,17 @@
 //@flow
 import Binding from './binding';
 
-export const PROPERTY_TYPES = {
-    BOOLEAN: "bool",
-    NUMBER: "number",
-    STRING: "string",
-    ARRAY: "array",
-    OBJECT: "object",
-    COMPONENT: "component",
-    PROPERTY: "attr",
-    ATTRIBUTE: "attr",
-    ANY: "any"
+enum PropertyType {
+    BOOLEAN = "bool",
+    NUMBER = "number",
+    STRING = "string",
+    ARRAY = "array",
+    OBJECT = "object",
+    COMPONENT = "component",
+    PROPERTY = "prop",
+    ATTRIBUTE = "attr",
+    ANY = "any"
 };
-
-export type PropertyType = $Keys<typeof PROPERTY_TYPES>;
 
 export default class Property  {
 

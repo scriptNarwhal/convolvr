@@ -5,6 +5,7 @@ import {
     getChatHistory,
     sendMessage
   } from '../../redux/actions/message-actions'
+import Component from '../../core/component';
 
 export default class ChatSystem {
 
@@ -29,7 +30,7 @@ export default class ChatSystem {
           
              Object.keys( byUserName ).map(userName => {
 
-                 byUserName[userName].map(comp => {
+                 byUserName[userName].map((comp: Component) => {
                     let attrs = comp.attrs,
                         from = '';
                     
@@ -86,7 +87,7 @@ export default class ChatSystem {
         return {
             username: attr.userName,
             space: this.world.name,
-            sendMessage: (message) => {
+            sendMessage: (message: string) => {
                 this.sendMessage(component, message)
             },
             hide: (delay = 0) => {
@@ -111,19 +112,19 @@ export default class ChatSystem {
 
     initChatModal() {
         let chatModal = this.world.systems.assets.makeEntity("help-screen", true, {}, [0,1,0]),
-            cPos = three.camera.position;
+            cPos = this.world.three.camera.position;
 
         chatModal.components[0].attrs.text.lines = ["Welcome"]
-        chatModal.init(three.scene, false, ()=>{})
+        chatModal.init(this.world.three.scene, false, ()=>{})
         chatModal.update(cPos.x, cPos.y - 1, cPos.z - 1.7)
         this.chatModal = chatModal
     }
 
     updateChatModal() {
         let user = this.world.user.avatar,
-            userPos = user.mesh.position;
+            userPos: any = user.mesh.position;
         
-        this.chatModal && this.chatModal.update( userPos.x, userPos.y-1, userPos.z-1.2 )
+        this.chatModal && this.chatModal.update( [userPos.x, userPos.y-1, userPos.z-1.2] )
     }
 
     hideChatModal () {
@@ -134,24 +135,21 @@ export default class ChatSystem {
         this.chatModal.mesh.visible = true
     }
 
-    sendMessage (component, message) {
+    sendMessage (component: Component, message: string) {
         let state = component.state.chat;
 
         this.world.store.dispatch(sendMessage(message, state.username, [], null, state.space))
     }
 
-    containsObject ( obj, list ) {
+    containsObject ( obj: any, list: any ): boolean {
        if (list.length == 0) {
            return false;
        }
        for ( let i = list.length - 1; i >= 0; i-- ) {
-
             if ( list[ i ] === obj ) {
                 return true
             }
-
         }
-
         return false
     }
 }

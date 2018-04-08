@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosPromise } from 'axios';
 import { API_SERVER } from '../../config.js'
 
 import Entity from '../../core/entity'
@@ -25,8 +25,40 @@ import column2Comp from '../../assets/components/misc/column-2'
 
 import battleship from '../../assets/entities/vehicles/battleship'
 import car from '../../assets/entities/vehicles/car'
+import Convolvr from '../../world/world.js';
+import Component, { DBComponent } from '../../core/component.js';
+
+let THREE = (window as any).THREE;
 
 export default class AssetSystem {
+
+    private world: Convolvr
+
+    public geometries: any
+    public materials: any
+    public textures: any
+    public proceduralTextures: any
+    public envMaps: any
+    public audioBuffers: any
+    public models: any
+    public entities: any
+    public autoDecrementEntity: any // entities loaded from network / db have positive ids
+    public components: any
+    public entitiesByName: any
+    public componentsByName: any
+    public userEntitiesByName: any
+    public userComponentsByName: any
+    public loadingItemsById: any
+    public userEntities: any[]
+    public userComponents: any[]
+    public userProperties: any[]
+    public places: any
+    public spaces: any
+    public attrs: any
+    public files: any
+    public directories: any
+    public textureLoader: any
+    public audioLoader: any
 
     constructor ( world: Convolvr ) {
         this.world                = world
@@ -70,14 +102,14 @@ export default class AssetSystem {
         }
     }
 
-    loadImage ( asset, config, callback ) {
+    loadImage ( asset: string, config: any, callback: Function ) {
 
         let texture = null,
             configCode = !!config.repeat ? `:repeat:${config.repeat.join('.')}` : '',
             textureCode = `${asset}:${configCode}`
 
         if ( this.textures[ textureCode ] == null ) {
-            texture = this.textureLoader.load(asset, texture => { callback(texture) })
+            texture = this.textureLoader.load(asset, (texture: any) => { callback(texture) })
             this.textures[ textureCode ] = texture
         } else {
             texture = this.textures[ textureCode ]
@@ -86,11 +118,11 @@ export default class AssetSystem {
         callback( texture )
     }
 
-    loadSound ( asset, sound, callback ) {
+    loadSound ( asset: string, sound: any, callback: Function ) {
 
         if (this.audioBuffers[ asset ] == null) {
 
-           this.audioLoader.load( asset, buffer => {
+           this.audioLoader.load( asset, (buffer: any) => {
                 sound.setBuffer( buffer )
                 callback()
            })
@@ -101,7 +133,7 @@ export default class AssetSystem {
         }
     }
 
-    loadModel ( asset, callback ) {
+    loadModel ( asset: string, callback: Function ) {
         // use obj and fbx systems
         let systems = this.world.systems,
             obj = systems.obj,
@@ -117,18 +149,18 @@ export default class AssetSystem {
 		var vertex_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
 
 		vertex_loader.setResponseType('text')
-		vertex_loader.load( vertex_url, vertex_text => {
+		vertex_loader.load( vertex_url, (vertex_text: any) => {
 
 			var fragment_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
 			fragment_loader.setResponseType('text')
-			fragment_loader.load( fragment_url, fragment_text => {
+			fragment_loader.load( fragment_url, (fragment_text: any) => {
 				onLoad(vertex_text, fragment_text)
 			});
 
 		}, onProgress, onError)
 	}
 
-    getEnvMapFromColor ( r, g, b ) {
+    getEnvMapFromColor ( r: number, g: number, b: number ) {
 
         let envURL = '/data/images/photospheres/sky-reflection.jpg'
 
@@ -137,7 +169,7 @@ export default class AssetSystem {
             if ( g > b ) {
                 if ( r > b && g > r /3  ) {
                     envURL = '/data/images/photospheres/sky-reflection-o'
-                } else if (red < 0.2 && blue < 0.2) {
+                } else if (r < 0.2 && b < 0.2) {
                     envURL = '/data/images/photospheres/sky-reflection-g'
                 } else {
                     envURL = '/data/images/photospheres/sky-reflection-r'
@@ -159,15 +191,15 @@ export default class AssetSystem {
         return `${envURL}.jpg`
     }
 
-    setSpaces ( spaces ) {
+    setSpaces ( spaces: any[] ) {
         this.spaces = spaces
     }
 
-    setPlaces ( places ) {
+    setPlaces ( places: any[] ) {
         this.places = places
     }
 
-    loadInventoryEntity ( username, itemId, callback ) {
+    loadInventoryEntity ( username: string, itemId: any): Promise<any> {
         let assets = this
         if (this.loadingItemsById.entities[ itemId ]) { return }
         console.log("continuing to load")
@@ -181,7 +213,7 @@ export default class AssetSystem {
                 })
     }
 
-    loadInventoryComponent ( username, itemId, callback ) {
+    loadInventoryComponent ( username: string, itemId: any ): Promise<any> {
         let assets = this
         if (this.loadingItemsById.components[ itemId ]) { return }
         this.loadingItemsById.components[ itemId ] = true
@@ -194,7 +226,7 @@ export default class AssetSystem {
                 })
     }
 
-    isEntityLoaded ( entityName ) {
+    isEntityLoaded ( entityName: string ) {
         let found = false
         
         if ( this.entitiesByName[ entityName ] != null ) {
@@ -206,7 +238,7 @@ export default class AssetSystem {
         return found
     }
 
-    addUserEntities ( entities ) {
+    addUserEntities ( entities: any[]) {
         let assets = this
         entities.map( ent => {
             assets.userEntitiesByName[ ent.name ] = ent
@@ -214,7 +246,7 @@ export default class AssetSystem {
         this.userEntities = this.userEntities.concat( entities )
     }
 
-    addUserComponents ( components ) {
+    addUserComponents ( components: any[]) {
         let assets = this
         components.map( comp => {
             assets.userComponentsByName[ comp.name ] = comp
@@ -222,31 +254,31 @@ export default class AssetSystem {
         this.userComponents = this.userComponents.concat( components )
     }
 
-    addUserProperties ( attrerties ) {
+    addUserProperties ( attrerties: any[]) {
         this.userProperties = this.userProperties.concat( attrerties )
     }
 
-    addUserAssets ( assets ) {
-        this.systems.asset = this.systems.asset.concat( assets )
+    addUserAssets ( assets: any[]) {
+        
     }
 
-    setUserFiles ( files ) {
+    setUserFiles ( files: any[]) {
         this.files = files
     }
 
-    addUserFiles ( files ) {
+    addUserFiles ( files: any[]) {
         this.files = this.files.concat( files )
     }
 
-    setUserDirectories ( directories ) {
+    setUserDirectories ( directories: any[]) {
         this.directories = directories
     }
 
-    addUserDirectories ( directories ) {
+    addUserDirectories ( directories: any[]) {
         this.directories = this.directories.concat( directories )
     }
 
-    makeEntity ( name,  init, config, voxel  ) {
+    makeEntity ( name: string, init: boolean, config: any, voxel: number[] ) {
         console.log("make entity ", name)
         let builtIn = this.entitiesByName,
             library = builtIn[ name ] != null ? builtIn : this.userEntitiesByName,
@@ -260,7 +292,7 @@ export default class AssetSystem {
         }
     }
 
-    makeComponent ( name, data, config ) {
+    makeComponent ( name: string, data: any, config: any) {
         let builtIn = this.componentsByName,
             library = builtIn[ name ] != null ? builtIn : this.userComponentsByName
 
@@ -271,14 +303,12 @@ export default class AssetSystem {
         }
     }
 
-    getMaterialProp ( name ) {
-
-        let attr = null
+    getMaterialProp ( name: string ) {
+        let attr: any = null
         
-        this.attrs.material.map(( mat, i ) => {
+        this.attrs.material.map(( mat: any, i: number ) => {
             if ( mat.name == name ) 
                 attr = mat
-            
         })
 
         return { ...attr }
@@ -289,12 +319,12 @@ export default class AssetSystem {
         return this.autoDecrementEntity
     }
 
-    _addBuiltInComponent ( name, data ) {
+    _addBuiltInComponent ( name: string, data: any ) {
         this.components.push(data)
         this.componentsByName[name] = data
     }
 
-    _addBuiltInEntity ( name, data ) {
+    _addBuiltInEntity ( name: string, data: any ) {
         this.entities.push(data)
         this.entitiesByName[name] = data
     }
@@ -323,17 +353,17 @@ export default class AssetSystem {
         this._addBuiltInEntity( "icon", this._initButton() )
     }
 
-    _loadPlaces ( places ) {
+    _loadPlaces ( places: any[] ) {
         // implement.. call this from redux action
         this.places = places
     }
 
-    _loadSpaces ( spaces ) { 
+    _loadSpaces ( spaces: any[] ) { 
         // implement call this from redux action
         this.spaces = spaces
     }
 
-    _initButton ( component, data ) {
+    _initButton ( component?: DBComponent, data?: any ) {
 
         let color = data && data.color ? data.color : 0x151515,
             components = [],
@@ -341,7 +371,6 @@ export default class AssetSystem {
             x = 2
         
         if ( !!component ) { 
-
             button = component
 
         } else {
@@ -362,8 +391,8 @@ export default class AssetSystem {
                     }
                 },
                 position: [ 0, 0, 0 ],
-                quaternion: null,
-                components: []
+                quaternion: [0, 0, 0, 1],
+                components: [] as Component[]
             }
 
         }
@@ -382,15 +411,15 @@ export default class AssetSystem {
         //             }
         //         },
         //         position: [ 0, 0, -4000 ],
-        //         quaternion: null
+        //         quaternion: [0, 0, 0, 1]
         //     })
 
         return button
     }
 
-    initIconProps ( color, texture ) {
+    initIconProps ( color: number, texture: any ) {
 
-        let material = {
+        let material: any = {
             name: "metal",
             color,
             config: {

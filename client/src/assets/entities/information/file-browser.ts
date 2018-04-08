@@ -1,3 +1,5 @@
+import Component from "../../../core/component";
+
 let block = {
     id: -1,
     name: "file-browser",
@@ -34,7 +36,7 @@ let block = {
         },
         quaternion: [ 0, 0, 0, 1 ],
         position: [ 0, 0, 0 ],
-        components: []
+        components: new Array<Component>()
     }],
     position: [ 0, 0, 0 ],
     quaternion: [ 0, 0, 0, 1 ]

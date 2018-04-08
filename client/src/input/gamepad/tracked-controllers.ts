@@ -1,6 +1,15 @@
+import Convolvr from "../../world/world";
+import UserInput from "../user-input";
+import ToolboxSystem from "../../systems/tool/toolbox";
 export default class TrackedController {
 
-  constructor(input, world) {
+  public input: UserInput
+  public world: Convolvr
+  public buttons: any
+  public stickCooldown: any
+  public stickTimeout: any
+
+  constructor(input: UserInput, world: Convolvr) {
     this.input = input
     this.world = world
     this.buttons = {
@@ -11,7 +20,7 @@ export default class TrackedController {
     this.stickTimeout = null
   }
 
-  coolDown(hand) {
+  coolDown(hand?: number) {
     this.stickCooldown = true
     clearTimeout(this.stickTimeout)
     this.stickTimeout = setTimeout(()=>{
@@ -19,21 +28,21 @@ export default class TrackedController {
     }, 50)
   }
 
-  down( buttons, hand, index ) {
+  private down(buttons: any, hand: number, index: number) {
     let current = hand == 0 ? this.buttons.right : this.buttons.left,
         value = this.buttonPressed( buttons[ index ] ) && current[ index ] == false
 
     return value
   }
 
-  up( buttons, hand, index ) {
+  private up(buttons: any, hand: number, index: number) {
     let current = hand == 0 ? this.buttons.right : this.buttons.left,
         value = !this.buttonPressed( buttons[ index ] ) && current[ index ]
 
     return value
   }
 
-  handleOculusTouch(gamepad)  {
+  public handleOculusTouch(gamepad: Gamepad)  {
     let axes        = gamepad.axes,
         buttons     = gamepad.buttons,
         b           = buttons.length,
@@ -41,15 +50,15 @@ export default class TrackedController {
         i           = 0,
         world       = this.world,
         input       = this.input,
-        btnState = [],
+        btnState: any[] = [],
         useTracking = input.trackedControls,
         rotation    = input.rotationVector,
         tools       = world.systems.toolbox
 
-    if ( useTracking && gamepad.pose )
-      tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
+    if ( useTracking && (gamepad as any).pose )
+      tools.setHandOrientation( (gamepad as any).hand == 'left' ? 1 : 0, (gamepad as any).pose.position, (gamepad as any).pose.orientation )
 
-    if ( gamepad.hand == 'left' ) {
+    if ( (gamepad as any).hand == 'left' ) {
       if ( world.settings.vrMovement == 'stick' ) {
         if ( Math.abs(axes[0]) > 0.1 )
             input.moveVector.x = axes[0] * 2
@@ -72,7 +81,7 @@ export default class TrackedController {
 
       i = 0;
       while ( i < b ) {
-        btnState.push(buttonValue(buttons[ b ]))
+        btnState.push(this.buttonValue(buttons[ b ]))
         i += 1;
       }
       this.buttons.left = btnState;
@@ -104,12 +113,12 @@ export default class TrackedController {
       btnState = this.buttons.right = []
     }
 
-    gamepad.buttons.map(button=> {
+    gamepad.buttons.map((button: any)=> {
       btnState.push( this.buttonValue(button) )
     })
   }
 
-  handleOpenVRGamepad(gamepad)  {
+  public handleOpenVRGamepad(gamepad: Gamepad)  {
         let axes        = gamepad.axes,
             buttons     = gamepad.buttons,
             b           = buttons.length,
@@ -117,15 +126,15 @@ export default class TrackedController {
             i           = 0,
             world       = this.world,
             input       = this.input,
-            btnState    = [],
+            btnState: any[] = [],
             useTracking = input.trackedControls,
             rotation    = input.rotationVector,
             tools       = world.systems.toolbox
 
-        if (useTracking && gamepad.pose)
-          tools.setHandOrientation( gamepad.hand == 'left' ? 1 : 0, gamepad.pose.position, gamepad.pose.orientation )
+        if (useTracking && (gamepad as any).pose)
+          tools.setHandOrientation( (gamepad as any).hand == 'left' ? 1 : 0, (gamepad as any).pose.position, (gamepad as any).pose.orientation )
 
-        if ( gamepad.hand == 'left' ) {
+        if ( (gamepad as any).hand == 'left' ) {
           if ( world.settings.vrMovement == 'stick' ) {
             if ( Math.abs(axes[0]) > 0.1 )
                 input.moveVector.x = axes[0] * 2
@@ -182,14 +191,14 @@ export default class TrackedController {
         })
       }
 
-  handleOculusRemote(gamepad) { // oculus remote
+  public handleOculusRemote(gamepad: Gamepad) { // oculus remote
     let buttons = gamepad.buttons,
         b = buttons.length,
         i = 0,
         world = this.world,
         input = this.input,
         rotation = input.rotationVector,
-        tools = world.user.toolbox,
+        tools: ToolboxSystem = world.user.toolbox,
         button = gamepad.buttons[0]
 
         if ( this.buttonReleased( this.buttons.right[0] ) && this.buttonPressed( button ) )
@@ -197,15 +206,16 @@ export default class TrackedController {
           tools.usePrimary(0) // right hand
 
         this.buttons.right[0] = button
-        input.moveVector.x += gamepad.buttons[5].pressed * 10.1 - gamepad.buttons[4].pressed * 10.1
-        input.moveVector.z += gamepad.buttons[3].pressed * 10.1 - gamepad.buttons[2].pressed * 10.1
+        input.moveVector.x += gamepad.buttons[5].pressed ? 1 : 0 * 10.1 - (gamepad.buttons[4].pressed ? 1 : 0 * 10.1)
+        input.moveVector.z += gamepad.buttons[3].pressed ? 1 : 0 * 10.1 - (gamepad.buttons[2].pressed ? 1 : 0 * 10.1)
   }
 
-  handleDaydreamController(gamepad) {
-    let button = gamepad.buttons[0]
+  public handleDaydreamController(gamepad: Gamepad) {
+    let button = gamepad.buttons[0],
+        tools: ToolboxSystem = this.world.user.toolbox;
 
-    if ( gamepad.pose )
-      tools.setHandOrientation(0, [ 0, -0.5, 0.5 ], gamepad.pose.orientation)
+    if ((gamepad as any).pose )
+      tools.setHandOrientation(0, [ 0, -0.5, 0.5 ], (gamepad as any).pose.orientation)
 
     if ( this.buttonReleased( this.buttons.right[0] ) && this.buttonPressed( button ) )
         tools.usePrimary(0) // right hand
@@ -213,21 +223,21 @@ export default class TrackedController {
     this.buttons.right[0] = button
   }
 
-  buttonPressed(b) {
+  private buttonPressed(b: GamepadButton) {
     if (typeof(b) == "object") {
       return b.pressed
     }
     return b == 1.0 || b > 0.8
   }
 
-  buttonReleased(b) {
+  private buttonReleased(b: GamepadButton) {
     if (typeof(b) == "object") {
       return !b.pressed
     }
     return b == 0.0 || b < 0.2
   }
 
-  buttonValue(b) {
+  private buttonValue(b: GamepadButton) {
     if (typeof(b) == "object") {
       return b.pressed
     }

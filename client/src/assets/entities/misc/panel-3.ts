@@ -1,3 +1,5 @@
+import { DBComponent } from "../../../core/component";
+
 let panel3 = {
             id: 0,
             name: "panel3",
@@ -14,9 +16,9 @@ let panel3 = {
                             name: "plastic"
                         }
                     },
-                    quaternion: null,
+                    quaternion: [0, 0, 0, 1],
                     position: [-0, 0.5, 0],
-                    components: []
+                    components: [] as DBComponent[]
                 },
                 {
                     attrs: {
@@ -30,7 +32,7 @@ let panel3 = {
                             name: "hard-light"
                         }
                     },
-                    quaternion: null,
+                    quaternion: [0, 0, 0, 1],
                     position: [0, 4625, 0],
                     components: []
                 },
@@ -46,7 +48,7 @@ let panel3 = {
                             name: "hard-light"
                         }
                     },
-                    quaternion: null,
+                    quaternion: [0, 0, 0, 1],
                     position: [-0, -10250, 0],
                     components: []
                 },
@@ -62,7 +64,7 @@ let panel3 = {
                             name: "hard-light"
                         }
                     },
-                    quaternion: null,
+                    quaternion: [0, 0, 0, 1],
                     position: [0, -0.14, 0],
                     components: []
                 },

@@ -111,10 +111,10 @@ module.exports = function app (state: any = {
 }, action: any) {
   switch ( action.type ) {
     case UTIL_ACTIVATE_MODAL:
-        let newstate: any = {...state }
+        let newState: any = {...state }
         switch( action.modalType ) {
             case "textEdit":
-                newstate: any = {
+                newState = {
                     ...newState,
                     textEdit: {
                         ...newState.textEdit,
@@ -123,7 +123,7 @@ module.exports = function app (state: any = {
                 }
             break;
             case "renameFile":
-                newstate: any = {
+                newState = {
                     ...newState,
                     renameFile: {
                         ...newState.renameFile,
@@ -132,7 +132,7 @@ module.exports = function app (state: any = {
                 }
             break;
             case "sharingSettings":
-                newstate: any = {
+                newState = {
                     ...newState,
                     sharingSettings: {
                         ...newState.sharingSettings,
@@ -141,7 +141,7 @@ module.exports = function app (state: any = {
                 }
             break;
             case "importToSpace":
-                newstate: any = {
+                newState = {
                     ...newState,
                     importToSpace: {
                         ...newState.importToSpace,
@@ -150,7 +150,7 @@ module.exports = function app (state: any = {
                 }
             break;
             case "importToInventory":
-                newstate: any = {
+                newState = {
                     ...newState,
                     importToInventory: {
                         ...newState.importToInventory,
@@ -159,7 +159,7 @@ module.exports = function app (state: any = {
                 }
             break;
             case "entityEdit":
-                newstate: any = {
+                newState = {
                     ...newState,
                     entityEdit: {
                         ...newState.entityEdit,
@@ -168,7 +168,7 @@ module.exports = function app (state: any = {
                 }
             break;
             case "inventoryExport":
-                newstate: any = {
+                newState = {
                     ...newState,
                     inventoryExport: {
                         ...newState.inventoryExport,
@@ -177,7 +177,7 @@ module.exports = function app (state: any = {
                 }
             break;
             case "componentEdit":
-                newstate: any = {
+                newState = {
                     ...newState,
                     componentEdit: {
                         ...newState.componentEdit,
@@ -186,7 +186,7 @@ module.exports = function app (state: any = {
                 }
             break;
             case "attributeEdit":
-                newstate: any = {
+                newState = {
                     ...newState,
                     attributeEdit: {
                         ...newState.attributeEdit,

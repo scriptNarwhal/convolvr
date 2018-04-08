@@ -1,6 +1,11 @@
+import Convolvr from "../../world/world";
+import Component from "../../core/component";
+
 export default class MiniatureSystem {
 
-    constructor ( world ) {
+    private world: Convolvr
+
+    constructor ( world: Convolvr ) {
         this.world = world
     }
 
@@ -23,13 +28,13 @@ export default class MiniatureSystem {
 
         return {
             fullSize: false,
-            miniaturize: ( revert, scale ) => {
+            miniaturize: ( revert: boolean, scale: number ) => {
                 this.miniaturize( component, revert, scale )
             }
         }
     }
 
-    miniaturize ( component, revert, finalScale ) {
+    miniaturize ( component: Component, revert: boolean, finalScale: number ) {
 
             let scale = 1
 

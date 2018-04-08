@@ -60,7 +60,7 @@ module.exports = function places (state: any = {
       })
     case INVENTORY_FETCH:
     case INVENTORY_FETCH_FAIL:
-      let newstate: any = {},
+      let newState: any = {},
           isFetching = action.type == INVENTORY_FETCH
 
       switch ( action.category ) {
@@ -79,7 +79,7 @@ module.exports = function places (state: any = {
     case INVENTORY_FETCH_DONE:
       switch( action.category ) {
           case "Entities":
-            three.world.systems.assets.addUserEntities(action.data)
+            (window as any).three.world.systems.assets.addUserEntities(action.data)
             return Object.assign({}, state, {
                 items: {
                     ...state.items,
@@ -87,9 +87,8 @@ module.exports = function places (state: any = {
                 },
                 entitiesFetching: false
             })
-          break
           case "Components":
-            three.world.systems.assets.addUserComponents(action.data)
+            (window as any).three.world.systems.assets.addUserComponents(action.data)
             return Object.assign({}, state, {
                 items: {
                     ...state.items,
@@ -97,7 +96,6 @@ module.exports = function places (state: any = {
                 },
                 componentsFetching: false
             })
-          break
           case "Properties":
             return Object.assign({}, state, {
                 items: {
@@ -106,7 +104,6 @@ module.exports = function places (state: any = {
                 },
                 attrertiesFetching: false
             })
-          break
       }
     case INVENTORY_ITEM_FETCH:
       return Object.assign({}, state, {
@@ -127,7 +124,6 @@ module.exports = function places (state: any = {
                 },
                 itemFetching: false
             })
-          break
           case "Components":
             return Object.assign({}, state, {
                 item: {
@@ -136,7 +132,6 @@ module.exports = function places (state: any = {
                 },
                 itemFetching: false
             })
-          break
           case "Properties":
             return Object.assign({}, state, {
                 item: {
@@ -145,7 +140,6 @@ module.exports = function places (state: any = {
                 },
                 itemFetching: false
             })
-          break
       }
     case INVENTORY_UPDATE_FETCH:
       return Object.assign({}, state, {

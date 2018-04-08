@@ -1,34 +1,45 @@
 import Touch from './touch'
 import Keyboard from './keyboard'
 import Mouse from './mouse'
-import GamePad from './gamepad'
+import GamepadHandler from './gamepad'
 import LeapMotion from './leap-motion'
 import DeviceOrientationControls from './lib/device-orientation'
 import Convolvr from '../world/world'
 import { isVRMode } from '../config'
+import GamePadHandler from './gamepad';
+
+let THREE = (window as any).THREE
 
 export default class UserInput {
 
-	camera: 		any
-	device: 		Object
-	castPos: 		any
-	world: 			Convolvr
-	initDone: 		boolean
-	focus: 			boolean
-	fullscreen: 	boolean
-	rotationVector: Object
-	tmpQuaternion:  any
-	moveVector:     any
-	keys: 		    Object
-	lastTouch: 	    Array<Array<number>>
-	tiltControls:   DeviceOrientationControls
-	touchControls:  Touch
-	keyboard:  		Keyboard
-	mouse:          Mouse
-	gamepad: 		Gamepad
-	leapControls: 	LeapMotion
+	camera: 		  any
+	user:             any
+	device: 		  any
+	castPos: 		  any
+	world: 			  Convolvr
+	initDone: 		  boolean
+	focus: 			  boolean
+	fullscreen: 	  boolean
+	gamepadMode:      boolean
+	leapMode:         string
+	trackedControls:  boolean
+	leapMotion:       boolean
+	rotationVector:   any
+	tmpQuaternion:    any
+	moveVector:       any
+	keys: 		      any
+	cameraPos:        any
+	handsDetected:    number
+	gamepads: 	      any
+	lastTouch: 	      Array<Array<number>>
+	tiltControls:     any
+	touchControls:    Touch
+	keyboard:  		  Keyboard
+	mouse:            Mouse
+	gamepad: 		  GamepadHandler
+	leapControls: 	  LeapMotion
 
-	constructor ( socket ) {
+	constructor ( socket: any ) {
 
 		this.camera = {
 			rotation: new THREE.Vector3()
@@ -73,7 +84,7 @@ export default class UserInput {
 		
 	}
 
-	init ( world, camera, device ) {
+	init ( world: Convolvr, camera: any, device: any) {
 		let uInput = this,
 			mouse = null
 
@@ -89,7 +100,7 @@ export default class UserInput {
 		this.mouse = mouse
 		this.touchControls = new Touch(this)
 		this.keyboard = new Keyboard(this, this.world)
-		this.gamepad = new GamePad(this)
+		this.gamepad = new GamePadHandler(this)
 		this.leapControls = new LeapMotion(this, this.world)
 		this.tmpQuaternion = new THREE.Quaternion()
 		this.initDone = true
@@ -110,7 +121,7 @@ export default class UserInput {
 			return
 
 		let world = this.world,
-			terrain = world.terrain,
+			terrain: any = world.terrain,
 			terrainMesh = terrain.mesh,
 			terrainConfig = terrain.config,
 			terrainMode = '',
@@ -158,9 +169,9 @@ export default class UserInput {
 		if ( Math.abs(velocity.y) > 0.2 )
 			this.device.falling = true
 
-		if ( world.settings.gravity > 0 ) {
+		if ( world.config.gravity > 0 ) {
 			if ( this.device.falling ) { //if not standing on something..
-				if ( world.settings.highAltitudeGravity || this.camera.position.y < 220.00 )
+				if ( world.config.highAltitudeGravity || this.camera.position.y < 220.00 )
 					velocity.y -= 0.016 * delta  // apply gravity
 
 			}			
@@ -200,37 +211,37 @@ export default class UserInput {
 			world.user.mesh.position.set( this.camera.position.x, this.camera.position.y, this.camera.position.z )
 	}
 
-	toggleFullscreen( elem ) {
+	toggleFullscreen( elem: any ) {
 
-		if ( !document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {
+		if ( !document.fullscreenElement && !(document as any).mozFullScreenElement && !document.webkitFullscreenElement && !(document as any).msFullscreenElement ) {
 
 			this.fullscreen = true
 
 			if ( document.documentElement.requestFullscreen ) {
 				document.documentElement.requestFullscreen()
-			} else if ( document.documentElement.msRequestFullscreen ) {
-				document.documentElement.msRequestFullscreen()
-			} else if ( document.documentElement.mozRequestFullScreen ) {
-				document.documentElement.mozRequestFullScreen()
+			} else if ( (document.documentElement as any).msRequestFullscreen ) {
+				(document.documentElement as any).msRequestFullscreen()
+			} else if ( (document.documentElement as any).mozRequestFullScreen ) {
+				(document.documentElement as any).mozRequestFullScreen()
 			} else if ( document.documentElement.webkitRequestFullscreen ) {
-				document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT)
+				(document.documentElement as any).webkitRequestFullscreen((Element as any).ALLOW_KEYBOARD_INPUT)
 			}
 		} else {
 
 			this.fullscreen = false
 			if ( document.exitFullscreen ) {
 				document.exitFullscreen()
-			} else if ( document.msExitFullscreen ) {
-				document.msExitFullscreen()
-			} else if ( document.mozCancelFullScreen ) {
-				document.mozCancelFullScreen()
+			} else if ( (document as any).msExitFullscreen ) {
+				(document as any).msExitFullscreen()
+			} else if ( (document as any).mozCancelFullScreen ) {
+				(document as any).mozCancelFullScreen()
 			} else if ( document.webkitExitFullscreen ) {
 				document.webkitExitFullscreen()
 			}
 		}
 	}
 
-	teleport ( position ) {
+	teleport ( position: any ) {
 		// implement
 	}
 }

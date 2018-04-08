@@ -1,3 +1,5 @@
+import { DBComponent } from "../../../core/component";
+
 let helpScreen = {
     id: -3,
     name: "help-screen",
@@ -38,7 +40,7 @@ let helpScreen = {
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
-            components: []
+            components: [] as DBComponent[]
         }
     ]
 }

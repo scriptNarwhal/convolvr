@@ -2,7 +2,8 @@
 import Convolvr from '../../../world/world'
 import Component from '../../../core/component'
 import Entity from '../../../core/entity'
-import * as THREE from 'three'
+// import * as THREE from 'three'
+const THREE = (window as any).THREE;
 
 export default class FactorySystem {
 
@@ -27,15 +28,15 @@ export default class FactorySystem {
     }
 
     generate(component: Component, menuItem: boolean = true) {
-        let attr:       Object           = component.attrs.factory,
-            position:   THREE.Vector3    = component.entity.mesh.position,
+        let attr:       any           = component.attrs.factory,
+            position:   any /*THREE.Vector3*/    = component.entity.mesh.position,
             voxel:      Array<number>    = component.entity.voxel,
             entityPos:  Array<number>    = !!attr.anchorOutput ? [0, 0, 0] : position.toArray(),
             miniature:  boolean          = !!attr.miniature,
             type:       string           = attr.type,
             preset:     string           = attr.preset,
             attrName:   string           = attr.attrName,
-            data:       Object           = attr.data,
+            data:       any           = attr.data,
             quat:       Array<number>    = data ? data.quaternion : [0,0,0,1],
             components: Array<Component> = data ? data.components : [],
             created:    Entity           = null;
@@ -79,7 +80,7 @@ export default class FactorySystem {
             if ( !!attr.anchorOutput ) {
                 created.init(component.mesh)
             } else {
-                created.init(window.three.scene)
+                created.init(this.world.three.scene)
             }
 
             if ( created.mesh != null ) {
@@ -113,7 +114,7 @@ export default class FactorySystem {
         return  ent;
     }
 
-    _generateComponent(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+    _generateComponent(menuItem: boolean, data: any, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
         let newComponent = {
                 ...data,
                 attrs: {
@@ -133,7 +134,7 @@ export default class FactorySystem {
         return new Entity( -1, [ newComponent ], position, quaternion, voxel )
     }
 
-    _generateGeometry(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+    _generateGeometry(menuItem: boolean, data: any, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
         return new Entity(-1, [{
                 attrs: Object.assign({}, {geometry: data}, {
                     mixin: true,
@@ -156,7 +157,7 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generateSystem(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+    _generateSystem(menuItem: boolean, data: any, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
         return new Entity(-1, [{
             attrs: Object.assign({}, data, {
                     mixin: true,
@@ -193,7 +194,7 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generateMaterial(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+    _generateMaterial(menuItem: boolean, data: any, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
 
         return new Entity(-1, [{
                 attrs: Object.assign({}, {material: data}, {
@@ -216,7 +217,7 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generateAsset(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateAsset(menuItem: boolean, data: any, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
         return new Entity(-1, [{
                 attrs: Object.assign({}, {material: {diffuse: data}}, {
@@ -247,7 +248,7 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generateSpace(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateSpace(menuItem: boolean, data: any, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
         return new Entity(-1, [{
             attrs: Object.assign({}, data, {
@@ -286,7 +287,7 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generatePlace(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generatePlace(menuItem: boolean, data: any, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
          return new Entity(-1, [{
             attrs: Object.assign({}, data, {
@@ -316,19 +317,19 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generateFile(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateFile(menuItem: boolean, data: any, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
         return new Entity(-1, [{
             attrs: Object.assign({}, data, {
                     mixin: true,
                     miniature: {},
-                    text: {
-                        color: 0xffffff,
-                        background: 0x000000,
-                        lines: [
-                            data
-                        ]
-                    },
+                    // text: {
+                    //     color: 0xffffff,
+                    //     background: 0x000000,
+                    //     lines: [
+                    //         data
+                    //     ]
+                    // },
                     file: {
                         filename: data
                         // implement
@@ -352,19 +353,19 @@ export default class FactorySystem {
         ], position, quaternion, voxel)
     }
 
-    _generateDirectory(menuItem: boolean, data: Object, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
+    _generateDirectory(menuItem: boolean, data: any, voxel: Array<number>, position: Array<number>, quaternion: Array<number> ) {
 
         return new Entity(-1, [{
             attrs: Object.assign({}, data, {
                     mixin: true,
                     miniature: {},
-                    text: {
-                        color: 0xffffff,
-                        background: 0x000000,
-                        lines: [
-                            data
-                        ]
-                    },
+                    // text: {
+                    //     color: 0xffffff,
+                    //     background: 0x000000,
+                    //     lines: [
+                    //         data
+                    //     ]
+                    // },
                     file: {
                         workingDir: data
                         // implement

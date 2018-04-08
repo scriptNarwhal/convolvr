@@ -1,6 +1,5 @@
 /* structure actions */
 import axios from 'axios';
-import { browserHistory } from 'react-router'
 import {
     USER_ADD,
     USER_CONNECT,
@@ -24,13 +23,13 @@ export function addUser () {
         type: USER_ADD
     }
 }
-export function userConnect (id) {
+export function userConnect (id: any) {
     return {
         type: USER_CONNECT,
         id: id
     }
 }
-export function userDisconnect (id) {
+export function userDisconnect (id: any) {
     return {
         type: USER_DISCONNECT,
         id
@@ -43,7 +42,7 @@ export function logOut () {
         type: USER_LOG_OUT
     }
 }
-export function fetchUsers (id) {
+export function fetchUsers (id: any) {
     return (dispatch: any) => {
      dispatch({
          type: USERS_FETCH,
@@ -57,7 +56,7 @@ export function fetchUsers (id) {
         });
    }
 }
-export function receiveUsers (users) {
+export function receiveUsers (users: any[]) {
     return {
         type: USERS_FETCH_DONE,
         users: users
@@ -69,7 +68,7 @@ export function failedFetchUsers(err: any) {
         err: err
     }
 }
-export function updateUser ( id, name, pass, email, data ) {
+export function updateUser ( id: any, name: string, pass: string, email: string, data: any) {
 
     return (dispatch: any) => {
         dispatch({
@@ -90,7 +89,7 @@ export function updateUser ( id, name, pass, email, data ) {
   }
 
 }
-export function updateUserFailed ( resp ) {
+export function updateUserFailed ( resp: any ) {
     
     return {
         type: UPDATE_USER_FAIL,
@@ -98,7 +97,7 @@ export function updateUserFailed ( resp ) {
         error: resp.error
     }
 }
-export function updateUserDone ( resp ) {
+export function updateUserDone ( resp: any ) {
     
     return {
         type: UPDATE_USER_DONE,
@@ -106,13 +105,13 @@ export function updateUserDone ( resp ) {
         id: resp.data.id
     }
 }
-export function deleteUser (id) {
+export function deleteUser (id: any) {
     return {
         type: DELETE_USER
     }
 }
 
-export function login ( user, pass, email, data ) {
+export function login ( user: string, pass: string, email: string, data: any ) {
     return (dispatch: any) => {
          dispatch({
              type: LOGIN_FETCH
@@ -125,8 +124,8 @@ export function login ( user, pass, email, data ) {
              data: data
          })
          .then((response: any) => {
-             console.info("ACTION LOGIN: USER USER LOGIN ", window.three.world.onUserLogin)
-             window.three.world.onUserLogin( response )
+             console.info("ACTION LOGIN: USER USER LOGIN ", (window as any).three.world.onUserLogin);
+             (window as any).three.world.onUserLogin( response )
              dispatch(loginDone(response))
              dispatch(fetchUserSpaces(response.data.id))
              
@@ -136,11 +135,11 @@ export function login ( user, pass, email, data ) {
    }
 }
 
-export function loginDone ( response ) {
+export function loginDone ( response: any ) {
     
     setTimeout(()=>{
         let data = response.data,
-        worldUser = three.world.user
+        worldUser = (window as any).three.world.user
 
         worldUser.name = data.name
         worldUser.email = data.email
@@ -151,14 +150,15 @@ export function loginDone ( response ) {
     
 
   if (window.location.href.indexOf("/login") > -1) {
-      browserHistory.push("/chat")
+        console.warn("call redirect here .. make redux action for it")
+        //browserHistory.push("/chat")
   }
   return {
       type: LOGIN_DONE,
       data: response.data
   }
 }
-export function loginFailed (response) {
+export function loginFailed (response: any) {
     return {
         type: LOGIN_FAIL,
         data: response.data

@@ -10,7 +10,7 @@ let panel1Comp = {
             name: "plastic"
         }
     },
-    quaternion: null,
+    quaternion: [0, 0, 0, 1],
     position: [0, 0, 0]
 }
 

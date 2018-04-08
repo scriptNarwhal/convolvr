@@ -1,9 +1,11 @@
+import Component from "../../core/component";
+const THREE = (window as any).THREE;
 export default class LightSystem {
 
-    constructor ( world ) {
+    private world: Convolvr
 
+    constructor ( world: Convolvr ) {
         this.world = world
-
     }
 
     init(component: Component) { 
@@ -23,7 +25,6 @@ export default class LightSystem {
             case "spot":
                 light = new THREE.SpotLight( attr.color, attr.intensity )
                 if ( world.shadows > 0 ) {
-
                     shadowRes = 128 * Math.pow(2, world.shadows) / (world.mobile ? 4 : 1) 
                     light.castShadow = true;
                     light.shadow.mapSize.width = shadowRes;
@@ -34,7 +35,6 @@ export default class LightSystem {
                     light.target = component.mesh
                     light.position.set( 0, 4000, -4000 )
                 }
-
             break
         }
 
@@ -42,16 +42,13 @@ export default class LightSystem {
 
         return {
             light,
-            update: ({ color, intensity, distance }) => {
-                
-                this._update( component, { color, intensity, distance })
-
+            update: ( color: number, intensity: number, distance: number ) => {
+                this._update( component,  color, intensity, distance )
             }
         }
-
     }
 
-    _update ( component, { color, intensity, distance }) {
+    _update ( component: Component, color: number, intensity: number, distance: number ) {
 
         let light = component.state.light.light
 

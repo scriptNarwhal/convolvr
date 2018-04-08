@@ -1,6 +1,6 @@
 import * as React from "react"; import { Component } from "react";
 import ReactDOM from 'react-dom' // React
-import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import { Router, Route} from 'react-router'
 import { Provider } from 'react-redux'
 import { APP_ROOT} from './config'
 
@@ -23,7 +23,6 @@ class Routes extends Component<any, any> {
             <Provider store={this.props.store}>
                 <Router history={this.props.history}>
                     <Route path={APP_ROOT+"/"} component={App} >
-                        <IndexRoute component={HUD}/>
                 <Route path={APP_ROOT+"/:userName/:worldName"} component={HUD} />
                 <Route path={APP_ROOT+"/:userName/:worldName/at/:coords"} component={HUD} />
                 <Route path={APP_ROOT+"/:userName/:worldName/:placeName"} component={HUD} />

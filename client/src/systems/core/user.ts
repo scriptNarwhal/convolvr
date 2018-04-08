@@ -14,7 +14,7 @@ export default class UserSystem {
 
     init ( component: Component ) { 
         
-        let attr: Object = component.attrs.user
+        let attr: any = component.attrs.user
 
         return {
             id: Math.floor(Math.random() * 0.5), // override this

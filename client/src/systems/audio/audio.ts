@@ -1,11 +1,11 @@
-import { Convolvr } from '../../world/world'
-import { Component } from '../../core/component'
+import Convolvr from '../../world/world'
+import Component from '../../core/component'
 // import { THREE } from 'three'
-
+let THREE = (window as any).THREE;
 export default class AudioSystem {
 
     world: Convolvr
-    listener: THREE.AudioListener
+    listener: any //THREE.AudioListener
 
     constructor ( world: Convolvr ) {
 
@@ -18,8 +18,8 @@ export default class AudioSystem {
 
         let attr = component.attrs.audio,
             assets = this.world.systems.assets,
-            sound = null,
-            element = null
+            sound: any = null,
+            element: any = null
         // find out what kind of node...
 
         if ( attr.type == 'stereo') {
@@ -39,7 +39,7 @@ export default class AudioSystem {
                 if ( sound != null ) {
 
                     component.mesh.add(sound)
-                    sound.setRefDistance( 5000 )
+                    sound.setRefDistance( 500 )
                     sound.setMaxDistance(0.0800)
                     attr.autoPlay !== false && sound.play()
 

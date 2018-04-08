@@ -3,19 +3,19 @@ import Convolvr from '../../../world/world'
 import Component from '../../../core/component'
 import Entity from '../../../core/entity'
 import Voxel from '../../../core/voxel'
-import { THREE } from 'three'
+
 
 export default class OimoPluginSystem {
 
     world: Convolvr
-    worker: Object
-    meshes: Array<THREE.Mesh>
-    oimoInfo: Object
+    worker: any
+    meshes: Array<any>
+    oimoInfo: any
 
     constructor( world: Convolvr ) {
         
-        let worker: Object            = new Worker("/data/js/workers/oimo.js"),
-            meshes: Array<THREE.Mesh> = this.meshes = [],
+        let worker: any            = new Worker("/data/js/workers/oimo.js"),
+            meshes: Array<any> = this.meshes = [],
             dt:     number            = 1 / 60;
         
         const ToRad: number = Math.PI / 180,
@@ -25,17 +25,17 @@ export default class OimoPluginSystem {
         this.world = world
         worker.postMessage = worker.webkitPostMessage || worker.postMessage
 
-        worker.onmessage = e => {
+        worker.onmessage = (e: any) => {
             // stat
             this.oimoInfo = e.data.perf;
             // Get fresh data from the worker
-            let minfo: Object = e.data.minfo,
-                body:  Array<THREE.Mesh> = this.meshes;
+            let minfo: any = e.data.minfo,
+                body:  Array<any> = this.meshes;
 
             if ( typeof minfo != 'object' ) return
 
             var length: number = meshes.length,
-                b:      Object = {},
+                b:      any = {},
                 id:     number = 0,
                 n:      number = 0
                

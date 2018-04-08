@@ -5,6 +5,7 @@
 import Component from './component'
 import DBComponent from './component'
 import axios from 'axios'
+import Voxel from './voxel';
 
 export type DBEntity = {
   id:             number
@@ -17,33 +18,53 @@ export type DBEntity = {
   boundingRadius: number
 }
 
+enum WorkerUpdateMode {
+  ADD = "add",
+  UPDATE = "update",
+  TELEMETRY = "update-telemetry",
+  NONE = ""
+}
+
+let THREE = (window as any).THREE;
+
 export default class Entity {
 
   public id: number
   public components: any[]
-  public position: number[] | false
-  public quaternion: number[] | false
+  public position: number[] | false | null
+  public quaternion: number[] | false | null
+  public voxel: number[]
+  public name: string
+
   public mesh: any
-  public boundingRadius: 0.5 // set in init()
   public componentsByAttr: any // arrays are defined here with key of attr
   public compsByFaceIndex: any // possibly deprecated
   public allComponents: Component[]
   public combinedComponents: Component[]
-  public voxel: number[]
   public oldCoords: number[]
-  public name: string
+  public boundingRadius = 0.5
+  public boundingBox: number[]
+
+  private mount: any
   private lastFace: number
   private _compPos: any
   public tags: string[]
   private handlers: any
 
-  constructor (id: number, components: any[], position: number[], quaternion: number[], voxel: number[], name: string, tags: string[]) {
+  constructor (
+    id: number, 
+    components: any[], 
+    position: number[], 
+    quaternion: number[], 
+    voxel: number[], 
+    name?: string, 
+    tags?: string[]
+  ) {
       let world = (window as any).three.world;
 
       if ( id == -1 ) {
         world && world.systems.assets.autoEntityID()
       }
-
       this.id = id
       this.components = components || []
       this.position = position ? position : false
@@ -82,8 +103,15 @@ export default class Entity {
     };
   }
 
-  public update(position: number[], quaternion?: number | any, components?: any[], component?: any, componentPath?: number[], config = {}) {
-    let entityConfig = Object.assign({}, config, { updateWorkers: true } );
+  public update(
+    position: number[] | false | null, 
+    quaternion?: number[] | false | null, 
+    components?: any[] | false | null, 
+    component?: any | false | null, 
+    componentPath?: number[] | false | null, 
+    config = {}
+  ) {
+    let entityConfig = Object.assign({} as any, config, { updateWorkers: true } ) as any;
 
     if (componentPath && componentPath.length > 0) {
       this.updateComponentAtPath( component, componentPath)
@@ -102,10 +130,10 @@ export default class Entity {
         this.quaternion = quaternion
         this.mesh.quaternion.fromArray( quaternion )
       }
-      if (config.updateWorkers !== false) {
+      if ((config as any).updateWorkers !== false) {
         this.updateWorkers(
-          "update-telemetry",
-          three.world.systems,
+          WorkerUpdateMode.TELEMETRY,
+          (window as any).three.world.systems,
           { oldCoords: this.oldCoords }
         )
       } 
@@ -123,7 +151,7 @@ export default class Entity {
   public callHandlers(type: string): void {
     let ent = this;
 
-    this.handlers[ type ].forEach( handler => {
+    this.handlers[ type ].forEach( (handler: Function) => {
       handler( ent )
     })
   }
@@ -153,10 +181,10 @@ export default class Entity {
     this.init( this.mount, { updateWorkers: true } )
   }
 
-  public init( mount, config = {}, callback ) {
+  public init( mount: any, config: any = {}, callback?: Function) {
     let mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
-        three = window.three,
+        three = (window as any).three,
         world = three.world,
         systems = world.systems,
         mobile = world.mobile,
@@ -168,7 +196,7 @@ export default class Entity {
         compRadius = 0.5,
         materials = [],
         addToOctree = true,
-        workerUpdate = "",
+        workerUpdate: any = WorkerUpdateMode.NONE,
         updateVoxel = false,
         comp = null,
         face = 0,
@@ -188,7 +216,7 @@ export default class Entity {
       } else {
         three.scene.remove( this.mesh )
       }
-      this.removeFromVoxel( this.voxel )
+      this.removeFromVoxel( this.voxel );
       workerUpdate = !! config && config.updateWorkers ? "update" : workerUpdate
     } else {
       workerUpdate = !! config && config.updateWorkers ? "add" : workerUpdate
@@ -308,10 +336,11 @@ export default class Entity {
   }
 
   private saveNewEntity(): void {
-    let data = this.serialize();
+    let data = this.serialize(),
+        worldName = (window as any).three.world.name;
 
     axios.put(
-      `${API_SERVER}/api/import-to-world/${three.world.name}/${this.voxel.join("x")}`,
+      `${API_SERVER}/api/import-to-world/${worldName}/${this.voxel.join("x")}`,
        data
     ).then( (response: any) => {
       console.info("Entity Saved", this)
@@ -321,12 +350,13 @@ export default class Entity {
   }
 
   private saveUpdatedEntity(oldVoxel: any): void {
-    let data = this.serialize();
+    let data = this.serialize(),
+        worldName = (window as any).three.world.name;
 
     console.info("save", data)
     console.log("oldVoxel", oldVoxel, "newVoxel", this.voxel)
     axios.put(
-      `${API_SERVER}/api/update-space-entity/${three.world.name}/${this.voxel.join("x")}/${oldVoxel.join("x")}`,
+      `${API_SERVER}/api/update-space-entity/${worldName}/${this.voxel.join("x")}/${oldVoxel.join("x")}`,
        data
     ).then( (response: any) => {
       console.info("Entity Updated", this)
@@ -354,35 +384,36 @@ export default class Entity {
     return coords
   }
 
-  onVoxelChanged() {
+  private onVoxelChanged(coords: number[]) {
 
   }
 
-  updateOldCoords() {
+  public updateOldCoords() {
     this.oldCoords = [ ...this.voxel ]
   }
 
-  addToVoxel(coords, mesh) {
+  public addToVoxel(coords: number[], mesh: any) {
     let ent = this;
 
-    this.getVoxelForUpdate( coords, addTo => {
+    this.getVoxelForUpdate( coords, (addTo: any) => {
       addTo.meshes.push( mesh )
       addTo.entities.push( ent )
     })
     this.callHandlers("addToVoxel")
   }
 
-  removeFromVoxel (coords, mesh) {
+  public removeFromVoxel (coords: number[], mesh?: any) {
     let removeFrom = this.getVoxelForUpdate( coords ),
         ent = this;
 
+    mesh = mesh ? mesh : this.mesh;
     removeFrom.entities.splice( removeFrom.entities.indexOf( ent ), 1)
     removeFrom.meshes.splice( removeFrom.meshes.indexOf( mesh ), 1 )
     this.callHandlers("removeFromVoxel")
   }
 
-  getVoxelForUpdate (coords, callback) {
-    let world = window.three.world,
+  public getVoxelForUpdate (coords: number[], callback?: Function): Voxel {
+    let world = (window as any).three.world,
         thisEnt = this,
         systems = world.systems,
         terrain = systems.terrain,
@@ -406,22 +437,22 @@ export default class Entity {
   }
 
   // refactor to return instantiated component
-  public getComponentByPath(path, pathIndex, components = false) {
+  public getComponentByPath(path: any[], pathIndex: number, components: Component[] | false = false): Component {
     let foundComponent = null
 
     if ( components == false )
       components = this.components
-
     if ( pathIndex + 1 < path.length ) {
       foundComponent = this.getComponentByPath( path, pathIndex + 1, components[ path[ pathIndex ] ].components )
     } else {
       foundComponent = components[ path[ pathIndex ] ]
     }
+    return foundComponent;
   }
 
-  public updateComponentAtPath( component, path, pathIndex = 0, components = false, resetState = false ) {
-    let oldstate: any = {},
-        sanitizedstate: any = {}
+  public updateComponentAtPath( component: DBComponent, path: any[], pathIndex = 0, components: Component[] | false = false, resetState = false) {
+    let oldState: any = {},
+        sanitizedState: any = {}
 
     console.log( "update component at path", component, path, pathIndex, components )
 
@@ -434,14 +465,14 @@ export default class Entity {
 
       if ( resetState == false ) {
 
-        if ( this.allComponents.indexOf()) {
+        if (this.allComponents[path[pathIndex]]) {
           oldState = this.allComponents[ path[ pathIndex ] ].state
         } else {
           console.warn( "Error finding component state", path, pathIndex, path[ pathIndex ], this.allComponents )
         }
 
         if ( oldState.tool || oldState.toolUI )
-          sanitizedstate: any = { tool: {}, toolUI: {} }
+          sanitizedState = { tool: {}, toolUI: {} }
 
         component.state = Object.assign({}, oldState, component.state || {}, sanitizedState )
       }
@@ -454,8 +485,11 @@ export default class Entity {
     }
   }
 
-  private updateWorkers(mode, systems, config = {}) {
-    let entityData = {
+  private updateWorkers(mode: WorkerUpdateMode, systems: any, config: any = {}) {
+    if (mode == WorkerUpdateMode.NONE) {
+      return;
+    }
+    let entityData: any = {
         id: this.id,
         components: this.components,
         position: this.position,
@@ -465,7 +499,7 @@ export default class Entity {
       },
       message = "";
 
-    if ( mode == "add" ) {
+    if ( mode == WorkerUpdateMode.ADD ) {
       message = JSON.stringify({
         command: "add entity",
         data: {
@@ -473,7 +507,7 @@ export default class Entity {
           entity: entityData
         }
       })
-    } else if ( mode == "update") {
+    } else if ( mode == WorkerUpdateMode.UPDATE) {
       message = JSON.stringify({
         command: "update entity",
         data: {
@@ -482,7 +516,7 @@ export default class Entity {
           entity: entityData
         }
       })
-    } else if ( mode == "update-telemetry" ) {
+    } else if ( mode == WorkerUpdateMode.TELEMETRY ) {
       // make position not offset and actually lined up attrerly
       let newPosition = [ ...entityData.position ];
       
@@ -504,17 +538,17 @@ export default class Entity {
     //systems.oimo.worker.postMessage( message )
   }
 
-  public getClosestComponent( position, recursive = true ) {
+  public getClosestComponent( position: any, recursive = true ) {
     let compPos = this._compPos,
         entMesh = this.mesh,
         worldCompPos = null,
         distance = 0.0900,
         newDist = 0,
-        closest = null,
+        closest: Component | null = null,
         closestSubComp = null;
 
     entMesh.updateMatrixWorld()
-    this.allComponents.map( component => {
+    this.allComponents.map( (component: Component) => {
 
       if ( !! component.merged ) {
         return false
@@ -532,7 +566,7 @@ export default class Entity {
     if ( !!!closest ) {
       distance = 0.0900
       newDist = 0
-      this.combinedComponents.map( component => {
+      this.combinedComponents.map( (component: Component) => {
         if ( component.data ) {
           compPos.fromArray( component.data.position )
           worldCompPos = entMesh.localToWorld( compPos )
@@ -553,10 +587,10 @@ export default class Entity {
     return closest
   }
 
-  public getComponentByFace ( face ) {
+  public getComponentByFace ( face: number ) {
     let component = false
 
-    this.compsByFaceIndex.forEach((comp) => {
+    this.compsByFaceIndex.forEach((comp: any) => {
       if ( face >= comp.from && face <= comp.to ) {
         component = comp.component
       }

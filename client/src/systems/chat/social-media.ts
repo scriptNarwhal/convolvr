@@ -1,6 +1,12 @@
+import Convolvr from "../../world/world";
+import Component from "../../core/component";
+
 export default class SocialMediaSystem {
 
-    constructor ( world ) {
+    private world: Convolvr
+    public friends: any[]
+
+    constructor ( world: Convolvr ) {
 
         this.world = world
         this.friends = []

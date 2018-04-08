@@ -2,8 +2,9 @@ import Entity from '../../../core/entity'
 import Component from '../../../core/component'
 import chatText from '../../components/chat-text'
 
+let THREE = (window as any).THREE;
 // default avatar
-let avatar = ( assetSystem, config, voxel ) => { // wholeBody == true == not just 'vr hands'
+let avatar = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody == true == not just 'vr hands'
   
   console.log("init avatar: config: ", config )
         let mesh = null, // new THREE.Object3D();

@@ -1,6 +1,13 @@
+import Convolvr from "../../world/world";
+import Component from "../../core/component";
+
 export default class SpeechSystem {
 
-    constructor (world) {
+    public world: Convolvr
+    public synth: any
+    public voices: any
+
+    constructor (world: Convolvr) {
         
         let synth = window.speechSynthesis,
             voices = synth.getVoices()
@@ -12,26 +19,26 @@ export default class SpeechSystem {
         //     voices[i].name + ' (' + voices[i].lang + ')'
     }
 
-    init (component) {
+    public init (component: Component) {
         let attr = component.attrs.speech;
 
         if ( attr.readText !== false ) {
             if ( component.attrs.text ) { // speak text
-                this.speak(component.attrs.text.lines.join(". "), false, 0)
+                this.speak(component.attrs.text.lines.join(". "), "", 0)
             }
         }
         return {
-            speak: (text, voice, voiceIndex) => {
+            speak: (text: string, voice: string, voiceIndex?: number) => {
                 this.speak(text, voice, voiceIndex)
             },
-            speakAll: (lines, voice, voiceIndex) => {
+            speakAll: (lines: string[], voice: string, voiceIndex?: number) => {
                 this.speak( lines.join(". "), voice, voiceIndex )
             }
         }
 
     }
 
-    speak (text, voiceName, voiceIndex) {
+    private speak (text: string, voiceName: string, voiceIndex?: number) {
         let utterThis = new SpeechSynthesisUtterance(text);
 
         if ( voiceName ) {

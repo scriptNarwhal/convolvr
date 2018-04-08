@@ -12,7 +12,7 @@ export let detectSpaceDetailsFromURL = () => {
         coords = [0,0,0],
         nonSpaces = ["login", "network", "chat", "files", "settings", "spaces", "new-world"],
         isSpace = true,
-        worldDetails = [ "world", APP_NAME ]
+        worldDetails: any[] = [ "world", APP_NAME ]
 
     nonSpaces.map( nSpace => {
         if ( url.indexOf(`/${nSpace}`) == 0 ) {
@@ -48,8 +48,8 @@ export let isMobile = () => {
     if (ratio >= 2.5) {
         return width <   window.innerHeight;
     } else {
-        return width <= 480 || window.ratio >= 1.25 && width <= 720;
+        return width <= 480 || ratio >= 1.25 && width <= 720;
     }
 }
 
-export let isVRMode = ( mode ) => (mode == "3d" || mode == "stereo")
+export let isVRMode = (mode: string) => (mode == "3d" || mode == "stereo")

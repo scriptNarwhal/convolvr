@@ -148,7 +148,7 @@ class App extends Component<any, any> {
       //this.initiateVRMode()
       if ( true ) { //three.world.mode != "stereo") {
 
-        navigator.getVRDisplays().then( displays => { console.log("displays", displays)
+        (navigator as any).getVRDisplays().then( (displays: any[]) => { console.log("displays", displays)
 				
           if ( displays.length > 0 ) {
 

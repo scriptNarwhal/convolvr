@@ -14,6 +14,9 @@ import {
     FILES_UPLOAD_FETCH,
     FILES_UPLOAD_DONE,
     FILES_UPLOAD_FAIL,
+    FILE_CREATE_FETCH,
+    FILE_CREATE_DONE,
+    FILE_CREATE_FAIL,
     TEXT_READ_FETCH,
     TEXT_READ_DONE,
     TEXT_READ_FAIL,
@@ -285,11 +288,11 @@ export function deleteFile(username: string, dir: string, filename: string) {
     };
 }
 
-export function readText(filename: string, username: string, dir) {
+export function readText(filename: string, username: string, dir: string) {
     return (dispatch: any) => {
         dispatch({
             type: TEXT_READ_FETCH,
-            username: string,
+            username,
             dir
         });
         return axios

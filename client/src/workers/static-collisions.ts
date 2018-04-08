@@ -19,7 +19,9 @@ let observer = {
 	voxelList = [],
 	voxels = []
 
-self.update = ( ) => {
+let scWorker = (self as any);
+
+scWorker.update = ( ) => {
 
 	var distance = 0,
 		position 	 = observer.position,
@@ -48,7 +50,7 @@ self.update = ( ) => {
 		if ( !!voxel && distance2dCompare( position, voxel.position, 180 ) ) { 	// do collisions on voxels & structures... just walls at first..
 			if ( voxel.loaded == undefined ) {
 				voxel.loaded = true
-				self.postMessage('{"command": "load entities", "data":{"coords":"'+voxel.cell[0]+'.'+voxel.cell[1]+'.'+voxel.cell[2]+'"}}');
+				scWorker.postMessage('{"command": "load entities", "data":{"coords":"'+voxel.cell[0]+'.'+voxel.cell[1]+'.'+voxel.cell[2]+'"}}');
 			}
 			if ( distance2dCompare( position, voxel.position, 60 ) ) {
 
@@ -58,11 +60,11 @@ self.update = ( ) => {
 				if ( distance2dCompare( position, voxel.position, 24.5 ) ) {
 					if ( position[1] > yPos - 21 + vrHeight  && position[1] < 14.25+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
 						collision = true
-						self.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
+						scWorker.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
 					}
 				}
 				if ( !!voxel.entities && voxel.entities.length > 0 ) {
-					collision = self.checkStaticCollisions( voxel, position )
+					collision = scWorker.checkStaticCollisions( voxel, position )
 				}
 			}
 		}
@@ -71,13 +73,13 @@ self.update = ( ) => {
 	if ( !collision )
 		observer.prevPos = [ observer.position[0], observer.position[1], observer.position[2] ]
 
-	self.postMessage('{"command": "update"}')
-	self.updateLoop = setTimeout( () => {
-		self.update()
+	scWorker.postMessage('{"command": "update"}')
+	scWorker.updateLoop = setTimeout( () => {
+		scWorker.update()
 	}, 15)
 }
 
-self.checkStaticCollisions = ( voxel, position ) => {
+scWorker.checkStaticCollisions = ( voxel, position ) => {
 	let e = voxel.entities.length - 1,
 		ent = null,
 		entRadius = 10,
@@ -108,7 +110,7 @@ self.checkStaticCollisions = ( voxel, position ) => {
 					)) {
 						let verticalOffset = (position[1] + 2 - (entComp.position[1] + ent.position[1] )) //  + entComp.geometry ? entComp.geometry.size[1] : 1
 						if (verticalOffset > 0 && verticalOffset < 5) {
-							self.postMessage(JSON.stringify({
+							scWorker.postMessage(JSON.stringify({
 								command: "floor collision", data: {
 									position: entComp.position,
 									floorData: entComp.attrs.floor
@@ -123,7 +125,7 @@ self.checkStaticCollisions = ( voxel, position ) => {
 					boundingRadius
 				)) {
 					collision = true
-					self.postMessage(JSON.stringify({ command: "entity-user collision", data: { position: entComp.position } }))
+					scWorker.postMessage(JSON.stringify({ command: "entity-user collision", data: { position: entComp.position } }))
 				}
 
 			})
@@ -133,7 +135,7 @@ self.checkStaticCollisions = ( voxel, position ) => {
 	return collision
 }
 
-self.onmessage = ( event ) => {
+scWorker.onmessage = ( event ) => {
 
 	var message  = JSON.parse( event.data ),
 		data 	 = message.data,
@@ -150,44 +152,44 @@ self.onmessage = ( event ) => {
 		user.position = data.position
 		user.velocity = data.velocity
 		user.vrHeight = data.vrHeight
-		//self.postMessage(JSON.stringify(self.observer));
+		//scWorker.postMessage(JSON.stringify(scWorker.observer));
 	} else if ( message.command == "add voxels" ) {
-		self.addVoxels( message, data )
+		scWorker.addVoxels( message, data )
 	} else if ( message.command == "remove voxels" ) {
-		self.removeVoxels( message, data )
+		scWorker.removeVoxels( message, data )
 	} else if ( message.command == "add entity" ) {
-		self.addEntity()
+		scWorker.addEntity()
   	} else if ( message.command == "remove entity" ) {
-    	self.removeEntity( message, data )
+    	scWorker.removeEntity( message, data )
 	} else if ( message.command == "update entity" || message.command == "update telemetry" ) {
 		if ( message.command == "update entity" ) {
-			self.updateEntity( message, data )
+			scWorker.updateEntity( message, data )
 		} else {
-			self.updateTelemetry( message, data )
+			scWorker.updateTelemetry( message, data )
 		}
 	} else if ( message.command == "clear" ) {
 		voxels = []
 		voxelList = []
 	} else if ( message.command == "start" ) {
-		self.update()
+		scWorker.update()
 	} else if ( message.command == "stop" ) {
-		self.stop()
+		scWorker.stop()
 	} else if ( message.command == "log" ) {
 		if (data == "") {
-			self.postMessage('{"command":"log","data":[' + user.position[0] + ',' + user.position[1] + ',' + user.position[2] + ']}');
-			self.postMessage('{"command":"log","data":' + JSON.stringify(voxels)+ '}');
+			scWorker.postMessage('{"command":"log","data":[' + user.position[0] + ',' + user.position[1] + ',' + user.position[2] + ']}');
+			scWorker.postMessage('{"command":"log","data":' + JSON.stringify(voxels)+ '}');
 		}
 	}
 };
 
-self.addVoxels = (message, data) => {
+scWorker.addVoxels = (message, data) => {
 	voxelList = voxelList.concat(data)
 	data.map( v => {
 		voxels[ v.cell.join(".") ] = v
 	})
 }
 
-self.removeVoxels = (message, data) => {
+scWorker.removeVoxels = (message, data) => {
 	let toRemove = null,
 		voxel = null,
 		c 		 = 0,
@@ -210,7 +212,7 @@ self.removeVoxels = (message, data) => {
 	}
 }
 
-self.addEntity = (message, data) => {
+scWorker.addEntity = (message, data) => {
 	if (!data) {
 		console.warn("no data for addEntity")
 		return
@@ -223,7 +225,7 @@ self.addEntity = (message, data) => {
 	entities.push( data.entity )
 }
 
-self.removeEntity = ( message, data ) => {
+scWorker.removeEntity = ( message, data ) => {
 	let entities = voxels[ data.coords.join(".") ].entities;
 
 	if ( entities != null ) {
@@ -239,7 +241,7 @@ self.removeEntity = ( message, data ) => {
 	}
 }
 
-self.updateEntity = (message, data) => {
+scWorker.updateEntity = (message, data) => {
 	let cell =  data.coords.join(".");
 
 	if (!data || !data.coords) {
@@ -265,7 +267,7 @@ self.updateEntity = (message, data) => {
 	}
 }
 
-self.updateTelemetry = (message, data) => {
+scWorker.updateTelemetry = (message, data) => {
 	
 	console.warn("physics worker: updateTelemetry()", message, data)
 	if (!data || !data.coords) {
@@ -318,6 +320,6 @@ self.updateTelemetry = (message, data) => {
 	}
 }
 
-self.stop = () => {
-	clearTimeout( self.updateLoop )
+scWorker.stop = () => {
+	clearTimeout( scWorker.updateLoop )
 }

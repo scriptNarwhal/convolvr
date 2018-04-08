@@ -1,5 +1,7 @@
-import { dispatch } from 'redux';
 import { toggleMenu } from '../redux/actions/app-actions';
+import Convolvr from '../world/world';
+import UserInput from './user-input';
+import ToolboxSystem from '../systems/tool/toolbox';
 
 export default class Mouse {
     
@@ -21,15 +23,15 @@ export default class Mouse {
             uInput: any = this.input,
             world: Convolvr = this.world
 
-        viewport.requestPointerLock = viewport.requestPointerLock || viewport.mozRequestPointerLock || viewport.webkitRequestPointerLock;
-        viewport.style.pointerEvents = ''
+        viewport.requestPointerLock = viewport.requestPointerLock || (viewport as any).mozRequestPointerLock || (viewport as any).webkitRequestPointerLock;
+        (viewport as any).style.pointerEvents = '';
 
         if ("onpointerlockchange" in document) {
-            document.addEventListener('pointerlockchange', () => { this.lockChangeAlert(viewport) }, false)
+            document.addEventListener('pointerlockchange', () => { this.lockChangeAlert(viewport) }, false);
         } else if ("onmozpointerlockchange" in document) {
-            document.addEventListener('mozpointerlockchange', () => { this.lockChangeAlert(viewport) }, false)
+            (document as Document).addEventListener('mozpointerlockchange', () => { this.lockChangeAlert(viewport) }, false);
         } else if ("onwebkitpointerlockchange" in document) {
-            document.addEventListener('webkitpointerlockchange', () => { this.lockChangeAlert(viewport) }, false)
+            (document as Document).addEventListener('webkitpointerlockchange', () => { this.lockChangeAlert(viewport) }, false)
         }
 
         setTimeout(() => {
@@ -52,13 +54,13 @@ export default class Mouse {
             })
 
             document.addEventListener("mouseup", (e) => {
-                let toolbox = this.world.systems.toolbox,
+                let toolbox: ToolboxSystem = this.world.systems.toolbox,
                     target = (e.target as any);
 
                 if ( world.mode != "web" && this.input.focus && target && target.tagName.toLowerCase() == "canvas" ) {
                     switch ( e.which ) {
                         case 1: // left mouse
-                            toolbox.usePrimary(0, 0) // right hand
+                            toolbox.usePrimary(0) // right hand
                         break
                         case 2: // scroll wheel click
                             // tools.selectObject() .. might be handy
@@ -103,13 +105,13 @@ export default class Mouse {
         this.input.focus = (doc.pointerLockElement === canvas || doc.mozPointerLockElement === canvas || doc.webkitPointerLockElement === canvas);
         this.input.fullscreen = this.input.focus
 
-        if ( !this.input.focus && !this.input.fullscreen && world.user.username != "" ) {
+        if ( !this.input.focus && !this.input.fullscreen && world.user.name != "" ) {
             //world.showChat();
             world.mode = "web"
             document.body.setAttribute("class", "desktop")
             this.store.dispatch( toggleMenu( true ) )
         } else {
-            if (world.user.username != "") {
+            if (world.user.name != "") {
                 if (world.mode != "stereo")
                     world.mode = "3d"
 

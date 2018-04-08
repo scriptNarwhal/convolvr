@@ -1,16 +1,14 @@
-//@flow
 import axios from 'axios'
-import { THREE } from 'three'
-import Entity from './entity'
+import Entity, { DBEntity } from './entity'
 import Convolvr from '../world/world'
 import { 
     API_SERVER
 } from '../config'
+import StaticCollisions from '../systems/environment/physics/static-collisions';
 
 export class Bounds {
-
-    from: number[]
-    to:   number[]
+    public from: number[]
+    public to:   number[]
 
     constructor(from: number[], to: number[]) {
         this.from = from;
@@ -18,22 +16,36 @@ export class Bounds {
     }
 } 
 
+export class DBVoxel {
+    
+    public entities: DBEntity[];
+    public voxels:   DBVoxel[];
+    public path:     number[];
+    public bounds:   Bounds;
+    public coords:   number[];
+
+    public setData(data: any) {
+
+    }
+}
+
 export default class Voxel {
 
-    data:     Object
-    world:    Convolvr
-    entities: Array<Entity>
-    meshes:   Array<THREE.Mesh>
-    voxels:   Array<Voxel>
-    coords:   Array<number>
-    bounds:  Bounds | null
-    cleanUp:  boolean
-    loaded:   boolean
-    fetching: boolean
+    public data:     any
+    private world:   Convolvr
+    public entities: Entity[]
+    public meshes:   any[]
+    public voxels:   Voxel[]
+    public coords:   number[]
+    public bounds:   Bounds | null
+    
+    public cleanUp:  boolean
+    public loaded:   boolean
+    public fetching: boolean
 
-    constructor ( data: Object, cell: Array<number>, world: Convolvr) {
+    constructor ( data: any, cell: Array<number>, world: Convolvr) {
         let visible:  boolean     = data.visible,
-            scene:    THREE.Scene = world.three.scene,
+            scene:    any = world.three.scene,
             altitude: number      = 0
 
         this.coords = cell
@@ -57,20 +69,25 @@ export default class Voxel {
         this.fetching = false
     }
 
-    setData ( data: Object ) {
+    public setData ( data: any ) {
         data.cell = this.coords
         this.data = data
         this.loaded = true
         this.fetching = false
     }
 
-    fetchData ( callback: Function ) {
+    public fetchData ( callback: Function ) {
         let v = this,
             coords = this.coords,
             system = this.world.systems,
-            collisions = system.staticCollisions ? system.staticCollisions : {},
+            collisions: StaticCollisions = system.staticCollisions,
             oimo = system.oimo ? system.oimo : {},
             worldName  = this.world.name != "" ? this.world.name : "Overworld";
+
+        if (!collisions) {
+            console.warn("StaticCollision system not loaded yet")
+            return
+        }
 
         if ( this.fetching ) {
             setTimeout( ()=> { callback( v )}, 2000 )
@@ -80,7 +97,7 @@ export default class Voxel {
         this.fetching = true
         axios.get(`${API_SERVER}/api/voxels/${worldName}/${coords.join("x")}`).then((response: any) => {
             let physicsVoxels = []
-            typeof response.data.map == 'function' && response.data.map(c => {
+            typeof response.data.map == 'function' && response.data.map((c: any) => {
                 v.setData(c)
                 v.loadDistantEntities()
                 callback && callback(v)
@@ -99,16 +116,16 @@ export default class Voxel {
         })
     }
 
-    loadInnerVoxels() {
+    public loadInnerVoxels() {
         // implement
 
     }
 
-    loadDistantEntities () {
-        let scene:  Object        = this.world.three.scene,
+    public loadDistantEntities () {
+        let scene:  any        = this.world.three.scene,
             coords: Array<number> = this.coords
 
-        !!this.data.entities && this.data.entities.map( ( e, i ) => {
+        !!this.data.entities && this.data.entities.map( ( e: any, i: number  ) => {
             let entity: Entity = new Entity( e.id, e.components, e.position, e.quaternion, coords )
 
             if ( i < 2 ) {

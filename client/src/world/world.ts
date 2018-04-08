@@ -15,7 +15,7 @@ import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
 import SkyboxSystem from '../systems/environment/skybox'
-import TerrainSystem from '../systems/environment/terrain'
+import SpaceSystem from '../systems/environment/space'
 import Settings from './local-settings'
 import {
 	compressFloatArray,
@@ -23,6 +23,7 @@ import {
 	compressVector4
 } from '../network/util'
 import UserInput from '../input/user-input'
+import Component from '../core/component';
 
 let world: any = null,
 	THREE = (window as any).THREE,
@@ -42,7 +43,7 @@ export default class Convolvr {
 	public mobile: 		 boolean
 	public userInput: 	 UserInput
 	public settings: 	 Settings
-	public config: 		 Object
+	public config: 		 any
 	public windowFocus:  boolean
 	public willRender:   boolean
 	public name: 	     string
@@ -65,8 +66,8 @@ export default class Convolvr {
 	public octree: 		 any
 	public raycaster: 	 any
 	public systems: 	 Systems
-	public terrain: 	 TerrainSystem
-	public workers: 	 Object
+	public terrain: 	 SpaceSystem
+	public workers: 	 any
 	public skyBoxMesh:   any
 	public skyLight:     any
 	public sunLight:     any
@@ -97,7 +98,7 @@ export default class Convolvr {
 		this.userInput = userInput
 		this.settings = new Settings( this )
 		viewDist = [ 0.1, 2000 + (3+this.settings.viewDistance)*GRID_SIZE[0]*150 ]
-		usePostProcessing = this.settings.enablePostProcessing == 'on'
+		usePostProcessing = (this.settings as any).enablePostProcessing == 'on'
 		camera = new THREE.PerspectiveCamera( this.settings.fov, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
 		this.onUserLogin = () => {}
 		this.initChatAndLoggedInUser = () => {}
@@ -176,10 +177,10 @@ export default class Convolvr {
 		animate(this, 0, 0)
 		this.animate = animate;
 
-		three.vrDisplay = null
-		window.navigator.getVRDisplays().then( displays => { console.log( "displays", displays )
+		(three as any).vrDisplay = null;
+		(window.navigator as any).getVRDisplays().then( (displays: any[]) => { console.log( "displays", displays )
 			if ( displays.length > 0 )
-				three.vrDisplay = displays[ 0 ]
+				(three as any).vrDisplay = displays[ 0 ]
 
 		})
 		this.initialLoad = false
@@ -317,10 +318,9 @@ export default class Convolvr {
 	load (userName: string, name: string, callback: Function, readyCallback: Function) { console.log("load world", userName, name)
 		let world = this
 
-		this.name = name
-		this.userName = userName
-		console.log( this.systems.terrain )
-		this.systems.terrain.readyCallback = readyCallback
+		this.name = name;
+		this.userName = userName;
+		(this.systems.terrain as any).readyCallback = readyCallback
 
 		axios.get(`${API_SERVER}/api/spaces/name/${name}`).then( (response: any) => { // fix this... needs userName now
 			 this.init(response.data, ()=> { callback && callback(world) } )
@@ -345,12 +345,12 @@ export default class Convolvr {
 			browserHistory.push("/"+(user||"convolvr")+"/"+name+(!!place ? `/${place}` : ''))
 	}
 
-	generateFullLOD ( coords: Array<number> ) {
-		let voxel = this.terrain.voxels[coords],
+	generateFullLOD ( coords: number[] ) {
+		let voxel = (this.terrain as any).voxels[coords],
 			scene = three.scene
 
 		if ( voxel != null && voxel.cleanUp == false ) {
-			voxel.entities.map( ( entity, i )=>{
+			voxel.entities.map( ( entity: Entity, i: number )=>{
 				i > 2 && entity.init(scene)
 			})
 		}
@@ -363,13 +363,13 @@ export default class Convolvr {
 			image 	  = "",
 			imageSize = [0, 0],
 			userHands = !!world.user.toolbox ? world.user.toolbox.hands : [],
-			hands 	  = []
+			hands: any[] = []
 
 		if ( this.sendUpdatePacket == 12 ) // send image
 	    	imageSize = this.sendVideoFrame()
 
 	  	this.sendUpdatePacket += 1
-	  	if ( this.sendUpdatePacket %((2+(2*this.mode == "stereo"))*(mobile ? 2 : 1)) == 0 ) { // send packets faster / slower for all vr / mobile combinations
+	  	if ( this.sendUpdatePacket %((2+(2*this.mode.search("stereo") > -1 ? 1 : 0))*(mobile ? 2 : 1)) == 0 ) { // send packets faster / slower for all vr / mobile combinations
 			if ( input.trackedControls || input.leapMotion ) {
 				userHands.forEach( (handComponent: Component) => {
 					let hand = handComponent.mesh
@@ -400,7 +400,7 @@ export default class Convolvr {
 	    }
 	}
 
-	getVoxel ( position: any ) {
+	getVoxel ( position?: any ) {
 		let pos = position || this.camera.position
 
 		return [ Math.floor( pos.x / GRID_SIZE[ 0 ] ), 0, Math.floor( pos.z / GRID_SIZE[ 2 ] ) ]
