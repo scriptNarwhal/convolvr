@@ -16,11 +16,15 @@
   go get github.com/Convolvr/core
   go get github.com/Convolvr/server
   go get github.com/Convolvr/generate
-  cd convolvr/client && npm install && npm start &
-  cd ../cmd && go build && ./cmd # starts http on :3007 by default
+  cd convolvr/client && npm install && gulp &
+  cd ../cmd && go build # && ./cmd # to start server
 ```
 
 ## Development [Wiki](https://github.com/Convolvr/convolvr/wiki/Development)
+```shell
+  cd convolvr/client && gulp watch
+  cd ../cmd && go build && ./cmd  # starts http on :3007 by default
+```
 
 ### Client Example [full code here](https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
 ```js
