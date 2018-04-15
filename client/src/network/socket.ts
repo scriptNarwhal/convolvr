@@ -1,4 +1,4 @@
-import EventEmitter from 'events'
+import * as EventEmitter from 'events'
 export let events = new EventEmitter()
 
 let socket = new WebSocket((window.location.href.indexOf("https") > -1 ? 'wss:' : 'ws:')+"//"+(location.host+"/connect"))

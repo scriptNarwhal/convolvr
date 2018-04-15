@@ -16,13 +16,13 @@ let styles = {
 }
 
 export default class Tab extends Component<any, any> {
-
-  public defaultProps = {
-    title: "Menu Item",
-    showTitle: false, 
-    compact: false
+  static get defaultProps() {
+    return {
+      title: "Menu Item",
+      showTitle: false, 
+      compact: false
+    }
   }
-
   render() {
 
     return (

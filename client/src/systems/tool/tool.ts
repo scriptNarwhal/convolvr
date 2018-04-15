@@ -1,4 +1,3 @@
-//@flow
 import Entity from '../../core/entity'
 import Component from '../../core/component'
 import { 
@@ -10,7 +9,7 @@ import Convolvr from '../../world/world'
 export default class ToolSystem {
 
     world: Convolvr
-    panels: Array<Entity>
+    panels: Entity[]
 
     constructor ( world: Convolvr ) {
         this.world = world
@@ -22,7 +21,7 @@ export default class ToolSystem {
             toolSystem = this,
             contentProps = {},
             factories = null,
-            panels = [],
+            panels: Entity[] = [],
             panel = null,
             newPanel = null
 
@@ -33,7 +32,7 @@ export default class ToolSystem {
         }
 
         if ( attr.panels )
-            attr.panels.map( ( newPanel, p) => { console.info("init multiple panels", newPanel);
+            attr.panels.map( ( newPanel: any, p: number) => { console.info("init multiple panels", newPanel);
                 contentProps = newPanel && newPanel.content ? newPanel.content.attrs : {}
                 let panelEnt = toolSystem._initPanelUIEntity( newPanel, contentProps )
                 console.info("panel ent ", panelEnt)
@@ -45,7 +44,7 @@ export default class ToolSystem {
             panels,
             panel,
             preview: {
-                box: null,
+                box: null as any,
                 show: (cursor: Component) => {
                     this._showPreview( component, cursor )
                 },
@@ -65,7 +64,7 @@ export default class ToolSystem {
         }
     }
 
-    _initPanelUIEntity(panelProp: Object, contentProps: Object) {
+    _initPanelUIEntity(panelProp: any, contentProps: any) {
         return new Entity(-1, [ // move panels to asset system perhaps.. or define below*
             {
                 position: [0, 0, 0],

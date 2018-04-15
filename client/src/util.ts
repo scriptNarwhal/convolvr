@@ -1,7 +1,7 @@
-export let rgb = ( r, g, b ) => { // because I never remeber to quote that rofl..
+export let rgb = ( r: number, g: number, b: number ) => { // because I never remeber to quote that rofl..
     return `rgb(${r}, ${g}, ${b})`
 }
 
-export let rgba = ( r, g, b, a ) => { 
+export let rgba = ( r: number, g: number, b: number, a: number ) => { 
     return `rgba(${r}, ${g}, ${b}, ${a})`
 }

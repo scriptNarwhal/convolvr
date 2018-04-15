@@ -9,7 +9,7 @@ import {
     DELETE_AVATAR
 } from '../constants/action-types';
 
-module.exports = function avatars (state: any = {
+export default function avatars (state: any = {
     types: [],
     userAvatar: "default"
 }, action: any) {

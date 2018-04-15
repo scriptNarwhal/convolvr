@@ -1,4 +1,3 @@
-//@flow
 import Convolvr from '../../../world/world'
 import Component from '../../../core/component'
 import Entity from '../../../core/entity'
@@ -13,7 +12,7 @@ export default class StaticCollisions {
 
 	constructor( world: Convolvr ) {
 
-		this.worker = new Worker('/data/js/workers/static-collision.js')
+		this.worker = new Worker('/data/js/workers/static-collisions-bundle.js')
 
 		let worker: Worker = this.worker,
 			three:  any = (window as any).three || {}

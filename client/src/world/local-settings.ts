@@ -57,24 +57,20 @@ export default class Settings {
 		this.gravity = 1
 	}
 
-	setValueWithType(value: any, type: SettingType ) {
+	setValueWithType(value: any, type: SettingType ): any {
 		switch (type) {
 			case SettingType.bool:
 				return value == "on" ? true : false;
-			break;
 			case SettingType.int:
 				return parseInt( value );
-			break;
 			case SettingType.float:
 				return parseFloat( value );
-			break;
 			case SettingType.str:
 				return value;
-			break;
 		}
 	}
 
-	setValue( value: any, key: string, type: SettingType) {
+	setValue( value: any, key: string, type: SettingType): void {
 		switch (key) {
 			case "cameraMode":
 			this.cameraMode = this.setValueWithType(value, type)

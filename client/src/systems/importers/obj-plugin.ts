@@ -1,10 +1,14 @@
+import Convolvr from "../../world/world";
+import Component from "../../core/component";
+const THREE = (window as any).THREE;
 export default class ObjPluginSystem { // allows use of imported .obj meshes
 
-    constructor ( world ) {
+    private world: Convolvr
+    public loader: any
 
+    constructor ( world: Convolvr ) {
         this.world = world
         this.loader = null
-
     }
 
     init(component: Component) { 
@@ -15,7 +19,7 @@ export default class ObjPluginSystem { // allows use of imported .obj meshes
 
         this.loader.load(
 			attr.url,
-			 obj => {
+			 (obj: any) => {
                 component.mesh.add( obj )
                 component.state.obj.obj = obj
 			}
@@ -23,7 +27,7 @@ export default class ObjPluginSystem { // allows use of imported .obj meshes
 
         return {
            url: attr.url,
-           obj: null
+           obj: null as any
         }
         
     }

@@ -22,10 +22,12 @@ export default class Button extends Component<any, any> {
     onFiles?: Function
     compact?:boolean
   }
-  private defaultProps: any = {
+  static get defaultProps() {
+    return {
       title: "Button",
       style: false,
       compact: false
+    }
   }
 
   render() {

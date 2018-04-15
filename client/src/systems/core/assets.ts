@@ -1,5 +1,5 @@
 import axios, { AxiosPromise } from 'axios';
-import { API_SERVER } from '../../config.js'
+import { API_SERVER } from '../../config'
 
 import Entity from '../../core/entity'
 import BuiltinProps from '../../assets/attributes'

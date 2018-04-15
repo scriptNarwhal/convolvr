@@ -20,7 +20,7 @@ import {
   PLACE_FETCH_FAIL,
 } from '../constants/action-types'
 import axios from 'axios'
-import { API_SERVER } from '../../config.js'
+import { API_SERVER } from '../../config'
 
 export function fetchPlaces () {
 

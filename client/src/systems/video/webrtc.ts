@@ -44,7 +44,7 @@ export default class WebRTCSystem {
             
         if ( navigator.getUserMedia && this.videoCallButton ) { // probably don't need a button to use this.. debug later
             this.videoCallButton.addEventListener("click", this.initiateCall)
-            this.endCallButton.addEventListener("click", evt => {
+            this.endCallButton.addEventListener("click", (evt: any) => {
                 send("rtc", {"closeConnection": true })
             })
         } else {
@@ -72,11 +72,11 @@ export default class WebRTCSystem {
     createAndSendOffer(component: Component, params: any) {
         let connection = this.peerConn
         connection.createOffer(
-            offer => {
+            (offer: any) => {
                 let off = new RTCSessionDescription(offer);
-                connection.setLocalDescription(new RTCSessionDescription(off), () => { send("rtc", {"sdp": off }) }, error => {console.log(error)})
+                connection.setLocalDescription(new RTCSessionDescription(off), () => { send("rtc", {"sdp": off }) }, (error: any) => {console.log(error)})
             }, 
-            error => { 
+            (error: any) => { 
                 console.log(error)
             }
         )
@@ -88,7 +88,7 @@ export default class WebRTCSystem {
         connection.createAnswer(
             (answer: any) => {
                 let ans = new RTCSessionDescription(answer)
-                connection.setLocalDescription(ans, ()=>{ send("rtc", {"sdp": ans })}, error => {console.log(error)} )
+                connection.setLocalDescription(ans, ()=>{ send("rtc", {"sdp": ans })}, (error: any) => {console.log(error)} )
             },
             (error: any) => { 
                 console.log(error)
@@ -135,7 +135,7 @@ export default class WebRTCSystem {
     endCall(component: Component, params: any) {
 
         this.peerConn.close()
-        this.localVideoStream.getTracks().forEach(track => {
+        this.localVideoStream.getTracks().forEach((track: any) => {
             track.stop()
         })
         this.localVideo.src = ""

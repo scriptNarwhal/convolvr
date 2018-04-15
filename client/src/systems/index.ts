@@ -73,7 +73,18 @@ import VirtualMachineSystem from './logic/virtual-machine'
 import SkyboxSystem from './environment/skybox'
 
 import Convolvr from '../world/world'
+import Component from '../core/component';
 
+type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "camera" | "chat" | "condition" | "control" |
+					 "conveyor" | "cursor" | "datgui" | "destructable" | "display" | "virtualDevice" | "door" | "drawing" | 
+					 "emote" | "faction" | "factory" | "fbx" | "file" | "floor" | "geometry" | "grab" | "graph" | "hand" | 
+					 "head" | "hover" | "input" | "loop" | "light" | "layout" | "lookAway" | "magic" | "material" | "media" | 
+					 "metaFactory" | "miniature" | "npc" | "obj" | "oimo" | "objective" | "particles" | "propulsion" | "portal" |
+					 "projectile" | "quest" | "rest" | "rpgRace" | "signal" | "skill" | "skybox" | "screenshot" | "socialMedia" | 
+					 "speech" | "state" | "stat" | "staticCollisions" | "switch" | "terrain" | "text" | "time" | "toolUI" | "tool" |
+					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "wall" | "webrtc" | "weapon";
+
+const THREE = (window as any).THREE;
 export default class Systems {
 
 	public world: Convolvr
@@ -274,7 +285,7 @@ export default class Systems {
 			mesh = null;
 			
 
-        Object.keys( attrs ).map( attr => {
+        Object.keys( attrs ).map( (attr: AttributeName) => {
 
             if ( this[ attr ] != null ) {
 				
@@ -292,9 +303,9 @@ export default class Systems {
 				// }
 
 				if ( !!this.deferred[ attr ] ) { /* add other systems here */
-					deferredSystems.push( attr )
+					deferredSystems.push( attr );
                 } else {
-                    state[ attr ] = this[ attr ].init( component )
+                    state[ attr ] = (this[ attr ] as any).init( component )
 				}
 				
 				if ( !!!componentsByAttr[ attr ] ) {
@@ -311,8 +322,8 @@ export default class Systems {
         mesh.matrixAutoUpdate = false
         component.mesh = mesh
 
-        deferredSystems.map( attr => {
-            state[ attr ] = this[ attr ].init( component )
+        deferredSystems.map( (attr: AttributeName) => {
+            state[ attr ] = (this[ attr ] as any).init( component )
         })
 
         return mesh

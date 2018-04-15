@@ -1,6 +1,11 @@
+import Component from "../../core/component";
+import Convolvr from "../../world/world";
+
 export default class LayoutSystem {
 
-    constructor ( world ) {
+    private world: Convolvr
+
+    constructor ( world: Convolvr ) {
         this.world = world
     }
 
@@ -24,7 +29,7 @@ export default class LayoutSystem {
         }
     }
 
-    useLayout ( name, component, position = [0,0,0], index, axis, columns = 3, gridSize = 0.66, isometric = false ) {
+    useLayout ( name: string, component: Component, position = [0,0,0], index: number, axis: string, columns = 3, gridSize = 0.66, isometric = false ) {
 
         let pos = [ 0, 0, 0 ]
 
@@ -42,21 +47,20 @@ export default class LayoutSystem {
                 pos = this._tubeLayout( component, position, index, axis, columns, gridSize, isometric )
             break
             case "fibonacci":
-                pos = this._fibonacciLayout( component, position, index, axis, columns, gridSize )
+                pos = this._fibonacciLayout( component, position, index, columns, gridSize )
             break
         }
         return [ pos[0] + position[0], pos[1] + position[1], pos[2] + position[2] ]
     }
 
-    _listLayout ( component, position, index, axis, gridSize ) {
+    _listLayout (component: Component, position: number[], index: number, axis = "xy", gridSize: number) {
 
         let pos = [ 0, index * gridSize, 0 ]
 
         return pos
     }
 
-    _gridLayout ( component, position, index, axis = "xy", columns, gridSize, isometric ) {
-
+    _gridLayout (component: Component, position: number[], index: number, axis = "xy", columns: number, gridSize: number, isometric: boolean ) {
         let x = index % columns,
             z = Math.max( 0, Math.floor( (index) / columns ) ),
             size = gridSize * 1.15,
@@ -75,7 +79,7 @@ export default class LayoutSystem {
         return pos
     }
 
-    _radialLayout ( component, position, index, axis, columns, gridSize, isometric ) {
+    _radialLayout (component: Component, position: number[], index: number, axis = "xy", columns: number, gridSize: number, isometric: boolean ) {
 
         //TODO: Implement P2
         let pos = [ 0, index * gridSize, 0 ]
@@ -83,8 +87,7 @@ export default class LayoutSystem {
         return pos
     }
 
-    _tubeLayout ( component, position, index, axis, columns, gridSize, isometric ) {
-
+    _tubeLayout (component: Component, position: number[], index: number, axis = "z", columns: number, gridSize: number, isometric: boolean ) {
         let x = index % columns,
             z = Math.max( 0, Math.floor( (index) / columns ) ),
             margin = gridSize,
@@ -112,7 +115,7 @@ export default class LayoutSystem {
         return pos
     }
 
-    _fibonacciLayout ( component, position, index, columns, gridSize ) {
+    _fibonacciLayout ( component: Component, position: number[], index: number, columns: number, gridSize: number ) {
 
         //TODO: Implement P3
         let pos = [ 0, index * gridSize, 0 ]

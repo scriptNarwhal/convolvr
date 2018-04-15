@@ -21,7 +21,7 @@ import {
     UTIL_ACTIVATE_MODAL
 } from '../constants/action-types';
 
-module.exports = function app (state: any = {
+export default function app (state: any = {
     textEdit: {
         windowsOpen: 0,
         activated: false,

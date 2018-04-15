@@ -1,6 +1,12 @@
+
+import Component from '../../core/component.js';
+import Convolvr from '../../world/world'
+
 // import { parser } from 'ecs'
 
 export default class VirtualMachine {
+
+    world: Convolvr
 
     constructor ( world: Convolvr ) {
         this.world = world
@@ -8,21 +14,21 @@ export default class VirtualMachine {
 
     init ( component: Component ) {
 
-        let stack = []
+        let stack: any[] = []
         // REFACTOR THIS
         // first make convolvr/ecs based on SpaceHexagon/ecs
         // integrate here
         // detect memory, ioController, gpu,  if available
 
         return {
-            operate: ( component ) => { // called continually, with a maximum number of operations per second
+            operate: ( component: Component ) => { // called continually, with a maximum number of operations per second
                 
-                this.operate( component.state.cpu )
+                this.operate( component )
 
             },
-            onInput: ( component ) => {
+            onInput: ( component: Component, input: any ) => {
 
-                this.onInput ( component.state.cpu )
+                this.onInput ( component, input )
 
             },
             stack
@@ -30,9 +36,8 @@ export default class VirtualMachine {
 
     }
 
-    operate ( state ) {
-
-        let stack = state.stack
+    operate ( component: Component ) {
+        let stack = component.state.cpu.stack;
         // supporting webasm would be ideal.. also interesting would be:
         
         // implement some kind of imperative syntax for:
@@ -41,9 +46,8 @@ export default class VirtualMachine {
 
     }
     
-    onInput ( input ) {
-
-        let stack = state.stack
+    onInput ( component: Component, input: any ) {
+        let stack = component.state.cpu.stack;
         // implement
         // .. this should use an IOController attr in an adjacent component
 

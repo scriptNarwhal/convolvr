@@ -16,7 +16,9 @@ import CustomTool from '../../assets/entities/tools/core/custom-tool'
 import { GRID_SIZE } from '../../config'
 import Convolvr from '../../world/world';
 import User from '../../world/user';
+import { Component } from 'react';
 
+let THREE = (window as any).THREE;
 
 export default class ToolboxSystem {
     
@@ -58,7 +60,7 @@ export default class ToolboxSystem {
           if (user.avatar && user.avatar.addHandler) {
             user.avatar.addHandler("init", () => {
               console.log("user avatar init event handler ", user.avatar)
-               user.avatar.componentsByAttr.hand.map((m, i) => {
+               user.avatar.componentsByAttr.hand.map((m: Component, i: number) => {
                  if (i < 3)
                    toolbox.hands.push(m)
                })
@@ -221,9 +223,11 @@ export default class ToolboxSystem {
           // check telemetry here to see if activate callbacks should fire instead of tool action
           if ( cursorState.component && cursorState.component.attrs.activate ) { 
             !!cursorState.component && console.warn("Activate ", cursorState.component )
-            !!cursorState.component && cursorState.component.state.activate.callbacks.map( (callback) => {
+            if (cursorState.component) {
+              for (let callback of cursorState.component.state.activate.callbacks) {
                 callback() // action is handled by checking component attrs ( besides .activate )
-            })
+              }
+            }
             return // cursor system has found the component ( provided all has gone according to plan.. )
           }
           //console.log("use Primary ", componentsByAttr)
@@ -265,7 +269,7 @@ export default class ToolboxSystem {
               quaternion, 
               componentPath 
             }               = telemetry,
-            action = false
+            action: any = false
             
         if ( tool.mesh == null ) {
             tool.equip(hand)
@@ -334,7 +338,7 @@ export default class ToolboxSystem {
   
       sendToolAction(
         primary: boolean, 
-        tool: string, 
+        tool: any, 
         hand: number, 
         position: number[], 
         quaternion: number[], 
@@ -347,7 +351,8 @@ export default class ToolboxSystem {
       ) {
         let camera = this.world.camera,
             cPos = camera.position,
-            toolName = tool.name;
+            toolName = tool.name,
+            options = tool.options // implement
   
         if ( toolName == "Geometry Tool" || toolName == "Material Tool" || toolName == "System Tool" )
           toolName = "Update Tool"
@@ -367,7 +372,7 @@ export default class ToolboxSystem {
             hand,
             position,
             quaternion,
-            options: tool.options,
+            options,
             coords,
             componentPath,
             components,

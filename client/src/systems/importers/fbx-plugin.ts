@@ -3,7 +3,7 @@ import Convolvr from '../../world/world'
 import Component from '../../core/component'
 const THREE = (window as any).THREE;
 
-type FBXstate = {
+type FBXState = {
     url: string
     fbx: any
 }
@@ -12,7 +12,7 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
     public world: Convolvr
     public loader: any
     public manager: any
-    public mixers: Array<Object>
+    public mixers: Array<any>
     public live: boolean
 
     constructor ( world: Convolvr ) {
@@ -36,7 +36,7 @@ export default class FBXPluginSystem { // allows use of imported .fbx models
         
         this.loader = this.loader ||  new THREE.FBXLoader( manager );
         this.manager = manager
-		this.loader.load( attr.url, fbx => {
+		this.loader.load( attr.url, (fbx: any) => {
 
 			fbx.mixer = new THREE.AnimationMixer( fbx )
 			mixers.push( fbx.mixer )

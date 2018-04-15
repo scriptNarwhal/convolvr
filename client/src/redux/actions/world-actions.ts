@@ -24,7 +24,7 @@ import {
   CHAT_HISTORY_CLEAR
 } from '../constants/action-types'
 import axios from 'axios'
-import { API_SERVER } from '../../config.js'
+import { API_SERVER } from '../../config'
 import { getChatHistory } from './message-actions'
 
 export function fetchSpaces () {

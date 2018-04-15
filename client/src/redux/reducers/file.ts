@@ -44,7 +44,7 @@ import {
     CHANGE_DIRECTORY
 } from '../constants/action-types';
 
-module.exports = function files (state: any = {
+export default function files (state: any = {
   list: {
     data: false,
     fetching: false,

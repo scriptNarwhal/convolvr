@@ -14,7 +14,7 @@ export default class OimoPluginSystem {
 
     constructor( world: Convolvr ) {
         
-        let worker: any            = new Worker("/data/js/workers/oimo.js"),
+        let worker: any            = new Worker("/data/js/workers/oimo-bundle.js"),
             meshes: Array<any> = this.meshes = [],
             dt:     number            = 1 / 60;
         
@@ -60,7 +60,7 @@ export default class OimoPluginSystem {
      * Registers component with this system
     */
     init ( component: Component ) {         
-        let attr: Object = component.attrs.oimo
+        let attr: any = component.attrs.oimo
 
         //TODO: implement
 
@@ -69,11 +69,11 @@ export default class OimoPluginSystem {
         }
     }
 
-    addVoxels ( voxels: Array<Object> ) {
+    addVoxels ( voxels: Array<any> ) {
         this.worker.postMessage( { action: "add voxels", voxels } )  
     }
 
-    addEntity ( entity: Object ) {
+    addEntity ( entity: any ) {
         this.worker.postMessage( { action: "add entity", entity: { id: entity.id, position: entity.position, quaternion: entity.quaternion, components: entity.components }} )
     }
 

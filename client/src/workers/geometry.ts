@@ -10,5 +10,5 @@ self.onmessage = function (event) { // Do some work.
 };
 
 self.stop = function () {
-	clearTimeout(self.updateLoop);
-}
+	clearTimeout(((self as any).updateLoop));
+};

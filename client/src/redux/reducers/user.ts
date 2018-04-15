@@ -15,7 +15,7 @@ import {
     LOGIN_FAIL
 } from '../constants/action-types';
 
-module.exports = function users (state: any = {
+export default function users (state: any = {
     loggedIn: false,
     loginError: false,
     all: [],

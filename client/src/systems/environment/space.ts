@@ -9,6 +9,7 @@ import {
 } from '../../config'
 import StaticCollisions from './physics/static-collisions';
 import Component from '../../core/component';
+import Convolvr from '../../world/world';
 
 export default class SpaceSystem {
 
@@ -131,7 +132,7 @@ export default class SpaceSystem {
 
   destroy () {
     this.voxelList.map( v => {
-			v.entities.map(e => {
+			v.entities.map((e: any) => {
 				if ( e.mesh ) {
 					this.world.octree.remove( e.mesh )
 					this.world.three.scene.remove( e.mesh )
@@ -147,11 +148,12 @@ export default class SpaceSystem {
   }
 
   loadVoxel ( coords: number[], callback: Function) {
-    let voxels     = this.voxels,
-        voxelList  = this.voxelList,
-        voxelKey   = coords[0]+".0."+coords[2], // debugging this.. 
-        voxelData  = { cell: [coords[0], 0, coords[2]], name: "unloaded voxel", visible: true, altitude: 0, entities: [] },
-        v          = null;
+    let voxels              = this.voxels,
+        voxelList           = this.voxelList,
+        voxelKey            = coords[0]+".0."+coords[2], // debugging this.. 
+        entities:  Entity[] = [],
+        voxelData           = { cell: [coords[0], 0, coords[2]], name: "unloaded voxel", visible: true, altitude: 0, entities },
+        v                   = null;
     
     if ( voxels[ voxelKey ] == null ) {
         v = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world )
@@ -173,7 +175,7 @@ export default class SpaceSystem {
         config              = this.config,
         terrain             = this,
         world               = this.world,
-        scene               = three.scene,
+        scene               = this.world.three.scene,
         systems             = world.systems,
         octree              = world.octree,
         voxel               = null,
@@ -182,7 +184,7 @@ export default class SpaceSystem {
         loadedVoxels        = [],
         chunkPos            = [],
         pCell               = [ 0, 0, 0 ],
-        position            = three.camera.position,
+        position            = this.world.three.camera.position,
         terrainChunk        = null,
         coords              = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), Math.floor( position.y / GRID_SIZE[ 1 ] ), Math.floor( position.z / GRID_SIZE[ 2 ] ) ],
         lastCoords          = this.lastChunkCoords,
@@ -245,7 +247,7 @@ export default class SpaceSystem {
           terrainChunk = voxels[ cleanUp.cell ]
 
           if ( terrainChunk && terrainChunk.entities ) {
-            terrainChunk.entities.map( e => {
+            terrainChunk.entities.map( (e: any) => {
               if ( !!e && !!e.mesh ) {
                 octree.remove( e.mesh )
                 (window as any).three.scene.remove( e.mesh )
@@ -290,7 +292,7 @@ export default class SpaceSystem {
         this.reqVoxels = []
         axios.get(`${API_SERVER}/api/voxels/${this.world.name}/${voxels}`).then( (response: any) => {
 
-          typeof response.data.map == 'function' && response.data.map( c => {
+          typeof response.data.map == 'function' && response.data.map( (c: any) => {
                 terrain.loadedVoxels.push( c )
           })
 

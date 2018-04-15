@@ -1,9 +1,13 @@
+
+import Component from '../../core/component.js';
+import Convolvr from '../../world/world'
+
 export default class LoopSystem {
 
-    constructor ( world ) {
+    world: Convolvr
 
+    constructor ( world: Convolvr ) {
         this.world = world
-
     }
 
     init(component: Component) {

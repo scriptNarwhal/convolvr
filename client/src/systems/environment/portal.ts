@@ -1,4 +1,5 @@
 import Convolvr from "../../world/world";
+import Component from "../../core/component";
 
 export default class PortalSystem {
 
@@ -28,31 +29,28 @@ export default class PortalSystem {
     }
 
     teleport (component: Component, user: string, worldName: string, coords: number[], placeName: string) {
-        
+        let noRedirect = false;
+
         if ( !!!user ) {
-
             user = "space" // temporary hack
-
         }
 
-        if ( !!world && world != this.world.name ) { // check if its the same world or a new one
-
+        if ( !!worldName && worldName != this.world.name ) { // check if its the same world or a new one
             this.world.reload( user, worldName, placeName, coords, noRedirect )
-
         }
 
         if ( !!coords ) {
 
-            three.camera.position.fromArray( [
-                parseInt(coords[0])*42.18181818, 
-                parseInt(coords[1])*36.698181818181816, 
-                parseInt(coords[2])*36.698181818181816
+            this.world.three.camera.position.fromArray( [
+                coords[0]*42.18181818, 
+                coords[1]*36.698181818181816, 
+                coords[2]*36.698181818181816
             ] )
-			three.camera.updateMatrix()
+			this.world.three.camera.updateMatrix()
 
         }
 
-        if ( !!placename ) {
+        if ( !!placeName ) {
 
             // look up from loaded placenames
             //  then set camera position*

@@ -1,19 +1,22 @@
 import axios from 'axios'
+import Component from '../../core/component.js';
+import Convolvr from '../../world/world'
 
 export default class RESTSystem {
 
-    constructor (world) {
+    world: Convolvr
 
+    constructor ( world: Convolvr ) {
         this.world = world
-
     }
 
-    init (component) { 
+
+    init (component: Component) { 
 
         let attr = component.attrs.rest, // specify url, method, etc
             rest = this
 
-        let getCallback = (response, component) => {
+        let getCallback = (response: any, component: Component) => {
 
                 component.state.rest.getResponse = response
 
@@ -33,13 +36,13 @@ export default class RESTSystem {
                 }
 
             },
-            getError =  ( error, component ) => {
+            getError =  ( error: any, component: Component ) => {
                 component.state.rest.getError = error
             },
-            postCallback = (response, component) => {
+            postCallback = (response: any, component: Component) => {
                 component.state.rest.postResponse = response
             },
-            postError =  ( error, component ) => {
+            postError =  ( error: any, component: Component ) => {
                 component.state.rest.postError = error
             }
 
@@ -49,7 +52,13 @@ export default class RESTSystem {
         }
 
         if ( attr.post ) {
-            this.postRequest( component, attr.post.url, attr.post.data )
+            this.postRequest( component, attr.post.url, attr.post.data,
+            (success: any)=> {
+
+            }, 
+            (error: any)=>{
+
+            })
         }
 
         // add init logic... // other systems can call these methods too*
@@ -58,16 +67,16 @@ export default class RESTSystem {
 
             getResponse: false,
             postResponse: false,
-            getRequest: ( url ) => {
+            getRequest: ( url: string ) => {
                 rest.getRequest( component, url, getCallback, getError )
             },
-            postRequest: ( url, data ) => {
+            postRequest: ( url: string, data: any ) => {
                 rest.postRequest( component, url, data, postCallback, postError )
             }
         }
     }
 
-    getRequest ( component, url, callback, onError ) {
+    getRequest ( component: Component, url: string, callback: Function, onError: Function) {
 
         axios.get(url).then( res => {
             callback ( res, component )
@@ -76,7 +85,7 @@ export default class RESTSystem {
         });
     }
 
-    postRequest ( component, url, data, callback, onError ) {
+    postRequest ( component: Component, url: string, data: any, callback: Function, onError: Function) {
 
         axios.post(url, data).then( res => {
            callback( res, component )

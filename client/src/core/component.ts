@@ -30,7 +30,7 @@ export default class Component {
   public merged:             boolean;
   public isComponent:        boolean;
   private _compPos:          any;
-  public mount:             Component | Entity | null
+  public parent:             Component | null //| Entity | null
   public index:              number
   public path:               number[]
 
@@ -64,7 +64,7 @@ export default class Component {
       this.merged = false
       this.isComponent = true
       this._compPos = new THREE.Vector3()
-      this.mount = parent ? parent : null
+      this.parent = parent ? parent : null
 
       if ( !!! attrs ) {
         this.attrs = attrs = {} 
@@ -185,7 +185,7 @@ export default class Component {
   getClosestComponent( position: number[], recursive = false ): Component {
     let compPos = this._compPos, 
         entMesh = this.mesh,
-        parentMesh = this.mount ? this.mount.mesh : false,
+        parentMesh = this.parent ? this.parent.mesh : false,
         worldCompPos = null,
         distance = 0.0900,
         newDist = 0,

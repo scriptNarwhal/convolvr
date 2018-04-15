@@ -9,7 +9,7 @@ import {
     APP_SET_WINDOW_FOCUS
 } from '../constants/action-types';
 
-module.exports = function app (state: any = {
+export default function app (state: any = {
     menuOpen: false,
     vrMode: false,
     chatOpen: false,

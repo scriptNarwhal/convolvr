@@ -163,7 +163,8 @@ export default class Entity {
   }
 
   public removeTag(tagName: string): void {
-    let tagIndex = this._getTagIndex(tagName)
+    let tagIndex = this._getTagIndex(tagName);
+    
     if (tagIndex > -1) {
       this.tags.splice(tagIndex, 1);
     }

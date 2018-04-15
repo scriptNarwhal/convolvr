@@ -16,7 +16,7 @@ import {
     LOGIN_DONE,
     LOGIN_FAIL
 } from '../constants/action-types';
-import { API_SERVER } from '../../config.js'
+import { API_SERVER } from '../../config'
 import { fetchUserSpaces } from './world-actions'
 export function addUser () {
     return {

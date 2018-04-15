@@ -7,7 +7,7 @@ import {
     DELETE_COMPONENT
 } from '../constants/action-types';
 
-module.exports = function components (state: any = {
+export default function components (state: any = {
     all: [],
     userComponents: [],
     current: null,

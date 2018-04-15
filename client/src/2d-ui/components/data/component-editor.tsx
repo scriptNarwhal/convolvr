@@ -398,7 +398,7 @@ export default connect(
   (state: any, ownProps: any) => {
     return {
         cwd: state.files.listDirectories.workingPath,
-        section: state.routing.locationBeforeTransitions.pathname,
+        section: window.location.href,  //state.routing.locationBeforeTransitions.pathname
         menuOpen: state.app.menuOpen,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.componentEdit.activated,

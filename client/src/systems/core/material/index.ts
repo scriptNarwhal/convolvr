@@ -3,11 +3,17 @@ import {
   _initMaterialConfig
 } from './material-init'
 import ProceduralMaterials from './material-procedural'
+import Convolvr from '../../../world/world';
+import Component from '../../../core/component';
+import AssetSystem from '../assets';
 
+const THREE = (window as any).THREE;
 export default class MaterialSystem {
 
-    constructor ( world ) {
+  private world: Convolvr
+  public procedural: ProceduralMaterials
 
+    constructor ( world: Convolvr ) {
         this.world = world
         this.procedural = new ProceduralMaterials( this, world )
     }
@@ -18,14 +24,14 @@ export default class MaterialSystem {
             mobile = this.world.mobile,
             attrs = component.attrs,
             attr = attrs.material,
-            mat = { color: attr.color || 0xffffff },
+            mat: any = { color: attr.color || 0xffffff },
             assets = this.world.systems.assets,
-            renderer = three.renderer,
+            renderer = (window as any).three.renderer,
             anisotropy = renderer.capabilities.getMaxAnisotropy() / ( mobile ? 2 : 1 ),
             path = '/data',
-            material = null,
+            material: any = null,
             basic = false,
-            textureConfig = { },
+            textureConfig: any = { },
             diffuse = !!attr.map ? attr.map.replace(path, '') : "",
             specular = !!attr.specularMap ? attr.specularMap.replace(path, '') : "",
             alpha = !!attr.alphaMap ? attr.alphaMap : "",
@@ -35,13 +41,13 @@ export default class MaterialSystem {
             pattern = !!attr.procedural ? attr.procedural.name : "",
             materialCode = '',
             shading = !!attr.shading ? attr.shading : 'default',
-            simpleShading = this.world.settings.lighting != 'high'
+            simpleShading: boolean = this.world.settings.lighting < 2
             
         basic = _initMaterialProp( attr, simpleShading )
         materialCode = `${attr.repeat ? attr.repeat.join(",") : ""}:${attr.name}:${attr.color}:${attr.map}:${attr.specular}:${reflection}:`+
                                                                    `${attr.alpha}:${attr.bump}:${attr.roughnessMap}:${attr.metalnessMap}:${pattern}`;
 
-        let onMapsLoaded = loadedMat => {
+        let onMapsLoaded = (loadedMat: any) => {
 
           if ( attr.procedural )
             loadedMat.map = this.procedural.generateTexture( attr.procedural )
@@ -59,25 +65,25 @@ export default class MaterialSystem {
           if ( envMapUrl && envMapUrl != "none" && (attr.roughnessMap || attr.metalnessMap) || shading == 'physical' ) {
 
             shading = 'physical'
-            assets.loadImage( envMapUrl, textureConfig, ( envMap ) => { 
+            assets.loadImage( envMapUrl, textureConfig, ( envMap: any ) => { 
 
               envMap.mapping = THREE.EquirectangularReflectionMapping 
               mat.envMap = envMap
 
-              assets.loadImage( attr.roughnessMap, textureConfig, ( roughnessMap ) => {
+              assets.loadImage( attr.roughnessMap, textureConfig, ( roughnessMap: any ) => {
 
                 !!attr.repeat && this._setTextureRepeat( roughnessMap, attr.repeat )
                 roughnessMap.anisotropy = renderer.capabilities.getMaxAnisotropy()
                 mat.roughnessMap = roughnessMap
                 
-                let roughnessCallback = roughnessMap => { 
+                let roughnessCallback = (roughnessMap: any) => { 
                     roughnessMap.wrapS = roughnessMap.wrapT = THREE.ClampToEdgeWrapping
                     !!attr.repeat && this._setTextureRepeat( roughnessMap, attr.repeat )
-                    roughnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
+                    roughnessMap.anisotropy = anisotropy / (simpleShading ? 2.0 : 1);
                     mat.roughnessMap = roughnessMap
                     material = materialSystem._initMaterial( attr, mat, shading, basic, mobile )
                   },
-                  mapCallback = diffuse => { 
+                  mapCallback = (diffuse: any) => { 
 
                     diffuse.wrapS = diffuse.wrapT = THREE.ClampToEdgeWrapping
                     !!attr.repeat && this._setTextureRepeat( diffuse, attr.repeat )
@@ -85,7 +91,7 @@ export default class MaterialSystem {
                     mat.map = diffuse
                     material = materialSystem._initMaterial( attr, mat, shading, basic, mobile )
                   },
-                  mapAndRoughnessCallback = diffuse => {
+                  mapAndRoughnessCallback = (diffuse: any) => {
 
                     diffuse.wrapS = diffuse.wrapT = THREE.ClampToEdgeWrapping
                     !!attr.repeat && this._setTextureRepeat( diffuse, attr.repeat )
@@ -93,15 +99,15 @@ export default class MaterialSystem {
                     mat.map = diffuse
                     assets.loadImage( attr.roughnessMap, textureConfig, roughnessCallback )
                   },
-                  metalnessCallback = metalnessMap => {
+                  metalnessCallback = (metalnessMap: any) => {
 
                     metalnessMap.wrapS = metalnessMap.wrapT = THREE.ClampToEdgeWrapping
                     !!attr.repeat && this._setTextureRepeat( metalnessMap, attr.repeat )
-                    metalnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
+                    metalnessMap.anisotropy = anisotropy / (simpleShading ? 2.0 : 1);
                     mat.metalnessMap = metalnessMap
                     material = materialSystem._initMaterial( attr, mat, shading, basic, mobile )
                   },
-                  mapAndMetalnessCallback = diffuse => {
+                  mapAndMetalnessCallback = (diffuse: any) => {
 
                     diffuse.wrapS = diffuse.wrapT = THREE.ClampToEdgeWrapping
                     !!attr.repeat && this._setTextureRepeat( diffuse, attr.repeat )
@@ -109,15 +115,15 @@ export default class MaterialSystem {
                     mat.map = diffuse
                     assets.loadImage( attr.roughnessMap, textureConfig, metalnessCallback )
                   },
-                  metalnessAndRoughnessCallBack = roughnessMap => {
+                  metalnessAndRoughnessCallBack = (roughnessMap: any) => {
 
                     roughnessMap.wrapS = roughnessMap.wrapT = THREE.ClampToEdgeWrapping
                     !!attr.repeat && this._setTextureRepeat( roughnessMap, attr.repeat )
-                    roughnessMap.anisotropy = anisotropy / simpleShading ? 2.0 : 1
+                    roughnessMap.anisotropy = anisotropy / (simpleShading ? 2.0 : 1);
                     mat.roughnessMap = roughnessMap
                     assets.loadImage( attr.roughnessMap, textureConfig, metalnessCallback )
                   },
-                  mapMetalnessAndRoughnessCallback = tex => {
+                  mapMetalnessAndRoughnessCallback = (tex: any) => {
                     
                     tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping
                     !!attr.repeat && this._setTextureRepeat( diffuse, attr.repeat )
@@ -160,7 +166,7 @@ export default class MaterialSystem {
             shading = 'phong'
             material = this._initMaterial( attr, mat, shading, basic, mobile )
 
-            attr.specularMap && assets.loadImage( attr.specularMap, textureConfig, specularMap => { 
+            attr.specularMap && assets.loadImage( attr.specularMap, textureConfig, (specularMap: any) => { 
 
               specularMap.wrapS = specularMap.wrapT = THREE.ClampToEdgeWrapping
               specularMap.anisotropy = anisotropy
@@ -169,7 +175,7 @@ export default class MaterialSystem {
 
             })
 
-            !!attr.map && assets.loadImage( attr.map, textureConfig, texture => { 
+            !!attr.map && assets.loadImage( attr.map, textureConfig, (texture: any) => { 
 
               if ( !!attr.repeat )
                 this._setTextureRepeat( texture, attr.repeat )
@@ -207,13 +213,13 @@ export default class MaterialSystem {
       }
     }
 
-    _getTextureCode( attr, mapType: string ) {
+    _getTextureCode( attr: any, mapType: string ) {
      return `${attr[mapType]}:${attr.repeat ? attr.repeat.join(".") : ""}`;
     }
 
-    _loadAlphaMap ( attr, textureConfig, material, assets, callback ) {
+    _loadAlphaMap ( attr: any, textureConfig: any, material: any, assets: AssetSystem, callback: Function ) {
 
-      assets.loadImage( attr.alphaMap, textureConfig, texture => { 
+      assets.loadImage( attr.alphaMap, textureConfig, (texture: any) => { 
         
         let renderer = this.world.three.renderer
 
@@ -228,9 +234,9 @@ export default class MaterialSystem {
       })
     }
 
-    _loadBumpMap ( attr, textureConfig, material, assets, callback ) {
+    _loadBumpMap (attr: any, textureConfig: any, material: any, assets: AssetSystem, callback: Function) {
       
-            assets.loadImage( attr.bumpMap, textureConfig, texture => { 
+            assets.loadImage( attr.bumpMap, textureConfig, (texture: any) => { 
               
               let renderer = this.world.three.renderer
       
@@ -246,7 +252,7 @@ export default class MaterialSystem {
       
       }
 
-    _initMaterial( attr, config, shading, basic, mobile ) {
+    _initMaterial(attr: any, config: any, shading: any, basic: boolean, mobile: boolean) {
 
       let material = null
 
@@ -256,33 +262,23 @@ export default class MaterialSystem {
 
 
       if ( basic ) {
-
           material = new THREE.MeshBasicMaterial( config )
-
         } else if ( shading == 'physical' ) {
-
             material = new THREE.MeshPhysicalMaterial( config )
-
         } else {
-
             material = mobile ? new THREE.MeshLambertMaterial( config ) : new THREE.MeshPhongMaterial( config )
-
         }
 
         return material
-
     }
 
-    _setTextureRepeat ( texture, repeat ) {
+    _setTextureRepeat ( texture: any, repeat: any[] ) {
 
       if ( repeat[0] == "wrapping" ) {
-
           texture.wrapS = texture.wrapT = THREE.RepeatWrapping
 			    texture.repeat.set(repeat[1], repeat[2])
           texture.needsUpdate = true
-
       }
-
     }
 
 }

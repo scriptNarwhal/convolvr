@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { browserHistory } from 'react-router'
+// import { browserHistory } from 'react-router'
 import { animate } from './render'
 import {
 	API_SERVER,
 	APP_NAME,
 	GRID_SIZE,
 	isMobile
-} from '../config.js'
+} from '../config'
 import { send } from '../network/socket'
 import User from './user'
 import Avatar from '../assets/entities/avatars/avatar'
@@ -199,6 +199,7 @@ export default class Convolvr {
 		let coords: any    = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
 			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.25 ),
 			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, config.light.intensity ),
+			three          = this.three,
 			camera 		   = three.camera,
 			skyMaterial    = new THREE.MeshBasicMaterial( {color: 0x303030} ),
 			skyTexture     = null,
@@ -341,11 +342,14 @@ export default class Convolvr {
 		this.skybox.destroy()
 		this.load( user, name, () => {}, () => {} )
 
-		if ( !!! noRedirect )
-			browserHistory.push("/"+(user||"convolvr")+"/"+name+(!!place ? `/${place}` : ''))
+		if ( !!! noRedirect ) {
+
+		}
+			//TODO: re-implement this as a redux action the app component listens for
+			// browserHistory.push("/"+(user||"convolvr")+"/"+name+(!!place ? `/${place}` : ''))
 	}
 
-	generateFullLOD ( coords: number[] ) {
+	generateFullLOD ( coords: string) {
 		let voxel = (this.terrain as any).voxels[coords],
 			scene = three.scene
 
@@ -357,7 +361,7 @@ export default class Convolvr {
 	}
 
 	sendUserData () {
-		let camera 	  = three.camera,
+		let camera 	  = this.three.camera,
 			mobile 	  = this.mobile,
 			input 	  = this.userInput,
 			image 	  = "",
@@ -386,7 +390,7 @@ export default class Convolvr {
 					id: this.user.id,
 					username: this.user.name,
 					image: this.webcamImage,
-					avatar: this.user.data.avatar ? this.user.data.avatar : "default-avatar",
+					avatar: this.user.data && this.user.data.avatar ? this.user.data.avatar : "default-avatar",
 					imageSize,
 					hands,
 					position: compressVector3( camera.position, 4 ),
@@ -408,18 +412,20 @@ export default class Convolvr {
 
 	onWindowResize () {
 		let customDPI = this.settings.dpr,
-			dpr = customDPI ? customDPI : window.devicePixelRatio;
+			dpr = customDPI ? customDPI : window.devicePixelRatio,
+			three = this.three,
+			camera = three.camera;
 
 		this.screenResX = dpr * window.innerWidth
 		if ( this.mode != "stereo" ) {
-			three.renderer.setSize(window.innerWidth * dpr, window.innerHeight * dpr)
+			this.three.renderer.setSize(window.innerWidth * dpr, window.innerHeight * dpr)
 			if ( this.postProcessing.enabled )
 				this.postProcessing.onResize(window.innerWidth * dpr, window.innerHeight * dpr)
 
 		}
 
-		three.camera.aspect = innerWidth / innerHeight
-		three.camera.updateProjectionMatrix()
+		camera.aspect = innerWidth / innerHeight
+		camera.updateProjectionMatrix()
 
 		if ( this.IOTMode || this.willRender == false )
 			animate( this, Date.now(), 0 )

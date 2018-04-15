@@ -1,3 +1,5 @@
+import Convolvr from "../../world/world";
+import Component from "../../core/component";
 
 
 export default class FactionSystem {

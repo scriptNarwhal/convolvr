@@ -28,11 +28,13 @@ interface ShellProps {
 
 class Shell extends Component<ShellProps, any> {
 
-  private defaultProps = {
-    noBackground: false,
-    htmlClassName: "",
-    innerStyle: {},
-    data: {}
+  static get defaultProps () {
+    return {
+      noBackground: false,
+      htmlClassName: "",
+      innerStyle: {},
+      data: {}
+    }
   }
 
   public className: string
@@ -170,7 +172,7 @@ export default connect(
       users: state.users,
       menuOpen: state.app.menuOpen,
       stereoMode: state.app.vrMode,
-      reactPath: state.routing.locationBeforeTransitions.pathname
+      reactPath: window.location.href  //state.routing.locationBeforeTransitions.pathname
     }
   },
   (dispatch: any) => {

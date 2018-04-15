@@ -1,5 +1,6 @@
 import Component from '../../core/component'
 import Convolvr from '../../world/world'
+import Entity from '../../core/entity';
 
 export default class ToolUISystem {
 
@@ -45,7 +46,7 @@ export default class ToolUISystem {
         }
 
         return {
-            switchTool: ( tool, hand ) => {
+            switchTool: ( tool: number, hand: number) => {
                 this.switchTool( component, tool, hand )
             },
             updatePosition: ( ) => {    
@@ -60,7 +61,7 @@ export default class ToolUISystem {
         }
     }
 
-    switchTool ( component: Component, tool: number, hand: number ) {
+    switchTool (component: Component, tool: number, hand: number) {
 
         let toolbox = this.world.user.toolbox,
             currentTools = toolbox.currentTools,
@@ -70,7 +71,7 @@ export default class ToolUISystem {
             entity = component.entity,
             toolUIs = entity.componentsByAttr.toolUI
         
-        toolUIs.forEach( ui => {
+        toolUIs.forEach( (ui: Component) => {
             if ( ui.attrs.toolUI.currentTool ) {
                 ui.mesh.position.set( -0.050 + 0.3333 * hand, 0, -0.3333 )
                 //ui.mesh.updateMatrix()
@@ -79,7 +80,7 @@ export default class ToolUISystem {
         toolbox.useTool( tool, hand, true )
     }
 
-    updatePosition ( component: Component ) {
+    updatePosition (component: Component) {
 
       let mesh = component.entity.mesh,
           userMesh = this.world.user.avatar.mesh,
@@ -87,7 +88,7 @@ export default class ToolUISystem {
           pPos = mesh.position
 
       mesh.position.set( userPos.x, userPos.y, userPos.z )
-      mesh.rotation.y = three.camera.rotation.y
+      mesh.rotation.y = this.world.three.camera.rotation.y
       mesh.updateMatrix()
       mesh.translateZ( -1.5 )
       mesh.translateX(  0.1 )

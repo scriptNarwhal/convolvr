@@ -1,23 +1,64 @@
 import * as React from "react"; import { Component } from "react";
 import { withRouter } from 'react-router-dom'
+import { Router, Route, Switch} from 'react-router'
 import { events } from '../../network/socket'
 import Shell from '../components/shell'
 import Button from '../components/button'
 import { vrAnimate } from '../../world/render'
+import Data from '../../2d-ui/containers/data'
+import Spaces from '../../2d-ui/containers/worlds'
+import Places from '../../2d-ui/containers/places'
+import NewSpace from '../../2d-ui/containers/new-world'
+import Settings from '../../2d-ui/containers/settings'
+import Inventory from '../../2d-ui/containers/inventory'
+import Network from '../../2d-ui/containers/network'
+import Login from '../../2d-ui/containers/login'
+import Chat from '../../2d-ui/containers/chat'
+import Profile from '../../2d-ui/containers/profile'
+import HUD from '../../2d-ui/containers/hud'
+import { APP_ROOT} from '../../config'
 import { 
   detectSpaceDetailsFromURL,
   GRID_SIZE,
   APP_NAME
 } from '../../config'
 
-class App extends Component<any, any> {
+type AppContainerState = {
+  unread: number,
+  lastSender: string
+}
+
+type AppContainerProps = {
+  children?: any,
+  fetchSpaces: Function,
+  getInventory: Function,
+  getMessage: Function,
+  getChatHistory: Function,
+  fetchUniverseSettings: Function,
+  toggleMenu: Function,
+  setWindowFocus: Function,
+  toggleVRMode: Function,
+  login: Function,
+  url: any,
+  history: any,
+  focus: boolean,
+  stereoMode: boolean,
+  loggedIn: boolean,
+  world: string,
+  username: string,
+  menuOpen: boolean
+}
+
+class App extends Component<AppContainerProps, AppContainerState> {
+
+  public state: AppContainerState = {
+    unread: 0,
+    lastSender: ''
+  }
+
+  public props: AppContainerProps
 
   componentWillMount () {
-
-    this.state = {
-      unread: 0,
-      lastSender: ''
-    }
 
     this.props.fetchSpaces()
     this.props.getInventory(this.props.username, "Entities")
@@ -310,7 +351,7 @@ class App extends Component<any, any> {
                 }, 0.09)
               }
               three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
-                vrAnimate( three.vrDisplay, Date.now(), [0,0,0], 0)
+                vrAnimate( three.world, three.vrDisplay, Date.now(), [0,0,0], 0)
               })
             }).catch( (err: any) => {
               console.error( err )
@@ -383,7 +424,22 @@ class App extends Component<any, any> {
                  } }
                  key={2}
          />
-            {this.props.children}
+             <Switch>
+                            <Route path={APP_ROOT+"/:userName/:worldName"} component={HUD} />
+                            <Route path={APP_ROOT+"/:userName/:worldName/at/:coords"} component={HUD} />
+                            <Route path={APP_ROOT+"/:userName/:worldName/:placeName"} component={HUD} />
+                            <Route path={APP_ROOT+"/login"} component={Login} />
+                            <Route path={APP_ROOT+"/chat"} component={Chat} />
+                            <Route path={APP_ROOT+"/files"} component={Data} />
+                            <Route path={APP_ROOT+"/files/:username"} component={Data} />
+                            <Route path={APP_ROOT+"/spaces"} component={Spaces} />
+                            <Route path={APP_ROOT+"/places"} component={Places} />
+                            <Route path={APP_ROOT+"/new-world"} component={NewSpace} />
+                            <Route path={APP_ROOT+"/settings"} component={Settings} />
+                            <Route path={APP_ROOT+"/inventory"} component={Inventory} />
+                            <Route path={APP_ROOT+"/network"} component={Network} />
+                            <Route path={APP_ROOT+"/profile"} component={Profile} />
+                        </Switch>
             <div className="lightbox" style={{display: "none"}}></div>
             <canvas id="webcam-canvas"></canvas>
             <video id='local-video' style={{display:'none'}}></video>
@@ -425,7 +481,7 @@ export default connect(
     return {
       loggedIn: state.users.loggedIn,
       username: state.users.loggedIn != false ? state.users.loggedIn.name : "public",
-      url: state.routing.locationBeforeTransitions,
+      url: { pathname: window.location.pathname },//state.routing.locationBeforeTransitions,
       tools: state.tools,
       users: state.users,
       menuOpen: state.app.menuOpen,
@@ -473,4 +529,4 @@ export default connect(
       }
     }
   }
-)(App)
+)(App as React.ComponentClass<any>)

@@ -150,7 +150,7 @@ export default connect(
   (state: any, ownProps: any) => {
     return {
         cwd: state.files.listDirectories.workingPath,
-        section: state.routing.locationBeforeTransitions.pathname,
+        section: window.location.href,  //state.routing.locationBeforeTransitions.pathname
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         textData: state.files.readText.data,

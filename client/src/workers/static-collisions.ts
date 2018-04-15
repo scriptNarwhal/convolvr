@@ -1,12 +1,12 @@
 /*  static collision detection worker */
 
-let distance2d = ( a, b ) => {
+let distance2d = ( a: number[], b: number[] ): number => {
     return Math.sqrt( Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) )
   },
-  distance2dCompare = ( a, b, n ) => { // more efficient version of distance2d()
+  distance2dCompare = ( a: number[], b: number[], n: number): boolean => { // more efficient version of distance2d()
 	  return Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) < (n*n)
   },
-  distance3dCompare = ( a, b, n ) => { // ..faster than using Math.sqrt()
+  distance3dCompare = ( a: number[], b: number[], n: number): boolean => { // ..faster than using Math.sqrt()
 	  return (Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[1]-b[1]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) ) < (n*n)
   }
 
@@ -16,15 +16,15 @@ let observer = {
 		velocity: [0, 0, 0],
 		vrHeight: 1.66
 	},
-	voxelList = [],
-	voxels = []
+	voxelList: any[] = [],
+	voxels: any = []
 
 let scWorker = (self as any);
 
 scWorker.update = ( ) => {
 
 	var distance = 0,
-		position 	 = observer.position,
+		position: any = observer.position,
 		innerBox 	 = [false, false],
 		velocity 	 = observer.velocity,
 		vrHeight 	 = observer.vrHeight,
@@ -79,9 +79,9 @@ scWorker.update = ( ) => {
 	}, 15)
 }
 
-scWorker.checkStaticCollisions = ( voxel, position ) => {
+scWorker.checkStaticCollisions = ( voxel: any, position: number[] ) => {
 	let e = voxel.entities.length - 1,
-		ent = null,
+		ent: any = null,
 		entRadius = 10,
 		collision = false
 
@@ -97,12 +97,12 @@ scWorker.checkStaticCollisions = ( voxel, position ) => {
 			ent.position[2] - entRadius/2.0], (entRadius * 1.6 || 3) + 2.5
 		)) {
 
-			ent.components.map(entComp => {
+			ent.components.map( (entComp: any) => {
 				let boundingRadius = entComp.boundingRadius * 1.2 ||
 				    Math.max(entComp.attrs.geometry.size[0], entComp.attrs.geometry.size[2]) * 1.2
 
 				if (!!entComp.attrs.floor) {
-					let rootPos = ent.position.map( v => v-ent.boundingRadius / 2.0 )
+					let rootPos = ent.position.map( (v: any) => v-ent.boundingRadius / 2.0 )
 					if (distance2dCompare(
 						position,
 						[rootPos[0] + entComp.position[0], 0, rootPos[2] + entComp.position[2]],
@@ -135,7 +135,7 @@ scWorker.checkStaticCollisions = ( voxel, position ) => {
 	return collision
 }
 
-scWorker.onmessage = ( event ) => {
+scWorker.onmessage = (event: any) => {
 
 	var message  = JSON.parse( event.data ),
 		data 	 = message.data,
@@ -182,14 +182,14 @@ scWorker.onmessage = ( event ) => {
 	}
 };
 
-scWorker.addVoxels = (message, data) => {
+scWorker.addVoxels = (message: any, data: any) => {
 	voxelList = voxelList.concat(data)
-	data.map( v => {
+	for (let v of data) {
 		voxels[ v.cell.join(".") ] = v
-	})
+	}
 }
 
-scWorker.removeVoxels = (message, data) => {
+scWorker.removeVoxels = (message: any, data: any) => {
 	let toRemove = null,
 		voxel = null,
 		c 		 = 0,
@@ -212,7 +212,7 @@ scWorker.removeVoxels = (message, data) => {
 	}
 }
 
-scWorker.addEntity = (message, data) => {
+scWorker.addEntity = (message: any, data: any) => {
 	if (!data) {
 		console.warn("no data for addEntity")
 		return
@@ -225,7 +225,7 @@ scWorker.addEntity = (message, data) => {
 	entities.push( data.entity )
 }
 
-scWorker.removeEntity = ( message, data ) => {
+scWorker.removeEntity = ( message: any, data: any ) => {
 	let entities = voxels[ data.coords.join(".") ].entities;
 
 	if ( entities != null ) {
@@ -241,7 +241,7 @@ scWorker.removeEntity = ( message, data ) => {
 	}
 }
 
-scWorker.updateEntity = (message, data) => {
+scWorker.updateEntity = (message: any, data: any) => {
 	let cell =  data.coords.join(".");
 
 	if (!data || !data.coords) {
@@ -267,7 +267,7 @@ scWorker.updateEntity = (message, data) => {
 	}
 }
 
-scWorker.updateTelemetry = (message, data) => {
+scWorker.updateTelemetry = (message: any, data: any) => {
 	
 	console.warn("physics worker: updateTelemetry()", message, data)
 	if (!data || !data.coords) {

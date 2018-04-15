@@ -1,9 +1,12 @@
+import Convolvr from "../../world/world";
+import Component from "../../core/component";
+
 export default class BrowserSystem {
 
+    world: Convolvr
+
     constructor ( world: Convolvr ) {
-
         this.world = world
-
     }
 
     init ( component: Component ) { 
@@ -54,43 +57,43 @@ export default class BrowserSystem {
         }
 
         return {
-            navigate: ( url ) => {
+            navigate: (url: string) => {
                 this.navigate( component, url )
             },
-            upOneLevel: ( url ) => {
+            upOneLevel: (url: string) => {
                 this.upOneLevel( component )
             },
-            back: ( url ) => {
+            back: (url: string) => {
                 this.back( component )
             },
-            forward: ( url ) => {
+            forward: (url: string) => {
                 this.forward( component )
             },
-            refresh: ( url ) => {
+            refresh: (url: string) => {
                 this.refresh( component )
             },
             type: attr.type
         }
     }
 
-    upOneLevel ( component ) {
+    upOneLevel ( component: Component ) {
 
     }
 
-    navigate ( component, url ) {
+    navigate ( component: Component, url: string ) {
 
     }
 
-    back ( component ) {
+    back ( component: Component ) {
 
     }
 
-    forward ( component ) {
+    forward ( component: Component ) {
 
 
     }
     
-    refresh ( component ) {
+    refresh ( component: Component ) {
 
 
     }

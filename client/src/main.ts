@@ -1,6 +1,7 @@
 console.log('Convolvr Client Initializing')
-import ReactDOM from 'react-dom' // React
-import React, { Component } from 'react'
+import * as ReactDOM from 'react-dom' // React
+import { Component } from 'react'
+import * as React from 'react';
 import { Router, Route  } from 'react-router'
 import { routerReducer } from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory'

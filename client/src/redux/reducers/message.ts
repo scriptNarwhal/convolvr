@@ -7,7 +7,7 @@ import {
     CHAT_HISTORY_CLEAR
 } from '../constants/action-types';
 
-module.exports = function messages (state: any = {
+export default function messages (state: any = {
     messages:[],
     fetching: false,
     historyErr: false

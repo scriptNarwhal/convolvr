@@ -6,8 +6,8 @@ import {
     CHAT_HISTORY_FAIL
 } from '../constants/action-types';
 import axios from 'axios';
-import { API_SERVER } from '../../config.js'
-import { send } from '../../network/socket.js'
+import { API_SERVER } from '../../config'
+import { send } from '../../network/socket'
 
 export function sendMessage (message: string, from: string, files: any[], avatar?: string, space?: string) {
     send('chat message', {

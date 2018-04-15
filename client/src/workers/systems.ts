@@ -1,5 +1,7 @@
 /* generic system worker */
-self.onmessage = event => {
+let sw = (self as any);
+
+sw.onmessage = (event: any) => {
 
 	let message = JSON.parse(event.data),
             data = message.data
@@ -11,8 +13,8 @@ self.onmessage = event => {
 
 };
 
-self.stop = () => {
+sw.stop = () => {
 
-    clearTimeout(self.updateLoop)
+    clearTimeout(sw.updateLoop)
     
 }

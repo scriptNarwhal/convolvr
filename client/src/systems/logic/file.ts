@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_SERVER } from '../../config.js'
+import { API_SERVER } from '../../config'
 import Component from '../../core/component.js';
 import Convolvr from '../../world/world'
 
@@ -202,7 +202,7 @@ export default class FileSystem {
         })
     }
 
-    _deleteFile (component: Component, filename: string, username: string, dir) {
+    _deleteFile (component: Component, filename: string, username: string, dir: string) {
 
         //TODO: implement
 
@@ -213,7 +213,7 @@ export default class FileSystem {
         component.state.file.workingPath = (username+dir).split("/")
     }
 
-    _readText (component: Component, filename: string, username: string, dir ) {
+    _readText (component: Component, filename: string, username: string, dir: string ) {
         axios.get(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+dir : ''}`).then((response: any) => {
             this._handleResponse(component,  'readText', response.data )
         }).catch((err: any) =>{
@@ -221,7 +221,7 @@ export default class FileSystem {
         })
     }
 
-    _writeText (component: Component, text, filename: string, username: string, dir: string ) {
+    _writeText (component: Component, text: any, filename: string, username: string, dir: string ) {
         let outDir = !!dir && dir != "" ? "/"+dir : ""
 
         axios.post(`${API_SERVER}/api/documents/${username}/${filename}${dir != null ? "?dir="+outDir : ''}`, {text: text}).then((response: any) => {

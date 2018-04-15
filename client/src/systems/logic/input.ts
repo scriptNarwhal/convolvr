@@ -1,10 +1,15 @@
+import Component from '../../core/component.js';
+import Convolvr from '../../world/world'
+
 export default class InputSystem {
-    
-    constructor (world) {
+
+    world: Convolvr
+
+    constructor (world: Convolvr) {
         this.world = world
     }
 
-    init (component) {
+    init (component: Component) {
         
         let attr = component.attrs.input
         

@@ -1,4 +1,4 @@
-export let _initMaterialProp = (attr, simpleShading) => { // material presets & configuration
+export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // material presets & configuration
 
   let basic = false
 
@@ -71,31 +71,23 @@ export let _initMaterialProp = (attr, simpleShading) => { // material presets & 
       break
     case "organic":
       if (!simpleShading) {
-
         attr.roughnessMap = "/data/images/textures/tiles-light.png"
         attr.map = !!!attr.map ? '/data/images/textures/tiles-light.png' : attr.map
-
       } else {
-
         attr.map = '/data/images/textures/tiles-light.png' // /data/images/textures/gplaypattern_@2X-2.png'
         attr.envMap = 'none'
-
       }
 
       attr.repeat = ['wrapping', 6, 6]
       break
     case "tree":
       if (!simpleShading) {
-
         //attr.roughnessMap = "/data/images/textures/tiles-light.png"
         attr.map = !!!attr.map ? '/data/images/textures/foliage1.jpg' : attr.map
        // attr.alphaMap = !!!attr.map ? "/data/images/textures/surface03.jpg" : attr.map
-
       } else {
-
         attr.map = '/data/images/textures/foliage1.jpg'
         attr.envMap = 'none'
-
       }
 
       attr.repeat = ['wrapping', 6, 6]
@@ -128,14 +120,10 @@ export let _initMaterialProp = (attr, simpleShading) => { // material presets & 
       attr.repeat = !!!attr.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
 
       if (!simpleShading) {
-
         attr.metalnessMap = "/data/images/textures/metal5.jpg"
         attr.map = !!!attr.map ? '/data/images/textures/metal5.jpg' : attr.map
-
       } else {
-
         attr.map = !!!attr.map ? '/data/images/textures/metal5.jpg' : attr.map
-
       }
       break
     case "glass":
@@ -185,7 +173,7 @@ export let _initMaterialProp = (attr, simpleShading) => { // material presets & 
 }
 
 
-export let _initMaterialConfig = ( attr, mat, shading, basic, mobile  ) => {
+export let _initMaterialConfig = ( attr: any, mat:any, shading: any, basic: boolean, mobile: boolean  ) => {
     
   if ( mobile ) 
 

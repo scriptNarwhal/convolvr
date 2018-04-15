@@ -1,4 +1,5 @@
 import Convolvr from "../../world/world";
+import Component from "../../core/component";
 
 const THREE = (window as any).THREE;
 
@@ -7,7 +8,7 @@ export default class SkyboxSystem {
     public live = true;
     private world: Convolvr
 
-    constructor(world) {
+    constructor(world: Convolvr) {
         this.world = world
         this.live = true
     }
@@ -47,7 +48,7 @@ export default class SkyboxSystem {
         let world = this.world,
             systems = world.systems
 
-        systems.assets.loadImage('/data/user/' + config.photosphere, {}, (texture) => {
+        systems.assets.loadImage('/data/user/' + config.photosphere, {}, (texture: any) => {
 
             let skySize = 1000 + ((world.settings.viewDistance + 3.5) * 1.4) * 140,
                 image: any = {},
@@ -104,6 +105,8 @@ export default class SkyboxSystem {
             mesh.material = skyMaterial
         }, (progress: any) => {
             console.log("Loading Shaders: ", progress)
+        }, (onError: any) => {
+            console.error(onError);
         })
     }
 

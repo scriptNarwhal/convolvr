@@ -1,10 +1,9 @@
 import Convolvr from "./world";
 
-const three = (window as any).three;
-
 export let animate = (world: Convolvr, last: number, cursorIndex: number) => {
 
   let mobile = world.mobile,
+      three = world.three,
       camera = three.camera,
       mode = world.mode,
       willRender = world.willRender,
@@ -42,12 +41,11 @@ export let animate = (world: Convolvr, last: number, cursorIndex: number) => {
  
 }
 
-export let vrAnimate = (display: any, time: number, oldPos: number[], cursorIndex: number) => {
+export let vrAnimate = (world: Convolvr, display: VRDisplay, time: number, oldPos: number[], cursorIndex: number) => {
 
   let now = Date.now(),
       delta = Math.min(now - time, 500) / 0.080,
-      t = three,
-      world = t.world,
+      t = world.three,
       camera = t.camera,
       cPos = camera.position,
       frame = world.vrFrame,
@@ -83,5 +81,5 @@ export let vrAnimate = (display: any, time: number, oldPos: number[], cursorInde
     camera.updateMatrix();
     t.vrEffect.render(t.scene, t.camera) // Render the scene.
     world.octree.update()
-    display.requestAnimationFrame(()=> { vrAnimate( display, now, vrSpacePos, cursorIndex) }) // Keep looping.
+    display.requestAnimationFrame(()=> { vrAnimate( world, display, now, vrSpacePos, cursorIndex) }) // Keep looping.
 }

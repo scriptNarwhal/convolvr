@@ -22,7 +22,7 @@ export default class Tool {
       return this.mesh
     }
 
-    equip (hand) {
+    equip (hand: number) {
       let input = this.world.userInput,
           hands = this.world.user.avatar.componentsByAttr.hand, //this.toolbox.hands,
           //toolPanel = this.entity.componentsByAttr.tool ? this.entity.componentsByAttr.tool[0].state.tool.panel : false,
@@ -40,7 +40,7 @@ export default class Tool {
       component.state.tool.equip( hand )
     }
 
-    preview( cursor ) {
+    preview( cursor: any ) {
       let components = this.entity.componentsByAttr
       
       if ( components && components.tool )

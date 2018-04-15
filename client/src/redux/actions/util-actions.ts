@@ -22,7 +22,7 @@ import {
     UTIL_CLOSE_ATTRIBUTE_EDITOR,
     UTIL_ACTIVATE_MODAL
 } from '../constants/action-types';
-import { API_SERVER } from '../../config.js'
+import { API_SERVER } from '../../config'
 
 export function activateModal ( modalType: string ) {
     return {

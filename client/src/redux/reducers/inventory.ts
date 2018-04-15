@@ -21,7 +21,7 @@ import {
 } from '../constants/action-types'
 import { detectSpaceDetailsFromURL } from '../../config'
 
-module.exports = function places (state: any = {
+export default function places (state: any = {
     items: {
         entities: [],
         components: [],

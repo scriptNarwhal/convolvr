@@ -1,7 +1,8 @@
 //@flow
 import Convolvr from '../../../world/world'
-import * as THREE from 'three'
-
+import AssetSystem from '../assets';
+// import * as THREE from 'three'
+const THREE = (window as any).THREE;
 export default class ProceduralMaterials {
 
   world: Convolvr
@@ -9,17 +10,17 @@ export default class ProceduralMaterials {
   randoms: Array<number>
   noise: boolean
 
-  constructor( materialSystem: Object, world: Convolvr ) {
+  constructor( materialSystem: any, world: Convolvr ) {
     this.world = world
     this.materials = materialSystem
     this.randoms = [ 0, 0, 0, 0, 0, 0 ]
     this.noise = false
   }
 
-  generateTexture( params: Object ) { // would be useful for tiling / random patterns
-    let assets:      Object = this.world.systems.assets,
+  generateTexture( params: any ) { // would be useful for tiling / random patterns
+    let assets:      AssetSystem = this.world.systems.assets,
         textureCode: string = params.name,
-        texture:     Object = {} 
+        texture:     any = {} 
 
     if ( assets.proceduralTextures[ textureCode ] == null ) {  // reference TextSystem for canvas code here..
       texture = this._renderTexture( params.procedural )
@@ -31,11 +32,11 @@ export default class ProceduralMaterials {
     return texture
   }
 
-  _renderTexture( params: Object ) {
-    let newTex:     THREE.CanvasTexture = null,
-        canvas:     Object              = document.createElement("canvas"),
+  _renderTexture( params: any ) {
+    let newTex:     any = null,
+        canvas:     any              = document.createElement("canvas"),
         canvasSize: Array<number>       = [1024, 1024],
-        context:    Object  = {}
+        context:    any  = {}
 
     canvas.setAttribute("style", "display:none")
     canvas.width = canvasSize[0]
@@ -52,10 +53,10 @@ export default class ProceduralMaterials {
     return newTex
   }
 
-  _renderInstructions( context: Object, calls: Array<Object>, i: number = 0 ) {
+  _renderInstructions(context: CanvasRenderingContext2D, calls: any[], i: number = 0) {
     const DCS = calls.length;
     let draw = null,
-        params = [],
+        params: any[] = [],
         c = 0;
 
     while ( c < DCS ) {
@@ -96,7 +97,7 @@ export default class ProceduralMaterials {
           context.fillRect(params[0], params[1], params[2], params[3])
           break
         case "arc":
-          context.arc(params[0], params[1], params[2], params[3])
+          context.arc(params[0], params[1], params[2], params[3], params[4])
           break
         case "text":
           context.fillText(params[0], params[1], params[2])
@@ -109,7 +110,7 @@ export default class ProceduralMaterials {
     }
   }
 
-  _renderLoop( context: Object, calls: Array<Object>, start: number, dir: string, cond: string, limit: number ) {
+  _renderLoop( context: CanvasRenderingContext2D, calls: any[], start: number, dir: string, cond: string, limit: number ) {
 
     const MAX = 1024;
     let i:   number = start,

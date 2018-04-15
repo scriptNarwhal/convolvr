@@ -1,6 +1,6 @@
 
 import { toggleMenu } from '../redux/actions/app-actions';
-import { isVRMode } from '../config.js'
+import { isVRMode } from '../config'
 import UserInput from './user-input';
 import Convolvr from '../world/world';
 

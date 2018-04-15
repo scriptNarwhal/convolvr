@@ -1,4 +1,5 @@
 import Component from "../../core/component";
+import Convolvr from "../../world/world";
 const THREE = (window as any).THREE;
 export default class LightSystem {
 
@@ -24,8 +25,8 @@ export default class LightSystem {
             break
             case "spot":
                 light = new THREE.SpotLight( attr.color, attr.intensity )
-                if ( world.shadows > 0 ) {
-                    shadowRes = 128 * Math.pow(2, world.shadows) / (world.mobile ? 4 : 1) 
+                if ( world.settings.shadows > 0 ) {
+                    shadowRes = 128 * Math.pow(2, world.settings.shadows) / (world.mobile ? 4 : 1) 
                     light.castShadow = true;
                     light.shadow.mapSize.width = shadowRes;
                     light.shadow.mapSize.height = shadowRes;

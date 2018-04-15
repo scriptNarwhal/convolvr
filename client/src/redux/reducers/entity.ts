@@ -8,7 +8,7 @@ import {
     ENTITY_IMPORT_TO_SPACE_FAIL
 } from '../constants/action-types';
 
-module.exports = function entities (state: any = {
+export default function entities (state: any = {
     all: [],
     userEntities: [],
     current: null,

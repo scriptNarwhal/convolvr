@@ -1,9 +1,7 @@
-//@flow
-// import * as THREEJS from 'three' 
 import Convolvr from '../../world/world'
 import Component from '../../core/component'
 
-let _THREE
+let _THREE: any;
 
 export default class TextSystem {
 
@@ -21,7 +19,7 @@ export default class TextSystem {
         ]
     }
 
-    init(component: Component) {
+    public init(component: Component) {
         let attr = component.attrs.text,
             text = attr.lines,
             color = attr.color,
@@ -47,10 +45,10 @@ export default class TextSystem {
         if (oldMapImg) {
             oldMapImg = oldMapImg.image;
             config.noBackground = true;
-            this._renderBackground(oldMapImg, context);
+            this.renderBackground(oldMapImg, context);
         }
 
-        this._renderText(context, text, color, background, canvasSize, config )
+        this.renderText(context, text, color, background, canvasSize, config )
         
         textTexture = new _THREE.Texture( textCanvas )
         textTexture.anisotropy = this.world.three.renderer.capabilities.getMaxAnisotropy()
@@ -62,7 +60,7 @@ export default class TextSystem {
         textMaterial.map.needsUpdate = true
         component.mesh.material = textMaterial
         if (canvasSize[0] != canvasSize[1]) {
-            this._resizeComponent(component, canvasSize)
+            this.resizeComponent(component, canvasSize)
         }
         return {
             textMaterial,
@@ -76,26 +74,26 @@ export default class TextSystem {
                 if ( !!textProp )
                     component.attrs.text = Object.assign( {}, component.attrs.text, textProp )
 
-                this._update( component )
+                this.update( component )
             },
             write: ( text: string ) => {
-                this._write( component, text )
+                this.write( component, text )
             }
         }
     }
 
-    _renderBackground(image: any, context: any) {
+    private renderBackground(image: any, context: any) {
         context.drawImage(image, 0, 0)
     }
 
-    _resizeComponent(component: Component, size: number[]) {
+    private resizeComponent(component: Component, size: number[]) {
         let geomProp = component.attrs.geometry,
             currentSize = geomProp.size;
         
         
     }
 
-    _write(component: Component, text: string) {
+    private write(component: Component, text: string) {
         if (component.attrs.text.label) {
             component.attrs.text.lines = [];
             if (text.indexOf(":") > 0) {
@@ -108,7 +106,7 @@ export default class TextSystem {
         component.attrs.text.lines.push( text )
     }
 
-    _update(component: Component) {
+    private update(component: Component) {
         let attr         = component.attrs.text,
             state        = component.state.text,
             text         = attr.lines,
@@ -121,16 +119,16 @@ export default class TextSystem {
             context      = state.context,
             config       = state.config;
         
-        this._renderText( context, text, color, background, canvasSize, config )
+        this.renderText( context, text, color, background, canvasSize, config )
         textTexture.needsUpdate = true   
     }
 
-    _renderText(context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: any) {
+    private renderText(context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: any) {
         let textLine = '',
             label = config.label,
             fontSize = (config.fontSize > 0 ? config.fontSize : (label ? 58 : 39)),
             lineHeight = fontSize*1.35,
-            textRenderstate: any = {
+            textRenderState: any = {
                 codeBlock: false,
                 canvasSize,
                 fontSize: fontSize,
@@ -172,11 +170,11 @@ export default class TextSystem {
             })
         } else {
             text.forEach(( line, l ) => { 
-                this._highlightMarkdown( l, line, lines, context, textRenderState ) // markdown
+                this.highlightMarkdown( l, line, lines, context, textRenderState ) // markdown
                 if (line[0] == '%' || /^.*\:\s\%/.test(line) ) {
                     let outputLine = " "+line.substr(1, line.length-1);
 
-                    this._highlightSynesthesia(l, outputLine, lines, context, textRenderState)
+                    this.highlightSynesthesia(l, outputLine, lines, context, textRenderState)
                 } else {
                     context.fillText(line, 16, 960-(1 + (lines-l)*lineHeight))
                 }
@@ -184,7 +182,7 @@ export default class TextSystem {
         }
     }
 
-    _highlightSynesthesia(l: number, line: string, lines: number, context: any, textState: any) {
+    private highlightSynesthesia(l: number, line: string, lines: number, context: any, textState: any) {
         let xSize = textState.canvasSize[0],
             lineHeight = textState.fontSize*1.35,
             height = 960-(1 + (lines-l)*lineHeight),
@@ -204,7 +202,7 @@ export default class TextSystem {
         context.fillStyle = textState.fillStyle;
     }
 
-    _highlightMarkdown(l: number, line: string, lines: number, context: any, textState: any) {
+    private highlightMarkdown(l: number, line: string, lines: number, context: any, textState: any) {
         let xSize = textState.canvasSize[0],
             lineHeight = textState.fontSize,
             height = 960-(1 + (lines-l)*lineHeight),

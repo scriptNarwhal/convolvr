@@ -9,7 +9,7 @@ import {
     APP_TOGGLE_FULLSCREEN,
     APP_SET_WINDOW_FOCUS
 } from '../constants/action-types';
-import { API_SERVER } from '../../config.js'
+import { API_SERVER } from '../../config'
 
 export function toggleMenu ( force?: boolean ) {
     console.log("toggle menu ", force)

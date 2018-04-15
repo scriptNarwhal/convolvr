@@ -1,6 +1,11 @@
+import Convolvr from "../../world/world";
+import Component from "../../core/component";
+
 export default class TimeSystem {
 
-    constructor ( world ) {
+    world: Convolvr
+
+    constructor ( world: Convolvr ) {
         this.world = world
     }
 
@@ -10,7 +15,7 @@ export default class TimeSystem {
 
         return {
             open: false,
-            setTimeout: ( timeout, data ) => {
+            setTimeout: ( timeout: number, data: any ) => {
                 this.setTimeout( component, timeout, data )
             },
             getTime: () => {
@@ -19,11 +24,11 @@ export default class TimeSystem {
         }
     }
 
-    setTimeout ( component, timeout, data ) {
+    setTimeout ( component: Component, timeout: number, data: any ) {
         // implement
     }
 
-    getTime ( component ) {
+    getTime ( component: Component ) {
 
     }
 
