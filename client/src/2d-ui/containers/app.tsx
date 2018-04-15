@@ -169,12 +169,12 @@ class App extends Component<AppContainerProps, AppContainerState> {
     })
 
     window.onblur = () => {
-      this.props.setWindowFocus(false)
+      //this.props.setWindowFocus(false)
       (window as any).three.world.windowFocus = false
     }
 
     window.onfocus = () => {
-      this.props.setWindowFocus(true)
+      //this.props.setWindowFocus(true)
       (window as any).three.world.windowFocus = true;
       (window as any).three.world.user.velocity.y = 0;
       this.setState({

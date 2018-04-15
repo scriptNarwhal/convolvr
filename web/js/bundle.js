@@ -80328,10 +80328,12 @@ class App extends react_1.Component {
             window.location.pathname.indexOf(`/${menuUrl}`) > -1 && this.props.toggleMenu(true);
         });
         window.onblur = () => {
-            this.props.setWindowFocus(false)(window).three.world.windowFocus = false;
+            //this.props.setWindowFocus(false)
+            window.three.world.windowFocus = false;
         };
         window.onfocus = () => {
-            this.props.setWindowFocus(true)(window).three.world.windowFocus = true;
+            //this.props.setWindowFocus(true)
+            window.three.world.windowFocus = true;
             window.three.world.user.velocity.y = 0;
             this.setState({
                 unread: 0
