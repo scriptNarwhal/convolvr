@@ -135,6 +135,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
     }, 100)
 
     world.initChatAndLoggedInUser = ( doLogin = false ) => {
+      console.log("init chat and logged in user")
       this.props.getChatHistory(world.name, 0) // wait a fraction of a second for the world to load / to show in 3d too
       if ( doLogin ) {
         let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...

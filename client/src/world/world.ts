@@ -41,7 +41,9 @@ export default class Convolvr {
 	public socket: 		 any
 	public store: 		 any
 	public mobile: 		 boolean
-	public userInput: 	 UserInput
+	public ambientLight:   any
+	public socketHandlers: any
+	public userInput:    UserInput = new UserInput(null);
 	public settings: 	 Settings
 	public config: 		 any
 	public windowFocus:  boolean
@@ -51,7 +53,7 @@ export default class Convolvr {
 	public mode: 	     string
 	public rPos: 	     boolean
 	public users: 		 Array<User>
-	public user: 		 User
+	public user:         User     = new User({});
 	public camera: 		 any
 	public skyboxMesh: 	 any
 	public help:         any
@@ -76,10 +78,8 @@ export default class Convolvr {
 	public animate: 				Function
 	public initChatAndLoggedInUser: Function
 	public onUserLogin: 			Function
-	public ambientLight: any
-	public socketHandlers: any
 
-	constructor( user: User, userInput: UserInput, socket: any, store: any, loadedCallback: Function ) {
+	constructor(socket: any, store: any, loadedCallback: Function) {
 
 		let mobile = isMobile(),
 			scene = new THREE.Scene(),
@@ -95,7 +95,6 @@ export default class Convolvr {
 		this.store = store
 		this.mobile = mobile
 		this.willRender = true;
-		this.userInput = userInput
 		this.settings = new Settings( this )
 		viewDist = [ 0.1, 2000 + (3+this.settings.viewDistance)*GRID_SIZE[0]*150 ]
 		usePostProcessing = (this.settings as any).enablePostProcessing == 'on'
@@ -126,7 +125,6 @@ export default class Convolvr {
 		this.mode = "3d" // web, stereo ( IOTmode should be set this way )
 		this.rPos = false
 		this.users = []
-		this.user = user || {} as User
  		this.camera = camera
 		this.skyboxMesh = false
 		this.vrFrame = !!(window as any).VRFrameData ? new VRFrameData() : null
@@ -194,7 +192,28 @@ export default class Convolvr {
 		this.animate(this, 0, 0)
 	}
 
-	init(config: any, callback: Function ) {
+	public initUserInput() {
+		this.userInput.init( this, this.camera, this.user )
+    	this.userInput.rotationVector = { x: 0, y: 2.5, z: 0 }
+	}
+
+	public initUserAvatar(coords: number[], newUser: any, callback: Function, overrideAvatar?: string) {
+		let avatar = this.systems.assets.makeEntity(  
+			overrideAvatar || newUser.data.avatar || "default-avatar", 
+			true, 
+			{ 
+			  userId: newUser.id, 
+			  userName: newUser.name,
+			  wholeBody: false 
+			}, 
+			coords 
+		  ) // entity id can be passed into config object
+	  avatar.init( this.three.scene )
+	  this.user.useAvatar( avatar )
+	  callback && callback();
+	}
+
+	public init(config: any, callback: Function ) {
 
 		let coords: any    = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
 			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.25 ),
