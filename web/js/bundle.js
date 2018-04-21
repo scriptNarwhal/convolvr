@@ -80288,20 +80288,29 @@ class App extends react_1.Component {
         });
         this.props.fetchUniverseSettings();
         setTimeout(() => {
-            console.log("world & worldUser ", worldDetails[0], worldDetails[1]);
             let respawnCamera = () => {
+                console.log("----------------------------------");
+                console.log("----------------------------------");
+                console.log("----------------------------------");
+                console.log("----------------------------------");
+                console.log("6 respawn camera");
                 let cameraPos = world.three.camera.position, voxelKey = `${Math.floor(cameraPos.x / config_2.GRID_SIZE[0])}.0.${Math.floor(cameraPos.z / config_2.GRID_SIZE[2])}`, altitude = 0;
                 if (world.terrain.voxels[voxelKey]) {
-                    altitude = (world.terrain.voxels[voxelKey].data.altitude)(window).three.camera.position.set(cameraPos.x + Math.random() * 2, world.terrain.voxels[voxelKey].data.altitude / 10000, cameraPos.z + Math.random() * 2) + 7;
+                    altitude = (world.terrain.voxels[voxelKey].data.altitude);
+                    window.three.camera.position.set(cameraPos.x + Math.random() * 2, world.terrain.voxels[voxelKey].data.altitude / 10000, cameraPos.z + Math.random() * 2) + 7;
                 }
                 window.three.world.user.velocity.y = -1000;
             };
             world.load(worldDetails[0], worldDetails[1], () => { }, () => {
-                console.log("init 3d UI / terrain loaded");
                 respawnCamera();
             });
         }, 100);
         world.initChatAndLoggedInUser = (doLogin = false) => {
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("5 init chat & logged in user");
             this.props.getChatHistory(world.name, 0); // wait a fraction of a second for the world to load / to show in 3d too
             if (doLogin) {
                 let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...
@@ -80315,7 +80324,7 @@ class App extends react_1.Component {
                     }
                 }
                 if (!autoSignIn && this.props.loggedIn == false && window.location.href.indexOf("/chat") > -1) {
-                    this.props.history.push("/login");
+                    //this.props.history.push("/login")
                 }
             }
             else {
@@ -87748,18 +87757,13 @@ var config_1 = require("./config");
 var routes_1 = require("./routes");
 var world_1 = require("./world/world");
 var socket_1 = require("./network/socket");
-var user_input_1 = require("./input/user-input");
-var user_1 = require("./world/user");
 //import ProgressBar from 'progressbardottop'
 var store = makeStore_1.default(react_router_redux_1.routerReducer),
     socket = socket_1.events,
     token = "",
-    userInput = void 0,
 
 //progressBar:  ProgressBar,
-user = new user_1.default({}),
-    loadingSpace = null,
-    avatar = null,
+loadingSpace = null,
     toolMenu = null,
     // built in ui entities
 helpScreen = null,
@@ -87768,12 +87772,7 @@ helpScreen = null,
 var history = createBrowserHistory_1.default();
 token = localStorage.getItem("token") || "";
 config_1.clearOldData();
-// progressBar = new ProgressBar({
-//   selector: "#progressbar",
-//   hideOnComplete: true,
-// })
-userInput = new user_input_1.default(null);
-loadingSpace = new world_1.default(user, userInput, socket, store, function (world) {
+loadingSpace = new world_1.default(socket, store, function (world) {
     var systems = world.systems,
         scene = world.three.scene,
         pos = world.camera.position,
@@ -87781,27 +87780,35 @@ loadingSpace = new world_1.default(user, userInput, socket, store, function (wor
         voxelKey = coords.join("."),
         altitude = systems.terrain.voxels[voxelKey].data.altitude;
     world.onUserLogin = function (newUser) {
-        console.log("on user login: ", newUser);
-        avatar = systems.assets.makeEntity(newUser.data.avatar || "default-avatar", true, {
-            userId: newUser.id,
-            userName: newUser.name,
-            wholeBody: false
-        }, coords); // entity id can be passed into config object
-        avatar.init(scene);
-        user.useAvatar(avatar);
-        world.user = user;
-        user.toolbox = world.systems.toolbox;
-        toolMenu = systems.assets.makeEntity("tool-menu", true, {}, config_1.GLOBAL_SPACE); // method for spawning built in entities
-        user.hud = toolMenu;
-        toolMenu.init(scene, {}, function (menu) {
-            menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition();
+        var user = world.user;
+        console.log("----------------------------------");
+        console.log("----------------------------------");
+        console.log("----------------------------------");
+        console.log("----------------------------------");
+        console.log("2 on user login: ", newUser);
+        user.data = Object.assign({}, user.data, newUser);
+        user.name = newUser.userName;
+        user.id = newUser.id;
+        world.initUserAvatar(coords, newUser, function () {
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("3 init user avatar callback");
+            world.initUserInput();
+            user.toolbox = world.systems.toolbox;
+            toolMenu = systems.assets.makeEntity("tool-menu", true, {}, config_1.GLOBAL_SPACE); // method for spawning built in entities
+            user.hud = toolMenu;
+            toolMenu.init(scene, {}, function (menu) {
+                menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition();
+            });
+            if (Math.abs(coords[0]) < 2 && Math.abs(coords[2]) < 2) pos.set(pos.x - 25 + Math.random() * 50, pos.y + 25, pos.z - 25 + Math.random() * 50);
         });
-        userInput.init(world, world.camera, user);
-        userInput.rotationVector = { x: 0, y: 2.5, z: 0 };
-        console.info("onUserLogin", newUser, avatar);
-        if (Math.abs(coords[0]) < 2 && Math.abs(coords[2]) < 2) pos.set(pos.x - 25 + Math.random() * 50, pos.y + 25, pos.z - 25 + Math.random() * 50);
     };
-    world.initChatAndLoggedInUser(localStorage.getItem("username") != null);
+    world.onUserLogin(world.user);
+    setTimeout(function () {
+        return world.initChatAndLoggedInUser(localStorage.getItem("username") != null);
+    }, 1000);
     chatScreen = systems.assets.makeEntity("chat-screen", true, {}, coords); //; chatScreen.components[0].attrs.speech = {}
     chatScreen.init(scene);
     chatScreen.update([pos.x, altitude + 21, pos.z + 10]);
@@ -87815,7 +87822,6 @@ loadingSpace = new world_1.default(user, userInput, socket, store, function (wor
     helpScreen.update([pos.x - 4, altitude + 21, pos.z + 10]);
     world.help = helpScreen;
 });
-//loadingSpace.progressBar = progressBar
 ReactDOM.render(React.createElement(routes_1.default, { store: store, history: history }), document.getElementsByTagName('main')[0]);
 function _initVideoChat(world, helpScreen, voxel) {
     var videoChat = world.systems.assets.makeEntity("video-chat", true, {}, voxel); // simple example of displaying GET response from server
@@ -87826,14 +87832,14 @@ function _initVideoChat(world, helpScreen, voxel) {
 function _initHTTPClientTest(world, helpScreen, voxel) {
     var httpClient = world.systems.assets.makeEntity("help-screen", true, {}, voxel),
         // simple example of displaying GET response from server
-    compProps = httpClient.components[0].attrs;
-    compProps.rest = {
+    attributes = httpClient.components[0].attrs;
+    attributes.rest = {
         get: {
             url: "/api/voxels/" + world.name + "/0x0x0,-1x0x0"
         }
     };
-    compProps.text.lines = ["/api/voxels/overworld/0x0x0,-1x0x0"]; // really just clearing the default text until something loads
-    compProps.text.color = "#f0f0f0";
+    attributes.text.lines = ["/api/voxels/overworld/0x0x0,-1x0x0"]; // really just clearing the default text until something loads
+    attributes.text.color = "#f0f0f0";
     httpClient.init(helpScreen.mesh); // anchor to other entity (instead of scene) upon init
     httpClient.update([-12, 0, 0]);
 }
@@ -87843,7 +87849,7 @@ function _initFileSystemTest(world, helpScreen, voxel) {
     fileBrowser.update([-16, 0, 0]);
 }
 
-},{"./config":199,"./input/user-input":210,"./network/socket":216,"./redux/makeStore":227,"./routes":239,"./world/user":321,"./world/world":322,"history/createBrowserHistory":46,"react":114,"react-dom":75,"react-router-redux":98}],212:[function(require,module,exports){
+},{"./config":199,"./network/socket":216,"./redux/makeStore":227,"./routes":239,"./world/world":322,"history/createBrowserHistory":46,"react":114,"react-dom":75,"react-router-redux":98}],212:[function(require,module,exports){
 "use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -94771,16 +94777,15 @@ var SpaceSystem = function () {
     }, {
         key: "destroy",
         value: function destroy() {
-            var _this = this;
-
+            var world = this.world;
             this.voxelList.map(function (v) {
                 v.entities.map(function (e) {
                     if (e.mesh) {
-                        _this.world.octree.remove(e.mesh);
-                        _this.world.three.scene.remove(e.mesh);
+                        world.octree.remove(e.mesh);
+                        world.three.scene.remove(e.mesh);
                     }
                 });
-                if (v.mesh) _this.world.three.scene.remove(v.mesh);
+                if (v.mesh) world.three.scene.remove(v.mesh);
             });
             this.voxels = {};
             this.voxelList = [];
@@ -94808,6 +94813,8 @@ var SpaceSystem = function () {
     }, {
         key: "bufferVoxels",
         value: function bufferVoxels(force, phase) {
+            var _this = this;
+
             var voxels = this.voxels,
                 voxelList = this.voxelList,
                 config = this.config,
@@ -94833,6 +94840,7 @@ var SpaceSystem = function () {
                 y = coords[2] - phase,
                 c = 0;
             var endCoords = [coords[0] + viewDistance, coords[2] + viewDistance];
+            //console.log("endCoords", endCoords)
             this.chunkCoords = coords;
             force = phase == 0;
             if (this.world.name == "") {
@@ -94870,7 +94878,8 @@ var SpaceSystem = function () {
                     if (terrainChunk && terrainChunk.entities) {
                         terrainChunk.entities.map(function (e) {
                             if (!!e && !!e.mesh) {
-                                octree.remove(e.mesh)(window).three.scene.remove(e.mesh);
+                                _this.world.octree.remove(e.mesh);
+                                _this.world.three.scene.remove(e.mesh);
                             }
                         });
                         removePhysicsVoxels.push(cleanUp.physics);
@@ -94887,6 +94896,7 @@ var SpaceSystem = function () {
                 while (y <= endCoords[1]) {
                     if (voxels[x + ".0." + y] == null) {
                         // only if its not already loaded
+                        console.log("initialize voxel", x, y);
                         this.initializeVoxel([x, 0, y], x + ".0." + y);
                         c += 1;
                         this.reqVoxels.push(x + "x0x" + y);
@@ -94977,6 +94987,8 @@ var SpaceSystem = function () {
                 v.setData(newVoxel);
                 this.physicsVoxels.push(v.data);
                 v.loadDistantEntities();
+                console.log("------");
+                console.log("initializeEntities", { initialLoad: initialLoad, cameraKey: cameraKey, voxelKey: voxelKey });
                 if (initialLoad == false && cameraKey == voxelKey) {
                     this.world.initialLoad = true;
                     this.loaded = true;
@@ -96916,7 +96928,7 @@ var ToolboxSystem = function () {
                         });
                     });
                 } else {
-                    console.error("user.avatar hasn't loaded yet: User:", user);
+                    // console.error("user.avatar hasn't loaded yet: User:", user)
                 }
             }, 5000);
             console.info("user hands ", this.hands);
@@ -98349,13 +98361,13 @@ var Settings = function () {
             types = [SettingType.str, SettingType.str, SettingType.bool, SettingType.int, SettingType.int, SettingType.bool, SettingType.bool, SettingType.int, SettingType.float, SettingType.int, SettingType.str, SettingType.float, SettingType.int, SettingType.bool, SettingType.float],
             defaults = ["fps", "stick", "off", 2, window.innerWidth < 720 ? 1 : 2, "off", "off", 0, 0, 0, "hybrid", 0, 75, "off", 0],
             settings = this;
-        options.map(function (item, i) {
-            var setting = localStorage.getItem(item);
-            if (setting === null) {
-                setting = defaults[i];
-                localStorage.setItem(item, setting);
+        options.map(function (setting, i) {
+            var settingValue = localStorage.getItem(setting);
+            if (settingValue === null) {
+                settingValue = defaults[i];
+                localStorage.setItem(setting, settingValue);
             }
-            settings.setValue(item, setting, types[i]);
+            settings.setValue(settingValue, setting, types[i]);
         });
         world.userInput.leapMode = this.leapMode;
         this.gravity = 1;
@@ -98736,21 +98748,30 @@ var axios_1 = require("axios");
 var render_1 = require("./render");
 var config_1 = require("../config");
 var socket_1 = require("../network/socket");
+var user_1 = require("./user");
 var systems_1 = require("../systems");
 var post_processing_1 = require("./post-processing");
 var handlers_1 = require("../network/handlers");
 var local_settings_1 = require("./local-settings");
 var util_1 = require("../network/util");
+var user_input_1 = require("../input/user-input");
 var world = null,
     THREE = window.THREE,
     three = void 0;
 
 var Convolvr = function () {
-    function Convolvr(user, userInput, socket, store, loadedCallback) {
+    function Convolvr(socket, store, loadedCallback) {
         var _this = this;
 
         _classCallCheck(this, Convolvr);
 
+        this.userInput = new user_input_1.default(null);
+        this.user = new user_1.default({});
+        console.log("----------------------------------");
+        console.log("----------------------------------");
+        console.log("----------------------------------");
+        console.log("----------------------------------");
+        console.log("0.5 new world");
         var mobile = config_1.isMobile(),
             scene = new THREE.Scene(),
             camera = null,
@@ -98764,7 +98785,6 @@ var Convolvr = function () {
         this.store = store;
         this.mobile = mobile;
         this.willRender = true;
-        this.userInput = userInput;
         this.settings = new local_settings_1.default(this);
         viewDist = [0.1, 2000 + (3 + this.settings.viewDistance) * config_1.GRID_SIZE[0] * 150];
         usePostProcessing = this.settings.enablePostProcessing == 'on';
@@ -98792,7 +98812,6 @@ var Convolvr = function () {
         this.mode = "3d"; // web, stereo ( IOTmode should be set this way )
         this.rPos = false;
         this.users = [];
-        this.user = user || {};
         this.camera = camera;
         this.skyboxMesh = false;
         this.vrFrame = !!window.VRFrameData ? new VRFrameData() : null;
@@ -98813,6 +98832,7 @@ var Convolvr = function () {
             overlapPct: 0.15,
             scene: scene
         });
+        console.log(this.octree);
         this.octree.visualMaterial.visible = false;
         this.raycaster = new THREE.Raycaster();
         this.raycaster.near = 0.25;
@@ -98847,6 +98867,11 @@ var Convolvr = function () {
         });
         this.initialLoad = false;
         this.loadedCallback = function () {
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("0.75 world.loadedCallback()");
             loadedCallback(_this);
             _this.initialLoad = true;
         };
@@ -98856,6 +98881,34 @@ var Convolvr = function () {
         key: "startAnimation",
         value: function startAnimation() {
             this.animate(this, 0, 0);
+        }
+    }, {
+        key: "initUserInput",
+        value: function initUserInput() {
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("4 init user input");
+            this.userInput.init(this, this.camera, this.user);
+            this.userInput.rotationVector = { x: 0, y: 2.5, z: 0 };
+        }
+    }, {
+        key: "initUserAvatar",
+        value: function initUserAvatar(coords, newUser, callback, overrideAvatar) {
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("----------------------------------");
+            console.log("2.5 init user avatar");
+            var avatar = this.systems.assets.makeEntity(overrideAvatar || newUser.data.avatar || "default-avatar", true, {
+                userId: newUser.id,
+                userName: newUser.name,
+                wholeBody: false
+            }, coords); // entity id can be passed into config object
+            avatar.init(this.three.scene);
+            this.user.useAvatar(avatar);
+            callback && callback();
         }
     }, {
         key: "init",
@@ -99007,7 +99060,7 @@ var Convolvr = function () {
         key: "generateFullLOD",
         value: function generateFullLOD(coords) {
             var voxel = this.terrain.voxels[coords],
-                scene = three.scene;
+                scene = this.three.scene;
             if (voxel != null && voxel.cleanUp == false) {
                 voxel.entities.map(function (entity, i) {
                     i > 2 && entity.init(scene);
@@ -99101,6 +99154,6 @@ var Convolvr = function () {
 
 exports.default = Convolvr;
 
-},{"../config":199,"../network/handlers":212,"../network/socket":216,"../network/util":217,"../systems":286,"./local-settings":317,"./post-processing":318,"./render":319,"axios":1}]},{},[211])
+},{"../config":199,"../input/user-input":210,"../network/handlers":212,"../network/socket":216,"../network/util":217,"../systems":286,"./local-settings":317,"./post-processing":318,"./render":319,"./user":321,"axios":1}]},{},[211])
 
 //# sourceMappingURL=bundle.js.map

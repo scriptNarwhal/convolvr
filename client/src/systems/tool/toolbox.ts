@@ -66,7 +66,7 @@ export default class ToolboxSystem {
                })
              })
           } else {
-            console.error("user.avatar hasn't loaded yet: User:", user)
+            // console.error("user.avatar hasn't loaded yet: User:", user)
           }
           
         }, 5000)

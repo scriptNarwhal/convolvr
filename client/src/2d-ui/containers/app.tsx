@@ -114,28 +114,35 @@ class App extends Component<AppContainerProps, AppContainerState> {
     })
 
     this.props.fetchUniverseSettings()
-    setTimeout( ()=> { console.log("world & worldUser ", worldDetails[0], worldDetails[1] )
+    setTimeout( ()=> { 
       let respawnCamera = () => {
-
+        console.log("----------------------------------"); 
+        console.log("----------------------------------");
+        console.log("----------------------------------");
+        console.log("----------------------------------");
+        console.log("6 respawn camera")
         let cameraPos = world.three.camera.position,
             voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
             altitude = 0
 
         if ( world.terrain.voxels[ voxelKey ] ) {
-          altitude = (world.terrain.voxels[ voxelKey ].data.altitude)
+          altitude = (world.terrain.voxels[ voxelKey ].data.altitude);
           (window as any).three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
         }
         (window as any).three.world.user.velocity.y = -1000
       }
 
       world.load( worldDetails[ 0 ], worldDetails[ 1 ], () => { /* systems online */ }, ()=> { /* terrain finished loading */
-        console.log("init 3d UI / terrain loaded")
         respawnCamera()
       })
     }, 100)
 
     world.initChatAndLoggedInUser = ( doLogin = false ) => {
-      console.log("init chat and logged in user")
+      console.log("----------------------------------"); 
+    console.log("----------------------------------");
+    console.log("----------------------------------");
+    console.log("----------------------------------");
+    console.log("5 init chat & logged in user")
       this.props.getChatHistory(world.name, 0) // wait a fraction of a second for the world to load / to show in 3d too
       if ( doLogin ) {
         let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...
@@ -151,9 +158,8 @@ class App extends Component<AppContainerProps, AppContainerState> {
             this.props.login(username, password, "", {})
           }
         }
-  
         if (!autoSignIn && this.props.loggedIn == false && window.location.href.indexOf("/chat") >-1) {
-          this.props.history.push("/login")
+          //this.props.history.push("/login")
         }
       } else {
         world.onUserLogin( world.user )
@@ -164,9 +170,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
 
     let showMenuURLs = [ "chat", "login", "spaces", "files", "places", "inventory", "settings", "network", "new-world" ]
     showMenuURLs.map( (menuUrl) => {
-
       window.location.pathname.indexOf(`/${menuUrl}`) > -1 && this.props.toggleMenu(true)
-
     })
 
     window.onblur = () => {

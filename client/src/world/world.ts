@@ -80,14 +80,18 @@ export default class Convolvr {
 	public onUserLogin: 			Function
 
 	constructor(socket: any, store: any, loadedCallback: Function) {
-
+		console.log("----------------------------------"); 
+		console.log("----------------------------------");
+		console.log("----------------------------------");
+		console.log("----------------------------------");
+		console.log("0.5 new world")
 		let mobile = isMobile(),
 			scene = new THREE.Scene(),
 			camera = null,
 			screenResX = window.devicePixelRatio * window.innerWidth,
 			renderer = null,
 			self = this,
-			three = {},
+			three: any = {},
 			postProcessing: PostProcessing = null,
 			usePostProcessing = false,
 			viewDist = [ 0.1, 100000 ]
@@ -107,12 +111,12 @@ export default class Convolvr {
 			rendererOptions.alpha = true
 			rendererOptions.clearColor = 0x000000
 		}
-		renderer = new THREE.WebGLRenderer(rendererOptions)
+		renderer = new THREE.WebGLRenderer(rendererOptions);
 		if ( this.settings.shadows > 0 ) {
 			renderer.shadowMap.enabled = true;
 			renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
 		}
-		postProcessing = new PostProcessing(renderer, scene, camera)
+		postProcessing = new PostProcessing(renderer, scene, camera);
 		if ( usePostProcessing )
 			postProcessing.init()
 
@@ -145,7 +149,7 @@ export default class Convolvr {
 			overlapPct: 0.15,
 			scene
 		})
-
+		console.log(this.octree)
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
 		this.raycaster.near = 0.25
@@ -183,6 +187,11 @@ export default class Convolvr {
 		})
 		this.initialLoad = false
 		this.loadedCallback = () => {
+			console.log("----------------------------------"); 
+			console.log("----------------------------------");
+			console.log("----------------------------------");
+			console.log("----------------------------------");
+			console.log("0.75 world.loadedCallback()")
 			loadedCallback( this );
 			 this.initialLoad = true;
 		}
@@ -193,11 +202,21 @@ export default class Convolvr {
 	}
 
 	public initUserInput() {
+		console.log("----------------------------------"); 
+    console.log("----------------------------------");
+    console.log("----------------------------------");
+	console.log("----------------------------------");
+	console.log("4 init user input")
 		this.userInput.init( this, this.camera, this.user )
     	this.userInput.rotationVector = { x: 0, y: 2.5, z: 0 }
 	}
 
 	public initUserAvatar(coords: number[], newUser: any, callback: Function, overrideAvatar?: string) {
+		console.log("----------------------------------"); 
+		console.log("----------------------------------");
+		console.log("----------------------------------");
+		console.log("----------------------------------");
+		console.log("2.5 init user avatar")
 		let avatar = this.systems.assets.makeEntity(  
 			overrideAvatar || newUser.data.avatar || "default-avatar", 
 			true, 
@@ -214,7 +233,6 @@ export default class Convolvr {
 	}
 
 	public init(config: any, callback: Function ) {
-
 		let coords: any    = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
 			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.25 ),
 			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, config.light.intensity ),
@@ -370,7 +388,7 @@ export default class Convolvr {
 
 	generateFullLOD ( coords: string) {
 		let voxel = (this.terrain as any).voxels[coords],
-			scene = three.scene
+			scene = this.three.scene
 
 		if ( voxel != null && voxel.cleanUp == false ) {
 			voxel.entities.map( ( entity: Entity, i: number )=>{

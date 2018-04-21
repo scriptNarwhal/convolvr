@@ -40,17 +40,18 @@ export default class Settings {
 			types: SettingType[] = [ SettingType.str,  SettingType.str,      SettingType.bool, SettingType.int,   SettingType.int,
 									 SettingType.bool, SettingType.bool, 	 SettingType.int,  SettingType.float, SettingType.int,            
 									 SettingType.str,  SettingType.float,    SettingType.int,  SettingType.bool,  SettingType.float],
-			defaults = ["fps",  "stick", "off", 2, window.innerWidth < 720 ? 1 : 2, 
-						"off",  "off",  0, 0, 0, "hybrid",  0, 75, "off", 0],
+			defaults = 			   ["fps",             "stick",              "off",            2,                 window.innerWidth < 720 ? 1 : 2, 
+									"off",   		   "off",  				 0, 			   0, 				  0, 
+									"hybrid",  		   0, 					 75, 			   "off", 			  0],
 			settings = this
 
-		options.map( (item, i) => {
-				let setting: any = localStorage.getItem( item )
-				if (setting === null) {
-					setting = defaults[ i ];
-					localStorage.setItem( item, setting )
+		options.map( (setting, i) => {
+				let settingValue: any = localStorage.getItem( setting )
+				if (settingValue === null) {
+					settingValue = defaults[ i ];
+					localStorage.setItem( setting, settingValue )
 				}
-				settings.setValue( item, setting, types[ i ] )
+				settings.setValue( settingValue, setting, types[ i ] )
 			})
 
 		world.userInput.leapMode = this.leapMode

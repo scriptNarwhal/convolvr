@@ -36,10 +36,6 @@ const history = createHistory()
 
 token = localStorage.getItem("token") || ""
 clearOldData()
-// progressBar = new ProgressBar({
-//   selector: "#progressbar",
-//   hideOnComplete: true,
-// })
 
 loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
   let systems:   Systems       = world.systems,
@@ -47,12 +43,15 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
       pos:       any           = world.camera.position,
       coords:    Array<number> = world.getVoxel( pos ),
       voxelKey:  string        = coords.join("."),
-      altitude:  number        = (systems.terrain as any).voxels[ voxelKey ].data.altitude
-
+      altitude:  number        = (systems.terrain as any).voxels[ voxelKey ].data.altitude;
+     
   world.onUserLogin = (newUser: any) => {
     let user = world.user;
-    
-    console.log("on user login: ", newUser)
+    console.log("----------------------------------"); 
+    console.log("----------------------------------");
+    console.log("----------------------------------");
+    console.log("----------------------------------");
+    console.log("2 on user login: ", newUser)
     user.data = {
       ...user.data,
       ...newUser
@@ -60,6 +59,11 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
     user.name = newUser.userName;
     user.id = newUser.id;
     world.initUserAvatar(coords, newUser, ()=>{
+      console.log("----------------------------------"); 
+    console.log("----------------------------------");
+    console.log("----------------------------------");
+    console.log("----------------------------------");
+    console.log("3 init user avatar callback")
       world.initUserInput();
       user.toolbox = world.systems.toolbox
       toolMenu = systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) // method for spawning built in entities
@@ -70,7 +74,9 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
       if ( Math.abs(coords[0]) < 2 && Math.abs(coords[2]) < 2 )
         pos.set( pos.x -25+Math.random()*50, pos.y + 25, pos.z -25+Math.random()*50 );
     }); 
-  }
+  };
+
+  world.onUserLogin(world.user);
   
   setTimeout(()=>world.initChatAndLoggedInUser( localStorage.getItem("username") != null ), 1000);    
   chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ); //; chatScreen.components[0].attrs.speech = {}
@@ -78,16 +84,16 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
   chatScreen.update( [ pos.x, altitude + 21, pos.z+10] );  
   (world as any).chat = chatScreen
   helpScreen = systems.assets.makeEntity( "help-screen", true, {}, coords );
+
   helpScreen.init(scene, {}, (help: Entity) => { 
     _initHTTPClientTest( world, help, coords ); 
     _initFileSystemTest( world, help, coords ); 
     _initVideoChat( world, help, coords ); 
   })
+
   helpScreen.update( [ pos.x-4, altitude + 21, pos.z+10 ] );
   world.help = helpScreen;
 });
-
-//loadingSpace.progressBar = progressBar
 
 ReactDOM.render(
   React.createElement(Routes, { store, history }),
