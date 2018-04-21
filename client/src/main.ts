@@ -47,11 +47,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
      
   world.onUserLogin = (newUser: any) => {
     let user = world.user;
-    console.log("----------------------------------"); 
-    console.log("----------------------------------");
-    console.log("----------------------------------");
-    console.log("----------------------------------");
-    console.log("2 on user login: ", newUser)
+    
     user.data = {
       ...user.data,
       ...newUser
@@ -59,11 +55,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
     user.name = newUser.userName;
     user.id = newUser.id;
     world.initUserAvatar(coords, newUser, ()=>{
-      console.log("----------------------------------"); 
-    console.log("----------------------------------");
-    console.log("----------------------------------");
-    console.log("----------------------------------");
-    console.log("3 init user avatar callback")
+    
       world.initUserInput();
       user.toolbox = world.systems.toolbox
       toolMenu = systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) // method for spawning built in entities

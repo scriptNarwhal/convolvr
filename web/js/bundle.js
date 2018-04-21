@@ -87781,20 +87781,10 @@ loadingSpace = new world_1.default(socket, store, function (world) {
         altitude = systems.terrain.voxels[voxelKey].data.altitude;
     world.onUserLogin = function (newUser) {
         var user = world.user;
-        console.log("----------------------------------");
-        console.log("----------------------------------");
-        console.log("----------------------------------");
-        console.log("----------------------------------");
-        console.log("2 on user login: ", newUser);
         user.data = Object.assign({}, user.data, newUser);
         user.name = newUser.userName;
         user.id = newUser.id;
         world.initUserAvatar(coords, newUser, function () {
-            console.log("----------------------------------");
-            console.log("----------------------------------");
-            console.log("----------------------------------");
-            console.log("----------------------------------");
-            console.log("3 init user avatar callback");
             world.initUserInput();
             user.toolbox = world.systems.toolbox;
             toolMenu = systems.assets.makeEntity("tool-menu", true, {}, config_1.GLOBAL_SPACE); // method for spawning built in entities
@@ -93530,39 +93520,39 @@ exports._initMaterialProp = function (attr, simpleShading) {
         case "terrain":
             if (!simpleShading) {
                 //attr.metalnessMap = "/data/images/textures/tiles.png" 
-                attr.roughnessMap = '/data/images/textures/space5.jpg';
-                attr.map = !!!attr.map ? '/data/images/textures/space4.jpg' : attr.map;
+                attr.roughnessMap = '/data/images/textures/terrain5.jpg';
+                attr.map = !!!attr.map ? '/data/images/textures/terrain4.jpg' : attr.map;
             } else {
-                attr.map = '/data/images/textures/space4.jpg';
+                attr.map = '/data/images/textures/terrain4.jpg';
                 attr.envMap = 'none';
             }
             attr.repeat = ['wrapping', 10, 10];
             break;
         case "terrain2":
             if (!simpleShading) {
-                attr.map = !!!attr.map ? '/data/images/textures/space1.jpg' : attr.map;
+                attr.map = !!!attr.map ? '/data/images/textures/terrain1.jpg' : attr.map;
             } else {
-                attr.map = '/data/images/textures/space1.jpg'; // /data/images/textures/gplaypattern_@2X-2.png'
+                attr.map = '/data/images/textures/terrain1.jpg'; // /data/images/textures/gplaypattern_@2X-2.png'
                 attr.envMap = 'none';
             }
             attr.repeat = ['wrapping', 8, 8];
             break;
         case "terrain3":
             if (!simpleShading) {
-                attr.map = !!!attr.map ? '/data/images/textures/space4.jpg' : attr.map;
+                attr.map = !!!attr.map ? '/data/images/textures/terrain4.jpg' : attr.map;
                 //attr.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
             } else {
-                attr.map = '/data/images/textures/space4.jpg'; // /data/images/textures/gplaypattern_@2X-2.png'
+                attr.map = '/data/images/textures/terrain4.jpg'; // /data/images/textures/gplaypattern_@2X-2.png'
                 attr.envMap = 'none';
             }
             attr.repeat = ['wrapping', 10, 10];
             break;
         case "terrain4":
             if (!simpleShading) {
-                attr.metalnessMap = "/data/images/textures/space3.jpg";
-                attr.map = !!!attr.map ? '/data/images/textures/space3.jpg' : attr.map;
+                attr.metalnessMap = "/data/images/textures/terrain3.jpg";
+                attr.map = !!!attr.map ? '/data/images/textures/terrain3.jpg' : attr.map;
             } else {
-                attr.map = '/data/images/textures/space3.jpg';
+                attr.map = '/data/images/textures/terrain3.jpg';
                 attr.envMap = 'none';
             }
             attr.repeat = ['wrapping', 10, 10];
