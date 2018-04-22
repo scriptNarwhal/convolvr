@@ -9,6 +9,9 @@ import {
 import { isMobile } from '../../../config'
 import AttributeEditor from './attribute-editor'
 import VectorInput from '../vector-input'
+
+import BuiltinProps from '../../../assets/attributes'
+import { getPropsList } from '../../../assets/attributes'
 import { 
     textAreaStyle,
     basicInputStyle,
@@ -16,17 +19,15 @@ import {
     modalStyle 
 } from '../../styles'
 
+type ComponentEditorProps = {
+    title: string,
+    source: string,
+    contextMenuOptions: any[]
+}
+
 class ComponentEditor extends Component<any, any> {
 
-    private defaultProps = {
-        title: "New Component",
-        source: "inventory",
-        entityEditMode: true,
-        contextMenuOptions: [
-            { name: "Edit" },
-            { name: "Delete"}
-        ]
-    }
+    private defaultProps: ComponentEditorProps
 
     componentWillMount () {
         this.setState({
@@ -315,6 +316,7 @@ class ComponentEditor extends Component<any, any> {
                             <h4 style={styles.h4}>Properties</h4>
                             <AttributeEditor onSave={ (data: any) => this.onSaveProperty( data ) } 
                                             entityEditMode={true}
+                                            convolvrAttrs={getPropsList( BuiltinProps() )}
                                             source={"componentEdit"}
                                             username={ this.props.username }
                                             title={"Add Property"}

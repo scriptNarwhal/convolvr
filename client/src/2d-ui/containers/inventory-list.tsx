@@ -7,27 +7,26 @@ import ComponentEditor from '../components/data/component-editor'
 import AttributeEditor from '../components/data/attribute-editor'
 import ImportToSpace from '../components/data/import-to-world'
 import InventoryExport from '../components/data/inventory-export'
+import BuiltinProps, { getPropsList } from "../../assets/attributes";
+
+type InventoryListProps = {
+  title: string,
+    dir: string,
+    username: string,
+    fetching: boolean,
+    category: string,
+    showTitle: boolean
+    style: any,
+    color: string,
+    compact: boolean,
+    isImage: boolean,
+    options: any[],
+    contextMenuOptions: any[]
+}
 
 export default class InventoryList extends Component<any, any> {
 
-  public defaultProps = {
-    title: "File Options",
-    dir: "",
-    username: "",
-    fetching: false,
-    category: "Entities",
-    showTitle: false,
-    style: {},
-    color: '#252525',
-    compact: false,
-    isImage: false,
-    options: [] as any[],
-    contextMenuOptions: [
-      { name: "Add To Space" },
-      { name: "Export JSON" },
-      { name: "Edit" }
-    ]
-  }
+  public defaultProps: InventoryListProps;
 
   componentWillMount() {
     this.setState({
@@ -64,6 +63,7 @@ export default class InventoryList extends Component<any, any> {
               ) : (
                     <AttributeEditor username={this.props.username}
                       entityEditMode={false}
+                      convolvrAttrs={getPropsList( BuiltinProps() )}
                     />
                   )
             }

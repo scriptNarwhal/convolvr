@@ -14,14 +14,13 @@ import {
   modalStyle 
 } from '../../styles'
 
+type EntityEditorProps = {
+  contextMenuOptions: any[]
+}
+
 class EntityEditor extends Component<any, any> {
 
-  private defaultProps = {
-    contextMenuOptions: [
-      { name: "Edit" },
-      { name: "Delete"}
-    ]
-  }
+  private defaultProps: EntityEditorProps;
 
   componentWillMount () {
     this.setState({

@@ -277,7 +277,7 @@ export default class MaterialSystem {
       if ( repeat[0] == "wrapping" ) {
           texture.wrapS = texture.wrapT = THREE.RepeatWrapping
 			    texture.repeat.set(repeat[1], repeat[2])
-          texture.needsUpdate = true
+          //texture.needsUpdate = true
       }
     }
 

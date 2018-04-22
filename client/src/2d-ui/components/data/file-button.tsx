@@ -5,13 +5,15 @@ let styles = {
   button: fileButtonStyle
 }
 
-export default class FileButton extends Component<any, any> {
+type FileButtonProps = {
+  title: string,
+  style?: any,
+  onClick: Function
+}
 
-  private defaultProps = {
-    title: "Button",
-    style: {}
-  }
+export default class FileButton extends Component<FileButtonProps, any> {
 
+  private defaultProps: FileButtonProps
 
   render() {
     

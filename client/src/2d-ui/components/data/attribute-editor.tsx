@@ -4,8 +4,6 @@ import { withRouter } from 'react-router-dom'
 import FileButton from './file-button'
 import { rgba, rgb } from '../../../util'
 import { isMobile } from '../../../config'
-import BuiltinProps from '../../../assets/attributes'
-import { getPropsList } from '../../../assets/attributes'
 import { 
   textAreaStyle,
   lightboxStyle, 
@@ -87,7 +85,7 @@ class AttributeEditor extends Component<any, any> {
     let template: any = "",
         propName: string = ""
 
-    template = this.props.convolvrProps.find( (prop: any) => { return prop.name == name} )
+    template = this.props.convolvrAttrs.find( (prop: any) => { return prop.name == name} )
     propName = name.split(".")[0]
     this.setText( propName, template.data, true )
   }
@@ -181,7 +179,7 @@ class AttributeEditor extends Component<any, any> {
                 } 
                 <select onChange={ e=> { this.useTemplate( e.target.value ) } } >
                   {
-                    this.props.convolvrProps.map( (prop: any, p: number) => {
+                    this.props.convolvrAttrs.map( (prop: any, p: number) => {
                       let propName = `${prop.name}`
                       return (
                         <option key={p} value={propName}>{propName}</option>
