@@ -36,7 +36,7 @@ export default class SpaceSystem {
   public voxelList: any[]
   public voxels: any
 
-    constructor ( world: Convolvr ) {
+    constructor (world: Convolvr) {
       this.world            = world
       this.config           = world.config.terrain
       this.octree           = world.octree
@@ -134,13 +134,13 @@ export default class SpaceSystem {
     let world = this.world;
     this.voxelList.map( v => {
 			v.entities.map((e: any) => {
-				if ( e.mesh ) {
+				if (e.mesh ) {
 					world.octree.remove( e.mesh )
 					world.three.scene.remove( e.mesh )
 				}					
 			})
 
-			if ( v.mesh )				
+			if (v.mesh )				
         world.three.scene.remove( v.mesh )
     })
 
@@ -148,7 +148,7 @@ export default class SpaceSystem {
 		this.voxelList = []
   }
 
-  loadVoxel ( coords: number[], callback: Function) {
+  loadVoxel (coords: number[], callback: Function) {
     let voxels              = this.voxels,
         voxelList           = this.voxelList,
         voxelKey            = coords[0]+".0."+coords[2], // debugging this.. 
@@ -156,7 +156,7 @@ export default class SpaceSystem {
         voxelData           = { cell: [coords[0], 0, coords[2]], name: "unloaded voxel", visible: true, altitude: 0, entities },
         v                   = null;
     
-    if ( voxels[ voxelKey ] == null ) {
+    if (voxels[ voxelKey ] == null ) {
         v = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world )
         voxels[ voxelKey ] = v
         voxelList.push( v )
@@ -164,7 +164,7 @@ export default class SpaceSystem {
       v = voxels[ voxelKey ]
     }
 
-    if ( v.loaded == false )
+    if (v.loaded == false )
       v.fetchData( callback )
 
     return v
@@ -181,7 +181,7 @@ export default class SpaceSystem {
         octree              = world.octree,
         voxel               = null,
         removePhysicsVoxels: any[] = [],
-        cleanUpVoxels: any[] = [],
+        cleanUpVoxels:       any[] = [],
         loadedVoxels        = [],
         chunkPos            = [],
         pCell               = [ 0, 0, 0 ],
@@ -196,27 +196,26 @@ export default class SpaceSystem {
         y                   = coords[ 2 ] - phase,
         c                   = 0;
 
-  const endCoords = [coords[0]+viewDistance, coords[2]+viewDistance]
-        //console.log("endCoords", endCoords)
+  const endCoords = [coords[0]+viewDistance, coords[2]+viewDistance];
+
     this.chunkCoords = coords
     force = phase == 0
-    if ( this.world.name == "" ) { return }
+    if (this.world.name == "" ) { return }
 
-    if ( force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
+    if (force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
 
         lastCoords = this.lastChunkCoords = [ coords[0], coords[1], coords[2] ]
         let userName = world.userName || "convolvr",
             pageName = window.location.pathname,
             shortURLView = pageName.indexOf('/files') > -1 || pageName.indexOf('/inventory') > -1 || pageName.indexOf('/settings') > -1
 
-        if ( phase > 0 && this.loaded && !shortURLView )
+        if (phase > 0 && this.loaded && !shortURLView )
           console.warn("Call browserhistory redirect action bere!!")
           //browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
 
         force = false 	// remove old voxels
 
         for (var v in voxelList) {
-
           voxel = voxelList[v]
           pCell = voxel.data.cell
 
@@ -242,12 +241,12 @@ export default class SpaceSystem {
       loadedVoxels = this.loadedVoxels
 
       this.cleanUpVoxels.map(( cleanUp, i ) => {
-        if ( c < 3 && cleanUp ) {
+        if (c < 3 && cleanUp ) {
           terrainChunk = voxels[ cleanUp.cell ];
 
-          if ( terrainChunk && terrainChunk.entities ) {
+          if (terrainChunk && terrainChunk.entities ) {
             terrainChunk.entities.map( (e: any) => {
-              if ( !!e && !!e.mesh ) {
+              if (!!e && !!e.mesh ) {
                 this.world.octree.remove( e.mesh );
                 this.world.three.scene.remove( e.mesh );
               } 
@@ -265,8 +264,7 @@ export default class SpaceSystem {
       c = 0;
       while ( x <= endCoords[ 0 ] && c < 2 ) { // load new terrain voxels
         while ( y <= endCoords[ 1 ] ) {
-          if ( voxels[x+".0."+y] == null ) { // only if its not already loaded
-            console.log("initialize voxel", x, y)
+          if (voxels[x+".0."+y] == null ) { // only if its not already loaded
             this.initializeVoxel( [ x, 0, y ], x+".0."+y )
             c += 1
             this.reqVoxels.push( x+"x0x"+y )
@@ -277,12 +275,12 @@ export default class SpaceSystem {
         x += 1
       }
       
-      if ( this.reqVoxels.length >= 6 ) {
+      if (this.reqVoxels.length >= 6 ) {
 
         let voxels = ""
 
         this.reqVoxels.map( ( rc, i ) => {
-          if ( i > 0 )
+          if (i > 0 )
             voxels += ","
           
           voxels += rc
@@ -301,7 +299,7 @@ export default class SpaceSystem {
 
       }
 
-      if ( removePhysicsVoxels.length > 0 ) {
+      if (removePhysicsVoxels.length > 0 ) {
         let removeChunkData = JSON.stringify(removePhysicsVoxels);
 
         this.StaticCollisions.worker.postMessage('{"command":"remove voxels","data":'+removeChunkData+'}')
@@ -310,7 +308,7 @@ export default class SpaceSystem {
 
       this.initializeEntities( config )
 
-      if ( this.physicsVoxels.length > 0 ) { //console.log("physics voxels", physicsVoxels)
+      if (this.physicsVoxels.length > 0) { //console.log("physics voxels", physicsVoxels)
       
         systems.staticCollisions.worker.postMessage(JSON.stringify({
               command: "add voxels",
@@ -323,7 +321,7 @@ export default class SpaceSystem {
 
         this.physicsVoxels = []
 
-        if ( world.settings.IOTMode ) 
+        if (world.settings.IOTMode ) 
           animate(world, Date.now(), 0)
 
       }
@@ -333,16 +331,14 @@ export default class SpaceSystem {
       lastCoords[2] = coords[2]
       phase ++
 
-      if ( phase > viewDistance )
-
+      if (phase > viewDistance )
         phase = 0
       
       //setTimeout(() => { this.bufferVoxels(force, phase) }, 32 ) // experiment // 32)
       this.phase = phase
-
     }
 
-    initializeVoxel ( cell: number[], key: string ) {
+    initializeVoxel (cell: number[], key: string): Voxel {
       let emptyVoxel = new Voxel( { 
         cell, 
         name: "empty voxel", 
@@ -354,8 +350,7 @@ export default class SpaceSystem {
       this.voxelList.push( emptyVoxel )
       this.voxels[ key ] = emptyVoxel
 
-      return emptyVoxel
-
+      return emptyVoxel;
     }
 
     initializeEntities (config: any) {
@@ -368,43 +363,41 @@ export default class SpaceSystem {
           cameraKey     = Math.floor(cam.position.x / GRID_SIZE[0]) + ".0." + Math.floor(cam.position.z / GRID_SIZE[2]),
           c             = 0
 
-      if ( !!config )
+      if (!!config )
 
         showVoxels = config.type == "voxels" || config.type == "both"
 
      // loadedVoxels.map((newVoxel, i) => {
 
-        if ( loadedVoxels.length > 0 ) {
+        if (loadedVoxels.length > 0 ) {
 
           let newVoxel = loadedVoxels[ 0 ],
               voxelKey = newVoxel.x + ".0." + newVoxel.z,
               voxelData = { coords: [newVoxel.x, 0, newVoxel.z], name: newVoxel.name, visible: showVoxels, altitude: newVoxel.altitude, entities: newVoxel.entities },
               v = this.voxels[ voxelKey ]
               
-          if ( !!!v )
+          if (!!!v )
 
             v = this.initializeVoxel( [ newVoxel.x, 0, newVoxel.z], newVoxel.x + ".0." + newVoxel.z )
 
-          if ( !!!v ) {
+          if (!!!v ) {
 
             console.error("Voxel couldn't load: ", [ newVoxel.x, 0, newVoxel.z])
             return
 
           }
 
-          v.setData(newVoxel)
-          this.physicsVoxels.push(v.data)
-          v.loadDistantEntities()
-          console.log("------")
-          console.log("initializeEntities", { initialLoad, cameraKey, voxelKey })
-          if ( initialLoad == false && cameraKey == voxelKey ) {
+          v.setData(newVoxel);
+          this.physicsVoxels.push(v.data);
+          v.loadDistantEntities();
+          if (initialLoad == false && cameraKey == voxelKey ) {
 
             this.world.initialLoad = true
             this.loaded = true
             this.world.loadedCallback()
             this.readyCallback()
 
-          } else if ( this.loaded == false && cameraKey == voxelKey ) {
+          } else if (this.loaded == false && cameraKey == voxelKey ) {
 
             this.loaded = true
             this.readyCallback()

@@ -8,8 +8,17 @@ import MoveFile from './data/move-file'
 import ImportToInventory from './data/import-to-inventory'
 import { isMobile } from '../../config'
 
+type LocationBarProps = {
+  path: any[],
+  username: string,
+  label: string,
+  style: any,
+  showFileOptions: boolean,
+  onOptionClick: Function
+}
+
 export default class LocationBar extends Component<any, any> {
-  private defaultProps: any = {
+  public defaultProps: LocationBarProps = {
     path: [],
     username: "",
     label: "",

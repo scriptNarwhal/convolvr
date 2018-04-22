@@ -12,59 +12,43 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
       break
     case "terrain":
       if (!simpleShading) {
-
         //attr.metalnessMap = "/data/images/textures/tiles.png" 
         attr.roughnessMap = '/data/images/textures/terrain5.jpg'
         attr.map = !!!attr.map ? '/data/images/textures/terrain4.jpg' : attr.map
-
       } else {
-
         attr.map = '/data/images/textures/terrain4.jpg'
         attr.envMap = 'none'
-
       }
 
       attr.repeat = ['wrapping', 10, 10]
       break
     case "terrain2":
       if (!simpleShading) {
-
         attr.map = !!!attr.map ? '/data/images/textures/terrain1.jpg' : attr.map
-
       } else {
-
         attr.map = '/data/images/textures/terrain1.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
         attr.envMap = 'none'
-
       }
       attr.repeat = ['wrapping', 8, 8]
       break
     case "terrain3":
       if (!simpleShading) {
-
         attr.map = !!!attr.map ? '/data/images/textures/terrain4.jpg' : attr.map
         //attr.roughnessMap = '/data/images/textures/shattered_@2X-2.png'
-
       } else {
-
         attr.map = '/data/images/textures/terrain4.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
         attr.envMap = 'none'
-
       }
 
       attr.repeat = ['wrapping', 10, 10]
       break
     case "terrain4":
       if (!simpleShading) {
-
         attr.metalnessMap = "/data/images/textures/terrain3.jpg"
         attr.map = !!!attr.map ? '/data/images/textures/terrain3.jpg' : attr.map
-
       } else {
-
         attr.map = '/data/images/textures/terrain3.jpg'
         attr.envMap = 'none'
-
       }
 
       attr.repeat = ['wrapping', 10, 10]
@@ -96,7 +80,6 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
       attr.repeat = !!!attr.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
 
       if (!simpleShading)
-
         attr.metalnessMap = "/data/images/textures/metal4.jpg"
 
 
@@ -106,14 +89,10 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
       attr.repeat = !!!attr.map ? ['wrapping', 3, 3] : ['wrapping', 1, 1]
 
       if (!simpleShading) {
-
         attr.alphaMap = "/data/images/textures/metal2.png"
         attr.map = !!!attr.map ? '/data/images/textures/metal3.png' : attr.map
-
       } else {
-
         attr.map = !!!attr.map ? '/data/images/textures/metal3.png' : attr.map
-
       }
       break
       case "metal3":
@@ -130,20 +109,15 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
       attr.repeat = ['wrapping', 18, 18]
 
       if (!simpleShading) {
-
         attr.metalnessMap = '/data/images/textures/shattered_@2X-2.png'
-
       } else {
-
         attr.specularMap = '/data/images/textures/tiles.png'
-
       }
       break
     case "hard-light":
       attr.map = '/data/images/textures/surface03.jpg'
 
       if (!simpleShading)
-
         attr.metalnessMap = '/data/images/textures/surface03.jpg'
 
       break
@@ -152,7 +126,6 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
       attr.map = !!!attr.map ? '/data/images/textures/gplaypattern_@2X-2.png' : attr.map
 
       if (!simpleShading)
-
         attr.metalnessMap = "/data/images/textures/tiles.png"
     break
     case "stars":
@@ -164,7 +137,6 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
   }
 
   if (simpleShading)
-
     attr.envMap = 'none'
 
 
