@@ -18,7 +18,7 @@ interface ContextMenuProps {
 
 export default class ContextMenu extends Component<ContextMenuProps, any> {
 
-  public defaultProps = {
+  public static defaultProps: Partial<ContextMenuProps> = {
     title: "File Options",
     dir: "",
     username: "",

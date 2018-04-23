@@ -35,8 +35,8 @@ class Spaces extends Component<SpacesProps, any> {
     }
     //this.props.history.push(userName+"/"+name)
     //window.location.href = window.location.href // workaround..
-    this.props.setCurrentSpace( userName, name )
-    (window as any).three.world.reload( userName, name, false, false )
+    this.props.setCurrentSpace( userName, name );
+    (window as any).three.world.reload( userName, name, false, false );
     this.props.toggleMenu(false)
   }
 

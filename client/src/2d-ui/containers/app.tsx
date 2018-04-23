@@ -478,7 +478,7 @@ export default connect(
     return {
       loggedIn: state.users.loggedIn,
       username: state.users.loggedIn != false ? state.users.loggedIn.name : "public",
-      url: { pathname: window.location.pathname },//state.routing.locationBeforeTransitions,
+      url: state.app.navigateToUrl,//state.routing.locationBeforeTransitions,
       tools: state.tools,
       users: state.users,
       menuOpen: state.app.menuOpen,

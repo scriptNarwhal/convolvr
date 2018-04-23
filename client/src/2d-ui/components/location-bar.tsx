@@ -18,16 +18,8 @@ type LocationBarProps = {
 }
 
 export default class LocationBar extends Component<any, any> {
-  public defaultProps: LocationBarProps = {
-    path: [],
-    username: "",
-    label: "",
-    style: {},
-    showFileOptions: false,
-    onOptionClick: (e: any, option: any) => {
+  public defaultProps: LocationBarProps;
   
-    }
-  }
   componentWillMount () {
     this.setState({
 

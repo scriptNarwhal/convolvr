@@ -7,7 +7,8 @@ import {
     APP_HIDE_CHAT,
     APP_HIDE_LOGIN,
     APP_TOGGLE_FULLSCREEN,
-    APP_SET_WINDOW_FOCUS
+    APP_SET_WINDOW_FOCUS,
+    APP_NAVIGATE_TO
 } from '../constants/action-types';
 import { API_SERVER } from '../../config'
 
@@ -38,6 +39,13 @@ export function toggleMenu ( force?: boolean ) {
     return {
         type: APP_TOGGLE_MENU,
         force
+    }
+}
+
+export function navigateTo(url: string) {
+    return {
+        type: APP_NAVIGATE_TO,
+        url
     }
 }
 

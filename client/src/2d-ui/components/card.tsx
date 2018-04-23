@@ -19,34 +19,38 @@ interface CardProps {
   contextMenuOptions?: any[]
 }
 
+// = {
+//   title: "Menu Item",
+//   description: "",
+//   username: "",
+//   dir: "",
+//   category: "",
+//   showTitle: false,
+//   color: '#252525',
+//   image: "",
+//   compact: false,
+//   quarterSize: false,
+//   onContextMenu: false,
+//   contextMenuOptions: [
+//     { name: "Download" },
+//     { name: "Add To Inventory"},
+//     { name: "Delete" },
+//     { name: "Rename" },
+//     { name: "Share" },
+//     { name: "Edit" },
+//   ]
+// }
+
 export default class Card extends Component<CardProps, any> {
 
-  private defaultProps = {
-    title: "Menu Item",
-    description: "",
-    username: "",
-    dir: "",
-    category: "",
-    showTitle: false,
-    color: '#252525',
-    image: "",
-    compact: false,
-    quarterSize: false,
-    onContextMenu: false,
-    contextMenuOptions: [
-      { name: "Download" },
-      { name: "Add To Inventory"},
-      { name: "Delete" },
-      { name: "Rename" },
-      { name: "Share" },
-      { name: "Edit" },
-    ]
-  }
+  private defaultProps: CardProps
 
   public props: CardProps
 
   componentWillMount () {
-   
+   this.setState({
+     isHovering: false
+   })
   }
 
   handleContextAction (name: string, e: any) {

@@ -125,7 +125,7 @@ export default connect(
   (state: any, ownProps: any) => {
     return {
         cwd: state.files.listDirectories.workingPath,
-        section: window.location.href,  //state.routing.locationBeforeTransitions.pathname
+        section: state.app.navigateToUrl.pathname,
         stereoMode: state.app.stereoMode,
         menuOpen: state.app.menuOpen,
         vrMode: state.app.vrMode,

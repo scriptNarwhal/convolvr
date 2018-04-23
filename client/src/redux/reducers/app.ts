@@ -6,7 +6,8 @@ import {
     APP_SHOW_LOGIN,
     APP_HIDE_LOGIN,
     APP_TOGGLE_FULLSCREEN,
-    APP_SET_WINDOW_FOCUS
+    APP_SET_WINDOW_FOCUS,
+    APP_NAVIGATE_TO
 } from '../constants/action-types';
 
 export default function app (state: any = {
@@ -15,7 +16,10 @@ export default function app (state: any = {
     chatOpen: false,
     loginOpen: false,
     fullscreen: false,
-    windowFocus: true
+    windowFocus: true,
+    navigateToUrl: {
+        pathname: ""
+    }
 }, action: any) {
   switch (action.type) {
     case APP_TOGGLE_MENU:
@@ -27,38 +31,45 @@ export default function app (state: any = {
         } else {
            open = !state.menuOpen
         }
-        return Object.assign({}, state, {
+        return { ... state,
             menuOpen: open
-        }) 
+        } 
+    case APP_NAVIGATE_TO: 
+        return {
+            ...state,
+            navigateToUrl: {
+                pathname: action.url
+            }
+        }
     case APP_TOGGLE_VR:
         (window as any).three.world.mode = !state.vrMode ? "stereo" : "3d";
-        return Object.assign({}, state, {
+        return { ... state,
             vrMode: !state.vrMode
-        })
+        }
     case APP_TOGGLE_FULLSCREEN:
-        return Object.assign({}, state, {
+        return { ... state,
             fullscreen: !state.fullscreen || action.force
-        })
+        }
     case APP_SHOW_CHAT:
-        return Object.assign({}, state, {
+        return { ... state,
             chatOpen: true
-        })
+        }
     case APP_HIDE_CHAT:
-        return Object.assign({}, state, {
+        return { ... state,
             chatOpen: false
-        })
+        }
     case APP_SHOW_LOGIN:
-        return Object.assign({}, state, {
+        return { ... state,
             loginOpen: true
-        })
+        }
     case APP_HIDE_LOGIN:
-        return Object.assign({}, state, {
+        return { ... state,
             loginOpen: false
-        })
+        }
     case APP_SET_WINDOW_FOCUS:
-        return Object.assign({}, state, {
+        return { ... state,
             windowFocus: action.focus
-        })
+        }
     default:
       return state;
   }

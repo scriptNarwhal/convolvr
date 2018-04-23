@@ -65,7 +65,11 @@ class AttributeEditor extends Component<any, any> {
           this.setState({activated: false})
       }
     } else { // load from inventory
-      let inventoryData = nextProps.properties[ nextProps.itemIndex || nextProps.itemId ]
+      let inventoryData;
+
+      if (nextProps.itemIndex || nextProps.itemId) {
+        inventoryData = nextProps.properties[ nextProps.itemIndex || nextProps.itemId ]
+      }
 
       if ( inventoryData ) {
         this.setState( inventoryData )         
@@ -230,7 +234,7 @@ import {
 export default connect(
   (state: any, ownProps: any) => {
     return {
-        section: window.location.href,  //state.routing.locationBeforeTransitions.pathname
+        section: state.app.navigateToUrl.pathname,
         menuOpen: state.app.menuOpen,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.attributeEdit.activated,

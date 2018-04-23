@@ -120,7 +120,7 @@ class ComponentEditor extends Component<any, any> {
                     name: "Wireframe Box",
                     position: [0, 0, 0],
                     quaternion: [0, 0, 0, 1],
-                    props: {
+                    attrs: {
                         geometry: {
                             shape: "box",
                             size: [1, 1, 1]
@@ -138,7 +138,7 @@ class ComponentEditor extends Component<any, any> {
                     name: "Box2",
                     position: [0, 0, 0],
                     quaternion: [0, 0, 0, 1],
-                    props: {
+                    attrs: {
                         geometry: {
                             shape: "box",
                             size: [1, 1, 1]
@@ -188,7 +188,7 @@ class ComponentEditor extends Component<any, any> {
         let name = this.state.name,
             newId = -1,
             data: any = {},
-            props = {};
+            attrs = {};
 
         if ( name == "" )  {
             alert("Name is required.")
@@ -197,7 +197,7 @@ class ComponentEditor extends Component<any, any> {
 
         this.state.properties.map( (prop: any) => {
             console.log("Prop ", prop)
-            props = Object.assign({}, props, prop.data )
+            attrs = Object.assign({}, attrs, prop.data )
         })
 
         data = {
@@ -206,7 +206,7 @@ class ComponentEditor extends Component<any, any> {
             position: this.state.position,
             quaternion: this.state.quaternion,
             components: this.state.components,
-            props
+            attrs
         }
         console.info("<ComponentEditor> save() data ", data)
         if ( this.props.onSave && this.props.source != "inventory" ) {
@@ -400,7 +400,7 @@ export default connect(
   (state: any, ownProps: any) => {
     return {
         cwd: state.files.listDirectories.workingPath,
-        section: window.location.href,  //state.routing.locationBeforeTransitions.pathname
+        section: state.app.navigateToUrl.pathname,
         menuOpen: state.app.menuOpen,
         username: state.users.loggedIn ? state.users.loggedIn.name : "public",
         activated: state.util.componentEdit.activated,

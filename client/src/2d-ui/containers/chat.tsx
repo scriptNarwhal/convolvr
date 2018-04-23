@@ -244,7 +244,7 @@ let styles = {
     return {
       width: '100%',
       border: 'none',
-      background: '#0b1c4d',
+      background: 'hsla(206, 75%, 17%, 1)',
       color: 'white',
       fontSize: '1em',
       padding: '11px',
@@ -326,7 +326,7 @@ let styles = {
       overflowY: 'auto',
       overflowX: 'hidden',
       fontSize: '12pt',
-      background: 'hsl(224, 66%, 9%)',
+      background: 'rgba(11, 12, 21, 0.97)',
       borderRadius: '0.5em',
       boxShadow: 'rgba(0, 0, 0, 0.65) 0em 0.75em 5em, rgba(0,0,0,0.65) 0em 0.2em 0.25em',
       padding: '1em'

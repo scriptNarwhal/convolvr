@@ -5,6 +5,15 @@ import LocationBar from '../components/location-bar'
 
 class Data extends Component<any, any> {
 
+  private contextMenuOptions = [
+        { name: "Download" },
+        { name: "Add To Inventory"},
+        { name: "Delete" },
+        { name: "Rename" },
+        { name: "Share" },
+        { name: "Edit" },
+    ]
+
   componentWillMount () {
     this.props.listFiles(this.props.username, this.props.workingPath.join("/"))
     this.props.listDirectories(this.props.username, this.props.workingPath.join("/"))
@@ -119,6 +128,7 @@ class Data extends Component<any, any> {
                       }}
                       compact={thumbs || !this.isImage(file) }
                       quarterSize={mobile && this.isImage(file) }
+                      contextMenuOptions={this.contextMenuOptions}
                       onContextMenu={ (name: string, data: any, e: any) => this.onContextAction(name, data, e) }
                       showTitle={true}
                       username={this.props.username}
@@ -173,6 +183,7 @@ class Data extends Component<any, any> {
             dirs.map((dir: string, i: number) => {
               return (
                 <Card image={''}
+                      contextMenuOptions={this.contextMenuOptions}
                       clickHandler={ (e: any, title: string) => {
                         console.log(e, title, "clicked")
                         this.enterDirectory(title)

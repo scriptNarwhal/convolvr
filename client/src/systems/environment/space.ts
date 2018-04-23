@@ -10,6 +10,7 @@ import {
 import StaticCollisions from './physics/static-collisions';
 import Component from '../../core/component';
 import Convolvr from '../../world/world';
+import { navigateTo } from '../../redux/actions/app-actions';
 
 export default class SpaceSystem {
 
@@ -211,6 +212,7 @@ export default class SpaceSystem {
 
         if (phase > 0 && this.loaded && !shortURLView )
           console.warn("Call browserhistory redirect action bere!!")
+          this.world.store.dispatch(navigateTo("/"+userName+"/"+world.name+"/at/"+coords.join(".")))
           //browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
 
         force = false 	// remove old voxels
