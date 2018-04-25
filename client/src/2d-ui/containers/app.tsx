@@ -216,7 +216,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
   componentWillReceiveProps ( nextProps: any) {
     let newSpace: any[] = ["world", "Convolvr"],
         userNameChanged = nextProps.username != this.props.username,
-        pathChange = nextProps.url.pathname.indexOf("/at") > -1 ? false : nextProps.url.pathname != this.props.url.pathname
+        pathChange =  nextProps.url.pathname != this.props.url.pathname; // nextProps.url.pathname.indexOf("/at") > -1 ? false :
 
     if ( pathChange ) {
       newSpace = detectSpaceDetailsFromURL()
@@ -228,8 +228,10 @@ class App extends Component<AppContainerProps, AppContainerState> {
             (window as any).three.world.reload ( newSpace[ 0 ], newSpace[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
 
           }
+         
         }
       }
+      
 
     } else if ( newSpace.length >= 4 ) {
       console.warn("detected world voxel coords ", newSpace[3]);
@@ -526,4 +528,4 @@ export default connect(
       }
     }
   }
-)(App as React.ComponentClass<any>)
+)(withRouter(App as React.ComponentClass<any>) as React.ComponentClass<any>)

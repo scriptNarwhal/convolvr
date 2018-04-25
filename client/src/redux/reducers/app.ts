@@ -18,7 +18,8 @@ export default function app (state: any = {
     fullscreen: false,
     windowFocus: true,
     navigateToUrl: {
-        pathname: ""
+        pathname: "",
+        historyState: {}
     }
 }, action: any) {
   switch (action.type) {
@@ -35,6 +36,7 @@ export default function app (state: any = {
             menuOpen: open
         } 
     case APP_NAVIGATE_TO: 
+        window.history.pushState(state.navigateToUrl.historyState, window.document.title, action.url);
         return {
             ...state,
             navigateToUrl: {

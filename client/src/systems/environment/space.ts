@@ -210,11 +210,10 @@ export default class SpaceSystem {
             pageName = window.location.pathname,
             shortURLView = pageName.indexOf('/files') > -1 || pageName.indexOf('/inventory') > -1 || pageName.indexOf('/settings') > -1
 
-        if (phase > 0 && this.loaded && !shortURLView )
-          console.warn("Call browserhistory redirect action bere!!")
+        if (phase > 0 && this.loaded && !shortURLView ){
           this.world.store.dispatch(navigateTo("/"+userName+"/"+world.name+"/at/"+coords.join(".")))
           //browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
-
+        }
         force = false 	// remove old voxels
 
         for (var v in voxelList) {
