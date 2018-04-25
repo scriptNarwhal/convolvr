@@ -33,11 +33,11 @@ class Spaces extends Component<SpacesProps, any> {
     if (userName == '') {
       userName = 'space'
     }
-    //this.props.history.push(userName+"/"+name)
-    //window.location.href = window.location.href // workaround..
-    this.props.setCurrentSpace( userName, name );
-    (window as any).three.world.reload( userName, name, false, false );
-    this.props.toggleMenu(false)
+    this.props.history.push(userName+"/"+name)
+    window.location.href = window.location.href // workaround..
+    //this.props.setCurrentSpace( userName, name );
+    //(window as any).three.world.reload( userName, name, false, false );
+    //this.props.toggleMenu(false)
   }
 
   _renderSpaces ( spaces: any[] ) {
