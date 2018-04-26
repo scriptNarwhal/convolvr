@@ -211,7 +211,7 @@ export default class SpaceSystem {
             shortURLView = pageName.indexOf('/files') > -1 || pageName.indexOf('/inventory') > -1 || pageName.indexOf('/settings') > -1
 
         if (phase > 0 && this.loaded && !shortURLView ){
-          this.world.store.dispatch(navigateTo("/"+userName+"/"+world.name+"/at/"+coords.join(".")))
+          this.world.store.dispatch(navigateTo("/"+userName+"/"+world.name+"/at/"+coords.join("."), true))
         }
         force = false 	// remove old voxels
 
