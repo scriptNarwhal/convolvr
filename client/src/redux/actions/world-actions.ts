@@ -26,6 +26,7 @@ import {
 import axios from 'axios'
 import { API_SERVER } from '../../config'
 import { getChatHistory } from './message-actions'
+import { navigateTo } from './app-actions';
 
 export function fetchSpaces () {
     return (dispatch: any) => {
@@ -104,13 +105,12 @@ export function createSpace (data: any) {
      })
      return axios.post(API_SERVER+"/api/spaces", data)
         .then((response: any) => {
-            dispatch(createSpaceDone(response))
-            (window as any).three.world.reload( data.userName, data.name, false, false ) // until this works perfectly, refresh the page
-            
-            //browserHistory.push("/"+data.userName+"/"+data.name)
-            //window.location.href = window.location.href  /* work around */
+            dispatch(createSpaceDone(response));
+            /* hack */ window.location.href = window.location.hostname+"/"+data.userName+"/"+data.name;
+            // (window as any).three.world.reload( data.userName, data.name, false, false ) // until this works perfectly, refresh the page
+            // dispatch(navigateTo("/"+data.userName+"/"+data.name));
         }).catch((response: any) => {
-            dispatch(createSpaceFail(response))
+            dispatch(createSpaceFail(response));
         });
    }
 }

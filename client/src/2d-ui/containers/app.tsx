@@ -231,7 +231,9 @@ class App extends Component<AppContainerProps, AppContainerState> {
          
         }
       }
-      
+      if (!nextProps.url.nativeAPI) {
+        this.props.history.push(nextProps.url.pathname);
+      }
 
     } else if ( newSpace.length >= 4 ) {
       console.warn("detected world voxel coords ", newSpace[3]);
@@ -423,22 +425,22 @@ class App extends Component<AppContainerProps, AppContainerState> {
                  } }
                  key={2}
          />
-             <Switch>
-                            <Route path={APP_ROOT+"/:userName/:worldName"} component={HUD} />
-                            <Route path={APP_ROOT+"/:userName/:worldName/at/:coords"} component={HUD} />
-                            <Route path={APP_ROOT+"/:userName/:worldName/:placeName"} component={HUD} />
-                            <Route path={APP_ROOT+"/login"} component={Login} />
-                            <Route path={APP_ROOT+"/chat"} component={Chat} />
-                            <Route path={APP_ROOT+"/files"} component={Data} />
-                            <Route path={APP_ROOT+"/files/:username"} component={Data} />
-                            <Route path={APP_ROOT+"/spaces"} component={Spaces} />
-                            <Route path={APP_ROOT+"/places"} component={Places} />
-                            <Route path={APP_ROOT+"/new-world"} component={NewSpace} />
-                            <Route path={APP_ROOT+"/settings"} component={Settings} />
-                            <Route path={APP_ROOT+"/inventory"} component={Inventory} />
-                            <Route path={APP_ROOT+"/network"} component={Network} />
-                            <Route path={APP_ROOT+"/profile"} component={Profile} />
-                        </Switch>
+        <Switch>
+          <Route path={APP_ROOT + "/:userName/:worldName"} component={HUD} />
+          <Route path={APP_ROOT + "/:userName/:worldName/at/:coords"} component={HUD} />
+          <Route path={APP_ROOT + "/:userName/:worldName/:placeName"} component={HUD} />
+          <Route path={APP_ROOT + "/login"} component={Login} />
+          <Route path={APP_ROOT + "/chat"} component={Chat} />
+          <Route path={APP_ROOT + "/files"} component={Data} />
+          <Route path={APP_ROOT + "/files/:username"} component={Data} />
+          <Route path={APP_ROOT + "/spaces"} component={Spaces} />
+          <Route path={APP_ROOT + "/places"} component={Places} />
+          <Route path={APP_ROOT + "/new-world"} component={NewSpace} />
+          <Route path={APP_ROOT + "/settings"} component={Settings} />
+          <Route path={APP_ROOT + "/inventory"} component={Inventory} />
+          <Route path={APP_ROOT + "/network"} component={Network} />
+          <Route path={APP_ROOT + "/profile"} component={Profile} />
+        </Switch>
             <div className="lightbox" style={{display: "none"}}></div>
             <canvas id="webcam-canvas"></canvas>
             <video id='local-video' style={{display:'none'}}></video>

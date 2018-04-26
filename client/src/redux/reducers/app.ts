@@ -19,6 +19,7 @@ export default function app (state: any = {
     windowFocus: true,
     navigateToUrl: {
         pathname: "",
+        nativeAPI: false,
         historyState: {}
     }
 }, action: any) {
@@ -35,12 +36,15 @@ export default function app (state: any = {
         return { ... state,
             menuOpen: open
         } 
-    case APP_NAVIGATE_TO: 
-        window.history.pushState(state.navigateToUrl.historyState, window.document.title, action.url);
+    case APP_NAVIGATE_TO:
+        if (action.nativeAPI) {
+            window.history.pushState(state.navigateToUrl.historyState, window.document.title, action.url);
+        }
         return {
             ...state,
             navigateToUrl: {
-                pathname: action.url
+                pathname: action.url,
+                nativeAPI: action.nativeAPI
             }
         }
     case APP_TOGGLE_VR:

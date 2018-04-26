@@ -212,7 +212,6 @@ export default class SpaceSystem {
 
         if (phase > 0 && this.loaded && !shortURLView ){
           this.world.store.dispatch(navigateTo("/"+userName+"/"+world.name+"/at/"+coords.join(".")))
-          //browserHistory.push( "/"+userName+"/"+world.name+"/at/"+coords.join("."))
         }
         force = false 	// remove old voxels
 

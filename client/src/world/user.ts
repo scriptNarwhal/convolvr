@@ -32,7 +32,7 @@ export default class User {
   }
 
   useAvatar ( avatar: Entity ) {
-    if ( this.avatar ) {
+    if ( this.avatar && this.mesh && this.mesh.parent ) {
       this.mesh.parent.remove( this.mesh )
     }
 

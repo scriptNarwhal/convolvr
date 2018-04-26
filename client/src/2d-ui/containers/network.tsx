@@ -68,7 +68,7 @@ import {
   fetchUniverseSettings
 } from '../../redux/actions/world-actions'
 import {
-  toggleMenu
+  toggleMenu, navigateTo
 } from '../../redux/actions/app-actions'
 
 export default connect(
@@ -80,6 +80,9 @@ export default connect(
   },
   (dispatch: any) => {
     return {
+      historyPush: (url: string, native = false) => {
+        dispatch(navigateTo(url, native))
+      },
       toggleMenu: (force: boolean) => {
         dispatch( toggleMenu( force ) )
       },

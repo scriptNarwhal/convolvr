@@ -18,6 +18,7 @@ import {
 } from '../constants/action-types';
 import { API_SERVER } from '../../config'
 import { fetchUserSpaces } from './world-actions'
+import { navigateTo } from './app-actions';
 export function addUser () {
     return {
         type: USER_ADD
@@ -125,38 +126,37 @@ export function login ( user: string, pass: string, email: string, data: any ) {
          })
          .then((response: any) => {
              console.info("ACTION LOGIN: USER USER LOGIN ", (window as any).three.world.onUserLogin);
-             (window as any).three.world.onUserLogin( response )
-             dispatch(loginDone(response))
+             dispatch(loginDone(response));
+             (window as any).three.world.onUserLogin( response );
              dispatch(fetchUserSpaces(response.data.id))
              
           }).catch((response: any) => {
+              console.error("login error", response);
               dispatch(loginFailed(response))
         });
    }
 }
 
 export function loginDone ( response: any ) {
-    
-    setTimeout(()=>{
-        let data = response.data,
-        worldUser = (window as any).three.world.user
+    return (dispatch: any) => {
+        setTimeout(()=>{
+            let data = response.data,
+            worldUser = (window as any).three.world.user
 
-        worldUser.name = data.name
-        worldUser.email = data.email
-        worldUser.id = data.id
-        console.info("USER DATA: ", worldUser.data)
-        worldUser.data = Object.assign({}, worldUser.data, data.data )
-    }, 1000)
-    
-
-  if (window.location.href.indexOf("/login") > -1) {
-        console.warn("call redirect here .. make redux action for it")
-        //browserHistory.push("/chat")
-  }
-  return {
-      type: LOGIN_DONE,
-      data: response.data
-  }
+            worldUser.name = data.name
+            worldUser.email = data.email
+            worldUser.id = data.id
+            console.info("USER DATA: ", worldUser.data)
+            worldUser.data = Object.assign({}, worldUser.data, data.data )
+        }, 1000);
+        if (window.location.href.indexOf("/login") > -1) {
+                dispatch(navigateTo("/chat"))
+        }
+        return {
+            type: LOGIN_DONE,
+            data: response.data
+        }
+    }
 }
 export function loginFailed (response: any) {
     return {

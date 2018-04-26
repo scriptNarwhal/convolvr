@@ -37,7 +37,7 @@ class Login extends Component<any, any> {
 
   signUp () {
     this.props.logout()
-    this.props.history.push("/profile")
+    this.props.historyPush("/profile")
   }
 
   handleKeyDown (e: any) {
@@ -126,6 +126,7 @@ import {
   logOut,
   login 
 } from '../../redux/actions/user-actions'
+import { navigateTo } from "../../redux/actions/app-actions";
 
 export default connect(
   (state: any) => {
@@ -138,6 +139,9 @@ export default connect(
   },
   (dispatch: any) => {
     return {
+      historyPush: (url: string, native = false) => {
+        dispatch(navigateTo(url, native))
+      },
       logout: () => {
         dispatch( logOut() )
       },

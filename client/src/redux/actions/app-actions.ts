@@ -42,10 +42,11 @@ export function toggleMenu ( force?: boolean ) {
     }
 }
 
-export function navigateTo(url: string) {
+export function navigateTo(url: string, nativeAPI = false) {
     return {
         type: APP_NAVIGATE_TO,
-        url
+        url,
+        nativeAPI
     }
 }
 

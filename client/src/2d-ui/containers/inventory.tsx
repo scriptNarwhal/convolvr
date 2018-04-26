@@ -10,7 +10,7 @@ class Inventory extends Component<any, any> {
     handleBGClick(e: any) {
         if (e.target.getAttribute("id") == "bg-toggle-menu") {
             this.props.toggleMenu(false);
-            this.props.history.push("/");
+            this.props.historyPush("/");
         }
     }
 
@@ -107,7 +107,7 @@ class Inventory extends Component<any, any> {
 
 import { connect } from "react-redux";
 import { sendMessage } from "../../redux/actions/message-actions";
-import { showChat } from "../../redux/actions/app-actions";
+import { showChat, navigateTo } from "../../redux/actions/app-actions";
 import { listFiles, listDirectories, changeDirectory,uploadFile, uploadFiles } from "../../redux/actions/file-actions";
 import {
     getInventory,
@@ -135,6 +135,9 @@ export default connect(
     },
     (dispatch: any) => {
         return {
+            historyPush: (url: string, native = false) => {
+                  dispatch(navigateTo(url, native))
+            },
             toggleMenu: (force: boolean) => {
                 dispatch(toggleMenu(force));
             },

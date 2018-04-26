@@ -21,6 +21,7 @@ import {
 } from '../constants/action-types'
 import axios from 'axios'
 import { API_SERVER } from '../../config'
+import { navigateTo } from './app-actions';
 
 export function fetchPlaces () {
 
@@ -100,7 +101,7 @@ export function createPlace( data: any ) {
      return axios.post(API_SERVER+"/api/places", data)
         .then((response: any) => {
             dispatch(createPlaceDone(response))
-            //browserHistory.push("/"+data.userName+"/"+data.name)
+            dispatch(navigateTo("/"+data.userName+"/"+data.name))
             window.location.href = window.location.href  /* work around */
             // this should.. work differently
         }).catch((response: any) => {

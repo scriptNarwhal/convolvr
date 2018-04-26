@@ -9,7 +9,7 @@ class Places extends Component<any, any> {
   handleBGClick (e: any) {
     if (e.target.getAttribute("id") == "bg-toggle-menu") {
       this.props.toggleMenu(false)
-      this.props.history.push("/")
+      this.props.historyPush("/")
 
     }
   }
@@ -18,7 +18,7 @@ class Places extends Component<any, any> {
     if (userName == '') {
       userName = 'space'
     }
-    this.props.history.push(userName+"/"+world+"/"+name)
+    this.props.historyPush(userName+"/"+world+"/"+name)
     window.location.href = window.location.href // workaround..
     // this.props.setCurrentSpace(name)
     // three.world.reload(name)
@@ -87,7 +87,7 @@ class Places extends Component<any, any> {
 
 import { connect } from 'react-redux';
 import {
-  toggleMenu
+  toggleMenu, navigateTo
 } from '../../redux/actions/app-actions'
 import { fetchPlaces, setCurrentPlace } from '../../redux/actions/place-actions'
 
@@ -100,6 +100,9 @@ export default connect(
   },
   (dispatch: any) => {
     return {
+      historyPush: (url: string, native = false) => {
+        dispatch(navigateTo(url, native))
+      },
       toggleMenu: (force: boolean) => {
         dispatch( toggleMenu( force ) )
       },
