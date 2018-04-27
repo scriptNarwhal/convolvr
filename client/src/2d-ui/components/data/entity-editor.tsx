@@ -15,7 +15,8 @@ import {
 } from '../../styles'
 
 type EntityEditorProps = {
-  contextMenuOptions: any[]
+  contextMenuOptions: any[],
+  title?: string
 }
 
 class EntityEditor extends Component<any, any> {
@@ -296,7 +297,7 @@ class EntityEditor extends Component<any, any> {
     } else {
 
       return (
-        <FileButton title="New Entity" onClick={ () => { this.toggleModal() } } />
+        <FileButton title={this.props.title || "New Entity"} onClick={ () => { this.toggleModal() } } />
       )
 
     }

@@ -52,18 +52,20 @@ export default class InventoryList extends Component<any, any> {
             {
               this.props.category == "Entities" ? (
                 [
-                  <EntityEditor username={this.props.username} key="1" />,
+                  <EntityEditor username={this.props.username} key="1" title="Add" />,
                   <ImportToSpace key="2" />,
                   <InventoryExport key="3" />
                 ]
               ) : this.props.category == "Components" ? (
                 <ComponentEditor username={this.props.username}
                   entityEditMode={false}
+                  title="Add"
                 />
               ) : (
                     <AttributeEditor username={this.props.username}
                       entityEditMode={false}
                       convolvrAttrs={getPropsList( BuiltinProps() )}
+                      title="Add"
                     />
                   )
             }

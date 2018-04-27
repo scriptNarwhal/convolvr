@@ -75,7 +75,7 @@ class Inventory extends Component<any, any> {
                         ? [
                               [this.props.inventoryEntities, "Entities"],
                               [this.props.inventoryComponents, "Components"],
-                              [this.props.inventoryProperties, "Properties"]
+                              [this.props.inventoryProperties, "Attributes"]
                           ].map((inventorySet, i) => (
                               <InventoryList
                                   onAction={(name: string, data: any, e: any) => {

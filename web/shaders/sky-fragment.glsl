@@ -47,7 +47,7 @@ void main( void ) {
     vec3 newColor = vec3(0,0,0);
     vec3 terrainGradient = vec3(0,0,0);
 
-    if ( vUv.y >= 0.5 ) {
+   
 
         luminance += min(0.3, depth * 1.4);
         glow =+ sin(0.45 * depth * depth);
@@ -72,22 +72,23 @@ void main( void ) {
              newColor.z += ((luminance * red) -1.0) / 3.4;
         } 
 
+       
         color = vec4( newColor, 1.0 );
         glow += sin( abs(vUv.x * PI -lightYaw  )  );
-        gl_FragColor = (color * vec4(0.1+1.2*glow, 0.1+1.2*glow, 0.1+1.2*glow, 1.0)) + 
-                       texture2D(starTexture, fract(vec2(vUv.x*8.0, vUv.y*4.0)));
+        color *= vec4(0.1+1.2*glow, 0.1+1.2*glow, 0.1+1.2*glow, 1.0);
+     if ( vUv.y >= 0.5 ) {
+        gl_FragColor = (color) +  texture2D(starTexture, fract(vec2(vUv.x*8.0, vUv.y*4.0)));
      } else {    
 
-        glow = 0.75;
-        terrainGradient = vec3(vUv.y*red, vUv.y*green, vUv.y*blue );
-        float t = sin(((0.5-vUv.y))*3.14);
+        float t = 1.0-((0.5-vUv.y)*2.0);
+        glow = t/1.25;
         color = vec4( 
-            mix(terrainRed* 0.9, terrainGradient.x*t, t),
-            mix(terrainGreen* 0.9, terrainGradient.y*t, t),
-            mix(terrainBlue* 0.9, terrainGradient.z*t, t), 
+            mix(terrainRed* 0.9, color.x*t, t),
+            mix(terrainGreen* 0.9, color.y*t, t),
+            mix(terrainBlue* 0.9, color.z*t, t), 
             1.0
         );
-        gl_FragColor = (color * vec4(0.1+1.0*glow, 0.1+1.0*glow, 0.1+1.0*glow, 1.0));
+        gl_FragColor = (color * vec4(glow, glow, glow, 1.0));
     }
 
 }

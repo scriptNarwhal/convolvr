@@ -379,7 +379,7 @@ class ComponentEditor extends Component<any, any> {
             )
         } else {
             return (
-                <FileButton title={this.props.title} onClick={ () => { this.toggleModal(); this.setState({editMode: false})} } />
+                <FileButton title={this.props.title || "New Component"} onClick={ () => { this.toggleModal(); this.setState({editMode: false})} } />
             )
         } 
     }

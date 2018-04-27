@@ -23,7 +23,6 @@ export default class ToolUISystem {
         if ( attr.menu ) {
 
         } else if ( attr.toolIndex != undefined ) {
-            console.log( "adding switch tool callback", activate)
             activate && state.activate.callbacks.push( () => {
                 console.info("Switch tool callback")
                 this.switchTool( component, attr.toolIndex, typeof attr.toolHand == 'number' ? attr.toolHand : 0 )

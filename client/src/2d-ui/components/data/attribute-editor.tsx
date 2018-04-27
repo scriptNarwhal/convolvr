@@ -207,7 +207,7 @@ class AttributeEditor extends Component<any, any> {
     } else {
 
       return (
-        <FileButton title={this.props.title} onClick={ () => { this.toggleModal() } } />
+        <FileButton title={this.props.title || "New Attribute Preset"} onClick={ () => { this.toggleModal() } } />
       )
 
     }
