@@ -18,29 +18,6 @@ interface CardProps {
   clickHandler: Function
   contextMenuOptions?: any[]
 }
-
-// = {
-//   title: "Menu Item",
-//   description: "",
-//   username: "",
-//   dir: "",
-//   category: "",
-//   showTitle: false,
-//   color: '#252525',
-//   image: "",
-//   compact: false,
-//   quarterSize: false,
-//   onContextMenu: false,
-//   contextMenuOptions: [
-//     { name: "Download" },
-//     { name: "Add To Inventory"},
-//     { name: "Delete" },
-//     { name: "Rename" },
-//     { name: "Share" },
-//     { name: "Edit" },
-//   ]
-// }
-
 export default class Card extends Component<CardProps, any> {
 
   private defaultProps: CardProps

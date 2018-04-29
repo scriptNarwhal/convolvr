@@ -9,7 +9,7 @@ let avatar = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody 
   console.log("init avatar: config: ", config )
         let mesh = null, // new THREE.Object3D();
             entity = null,
-            component = null,
+            component: any = null,
             componentB = null,
             components = [],
             cursorRot = new THREE.Quaternion(),

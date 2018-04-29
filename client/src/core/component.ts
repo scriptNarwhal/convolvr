@@ -1,40 +1,44 @@
 import Entity from "./entity";
+import Binding from './binding';
 
 const THREE = (window as any).THREE;
 
 export type DBComponent = {
-  id:         number
-  name:       string
-  components: DBComponent[]
-  position:   number[]
-  quaternion: number[]
-  props:      { [key: string]: any }
-  attrs:      { [key: string]: any }
-  state:      { [key: string]: any }
-  tags:       string[]
+  id?:         number
+  name?:       string
+  components?: DBComponent[]
+  position?:   number[]
+  quaternion?: number[]
+  props?:      any[]
+  attrs?:      { [key: string]: any }
+  state?:      { [key: string]: any }
+  tags?:       string[]
 }
 
 export default class Component {
 
   public entity:             any
   public mesh:               any
-  public data:               any
+  public props:              any[]
   public attrs:              any
   public state:              any
+  public bindings:           Binding[]
   public components:         any[]
   public compsByFaceIndex:   any[]
   public allComponents:      Component[]
   public combinedComponents: Component[]
+  public data:               any
+  public parent:             Component | null //| Entity | null
+  public index:              number
+  public path:               number[]
   public lastFace:           number;
   public detached:           boolean;
   public merged:             boolean;
   public isComponent:        boolean;
   private _compPos:          any;
-  public parent:             Component | null //| Entity | null
-  public index:              number
-  public path:               number[]
 
-  constructor (data: any, entity: Entity, systems: any, config: any = false, parent?: Component | null ) {
+
+  constructor (data: DBComponent, entity: Entity, systems: any, config: any = false, parent?: Component | null ) {
       let quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : [ 0, 0, 0 ],
           path = config && config.path ? config.path : [],
@@ -67,8 +71,8 @@ export default class Component {
       this.parent = parent ? parent : null
 
       if ( !!! attrs ) {
-        this.attrs = attrs = {} 
-        console.warn("Component must have attrs")
+        this.attrs = attrs = {} ;
+        console.warn("Component must have attributes");
       }
 
       if ( attrs.geometry == undefined ) {
@@ -80,12 +84,13 @@ export default class Component {
           this.merged = true
       }
 
-      if ( attrs.material == undefined )
+      if ( attrs.material == undefined ) {
         attrs.material = {
           name: 'wireframe',
           color: 0xffffff
         }
-    
+      }
+      
       mesh = systems.registerComponent( this )
       this.mesh = mesh
       mesh.userData = { 
@@ -103,11 +108,7 @@ export default class Component {
       this.components.length > 0 && this.initSubComponents( this.components, entity, systems, config )
   }
 
-  initProperties(): void {
-
-  }
-
-  initSubComponents(components: any[], entity: Entity, systems: any, config: { [key:string]: any } ): void {
+  private initSubComponents(components: any[], entity: Entity, systems: any, config: { [key:string]: any } ): void {
     let base = new THREE.Geometry(),
         three = (window as any).three,
         mobile = !!config ? config.mobile : three.world.mobile,
@@ -182,7 +183,7 @@ export default class Component {
     this.mesh.userData.compsByFaceIndex = this.compsByFaceIndex     
   }
 
-  getClosestComponent( position: number[], recursive = false ): Component {
+  public getClosestComponent(position: number[], recursive = false): Component {
     let compPos = this._compPos, 
         entMesh = this.mesh,
         parentMesh = this.parent ? this.parent.mesh : false,
@@ -210,7 +211,7 @@ export default class Component {
 
       distance = 0.0900
       newDist = 0
-      this.combinedComponents.map( component => {
+      this.combinedComponents.map(component => {
         console.log("Finding Combined Component: ")
         compPos.fromArray( component.data.position ); console.log("compPos", compPos)
         if ( parentMesh ) {
@@ -231,7 +232,7 @@ export default class Component {
     return closest
   }
 
-  getComponentByFace(face: number): Component | boolean {
+  public getComponentByFace(face: number): Component | boolean {
     let component: any = false
 
     this.compsByFaceIndex.forEach(( comp ) => {

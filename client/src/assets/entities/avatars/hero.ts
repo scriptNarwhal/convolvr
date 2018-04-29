@@ -9,8 +9,8 @@ let hero = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody ==
 
         var mesh = null, // new THREE.Object3D();
             entity = null,
-            component = null,
-            componentB = null,
+            component: any = null,
+            componentB: any = null,
             components = [],
             cursorRot = new THREE.Quaternion(),
             cursorComponent = null,

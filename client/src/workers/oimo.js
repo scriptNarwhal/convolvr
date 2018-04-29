@@ -35,7 +35,7 @@ self.onmessage = ( e ) => {
         world = new OIMO.Space( { timestep:e.data.dt, iterations:8, broadphase:2, spacescale:1, random:true, info:false } )
         // Ground plane // make configurable
         
-        let ground = world.add({size:[1000, 20, 1000], pos:[0,-10,0]}),
+        let ground = world.add({size:[1000, 20, 1000], pos:[0,-10,0]}), // make configurable
             N = e.data.N
 
             minfo = new Float32Array( N * 8 )

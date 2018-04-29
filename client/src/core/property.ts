@@ -1,32 +1,28 @@
-//@flow
-import Binding from './binding';
+import { BindingType } from './binding';
 
-enum PropertyType {
+export enum PropType {
     BOOLEAN = "bool",
     NUMBER = "number",
+    VEC2 = "vec2",
+    VEC3 = "vec3",
+    VEC4 = "vec4",
     STRING = "string",
     ARRAY = "array",
     OBJECT = "object",
     COMPONENT = "component",
-    PROPERTY = "prop",
-    ATTRIBUTE = "attr",
+    FUNCTION = "func",
+    EXPRESSION = "expr",
+    IMAGE = "image",
+    AUDIO = "audio",
+    VIDEO = "video",
     ANY = "any"
 };
 
-export default class Property  {
-
-    type: PropertyType
-    binding: Binding
-    bindingStr: string
-    name: string
-    
-    constructor(type: PropertyType, name: string, binding: string) {
-        this.type = type;
-        this.name = name;
-        this.bindingStr = binding;
-    }
-
-    bind() {
-        // implement creating the binding object 
-    }
+type Property = {
+    name: string,
+    type: PropType,
+    bindTarget: BindingType
+    binding: string,
 };
+
+export default Property;

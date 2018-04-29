@@ -41,7 +41,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
   let systems:   Systems       = world.systems,
       scene:     any           = world.three.scene,  
       pos:       any           = world.camera.position,
-      coords:    Array<number> = world.getVoxel( pos ),
+      coords:    number[] = world.getVoxel( pos ),
       voxelKey:  string        = coords.join("."),
       altitude:  number        = (systems.terrain as any).voxels[ voxelKey ].data.altitude;
      
@@ -54,8 +54,8 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
     };
     user.name = newUser.userName;
     user.id = newUser.id;
-    world.initUserAvatar(coords, newUser, ()=>{
-    
+    world.initUserAvatar(coords, newUser, ()=> {
+
       world.initUserInput();
       user.toolbox = world.systems.toolbox
       toolMenu = systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) // method for spawning built in entities
@@ -63,9 +63,15 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
       toolMenu.init( scene, {}, (menu: Entity) => { 
         menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
       }); 
-      if ( Math.abs(coords[0]) < 2 && Math.abs(coords[2]) < 2 )
+      
+      if ( Math.abs(coords[0]) < 2 && Math.abs(coords[2]) < 2 ) {
         pos.set( pos.x -25+Math.random()*50, pos.y + 25, pos.z -25+Math.random()*50 );
+      }
+      if (coords[1]< 1) {
+        pos.y += 120;
+      }
     }); 
+
   };
 
   world.onUserLogin(world.user);
@@ -92,14 +98,14 @@ ReactDOM.render(
   document.getElementsByTagName('main')[0]
 )
 
-function _initVideoChat ( world: Convolvr, helpScreen: Entity, voxel: Array<number> ) {
+function _initVideoChat ( world: Convolvr, helpScreen: Entity, voxel: number[] ) {
   let videoChat = world.systems.assets.makeEntity( "video-chat", true, {}, voxel ) // simple example of displaying GET response from server
   // videoChat.components[0].attrs.particles = {}
   videoChat.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
   videoChat.update( [ -8, 0, 0 ] )
 }
 
-function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: Array<number> ) {
+function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: number[] ) {
   let httpClient = world.systems.assets.makeEntity( "help-screen", true, {}, voxel ), // simple example of displaying GET response from server
       attributes = httpClient.components[0].attrs
 
@@ -114,7 +120,7 @@ function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: Array
   httpClient.update( [ -12, 0, 0 ] )
 }
 
-function _initFileSystemTest ( world: Convolvr, helpScreen: Entity, voxel: Array<number> ) {
+function _initFileSystemTest ( world: Convolvr, helpScreen: Entity, voxel: number[] ) {
   let fileBrowser = world.systems.assets.makeEntity( "file-browser", true, {}, voxel ) // show public files in 3d
 
   fileBrowser.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init

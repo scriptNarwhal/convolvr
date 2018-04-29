@@ -1,6 +1,6 @@
 //@flow
 import Convolvr from '../../../world/world'
-import Component from '../../../core/component'
+import Component, { DBComponent } from '../../../core/component'
 import Entity from '../../../core/entity'
 // import * as THREE from 'three'
 const THREE = (window as any).THREE;
@@ -92,7 +92,7 @@ export default class FactorySystem {
         }
     }
 
-    _generateEntity(menuItem: boolean, components: Array<Component>, voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
+    _generateEntity(menuItem: boolean, components: DBComponent[], voxel: Array<number>, position: Array<number>, quaternion: Array<number>, preset: string ) {
         let ent: Entity = null;
 
         if ( !! components && components.length > 0 ) {
@@ -106,7 +106,7 @@ export default class FactorySystem {
                     }
                 }
 
-                ent.components.forEach( (component: Component) => {
+                ent.components.forEach( (component: DBComponent) => {
                     component.attrs.toolUI = component.attrs.toolUI ? { ...component.attrs.toolUI, ...toolUIProp} : toolUIProp;
                 })
             }

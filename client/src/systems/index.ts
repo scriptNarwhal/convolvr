@@ -74,6 +74,7 @@ import SkyboxSystem from './environment/skybox'
 
 import Convolvr from '../world/world'
 import Component from '../core/component';
+import Binding from '../core/binding';
 
 type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "camera" | "chat" | "condition" | "control" |
 					 "conveyor" | "cursor" | "datgui" | "destructable" | "display" | "virtualDevice" | "door" | "drawing" | 
@@ -274,8 +275,7 @@ export default class Systems {
 	/**
 	*  Reads component attrs, registers with systems and populates state with the resulting data
 	**/
-    registerComponent ( component: Component) {
-
+    registerComponent(component: Component) {
         let componentsByAttr = component.entity.componentsByAttr,
 			entity = component.entity,
 			stateByProp = entity.stateByProp,
@@ -286,21 +286,7 @@ export default class Systems {
 			
 
         Object.keys( attrs ).map( (attr: AttributeName) => {
-
             if ( this[ attr ] != null ) {
-				
-				// if ( attr == "material" ) {
-				// 	if (!attrs.assets) {
-
-				// 		let assets = state[ attr ].assets;
-				// 		// roughnessMap
-				// 		// map
-				// 		// metalnessMap
-				// 		// bumpMap
-				// 		// alphaMap
-				// 		// specularMap
-				// 	}
-				// }
 
 				if ( !!this.deferred[ attr ] ) { /* add other systems here */
 					deferredSystems.push( attr );
@@ -314,9 +300,12 @@ export default class Systems {
 				
 				componentsByAttr[ attr ].push( component )
             }
-        })
-    
+        });
+
 		mesh = new THREE.Mesh( state.geometry.geometry, state.material.material )
+		if (component.props) {
+			this.evaluateProperties(component, component.props);
+		}
 		state.geometry = Object.assign( {}, state.geometry, { geometry: null } )
 		state.material = Object.assign( {}, state.material, { material: null } )
         mesh.matrixAutoUpdate = false
@@ -327,13 +316,21 @@ export default class Systems {
         })
 
         return mesh
-    }
+	}
+	
+	private evaluateProperties(component: Component, properties: any[]): void {
+		let binding: Binding
 
+		// init binding here, resolve it to things in th
+		for (let prop of properties) {
+			binding = new Binding(component, prop.name, prop.type, prop.binding, prop.bindTarget);;
+			component.bindings.push(binding);
+		}
+	}
 	/**
 	*  Fires once per frame, passing the delta and total time passed
 	**/
-	tick ( delta: number, time: number ) {
-		
+	public tick(delta: number, time: number) {
 		let systems = this.liveSystems,
 			ln = systems.length,
 			l = 0

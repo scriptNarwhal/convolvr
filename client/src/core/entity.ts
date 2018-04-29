@@ -3,7 +3,7 @@
   API_SERVER
  } from '../config'
 import Component from './component'
-import DBComponent from './component'
+import { DBComponent } from './component'
 import axios from 'axios'
 import Voxel from './voxel';
 
@@ -30,7 +30,7 @@ let THREE = (window as any).THREE;
 export default class Entity {
 
   public id: number
-  public components: any[]
+  public components: DBComponent[]
   public position: number[] | false | null
   public quaternion: number[] | false | null
   public voxel: number[]
@@ -47,13 +47,13 @@ export default class Entity {
 
   private mount: any
   private lastFace: number
-  private _compPos: any
+  private compPos: any
   public tags: string[]
   private handlers: any
 
   constructor (
     id: number, 
-    components: any[], 
+    components: DBComponent[], 
     position: number[], 
     quaternion: number[], 
     voxel: number[], 
@@ -79,7 +79,7 @@ export default class Entity {
       this.oldCoords = [ ...this.voxel ]
       this.name = name || `entity${this.id}:${this.voxel.join("x")}`
       this.lastFace = 0
-      this._compPos = new THREE.Vector3()
+      this.compPos = new THREE.Vector3()
       this.tags = tags ? tags : [];
       this.handlers = {
         init: [],
@@ -442,7 +442,7 @@ export default class Entity {
     let foundComponent = null
 
     if ( components == false )
-      components = this.components
+      components = this.allComponents;
     if ( pathIndex + 1 < path.length ) {
       foundComponent = this.getComponentByPath( path, pathIndex + 1, components[ path[ pathIndex ] ].components )
     } else {
@@ -451,38 +451,29 @@ export default class Entity {
     return foundComponent;
   }
 
-  public updateComponentAtPath( component: DBComponent, path: any[], pathIndex = 0, components: Component[] | false = false, resetState = false) {
+  public updateComponentAtPath( component: DBComponent, path: any[], pathIndex = 0, components: DBComponent[] | false = false, resetState = false) {
     let oldState: any = {},
-        sanitizedState: any = {}
-
+        sanitizedState: any = {};
     console.log( "update component at path", component, path, pathIndex, components )
 
-    if ( components == false )
-      components = this.components
-
+    if ( components == false ) {
+      components = this.components;
+    }
     if ( pathIndex + 1 < path.length ) {
       this.updateComponentAtPath( component, path, pathIndex + 1, components[ path[ pathIndex ] ].components )
     } else {
-
-      if ( resetState == false ) {
-
-        if (this.allComponents[path[pathIndex]]) {
-          oldState = this.allComponents[ path[ pathIndex ] ].state
-        } else {
-          console.warn( "Error finding component state", path, pathIndex, path[ pathIndex ], this.allComponents )
+        if ( resetState == false ) {
+          if (this.allComponents[path[pathIndex]]) {
+            oldState = this.allComponents[ path[ pathIndex ] ].state
+          } else {
+            console.warn( "Error finding component state", path, pathIndex, path[ pathIndex ], this.allComponents )
+          }
+          if ( oldState.tool || oldState.toolUI ) {
+            sanitizedState = { tool: {}, toolUI: {} }
+          } 
         }
-
-        if ( oldState.tool || oldState.toolUI )
-          sanitizedState = { tool: {}, toolUI: {} }
-
         component.state = Object.assign({}, oldState, component.state || {}, sanitizedState )
-      }
-
-      if ( component.data ) {
-        components[ path[ pathIndex ] ] = component.data
-      } else {
-        components[ path[ pathIndex ] ] = component
-      }
+        components[ path[ pathIndex ] ] = component;
     }
   }
 
@@ -540,7 +531,7 @@ export default class Entity {
   }
 
   public getClosestComponent( position: any, recursive = true ) {
-    let compPos = this._compPos,
+    let compPos = this.compPos,
         entMesh = this.mesh,
         worldCompPos = null,
         distance = 0.0900,
