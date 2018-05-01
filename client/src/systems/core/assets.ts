@@ -31,15 +31,14 @@ import Component, { DBComponent } from '../../core/component.js';
 let THREE = (window as any).THREE;
 
 export default class AssetSystem {
-
     private world: Convolvr
-
     public geometries: any
     public materials: any
     public textures: any
     public proceduralTextures: any
     public envMaps: any
     public audioBuffers: any
+    public audioElements: any
     public models: any
     public entities: any
     public autoDecrementEntity: any // entities loaded from network / db have positive ids
@@ -70,6 +69,7 @@ export default class AssetSystem {
             default: '/data/images/photospheres/sky-reflection.jpg'
         }
         this.audioBuffers         = {}
+        this.audioElements        = {}
         this.models               = {}
         this.entities             = []
         this.autoDecrementEntity  = -1 // entities loaded from network / db have positive ids
@@ -93,16 +93,13 @@ export default class AssetSystem {
         this._initBuiltInComponents()
     }
 
-    init(component: Component) { 
-
+    public init(component: Component) { 
         let attr = component.attrs.assets
 
-        return {
-            
-        }
+        return {}
     }
 
-    loadImage ( asset: string, config: any): Promise<any> {
+    public loadImage(asset: string, config: any): Promise<any> {
         let texture = null,
             configCode = !!config.repeat ? `:repeat:${config.repeat.join('.')}` : '',
             textureCode = `${asset}:${configCode}`,
@@ -120,36 +117,44 @@ export default class AssetSystem {
         });
     }
 
-    loadSound ( asset: string, sound: any): Promise<any> {
+    public loadSound(asset: string, sound?: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            if (sound) { // if passed a positional audio node
+                if (this.audioBuffers[ asset ] == null) {
+                    this.audioLoader.load( asset, (buffer: any) => {
+                         sound.setBuffer( buffer );
+                         resolve(sound);
+                    });
+                 } else {
+                     sound.setBuffer( this.audioBuffers[ asset ] );
+                     resolve(sound);
+                 }
+            } else {
+                if (this.audioElements[ asset ] == null) {
+                    let elem = this.makeAudioElement({asset});
 
-        if (this.audioBuffers[ asset ] == null) {
-
-           this.audioLoader.load( asset, (buffer: any) => {
-                sound.setBuffer( buffer )
-                callback()
-           })
-
-        } else {
-            sound.setBuffer( this.audioBuffers[ asset ] )
-            callback()
-        }
+                    elem.onload = () => {
+                        resolve(elem);
+                    };
+                } else {
+                    resolve(this.audioElements[asset]);
+                }
+            }
+        });
     }
 
-    loadVideo (asset: string): Promise<any> {
-        let elem = document.createElement("video"),
-            done = new Promise((resolve, reject) => {
-                elem.onload = () => {
-                    resolve(elem);
-                };
-            });
+    public loadVideo(asset: string): Promise<any> {
+        let elem = document.createElement("video")
 
         elem.src = asset;
-        return done;
-
+        return new Promise((resolve, reject) => {
+            elem.onload = () => {
+                resolve(elem);
+            };
+        });
     }
 
-    loadModel ( asset: string): Promise<any> {
-        // use obj and fbx systems
+    public loadModel(asset: string) { // use obj and fbx systems
         let systems = this.world.systems,
             obj = systems.obj,
             fbx = systems.fbx
@@ -160,7 +165,7 @@ export default class AssetSystem {
         // fire callback
     }
 
-    loadShaders ( vertex_url: string, fragment_url: string, onLoad: Function, onProgress: Function, onError: Function ) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
+    public loadShaders(vertex_url: string, fragment_url: string, onLoad: Function, onProgress: Function, onError: Function ) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
 		var vertex_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
 
 		vertex_loader.setResponseType('text')
@@ -174,6 +179,15 @@ export default class AssetSystem {
 
 		}, onProgress, onError)
 	}
+
+    public makeAudioElement(attr: any): HTMLAudioElement {
+        let element = document.createElement("audio");
+        element.setAttribute("src", attr.asset);
+        element.setAttribute("autoplay", attr.autoPlay ? "on" : "off");
+        element.setAttribute("style", "display: none;");
+        document.body.appendChild(element);
+        return element;
+    }
 
     getEnvMapFromColor ( r: number, g: number, b: number ) {
 
@@ -206,15 +220,15 @@ export default class AssetSystem {
         return `${envURL}.jpg`
     }
 
-    setSpaces ( spaces: any[] ) {
+    public setSpaces ( spaces: any[] ) {
         this.spaces = spaces
     }
 
-    setPlaces ( places: any[] ) {
+    public setPlaces ( places: any[] ) {
         this.places = places
     }
 
-    loadInventoryEntity ( username: string, itemId: any): Promise<any> {
+    public loadInventoryEntity ( username: string, itemId: any): Promise<any> {
         let assets = this
         if (this.loadingItemsById.entities[ itemId ]) { return }
         console.log("continuing to load")
@@ -228,7 +242,7 @@ export default class AssetSystem {
                 })
     }
 
-    loadInventoryComponent ( username: string, itemId: any ): Promise<any> {
+    public loadInventoryComponent ( username: string, itemId: any ): Promise<any> {
         let assets = this
         if (this.loadingItemsById.components[ itemId ]) { return }
         this.loadingItemsById.components[ itemId ] = true
@@ -241,7 +255,7 @@ export default class AssetSystem {
                 })
     }
 
-    isEntityLoaded ( entityName: string ) {
+    public isEntityLoaded ( entityName: string ) {
         let found = false
         
         if ( this.entitiesByName[ entityName ] != null ) {
@@ -253,7 +267,7 @@ export default class AssetSystem {
         return found
     }
 
-    addUserEntities ( entities: any[]) {
+    public addUserEntities ( entities: any[]) {
         let assets = this
         entities.map( ent => {
             assets.userEntitiesByName[ ent.name ] = ent
@@ -261,7 +275,7 @@ export default class AssetSystem {
         this.userEntities = this.userEntities.concat( entities )
     }
 
-    addUserComponents ( components: any[]) {
+    public addUserComponents ( components: any[]) {
         let assets = this
         components.map( comp => {
             assets.userComponentsByName[ comp.name ] = comp
@@ -269,31 +283,31 @@ export default class AssetSystem {
         this.userComponents = this.userComponents.concat( components )
     }
 
-    addUserProperties ( attrerties: any[]) {
+    public addUserProperties ( attrerties: any[]) {
         this.userProperties = this.userProperties.concat( attrerties )
     }
 
-    addUserAssets ( assets: any[]) {
+    public addUserAssets ( assets: any[]) {
         
     }
 
-    setUserFiles ( files: any[]) {
+    public setUserFiles ( files: any[]) {
         this.files = files
     }
 
-    addUserFiles ( files: any[]) {
+    public addUserFiles ( files: any[]) {
         this.files = this.files.concat( files )
     }
 
-    setUserDirectories ( directories: any[]) {
+    public setUserDirectories ( directories: any[]) {
         this.directories = directories
     }
 
-    addUserDirectories ( directories: any[]) {
+    public addUserDirectories ( directories: any[]) {
         this.directories = this.directories.concat( directories )
     }
 
-    makeEntity ( name: string, init: boolean, config: any, voxel: number[] ) {
+    public makeEntity ( name: string, init: boolean, config: any, voxel: number[] ) {
         console.log("make entity ", name)
         let builtIn = this.entitiesByName,
             library = builtIn[ name ] != null ? builtIn : this.userEntitiesByName,
@@ -307,7 +321,7 @@ export default class AssetSystem {
         }
     }
 
-    makeComponent ( name: string, data: any, config: any) {
+    public makeComponent ( name: string, data: any, config: any) {
         let builtIn = this.componentsByName,
             library = builtIn[ name ] != null ? builtIn : this.userComponentsByName
 
@@ -318,7 +332,7 @@ export default class AssetSystem {
         }
     }
 
-    getMaterialProp ( name: string ) {
+    public getMaterialProp ( name: string ) {
         let attr: any = null
         
         this.attrs.material.map(( mat: any, i: number ) => {
@@ -329,29 +343,29 @@ export default class AssetSystem {
         return { ...attr }
     }
 
-    autoEntityID ( ) {
+    public autoEntityID ( ) {
         this.autoDecrementEntity --
         return this.autoDecrementEntity
     }
 
-    _addBuiltInComponent ( name: string, data: any ) {
+    private _addBuiltInComponent ( name: string, data: any ) {
         this.components.push(data)
         this.componentsByName[name] = data
     }
 
-    _addBuiltInEntity ( name: string, data: any ) {
+    private _addBuiltInEntity ( name: string, data: any ) {
         this.entities.push(data)
         this.entitiesByName[name] = data
     }
 
-    _initBuiltInComponents ( ) {
+    private _initBuiltInComponents ( ) {
         this._addBuiltInComponent("panel", panel1Comp)
         this._addBuiltInComponent("column", column1Comp)
         this._addBuiltInComponent("panel2", panel2Comp)
         this._addBuiltInComponent("column2", column2Comp)
     }
 
-    _initBuiltInEntities ( ) {
+    private _initBuiltInEntities ( ) {
         this._addBuiltInEntity( "default-avatar", avatar )
         this._addBuiltInEntity( "hero", hero )
         this._addBuiltInEntity( "tool-menu", toolMenu )
@@ -368,17 +382,17 @@ export default class AssetSystem {
         this._addBuiltInEntity( "icon", this._initButton() )
     }
 
-    _loadPlaces ( places: any[] ) {
+    private _loadPlaces ( places: any[] ) {
         // implement.. call this from redux action
         this.places = places
     }
 
-    _loadSpaces ( spaces: any[] ) { 
+    private _loadSpaces ( spaces: any[] ) { 
         // implement call this from redux action
         this.spaces = spaces
     }
 
-    _initButton ( component?: DBComponent, data?: any ) {
+    private _initButton ( component?: DBComponent, data?: any ) {
 
         let color = data && data.color ? data.color : 0x151515,
             components = [],
