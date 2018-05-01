@@ -12,6 +12,13 @@ export default class MaterialSystem {
 
   private world: Convolvr
   public procedural: ProceduralMaterials
+  private mapTypes = [
+      "map",
+      "roughnessMap",
+      "metalnessMap",
+      "specularMap",
+      "bumpMap"
+    ];
 
     constructor ( world: Convolvr ) {
         this.world = world
@@ -166,7 +173,7 @@ export default class MaterialSystem {
             shading = 'phong'
             material = this._initMaterial( attr, mat, shading, basic, mobile )
 
-            attr.specularMap && assets.loadImage( attr.specularMap, textureConfig, (specularMap: any) => { 
+            attr.specularMap && assets.loadImage( attr.specularMap, textureConfig).then((specularMap: any)=> { 
 
               specularMap.wrapS = specularMap.wrapT = THREE.ClampToEdgeWrapping
               specularMap.anisotropy = anisotropy

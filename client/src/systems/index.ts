@@ -323,7 +323,7 @@ export default class Systems {
 
 		// init binding here, resolve it to things in th
 		for (let prop of properties) {
-			binding = new Binding(component, prop.name, prop.type, prop.binding, prop.bindTarget);;
+			binding = new Binding(this, component, prop.name, prop.type, prop.binding, prop.bindTarget);
 			component.bindings.push(binding);
 		}
 	}

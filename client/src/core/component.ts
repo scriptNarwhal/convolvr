@@ -98,8 +98,8 @@ export default class Component {
           entity
       }
 
-      !! quaternion && mesh.quaternion.set( quaternion[0], quaternion[1], quaternion[2], quaternion[3] )
-      mesh.position.set( position[0], position[1], position[2] )
+      !! quaternion && mesh.quaternion.fromArray(quaternion);
+      mesh.position.fromArray(position);
       mesh.updateMatrix()
 
       if ( this.attrs.hand != undefined )
@@ -181,6 +181,16 @@ export default class Component {
       }
     }
     this.mesh.userData.compsByFaceIndex = this.compsByFaceIndex     
+  }
+
+  private updateBindings() {
+    for (let binding of this.bindings) {
+      binding.update();
+    }
+  }
+
+  public setProps(props: any): void {
+
   }
 
   public getClosestComponent(position: number[], recursive = false): Component {

@@ -49,7 +49,7 @@ void main( void ) {
 
    
 
-        luminance += min(0.3, depth * 1.4);
+        luminance += min(0.3, depth * 1.7);
         glow =+ sin(0.45 * depth * depth);
         newColor = vec3( luminance * red, luminance * green, luminance * blue );
 
@@ -83,9 +83,9 @@ void main( void ) {
         float t = 1.0-((0.5-vUv.y)*2.0);
         glow = t/1.25;
         color = vec4( 
-            mix(terrainRed* 0.9, color.x*t, t),
-            mix(terrainGreen* 0.9, color.y*t, t),
-            mix(terrainBlue* 0.9, color.z*t, t), 
+            mix(terrainRed* 0.9, (terrainRed+color.x)*t*0.5, t),
+            mix(terrainGreen* 0.9, (terrainGreen+color.y)*t*0.5, t),
+            mix(terrainBlue* 0.9, (terrainBlue+color.z)*t*0.5, t), 
             1.0
         );
         gl_FragColor = (color * vec4(glow, glow, glow, 1.0));

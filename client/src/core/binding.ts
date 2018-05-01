@@ -1,5 +1,6 @@
 import Component from "./component";
 import { PropType } from './property'
+import Systems from "../systems";
 export enum BindingType {
     ATTRIBUTE = "attr",
     PROPERTY = "prop",
@@ -14,21 +15,59 @@ type SourceData = string | any[] | any;
 type TargetData = string | any[] | any;
 
 export default class Binding  {
+    private systems: Systems
     private component: Component;
-    private source: any;
-    private target: any;
+    private sourceType: PropType;
+    private targetType: BindingType;
+    private source: any; 
+    private value: any;     // source resolves to value
+    private targetUri: any; 
+    private target: any | any[];  // targetUri resolves to target
 
-    constructor(component: Component, source: SourceData, sourceType: PropType, target: string, targetType: BindingType) {
+    constructor(systems: Systems, component: Component, source: SourceData, sourceType: PropType, targetUri: string, targetType: BindingType) {
+        this.systems = systems;
         this.component = component;
-        this.resolve(source, sourceType, target, targetType);
+        this.source = source;
+        this.sourceType = sourceType;
+        this.targetUri = targetUri;
+        this.targetType = targetType;
+
+        this.parseOrResolveSource(source, sourceType, ()=> {
+            this.resolveTarget(this.source, targetUri, targetType);
+            this.apply();
+       })
+        
     }
 
-    public resolve(source: SourceData, sourceType: PropType, target: string, targetType: BindingType) {
-        this.source = this.resolveSource(source, sourceType);
-        this.target = this.resolveTarget(source, target, targetType);
+    public update() {
+        this.parseOrResolveSource(this.source, this.sourceType, ()=> { this.apply() });
     }
 
-    private resolveSource(source: SourceData, type: PropType): any {
+
+    private parseOrResolveSource(source: SourceData, sourceType: PropType, callback: Function) {
+        if (sourceType == PropType.AUDIO || sourceType == PropType.VIDEO || sourceType == PropType.IMAGE) {
+            this.resolveSource(source, sourceType).then((value: any) => {
+                this.value = value;
+                callback();
+            })
+        } else {
+            this.value = this.parseSource(source, sourceType);
+            callback();
+        }
+    }
+
+    private resolveSource(source: SourceData, type: PropType) {
+        switch (type) {
+            case PropType.IMAGE:
+                return this.systems.assets.loadImage(source, {});
+            case PropType.AUDIO:
+                return this.systems.assets.loadSound(source);
+            case PropType.VIDEO:
+                return this.systems.assets.loadVideo(source);
+        }
+    }
+
+    private parseSource(source: SourceData, type: PropType): any {
         switch (type) {
             case PropType.BOOLEAN:
             case PropType.NUMBER:
@@ -42,42 +81,58 @@ export default class Binding  {
             case PropType.COMPONENT:
                 return 
             case PropType.FUNCTION:
-                return 
+                return // use ecs  to parse expression
             case PropType.EXPRESSION:
                 return // use ecs  to parse expression
-            case PropType.IMAGE:
-                return 
-            case PropType.AUDIO:
-                return 
-            case PropType.VIDEO:
-                return 
+           
             case PropType.ANY:
                 return 
         }
     }
 
-    private resolveTarget(source: any, target: TargetData, type: BindingType): void {
+    private resolveTarget(source: any, targetUri: TargetData, type: BindingType): void {
         let c = this.component;
+
         switch(type) {
             case BindingType.ATTRIBUTE:
-                c.attrs[target] = source; break;
+                this.target = [c.attrs, targetUri]; break;
             case BindingType.PROPERTY:
-                c.props[target] = source; break;
+                this.target =[c.props, targetUri]; break;
             case BindingType.CALL:
-            break;
             case BindingType.STATE:
-                c.state[target] = source; break;
+                this.target = [c.state, targetUri]; break;
             case BindingType.POSITION:
-                c.mesh.position.fromArray(source); break;
+                this.target = c.mesh.position; break;
             case BindingType.ROTATION:
-                c.mesh.quaternion.fromArray(source); break;
+                this.target = c.mesh.quaternion; break;
             case BindingType.TEXTURE:
-                c.mesh.material.map = source;
-                c.mesh.material.needsUpdate = true;
-            break;
+                this.target = c.mesh.material.map; break;
             case BindingType.CHILD_COMPONENT:
-                c.components.push(source);
-            break;
+                this.target = c.components; break;
+            
+        }
+    }
+
+    private apply() {
+        let c = this.component;
+        switch(this.targetType) {
+            case BindingType.ATTRIBUTE:
+            case BindingType.PROPERTY:
+            case BindingType.STATE:
+                this.target[0][this.target[1]] = this.value; break;
+            case BindingType.CALL:
+            
+            case BindingType.POSITION:
+            case BindingType.ROTATION:
+                this.target.fromArray(this.value); break;
+            case BindingType.TEXTURE:
+               this.target.map = this.value; break;
+                // = source;
+                //c.mesh.material.needsUpdate = true;
+           
+            case BindingType.CHILD_COMPONENT:
+                return c.components;//.push(source);
+            
         }
     }
 }

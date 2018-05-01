@@ -102,23 +102,25 @@ export default class AssetSystem {
         }
     }
 
-    loadImage ( asset: string, config: any, callback: Function ) {
-
+    loadImage ( asset: string, config: any): Promise<any> {
         let texture = null,
             configCode = !!config.repeat ? `:repeat:${config.repeat.join('.')}` : '',
-            textureCode = `${asset}:${configCode}`
+            textureCode = `${asset}:${configCode}`,
+            assets = this;
 
-        if ( this.textures[ textureCode ] == null ) {
-            texture = this.textureLoader.load(asset, (texture: any) => { callback(texture) })
-            this.textures[ textureCode ] = texture
-        } else {
-            texture = this.textures[ textureCode ]
-        }
-
-        callback( texture )
+        return new Promise((resolve, reject)=>{
+            if ( this.textures[ textureCode ] == null ) {
+                texture = assets.textureLoader.load(asset, (texture: any) => {
+                    resolve(texture);
+                });
+                assets.textures[ textureCode ] = texture; 
+            } else {
+                resolve(assets.textures[ textureCode ]);
+            }
+        });
     }
 
-    loadSound ( asset: string, sound: any, callback: Function ) {
+    loadSound ( asset: string, sound: any): Promise<any> {
 
         if (this.audioBuffers[ asset ] == null) {
 
@@ -133,7 +135,20 @@ export default class AssetSystem {
         }
     }
 
-    loadModel ( asset: string, callback: Function ) {
+    loadVideo (asset: string): Promise<any> {
+        let elem = document.createElement("video"),
+            done = new Promise((resolve, reject) => {
+                elem.onload = () => {
+                    resolve(elem);
+                };
+            });
+
+        elem.src = asset;
+        return done;
+
+    }
+
+    loadModel ( asset: string): Promise<any> {
         // use obj and fbx systems
         let systems = this.world.systems,
             obj = systems.obj,
@@ -162,7 +177,7 @@ export default class AssetSystem {
 
     getEnvMapFromColor ( r: number, g: number, b: number ) {
 
-        let envURL = '/data/images/photospheres/sky-reflection.jpg'
+        let envURL = '/data/images/photospheres/sky-reflection';
 
         if ( r !== g && g !== b ) {
             
