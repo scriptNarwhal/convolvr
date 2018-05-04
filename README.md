@@ -20,11 +20,8 @@
   cd ../cmd && go build # && ./cmd # to start server
 ```
 
-## Development [Wiki](https://github.com/Convolvr/convolvr/wiki/Development)
-```shell
-  cd convolvr/cmd && go build && ./cmd &  # starts on port 3007 by default
-  cd ../client && gulp 
-```
+## Development 
+[Wiki](https://github.com/Convolvr/convolvr/wiki/Development)
 
 ### Client Example [full code here](https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
 ```js
