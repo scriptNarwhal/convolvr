@@ -23,28 +23,8 @@
 ## Development 
 [Wiki](https://github.com/Convolvr/convolvr/wiki/Development)
 
-### Client Example [full code here](https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
-```js
-loadingSpace = new Convolvr( user, userInput, socket, store, ( world ) => {
-
-  let avatar = world.systems.assets.makeEntity( "default-avatar", true, { wholeBody: false } ) 
-  avatar.init( three.scene )
-  user.useAvatar( avatar ); world.user = user
-  user.toolbox = new Toolbox( user, world )
-
-  let toolMenu = world.systems.assets.makeEntity( "tool-menu", true ); user.hud = toolMenu
-  toolMenu.init( three.scene, {}, menu => {
-    menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition() 
-  }) 
-  userInput.init( world, world.camera, user )
-
-  let chatScreen = world.systems.assets.makeEntity( "chat-screen", true )
-  chatScreen.components[0].attrs.speech = {} // make the textbox read out loud
-  chatScreen.init( three.scene )
-  chatScreen.update( [ 0, 50000, 0 ] )  
-
-})
-```
+### Initialization Example 
+(https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
 
 ### Entity / System Mapping
 ```js
