@@ -24,7 +24,7 @@
 [Wiki](https://github.com/Convolvr/convolvr/wiki/Development)
 
 ### Initialization Example 
-(https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
+(https://github.com/convolvr/convolvr/blob/dev/client/src/main.js)
 
 ### Entity / System Mapping
 ```js
