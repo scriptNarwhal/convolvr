@@ -22,7 +22,7 @@ export default class MaterialSystem {
 
     constructor ( world: Convolvr ) {
         this.world = world
-        this.procedural = new ProceduralMaterials( this, world )
+        this.procedural = new ProceduralMaterials(this, world)
     }
 
     init(component: Component) {
@@ -36,7 +36,7 @@ export default class MaterialSystem {
             renderer = (window as any).three.renderer,
             anisotropy = renderer.capabilities.getMaxAnisotropy() / ( mobile ? 2 : 1 ),
             path = '/data',
-            material: any = null,
+            material: any = { notInitialized: 1 },
             basic = false,
             textureConfig: any = { },
             diffuse = !!attr.map ? attr.map.replace(path, '') : "",
@@ -51,128 +51,83 @@ export default class MaterialSystem {
             simpleShading: boolean = this.world.settings.lighting < 2
             
         basic = _initMaterialProp( attr, simpleShading )
-        materialCode = `${attr.repeat ? attr.repeat.join(",") : ""}:${attr.name}:${attr.color}:${attr.map}:${attr.specular}:${reflection}:`+
-                                                                   `${attr.alpha}:${attr.bump}:${attr.roughnessMap}:${attr.metalnessMap}:${pattern}`;
+        materialCode = `${attr.repeat ? attr.repeat.join(",") 
+                                      : ""}:${attr.name}:${attr.color}:${attr.map}:${attr.specular}:${reflection}:`+
+                                           `${attr.alpha}:${attr.bump}:${attr.roughnessMap}:${attr.metalnessMap}:${pattern}`;
 
-        let onMapsLoaded = (loadedMat: any) => {
-          if ( attr.procedural )
-            loadedMat.map = this.procedural.generateTexture( attr.procedural )
-          
-          assets.materials[ materialCode ] = loadedMat
+      let onMapsLoaded = (loadedMat: any) => {
+        if (attr.procedural) {
+          loadedMat.map = this.procedural.generateTexture(attr.procedural)
         }
+        assets.materials[materialCode] = loadedMat
+      }
 
-        if ( assets.materials[ materialCode ] == null ) {
-          if ( !! attr.config ) // raw, three.js material attrerties, to override things
-            mat = Object.assign({}, mat, attr.config)
+      if (assets.materials[materialCode] == null) {
+        if (!!attr.config) // raw, three.js material attrerties, to override things
+          mat = Object.assign({}, mat, attr.config)
 
-          if ( !!attr.repeat )
-            textureConfig.repeat = attr.repeat
+        if (!!attr.repeat)
+          textureConfig.repeat = attr.repeat
 
-          if ( envMapUrl && envMapUrl != "none" && (attr.roughnessMap || attr.metalnessMap) || shading == 'physical' ) {
+        if (envMapUrl && envMapUrl != "none" && (attr.roughnessMap || attr.metalnessMap) || shading == 'physical') {
 
-            shading = 'physical'
-            assets.loadImage( envMapUrl, textureConfig)
-            .then((envMap: any ) => { 
+          shading = 'physical'
+          let allMaps = assets.loadImage(envMapUrl, textureConfig);
 
-              envMap.mapping = THREE.EquirectangularReflectionMapping;
-              mat.envMap = envMap;
+          allMaps.then((envMap: any) => {
+            envMap.mapping = THREE.EquirectangularReflectionMapping;
+            mat.envMap = envMap;
 
-              assets.loadImage( attr.roughnessMap, textureConfig)
-              .then((roughnessMap: any ) => {
-
-                !!attr.repeat && this._setTextureRepeat( roughnessMap, attr.repeat )
-                roughnessMap.anisotropy = renderer.capabilities.getMaxAnisotropy()
-                mat.roughnessMap = roughnessMap
-                
-                let roughnessCallback = (roughnessMap: any) => { 
-                    roughnessMap.wrapS = roughnessMap.wrapT = THREE.ClampToEdgeWrapping
-                    !!attr.repeat && this._setTextureRepeat( roughnessMap, attr.repeat )
-                    roughnessMap.anisotropy = anisotropy / (simpleShading ? 2.0 : 1);
-                    mat.roughnessMap = roughnessMap
-                    material = materialSystem._initMaterial( attr, mat, shading, basic, mobile )
-                  },
-                  mapCallback = (diffuse: any) => { 
-                    diffuse.wrapS = diffuse.wrapT = THREE.ClampToEdgeWrapping
-                    !!attr.repeat && this._setTextureRepeat( diffuse, attr.repeat )
-                    diffuse.anisotropy = anisotropy
-                    mat.map = diffuse
-                    material = materialSystem._initMaterial( attr, mat, shading, basic, mobile )
-                  },
-                  mapAndRoughnessCallback = (diffuse: any) => {
-                    diffuse.wrapS = diffuse.wrapT = THREE.ClampToEdgeWrapping
-                    !!attr.repeat && this._setTextureRepeat( diffuse, attr.repeat )
-                    diffuse.anisotropy = anisotropy
-                    mat.map = diffuse
-                    assets.loadImage( attr.roughnessMap, textureConfig).then(roughnessCallback)
-                  },
-                  metalnessCallback = (metalnessMap: any) => {
-                    metalnessMap.wrapS = metalnessMap.wrapT = THREE.ClampToEdgeWrapping
-                    !!attr.repeat && this._setTextureRepeat( metalnessMap, attr.repeat )
-                    metalnessMap.anisotropy = anisotropy / (simpleShading ? 2.0 : 1);
-                    mat.metalnessMap = metalnessMap
-                    material = materialSystem._initMaterial( attr, mat, shading, basic, mobile )
-                  },
-                  mapAndMetalnessCallback = (diffuse: any) => {
-                    diffuse.wrapS = diffuse.wrapT = THREE.ClampToEdgeWrapping
-                    !!attr.repeat && this._setTextureRepeat( diffuse, attr.repeat )
-                    diffuse.anisotropy = anisotropy
-                    mat.map = diffuse
-                    assets.loadImage( attr.roughnessMap, textureConfig).then(metalnessCallback)
-                  },
-                  metalnessAndRoughnessCallBack = (roughnessMap: any) => {
-                    roughnessMap.wrapS = roughnessMap.wrapT = THREE.ClampToEdgeWrapping
-                    !!attr.repeat && this._setTextureRepeat( roughnessMap, attr.repeat )
-                    roughnessMap.anisotropy = anisotropy / (simpleShading ? 2.0 : 1);
-                    mat.roughnessMap = roughnessMap
-                    assets.loadImage( attr.roughnessMap, textureConfig).then(metalnessCallback)
-                  },
-                  mapMetalnessAndRoughnessCallback = (tex: any) => {
-                    tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping
-                    !!attr.repeat && this._setTextureRepeat( diffuse, attr.repeat )
-                    diffuse.anisotropy = anisotropy
-                    mat.map = diffuse
-                    assets.loadImage( attr.roughnessMap, textureConfig).then(metalnessAndRoughnessCallBack)
-                  }
-
-                if ( attr.roughnessMap && !!! attr.map ) { 
-                  assets.loadImage( attr.roughnessMap, textureConfig).then(roughnessCallback)
-                } else if ( attr.roughnessMap && attr.metalnessMap && !!! attr.map ) {
-                  assets.loadImage( attr.roughnessMap, textureConfig).then(metalnessAndRoughnessCallBack);
-                } else if ( attr.map && attr.roughnessMap ) {
-                  assets.loadImage( attr.map, textureConfig).then(mapAndRoughnessCallback);
-                } else if ( !!! attr.roughnessMap && attr.map ) {
-                  assets.loadImage( attr.map, textureConfig).then(mapCallback)
-                } else if ( !!!attr.roughnessMap && attr.map && attr.metalnessMap ) {
-                  assets.loadImage( attr.map, textureConfig).then(mapAndMetalnessCallback)
-                } else if ( attr.roughnessMap && attr.map && attr.metalnessMap ) {
-                  assets.loadImage( attr.map, textureConfig).then(mapMetalnessAndRoughnessCallback)
-                } else {
-                  material = materialSystem._initMaterial( attr, mat, shading, basic, mobile )
-                }
-
-                if ( attr.alphaMap || attr.bumpMap ) {
-                  this._loadAlphaMap( attr, textureConfig, material, assets, () => {
-                    if ( !!!attr.bumpMap ) { onMapsLoaded( material ) } // cache material for later
-                  })
-                  this._loadBumpMap( attr, textureConfig, material, assets, () => {
-                    onMapsLoaded( material ) // cache material for later
-                  })
-                } else {
-                  onMapsLoaded( material ) 
-                }
-              })
-            })
-            
-          } else {
+            if (attr.map) {
+              allMaps.then(() => {
+                assets.loadImage(attr.map, textureConfig)
+                  .then((map) => {
+                    this.mapCallback(map, "map", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
+                    if (attr.roughnessMap) {
+                      allMaps.then(() => {
+                        assets.loadImage(attr.roughnessMap, textureConfig)
+                          .then((map) => {
+                            this.mapCallback(map, "roughnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
+                          }
+                          )
+                      })
+                    }
+                    if (attr.metalnessMap) {
+                      allMaps.then(() => {
+                        assets.loadImage(attr.metalnessMap, textureConfig)
+                          .then((map) => {
+                            this.mapCallback(map, "metalnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
+                          }
+                          )
+                      })
+                    }
+                    allMaps.then(() => {
+                      material = this._initMaterial(attr, mat, shading, basic, mobile)
+                      if (attr.alphaMap || attr.bumpMap) {
+                        this._loadAlphaMap(attr, textureConfig, material, assets, () => {
+                          if (!!!attr.bumpMap) { onMapsLoaded(material) } // cache material for later
+                        });
+                        this._loadBumpMap(attr, textureConfig, material, assets, () => {
+                          onMapsLoaded(material) // cache material for later
+                        })
+                      } else {
+                        onMapsLoaded(material)
+                      }
+                    });
+                  });
+              });
+            }
+          }); 
+        } else {
 
             shading = 'phong'
             material = this._initMaterial( attr, mat, shading, basic, mobile )
 
             attr.specularMap && assets.loadImage( attr.specularMap, textureConfig).then((specularMap: any)=> { 
-              specularMap.wrapS = specularMap.wrapT = THREE.ClampToEdgeWrapping
-              specularMap.anisotropy = anisotropy
-              material.specularMap = specularMap
-              material.needsUpdate = true 
+              specularMap.wrapS = specularMap.wrapT = THREE.ClampToEdgeWrapping;
+              specularMap.anisotropy = anisotropy;
+              material.specularMap = specularMap;
+              material.needsUpdate = true;
             });
 
             !!attr.map && assets.loadImage( attr.map, textureConfig).then((texture: any) => { 
@@ -199,22 +154,30 @@ export default class MaterialSystem {
         } else {
           material = assets.materials[ materialCode ]
         }
-
       return {
           material,
           materialCode,
           getTextureCode: (mapType: string) => {
-            this._getTextureCode(attr, mapType)
+            this.getTextureCode(attr, mapType)
           }
       }
     }
 
-    _getTextureCode( attr: any, mapType: string ) {
+    private mapCallback(
+      map: any, mapName: string, mat: any, attr: any, shading: number, basic: boolean, mobile: boolean,
+      anisotropy: number, simpleShading: boolean, material: any, ms: MaterialSystem
+    ) {
+        map.wrapS = map.wrapT = THREE.ClampToEdgeWrapping;
+        !!attr.repeat && this._setTextureRepeat( map, attr.repeat );
+        map.anisotropy = anisotropy / (simpleShading ? 2.0 : 1);
+        mat[mapName] = map;
+    }
+
+    public getTextureCode( attr: any, mapType: string ) {
      return `${attr[mapType]}:${attr.repeat ? attr.repeat.join(".") : ""}`;
     }
 
-    _loadAlphaMap ( attr: any, textureConfig: any, material: any, assets: AssetSystem, callback: Function ) {
-
+    private _loadAlphaMap ( attr: any, textureConfig: any, material: any, assets: AssetSystem, callback: Function ) {
       assets.loadImage( attr.alphaMap, textureConfig)
       .then((texture: any) => { 
         let renderer = this.world.three.renderer
@@ -230,8 +193,7 @@ export default class MaterialSystem {
       })
     }
 
-    _loadBumpMap (attr: any, textureConfig: any, material: any, assets: AssetSystem, callback: Function) {
-      
+    private _loadBumpMap (attr: any, textureConfig: any, material: any, assets: AssetSystem, callback: Function) {
             assets.loadImage( attr.bumpMap, textureConfig)
             .then((texture: any) => { 
               let renderer = this.world.three.renderer
@@ -254,7 +216,7 @@ export default class MaterialSystem {
       shading = mobile ? "lambert" : shading
 
       _initMaterialConfig( attr, config, shading, basic, mobile)
-
+     
       if ( basic ) {
           material = new THREE.MeshBasicMaterial( config )
         } else if ( shading == 'physical' ) {

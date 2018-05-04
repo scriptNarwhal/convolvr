@@ -20,13 +20,8 @@ export default class AudioSystem {
         // find out what kind of node...
 
         if ( attr.type == 'stereo') {
-            element = document.createElement("audio")
-            element.setAttribute("src", attr.asset)
-            element.setAttribute("autoplay", attr.autoPlay ? "on" : "off")
-            element.setAttribute("style", "display: none;")
-            document.body.appendChild(element)
+            element = assets.makeAudioElement(attr);
         } else { // if (attr.type == 'positional')
-            
             sound = new THREE.PositionalAudio( this.listener ); //Create the PositionalAudio object (passing in the listener)
             assets.loadSound(attr.asset, sound).then((sound: any) => {
                 if ( sound != null ) {
