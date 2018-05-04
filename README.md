@@ -22,8 +22,8 @@
 
 ## Development [Wiki](https://github.com/Convolvr/convolvr/wiki/Development)
 ```shell
-  cd convolvr/client && gulp watch
-  cd ../cmd && go build && ./cmd  # starts http on :3007 by default
+  cd convolvr/cmd && go build && ./cmd &  # starts on port 3007 by default
+  cd ../client && gulp 
 ```
 
 ### Client Example [full code here](https://github.com/convolvr/convolvr/blob/dev/client/src/js/main.js)
