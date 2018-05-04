@@ -1,14 +1,13 @@
-//@flow
 import { OIMO } from 'oimo'
 
-let world:  Object        = {},
-    minfo:  Object        = {},
-    fps:    number        = 0,
-    f:      Array<number> = [ 0, 0, 0 ],
-    body:   Array<Object> = [],
-    byCell: Object        = {}
+let world          = {},
+    minfo          = {},
+    fps            = 0,
+    f       = [ 0, 0, 0 ],
+    body    = [],
+    byCell         = {}
 
-self.onmessage = ( e: Object ) => {
+self.onmessage = ( e ) => {
 
     if ( e.data.action ) {
 
@@ -36,7 +35,7 @@ self.onmessage = ( e: Object ) => {
         world = new OIMO.Space( { timestep:e.data.dt, iterations:8, broadphase:2, spacescale:1, random:true, info:false } )
         // Ground plane // make configurable
         
-        let ground = world.add({size:[1000, 20, 1000], pos:[0,-10,0]}),
+        let ground = world.add({size:[1000, 20, 1000], pos:[0,-10,0]}), // make configurable
             N = e.data.N
 
             minfo = new Float32Array( N * 8 )
@@ -84,10 +83,10 @@ let update = () => {
         self.postMessage({ perf:fps, minfo:minfo })
 
     },
-    addEntity = ( entity: Object ) => {
+    addEntity = ( entity ) => {
 
-        let newBody:    Object  = {},
-            isInMotion: boolean = false
+        let newBody  = {},
+            isInMotion = false
 
         entity.components.map( comp => {
 
@@ -102,7 +101,7 @@ let update = () => {
 
 
     },
-    addVoxels = ( voxels: Array<Object> ) => {
+    addVoxels = ( voxels) => {
 
         if ( voxels != null ) {
 
@@ -123,7 +122,7 @@ let update = () => {
         }
 
     },
-    makeStatic = ( entityId: number, voxel: Array<number> ) => {
+    makeStatic = ( entityId, voxel ) => {
 
         // implement
 

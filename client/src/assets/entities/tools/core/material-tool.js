@@ -38,7 +38,7 @@ export default class MaterialTool extends Tool {
                     metaFactory: { // generates factory for each item in dataSource
                       type: "attr", // entity, attr
                       attrName: "material",
-                      dataSource: this.world.systems.assets.attrs.material
+                      dataSource: this.world.systems.assets.attrs.material.filter((v, i, a) => { return v.name != "stars" })
                     },
                     layout: {
                       type: "grid",
@@ -55,7 +55,7 @@ export default class MaterialTool extends Tool {
             this.initLabel( false, "Material")
           ]
         }
-      ], coords)
+      ], null, null, coords)
     }
 
     primaryAction ( telemetry ) {

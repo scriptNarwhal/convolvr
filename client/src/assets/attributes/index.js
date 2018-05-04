@@ -59,7 +59,7 @@ export default function BuiltinProps () {
                         ]}
                     ]
                 } 
-            },
+             },
             { mixin: true,       color: 0xff0707 },
             { mixin: true,       color: 0x07ff07 },
             { mixin: true,       color: 0x0707ff }
@@ -68,9 +68,9 @@ export default function BuiltinProps () {
             { path: "/data/images/textures/tiles.png" },
             { path: "/data/images/textures/gplaypattern_@2X.png" }, 
             { path: "/data/images/textures/shattered_@2X.png" },
-            { path: "/data/images/textures/terrain1.jpg" }, 
-            { path: "/data/images/textures/terrain2.jpg" }, 
-            { path: "/data/images/textures/terrain3.jpg" },
+            { path: "/data/images/textures/space1.jpg" }, 
+            { path: "/data/images/textures/space2.jpg" }, 
+            { path: "/data/images/textures/space3.jpg" },
             { path: "/data/images/textures/organic.jpg" },
             { path: "/data/images/photospheres/sky-reflection.jpg" }, 
             { path: "/data/images/photospheres/sky-reflection-c.jpg" },
