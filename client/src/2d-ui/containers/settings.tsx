@@ -117,7 +117,7 @@ class Settings extends Component<any, any> {
               <h1>Settings</h1>
             </div>
             <div style={ { ...styles.odd, ...styles.top } }>
-            <h3 style={styles.h3}>View Distance</h3>
+            <h3 style={styles.h3 as any}>View Distance</h3>
               <div style={styles.col}>
                 <input onChange={e=> {this.setState({viewDistance: parseInt(e.target.value)})}}
                       style={styles.range}
@@ -133,7 +133,7 @@ class Settings extends Component<any, any> {
               </div>
             </div>
             <div style={styles.even}>
-            <h3 style={styles.h3}>Screen Resolution</h3>
+            <h3 style={styles.h3 as any}>Screen Resolution</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({dpr: e.target.value})}}
                       value={ this.state.dpr }
@@ -148,7 +148,7 @@ class Settings extends Component<any, any> {
             </div>
           </div>
             <div style={styles.odd}>
-            <h3 style={styles.h3}>Field Of View</h3>
+            <h3 style={styles.h3 as any}>Field Of View</h3>
               <div style={styles.col}>
                 <input onChange={e=> {this.setState({fov: parseInt(e.target.value)})}}
                       style={styles.range}
@@ -164,7 +164,7 @@ class Settings extends Component<any, any> {
               </div>
             </div>
             <div style={styles.even}>
-              <h3 style={styles.h3}>Lighting Quality</h3>
+              <h3 style={styles.h3 as any}>Lighting Quality</h3>
               <div style={styles.col}>
                 <select onChange={e=> {this.setState({lighting: e.target.value})}}
                         value={ this.state.lighting }
@@ -176,7 +176,7 @@ class Settings extends Component<any, any> {
               </div>
             </div>
             <div style={styles.odd}>
-              <h3 style={styles.h3}>Shadow Quality</h3>
+              <h3 style={styles.h3 as any}>Shadow Quality</h3>
               <div style={styles.col}>
                 <select onChange={e=> {this.setState({shadows: parseInt(e.target.value)})}}
                         value={ this.state.shadows }
@@ -190,7 +190,7 @@ class Settings extends Component<any, any> {
               </div>
             </div>
             <div style={styles.even}>
-              <h3 style={styles.h3}>Geometry Detail</h3>
+              <h3 style={styles.h3 as any}>Geometry Detail</h3>
               <div style={styles.col}>
                 <select onChange={e=> {this.setState({geometry: parseInt(e.target.value)})}}
                         value={ this.state.geometry }
@@ -204,7 +204,7 @@ class Settings extends Component<any, any> {
               </div>
             </div>
           <div style={styles.odd}>
-            <h3 style={styles.h3}>Antialiasing</h3>
+            <h3 style={styles.h3 as any}>Antialiasing</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({aa: e.target.value})}}
                       value={ this.state.aa }
@@ -216,7 +216,7 @@ class Settings extends Component<any, any> {
             </div>
           </div>
           <div style={styles.even}>
-            <h3 style={styles.h3}>Override Lens Spacing</h3>
+            <h3 style={styles.h3 as any}>Override Lens Spacing</h3>
             <div style={styles.col}>
               <input onChange={e=> {this.setState({manualLensDistance: parseFloat(e.target.value)})}}
                     style={styles.range}
@@ -232,7 +232,7 @@ class Settings extends Component<any, any> {
             </div>
           </div>
           <div style={styles.odd}>
-            <h3 style={styles.h3}>Floor Height (VR)</h3>
+            <h3 style={styles.h3 as any}>Floor Height (VR)</h3>
             <div style={styles.col}>
               <input onChange={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
                    style={styles.range}
@@ -248,7 +248,7 @@ class Settings extends Component<any, any> {
             </div>
           </div>
           <div style={styles.even}>
-            <h3 style={styles.h3}>Leap Motion Mode</h3>
+            <h3 style={styles.h3 as any}>Leap Motion Mode</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({leapMode: e.target.value})}}
                     value={ this.state.leapMode }
@@ -261,7 +261,7 @@ class Settings extends Component<any, any> {
             </div>
           </div>
           <div style={styles.odd}>
-            <h3 style={styles.h3}>Camera Control Mode</h3>
+            <h3 style={styles.h3 as any}>Camera Control Mode</h3>
             <div style={styles.col}>
               <select onChange={e=> { this.setState({camera: e.target.value})}}
                     value={ this.state.camera }
@@ -273,7 +273,7 @@ class Settings extends Component<any, any> {
             </div>
           </div>
           <div style={styles.even}>
-            <h3 style={styles.h3}>IOT Mode</h3>
+            <h3 style={styles.h3 as any}>IOT Mode</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({IOTMode: e.target.value})}}
                     value={ this.state.IOTMode }
@@ -285,7 +285,7 @@ class Settings extends Component<any, any> {
             </div>
           </div>
           <div  style={{ ...styles.odd, ...styles.bottom }}>
-            <h3 style={styles.h3}>Post Processing</h3>
+            <h3 style={styles.h3 as any}>Post Processing</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({postProcessing: e.target.value})}}
                       value={ this.state.postProcessing }
@@ -297,7 +297,7 @@ class Settings extends Component<any, any> {
             </div>
           </div>
           {/* <div style={{ ...styles.even, ...styles.bottom }}>
-            <h3 style={styles.h3}>Menu Blur Effect</h3>
+            <h3 style={styles.h3 as any}>Menu Blur Effect</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({blurEffect: e.target.value})}}
                       value={ this.state.blurEffect }
@@ -308,17 +308,17 @@ class Settings extends Component<any, any> {
               </select>
             </div>
           </div> */}
-          <input style={styles.save}
+          <input style={styles.save as any}
                  type='submit'
                  value="Profile Settings"
                  onClick={ e=> { this.props.history.push("/profile") } }
           />
-          <input style={styles.save}
+          <input style={styles.save as any}
                  type='submit'
                  value="Reset To Defaults"
                  onClick={ e=> this.resetToDefault()}
           />
-          <input style={styles.save}
+          <input style={styles.save as any}
                  type='submit'
                  value="Save Settings"
                  onClick={ e=> this.save()}
@@ -328,7 +328,7 @@ class Settings extends Component<any, any> {
             <div style={styles.admin}>
               <h2 style={{marginTop: '1em'}}>Admin Settings</h2>
               <div>
-                <h3 style={styles.h3}>Default Space</h3>
+                <h3 style={styles.h3 as any}>Default Space</h3>
                 <div style={styles.col}>
                   <select onChange={e=> { this.setState({defaultSpace: e.target.value})}}
                             value={ this.state.defaultSpace }
@@ -345,7 +345,7 @@ class Settings extends Component<any, any> {
                   </div>
                 </div>
               <div>
-                <h3 style={styles.h3}>Welcome Message</h3>
+                <h3 style={styles.h3 as any}>Welcome Message</h3>
                 <div style={styles.col}>
                   <input onBlur={e=> { this.setState({welcomeMessage: e.target.value})}}
                           value={ this.state.welcomeMessage }
@@ -355,7 +355,7 @@ class Settings extends Component<any, any> {
                   </div>
                 </div>
               <div style={styles.table}>
-                <h3 style={styles.h3}>Manage Network</h3>
+                <h3 style={styles.h3 as any}>Manage Network</h3>
                 <table>
                   <tr>
                     <td>Domain Name</td>
@@ -403,7 +403,7 @@ class Settings extends Component<any, any> {
                     }
                 </table>
               </div>
-              <input style={styles.save}
+              <input style={styles.save as any}
                      type='submit'
                      value="Save Admin Settings"
                      onClick={ e=> this.updateUniverseSettings()}

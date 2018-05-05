@@ -128,7 +128,7 @@ class Profile extends Component<any, any> {
               <h1>Profile</h1>
             </div>
             <div>
-            <h3 style={styles.h3}>User Name</h3>
+            <h3 style={styles.h3 as any}>User Name</h3>
             <div style={styles.col}>
               <span style={{paddingLeft: '1em'}}>
                <input onBlur={ (e)=> this.updateField( "name", e) }
@@ -139,7 +139,7 @@ class Profile extends Component<any, any> {
                 />
               </span>
             </div>
-            <h3 style={styles.h3}>Email Address</h3>
+            <h3 style={styles.h3 as any}>Email Address</h3>
             <div style={styles.col}>
               <span style={{paddingLeft: '1em'}}>
                 <input onBlur={ (e)=> this.updateField( "email", e) }
@@ -149,7 +149,7 @@ class Profile extends Component<any, any> {
                 />
               </span>
             </div>
-            <h3 style={styles.h3}>Update Password</h3>
+            <h3 style={styles.h3 as any}>Update Password</h3>
             <div style={styles.col}>
               <span style={{paddingLeft: '1em'}}>
                 <input onBlur={ (e)=> this.updateField( "pass", e) }
@@ -161,7 +161,7 @@ class Profile extends Component<any, any> {
             </div>
           </div>
           <div>
-            <h3 style={styles.h3}>Change Profile Image</h3>
+            <h3 style={styles.h3 as any}>Change Profile Image</h3>
             <div style={styles.col}>
               <span style={{paddingLeft: '1em'}}>
                 <input onChange={ (e)=> this.upload(e) }
@@ -172,7 +172,7 @@ class Profile extends Component<any, any> {
             </div>
           </div>
           <div>
-            <h3 style={styles.h3}>Change 3D Avatar</h3>
+            <h3 style={styles.h3 as any}>Change 3D Avatar</h3>
             <div style={styles.col}>
               <span style={{paddingLeft: '1em'}}>
                 <select onChange={ e=> { this.onAvatarChange( e.target.value )} } >
@@ -190,7 +190,7 @@ class Profile extends Component<any, any> {
               </span>
             </div>
           </div>
-            <input style={styles.save}
+            <input style={styles.save as any}
                  type='submit'
                  value={ this.state.id == -1 ? "Create Account" : "Save Settings" }
                  onClick={ e=> this.save()}

@@ -46,7 +46,7 @@ export default class InventoryList extends Component<any, any> {
 
     return (
       <div style={Object.assign({}, styles.list(this.props.color, this.props.compact), this.props.style)} title={this.props.category}>
-        <span style={styles.title}>
+        <span style={styles.title as any}>
           {this.props.category}
           <span style={styles.new}>
             {

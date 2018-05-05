@@ -29,7 +29,7 @@ export default class LocationBar extends Component<any, any> {
     return (
         <div style={ Object.assign({}, styles.bar(), styles.mobile(), this.props.style) }>
           <div onClick={ e=> { this.props.onItemSelect(this.props.label, 0) } }
-               style={styles.home}
+               style={styles.home as any}
           >
             <span style={{ marginRight: '0.3em' }}>
               { this.props.label }
@@ -38,7 +38,7 @@ export default class LocationBar extends Component<any, any> {
             {
               this.props.path.map((opt: any, i: number) =>{
                 return (
-                  <div style={styles.option}
+                  <div style={styles.option as any}
                        onClick={ e=> { this.props.onItemSelect(opt, i) } }
                        key={i}
                   >

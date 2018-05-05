@@ -73,7 +73,7 @@ export default class Card extends Component<CardProps, any> {
   render() {
 
     return (
-        <div style={styles.card(this.props.image, this.props.color, this.props.compact, this.props.quarterSize)}
+        <div style={styles.card(this.props.image, this.props.color, this.props.compact, this.props.quarterSize) as any}
              onClick={ evt => this.handleCardClick(evt) }
              onMouseMove={ evt => this.onMouseEnter(evt) }
              onMouseLeave={ evt => this.onMouseLeave(evt) }
@@ -81,7 +81,7 @@ export default class Card extends Component<CardProps, any> {
              className={"ui-card-outer"}
         >
             {(this.props.showTitle ? (
-                <span style={styles.title(this.props.image, this.props.quarterSize)}
+                <span style={styles.title(this.props.image, this.props.quarterSize) as any}
                       className="ui-card-title"
                 >
                 { this.props.title }

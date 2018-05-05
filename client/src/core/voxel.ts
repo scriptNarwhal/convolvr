@@ -6,31 +6,21 @@ import {
 } from '../config'
 import StaticCollisions from '../systems/environment/physics/static-collisions';
 
-export class Bounds {
-    public from: number[]
-    public to:   number[]
-
-    constructor(from: number[], to: number[]) {
-        this.from = from;
-        this.to = to;
-    }
+export type Bounds = {
+    from: number[]
+    to:   number[]
 } 
 
-export class DBVoxel {
-    
-    public entities: DBEntity[];
-    public voxels:   DBVoxel[];
-    public path:     number[];
-    public bounds:   Bounds;
-    public coords:   number[];
-
-    public setData(data: any) {
-
-    }
+export type DBVoxel = {
+ entities: DBEntity[];
+ voxels:   DBVoxel[];
+ path:     number[];
+ bounds:   Bounds;
+ coords:   number[];
+ cell?:    number[]
 }
 
 export default class Voxel {
-
     public data:     any
     private world:   Convolvr
     public entities: Entity[]
@@ -43,16 +33,16 @@ export default class Voxel {
     public loaded:   boolean
     public fetching: boolean
 
-    constructor ( data: any, cell: Array<number>, world: Convolvr) {
+    constructor(data: any, cell: number[], world: Convolvr) {
         let visible:  boolean     = data.visible,
             scene:    any = world.three.scene,
             altitude: number      = 0
 
-        this.coords = cell
-        this.voxels = data.voxels || []
-        this.bounds = data.bounds ? data.bounds : null
-        this.entities = []  
-        this.meshes = []
+        this.coords = cell;
+        this.voxels = data.voxels || [];
+        this.bounds = data.bounds ? data.bounds : null;
+        this.entities = [];  
+        this.meshes = [];
         this.world = world
         
         altitude = data.altitude || 0
@@ -69,8 +59,8 @@ export default class Voxel {
         this.fetching = false
     }
 
-    public setData ( data: any ) {
-        data.cell = this.coords
+    public setData ( data: DBVoxel ) {
+        data.cell = this.coords;
         this.data = data
         this.loaded = true
         this.fetching = false

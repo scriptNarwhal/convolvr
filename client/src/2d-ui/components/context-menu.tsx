@@ -82,7 +82,7 @@ export default class ContextMenu extends Component<ContextMenuProps, any> {
                 
                 return (
                   <div onClick={ (e: any)=> this.handleContextAction( opt.name, e ) }
-                       style={ { ...styles.option, borderBottom: i < numberOfOptions -1 ? styles.option.borderBottom : 'none' } }
+                       style={ { ...styles.option, borderBottom: i < numberOfOptions -1 ? styles.option.borderBottom : 'none' } as any }
                        key={i}
                   >
                     { opt.name == "Download" ? (

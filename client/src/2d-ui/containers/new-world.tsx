@@ -220,8 +220,8 @@ class NewSpace extends Component<any, any> {
                   {
                   this.state.skyType == 'photosphere' ? (
                     <div style={styles.option}>
-                      <span style={styles.label}>Skybox Photosphere</span>
-                      <span style={styles.setting}>
+                      <span style={styles.label as any}>Skybox Photosphere</span>
+                      <span style={styles.setting as any}>
                         <input style={styles.fileUpload} type='file' onChange={ (e)=> this.upload(e) } />
                       </span>
                     </div>
@@ -481,7 +481,7 @@ class NewSpace extends Component<any, any> {
                   <div style={styles.go}>
                     <input type="button"
                             value="Create"
-                            style={styles.signInButton}
+                            style={styles.signInButton as any}
                             onClick={(e: any)=> { this.createSpace() } }
                     />
                   </div>
