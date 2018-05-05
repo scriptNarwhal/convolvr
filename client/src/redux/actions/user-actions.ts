@@ -152,10 +152,10 @@ export function loginDone ( response: any ) {
         if (window.location.href.indexOf("/login") > -1) {
                 dispatch(navigateTo("/chat"))
         }
-        return {
+        dispatch({
             type: LOGIN_DONE,
             data: response.data
-        }
+        })
     }
 }
 export function loginFailed (response: any) {

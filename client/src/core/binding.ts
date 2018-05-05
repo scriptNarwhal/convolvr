@@ -39,7 +39,7 @@ export default class Binding  {
         
     }
 
-    public update() {
+    public update(): void {
         this.parseOrResolveSource(this.source, this.sourceType, ()=> { this.apply() });
     }
 
@@ -56,7 +56,7 @@ export default class Binding  {
         }
     }
 
-    private resolveSource(source: SourceData, type: PropType) {
+    private resolveSource(source: SourceData, type: PropType): Promise<any> {
         switch (type) {
             case PropType.IMAGE:
                 return this.systems.assets.loadImage(source, {});
@@ -113,7 +113,7 @@ export default class Binding  {
         }
     }
 
-    private apply() {
+    private apply(): void {
         let c = this.component;
         switch(this.targetType) {
             case BindingType.ATTRIBUTE:
@@ -131,7 +131,7 @@ export default class Binding  {
                 //c.mesh.material.needsUpdate = true;
            
             case BindingType.CHILD_COMPONENT:
-                return c.components;//.push(source);
+                this.target = c.components;//.push(source);
             
         }
     }

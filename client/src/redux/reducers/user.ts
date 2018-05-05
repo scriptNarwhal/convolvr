@@ -82,6 +82,7 @@ export default function users (state: any = {
             loggedIn: false
         })
     case LOGIN_DONE:
+        console.warn("login done", action);
         return Object.assign({}, state, {
                 fetching: false,
                 loggedIn: action.data != "" ? action.data : false

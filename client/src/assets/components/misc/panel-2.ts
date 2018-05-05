@@ -8,7 +8,8 @@ let panel2Comp = {
             material: {
                 color: 0x808080,
                 name: "plastic"
-            }
+            },
+            floor: {}
         },
         quaternion: [ 0, 0, 0, 1 ],
         position: [0.5, 0, 0]

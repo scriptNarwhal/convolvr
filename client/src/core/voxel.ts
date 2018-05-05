@@ -85,7 +85,8 @@ export default class Voxel {
         }
 
         this.fetching = true
-        axios.get(`${API_SERVER}/api/voxels/${worldName}/${coords.join("x")}`).then((response: any) => {
+        axios.get(`${API_SERVER}/api/voxels/${worldName}/${coords.join("x")}`)
+        .then((response: any) => {
             let physicsVoxels = []
             typeof response.data.map == 'function' && response.data.map((c: any) => {
                 v.setData(c)
@@ -116,7 +117,7 @@ export default class Voxel {
             coords: Array<number> = this.coords
 
         !!this.data.entities && this.data.entities.map( ( e: any, i: number  ) => {
-            let entity: Entity = new Entity( e.id, e.components, e.position, e.quaternion, coords )
+            let entity = new Entity( e.id, e.components, e.position, e.quaternion, coords );
 
             if ( i < 2 ) {
                 entity.init( scene )
