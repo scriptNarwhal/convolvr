@@ -7,7 +7,7 @@
  * - WebGL port by @supereggbert
  * http://www.glge.org/demos/fxaa/
  */
-
+export function FXAAShader(THREE) {
 THREE.FXAAShader = {
 
 	uniforms: {
@@ -86,3 +86,4 @@ THREE.FXAAShader = {
 	].join( "\n" )
 
 };
+}

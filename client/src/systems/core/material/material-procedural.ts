@@ -2,7 +2,7 @@
 import Convolvr from '../../../world/world'
 import AssetSystem from '../assets';
 // import * as THREE from 'three'
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 export default class ProceduralMaterials {
 
   world: Convolvr

@@ -86,7 +86,7 @@ type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "
 					 "speech" | "state" | "stat" | "staticCollisions" | "switch" | "terrain" | "text" | "time" | "toolUI" | "tool" |
 					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "volumetricFactory" | "wall" | "webrtc" | "weapon";
 
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 export default class Systems {
 
 	public world: Convolvr

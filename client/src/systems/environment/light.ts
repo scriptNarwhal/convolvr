@@ -1,6 +1,6 @@
 import Component from "../../core/component";
 import Convolvr from "../../world/world";
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 export default class LightSystem {
 
     private world: Convolvr

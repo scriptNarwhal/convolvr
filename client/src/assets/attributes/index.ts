@@ -1,12 +1,12 @@
-export function getPropsList ( attrs ) {
+export function getPropsList ( attrs: any ) {
 
-    let out = []
+    let out: any[] = []
 
-    attrs.geometry.map( (data, d) => {
+    attrs.geometry.map( (data: any, d: number) => {
         out.push({ name: `geometry.${d}`, data })
     })  
     
-    attrs.material.map( (data, d) => {
+    attrs.material.map( (data: any, d: number) => {
         out.push({ name: `material.${d}`, data })
     })
 
@@ -16,8 +16,8 @@ export function getPropsList ( attrs ) {
 
         let category = attrs.systems[ cat ]
 
-        Object.keys(category).map( key => {  
-            category[ key ].map( (dat, d) => {
+        Object.keys(category).map( (key: string) => {  
+            category[ key ].map( (dat: any, d: number) => {
                 out.push({ name: `${key}.${d}`, data: dat })
             })
         })
@@ -101,7 +101,7 @@ export default function BuiltinProps () {
                 ],
                 tool: [
                     // tool templates
-                ],
+                ] as any[],
                 
             },
             vehicles: {

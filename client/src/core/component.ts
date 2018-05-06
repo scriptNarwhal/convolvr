@@ -1,7 +1,7 @@
 import Entity from "./entity";
 import Binding from './binding';
 
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 
 export type DBComponent = {
   id?:         number

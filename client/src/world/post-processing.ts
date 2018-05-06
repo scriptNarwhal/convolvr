@@ -1,4 +1,4 @@
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 
 export default class PostProcessing {
 

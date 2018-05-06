@@ -2,7 +2,7 @@ import { GRID_SIZE } from '../../config'
 import Convolvr from '../../world/world';
 import Component from '../../core/component';
 import Entity from '../../core/entity';
-const THREE: any = (window as any).THREE;
+import * as THREE from 'three';
 
 let handDirection = new THREE.Vector3(0, 0, 0),
     cameraPos = new THREE.Vector3(0, 0, 0),

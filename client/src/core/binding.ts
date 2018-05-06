@@ -2,7 +2,7 @@ import Component from "./component";
 import { PropType } from './property'
 import Systems from "../systems";
 
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 export enum BindingType {
     ATTRIBUTE = "attr",
     PROPERTY = "prop",
@@ -184,9 +184,13 @@ export default class Binding  {
     }
 
     private vectorToColorMaterial(value: any, sourceType: PropType): any {
-        let material = new THREE.Material({ color: new THREE.Color().setRGB(...this.value)}),
-        
-        transparent = sourceType == PropType.VEC4;
+        let color = new THREE.Color();
+
+        color.setRGB(this.value[0], this.value[1], this.value[2]);
+
+        let material = new THREE.MeshLambertMaterial({ color }),
+            transparent = sourceType == PropType.VEC4;
+
         material.opacity = transparent ? this.value[3] : 0;
         material.transparent = transparent;
         return material

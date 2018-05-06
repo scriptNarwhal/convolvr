@@ -1,6 +1,6 @@
 //@flow
 import { animate } from '../../world/render'
-import { GRID_SIZE } from '../../config'
+import { GRID_SIZE, GLOBAL_SPACE } from '../../config'
 import Avatar from '../../assets/entities/avatars/avatar'
 import Entity from '../../core/entity';
 import Voxel from '../../core/voxel';
@@ -31,9 +31,12 @@ export default class UserUpdateHandler {
                 hands = [];
 
             if (!!data.entity && (world.terrain as any).loaded) {
+        
                 update = data.entity
-                userVoxel = voxels[coords[0] + '.0.' + coords[2]]
+                
                 if (update.id != world.user.id) { //  && closeToCamera == false 
+                    coords = [].concat(GLOBAL_SPACE);
+                    userVoxel = voxels[coords[0] + '.0.' + coords[2]]
                     pos = update.position
                     quat = update.quaternion
                     user = (world.users as any)["user" + update.id]

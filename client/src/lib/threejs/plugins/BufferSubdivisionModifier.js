@@ -36,6 +36,7 @@
  * EX: new TypedArrayHelper(initial_size_in_elements, 3, THREE.Vector3, Float32Array, 3, ['x', 'y', 'z']); (the x,y,z comes from THREE.Vector3. It would be abc if it were a face3. etc etc)
  *
  */
+export function BufferSubdivisionModifier(THREE) {
 THREE.Face3.prototype.set = function (a, b, c) {
     this.a = a;
     this.b = b;
@@ -776,3 +777,4 @@ C: x5
 
 
 })();
+}

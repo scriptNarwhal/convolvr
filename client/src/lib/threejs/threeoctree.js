@@ -7,7 +7,7 @@
  * based on Dynamic Octree by Piko3D @ http://www.piko3d.com/ and Octree by Marek Pawlowski @ pawlowski.it
  *
  */
- ( function ( THREE ) { "use strict";
+ export function ThreeOctree(THREE) { "use strict";
 
 	/*===================================================
 
@@ -2136,4 +2136,4 @@
 
 	};
 
-}( THREE ) );
+};

@@ -1,7 +1,7 @@
 import Entity from '../../../core/entity'
 import Component from '../../../core/component'
 import chatText from '../../components/chat-text'
-let THREE = (window as any).THREE,
+import * as THREE from 'three'; let
     monster = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody == true == not just 'vr hands'
 
   console.log("init avatar, assetSystem ", assetSystem )

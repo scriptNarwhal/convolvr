@@ -14,7 +14,7 @@
  * Shader and javascript packing code derrived from several Stack Overflow examples.
  *
  */
-
+export function GPUParticleSystem(THREE) {
 THREE.GPUParticleSystem = function( options ) {
 
 	THREE.Object3D.apply( this, arguments );
@@ -499,3 +499,4 @@ THREE.GPUParticleContainer = function( maxParticles, particleSystem ) {
 
 THREE.GPUParticleContainer.prototype = Object.create( THREE.Object3D.prototype );
 THREE.GPUParticleContainer.prototype.constructor = THREE.GPUParticleContainer;
+}

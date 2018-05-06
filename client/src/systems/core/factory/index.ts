@@ -3,7 +3,7 @@ import Convolvr from '../../../world/world'
 import Component, { DBComponent } from '../../../core/component'
 import Entity from '../../../core/entity'
 // import * as THREE from 'three'
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 
 export default class FactorySystem {
 

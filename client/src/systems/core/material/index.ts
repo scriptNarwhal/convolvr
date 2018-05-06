@@ -7,7 +7,7 @@ import Convolvr from '../../../world/world';
 import Component from '../../../core/component';
 import AssetSystem from '../assets';
 
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 export default class MaterialSystem {
 
   private world: Convolvr

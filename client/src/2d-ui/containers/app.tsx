@@ -21,7 +21,8 @@ import {
   detectSpaceDetailsFromURL,
   GRID_SIZE,
   APP_NAME
-} from '../../config'
+} from '../../config';
+import * as THREE from 'three'; 
 
 type AppContainerState = {
   unread: number,
@@ -296,7 +297,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
       (window as any).Notify.requestPermission(onPermissionGranted, onPermissionDenied);
     }
   }
-
+  
   initiateVRMode ( ) {
     this.props.toggleVRMode()
 
@@ -315,13 +316,13 @@ class App extends Component<AppContainerProps, AppContainerState> {
             MOUSE_KEYBOARD_CONTROLS_DISABLED: true,
             TOUCH_PANNER_DISABLED: true
           }
-          controls = new (window as any).THREE.VRControls(camera)
+          controls = new THREE.VRControls(camera)
 
           if (!three.world.mobile) {
             renderer.autoClear = false
           }
 
-          effect = new (window as any).THREE.VREffect(renderer, world.postProcessing)
+          effect = new THREE.VREffect(renderer, world.postProcessing)
           effect.scale = 1
           effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
           three.vrEffect = effect

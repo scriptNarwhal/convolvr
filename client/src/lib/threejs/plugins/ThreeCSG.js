@@ -1,4 +1,5 @@
 'use strict';
+export function ThreeBSB(THREE) {
 window.ThreeBSP = (function() {
 
 	var ThreeBSP,
@@ -550,3 +551,4 @@ window.ThreeBSP = (function() {
 
 	return ThreeBSP;
 })();
+}

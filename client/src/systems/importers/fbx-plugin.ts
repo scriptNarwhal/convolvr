@@ -1,7 +1,7 @@
 // not using flow yet..
 import Convolvr from '../../world/world'
 import Component from '../../core/component'
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 
 type FBXState = {
     url: string

@@ -1,6 +1,6 @@
 import Convolvr from "../../world/world";
 import Component from "../../core/component";
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 export default class ParticleSystem {
     
     world:           Convolvr
@@ -16,7 +16,7 @@ export default class ParticleSystem {
     init (component: Component) { 
 
         let attr = component.attrs.particles, 
-            ps = new THREE.GPUParticleSystem( {
+            ps = new this.world.THREE.GPUParticleSystem( {
                     maxParticles: attr.maxParticles  || 0.4
             }),
             options = {

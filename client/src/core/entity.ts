@@ -25,7 +25,7 @@ enum WorkerUpdateMode {
   NONE = ""
 }
 
-let THREE = (window as any).THREE;
+import * as THREE from 'three';
 
 export default class Entity {
 

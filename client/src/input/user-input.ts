@@ -8,7 +8,7 @@ import Convolvr from '../world/world'
 import { isVRMode } from '../config'
 import GamePadHandler from './gamepad';
 
-let THREE = (window as any).THREE
+import * as THREE from 'three';
 
 export default class UserInput {
 

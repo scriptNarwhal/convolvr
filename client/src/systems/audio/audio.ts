@@ -1,7 +1,7 @@
 import Convolvr from '../../world/world'
 import Component from '../../core/component'
 // import { THREE } from 'three'
-let THREE = (window as any).THREE;
+import * as THREE from 'three';
 export default class AudioSystem {
 
     world: Convolvr

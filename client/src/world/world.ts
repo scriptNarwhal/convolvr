@@ -1,5 +1,7 @@
 import axios from 'axios'
 // import { browserHistory } from 'react-router'
+import * as THREE from 'three';
+import THREEJSPluginLoader from '../lib';
 import { animate } from './render'
 import {
 	API_SERVER,
@@ -26,15 +28,17 @@ import UserInput from '../input/user-input'
 import Component from '../core/component';
 
 let world: any = null,
-	THREE = (window as any).THREE,
+	//THREE = (window as any).THREE,
 	three: any;
+	// (window as any).THREE = THREE;
 
 export default class Convolvr {
 
-	public postProcessing:   PostProcessing
-	public initialLoad: 	 boolean
-	public loadedCallback:   Function
-	public sendUpdatePacket: number
+	public postProcessing:      PostProcessing
+	public threeJsPluginLoader: THREEJSPluginLoader
+	public initialLoad: 	    boolean
+	public loadedCallback:      Function
+	public sendUpdatePacket:    number
 
 	public three:        any
 	public THREE:		 any
@@ -80,11 +84,6 @@ export default class Convolvr {
 	public onUserLogin: 			Function
 
 	constructor(socket: any, store: any, loadedCallback: Function) {
-		console.log("----------------------------------"); 
-		console.log("----------------------------------");
-		console.log("----------------------------------");
-		console.log("----------------------------------");
-		console.log("0.5 new world")
 		let mobile = isMobile(),
 			scene = new THREE.Scene(),
 			camera = null,
@@ -138,7 +137,8 @@ export default class Convolvr {
 		this.HMDMode = "standard" // "head-movement"
 		this.vrHeight = 1.66
 		this.screenResX = screenResX
-		this.initRenderer( renderer, "viewport" )
+		this.initRenderer( renderer, "viewport" );
+		this.threeJsPluginLoader = new THREEJSPluginLoader(THREE);
 		this.octree = new THREE.Octree({
 			undeferred: false,
 			depthMax: Infinity,
@@ -153,7 +153,8 @@ export default class Convolvr {
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
 		this.raycaster.near = 0.25
-		this.THREE = THREE
+		this.THREE = THREE;
+		(window as any).THREE = THREE;
 		three = this.three = {
 			world: this,
 			scene,
@@ -202,10 +203,6 @@ export default class Convolvr {
 	}
 
 	public initUserAvatar(coords: number[], newUser: any, callback: Function, overrideAvatar?: string) {
-		console.log("----------------------------------"); 
-		console.log("----------------------------------");
-		console.log("----------------------------------");
-		console.log("----------------------------------");
 		console.log("2.5 init user avatar")
 		let avatar = this.systems.assets.makeEntity(  
 			overrideAvatar || newUser.data.avatar || "default-avatar", 

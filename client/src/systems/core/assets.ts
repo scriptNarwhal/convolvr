@@ -28,7 +28,7 @@ import car from '../../assets/entities/vehicles/car'
 import Convolvr from '../../world/world.js';
 import Component, { DBComponent } from '../../core/component.js';
 
-let THREE = (window as any).THREE;
+import * as THREE from 'three';
 
 export default class AssetSystem {
     private world: Convolvr
@@ -166,18 +166,18 @@ export default class AssetSystem {
     }
 
     public loadShaders(vertex_url: string, fragment_url: string, onLoad: Function, onProgress: Function, onError: Function ) { // based off http://www.davideaversa.it/2016/10/three-js-shader-loading-external-file/
-		var vertex_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
+		var vertex_loader = new THREE.FileLoader()//THREE.XHRLoader(THREE.DefaultLoadingManager)
 
 		vertex_loader.setResponseType('text')
 		vertex_loader.load( vertex_url, (vertex_text: any) => {
 
-			var fragment_loader = new THREE.XHRLoader(THREE.DefaultLoadingManager)
+			var fragment_loader = new THREE.FileLoader();
 			fragment_loader.setResponseType('text')
 			fragment_loader.load( fragment_url, (fragment_text: any) => {
 				onLoad(vertex_text, fragment_text)
 			});
 
-		}, onProgress, onError)
+		}, onProgress as any, onError as any)
 	}
 
     public makeAudioElement(attr: any): HTMLAudioElement {

@@ -1,6 +1,6 @@
 import Convolvr from '../../world/world'
 import Component from '../../core/component'
-const THREE: any = (window as any).THREE;
+import * as THREE from 'three';
 
 export default class GeometrySystem {
 

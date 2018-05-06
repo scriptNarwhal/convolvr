@@ -19,7 +19,7 @@
  * 	Indexed Buffers
  * 	PreRotation support.
  */
-
+export function FBXLoader(THREE) {
 ( function () {
 
 	/**
@@ -5038,3 +5038,4 @@
 	}
 
 } )();
+}

@@ -1,7 +1,7 @@
 /**
  * @author alteredq / http://alteredqualia.com/
  */
-
+export function MaskPass(THREE){
 THREE.MaskPass = function ( scene, camera ) {
 
 	this.scene = scene;
@@ -84,3 +84,4 @@ THREE.ClearMaskPass.prototype = {
 	}
 
 };
+}

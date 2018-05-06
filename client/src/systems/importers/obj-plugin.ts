@@ -1,6 +1,6 @@
 import Convolvr from "../../world/world";
 import Component from "../../core/component";
-const THREE = (window as any).THREE;
+import * as THREE from 'three';
 export default class ObjPluginSystem { // allows use of imported .obj meshes
 
     private world: Convolvr

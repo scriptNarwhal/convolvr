@@ -1,6 +1,6 @@
 import Entity from '../core/entity'
 
-let THREE = (window as any).THREE;
+import * as THREE from 'three';
 
 export default class User {
   public id: number

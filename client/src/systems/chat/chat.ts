@@ -36,15 +36,15 @@ export default class ChatSystem {
                     
                     if ( attrs.chat.displayMessages ) {
                         console.log("display messages")
-                        console.log(attrs.chat)
+                        console.log(attrs.chat.userName)
                         if ( userName == "all" ) {
                             if ( chatMessage.from != chat.lastSender ) {
                                 from = `${chatMessage.from}: `
                             }
-                            comp.state.text.write(`${from}${chatMessage.message}`) // can batch this without re-rendering each time
+                            comp.state.text.write(`${from}: ${chatMessage.message}`) // can batch this without re-rendering each time
                             comp.state.text.update()
-                        } else if ( userName == attrs.chat.userName && attrs.text ) {
-                             comp.state.text.write(`${chatMessage.from}${chatMessage.message}`) // can batch this without re-rendering each time
+                        } else if ( chatMessage.from == attrs.chat.userName && attrs.text ) {
+                             comp.state.text.write(`${chatMessage.message}`) // can batch this without re-rendering each time
                              comp.state.text.update()  
                         }
                     }

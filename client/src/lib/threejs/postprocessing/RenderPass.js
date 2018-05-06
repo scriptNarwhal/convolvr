@@ -1,7 +1,7 @@
 /**
  * @author alteredq / http://alteredqualia.com/
  */
-
+export function RenderPass(THREE) {
 THREE.RenderPass = function ( scene, camera, overrideMaterial, clearColor, clearAlpha ) {
 
 	this.scene = scene;
@@ -49,3 +49,4 @@ THREE.RenderPass.prototype = {
 	}
 
 };
+}
