@@ -16,11 +16,15 @@
   go get github.com/Convolvr/core
   go get github.com/Convolvr/server
   go get github.com/Convolvr/generate
-  cd convolvr/client && npm install && gulp &
+  cd convolvr/client && npm install && gulp build &
   cd ../cmd && go build # && ./cmd # to start server
 ```
 
 ## Development 
+```shell
+  cd convolvr/client && gulp watch
+  cd convolvr/cmd && go build # && ./cmd # to start server
+```
 [Wiki](https://github.com/Convolvr/convolvr/wiki/Development)
 
 ### Initialization Example 
