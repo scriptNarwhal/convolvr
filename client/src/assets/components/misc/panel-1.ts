@@ -11,6 +11,9 @@ let panel1Comp = {
         },
         floor: {}
     },
+    props: [
+    
+    ] as any,
     quaternion: [0, 0, 0, 1],
     position: [0, 0, 0]
 }

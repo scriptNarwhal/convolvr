@@ -1,12 +1,8 @@
 console.log('Convolvr Client Initializing')
 import * as ReactDOM from 'react-dom' // React
-import { Component } from 'react'
 import * as React from 'react';
-import { Router, Route  } from 'react-router'
 import { routerReducer } from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory'
-import { render } from 'react-dom' // Redux
-import * as redux from 'redux'
 import makeStore from './redux/makeStore'
 import { 
   clearOldData, 
@@ -38,12 +34,12 @@ token = localStorage.getItem("token") || ""
 clearOldData()
 
 loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
-  let systems:   Systems       = world.systems,
-      scene:     any           = world.three.scene,  
-      pos:       any           = world.camera.position,
+  let systems:   Systems  = world.systems,
+      scene:     any      = world.three.scene,  
+      pos:       any      = world.camera.position,
       coords:    number[] = world.getVoxel( pos ),
-      voxelKey:  string        = coords.join("."),
-      altitude:  number        = (systems.terrain as any).voxels[ voxelKey ].data.altitude;
+      voxelKey:  string   = coords.join("."),
+      altitude:  number   = (systems.terrain as any).voxels[ voxelKey ].data.altitude;
      
   world.onUserLogin = (newUser: any) => {
     let user = world.user;
@@ -68,7 +64,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
         pos.set( pos.x -25+Math.random()*50, pos.y + 25, pos.z -25+Math.random()*50 );
       }
       if (coords[1]< 1) {
-        pos.y += 120;
+        pos.y = 28;
       }
     }); 
 

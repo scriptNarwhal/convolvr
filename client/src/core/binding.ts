@@ -1,6 +1,8 @@
 import Component from "./component";
 import { PropType } from './property'
 import Systems from "../systems";
+
+const THREE = (window as any).THREE;
 export enum BindingType {
     ATTRIBUTE = "attr",
     PROPERTY = "prop",
@@ -77,16 +79,15 @@ export default class Binding  {
             case PropType.STRING:
             case PropType.ARRAY:
             case PropType.OBJECT:
+            case PropType.ANY:
                 return source;
             case PropType.COMPONENT:
                 return 
             case PropType.FUNCTION:
-                return // use ecs  to parse expression
+                return source; // store function to evaluate later
             case PropType.EXPRESSION:
-                return // use ecs  to parse expression
-           
-            case PropType.ANY:
-                return 
+                // implement
+                return // use ecs to evaluate expression
         }
     }
 
@@ -106,7 +107,7 @@ export default class Binding  {
             case BindingType.ROTATION:
                 this.target = c.mesh.quaternion; break;
             case BindingType.TEXTURE:
-                this.target = c.mesh.material.map; break;
+                this.target = [c.mesh.material, 'map']; break;
             case BindingType.CHILD_COMPONENT:
                 this.target = c.components; break;
             
@@ -115,6 +116,8 @@ export default class Binding  {
 
     private apply(): void {
         let c = this.component;
+
+        this.value = this.typeCheck();
         switch(this.targetType) {
             case BindingType.ATTRIBUTE:
             case BindingType.PROPERTY:
@@ -126,13 +129,66 @@ export default class Binding  {
             case BindingType.ROTATION:
                 this.target.fromArray(this.value); break;
             case BindingType.TEXTURE:
-               this.target.map = this.value; break;
+               this.target[0][this.target[1]] = this.value; break;
                 // = source;
                 //c.mesh.material.needsUpdate = true;
            
             case BindingType.CHILD_COMPONENT:
-                this.target = c.components;//.push(source);
+                this.target = this.value;//.push(source);
             
         }
+    }
+
+    private typeCheck(): any {
+        let c = this.component;
+
+        switch(this.targetType) {
+            case BindingType.ATTRIBUTE:
+            case BindingType.PROPERTY:
+                return this.value;
+            case BindingType.CALL:
+            case BindingType.STATE:
+                return this.value;
+            case BindingType.POSITION:
+            case BindingType.ROTATION:
+                return this.value;
+            case BindingType.TEXTURE:
+                switch(this.sourceType) { 
+                    case PropType.BOOLEAN:
+                    case PropType.NUMBER:
+                    case PropType.STRING:
+                    case PropType.ARRAY:
+                    case PropType.OBJECT:
+                    case PropType.COMPONENT:
+                    case PropType.FUNCTION:
+                    case PropType.EXPRESSION:
+                    case PropType.ANY:
+                        // implement rendering text with text system
+                        return this.dataToJSONMaterial(this.value, this.sourceType);
+                    case PropType.VEC2:
+                        this.value = [...this.value, ...this.value, 0];
+                    case PropType.VEC3:
+                    case PropType.VEC4:
+                        return this.vectorToColorMaterial(this.value, this.sourceType);
+                }
+            break;
+
+            case BindingType.CHILD_COMPONENT:
+                return this.value;
+            
+        }
+    }
+
+    private dataToJSONMaterial(value: any, sourceType: PropType): any {
+        
+    }
+
+    private vectorToColorMaterial(value: any, sourceType: PropType): any {
+        let material = new THREE.Material({ color: new THREE.Color().setRGB(...this.value)}),
+        
+        transparent = sourceType == PropType.VEC4;
+        material.opacity = transparent ? this.value[3] : 0;
+        material.transparent = transparent;
+        return material
     }
 }

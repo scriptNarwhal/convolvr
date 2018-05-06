@@ -70,6 +70,7 @@ import WeaponSystem from './game/weapon'
 import NPCSystem from './game/npc'
 import VirtualDeviceSystem from './logic/virtual-device'
 import VirtualMachineSystem from './logic/virtual-machine'
+import VolumetricFactorySystem from './core/factory/volumetric-factory'
 import SkyboxSystem from './environment/skybox'
 
 import Convolvr from '../world/world'
@@ -83,7 +84,7 @@ type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "
 					 "metaFactory" | "miniature" | "npc" | "obj" | "oimo" | "objective" | "particles" | "propulsion" | "portal" |
 					 "projectile" | "quest" | "rest" | "rpgRace" | "signal" | "skill" | "skybox" | "screenshot" | "socialMedia" | 
 					 "speech" | "state" | "stat" | "staticCollisions" | "switch" | "terrain" | "text" | "time" | "toolUI" | "tool" |
-					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "wall" | "webrtc" | "weapon";
+					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "volumetricFactory" | "wall" | "webrtc" | "weapon";
 
 const THREE = (window as any).THREE;
 export default class Systems {
@@ -93,79 +94,80 @@ export default class Systems {
 	public systems: any
 	public deferred: any
 
-	public ability: 		 AbilitySystem;
-	public activate: 		 ActivateSystem;
-	public audio: 			 AudioSystem;
-	public assets: 		  	 AssetSystem;
-	public browser: 		 BrowserSystem;
-	public camera: 		  	 CameraSystem;
-	public chat: 			 ChatSystem;
-	public condition: 		 ConditionSystem;
-	public control: 		 ControlSystem;
-	public conveyor: 		 ConveyorSystem;
-	public cursor: 		  	 CursorSystem;
-	public datgui: 		  	 DatGUIVRPluginSystem;
-	public destructable: 	 DestructableSystem;
-	public display: 		 DisplaySystem;
-	public virtualDevice: 	 VirtualDeviceSystem;
-	public door: 			 DoorSystem;
-	public drawing: 		 DrawingSystem;
-	public emote: 			 EmoteSystem;
-	public faction: 		 FactionSystem;
-	public factory: 		 FactorySystem;
-	public fbx: 			 FBXPluginSystem;
-	public file: 			 FileSystem;
-	public floor: 			 FloorSystem;
-	public geometry: 		 GeometrySystem;
-	public grab: 			 GrabSystem;
-	public graph: 			 GraphSystem;
-	public hand: 			 HandSystem;
-	public head: 			 HeadSystem;
-	public hover: 			 HoverSystem;
-	public input: 			 InputSystem;
-	public loop: 			 LoopSystem;
-	public light: 			 LightSystem;
-	public layout: 		  	 LayoutSystem;
-	public lookAway: 		 LookAwaySystem;
-	public magic: 			 MagicSystem;
-	public material: 		 MaterialSystem;
-	public media: 			 MediaSystem;
-	public metaFactory: 	 MetaFactorySystem;
-	public miniature: 		 MiniatureSystem;
-	public npc: 			 NPCSystem;
-	public obj: 			 ObjPluginSystem;
-	public oimo: 			 OimoPluginSystem;
-	public objective: 		 ObjectiveSystem;
-	public particles: 		 ParticleSystem;
-	public propulsion: 	  	 PropulsionSystem;
-	public portal: 		  	 PortalSystem;
-	public projectile: 	  	 ProjectileSystem;
-	public quest: 			 QuestSystem;
-	public rest: 			 RESTSystem;
-	public rpgRace: 		 RPGRaceSystem;
-	public signal: 		  	 SignalSystem;
-	public skill: 			 SkillSystem;
-	public skybox: 		  	 SkyboxSystem;
-	public screenshot: 	  	 ScreenshotSystem;
-	public socialMedia: 	 SocialMediaSystem;
-	public speech: 		  	 SpeechSystem;
-	public state: 			 StateSystem;
-	public stat: 			 StatSystem;
-	public staticCollisions: StaticCollisions;
-	public switch: 		  	 SwitchSystem;
-	public terrain: 		 SpaceSystem;
-	public text: 			 TextSystem;
-	public time: 			 TimeSystem;
-	public toolUI: 		  	 ToolUISystem;
-	public tool: 			 ToolSystem;
-	public toolbox: 		 ToolboxSystem;
-	public user: 			 UserSystem;
-	public vehicle: 		 VehicleSystem;
-	public video: 			 VideoSystem;
-	public virtualMachine:   VirtualMachineSystem;
-	public wall: 			 WallSystem;
-	public webrtc: 		  	 WebRTCSystem;
-	public weapon: 		  	 WeaponSystem;
+	public ability: 		  AbilitySystem;
+	public activate: 		  ActivateSystem;
+	public audio: 			  AudioSystem;
+	public assets: 		  	  AssetSystem;
+	public browser: 		  BrowserSystem;
+	public camera: 		  	  CameraSystem;
+	public chat: 			  ChatSystem;
+	public condition: 		  ConditionSystem;
+	public control: 		  ControlSystem;
+	public conveyor: 		  ConveyorSystem;
+	public cursor: 		  	  CursorSystem;
+	public datgui: 		  	  DatGUIVRPluginSystem;
+	public destructable: 	  DestructableSystem;
+	public display: 		  DisplaySystem;
+	public virtualDevice: 	  VirtualDeviceSystem;
+	public door: 			  DoorSystem;
+	public drawing: 		  DrawingSystem;
+	public emote: 			  EmoteSystem;
+	public faction: 		  FactionSystem;
+	public factory: 		  FactorySystem;
+	public fbx: 			  FBXPluginSystem;
+	public file: 			  FileSystem;
+	public floor: 			  FloorSystem;
+	public geometry: 		  GeometrySystem;
+	public grab: 			  GrabSystem;
+	public graph: 			  GraphSystem;
+	public hand: 			  HandSystem;
+	public head: 			  HeadSystem;
+	public hover: 			  HoverSystem;
+	public input: 			  InputSystem;
+	public loop: 			  LoopSystem;
+	public light: 			  LightSystem;
+	public layout: 		  	  LayoutSystem;
+	public lookAway: 		  LookAwaySystem;
+	public magic: 			  MagicSystem;
+	public material: 		  MaterialSystem;
+	public media: 			  MediaSystem;
+	public metaFactory: 	  MetaFactorySystem;
+	public miniature: 		  MiniatureSystem;
+	public npc: 			  NPCSystem;
+	public obj: 			  ObjPluginSystem;
+	public oimo: 			  OimoPluginSystem;
+	public objective: 		  ObjectiveSystem;
+	public particles: 		  ParticleSystem;
+	public propulsion: 	  	  PropulsionSystem;
+	public portal: 		  	  PortalSystem;
+	public projectile: 	  	  ProjectileSystem;
+	public quest: 			  QuestSystem;
+	public rest: 			  RESTSystem;
+	public rpgRace: 		  RPGRaceSystem;
+	public signal: 		  	  SignalSystem;
+	public skill: 			  SkillSystem;
+	public skybox: 		  	  SkyboxSystem;
+	public screenshot: 	  	  ScreenshotSystem;
+	public socialMedia: 	  SocialMediaSystem;
+	public speech: 		  	  SpeechSystem;
+	public state: 			  StateSystem;
+	public stat: 			  StatSystem;
+	public staticCollisions:  StaticCollisions;
+	public switch: 		  	  SwitchSystem;
+	public terrain: 		  SpaceSystem;
+	public text: 			  TextSystem;
+	public time: 			  TimeSystem;
+	public toolUI: 		  	  ToolUISystem;
+	public tool: 			  ToolSystem;
+	public toolbox: 		  ToolboxSystem;
+	public user: 			  UserSystem;
+	public vehicle: 		  VehicleSystem;
+	public video: 			  VideoSystem;
+	public virtualMachine:    VirtualMachineSystem;
+	public volumetricFactory: VolumetricFactorySystem;
+	public wall: 			  WallSystem;
+	public webrtc: 		  	  WebRTCSystem;
+	public weapon: 		  	  WeaponSystem;
 
 	/**
 			*  Initializes all systems before components can be registered
@@ -175,79 +177,80 @@ export default class Systems {
 		world.systems = this
 
         let systems = {
-			ability: 		  new AbilitySystem( world ),
-			activate: 		  new ActivateSystem( world ),
-			audio: 			  new AudioSystem( world ),
-			assets: 		  new AssetSystem( world ),
-			browser: 		  new BrowserSystem( world ),
-			camera: 		  new CameraSystem( world ),
-			chat: 			  new ChatSystem( world ),
-			condition: 		  new ConditionSystem( world ),
-			control: 		  new ControlSystem( world ),
-			conveyor: 		  new ConveyorSystem( world ),
-			cursor: 		  new CursorSystem( world ),
-			datgui: 		  new DatGUIVRPluginSystem( world ),
-			destructable: 	  new DestructableSystem( world ),
-			display: 		  new DisplaySystem( world ),
-			virtualDevice:    new VirtualDeviceSystem( world ),
-			door: 			  new DoorSystem( world ),
-			drawing: 		  new DrawingSystem( world ),
-			emote: 			  new EmoteSystem( world ),
-			faction: 		  new FactionSystem( world ),
-			factory: 		  new FactorySystem( world ),
-			fbx: 			  new FBXPluginSystem( world ),
-			file: 			  new FileSystem( world ),
-			floor: 			  new FloorSystem( world ),
-			geometry: 		  new GeometrySystem( world ),
-			grab:             new GrabSystem( world ),
-			graph: 		      new GraphSystem( world ),
-			hand: 			  new HandSystem( world ),
-			head: 			  new HeadSystem( world ),
-			hover: 			  new HoverSystem( world ),
-			input: 			  new InputSystem( world ),
-			loop: 			  new LoopSystem( world ),
-			light: 			  new LightSystem( world ),
-			layout: 		  new LayoutSystem( world ),
-			lookAway: 		  new LookAwaySystem( world ),
-			magic: 			  new MagicSystem( world ),
-			material: 		  new MaterialSystem( world ),
-			media: 			  new MediaSystem( world ),
-			metaFactory: 	  new MetaFactorySystem( world ),
-			miniature: 		  new MiniatureSystem( world ),
-			npc: 			  new NPCSystem( world ),
-			obj: 			  new ObjPluginSystem( world ),
-			oimo: 		   	  new OimoPluginSystem( world ),
-			objective:        new ObjectiveSystem( world ),
-			particles: 		  new ParticleSystem( world ),
-			propulsion: 	  new PropulsionSystem( world ),
-			portal: 		  new PortalSystem( world ),
-			projectile: 	  new ProjectileSystem( world ),
-			quest: 			  new QuestSystem( world ),
-			rest: 			  new RESTSystem( world ),
-			rpgRace:		  new RPGRaceSystem( world ),
-			signal: 		  new SignalSystem( world ),
-			skill: 			  new SkillSystem( world ),
-			skybox:           new SkyboxSystem( world ),
-			screenshot: 	  new ScreenshotSystem( world ),
-			socialMedia: 	  new SocialMediaSystem( world ),
-			speech: 		  new SpeechSystem( world ),
-			state:            new StateSystem( world ),
-			stat: 			  new StatSystem( world ),
-			staticCollisions: new StaticCollisions( world ),
-			switch: 		  new SwitchSystem( world ),
-			terrain: 		  new SpaceSystem( world ),
-			text: 			  new TextSystem( world ),
-			time: 			  new TimeSystem( world ),
-			toolUI: 		  new ToolUISystem( world ),
-			tool: 			  new ToolSystem( world ),
-			toolbox:          new ToolboxSystem( world ),
-			user: 			  new UserSystem( world ),
-			vehicle: 		  new VehicleSystem( world ),
-			video: 			  new VideoSystem( world ),
-			virtualMachine:   new VirtualMachineSystem( world ),
-			wall: 			  new WallSystem( world ),
-			webrtc: 		  new WebRTCSystem( world ),
-			weapon:			  new WeaponSystem( world )
+			ability: 		   new AbilitySystem( world ),
+			activate: 		   new ActivateSystem( world ),
+			audio: 			   new AudioSystem( world ),
+			assets: 		   new AssetSystem( world ),
+			browser: 		   new BrowserSystem( world ),
+			camera: 		   new CameraSystem( world ),
+			chat: 			   new ChatSystem( world ),
+			condition: 		   new ConditionSystem( world ),
+			control: 		   new ControlSystem( world ),
+			conveyor: 		   new ConveyorSystem( world ),
+			cursor: 		   new CursorSystem( world ),
+			datgui: 		   new DatGUIVRPluginSystem( world ),
+			destructable: 	   new DestructableSystem( world ),
+			display: 		   new DisplaySystem( world ),
+			virtualDevice:     new VirtualDeviceSystem( world ),
+			door: 			   new DoorSystem( world ),
+			drawing: 		   new DrawingSystem( world ),
+			emote: 			   new EmoteSystem( world ),
+			faction: 		   new FactionSystem( world ),
+			factory: 		   new FactorySystem( world ),
+			fbx: 			   new FBXPluginSystem( world ),
+			file: 			   new FileSystem( world ),
+			floor: 			   new FloorSystem( world ),
+			geometry: 		   new GeometrySystem( world ),
+			grab:              new GrabSystem( world ),
+			graph: 		       new GraphSystem( world ),
+			hand: 			   new HandSystem( world ),
+			head: 			   new HeadSystem( world ),
+			hover: 			   new HoverSystem( world ),
+			input: 			   new InputSystem( world ),
+			loop: 			   new LoopSystem( world ),
+			light: 			   new LightSystem( world ),
+			layout: 		   new LayoutSystem( world ),
+			lookAway: 		   new LookAwaySystem( world ),
+			magic: 			   new MagicSystem( world ),
+			material: 		   new MaterialSystem( world ),
+			media: 			   new MediaSystem( world ),
+			metaFactory: 	   new MetaFactorySystem( world ),
+			miniature: 		   new MiniatureSystem( world ),
+			npc: 			   new NPCSystem( world ),
+			obj: 			   new ObjPluginSystem( world ),
+			oimo: 		   	   new OimoPluginSystem( world ),
+			objective:         new ObjectiveSystem( world ),
+			particles: 		   new ParticleSystem( world ),
+			propulsion: 	   new PropulsionSystem( world ),
+			portal: 		   new PortalSystem( world ),
+			projectile: 	   new ProjectileSystem( world ),
+			quest: 			   new QuestSystem( world ),
+			rest: 			   new RESTSystem( world ),
+			rpgRace:		   new RPGRaceSystem( world ),
+			signal: 		   new SignalSystem( world ),
+			skill: 			   new SkillSystem( world ),
+			skybox:            new SkyboxSystem( world ),
+			screenshot: 	   new ScreenshotSystem( world ),
+			socialMedia: 	   new SocialMediaSystem( world ),
+			speech: 		   new SpeechSystem( world ),
+			state:             new StateSystem( world ),
+			stat: 			   new StatSystem( world ),
+			staticCollisions:  new StaticCollisions( world ),
+			switch: 		   new SwitchSystem( world ),
+			terrain: 		   new SpaceSystem( world ),
+			text: 			   new TextSystem( world ),
+			time: 			   new TimeSystem( world ),
+			toolUI: 		   new ToolUISystem( world ),
+			tool: 			   new ToolSystem( world ),
+			toolbox:           new ToolboxSystem( world ),
+			user: 			   new UserSystem( world ),
+			vehicle: 		   new VehicleSystem( world ),
+			video: 			   new VideoSystem( world ),
+			virtualMachine:    new VirtualMachineSystem( world ),
+			volumetricFactory: new VolumetricFactorySystem( world ),
+			wall: 			   new WallSystem( world ),
+			webrtc: 		   new WebRTCSystem( world ),
+			weapon:			   new WeaponSystem( world ),
 		}
 		this.systems = systems
 		this.liveSystems = []
@@ -333,9 +336,9 @@ export default class Systems {
 	public tick(delta: number, time: number) {
 		let systems = this.liveSystems,
 			ln = systems.length,
-			l = 0
+			l = 0;
 		// refactor this to check time after each system/tick to avoid dropping render frames
-		if ( ln == 0 ) {
+		if ( delta > 250 || ln == 0 ) {
 			return
 		}
 
@@ -343,9 +346,6 @@ export default class Systems {
 			systems[ l ].tick( delta, time )
 			l += 1
 		}
-		// this.particles.tick( delta, time )
-		// this.terrain.tick( delta, time )
-		// this.fbx.tick( delta, time )
 	}
 }
 

@@ -187,11 +187,6 @@ export default class Convolvr {
 		})
 		this.initialLoad = false
 		this.loadedCallback = () => {
-			console.log("----------------------------------"); 
-			console.log("----------------------------------");
-			console.log("----------------------------------");
-			console.log("----------------------------------");
-			console.log("0.75 world.loadedCallback()")
 			loadedCallback( this );
 			 this.initialLoad = true;
 		}
@@ -202,11 +197,6 @@ export default class Convolvr {
 	}
 
 	public initUserInput() {
-		console.log("----------------------------------"); 
-    console.log("----------------------------------");
-    console.log("----------------------------------");
-	console.log("----------------------------------");
-	console.log("4 init user input")
 		this.userInput.init( this, this.camera, this.user )
     	this.userInput.rotationVector = { x: 0, y: 2.5, z: 0 }
 	}
@@ -248,7 +238,7 @@ export default class Convolvr {
 			b 			   = config.sky.blue,
 			shadowCam 	   = null,
 			oldConfig 	   = Object.assign({}, this.config),
-			skySize 	   = 1000+((this.settings.viewDistance+3.5)*1.4)*140,
+			skySize 	   = 2800+((this.settings.viewDistance+3.5)*1.4)*140,
 			oldSkyMaterial = {}
 
 		this.skyLight = skyLight

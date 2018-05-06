@@ -36,8 +36,7 @@ void main( void ) {
     float PI = 3.141592654;
     float depth = (1.0 - (abs(0.5 - vUv.y) ));
     float intense = vUv.y*2.0*abs(0.25 - (sin(vUv.x*PI*2.0) / 2.0));
-    float radial = abs(0.25 - (vUv.x / 2.0));
-    float glow = 0.0;
+    float glow = 0.2;
     float luminance = 0.0;
    /* 
     float mixedTerrainRed = red / 2.0 + terrainRed* 0.75;
@@ -49,8 +48,9 @@ void main( void ) {
 
    
 
-        luminance += min(0.3, depth * 1.7);
+        luminance += min(0.3, depth * 2.7);
         glow =+ sin(0.45 * depth * depth);
+        glow *= 1.5;
         newColor = vec3( luminance * red, luminance * green, luminance * blue );
 
         if ( luminance * green > 1.0 ) {
@@ -74,8 +74,8 @@ void main( void ) {
 
        
         color = vec4( newColor, 1.0 );
-        glow += sin( abs(vUv.x * PI -lightYaw  )  );
-        color *= vec4(0.1+1.2*glow, 0.1+1.2*glow, 0.1+1.2*glow, 1.0);
+        glow += sin( PI/2.0+(vUv.x * PI*2.0) -lightYaw );
+        color *= vec4(0.1+1.4*glow, 0.1+1.4*glow, 0.1+1.4*glow, 1.0);
      if ( vUv.y >= 0.5 ) {
         gl_FragColor = (color) +  texture2D(starTexture, fract(vec2(vUv.x*8.0, vUv.y*4.0)));
      } else {    

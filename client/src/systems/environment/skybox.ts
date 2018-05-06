@@ -28,12 +28,18 @@ export default class SkyboxSystem {
         let skybox = null
 
         if ( cylinderMode ) {
-            skybox = new THREE.Mesh(new THREE.CylinderGeometry(skySize / 2, skySize / 2, skySize, 24), oldSkyMaterial)
+            skybox = new THREE.Mesh(new THREE.CylinderGeometry(2800+skySize / 2, skySize / 2, skySize, 24), oldSkyMaterial)
         } else {
-            skybox = new THREE.Mesh(new THREE.OctahedronGeometry(skySize, 4), oldSkyMaterial)
+            skybox = new THREE.Mesh(new THREE.OctahedronGeometry(2800+skySize, 4), oldSkyMaterial)
         }
-       
-        (window as any).three.scene.add(skybox)
+
+        let sunMesh = new THREE.Mesh(
+            new THREE.OctahedronGeometry(skySize/32, 3), 
+            new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.95, transparent: true})
+        );
+
+        this.world.sunLight.add(sunMesh);
+        this.world.three.scene.add(skybox)
         return skybox
     }
 
@@ -125,13 +131,10 @@ export default class SkyboxSystem {
             skyMat = world.skyboxMesh.material
 
             if (skyMat) {
-                if (skyMat.uniforms)
-
+                if (skyMat.uniforms) {
                     skyMat.uniforms.time.value += delta
-
+                }
                 world.skyboxMesh.position.set(camera.position.x, camera.position.y, camera.position.z)
-
-               
 
                 skyLight.position.set(camera.position.x, 2000 + camera.position.y, camera.position.z)
                 sunLight.position.set(camera.position.x - Math.sin(yaw) * 2001, 2800, camera.position.z - Math.cos(yaw) * 2001) // y  // +camera.position.y+ Math.sin(pitch)*801
