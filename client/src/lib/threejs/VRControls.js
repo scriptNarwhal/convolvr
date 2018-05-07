@@ -2,7 +2,7 @@
  * @author dmarcos / https://github.com/dmarcos
  * @author mrdoob / http://mrdoob.com
  */
-
+export function VRControls(THREE) {
 THREE.VRControls = function ( object, onError ) {
 
 	var scope = this;
@@ -171,3 +171,4 @@ THREE.VRControls = function ( object, onError ) {
 	};
 
 };
+}

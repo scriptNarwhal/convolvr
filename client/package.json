@@ -37,6 +37,7 @@
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
     "mocha": "^3.5.0",
+    "proxy-middleware": "^0.15.0",
     "tsify": "^3.0.4",
     "typescript": "^2.7.2",
     "vinyl-buffer": "^1.0.1",

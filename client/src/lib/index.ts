@@ -12,9 +12,6 @@ import { ConvolutionShader } from './threejs/shaders/ConvolutionShader';
 import { CopyShader } from './threejs/shaders/CopyShader';
 import { FXAAShader } from './threejs/shaders/FXAAShader';
 import { ThreeOctree } from './threejs/threeoctree';
-import { VRControls } from 'three';
-
-
 
 export default class THREEJSPluginLoader {
     constructor (THREE: any) {

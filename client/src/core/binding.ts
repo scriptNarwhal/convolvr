@@ -68,6 +68,7 @@ export default class Binding  {
                 return this.systems.assets.loadVideo(source);
         }
     }
+    
 
     private parseSource(source: SourceData, type: PropType): any {
         switch (type) {

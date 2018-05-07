@@ -1,5 +1,7 @@
 var gulp = require('gulp');
 var browserSync = require('browser-sync').create();
+var url = require('url');
+var proxy = require('proxy-middleware');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var tsify = require('tsify');
@@ -58,13 +60,26 @@ gulp.task('build-watch', ['build'], function (done) {
 
 // use default task to launch Browsersync and watch JS files
 gulp.task('watch', ['build'], function () {
+    var proxyOptions = url.parse('http://localhost:3007/api'),
+        dataProxyOptions = url.parse('http://localhost:3007/data'),
+        pageProxyOptions = url.parse('http://localhost:3007');
+    proxyOptions.route = '/api';
+    dataProxyOptions.route = '/data';
+    pageProxyOptions.route = '/world'
     // Serve files from the root of this project
     browserSync.init({
-        proxy: "localhost",
-        port: 3007
+        server: {
+            open: false,
+            port: 3006,
+            baseDir: ['../web'],
+            middleware: [
+                proxy(proxyOptions), 
+                proxy(dataProxyOptions), 
+                proxy(pageProxyOptions)]
+        }
     });
 
     // add browserSync.reload to the tasks array to make
     // all browsers reload after tasks are complete.
-    gulp.watch("src/*", ['build-watch']);
+    gulp.watch("src/**/*.ts", ['build-watch']);
 });
