@@ -143,7 +143,7 @@ export default class MetaFactorySystem {
                 id: -1,
                 name: "",
                 components: [] as DBComponent[],
-                props: [],
+                props: {},
                 state: {},
                 tags: [],
                 attrs: {

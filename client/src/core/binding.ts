@@ -17,6 +17,7 @@ type SourceData = string | any[] | any;
 type TargetData = string | any[] | any;
 
 export default class Binding  {
+    public name: string;
     private systems: Systems
     private component: Component;
     private sourceType: PropType;
@@ -26,7 +27,8 @@ export default class Binding  {
     private targetUri: any; 
     private target: any | any[];  // targetUri resolves to target
 
-    constructor(systems: Systems, component: Component, source: SourceData, sourceType: PropType, targetUri: string, targetType: BindingType) {
+    constructor(systems: Systems, component: Component, name: string, source: SourceData, sourceType: PropType, targetUri: string, targetType: BindingType) {
+        this.name = name;
         this.systems = systems;
         this.component = component;
         this.source = source;
@@ -68,7 +70,7 @@ export default class Binding  {
                 return this.systems.assets.loadVideo(source);
         }
     }
-    
+
 
     private parseSource(source: SourceData, type: PropType): any {
         switch (type) {

@@ -60,6 +60,7 @@ import SpaceSystem from './environment/space'
 import TextSystem from './ui/text'
 import ToolSystem from './tool/tool'
 import TimeSystem from './logic/time'
+import TemplateSystem from './core/factory/template'
 import ToolUISystem from './tool/tool-ui'
 import ToolboxSystem from './tool/toolbox'
 import UserSystem from './core/user'
@@ -70,7 +71,6 @@ import WeaponSystem from './game/weapon'
 import NPCSystem from './game/npc'
 import VirtualDeviceSystem from './logic/virtual-device'
 import VirtualMachineSystem from './logic/virtual-machine'
-import VolumetricFactorySystem from './core/factory/volumetric-factory'
 import SkyboxSystem from './environment/skybox'
 
 import Convolvr from '../world/world'
@@ -84,7 +84,7 @@ type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "
 					 "metaFactory" | "miniature" | "npc" | "obj" | "oimo" | "objective" | "particles" | "propulsion" | "portal" |
 					 "projectile" | "quest" | "rest" | "rpgRace" | "signal" | "skill" | "skybox" | "screenshot" | "socialMedia" | 
 					 "speech" | "state" | "stat" | "staticCollisions" | "switch" | "terrain" | "text" | "time" | "toolUI" | "tool" |
-					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "volumetricFactory" | "wall" | "webrtc" | "weapon";
+					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "template" | "wall" | "webrtc" | "weapon";
 
 import * as THREE from 'three';
 export default class Systems {
@@ -94,80 +94,80 @@ export default class Systems {
 	public systems: any
 	public deferred: any
 
-	public ability: 		  AbilitySystem;
-	public activate: 		  ActivateSystem;
-	public audio: 			  AudioSystem;
-	public assets: 		  	  AssetSystem;
-	public browser: 		  BrowserSystem;
-	public camera: 		  	  CameraSystem;
-	public chat: 			  ChatSystem;
-	public condition: 		  ConditionSystem;
-	public control: 		  ControlSystem;
-	public conveyor: 		  ConveyorSystem;
-	public cursor: 		  	  CursorSystem;
-	public datgui: 		  	  DatGUIVRPluginSystem;
-	public destructable: 	  DestructableSystem;
-	public display: 		  DisplaySystem;
-	public virtualDevice: 	  VirtualDeviceSystem;
-	public door: 			  DoorSystem;
-	public drawing: 		  DrawingSystem;
-	public emote: 			  EmoteSystem;
-	public faction: 		  FactionSystem;
-	public factory: 		  FactorySystem;
-	public fbx: 			  FBXPluginSystem;
-	public file: 			  FileSystem;
-	public floor: 			  FloorSystem;
-	public geometry: 		  GeometrySystem;
-	public grab: 			  GrabSystem;
-	public graph: 			  GraphSystem;
-	public hand: 			  HandSystem;
-	public head: 			  HeadSystem;
-	public hover: 			  HoverSystem;
-	public input: 			  InputSystem;
-	public loop: 			  LoopSystem;
-	public light: 			  LightSystem;
-	public layout: 		  	  LayoutSystem;
-	public lookAway: 		  LookAwaySystem;
-	public magic: 			  MagicSystem;
-	public material: 		  MaterialSystem;
-	public media: 			  MediaSystem;
-	public metaFactory: 	  MetaFactorySystem;
-	public miniature: 		  MiniatureSystem;
-	public npc: 			  NPCSystem;
-	public obj: 			  ObjPluginSystem;
-	public oimo: 			  OimoPluginSystem;
-	public objective: 		  ObjectiveSystem;
-	public particles: 		  ParticleSystem;
-	public propulsion: 	  	  PropulsionSystem;
-	public portal: 		  	  PortalSystem;
-	public projectile: 	  	  ProjectileSystem;
-	public quest: 			  QuestSystem;
-	public rest: 			  RESTSystem;
-	public rpgRace: 		  RPGRaceSystem;
-	public signal: 		  	  SignalSystem;
-	public skill: 			  SkillSystem;
-	public skybox: 		  	  SkyboxSystem;
-	public screenshot: 	  	  ScreenshotSystem;
-	public socialMedia: 	  SocialMediaSystem;
-	public speech: 		  	  SpeechSystem;
-	public state: 			  StateSystem;
-	public stat: 			  StatSystem;
-	public staticCollisions:  StaticCollisions;
-	public switch: 		  	  SwitchSystem;
-	public terrain: 		  SpaceSystem;
-	public text: 			  TextSystem;
-	public time: 			  TimeSystem;
-	public toolUI: 		  	  ToolUISystem;
-	public tool: 			  ToolSystem;
-	public toolbox: 		  ToolboxSystem;
-	public user: 			  UserSystem;
-	public vehicle: 		  VehicleSystem;
-	public video: 			  VideoSystem;
-	public virtualMachine:    VirtualMachineSystem;
-	public volumetricFactory: VolumetricFactorySystem;
-	public wall: 			  WallSystem;
-	public webrtc: 		  	  WebRTCSystem;
-	public weapon: 		  	  WeaponSystem;
+	public ability: 		 AbilitySystem;
+	public activate: 		 ActivateSystem;
+	public audio: 			 AudioSystem;
+	public assets: 		  	 AssetSystem;
+	public browser: 		 BrowserSystem;
+	public camera: 		  	 CameraSystem;
+	public chat: 			 ChatSystem;
+	public condition: 		 ConditionSystem;
+	public control: 		 ControlSystem;
+	public conveyor: 		 ConveyorSystem;
+	public cursor: 		  	 CursorSystem;
+	public datgui: 		  	 DatGUIVRPluginSystem;
+	public destructable: 	 DestructableSystem;
+	public display: 		 DisplaySystem;
+	public virtualDevice: 	 VirtualDeviceSystem;
+	public door: 			 DoorSystem;
+	public drawing: 		 DrawingSystem;
+	public emote: 			 EmoteSystem;
+	public faction: 		 FactionSystem;
+	public factory: 		 FactorySystem;
+	public fbx: 			 FBXPluginSystem;
+	public file: 			 FileSystem;
+	public floor: 			 FloorSystem;
+	public geometry: 		 GeometrySystem;
+	public grab: 			 GrabSystem;
+	public graph: 			 GraphSystem;
+	public hand: 			 HandSystem;
+	public head: 			 HeadSystem;
+	public hover: 			 HoverSystem;
+	public input: 			 InputSystem;
+	public loop: 			 LoopSystem;
+	public light: 			 LightSystem;
+	public layout: 		  	 LayoutSystem;
+	public lookAway: 		 LookAwaySystem;
+	public magic: 			 MagicSystem;
+	public material: 		 MaterialSystem;
+	public media: 			 MediaSystem;
+	public metaFactory: 	 MetaFactorySystem;
+	public miniature: 		 MiniatureSystem;
+	public npc: 			 NPCSystem;
+	public obj: 			 ObjPluginSystem;
+	public oimo: 			 OimoPluginSystem;
+	public objective: 		 ObjectiveSystem;
+	public particles: 		 ParticleSystem;
+	public propulsion: 	  	 PropulsionSystem;
+	public portal: 		  	 PortalSystem;
+	public projectile: 	  	 ProjectileSystem;
+	public quest: 			 QuestSystem;
+	public rest: 			 RESTSystem;
+	public rpgRace: 		 RPGRaceSystem;
+	public signal: 		  	 SignalSystem;
+	public skill: 			 SkillSystem;
+	public skybox: 		  	 SkyboxSystem;
+	public screenshot: 	  	 ScreenshotSystem;
+	public socialMedia: 	 SocialMediaSystem;
+	public speech: 		  	 SpeechSystem;
+	public state: 			 StateSystem;
+	public stat: 			 StatSystem;
+	public staticCollisions: StaticCollisions;
+	public switch: 		  	 SwitchSystem;
+	public terrain: 		 SpaceSystem;
+	public text: 			 TextSystem;
+	public template: 	     TemplateSystem;
+	public time: 			 TimeSystem;
+	public toolUI: 		  	 ToolUISystem;
+	public tool: 			 ToolSystem;
+	public toolbox: 		 ToolboxSystem;
+	public user: 			 UserSystem;
+	public vehicle: 		 VehicleSystem;
+	public video: 			 VideoSystem;
+	public virtualMachine:   VirtualMachineSystem;
+	public wall: 			 WallSystem;
+	public webrtc: 		  	 WebRTCSystem;
+	public weapon: 		  	 WeaponSystem;
 
 	/**
 			*  Initializes all systems before components can be registered
@@ -239,6 +239,7 @@ export default class Systems {
 			switch: 		   new SwitchSystem( world ),
 			terrain: 		   new SpaceSystem( world ),
 			text: 			   new TextSystem( world ),
+			template: 		   new TemplateSystem( world ),
 			time: 			   new TimeSystem( world ),
 			toolUI: 		   new ToolUISystem( world ),
 			tool: 			   new ToolSystem( world ),
@@ -247,7 +248,6 @@ export default class Systems {
 			vehicle: 		   new VehicleSystem( world ),
 			video: 			   new VideoSystem( world ),
 			virtualMachine:    new VirtualMachineSystem( world ),
-			volumetricFactory: new VolumetricFactorySystem( world ),
 			wall: 			   new WallSystem( world ),
 			webrtc: 		   new WebRTCSystem( world ),
 			weapon:			   new WeaponSystem( world ),
@@ -321,12 +321,14 @@ export default class Systems {
         return mesh
 	}
 	
-	private evaluateProperties(component: Component, properties: any[]): void {
-		let binding: Binding
+	private evaluateProperties(component: Component, properties: {[key: string]: any}): void {
+		let binding: Binding,
+			prop
 
 		// init binding here, resolve it to things in th
-		for (let prop of properties) {
-			binding = new Binding(this, component, prop.name, prop.type, prop.binding, prop.bindTarget);
+		for (let propName in properties) {
+			prop = properties[propName];
+			binding = new Binding(this, component, propName, prop.value, prop.type, prop.binding, prop.bindingType);
 			component.bindings.push(binding);
 		}
 	}

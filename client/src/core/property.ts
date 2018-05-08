@@ -19,9 +19,10 @@ export enum PropType {
 };
 
 type Property = {
-    name: string,
+    name?: string,
     type: PropType,
-    bindTarget: BindingType
+    value: string | any,
+    bindingType: BindingType
     binding: string,
 };
 

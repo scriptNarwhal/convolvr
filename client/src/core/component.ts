@@ -1,7 +1,8 @@
+import * as THREE from 'three';
+
 import Entity from "./entity";
 import Binding from './binding';
-
-import * as THREE from 'three';
+import Property from "./property";
 
 export type DBComponent = {
   id?:         number
@@ -9,7 +10,7 @@ export type DBComponent = {
   components?: DBComponent[]
   position?:   number[]
   quaternion?: number[]
-  props?:      any[]
+  props?:      { [key: string]: Property }
   attrs?:      { [key: string]: any }
   state?:      { [key: string]: any }
   tags?:       string[]
@@ -19,9 +20,9 @@ export default class Component {
 
   public entity:             any
   public mesh:               any
-  public props:              any[]
-  public attrs:              any
-  public state:              any
+  public props:              { [key: string]: any }
+  public attrs:              { [key: string]: any }
+  public state:              { [key: string]: any }
   public bindings:           Binding[]
   public components:         any[]
   public compsByFaceIndex:   any[]
@@ -38,7 +39,7 @@ export default class Component {
   private _compPos:          any;
 
 
-  constructor (data: DBComponent, entity: Entity, systems: any, config: any = false, parent?: Component | null ) {
+  constructor (data: DBComponent, entity: Entity, systems: any, config: any = false, parent?: Component | null) {
       let quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : [ 0, 0, 0 ],
           path = config && config.path ? config.path : [],
@@ -183,14 +184,28 @@ export default class Component {
     this.mesh.userData.compsByFaceIndex = this.compsByFaceIndex     
   }
 
-  private updateBindings() {
+  private updateBindings(properties: {[propName: string]: Property}) {
     for (let binding of this.bindings) {
-      binding.update();
+      if (binding.name in properties) {
+        binding.update();
+      }
     }
   }
 
-  public setProps(props: any): void {
+  public setProps(props: {[propName: string]: Property}): void {
+    for (let prop in props) {
+      this.props[prop as any] = props[prop]; 
+    }
+    this.updateBindings(props);
+  }
 
+  public getBindingByName(name: string): Binding | boolean {
+    for (let binding of this.bindings) {
+      if (binding.name == name) {
+        return binding;
+      }
+    }
+    return false;
   }
 
   public getClosestComponent(position: number[], recursive = false): Component {
