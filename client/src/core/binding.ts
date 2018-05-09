@@ -200,6 +200,7 @@ export default class Binding  {
             config = {};
 
         canvas = text.createTextCanvas(canvasSize);
+        context = canvas.getContext("2d");
         text.renderText(context, textLines, color, background, canvasSize, config),
         material = text.createTextMaterial(canvas);
       
