@@ -188,7 +188,22 @@ export default class Binding  {
     }
 
     private dataToJSONMaterial(value: any, sourceType: PropType): any {
-        
+        let name =  "generated_"+value.toString()+sourceType,
+            textLines = JSON.stringify(value).match(/.{1,42}/g),
+            text = this.systems.text,
+            canvasSize = [1024, 1024],
+            color = "#ffffff",
+            background = "#000000",
+            material = null,
+            context: any = null,
+            canvas: any = null,
+            config = {};
+
+        canvas = text.createTextCanvas(canvasSize);
+        text.renderText(context, textLines, color, background, canvasSize, config),
+        material = text.createTextMaterial(canvas);
+      
+        return material;
     }
 
     private vectorToColorMaterial(value: any, sourceType: PropType): any {

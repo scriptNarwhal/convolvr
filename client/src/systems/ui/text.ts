@@ -26,18 +26,14 @@ export default class TextSystem {
             background = attr.background,
             textTexture = null,
             textMaterial = null,
-            textCanvas = document.createElement("canvas"),
+            textCanvas = null,
             canvasSizePOT = !!attr.canvasSize ? attr.canvasSize : [10, 10],
             canvasSize = !!attr.label && !!!attr.canvasSize ? [512, 128] : [Math.pow(2, canvasSizePOT[0]), Math.pow(2, canvasSizePOT[1])],
             context = null,
             config: any = { label: !!attr.label, fontSize: attr.fontSize != 0 ? attr.fontSize : -1 }
         
-        textCanvas.setAttribute("style", "display:none")
-        textCanvas.width = canvasSize[0]
-        textCanvas.height = canvasSize[1]
-        document != null && document.body != null && document.body.appendChild(textCanvas)
-        context = textCanvas.getContext("2d")
-
+        textCanvas = this.createTextCanvas(canvasSize);
+        context = textCanvas.getContext("2d");
         //get old diffuse map / color
         let oldDiffuseCode = component.state.material.getTextureCode("map"),
             oldMapImg = this.systems.assets.textures[ oldDiffuseCode ]
@@ -49,15 +45,7 @@ export default class TextSystem {
         }
 
         this.renderText(context, text, color, background, canvasSize, config )
-        
-        textTexture = new _THREE.Texture( textCanvas )
-        textTexture.anisotropy = this.world.three.renderer.capabilities.getMaxAnisotropy()
-        textMaterial = new _THREE.MeshBasicMaterial({
-            map: textTexture,
-            side: 0,
-            transparent: background.length == 9
-        });
-        textMaterial.map.needsUpdate = true
+        textMaterial = this.createTextMaterial(textCanvas, background);
         component.mesh.material = textMaterial
         if (canvasSize[0] != canvasSize[1]) {
             this.resizeComponent(component, canvasSize)
@@ -65,7 +53,7 @@ export default class TextSystem {
         return {
             textMaterial,
             textMesh: component.mesh,
-            textTexture,
+            textTexture: textMaterial.map,
             textCanvas,
             canvasSize,
             context,
@@ -80,6 +68,27 @@ export default class TextSystem {
                 this.write( component, text )
             }
         }
+    }
+
+    public createTextMaterial(textCanvas: HTMLCanvasElement, background?: string): any {
+        let textTexture = new _THREE.Texture( textCanvas )
+        textTexture.anisotropy = this.world.three.renderer.capabilities.getMaxAnisotropy()
+        let textMaterial = new _THREE.MeshBasicMaterial({
+            map: textTexture,
+            side: 0,
+            transparent: background != null ? background.length == 9 : false
+        });
+        textMaterial.map.needsUpdate = true
+        return textMaterial;
+    }
+
+    public createTextCanvas(canvasSize: number[]): HTMLCanvasElement {
+        let textCanvas = document.createElement("canvas");
+        textCanvas.setAttribute("style", "display:none")
+        textCanvas.width = canvasSize[0];
+        textCanvas.height = canvasSize[1];
+        document != null && document.body != null && document.body.appendChild(textCanvas)
+        return textCanvas;
     }
 
     private renderBackground(image: any, context: any) {
@@ -123,7 +132,7 @@ export default class TextSystem {
         textTexture.needsUpdate = true   
     }
 
-    private renderText(context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: any) {
+   public renderText(context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: any) {
         let textLine = '',
             label = config.label,
             fontSize = (config.fontSize > 0 ? config.fontSize : (label ? 58 : 39)),
