@@ -125,7 +125,12 @@ export default class Binding  {
             case BindingType.ATTRIBUTE:
             case BindingType.PROPERTY:
             case BindingType.STATE:
-                this.target[0][this.target[1]] = this.value; break;
+                if (this.target[1].indexOf('.') > -1){
+                    this.setAtPath(this.value, this.target[0], this.target[1]);
+                } else {
+                    this.target[0][this.target[1]] = this.value;
+                }
+            break;
             case BindingType.CALL:
             
             case BindingType.POSITION:
@@ -197,5 +202,19 @@ export default class Binding  {
         material.opacity = transparent ? this.value[3] : 0;
         material.transparent = transparent;
         return material
+    }
+
+    private setAtPath (value: any, obj: {[key:string]:any}, path: string) { // based off of https://stackoverflow.com/a/20424385/2961114
+        let parts = path.split('.'),
+            o = obj
+
+        if ( parts.length > 1 ) {
+            for (var i = 0; i < parts.length - 1; i++) {
+                if (!o[parts[i]])
+                    o[parts[i]] = {};
+                o = o[parts[i]];
+            }
+        }
+        o[ parts[ parts.length - 1 ] ] = value;
     }
 }
