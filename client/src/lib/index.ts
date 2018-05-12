@@ -12,6 +12,7 @@ import { ConvolutionShader } from './threejs/shaders/ConvolutionShader';
 import { CopyShader } from './threejs/shaders/CopyShader';
 import { FXAAShader } from './threejs/shaders/FXAAShader';
 import { ThreeOctree } from './threejs/threeoctree';
+import { VRControls } from './threejs/VRControls';
 
 export default class THREEJSPluginLoader {
     constructor (THREE: any) {
@@ -25,6 +26,7 @@ export default class THREEJSPluginLoader {
         (MaskPass as any)(THREE);
         (RenderPass as any)(THREE);
         (VREffectComposer as any)(THREE);
+        (VRControls as any)(THREE);
 
         (ConvolutionShader as any)(THREE);
         (CopyShader as any)(THREE);
