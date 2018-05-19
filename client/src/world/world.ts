@@ -203,7 +203,7 @@ export default class Convolvr {
 	}
 
 	public initUserAvatar(coords: number[], newUser: any, callback: Function, overrideAvatar?: string) {
-		console.log("2.5 init user avatar")
+		console.log("2.5 init user avatar", newUser, overrideAvatar);
 		let avatar = this.systems.assets.makeEntity(  
 			overrideAvatar || newUser.data.avatar || "default-avatar", 
 			true, 

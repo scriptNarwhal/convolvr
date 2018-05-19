@@ -308,7 +308,7 @@ export default class AssetSystem {
     }
 
     public makeEntity ( name: string, init: boolean, config: any, voxel: number[] ) {
-        console.log("make entity ", name)
+
         let builtIn = this.entitiesByName,
             library = builtIn[ name ] != null ? builtIn : this.userEntitiesByName,
             toMake = library[ name ],

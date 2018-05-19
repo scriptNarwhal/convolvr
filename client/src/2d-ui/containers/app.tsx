@@ -179,26 +179,26 @@ class App extends Component<AppContainerProps, AppContainerState> {
         unread: 0
       })
     }
+    console.log("adding onvrdisplayactivate handler");
+    let appComponent = this;
+    window.addEventListener('vrdisplayactivate', function(e) {
 
-    window.addEventListener('vrdisplayactivate', e => {
-
-      console.log('Display activated.', e)
+      console.log('Display activated.', e);
       //three.vrDisplay = e.display
       //this.initiateVRMode()
-      if ( true ) { //three.world.mode != "stereo") {
-
+     
         (navigator as any).getVRDisplays().then( (displays: any[]) => { console.log("displays", displays)
 				
           if ( displays.length > 0 ) {
 
             console.log("vrdisplayactivate: found display: ", displays[0])
             //three.vrDisplay = displays[0]
-            //this.initiateVRMode()
+            appComponent.initiateVRMode()
 
           }
-        })
-      }
-    })
+        });
+      
+    });
 
     let renderCanvas: any = document.querySelector("#viewport")
 
@@ -298,7 +298,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
     }
   }
   
-  initiateVRMode ( ) {
+  initiateVRMode (enable?: boolean ) {
     this.props.toggleVRMode()
 
     let three = (window as any).three,
@@ -362,11 +362,10 @@ class App extends Component<AppContainerProps, AppContainerState> {
           } else {
             alert("Connect VR Display and then reload page.")
           }
-         
-          this.props.toggleVRMode()
-          three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
-          three.world.onWindowResize()
       }
+      this.props.toggleVRMode()
+      three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
+      three.world.onWindowResize()
   }
 
   renderVRButtons () {

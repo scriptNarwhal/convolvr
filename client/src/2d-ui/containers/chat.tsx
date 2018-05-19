@@ -154,7 +154,8 @@ class Chat extends Component<any, any> {
 
                   })
                 }
-                <section style={styles.inputs(mobile) as any}>
+            </section>
+            <section style={styles.inputs(mobile) as any}>
                   <input type='text'
                         ref={(input: any) => { this.textInput = input; }}
                         onBlur={ (e: any)=> { this.setState({text: e.target.value }) }}
@@ -172,7 +173,6 @@ class Chat extends Component<any, any> {
                           style={ styles.uploadStyle(mobile) }
                     />
               </section>
-            </section>
           </span>
         </Shell>
     )
@@ -244,10 +244,11 @@ let styles = {
     return {
       width: '100%',
       border: 'none',
-      background: 'hsla(206, 75%, 17%, 1)',
+      background: 'black',
       color: 'white',
       fontSize: '1em',
       padding: '11px',
+      paddingLeft: '26px',
       borderRadius: '3px',
       // borderTopLeftRadius: '3px',
       // borderBottomleftRadius: '3px',
@@ -255,18 +256,20 @@ let styles = {
   },
   button: (mobile: boolean) => {
     return {
-      background: "hsla(225, 75%, 45%, 1)",
-      color: "white",
+      background: 'black',
+      color: '#00d0ff',
       width: '100px',
-      border: 'none',
       fontSize: '1em',
-      padding: '0.5em',
+      padding: '0.35em',
       borderBottomRightRadius: '3px',
       borderTopRightRadius: '3px',
       position: mobile ? 'fixed' : 'absolute',
-      bottom: mobile ? '65px' : '4px',
-      right: '0px',
-      height: '39px'
+      bottom: mobile ? '65px' : '13px',
+      right: '4px',
+      height: '39px',
+      border: '0.1em solid blue',
+      textTransform: 'uppercase',
+      cursor: 'pointer'
     }
   },
   message : {
@@ -322,7 +325,7 @@ let styles = {
       position: 'fixed',
       marginLeft: mobile ? 0 : '10px',
       left: mobile ? 0 : '62px',
-      bottom: mobile ? '58px' : '25px',
+      bottom: mobile ? '58px' : '38px',
       overflowY: 'auto',
       overflowX: 'hidden',
       fontSize: '12pt',
@@ -334,16 +337,17 @@ let styles = {
   },
   inputs: (mobile: boolean) => {
     return {
+      border: '#2d2d2d solid 0.1em',
       height:'2.75em',
       position: "fixed",
       // bottom: mobile ? "4px" : "-20px",
-      width: (mobile ? '100%': '103vh'),
-      maxWidth: mobile ? '100%' : '88vw',
+      width: (mobile ? '100%': '105vh'),
+      maxWidth: mobile ? '100%' : '85vw',
       textAlign: "left",
-      left: mobile ? '0px' : '64px',
-      bottom: mobile ? '60px' : '32px',
+      left: mobile ? '0px' : '22px',
+      bottom: mobile ? '60px' : '-10px',
       minWidth: '42vw',
-      marginLeft: '2%',
+      marginLeft: '2.5em',
       marginRight: '2%'
     }
   },

@@ -13,7 +13,7 @@ export default class UserUpdateHandler {
 
     constructor( handlers: any, world: Convolvr, socket: any ) {
         this.world = world
-        this.handlers = handlers
+        this.handlers = handlers;
         socket.on("update", (packet: any) => {
             let data = JSON.parse(packet.data),
                 world = this.world,
@@ -33,7 +33,10 @@ export default class UserUpdateHandler {
             if (!!data.entity && (world.terrain as any).loaded) {
         
                 update = data.entity
-                
+                if (!world.user || !world.user.id) {
+                    console.error("current user not initialized");
+                    return;
+                }
                 if (update.id != world.user.id) { //  && closeToCamera == false 
                     coords = [].concat(GLOBAL_SPACE);
                     userVoxel = voxels[coords[0] + '.0.' + coords[2]]
@@ -48,9 +51,9 @@ export default class UserUpdateHandler {
                             for (let h = 0, nHands = hands.length; h < nHands; h += 1) {
                                 let hand = hands[h];
 
-                                hand.mesh.position.fromArray(update.hands[h].pos)
-                                hand.mesh.quaternion.fromArray(update.hands[h].quat)
-                                hand.mesh.updateMatrix()
+                                hand.mesh.position.fromArray(update.hands[h].pos);
+                                hand.mesh.quaternion.fromArray(update.hands[h].quat);
+                                hand.mesh.updateMatrix();
                             }
                             // toggle tracked hands?
                             // let's attempt to..
@@ -80,9 +83,9 @@ export default class UserUpdateHandler {
     }
 
     addAvatarToVoxel(entity: any, userVoxel: Voxel, coords: number[], data: any ) {
-        console.log("add avatar to voxel data:", entity)
+
         let world = this.world,
-            avatar = world.systems.assets.makeEntity(entity.avatar, true, { wholeBody: true, userName: entity.username, id: entity.id }, coords),
+            avatar = world.systems.assets.makeEntity(data.avatar, true, { wholeBody: true, userName: entity.username, id: entity.id }, coords),
             user = (world.users as any)["user" + entity.id] = {
                 id: entity.id,
                 avatar,
