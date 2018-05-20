@@ -59,8 +59,8 @@ gulp.task('build-watch', ['build'], function (done) {
 });
 
 gulp.task('move-bundle', function() {
-    gulp.src(["bundle.js"], { base: './web/js' })
-    .pipe(gulp.dest('dist', {baseName: "./"}));
+    gulp.src(["js/web/bundle.js"])
+    .pipe(gulp.dest('dist'));
 });
 
 // use default task to launch Browsersync and watch JS files
