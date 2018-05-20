@@ -58,6 +58,11 @@ gulp.task('build-watch', ['build'], function (done) {
     done();
 });
 
+gulp.task('move-bundle', function() {
+    gulp.src(["web/js/bundle.js"], { base: './' })
+    .pipe(gulp.dest('dist'));
+});
+
 // use default task to launch Browsersync and watch JS files
 gulp.task('watch', ['build'], function () {
     var proxyOptions = url.parse('http://localhost:3007/api'),

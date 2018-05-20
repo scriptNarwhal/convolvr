@@ -1,6 +1,6 @@
 {
   "name": "convolvr",
-  "version": "0.6.0",
+  "version": "0.6.1",
 
   "scripts": {
     "start": "sh auto-build.sh",
@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublishOnly": "gulp build && gulp move-bundle"
   },
-  "main": "web/js/bundle.js",
+  "main": "dist/bundle.js",
   "description": "Modular webvr game engine, authoring tool and server.",
   "repository": {
     "type": "git",
