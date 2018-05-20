@@ -51,6 +51,7 @@ import ScreenshotSystem from './environment/screenshot'
 import SignalSystem from './logic/signal'
 import SkillSystem from './game/skill'
 import SocialMediaSystem from './chat/social-media'
+import SeatSystem from './vehicle/seat'
 import SpeechSystem from './audio/speech'
 import StateSystem from './logic/state'
 import StatSystem from './game/stat'
@@ -82,7 +83,7 @@ type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "
 					 "emote" | "faction" | "factory" | "fbx" | "file" | "floor" | "geometry" | "grab" | "graph" | "hand" | 
 					 "head" | "hover" | "input" | "loop" | "light" | "layout" | "lookAway" | "magic" | "material" | "media" | 
 					 "metaFactory" | "miniature" | "npc" | "obj" | "oimo" | "objective" | "particles" | "propulsion" | "portal" |
-					 "projectile" | "quest" | "rest" | "rpgRace" | "signal" | "skill" | "skybox" | "screenshot" | "socialMedia" | 
+					 "projectile" | "quest" | "rest" | "rpgRace" | "signal" | "seat" | "skill" | "skybox" | "screenshot" | "socialMedia" | 
 					 "speech" | "state" | "stat" | "staticCollisions" | "switch" | "terrain" | "text" | "time" | "toolUI" | "tool" |
 					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "template" | "wall" | "webrtc" | "weapon";
 
@@ -149,6 +150,7 @@ export default class Systems {
 	public skybox: 		  	 SkyboxSystem;
 	public screenshot: 	  	 ScreenshotSystem;
 	public socialMedia: 	 SocialMediaSystem;
+	public seat:             SeatSystem;
 	public speech: 		  	 SpeechSystem;
 	public state: 			 StateSystem;
 	public stat: 			 StatSystem;
@@ -231,6 +233,7 @@ export default class Systems {
 			skill: 			   new SkillSystem( world ),
 			skybox:            new SkyboxSystem( world ),
 			screenshot: 	   new ScreenshotSystem( world ),
+			seat:              new SeatSystem( world ),
 			socialMedia: 	   new SocialMediaSystem( world ),
 			speech: 		   new SpeechSystem( world ),
 			state:             new StateSystem( world ),

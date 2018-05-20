@@ -14,7 +14,6 @@ uniform float lightPitch;
 uniform sampler2D starTexture;
 vec4 color;
 
-
 float hash( float n ) {
     return fract(sin(n)*43758.5453);
 }
@@ -38,44 +37,34 @@ void main( void ) {
     float intense = vUv.y*2.0*abs(0.25 - (sin(vUv.x*PI*2.0) / 2.0));
     float glow = 0.2;
     float luminance = 0.0;
-   /* 
-    float mixedTerrainRed = red / 2.0 + terrainRed* 0.75;
-    float mixedTerrainGreen = green / 2.0 + terrainGreen* 0.75;
-    float mixedTerrainBlue = blue / 2.0 + terrainBlue* 0.75;
-   */
     vec3 newColor = vec3(0,0,0);
     vec3 terrainGradient = vec3(0,0,0);
 
-   
-
-        luminance += min(0.3, depth * 2.7);
-        glow =+ sin(0.45 * depth * depth);
-        glow *= 1.5;
-        newColor = vec3( luminance * red, luminance * green, luminance * blue );
-
-        if ( luminance * green > 1.0 ) {
-             newColor.x += ((luminance * green) -1.0) / 3.4;
-        } 
-        if ( luminance * blue > 1.0 ) {
-             newColor.x += ((luminance * blue) -1.0) / 3.4;
-        } 
-        if ( luminance * red > 1.0 ) {
-             newColor.y += ((luminance * red) -1.0) / 3.4;
-        } 
-        if ( luminance * blue > 1.0 ) {
-             newColor.y += ((luminance * blue) -1.0) / 3.4;
-        } 
-        if ( luminance * green > 1.0 ) {
-             newColor.z += ((luminance * green) -1.0) / 3.4;
-        } 
-        if ( luminance * red > 1.0 ) {
-             newColor.z += ((luminance * red) -1.0) / 3.4;
-        } 
-
-       
-        color = vec4( newColor, 1.0 );
-        glow += sin( PI/2.0+(vUv.x * PI*2.0) -lightYaw );
-        color *= vec4(0.1+1.4*glow, 0.1+1.4*glow, 0.1+1.4*glow, 1.0);
+    luminance += min(0.3, depth * 2.7);
+    glow += sin(0.45 * depth * depth);
+    glow *= 1.5;
+    newColor = vec3( luminance * red, luminance * green, luminance * blue );
+    // if ( luminance * green > 1.0 ) {
+    //      newColor.x += ((luminance * green) -1.0) / 3.4;
+    // } 
+    // if ( luminance * blue > 1.0 ) {
+    //      newColor.x += ((luminance * blue) -1.0) / 3.4;
+    // } 
+    // if ( luminance * red > 1.0 ) {
+    //      newColor.y += ((luminance * red) -1.0) / 3.4;
+    // } 
+    // if ( luminance * blue > 1.0 ) {
+    //      newColor.y += ((luminance * blue) -1.0) / 3.4;
+    // } 
+    // if ( luminance * green > 1.0 ) {
+    //      newColor.z += ((luminance * green) -1.0) / 3.4;
+    // } 
+    // if ( luminance * red > 1.0 ) {
+    //      newColor.z += ((luminance * red) -1.0) / 3.4;
+    // } 
+    color = vec4( newColor, 1.0 );
+    glow += 0.1+sin( PI/2.0+(vUv.x * PI*2.0) -lightYaw )+vUv.y;
+    color *= vec4(0.1+2.4*glow, 0.1+2.4*glow, 0.2+2.4*glow, 1.0);
      if ( vUv.y >= 0.5 ) {
         gl_FragColor = (color) +  texture2D(starTexture, fract(vec2(vUv.x*8.0, vUv.y*4.0)));
      } else {    

@@ -124,9 +124,9 @@ class App extends Component<AppContainerProps, AppContainerState> {
 
         if ( world.terrain.voxels[ voxelKey ] ) {
           altitude = (world.terrain.voxels[ voxelKey ].data.altitude);
-          (window as any).three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
+          world.three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
         }
-        (window as any).three.world.user.velocity.y = -1000
+        world.user.velocity.y = -1000
       }
 
       world.load( worldDetails[ 0 ], worldDetails[ 1 ], () => { /* systems online */ }, ()=> { /* terrain finished loading */

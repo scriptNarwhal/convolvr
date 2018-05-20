@@ -46,7 +46,7 @@ gulp.task('build', function () {
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(sourcemaps.write('./'))
         .pipe(rename({ prefix: i == 0 ? "" : entry.split("/").pop().split(".")[0]+"-" }))
-        .pipe(gulp.dest(i == 0 ? '../web/js' : '../web/js/workers'));
+        .pipe(gulp.dest(i == 0 ? 'web/js' : 'web/js/workers'));
     });
 
     return es.merge.apply(null, tasks);
@@ -71,7 +71,7 @@ gulp.task('watch', ['build'], function () {
         server: {
             open: false,
             port: 3006,
-            baseDir: ['../web'],
+            baseDir: ['web'],
             middleware: [
                 proxy(proxyOptions), 
                 proxy(dataProxyOptions), 
@@ -81,5 +81,18 @@ gulp.task('watch', ['build'], function () {
 
     // add browserSync.reload to the tasks array to make
     // all browsers reload after tasks are complete.
-    gulp.watch("src/**/*.ts", ['build-watch']);
+     gulp.watch("src/**/*.ts", ['build-watch']);
+    // var bundler = watchify('src/**/*.ts');
+
+	// bundler.transform(hbsfy);
+
+	// bundler.on('update', rebundle);
+
+	// function rebundle() {
+	// 	return bundler.bundle()
+	// 		.pipe(source('bundle.js'))
+	// 		.pipe(gulp.dest('web/js')).pipe(livereload());
+	// }
+
+	// return rebundle();
 });

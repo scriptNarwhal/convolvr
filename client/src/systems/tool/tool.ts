@@ -78,53 +78,31 @@ export default class ToolSystem {
                     material: {
                         name: "wireframe",
                         color: panelProp.color
-                    },
-                    components: [
-                        {
-                            position: [ 0, 0, 0],
-                            attrs: { // title for top bar
-                                text: {
-                                    label: true,
-                                    lines: [ panelProp.title ],
-                                    color: "#ffffff",
-                                    background: "#000000"
-                                },
-                                geometry: {
-                                    shape: "box",
-                                    size: [ 3, 0.5, 0.1 ]
-                                },
-                                material: {
-                                    name: "plastic",
-                                    color: 0xffffff
-                                }
+                    }
+                },
+                components: [
+                    {
+                        position: [ 0, 0, 0],
+                        attrs: { // title for top bar
+                            text: {
+                                label: true,
+                                lines: [ panelProp.title ],
+                                color: "#ffffff",
+                                background: "#000000"
                             },
-                            components: [],
-                            quaternion: [ 0, 0, 0, 1 ]
+                            geometry: {
+                                shape: "box",
+                                size: [ 3, 0.5, 0.1 ]
+                            },
+                            material: {
+                                name: "plastic",
+                                color: 0xffffff
+                            }
                         },
-                        {
-                            position: [ 0, 0, 0],
-                            attrs: { // title for top bar
-                                text: {
-                                    label: true,
-                                    lines: [ panelProp.title ],
-                                    color: "#ffffff",
-                                    background: "#000000"
-                                },
-                                geometry: {
-                                    shape: "box",
-                                    size: [ 3, 0.5, 0.1 ]
-                                },
-                                material: {
-                                    name: "plastic",
-                                    color: 0xffffff
-                                }
-                            },
-                            components: [],
-                            quaternion: [ 0, 0, 0, 1 ]
-                        }
-                    ]
-                    
-                }
+                        components: [],
+                        quaternion: [ 0, 0, 0, 1 ]
+                    }
+                ]
             },
             {
                 position: [0, -2.25, 0], // position & init the panel once the tool is equipped
@@ -217,8 +195,8 @@ export default class ToolSystem {
                     console.log("panel distance ", toolPanel.mesh.position.sub( panel.mesh.position ).length());
                     let mesh = panel.mesh
                     if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 4000 ) {
-                        mesh.translateX(12.5*i,0)
-                        mesh.translateZ(12.5*i,0)
+                        mesh.translateX(22.5*(1+i),0)
+                        mesh.translateZ(22.5*(1+i),0)
                         mesh.updateMatrix()
                     }
                 }
@@ -239,10 +217,10 @@ export default class ToolSystem {
             attrs: {
               geometry: {
                 shape: "box",
-                size: [ 0.6, 0.2, 0.2 ]
+                size: [ 1, 0.3, 0.2 ]
               },
               material: {
-                name: "glass"
+                name: "plastic"
               },
               text: {
                 label: true,
