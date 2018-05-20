@@ -155,8 +155,8 @@ export default class Convolvr {
 			// helps insert objects that lie over more than one node
 			overlapPct: 0.15,
 			scene
-		})
-		console.log(this.octree)
+		});
+		this.user.id = -Math.floor(Math.random()*1000000);
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
 		this.raycaster.near = 0.25
@@ -233,80 +233,15 @@ export default class Convolvr {
 		  }
 	}
 
-	startAnimation () { // for debugging
+	public startAnimation () { // for debugging
 		this.animate(this, 0, 0)
 	}
 
-	public initiateVRMode (enable?: boolean ) {
-		let three = this.three,
-			renderer = three.renderer,
-			ratio = window.devicePixelRatio || 1,
-			camera = three.camera,
-			scene = three.scene,
-			world = three.world,
-			controls = null,
-			effect: any = null
-	
-			if (three.vrControls == null) {
-			  (window as any).WebVRConfig = {
-				MOUSE_KEYBOARD_CONTROLS_DISABLED: true,
-				TOUCH_PANNER_DISABLED: true
-			  }
-			  controls = new THREE.VRControls(camera)
-	
-			  if (!three.world.mobile) {
-				renderer.autoClear = false
-			  }
-	
-			  effect = new THREE.VREffect(renderer, world.postProcessing)
-			  effect.scale = 1
-			  effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
-			  three.vrEffect = effect
-			  three.vrControls = controls
-			  
-			  function onResize() {
-				let ratio = window.devicePixelRatio || 1
-				effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
-			  }
-			  function onVRDisplayPresentChange(e: any) {
-				console.log('onVRDisplayPresentChange', e);
-				onResize();
-			  }
-			  // Resize the WebGL canvas when we resize and also when we change modes.
-			  window.addEventListener('resize', onResize);
-			  window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
-			  console.log("vrDisplay", three.vrDisplay)
-			  renderer.domElement.setAttribute("class", "viewport") // clear blur effect
-			  if (three.vrDisplay != null) {
-				three.vrDisplay.requestPresent([{source: renderer.domElement}]).then( ()=> {
-	
-				  if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
-					setTimeout(()=>{
-					  console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
-					  three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
-					
-					}, 0.09)
-				  }
-				  three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
-					vrAnimate( three.world, three.vrDisplay, Date.now(), [0,0,0], 0)
-				  })
-				}).catch( (err: any) => {
-				  console.error( err )
-				})
-				
-			  } else {
-				alert("Connect VR Display and then reload page.")
-			  }
-		  }
-		  
-		  this.toggleVRButtonCallback();
-		  three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
-		  three.world.onWindowResize()
-	  }
-
 	public initChatAndLoggedInUser( doLogin = false ) {
+		console.log("initChatAndLoggedInUser", this)
 		this.initChatCallback();
 		if ( doLogin ) {
+			console.log("do login");
 		  let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...
 		  username = '',
 		  password = '',
@@ -525,7 +460,7 @@ export default class Convolvr {
 	    	imageSize = this.sendVideoFrame()
 
 	  	this.sendUpdatePacket += 1
-	  	if ( this.sendUpdatePacket %((2+(2*this.mode.search("stereo") > -1 ? 1 : 0))*(mobile ? 2 : 1)) == 0 ) { // send packets faster / slower for all vr / mobile combinations
+	  	if ( this.sendUpdatePacket %((2+(2*this.mode.indexOf("stereo") > -1 ? 1 : 0))*(mobile ? 2 : 1)) == 0 ) { // send packets faster / slower for all vr / mobile combinations
 			if ( input.trackedControls || input.leapMotion ) {
 				userHands.forEach( (handComponent: Component) => {
 					let hand = handComponent.mesh
@@ -583,6 +518,73 @@ export default class Convolvr {
 			animate( this, Date.now(), 0 )
 
 	}
+
+	public initiateVRMode (enable?: boolean ) {
+		let three = this.three,
+			renderer = three.renderer,
+			ratio = window.devicePixelRatio || 1,
+			camera = three.camera,
+			scene = three.scene,
+			world = three.world,
+			controls = null,
+			effect: any = null
+	
+			if (three.vrControls == null) {
+			  (window as any).WebVRConfig = {
+				MOUSE_KEYBOARD_CONTROLS_DISABLED: true,
+				TOUCH_PANNER_DISABLED: true
+			  }
+			  controls = new THREE.VRControls(camera)
+	
+			  if (!three.world.mobile) {
+				renderer.autoClear = false
+			  }
+	
+			  effect = new THREE.VREffect(renderer, world.postProcessing)
+			  effect.scale = 1
+			  effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
+			  three.vrEffect = effect
+			  three.vrControls = controls
+			  
+			  function onResize() {
+				let ratio = window.devicePixelRatio || 1
+				effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
+			  }
+			  function onVRDisplayPresentChange(e: any) {
+				console.log('onVRDisplayPresentChange', e);
+				onResize();
+			  }
+			  // Resize the WebGL canvas when we resize and also when we change modes.
+			  window.addEventListener('resize', onResize);
+			  window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
+			  console.log("vrDisplay", three.vrDisplay)
+			  renderer.domElement.setAttribute("class", "viewport") // clear blur effect
+			  if (three.vrDisplay != null) {
+				three.vrDisplay.requestPresent([{source: renderer.domElement}]).then( ()=> {
+	
+				  if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
+					setTimeout(()=>{
+					  console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
+					  three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
+					
+					}, 0.09)
+				  }
+				  three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
+					vrAnimate( three.world, three.vrDisplay, Date.now(), [0,0,0], 0)
+				  })
+				}).catch( (err: any) => {
+				  console.error( err )
+				})
+				
+			  } else {
+				alert("Connect VR Display and then reload page.")
+			  }
+		  }
+		  
+		  this.toggleVRButtonCallback();
+		  three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
+		  three.world.onWindowResize()
+	  }
 
 	sendVideoFrame () { // probably going to remove this now that webrtc is in place
 

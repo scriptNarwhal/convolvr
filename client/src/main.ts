@@ -60,14 +60,13 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
       toolMenu.init( scene, {}, (menu: Entity) => { 
         menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
       }); 
-      
     }); 
-
   };
-
   world.onUserLogin(world.user);
+
+  
   initDemos(world, coords, pos, altitude);
-  setTimeout(()=>world.initChatAndLoggedInUser( localStorage.getItem("username") != null ), 1000);    
+  setTimeout(()=>world.initChatAndLoggedInUser( localStorage.getItem("username") != null ), 1400);    
  
 });
 

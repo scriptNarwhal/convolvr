@@ -313,13 +313,13 @@ class ComponentEditor extends Component<any, any> {
                             <VectorInput axis={4} decimalPlaces={4} onChange={ (value: any, event: any) => { this.onRotationChange( value, event) }} />
                         </span>
                         <div>
-                            <h4 style={styles.h4}>Properties</h4>
+                            <h4 style={styles.h4}>Attributes</h4>
                             <AttributeEditor onSave={ (data: any) => this.onSaveProperty( data ) } 
                                             entityEditMode={true}
                                             convolvrAttrs={getPropsList( BuiltinProps() )}
                                             source={"componentEdit"}
                                             username={ this.props.username }
-                                            title={"Add Property"}
+                                            title={"Add Attribute"}
                             />
                         </div>
                         <div style={ styles.components }>
