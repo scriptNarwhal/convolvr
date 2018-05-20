@@ -125,8 +125,8 @@ import { connect } from 'react-redux'
 import { 
   logOut,
   login 
-} from '../../redux/actions/user-actions'
-import { navigateTo } from "../../redux/actions/app-actions";
+} from '../redux/actions/user-actions'
+import { navigateTo } from "../redux/actions/app-actions";
 
 export default connect(
   (state: any) => {

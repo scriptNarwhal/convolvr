@@ -126,10 +126,10 @@ class ImportToSpace extends Component<any, any> {
 import { connect } from 'react-redux'
 import {
   addItemToSpace
-} from '../../../redux/actions/inventory-actions'
+} from '../../redux/actions/inventory-actions'
 import {
   closeImportToSpace
-} from '../../../redux/actions/util-actions'
+} from '../../redux/actions/util-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

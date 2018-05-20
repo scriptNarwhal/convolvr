@@ -144,17 +144,17 @@ class SharingSettings extends Component<any, any> {
 import { connect } from 'react-redux'
 import {
     toggleMenu
-} from '../../../redux/actions/app-actions'
+} from '../../redux/actions/app-actions'
 import {
   listShares,
   updateShare,
   createShare,
   deleteShare,
   writeText
-} from '../../../redux/actions/file-actions'
+} from '../../redux/actions/file-actions'
 import {
   closeSharingSettings
-} from '../../../redux/actions/util-actions'
+} from '../../redux/actions/util-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

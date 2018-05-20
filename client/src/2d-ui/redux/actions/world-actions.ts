@@ -24,7 +24,7 @@ import {
   CHAT_HISTORY_CLEAR
 } from '../constants/action-types'
 import axios from 'axios'
-import { API_SERVER } from '../../config'
+import { API_SERVER } from '../../../config'
 import { getChatHistory } from './message-actions'
 import { navigateTo } from './app-actions';
 

@@ -7,7 +7,7 @@ import {
     DELETE_AVATAR
 } from '../constants/action-types';
 import axios from 'axios';
-import { API_SERVER } from '../../config'
+import { API_SERVER } from '../../../config'
 
 export function addAvatar (data) {
     return {

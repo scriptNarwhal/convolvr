@@ -4,7 +4,6 @@ import { Router, Route, Switch} from 'react-router'
 import { events } from '../../network/socket'
 import Shell from '../components/shell'
 import Button from '../components/button'
-import { vrAnimate } from '../../world/render'
 import Data from '../../2d-ui/containers/data'
 import Spaces from '../../2d-ui/containers/worlds'
 import Places from '../../2d-ui/containers/places'
@@ -58,6 +57,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
   }
 
   public props: AppContainerProps
+  public world: Convolvr
 
   componentWillMount () {
 
@@ -69,6 +69,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
     let world = (window as any).three.world, 
         worldDetails = detectSpaceDetailsFromURL()
 
+    this.world = world;
     events.on("chat message", message => {
 
       let m = JSON.parse( message.data ),
@@ -132,32 +133,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
       world.load( worldDetails[ 0 ], worldDetails[ 1 ], () => { /* systems online */ }, ()=> { /* terrain finished loading */
         respawnCamera()
       })
-    }, 100)
-
-    world.initChatAndLoggedInUser = ( doLogin = false ) => {
-
-      this.props.getChatHistory(world.name, 0) // wait a fraction of a second for the world to load / to show in 3d too
-      if ( doLogin ) {
-        let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...
-        username = '',
-        password = '',
-        autoSignIn = false
-  
-        if (rememberUser != null) {
-          username = localStorage.getItem("username") // refactor this to be more secure before beta 0.6
-          password = localStorage.getItem("password")
-          if (username != null && username != '') {
-            autoSignIn = true
-            this.props.login(username, password, "", {})
-          }
-        }
-        if (!autoSignIn && this.props.loggedIn == false && window.location.href.indexOf("/chat") >-1) {
-          //this.props.history.push("/login")
-        }
-      } else {
-        world.onUserLogin( world.user )
-      }
-    }
+    }, 100);
 
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
 
@@ -166,51 +142,22 @@ class App extends Component<AppContainerProps, AppContainerState> {
       window.location.pathname.indexOf(`/${menuUrl}`) > -1 && this.props.toggleMenu(true)
     })
 
-    window.onblur = () => {
-      //this.props.setWindowFocus(false)
-      (window as any).three.world.windowFocus = false
-    }
-
-    window.onfocus = () => {
-      //this.props.setWindowFocus(true)
-      (window as any).three.world.windowFocus = true;
-      (window as any).three.world.user.velocity.y = 0;
+    world.rememberUserCallback = (username: string, password: string) => {
+			  this.props.login(username, password, "", {});
+    };
+    world.initChatCallback = () => {
+      this.props.getChatHistory(world.name, 0);
+    };
+    world.onFocusCallback = () => {
       this.setState({
-        unread: 0
-      })
-    }
-    console.log("adding onvrdisplayactivate handler");
-    let appComponent = this;
-    window.addEventListener('vrdisplayactivate', function(e) {
-
-      console.log('Display activated.', e);
-      //three.vrDisplay = e.display
-      //this.initiateVRMode()
-     
-        (navigator as any).getVRDisplays().then( (displays: any[]) => { console.log("displays", displays)
-				
-          if ( displays.length > 0 ) {
-
-            console.log("vrdisplayactivate: found display: ", displays[0])
-            //three.vrDisplay = displays[0]
-            appComponent.initiateVRMode()
-
-          }
-        });
-      
-    });
-
-    let renderCanvas: any = document.querySelector("#viewport")
-
-    renderCanvas.onclick = (event: any) => {
-      let elem = event.target,
-          uInput = (window as any).three.world.userInput
-      event.preventDefault()
-      if (!uInput.fullscreen) {
-        (window as any).three.world.mode = "3d"
-						elem.requestPointerLock()
-            this.props.toggleMenu(false)
-      }
+			  unread: 0
+			});
+    };
+    world.clickCanvasCallback = () => {
+      this.props.toggleMenu(false);
+    };
+    world.toggleVRButtonCallback = () => {
+      this.props.toggleVRMode();
     }
   }
 
@@ -229,7 +176,6 @@ class App extends Component<AppContainerProps, AppContainerState> {
             (window as any).three.world.reload ( newSpace[ 0 ], newSpace[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
 
           }
-         
         }
       }
       if (!nextProps.url.nativeAPI) {
@@ -298,75 +244,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
     }
   }
   
-  initiateVRMode (enable?: boolean ) {
-    this.props.toggleVRMode()
-
-    let three = (window as any).three,
-        renderer = three.renderer,
-        ratio = window.devicePixelRatio || 1,
-        camera = three.camera,
-        scene = three.scene,
-        world = three.world,
-        controls = null,
-        effect: any = null
-
-        if (three.vrControls == null) {
-
-          (window as any).WebVRConfig = {
-            MOUSE_KEYBOARD_CONTROLS_DISABLED: true,
-            TOUCH_PANNER_DISABLED: true
-          }
-          controls = new THREE.VRControls(camera)
-
-          if (!three.world.mobile) {
-            renderer.autoClear = false
-          }
-
-          effect = new THREE.VREffect(renderer, world.postProcessing)
-          effect.scale = 1
-          effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
-          three.vrEffect = effect
-          three.vrControls = controls
-          
-          function onResize() {
-            let ratio = window.devicePixelRatio || 1
-            effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
-          }
-          function onVRDisplayPresentChange(e: any) {
-            console.log('onVRDisplayPresentChange', e)
-            onResize()
-            
-          }
-          // Resize the WebGL canvas when we resize and also when we change modes.
-          window.addEventListener('resize', onResize);
-          window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
-          console.log("vrDisplay", three.vrDisplay)
-          renderer.domElement.setAttribute("class", "viewport") // clear blur effect
-          if (three.vrDisplay != null) {
-            three.vrDisplay.requestPresent([{source: renderer.domElement}]).then( ()=> {
-
-              if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
-                setTimeout(()=>{
-                  console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
-                  three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
-                
-                }, 0.09)
-              }
-              three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
-                vrAnimate( three.world, three.vrDisplay, Date.now(), [0,0,0], 0)
-              })
-            }).catch( (err: any) => {
-              console.error( err )
-            })
-            
-          } else {
-            alert("Connect VR Display and then reload page.")
-          }
-      }
-      this.props.toggleVRMode()
-      three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
-      three.world.onWindowResize()
-  }
+  
 
   renderVRButtons () {
     return this.props.stereoMode ?
@@ -392,7 +270,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
                   }}
                   image="/data/images/vr.png"
                   onClick={ (evt: any, title: string) => {
-                    this.initiateVRMode()
+                    this.world.initiateVRMode()
                   }
                 }
             />
@@ -459,23 +337,24 @@ import {
   toggleVR,
   setWindowFocus,
   showChat
-} from '../../redux/actions/app-actions'
+} from '../../2d-ui/redux/actions/app-actions'
 import {
   fetchSpaces,
   setCurrentSpace,
   fetchUniverseSettings
-} from '../../redux/actions/world-actions'
+} from '../../2d-ui/redux/actions/world-actions'
 import {
   getChatHistory,
   getMessage
-} from '../../redux/actions/message-actions'
+} from '../../2d-ui/redux/actions/message-actions'
 import { 
   fetchUsers,
   login 
-} from '../../redux/actions/user-actions'
+} from '../../2d-ui/redux/actions/user-actions'
 import {
   getInventory
-} from '../../redux/actions/inventory-actions'
+} from '../../2d-ui/redux/actions/inventory-actions'
+import Convolvr from "../../world/world";
 
 export default connect(
   (state: any) => {

@@ -19,7 +19,7 @@ import {
     PLACE_FETCH_DONE,
     PLACE_FETCH_FAIL
 } from '../constants/action-types'
-import { detectSpaceDetailsFromURL } from '../../config'
+import { detectSpaceDetailsFromURL } from '../../../config'
 
 export default function places (state: any = {
     current: detectSpaceDetailsFromURL()[1],

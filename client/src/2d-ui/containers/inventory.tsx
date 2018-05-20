@@ -106,18 +106,18 @@ class Inventory extends Component<any, any> {
 }
 
 import { connect } from "react-redux";
-import { sendMessage } from "../../redux/actions/message-actions";
-import { showChat, navigateTo } from "../../redux/actions/app-actions";
-import { listFiles, listDirectories, changeDirectory,uploadFile, uploadFiles } from "../../redux/actions/file-actions";
+import { sendMessage } from "../redux/actions/message-actions";
+import { showChat, navigateTo } from "../redux/actions/app-actions";
+import { listFiles, listDirectories, changeDirectory,uploadFile, uploadFiles } from "../redux/actions/file-actions";
 import {
     getInventory,
     addInventoryItem,
     updateInventoryItem,
     removeInventoryItem,
     addItemToSpace
-} from "../../redux/actions/inventory-actions";
-import { launchEditLoadedItem, launchInventoryExport, launchImportToSpace } from "../../redux/actions/util-actions";
-import { toggleMenu } from "../../redux/actions/app-actions";
+} from "../redux/actions/inventory-actions";
+import { launchEditLoadedItem, launchInventoryExport, launchImportToSpace } from "../redux/actions/util-actions";
+import { toggleMenu } from "../redux/actions/app-actions";
 
 export default connect(
     (state: any, ownProps: any) => {

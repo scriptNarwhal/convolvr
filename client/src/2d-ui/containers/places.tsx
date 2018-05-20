@@ -88,8 +88,8 @@ class Places extends Component<any, any> {
 import { connect } from 'react-redux';
 import {
   toggleMenu, navigateTo
-} from '../../redux/actions/app-actions'
-import { fetchPlaces, setCurrentPlace } from '../../redux/actions/place-actions'
+} from '../redux/actions/app-actions'
+import { fetchPlaces, setCurrentPlace } from '../redux/actions/place-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

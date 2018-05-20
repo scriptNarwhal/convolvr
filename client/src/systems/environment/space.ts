@@ -10,7 +10,7 @@ import {
 import StaticCollisions from './physics/static-collisions';
 import Component from '../../core/component';
 import Convolvr from '../../world/world';
-import { navigateTo } from '../../redux/actions/app-actions';
+import { navigateTo } from '../../2d-ui/redux/actions/app-actions';
 
 export default class SpaceSystem {
 

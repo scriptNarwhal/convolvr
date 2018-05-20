@@ -66,10 +66,10 @@ import { connect } from 'react-redux';
 
 import {
   fetchUniverseSettings
-} from '../../redux/actions/world-actions'
+} from '../redux/actions/world-actions'
 import {
   toggleMenu, navigateTo
-} from '../../redux/actions/app-actions'
+} from '../redux/actions/app-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

@@ -49,7 +49,7 @@ import {
 } from "../constants/action-types";
 
 import axios from "axios";
-import { API_SERVER } from "../../config";
+import { API_SERVER } from "../../../config";
 import { sendMessage } from "./message-actions";
 
 export function listFiles(username: string, dir: string) {

@@ -154,13 +154,13 @@ class Shell extends Component<ShellProps, any> {
 }
 
 import { connect } from 'react-redux'
-import { toggleMenu, toggleVR } from '../../redux/actions/app-actions'
+import { toggleMenu, toggleVR } from '../../2d-ui/redux/actions/app-actions'
 import {
     sendMessage
-} from '../../redux/actions/message-actions'
+} from '../../2d-ui/redux/actions/message-actions'
 import {
   listFiles
-} from '../../redux/actions/file-actions'
+} from '../../2d-ui/redux/actions/file-actions'
 
 export default connect(
   (state: any, ownProps: ShellProps) => {

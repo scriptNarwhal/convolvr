@@ -1,5 +1,5 @@
 
-import { toggleMenu } from '../redux/actions/app-actions';
+import { toggleMenu } from '../2d-ui/redux/actions/app-actions';
 import { isVRMode } from '../config'
 import UserInput from './user-input';
 import Convolvr from '../world/world';

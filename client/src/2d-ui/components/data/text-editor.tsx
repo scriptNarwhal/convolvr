@@ -135,10 +135,10 @@ import {
   listFiles,
   readText,
   writeText
-} from '../../../redux/actions/file-actions'
+} from '../../redux/actions/file-actions'
 import {
   closeTextEdit,
-} from '../../../redux/actions/util-actions'
+} from '../../redux/actions/util-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

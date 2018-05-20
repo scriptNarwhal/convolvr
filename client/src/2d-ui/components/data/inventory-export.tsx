@@ -141,10 +141,10 @@ import {
     getInventoryItem,
     addInventoryItem,
     updateInventoryItem
-} from '../../../redux/actions/inventory-actions'
+} from '../../redux/actions/inventory-actions'
 import {
     closeInventoryExport
-} from '../../../redux/actions/util-actions'
+} from '../../redux/actions/util-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

@@ -128,8 +128,8 @@ class Spaces extends Component<SpacesProps, any> {
 import { connect } from 'react-redux';
 import {
   toggleMenu
-} from '../../redux/actions/app-actions'
-import { fetchSpaces, setCurrentSpace } from '../../redux/actions/world-actions'
+} from '../redux/actions/app-actions'
+import { fetchSpaces, setCurrentSpace } from '../redux/actions/world-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

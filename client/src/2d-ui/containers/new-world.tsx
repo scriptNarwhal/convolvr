@@ -498,8 +498,8 @@ class NewSpace extends Component<any, any> {
 }
 
 import { connect } from 'react-redux'
-import { createSpace } from '../../redux/actions/world-actions'
-import { uploadFile } from '../../redux/actions/file-actions'
+import { createSpace } from '../redux/actions/world-actions'
+import { uploadFile } from '../redux/actions/file-actions'
 export default connect(
   (state: any) => {
     return {

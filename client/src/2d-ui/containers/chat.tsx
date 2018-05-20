@@ -183,14 +183,14 @@ import { connect } from 'react-redux';
 import {
   getChatHistory,
   sendMessage
-} from '../../redux/actions/message-actions'
+} from '../../2d-ui/redux/actions/message-actions'
 import {
   toggleMenu,
   showChat
-} from '../../redux/actions/app-actions'
+} from '../../2d-ui/redux/actions/app-actions'
 import {
   uploadFiles
-} from '../../redux/actions/file-actions'
+} from '../../2d-ui/redux/actions/file-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

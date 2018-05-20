@@ -4,6 +4,7 @@
 /convolvr.exe
 /convolvr.exe~
 /convolvr
+/dist/*.js
 /client/web/js/workers/*
 /client/web/js/bundle.js
 /client/web/js/bundle.js.map

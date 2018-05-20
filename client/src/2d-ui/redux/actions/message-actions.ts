@@ -6,8 +6,8 @@ import {
     CHAT_HISTORY_FAIL
 } from '../constants/action-types';
 import axios from 'axios';
-import { API_SERVER } from '../../config'
-import { send } from '../../network/socket'
+import { API_SERVER } from '../../../config'
+import { send } from '../../../network/socket'
 
 export function sendMessage (message: string, from: string, files: any[], avatar?: string, space?: string) {
     send('chat message', {
@@ -81,8 +81,6 @@ export function getChatHistory (spaceName: string, skip: number) {
 
                     }
                 }
-
-            
 
             if ( chatUI ) {
                 populateVRChat( response.data )

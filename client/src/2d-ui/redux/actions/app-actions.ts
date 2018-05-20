@@ -10,7 +10,7 @@ import {
     APP_SET_WINDOW_FOCUS,
     APP_NAVIGATE_TO
 } from '../constants/action-types';
-import { API_SERVER } from '../../config'
+import { API_SERVER } from '../../../config'
 
 export function toggleMenu ( force?: boolean ) {
     console.log("toggle menu ", force)

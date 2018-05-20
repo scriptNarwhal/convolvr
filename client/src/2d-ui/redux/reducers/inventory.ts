@@ -19,7 +19,7 @@ import {
     INVENTORY_ADD_TO_SPACE_DONE,
     INVENTORY_ADD_TO_SPACE_FAIL
 } from '../constants/action-types'
-import { detectSpaceDetailsFromURL } from '../../config'
+import { detectSpaceDetailsFromURL } from '../../../config'
 
 export default function places (state: any = {
     items: {

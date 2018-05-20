@@ -1,4 +1,4 @@
-import { toggleMenu } from '../redux/actions/app-actions';
+import { toggleMenu } from '../2d-ui/redux/actions/app-actions';
 import Convolvr from '../world/world';
 import UserInput from './user-input';
 import ToolboxSystem from '../systems/tool/toolbox';

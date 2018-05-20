@@ -111,14 +111,14 @@ class ImportToInventory extends Component<any, any> {
 import { connect } from 'react-redux'
 import {
     toggleMenu
-} from '../../../redux/actions/app-actions'
+} from '../../redux/actions/app-actions'
 import {
   readText,
   writeText
-} from '../../../redux/actions/file-actions'
+} from '../../redux/actions/file-actions'
 import {
     closeImportToInventory
-} from '../../../redux/actions/util-actions'
+} from '../../redux/actions/util-actions'
 import { isMobile } from "../../../config";
   
 export default connect(

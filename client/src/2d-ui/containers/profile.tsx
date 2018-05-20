@@ -202,19 +202,19 @@ class Profile extends Component<any, any> {
 }
 
 import { connect } from 'react-redux';
-import { sendMessage } from '../../redux/actions/message-actions'
-import { uploadFile } from '../../redux/actions/file-actions'
+import { sendMessage } from '../redux/actions/message-actions'
+import { uploadFile } from '../redux/actions/file-actions'
 import { 
   updateUser,
   login,
   logOut 
-} from '../../redux/actions/user-actions'
+} from '../redux/actions/user-actions'
 import {
   fetchSpaces,
   setCurrentSpace,
   fetchUniverseSettings,
   updateUniverseSettings
-} from '../../redux/actions/world-actions'
+} from '../redux/actions/world-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

@@ -22,7 +22,7 @@ import {
     UNIVERSE_SETTINGS_UPDATE_DONE,
     UNIVERSE_SETTINGS_UPDATE_FAIL
 } from '../constants/action-types'
-import { detectSpaceDetailsFromURL } from '../../config'
+import { detectSpaceDetailsFromURL } from '../../../config'
 
 function spaces (state: any = {
     current: detectSpaceDetailsFromURL()[1],

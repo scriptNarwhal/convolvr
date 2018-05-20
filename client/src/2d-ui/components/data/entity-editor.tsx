@@ -309,17 +309,17 @@ import { connect } from 'react-redux'
 import {
   readText,
   writeText
-} from '../../../redux/actions/file-actions'
+} from '../../redux/actions/file-actions'
 import {
     getInventory,
     addInventoryItem,
     getInventoryItem,
     updateInventoryItem
-} from '../../../redux/actions/inventory-actions'
+} from '../../redux/actions/inventory-actions'
 import {
     closeEntityEditor,
     launchEditLoadedItem
-} from '../../../redux/actions/util-actions'
+} from '../../redux/actions/util-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

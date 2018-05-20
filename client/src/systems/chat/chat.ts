@@ -4,7 +4,7 @@ import Entity from '../../core/entity';
 import {
     getChatHistory,
     sendMessage
-  } from '../../redux/actions/message-actions'
+  } from '../../2d-ui/redux/actions/message-actions'
 import Component from '../../core/component';
 
 export default class ChatSystem {

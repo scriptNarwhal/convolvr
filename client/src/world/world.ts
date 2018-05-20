@@ -2,7 +2,10 @@ import axios from 'axios'
 // import { browserHistory } from 'react-router'
 import * as THREE from 'three';
 import THREEJSPluginLoader from '../lib';
-import { animate } from './render'
+import { 
+	animate,
+	vrAnimate
+} from './render'
 import {
 	API_SERVER,
 	APP_NAME,
@@ -80,8 +83,12 @@ export default class Convolvr {
 	public shadowHelper: any
 
 	public animate: 				Function
-	public initChatAndLoggedInUser: Function
 	public onUserLogin: 			Function
+	public onFocusCallback:         Function
+	public clickCanvasCallback:     Function
+	public toggleVRButtonCallback:  Function
+	public rememberUserCallback:    Function
+	public initChatCallback:        Function
 
 	constructor(socket: any, store: any, loadedCallback: Function) {
 		let mobile = isMobile(),
@@ -191,11 +198,132 @@ export default class Convolvr {
 			loadedCallback( this );
 			 this.initialLoad = true;
 		}
+		window.onblur = () => {
+			//this.props.setWindowFocus(false)
+			this.windowFocus = false
+		};
+		window.onfocus = () => {
+			this.windowFocus = true;
+			this.user.velocity.y = 0;
+			this.onFocusCallback();
+		};
+		window.addEventListener('vrdisplayactivate', function(e) {
+			console.log('Display activated.', e);
+			  (navigator as any).getVRDisplays().then( (displays: any[]) => { console.log("displays", displays)
+				if ( displays.length > 0 ) {
+				  console.log("vrdisplayactivate: found display: ", displays[0])
+				  //three.vrDisplay = displays[0]
+				  self.initiateVRMode()
+				}
+			  });
+			
+		  });
+	  
+		  let renderCanvas: any = document.querySelector("#viewport")
+	  
+		  renderCanvas.onclick = (event: any) => {
+			let elem = event.target,
+				uInput = self.userInput
+			event.preventDefault()
+			if (!uInput.fullscreen) {
+			  self.mode = "3d"
+			elem.requestPointerLock()
+				self.clickCanvasCallback();
+			}
+		  }
 	}
 
 	startAnimation () { // for debugging
 		this.animate(this, 0, 0)
 	}
+
+	public initiateVRMode (enable?: boolean ) {
+		let three = this.three,
+			renderer = three.renderer,
+			ratio = window.devicePixelRatio || 1,
+			camera = three.camera,
+			scene = three.scene,
+			world = three.world,
+			controls = null,
+			effect: any = null
+	
+			if (three.vrControls == null) {
+			  (window as any).WebVRConfig = {
+				MOUSE_KEYBOARD_CONTROLS_DISABLED: true,
+				TOUCH_PANNER_DISABLED: true
+			  }
+			  controls = new THREE.VRControls(camera)
+	
+			  if (!three.world.mobile) {
+				renderer.autoClear = false
+			  }
+	
+			  effect = new THREE.VREffect(renderer, world.postProcessing)
+			  effect.scale = 1
+			  effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
+			  three.vrEffect = effect
+			  three.vrControls = controls
+			  
+			  function onResize() {
+				let ratio = window.devicePixelRatio || 1
+				effect.setSize(window.innerWidth * ratio, window.innerHeight * ratio)
+			  }
+			  function onVRDisplayPresentChange(e: any) {
+				console.log('onVRDisplayPresentChange', e);
+				onResize();
+			  }
+			  // Resize the WebGL canvas when we resize and also when we change modes.
+			  window.addEventListener('resize', onResize);
+			  window.addEventListener('vrdisplaypresentchange', onVRDisplayPresentChange);
+			  console.log("vrDisplay", three.vrDisplay)
+			  renderer.domElement.setAttribute("class", "viewport") // clear blur effect
+			  if (three.vrDisplay != null) {
+				three.vrDisplay.requestPresent([{source: renderer.domElement}]).then( ()=> {
+	
+				  if ( world.manualLensDistance != 0 && three.vrDisplay.dpdb_) {
+					setTimeout(()=>{
+					  console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
+					  three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
+					
+					}, 0.09)
+				  }
+				  three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
+					vrAnimate( three.world, three.vrDisplay, Date.now(), [0,0,0], 0)
+				  })
+				}).catch( (err: any) => {
+				  console.error( err )
+				})
+				
+			  } else {
+				alert("Connect VR Display and then reload page.")
+			  }
+		  }
+		  
+		  this.toggleVRButtonCallback();
+		  three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
+		  three.world.onWindowResize()
+	  }
+
+	public initChatAndLoggedInUser( doLogin = false ) {
+		this.initChatCallback();
+		if ( doLogin ) {
+		  let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...
+		  username = '',
+		  password = '',
+		  autoSignIn = false
+	
+		  if (rememberUser != null) {
+			username = localStorage.getItem("username") // refactor this to be more secure before beta 0.6
+			password = localStorage.getItem("password")
+			if (username != null && username != '') {
+			  autoSignIn = true;
+			  this.rememberUserCallback(username, password)
+			}
+		  }
+		} else {
+		  this.onUserLogin( world.user )
+		}
+	  }
 
 	public initUserInput() {
 		this.userInput.init( this, this.camera, this.user )

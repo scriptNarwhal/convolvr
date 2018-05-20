@@ -52,7 +52,7 @@ class UploadFiles extends Component<any, any> {
 import { connect } from 'react-redux'
 import {
     toggleMenu
- } from '../../../redux/actions/app-actions'
+ } from '../../redux/actions/app-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

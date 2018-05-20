@@ -208,11 +208,11 @@ class Data extends Component<any, any> {
 import { connect } from 'react-redux';
 import {
     sendMessage
-} from '../../redux/actions/message-actions'
+} from '../../2d-ui/redux/actions/message-actions'
 import {
   toggleMenu,
   showChat
-} from '../../redux/actions/app-actions'
+} from '../../2d-ui/redux/actions/app-actions'
 import {
   listFiles,
   listDirectories,
@@ -221,13 +221,13 @@ import {
   uploadFile,
   moveFile,
   deleteFile
-} from '../../redux/actions/file-actions'
+} from '../../2d-ui/redux/actions/file-actions'
 import {
   launchTextEdit,
   launchRenameFile,
   launchSharingSettings,
   launchImportToInventory
-} from '../../redux/actions/util-actions'
+} from '../../2d-ui/redux/actions/util-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

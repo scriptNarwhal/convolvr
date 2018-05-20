@@ -42,7 +42,7 @@ import { connect } from 'react-redux';
 import {
     toggleMenu,
     toggleVR
- } from '../../redux/actions/app-actions'
+ } from '../../2d-ui/redux/actions/app-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

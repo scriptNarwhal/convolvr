@@ -99,11 +99,11 @@ class NewFolder extends Component<any, any> {
 import { connect } from 'react-redux'
 // import {
 //   closeNewFolder
-// } from '../../../redux/actions/util-actions'
+// } from '../../redux/actions/util-actions'
 import {
   createDirectory,
   listDirectories
-} from '../../../redux/actions/file-actions'
+} from '../../redux/actions/file-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

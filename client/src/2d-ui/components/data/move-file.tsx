@@ -98,11 +98,11 @@ class MoveFile extends Component<any, any> {
 import { connect } from 'react-redux'
 import {
   closeRenameFile
-} from '../../../redux/actions/util-actions'
+} from '../../redux/actions/util-actions'
 import {
   moveFile,
   listDirectories
-} from '../../../redux/actions/file-actions'
+} from '../../redux/actions/file-actions'
 
 export default connect(
   (state: any, ownProps: any) => {

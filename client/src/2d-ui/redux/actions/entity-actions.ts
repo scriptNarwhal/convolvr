@@ -10,7 +10,7 @@ import {
     ENTITY_IMPORT_TO_SPACE_FAIL
 } from '../constants/action-types';
 import axios from 'axios';
-import { API_SERVER } from '../../config'
+import { API_SERVER } from '../../../config'
 
 export function addEntity (id, name, components) {
     let physicsSpace = three.world.UserPhysics.worker; // until I can find a better way to access this

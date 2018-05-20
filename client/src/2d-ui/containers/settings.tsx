@@ -420,12 +420,12 @@ class Settings extends Component<any, any> {
 import { connect } from 'react-redux';
 import {
     sendMessage
-} from '../../redux/actions/message-actions'
+} from '../redux/actions/message-actions'
 import {
   fetchSpaces,
   fetchUniverseSettings,
   updateUniverseSettings
-} from '../../redux/actions/world-actions'
+} from '../redux/actions/world-actions'
 
 export default connect(
   (state: any, ownProps: any) => {
