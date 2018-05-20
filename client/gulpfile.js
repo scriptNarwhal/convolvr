@@ -59,15 +59,15 @@ gulp.task('build-watch', ['build'], function (done) {
 });
 
 gulp.task('move-bundle', function() {
-    gulp.src(["js/web/bundle.js"])
+    gulp.src(["web/js/bundle.js"])
     .pipe(gulp.dest('dist'));
-    gulp.src(["js/web/workers/geometry-bundle.js"])
+    gulp.src(["web/js/workers/geometry-bundle.js"])
     .pipe(gulp.dest('dist'));
-    gulp.src(["js/web/workers/oimo-bundle.js"])
+    gulp.src(["web/js/workers/oimo-bundle.js"])
     .pipe(gulp.dest('dist'));
-    gulp.src(["js/web/workers/static-collisions-bundle.js"])
+    gulp.src(["web/js/workers/static-collisions-bundle.js"])
     .pipe(gulp.dest('dist'));
-    gulp.src(["js/web/workers/systems-bundle.js"])
+    gulp.src(["web/js/workers/systems-bundle.js"])
     .pipe(gulp.dest('dist'));
 });
 

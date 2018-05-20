@@ -1,6 +1,6 @@
 {
   "name": "convolvr",
-  "version": "0.6.13",
+  "version": "0.6.14",
 
   "scripts": {
     "start": "sh auto-build.sh",
