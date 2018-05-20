@@ -8,7 +8,7 @@
 - Supports infinite, configurable, procedural spaces 
 - Mesh based VR UI; Multiline text rendering
 
-![infinite procedural spaces](web/images/insta.gif)
+![infinite procedural spaces](client/web/images/insta.gif)
 
 ## Installation
 ```shell
