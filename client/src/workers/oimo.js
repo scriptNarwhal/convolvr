@@ -8,11 +8,8 @@ let world          = {},
     byCell         = {}
 
 self.onmessage = ( e ) => {
-
     if ( e.data.action ) {
-
         switch ( e.data.action ) {
-
             case "add voxels":
                 addVoxels( e.data.voxels )
             break
@@ -22,13 +19,10 @@ self.onmessage = ( e ) => {
             case "make static":
                 makeStatic( e.data.entityId, e.data.voxel )
             break
-
         }
-
     }
 
     if ( e.data.oimoUrl && !world ) {
-        
         // Load oimo.js
         importScripts( e.data.oimoUrl )
         // Init physics
@@ -42,11 +36,9 @@ self.onmessage = ( e ) => {
             setInterval( update, e.data.dt*1000 )
 
     }
-
 }
 
 let update = () => {
-
     // Step the world
     world.step()
 
@@ -62,15 +54,11 @@ let update = () => {
             n = 8 * id
 
             if ( b.sleeeping ) {
-
                 minfo[ n + 7 ] = 1;
-
             } else {
-
                 minfo[ n + 7 ] = 0;
                 b.getPosition().toArray( minfo, n );
                 b.getQuaternion().toArray( minfo, n+3 );
-
             }
 
             id += 1
@@ -84,16 +72,13 @@ let update = () => {
 
     },
     addEntity = ( entity ) => {
-
         let newBody  = {},
             isInMotion = false
 
         entity.components.map( comp => {
-
             if ( comp.attrs.oimo && comp.attrs.oimo.velocity ) {
                 // set velocity
             }
-
         })
 
         //body[i] = world.add({type:'sphere', size:[0.25], pos:[x,(0.5*i)+0.5,z], move:true})
@@ -102,23 +87,14 @@ let update = () => {
 
     },
     addVoxels = ( voxels) => {
-
         if ( voxels != null ) {
-
             voxels.map( v => {
-
                 if ( v.entities ) {
-
                     v.entities.map( ent => {
-
                         addEntity( ent )
-
                     })
-
                 }
-
             })
-
         }
 
     },
@@ -128,3 +104,4 @@ let update = () => {
 
     }
 
+sa

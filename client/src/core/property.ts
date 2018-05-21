@@ -9,12 +9,16 @@ export enum PropType {
     STRING = "string",
     ARRAY = "array",
     OBJECT = "object",
-    COMPONENT = "component",
+    ATTRIBUTE = "attr",
+    PROPERTY = "prop",
+    BINDING = "binding",
+    CALLBACK = "callback",
     FUNCTION = "func",
     EXPRESSION = "expr",
     IMAGE = "image",
     AUDIO = "audio",
     VIDEO = "video",
+    COMPONENT = "component",
     ANY = "any"
 };
 

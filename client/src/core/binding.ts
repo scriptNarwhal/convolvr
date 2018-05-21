@@ -27,7 +27,9 @@ export default class Binding  {
     private targetUri: any; 
     private target: any | any[];  // targetUri resolves to target
 
-    constructor(systems: Systems, component: Component, name: string, source: SourceData, sourceType: PropType, targetUri: string, targetType: BindingType) {
+    constructor(systems: Systems, component: Component, name: string, 
+        source: SourceData, sourceType: PropType, targetUri: string, targetType: BindingType) {
+        
         this.name = name;
         this.systems = systems;
         this.component = component;
@@ -49,7 +51,14 @@ export default class Binding  {
 
 
     private parseOrResolveSource(source: SourceData, sourceType: PropType, callback: Function) {
-        if (sourceType == PropType.AUDIO || sourceType == PropType.VIDEO || sourceType == PropType.IMAGE) {
+        let nodeReference = (typeof source == 'string' && (source.indexOf("$parent") == 0 || source.indexOf("$sibling") == 0)),
+            mustResolve = sourceType == PropType.AUDIO || sourceType == PropType.VIDEO || 
+                          sourceType == PropType.IMAGE;
+
+        if (nodeReference) {
+            this.parseOrResolveSource(this.resolveNodeReference(source, sourceType), sourceType, callback);
+        }
+        if (mustResolve) {
             this.resolveSource(source, sourceType).then((value: any) => {
                 this.value = value;
                 callback();
@@ -71,6 +80,33 @@ export default class Binding  {
         }
     }
 
+    private resolveNodeReference(source: SourceData, sourceType: PropType): any {
+        let nodeRef = source.split("."),
+            hasIndex = nodeRef[0].indexOf("[")>-1,
+            index = hasIndex ? nodeRef[0].split("[")[1].split("]")[0] : -1,
+            refType = hasIndex ? nodeRef[0].split("[")[0] : nodeRef[0],
+            node = null,
+            sourcePath = nodeRef[1].indexOf(".") > -1 ? nodeRef[1].split(".") : nodeRef[1],
+            resolved = null;
+        
+        if(refType == "$parent") {
+            node = this.component.parent;
+        } else if (refType == "$sibling") {
+            node = this.component.parent.allComponents[index];
+        }
+        switch (sourceType) {
+            case PropType.PROPERTY:
+                return this.getAtPath(node.props[sourcePath[0]], sourcePath[1]);
+            case PropType.ATTRIBUTE:
+                return this.getAtPath(node.attrs[sourcePath[0]], sourcePath[1]);
+            case PropType.BINDING:
+                let binding = node.getBindingByName(sourcePath);
+
+                return binding ? (binding as Binding).getValue() : null;
+            case PropType.CALLBACK:
+                return node.state[sourcePath[0]].callbacks;
+        }
+    }
 
     private parseSource(source: SourceData, type: PropType): any {
         switch (type) {
@@ -82,6 +118,7 @@ export default class Binding  {
             case PropType.STRING:
             case PropType.ARRAY:
             case PropType.OBJECT:
+            case PropType.CALLBACK:
             case PropType.ANY:
                 return source;
             case PropType.COMPONENT:
@@ -89,7 +126,7 @@ export default class Binding  {
             case PropType.FUNCTION:
                 return source; // store function to evaluate later
             case PropType.EXPRESSION:
-                // implement
+            // implement
                 return // use ecs to evaluate expression
         }
     }
@@ -103,6 +140,7 @@ export default class Binding  {
             case BindingType.PROPERTY:
                 this.target =[c.props, targetUri]; break;
             case BindingType.CALL:
+                this.target = this.getAtPath(c.state, this.target);
             case BindingType.STATE:
                 this.target = [c.state, targetUri]; break;
             case BindingType.POSITION:
@@ -132,7 +170,11 @@ export default class Binding  {
                 }
             break;
             case BindingType.CALL:
-            
+                let targetFunction = this.target;
+
+                this.source.push(()=> {
+                    targetFunction();
+                });
             case BindingType.POSITION:
             case BindingType.ROTATION:
                 this.target.fromArray(this.value); break;
@@ -220,7 +262,24 @@ export default class Binding  {
         return material
     }
 
-    private setAtPath (value: any, obj: {[key:string]:any}, path: string) { // based off of https://stackoverflow.com/a/20424385/2961114
+    public getValue() {
+        return this.value;
+    } 
+
+    private getAtPath (obj: {[key:string]:any}, path: string): any { // based off of https://stackoverflow.com/a/20424385/2961114
+        let parts = path.split('.'),
+            o = obj
+
+        if ( parts.length > 1 ) {
+            for (var i = 0; i < parts.length - 1; i++) {
+                if (!o[parts[i]])
+                    o[parts[i]] = {};
+                o = o[parts[i]];
+            }
+        }
+        return o[ parts[ parts.length - 1 ] ];
+    }
+    private setAtPath (value: any, obj: {[key:string]:any}, path: string): void { // based off of https://stackoverflow.com/a/20424385/2961114
         let parts = path.split('.'),
             o = obj
 
