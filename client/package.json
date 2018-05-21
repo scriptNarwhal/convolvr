@@ -1,7 +1,6 @@
 {
   "name": "convolvr",
   "version": "0.6.14",
-
   "scripts": {
     "start": "sh auto-build.sh",
     "build": "gulp build",
@@ -17,6 +16,7 @@
   "author": "Jeremy Evans <openspacehexagon@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "@types/events": "^1.2.0",
     "@types/react": "^16.0.41",
     "@types/react-dom": "^16.0.4",
     "@types/react-redux": "^5.0.15",

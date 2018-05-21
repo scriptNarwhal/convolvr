@@ -25,7 +25,7 @@ export default class ChatSystem {
             currentUser = this.world.user.name,
             chat = this
 
-        events.on("chat message", message => {
+        events.on("chat message", (message: any) => {
             let chatMessage = JSON.parse( message.data )
           
              Object.keys( byUserName ).map(userName => {

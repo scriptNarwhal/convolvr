@@ -70,7 +70,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
         worldDetails = detectSpaceDetailsFromURL()
 
     this.world = world;
-    events.on("chat message", message => {
+    events.on("chat message", (message: any) => {
 
       let m = JSON.parse( message.data ),
           chatUI = (window as any).three.world.chat,

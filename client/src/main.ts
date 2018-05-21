@@ -17,7 +17,6 @@ import Systems from './systems/index'
 import { events } from './network/socket'
 import User from './world/user'
 import Entity from './core/entity'
-//import ProgressBar from 'progressbardottop'
 
 let store:        any      = makeStore(routerReducer),
     socket:       any      = events,

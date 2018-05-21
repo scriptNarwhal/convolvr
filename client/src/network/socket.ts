@@ -1,5 +1,5 @@
 import * as EventEmitter from 'events'
-export let events = new EventEmitter()
+export let events = new (EventEmitter as any)()
 
 let socket = new WebSocket((window.location.href.indexOf("https") > -1 ? 'wss:' : 'ws:')+"//"+(location.host+"/connect"))
 // Connect to our server: go server

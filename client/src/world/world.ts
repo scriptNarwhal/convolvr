@@ -2,6 +2,7 @@ import axios from 'axios'
 // import { browserHistory } from 'react-router'
 import * as THREE from 'three';
 import THREEJSPluginLoader from '../lib';
+// import * as ProgressBar from 'progressbardottop';
 import { 
 	animate,
 	vrAnimate
