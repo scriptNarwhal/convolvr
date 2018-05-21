@@ -143,7 +143,7 @@ export default class Convolvr {
 		this.capturing = false
 		this.webcamImage = ""
 		this.HMDMode = "standard" // "head-movement"
-		this.vrHeight = 1.66
+		this.vrHeight = 1.2
 		this.screenResX = screenResX
 		this.initRenderer( renderer, "viewport" );
 		this.threeJsPluginLoader = new THREEJSPluginLoader(THREE);
@@ -283,6 +283,7 @@ export default class Convolvr {
 	  callback && callback();
 	}
 
+
 	public init(config: any, callback: Function ) {
 		let coords: any    = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
 			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.25 ),
@@ -310,7 +311,7 @@ export default class Convolvr {
 
 		this.config = config; console.info("Space config: ", config)
 		this.terrain.initTerrain(config.terrain)
-		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 1.1)
+		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 1.4)
 		this.ambientLight.color.set( config.light.ambientColor )
 		Array(this.ambientLight, this.sunLight, this.skyLight).forEach( light => {
 			if ( !!!light.parent ) {
@@ -583,8 +584,8 @@ export default class Convolvr {
 		  }
 		  
 		  this.toggleVRButtonCallback();
-		  three.world.mode = three.world.mode != "stereo" ? "stereo" : "web"
-		  three.world.onWindowResize()
+		  //this.mode = this.mode != "stereo" ? "stereo" : "web"
+		  this.onWindowResize()
 	  }
 
 	sendVideoFrame () { // probably going to remove this now that webrtc is in place

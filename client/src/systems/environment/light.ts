@@ -39,7 +39,7 @@ export default class LightSystem {
             break
         }
 
-        component.mesh.add(light)
+        component.mesh.add(light);
 
         return {
             light,
@@ -54,21 +54,15 @@ export default class LightSystem {
         let light = component.state.light.light
 
         if ( color ) {
-
             light.color.set( color )
-
         } 
 
         if ( intensity ) {
-
             light.intensity = intensity
-
         }
 
         if ( distance ) {
-
             light.distance = distance
-
         }
 
     }

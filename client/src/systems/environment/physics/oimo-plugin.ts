@@ -1,4 +1,3 @@
-//@flow
 import Convolvr from '../../../world/world'
 import Component from '../../../core/component'
 import Entity from '../../../core/entity'
@@ -13,7 +12,7 @@ export default class OimoPluginSystem {
     oimoInfo: any
 
     constructor( world: Convolvr ) {
-        
+
         let worker: any            = new Worker("/data/js/workers/oimo-bundle.js"),
             meshes: Array<any> = this.meshes = [],
             dt:     number            = 1 / 60;
@@ -52,8 +51,8 @@ export default class OimoPluginSystem {
                 id += 1
             }
         }
+        worker.postMessage({ N:N, dt:dt, oimoUrl: "/data/lib/oimo/oimo.min.js" } );
 
-        worker.postMessage({ N:N, dt:dt, oimoUrl: "/data/lib/oimo/oimo.min.js" } )
     }
 
     /**
@@ -83,17 +82,13 @@ export default class OimoPluginSystem {
         if ( false == hasPhysics ) {
             this.addEntity( entity )
         } 
-
     }
 
-    makeStatic ( entity: Entity ) {
-        
+    makeStatic ( entity: Entity ) {   
         let hasPhysics = entity.componentsByAttr.oimo
 
         this.worker.postMessage( { action: "make static", entityId: entity.id, voxel: entity.voxel } ) 
 
     }
-
-
 }
 

@@ -41,14 +41,12 @@ export default class Binding  {
         this.parseOrResolveSource(source, sourceType, ()=> {
             this.resolveTarget(this.source, targetUri, targetType);
             this.apply();
-       })
-        
+       });
     }
 
     public update(): void {
         this.parseOrResolveSource(this.source, this.sourceType, ()=> { this.apply() });
     }
-
 
     private parseOrResolveSource(source: SourceData, sourceType: PropType, callback: Function) {
         let nodeReference = (typeof source == 'string' && (source.indexOf("$parent") == 0 || source.indexOf("$sibling") == 0)),
