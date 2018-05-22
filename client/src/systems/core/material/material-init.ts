@@ -20,7 +20,7 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
         attr.envMap = 'none'
       }
 
-      attr.repeat = ['wrapping', 10, 10]
+      attr.repeat = ['wrapping', 12, 12]
       break
     case "terrain2":
       if (!simpleShading) {
@@ -29,7 +29,7 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
         attr.map = '/data/images/textures/terrain1.jpg' // /data/images/textures/gplaypattern_@2X-2.png'
         attr.envMap = 'none'
       }
-      attr.repeat = ['wrapping', 8, 8]
+      attr.repeat = ['wrapping', 10, 10]
       break
     case "terrain3":
       if (!simpleShading) {
@@ -40,7 +40,7 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
         attr.envMap = 'none'
       }
 
-      attr.repeat = ['wrapping', 10, 10]
+      attr.repeat = ['wrapping', 12, 12]
       break
     case "terrain4":
       if (!simpleShading) {
@@ -51,7 +51,7 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
         attr.envMap = 'none'
       }
 
-      attr.repeat = ['wrapping', 10, 10]
+      attr.repeat = ['wrapping', 12, 12]
       break
     case "organic":
       if (!simpleShading) {

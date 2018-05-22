@@ -286,8 +286,8 @@ export default class Convolvr {
 
 	public init(config: any, callback: Function ) {
 		let coords: any    = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
-			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.25 ),
-			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, config.light.intensity ),
+			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.35 ),
+			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, Math.min(1.0, config.light.intensity) ),
 			three          = this.three,
 			camera 		   = three.camera,
 			skyMaterial    = new THREE.MeshBasicMaterial( {color: 0x303030} ),

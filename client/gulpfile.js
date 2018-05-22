@@ -95,8 +95,7 @@ gulp.task("default", ["build-workers"], bundle);
 watchedBrowserify.on("update", bundle);
 watchedBrowserify.on("log", gutil.log);
 
-// use default task to launch Browsersync and watch JS files
-gulp.task('browser-sync', ['build'], function () {
+function startBrowserSync() {
     var proxyOptions = url.parse('http://localhost:3007/api'),
         dataProxyOptions = url.parse('http://localhost:3007/data'),
         pageProxyOptions = url.parse('http://localhost:3007');
@@ -115,6 +114,11 @@ gulp.task('browser-sync', ['build'], function () {
                 proxy(pageProxyOptions)]
         }
     });
+}
+
+// use default task to launch Browsersync and watch JS files
+gulp.task('browser-sync', ['build'], function() {
+    startBrowserSync();
 
     // add browserSync.reload to the tasks array to make
     // all browsers reload after tasks are complete.

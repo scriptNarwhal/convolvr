@@ -146,7 +146,7 @@ export default class ToolSystem {
     }
 
     _positionToolPanel( toolPanel: Entity, userPos: Array<number>, index: number ) {
-        let userPosition = [userPos[0], userPos[ 1 ] + 2.25, userPos[2]],
+        let userPosition = [userPos[0], userPos[ 1 ] + 3, userPos[2]],
             mesh = toolPanel.mesh
 
         toolPanel.update(userPosition)
