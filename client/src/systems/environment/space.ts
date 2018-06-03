@@ -35,7 +35,7 @@ export default class SpaceSystem {
   public loadedVoxels: any[]
   public physicsVoxels: any
   public voxelList: any[]
-  public voxels: any
+  public voxels: { [coords: string]: Voxel }
 
     constructor (world: Convolvr) {
       this.world            = world
@@ -45,9 +45,9 @@ export default class SpaceSystem {
       this.mesh             = null
       this.distantTerrain   = null
       this.StaticCollisions = null
-      this.physicsVoxels    = []
-      this.voxels           = []
-      this.voxelList        = [] // map of coord strings to voxels
+      this.physicsVoxels    = [];
+      this.voxels           = {};
+      this.voxelList        = []; // map of coord strings to voxels
       this.lastChunkCoords  = [ 0, 0, 0 ]
       this.chunkCoords      = [ 0, 0, 0 ]
       this.cleanUpVoxels    = []

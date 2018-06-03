@@ -194,9 +194,9 @@ export default class ToolSystem {
                 if (panel && panel.mesh) {
                     let mesh: THREE.Mesh = panel.mesh;
 
-                    if ( panel.name != toolPanel.name && mesh.position.distanceTo(toolPanel.mesh.position) < 15 ) {
-                        mesh.translateX(-1.5*(1+i/4.0));
-                        mesh.translateZ(-1.5*(1+i/4.0));
+                    if ( panel.name != toolPanel.name && mesh.position.distanceTo(toolPanel.mesh.position) < 25 ) {
+                        mesh.translateX(-1.25*(1+i/4.0));
+                        mesh.translateZ(-1.25*(1+i/4.0));
                         mesh.updateMatrix()
                     }
                 }

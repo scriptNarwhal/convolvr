@@ -11,7 +11,8 @@ import {
 	API_SERVER,
 	APP_NAME,
 	GRID_SIZE,
-	isMobile
+	isMobile,
+	GLOBAL_SPACE
 } from '../config'
 import { send } from '../network/socket'
 import User from './user'
@@ -163,6 +164,7 @@ export default class Convolvr {
 		this.raycaster.near = 0.25
 		this.THREE = THREE;
 		(window as any).THREE = THREE;
+
 		three = this.three = {
 			world: this,
 			scene,
@@ -170,7 +172,6 @@ export default class Convolvr {
 			renderer,
 			vrDisplay: null
 		}
-
 		world = this;
 		(window as any).three = this.three
 
@@ -184,8 +185,9 @@ export default class Convolvr {
 		camera.add(this.systems.audio.listener)
 		this.socketHandlers = new SocketHandlers( this, socket )
 		window.addEventListener('resize', e => this.onWindowResize(), true)
-		this.onWindowResize()
-		animate(this, 0, 0)
+		this.onWindowResize();
+
+		animate(this, 0, 0);
 		this.animate = animate;
 
 		(three as any).vrDisplay = null;
@@ -220,9 +222,7 @@ export default class Convolvr {
 			
 		  });
 	  
-		  let renderCanvas: any = document.querySelector("#viewport")
-	  
-		  renderCanvas.onclick = (event: any) => {
+		(document.querySelector("#viewport") as any).onclick = (event: any) => {
 			let elem = event.target,
 				uInput = self.userInput
 			event.preventDefault()
@@ -231,7 +231,7 @@ export default class Convolvr {
 			elem.requestPointerLock()
 				self.clickCanvasCallback();
 			}
-		  }
+		}
 	}
 
 	public startAnimation () { // for debugging
@@ -268,7 +268,8 @@ export default class Convolvr {
 
 	public initUserAvatar(coords: number[], newUser: any, callback: Function, overrideAvatar?: string) {
 		console.log("2.5 init user avatar", newUser, overrideAvatar);
-		let avatar = this.systems.assets.makeEntity(  
+		let toolMenu:     Entity   = null,
+			avatar = this.systems.assets.makeEntity(  
 			overrideAvatar || newUser.data.avatar || "default-avatar", 
 			true, 
 			{ 
@@ -279,10 +280,16 @@ export default class Convolvr {
 			coords 
 		  ) // entity id can be passed into config object
 	  avatar.init( this.three.scene )
-	  this.user.useAvatar( avatar )
-	  callback && callback();
+	  this.user.useAvatar( avatar );
+	  this.initUserInput();
+      this.user.toolbox = world.systems.toolbox
+      toolMenu = this.systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) // method for spawning built in entities
+      this.user.hud = toolMenu
+      toolMenu.init( this.three.scene, {}, (menu: Entity) => { 
+        menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
+      }); 
+	  callback && callback(avatar);
 	}
-
 
 	public init(config: any, callback: Function ) {
 		let coords: any    = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
