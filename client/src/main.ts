@@ -51,7 +51,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
     };
     user.name = newUser.userName;
     user.id = newUser.id;
-    world.initUserAvatar(coords, newUser, (avatar: Entity)=> {
+    world.initUserAvatar(newUser, (avatar: Entity)=> {
       console.log("new user avatar", avatar);
       console.log(worldDetails);
       if (worldDetails[3] && worldDetails[3][1] <= 1) {

@@ -66,28 +66,28 @@ export default class UserUpdateHandler {
         })
     }
 
-    loadPlayerAvatar(entity: any, userVoxel: Voxel, coords: number[], data: any ) {
-        if ( this.isEntityLoaded( entity.avatar ) ) {
-            console.log("entity is loaded")
-            this.addAvatarToVoxel(entity, userVoxel, coords, data )
+    loadPlayerAvatar(userFrame: any, userVoxel: Voxel, coords: number[], data: any ) {
+        if ( this.isEntityLoaded( userFrame.avatar ) ) {
+            this.addAvatarToVoxel(userFrame, userVoxel, coords, data )
         } else {
             console.log("entity is not loaded")
-            if ( !!!this.world.systems.assets.loadingItemsById.entities[ entity.avatar ] ) {
-                this.world.systems.assets.loadInventoryEntity(entity.username, entity.avatar).then(()=>{
+            if ( !!!this.world.systems.assets.loadingItemsById.entities[ userFrame.avatar ] ) {
+                this.world.systems.assets.loadInventoryEntity(userFrame.username, userFrame.avatar).then(()=>{
                     console.info("loadPlayerAvatar loadInventory callback")
                    // this.world.systems.assets.userEntities
-                    this.addAvatarToVoxel(entity, userVoxel, coords, data )
+                    this.addAvatarToVoxel(userFrame, userVoxel, coords, data )
                 })
             }
         }
     }
 
-    addAvatarToVoxel(entity: any, userVoxel: Voxel, coords: number[], data: any ) {
-
+    addAvatarToVoxel(userFrame: any, userVoxel: Voxel, coords: number[], data: any ) {
         let world = this.world,
-            avatar = world.systems.assets.makeEntity(data.avatar, true, { wholeBody: true, userName: entity.username, id: entity.id }, coords),
-            user = (world.users as any)["user" + entity.id] = {
-                id: entity.id,
+            avatar = world.systems.assets.makeEntity(userFrame.avatar, true, 
+                { wholeBody: true, userName: userFrame.username, id: userFrame.id }, 
+            coords),
+            user = (world.users as any)["user" + userFrame.id] = {
+                id: userFrame.id,
                 avatar,
                 mesh: null as any
             }
@@ -109,8 +109,6 @@ export default class UserUpdateHandler {
     }
 
     initPlayerAvatar(avatar: Entity, newUser: any, newData: any) {
-        console.log("initPlayerAvatar")
-        console.info("[Remote] User avatar init")
         avatar.init(this.world.three.scene)
         newUser.mesh = avatar.mesh
 

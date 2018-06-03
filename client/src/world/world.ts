@@ -239,7 +239,6 @@ export default class Convolvr {
 	}
 
 	public initChatAndLoggedInUser( doLogin = false ) {
-		console.log("initChatAndLoggedInUser", this)
 		this.initChatCallback();
 		if ( doLogin ) {
 			console.log("do login");
@@ -266,8 +265,7 @@ export default class Convolvr {
     	this.userInput.rotationVector = { x: 0, y: 2.5, z: 0 }
 	}
 
-	public initUserAvatar(coords: number[], newUser: any, callback: Function, overrideAvatar?: string) {
-		console.log("2.5 init user avatar", newUser, overrideAvatar);
+	public initUserAvatar(newUser: any, callback: Function, overrideAvatar?: string) {
 		let toolMenu:     Entity   = null,
 			avatar = this.systems.assets.makeEntity(  
 			overrideAvatar || newUser.data.avatar || "default-avatar", 
@@ -277,7 +275,7 @@ export default class Convolvr {
 			  userName: newUser.name,
 			  wholeBody: false 
 			}, 
-			coords 
+			GLOBAL_SPACE 
 		  ) // entity id can be passed into config object
 	  avatar.init( this.three.scene )
 	  this.user.useAvatar( avatar );
