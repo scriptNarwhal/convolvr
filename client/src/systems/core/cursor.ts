@@ -22,7 +22,7 @@ export default class CursorSystem {
         this.selectAnimTimeout = null
     }
     
-    init (component: Component) {
+    public init (component: Component) {
         return {
             distance: 32000
         }
@@ -127,18 +127,18 @@ export default class CursorSystem {
         cursors.map((cursor: Component, i: number) => { // animate cursors & raycast scene
 
             let state = cursor.state.cursor,
-                cursorMesh = cursor.mesh
+                cursorMesh = cursor.mesh;
             
-            cursorSystem._animateCursors(world, input, cursorSystem, cursor, cursorMesh, state, i, cursorIndex)
+            cursorSystem.animateCursors(world, input, cursorSystem, cursor, cursorMesh, state, i, cursorIndex);
             if (i > 0) { // possibly refactor this to stop hands from lagging behind at high speed*
                 handMesh = cursors[i].mesh.parent
                 !!handMesh && handMesh.updateMatrix()
             }
 
             if (i == cursorIndex) // ray cast from one cursor at a time to save CPU
-                cursorSystem.rayCast(world, camera, cursor, i -1, handMesh, cursorSystem._cursorCallback)
+                cursorSystem.rayCast(world, camera, cursor, i -1, handMesh, cursorSystem.cursorCallback)
 
-        })
+        });
 
         if ( cursorSystem.entityCoolDown  > -3 )
             cursorSystem.entityCoolDown -= 2
@@ -151,7 +151,7 @@ export default class CursorSystem {
         return cursorIndex
     }
 
-    _cursorCallback(cursor: any, hand: number, world: Convolvr, obj: any, entity: Entity, component: Component) {
+    private cursorCallback(cursor: any, hand: number, world: Convolvr, obj: any, entity: Entity, component: Component) {
         let cursorState = cursor.state,
             distance = !!cursorState.cursor ? cursorState.cursor.distance : 2,
             attrs = !!component ? component.attrs : false,
@@ -214,11 +214,11 @@ export default class CursorSystem {
             }
     }
 
-    _animateCursors(world: Convolvr, input: any, cursorSystem: CursorSystem, cursor: any, cursorMesh: any, state: any, i: any, cursorIndex: number) {
+    private animateCursors(world: Convolvr, input: any, cursorSystem: CursorSystem, cursor: any, cursorMesh: any, state: any, i: any, cursorIndex: number) {
         let cursorState = cursor.state.cursor,
             cursorPos = cursorMesh.position,
             cursorSpeed = (cursorState.speed || 0 +(cursorState.speed || 0 +( state.distance - cursorPos.z ) / 8) / 2.0)/2.0,
-            trackedControls = ( input.trackedControls || input.leapMotion )
+            trackedControls = ( world.mode == "stereo" && input.trackedControls || input.leapMotion )
             
         cursorSpeed *= state.entity ? 1 : 0.9;
         cursorState.speed = cursorSpeed;
@@ -249,7 +249,7 @@ export default class CursorSystem {
         }
     }
 
-    _snapToComponent(mesh: any, component: Component, entity: Entity) {
+    private snapToComponent(mesh: any, component: Component, entity: Entity) {
 
         // implement
 

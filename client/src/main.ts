@@ -54,7 +54,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
     world.initUserAvatar(coords, newUser, (avatar: Entity)=> {
       console.log("new user avatar", avatar);
       console.log(worldDetails);
-      if (worldDetails[3] && worldDetails[3][1] <= 0) {
+      if (worldDetails[3] && worldDetails[3][1] <= 1) {
         console.warn("respawning camera");
         pos.y = world.systems.terrain.voxels[coords.join(".")].data.altitude+3;
       }

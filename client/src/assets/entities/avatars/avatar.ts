@@ -155,8 +155,9 @@ let avatar = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody 
         ++n
       }
     components.push( chatText(config) )
+    
     entity = new Entity( id, components, [0,0,0], [0,0,0,1], GLOBAL_SPACE )
-
+    console.warn("new avatar", entity.voxel);
     return entity
 }
 

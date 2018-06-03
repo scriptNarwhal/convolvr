@@ -24,6 +24,7 @@ export default class SpaceSystem {
   public distantTerrain: any
   public StaticCollisions: StaticCollisions
 
+  private hasBuffered: boolean;
   public loaded: boolean  
   public readyCallback: Function
 
@@ -54,6 +55,7 @@ export default class SpaceSystem {
       this.reqVoxels        = []
       this.loadedVoxels     = []
       this.loaded           = false
+      this.hasBuffered      = false;
       this.live             = true
       this.readyCallback    = () => {}
 
@@ -67,19 +69,19 @@ export default class SpaceSystem {
       this.voxels[ GLOBAL_SPACE.join(".") ] = globalVoxel
     }
 
-    init (component: Component) {
+    public init(component: Component) {
         let attr = component.attrs.tab,
             state: any = {}
             
         return state
     }
 
-    tick (delta: number, time: number) {
+    public tick(delta: number, time: number) {
 
       this.bufferVoxels( false, this.phase )
     }
 
-    initTerrain (config: any) {
+    public initTerrain(config: any) {
       let world = this.world,
           SpaceSystem = this,
           materials = world.systems.material
@@ -131,7 +133,7 @@ export default class SpaceSystem {
       }
   }
 
-  destroy () {
+  public destroy() {
     let world = this.world;
     this.voxelList.map( v => {
 			v.entities.map((e: any) => {
@@ -145,18 +147,18 @@ export default class SpaceSystem {
         world.three.scene.remove( v.mesh )
     })
 
-		this.voxels = {}
+		this.voxels = { GLOBAL_SPACE: this.voxels[GLOBAL_SPACE.join(".")]};
 		this.voxelList = []
   }
 
-  loadVoxel (coords: number[], callback: Function) {
+  public loadVoxel(coords: number[], callback: Function) {
     let voxels              = this.voxels,
         voxelList           = this.voxelList,
         voxelKey            = coords[0]+".0."+coords[2], // debugging this.. 
         entities:  Entity[] = [],
         voxelData           = { cell: [coords[0], 0, coords[2]], name: "unloaded voxel", visible: true, altitude: 0, entities },
         v                   = null;
-    
+
     if (voxels[ voxelKey ] == null ) {
         v = new Voxel( voxelData, [coords[0], 0, coords[2]], this.world )
         voxels[ voxelKey ] = v
@@ -171,7 +173,7 @@ export default class SpaceSystem {
     return v
   }
 
-  bufferVoxels (force: boolean, phase: number) {
+  private bufferVoxels(force: boolean, phase: number) {
     let voxels              = this.voxels,
         voxelList           = this.voxelList,
         config              = this.config,
@@ -187,7 +189,7 @@ export default class SpaceSystem {
         chunkPos            = [],
         pCell               = [ 0, 0, 0 ],
         position            = this.world.three.camera.position,
-        terrainChunk        = null,
+        voxelToRemove        = null,
         coords              = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), Math.floor( position.y / GRID_SIZE[ 1 ] ), Math.floor( position.z / GRID_SIZE[ 2 ] ) ],
         lastCoords          = this.lastChunkCoords,
         moveDir             = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
@@ -205,8 +207,8 @@ export default class SpaceSystem {
     force = phase == 0
     if (this.world.name == "" ) { return }
 
-    if (force || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
-
+    if (!this.hasBuffered || coords[0] != lastCoords[0] || coords[1] != lastCoords[1] || coords[2] != lastCoords[2] ) {
+        this.hasBuffered = true;
         lastCoords = this.lastChunkCoords = [ coords[0], coords[1], coords[2] ]
         let userName = world.userName || "convolvr",
             pageName = window.location.pathname,
@@ -220,9 +222,6 @@ export default class SpaceSystem {
         for (var v in voxelList) {
           voxel = voxelList[v]
           pCell = voxel.data.cell
-          if (pCell[1] == 1) {
-            console.warn("dcanger!!!");
-          }
           //console.log("space system::bufferVoxels::cell", pCell);
           if (!!!voxel.cleanUp && (pCell[0] <= coords[0] - removeDistance || pCell[0] >= coords[0] + removeDistance ||
             pCell[2] <= coords[2] - removeDistance || pCell[2] >= coords[2] + removeDistance)) { 	// mark voxels for removal
@@ -234,11 +233,8 @@ export default class SpaceSystem {
               },
               cell: pCell[0] + ".0." + pCell[2]
             })
-
           }
-
         }
-
       }
 
       c = 0
@@ -247,10 +243,10 @@ export default class SpaceSystem {
 
       this.cleanUpVoxels.map(( cleanUp, i ) => {
         if (c < 3 && cleanUp ) {
-          terrainChunk = voxels[ cleanUp.cell ];
+          voxelToRemove = voxels[ cleanUp.cell ];
 
-          if (terrainChunk && terrainChunk.entities ) {
-            terrainChunk.entities.map( (e: any) => {
+          if (voxelToRemove && voxelToRemove.entities ) {
+            voxelToRemove.entities.map( (e: any) => {
               if (!!e && !!e.mesh ) {
                 this.world.octree.remove( e.mesh );
                 this.world.three.scene.remove( e.mesh );
@@ -258,13 +254,13 @@ export default class SpaceSystem {
             })
 
             removePhysicsVoxels.push( cleanUp.physics )
-            voxelList.splice( voxelList.indexOf( terrainChunk ), 1)
+            voxelList.splice( voxelList.indexOf( voxelToRemove ), 1)
             delete voxels[ cleanUp.cell ]
             cleanUpVoxels.splice( i, 1 )
           }   
           c += 1
         }
-      })
+      });
 
       c = 0;
       while ( x <= endCoords[ 0 ] && c < 2 ) { // load new terrain voxels
@@ -281,8 +277,7 @@ export default class SpaceSystem {
       }
       
       if (this.reqVoxels.length >= 6 ) {
-
-        let voxels = ""
+        let voxels = "";
 
         this.reqVoxels.map( ( rc, i ) => {
           if (i > 0 )
@@ -359,7 +354,6 @@ export default class SpaceSystem {
     }
 
     initializeEntities (config: any) {
-
       let initialLoad   = this.world.initialLoad,
           showVoxels    = true,
           terrain       = this,
@@ -369,27 +363,22 @@ export default class SpaceSystem {
           c             = 0
 
       if (!!config )
-
         showVoxels = config.type == "voxels" || config.type == "both"
 
      // loadedVoxels.map((newVoxel, i) => {
 
         if (loadedVoxels.length > 0 ) {
-
           let newVoxel = loadedVoxels[ 0 ],
               voxelKey = newVoxel.x + ".0." + newVoxel.z,
               voxelData = { coords: [newVoxel.x, 0, newVoxel.z], name: newVoxel.name, visible: showVoxels, altitude: newVoxel.altitude, entities: newVoxel.entities },
               v = this.voxels[ voxelKey ]
               
           if (!!!v )
-
             v = this.initializeVoxel( [ newVoxel.x, 0, newVoxel.z], newVoxel.x + ".0." + newVoxel.z )
 
           if (!!!v ) {
-
             console.error("Voxel couldn't load: ", [ newVoxel.x, 0, newVoxel.z])
             return
-
           }
 
           v.setData(newVoxel);
@@ -410,13 +399,9 @@ export default class SpaceSystem {
           }
 
           loadedVoxels.splice(0, 1)
-
         }
-
         //c += 1
-
       //})
-
     }
 
 }

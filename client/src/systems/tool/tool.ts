@@ -16,7 +16,7 @@ export default class ToolSystem {
         this.panels = []
     }
 
-    init ( component: Component ) { 
+    public init(component: Component) { 
         let attr = component.attrs.tool,
             toolSystem = this,
             contentProps = {},
@@ -27,14 +27,14 @@ export default class ToolSystem {
 
         if ( attr.panel ) {
             contentProps = attr.panel && attr.panel.content ? attr.panel.content.attrs : {}
-            panel = this._initPanelUIEntity( attr.panel, contentProps )
+            panel = this.initPanelUIEntity( attr.panel, contentProps )
             this.panels.push( panel )
         }
 
         if ( attr.panels )
             attr.panels.map( ( newPanel: any, p: number) => { console.info("init multiple panels", newPanel);
                 contentProps = newPanel && newPanel.content ? newPanel.content.attrs : {}
-                let panelEnt = toolSystem._initPanelUIEntity( newPanel, contentProps )
+                let panelEnt = toolSystem.initPanelUIEntity( newPanel, contentProps )
                 console.info("panel ent ", panelEnt)
                 panels.push( panelEnt )
                 toolSystem.panels.push( panelEnt )
@@ -46,17 +46,17 @@ export default class ToolSystem {
             preview: {
                 box: null as any,
                 show: (cursor: Component) => {
-                    this._showPreview( component, cursor )
+                    this.showPreview( component, cursor )
                 },
                 hide: () => {
-                    this._hidePreview( component )
+                    this.hidePreview( component )
                 } 
             },
             equip: ( hand: number) => {
-                this._equip( component, hand )
+                this.equip( component, hand )
             },
             unequip: ( hand: number ) => {
-                this._unequip( component, hand )
+                this.unequip( component, hand )
             },
             initLabel: ( value: any ) => {
                 this.initLabel( component, value )
@@ -64,7 +64,7 @@ export default class ToolSystem {
         }
     }
 
-    _initPanelUIEntity(panelProp: any, contentProps: any) {
+    private initPanelUIEntity(panelProp: any, contentProps: any) {
         return new Entity(-1, [ // move panels to asset system perhaps.. or define below*
             {
                 position: [0, 0, 0],
@@ -72,7 +72,7 @@ export default class ToolSystem {
                     geometry: {
                         shape: "box",
                         detail: [4,2,2],
-                        size: [3, 0.5, 0.1],
+                        size: [3, 1.0, 0.05],
                         faceNormals: true
                     },
                     material: {
@@ -121,7 +121,7 @@ export default class ToolSystem {
         ], [0, -0.75, 0], [0,0,0,1], GLOBAL_SPACE, panelProp.title)
     }
 
-    _showPreview(component: Component, cursor: Component) {
+    private showPreview(component: Component, cursor: Component) {
         let previewBox = component.state.tool.preview ? component.state.tool.preview.box : null,
             assets = this.world.systems.assets,
             preview = null
@@ -138,25 +138,25 @@ export default class ToolSystem {
         }
     }
 
-    _hidePreview ( component: Component ) {
+    private hidePreview (component: Component ) {
         let previewBox = component.state.tool.preview ? component.state.tool.preview.box : null
         
         if ( previewBox != null )
             previewBox.mesh.visible = false
     }
 
-    _positionToolPanel( toolPanel: Entity, userPos: Array<number>, index: number ) {
+    private positionToolPanel(toolPanel: Entity, userPos: Array<number>, index: number ) {
         let userPosition = [userPos[0], userPos[ 1 ] + 3, userPos[2]],
             mesh = toolPanel.mesh
 
         toolPanel.update(userPosition)
         mesh.rotation.y = this.world.three.camera.rotation.y - Math.PI / 8
-        mesh.translateZ( -3 )
+        mesh.translateZ( -4 )
         mesh.translateX( 1.25 + (index * 3) )
         mesh.updateMatrix()
     }
 
-    _equip ( component: Component, hand: number ) { // refactor for panels[]
+    private equip (component: Component, hand: number ) { // refactor for panels[]
         let hands:            Array<Component> = this.world.user.avatar.componentsByAttr.hand, //this.toolbox.hands,
             componentsByAttr: any              = component.entity.componentsByAttr,
             input                              = this.world.userInput,
@@ -177,26 +177,25 @@ export default class ToolSystem {
             if ( toolPanel.mesh == null )
                 toolPanel.init( this.world.three.scene )
 
-            this._positionToolPanel( toolPanel, userPos, 0 )
+            this.positionToolPanel( toolPanel, userPos, 0 )
         }
         if ( toolPanels && toolPanels.length > 0 ) {
             toolPanels.map( (toolPanel, i) => {
                 if ( toolPanel.mesh == null )
                     toolPanel.init( this.world.three.scene )
 
-                toolSystem._positionToolPanel( toolPanel, userPos, i )
+                toolSystem.positionToolPanel( toolPanel, userPos, i )
             })
         }
 
         if ( toolPanel ) {
-            console.info("---"); console.warn("PANEL COLLISION CHECK");
             this.panels.map( (panel: Entity, i: number) => { 
                 if (panel && panel.mesh) {
                     let mesh: THREE.Mesh = panel.mesh;
 
                     if ( panel.name != toolPanel.name && mesh.position.distanceTo(toolPanel.mesh.position) < 25 ) {
-                        mesh.translateX(-1.25*(1+i/4.0));
-                        mesh.translateZ(-1.25*(1+i/4.0));
+                        mesh.translateX(-1.2*(1+i/10.0));
+                        mesh.translateZ(-0.5*(1+i/10.0));
                         mesh.updateMatrix()
                     }
                 }
@@ -204,7 +203,7 @@ export default class ToolSystem {
         }
     }
 
-    _unequip ( component: Component, hand: number ) {
+    private unequip ( component: Component, hand: number ) {
         let compMesh = component.mesh
 
         if ( compMesh != null && compMesh.parent != null )
