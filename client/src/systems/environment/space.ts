@@ -196,7 +196,9 @@ export default class SpaceSystem {
         x                   = coords[ 0 ] - phase,
         y                   = coords[ 2 ] - phase,
         c                   = 0;
-
+ if ((window as any).noBuffer) {
+   return;
+ }
   const endCoords = [coords[0]+viewDistance, coords[2]+viewDistance];
 
     this.chunkCoords = coords

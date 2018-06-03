@@ -2,7 +2,7 @@
   "name": "convolvr",
   "version": "0.6.14",
   "scripts": {
-    "start": "sh auto-build.sh",
+    "start": "gulp",
     "build": "gulp build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublishOnly": "gulp build && gulp move-bundle"
