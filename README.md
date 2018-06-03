@@ -22,7 +22,7 @@
 
 ## Development 
 ```shell
-  cd convolvr/client && gulp watch
+  cd convolvr/client && gulp # watchify
   cd convolvr/cmd && go build # && ./cmd # to start server
 ```
 [Wiki](https://github.com/Convolvr/convolvr/wiki/Development)
