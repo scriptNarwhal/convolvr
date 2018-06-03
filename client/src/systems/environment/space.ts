@@ -218,7 +218,10 @@ export default class SpaceSystem {
         for (var v in voxelList) {
           voxel = voxelList[v]
           pCell = voxel.data.cell
-
+          if (pCell[1] == 1) {
+            console.warn("dcanger!!!");
+          }
+          //console.log("space system::bufferVoxels::cell", pCell);
           if (!!!voxel.cleanUp && (pCell[0] <= coords[0] - removeDistance || pCell[0] >= coords[0] + removeDistance ||
             pCell[2] <= coords[2] - removeDistance || pCell[2] >= coords[2] + removeDistance)) { 	// mark voxels for removal
 

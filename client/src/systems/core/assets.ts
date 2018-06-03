@@ -22,6 +22,11 @@ import panel1Comp from '../../assets/components/misc/panel-1'
 import column1Comp from '../../assets/components/misc/column-1'
 import panel2Comp from '../../assets/components/misc/panel-2'
 import column2Comp from '../../assets/components/misc/column-2'
+import seat from '../../assets/components/vehicle/seat'
+import vehicle from '../../assets/components/vehicle/seat'
+import handle from '../../assets/components/tool/handle'
+import weapon from '../../assets/components/tool/weapon'
+
 
 import battleship from '../../assets/entities/vehicles/battleship'
 import car from '../../assets/entities/vehicles/car'
@@ -363,6 +368,10 @@ export default class AssetSystem {
         this._addBuiltInComponent("column", column1Comp)
         this._addBuiltInComponent("panel2", panel2Comp)
         this._addBuiltInComponent("column2", column2Comp)
+        this._addBuiltInComponent("handle", handle)
+        this._addBuiltInComponent("weapon", weapon)
+        this._addBuiltInComponent("vehicle", vehicle)
+        this._addBuiltInComponent("seat", seat)
     }
 
     private _initBuiltInEntities ( ) {

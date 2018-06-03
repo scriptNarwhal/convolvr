@@ -118,7 +118,7 @@ export default class ToolSystem {
                 }),
                 components: []
             }
-        ], [0, -0.75, 0], [0,0,0,1], GLOBAL_SPACE)
+        ], [0, -0.75, 0], [0,0,0,1], GLOBAL_SPACE, panelProp.title)
     }
 
     _showPreview(component: Component, cursor: Component) {
@@ -168,7 +168,7 @@ export default class ToolSystem {
 
         if (!input.trackedControls && !input.leapMotion) {
             this.world.user.avatar.mesh.add( toolMesh )
-            toolMesh.position.set( 0.05-( 0.08 * hand ), -0.333, -0.05 )
+            //toolMesh.position.set( -4.15-( 0.08 * hand ), -2.333, -2.05 )
         } else {
             hands[ hand ].mesh.add( toolMesh ) // add to respective hand 
         }
@@ -192,11 +192,11 @@ export default class ToolSystem {
             console.info("---"); console.warn("PANEL COLLISION CHECK");
             this.panels.map( (panel: Entity, i: number) => { 
                 if (panel && panel.mesh) {
-                    console.log("panel distance ", toolPanel.mesh.position.sub( panel.mesh.position ).length());
-                    let mesh = panel.mesh
-                    if ( panel.id != toolPanel.id && toolPanel.mesh.position.sub( panel.mesh.position ).length() < 4000 ) {
-                        mesh.translateX(22.5*(1+i),0)
-                        mesh.translateZ(22.5*(1+i),0)
+                    let mesh: THREE.Mesh = panel.mesh;
+
+                    if ( panel.name != toolPanel.name && mesh.position.distanceTo(toolPanel.mesh.position) < 15 ) {
+                        mesh.translateX(-1.5*(1+i/4.0));
+                        mesh.translateZ(-1.5*(1+i/4.0));
                         mesh.updateMatrix()
                     }
                 }

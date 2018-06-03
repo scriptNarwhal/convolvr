@@ -73,7 +73,10 @@ export default class OimoPluginSystem {
     }
 
     addEntity ( entity: any ) {
-        this.worker.postMessage( { action: "add entity", entity: { id: entity.id, position: entity.position, quaternion: entity.quaternion, components: entity.components }} )
+        this.worker.postMessage( { 
+            action: "add entity", 
+            entity: { id: entity.id, position: entity.position, quaternion: entity.quaternion, components: entity.components }
+        });
     }
 
     setInMotion ( entity: Entity ) {

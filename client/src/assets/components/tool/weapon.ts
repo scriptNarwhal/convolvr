@@ -1,16 +1,13 @@
-let gun = {
+let weapon = {
     attrs: {
         geometry: {
             merge: true,
             shape: "hexagon",
-            size: [ 0.333, 0.333, 0.5 ]
+            size: [ 0.333, 0.333, 1.0 ]
         },
         material: {
             color: 0xa0a0a0,
-            name: "plastic"
-        },
-        factory: {
-            // redundant?
+            name: "metal"
         },
         weapon: {
 
@@ -20,4 +17,4 @@ let gun = {
     position: [ 0, 0, 0 ]
 }
 
-export default gun
+export default weapon;

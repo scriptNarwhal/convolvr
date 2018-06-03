@@ -3,6 +3,7 @@ import Component from '../../../core/component'
 import chatText from '../../components/chat-text'
 
 import * as THREE from 'three';
+import { GLOBAL_SPACE } from '../../../config';
 // default avatar
 let avatar = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody == true == not just 'vr hands'
   
@@ -154,7 +155,7 @@ let avatar = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody 
         ++n
       }
     components.push( chatText(config) )
-    entity = new Entity( id, components, [0,0,0], [0,0,0,1], voxel )
+    entity = new Entity( id, components, [0,0,0], [0,0,0,1], GLOBAL_SPACE )
 
     return entity
 }

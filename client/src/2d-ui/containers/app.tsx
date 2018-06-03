@@ -113,7 +113,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
         // TODO: implement show chat modal
         // world.chatModal.componentsByAttr.text[0].state.text. 
       }
-    })
+    });
 
     this.props.fetchUniverseSettings()
     setTimeout( ()=> { 
@@ -123,9 +123,12 @@ class App extends Component<AppContainerProps, AppContainerState> {
             voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
             altitude = 0
 
-        if ( world.terrain.voxels[ voxelKey ] ) {
-          altitude = (world.terrain.voxels[ voxelKey ].data.altitude);
-          world.three.camera.position.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude / 10000, cameraPos.z+Math.random()*2) + 7
+        // if ( world.terrain.voxels[ voxelKey ] ) {
+        //   altitude = (world.terrain.voxels[ voxelKey ].data.altitude);
+        //   cameraPos.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude+20, cameraPos.z+Math.random()*2);
+        // }
+        if (worldDetails[2] && worldDetails[2][1] < 0) {
+          cameraPos.y+= 50;
         }
         world.user.velocity.y = -1000
       }

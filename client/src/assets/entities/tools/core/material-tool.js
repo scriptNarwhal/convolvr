@@ -90,9 +90,7 @@ export default class MaterialTool extends Tool {
           return false 
       
       } else {
-      
           coords = selected.voxel
-      
       }
       
       if ( !! cursorComponent && !! selected) {
@@ -109,9 +107,7 @@ export default class MaterialTool extends Tool {
         components = [ component ]
 
       } else {
-        
         return false
-        
       }
 
       return {

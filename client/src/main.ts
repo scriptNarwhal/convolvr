@@ -9,7 +9,8 @@ import {
   clearOldData, 
   APP_ROOT,
   GRID_SIZE,
-  GLOBAL_SPACE 
+  GLOBAL_SPACE, 
+  detectSpaceDetailsFromURL
 } from './config'
 import Routes from './2d-ui/routes'
 import Convolvr from './world/world'
@@ -28,19 +29,20 @@ let store:        any      = makeStore(routerReducer),
     chatScreen:   Entity   = null,
     httpClient:   Entity   = null
 
-const history = createHistory()
+const history = createHistory();
 
 token = localStorage.getItem("token") || ""
-clearOldData()
-
+clearOldData();
+console.warn("test");
 loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
   let systems:   Systems  = world.systems,
       scene:     any      = world.three.scene,  
       pos:       any      = world.camera.position,
       coords:    number[] = world.getVoxel( pos ),
       voxelKey:  string   = coords.join("."),
-      altitude:  number   = (systems.terrain as any).voxels[ voxelKey ].data.altitude;
-     
+      altitude:  number   = (systems.terrain as any).voxels[ voxelKey ].data.altitude,
+      worldDetails = detectSpaceDetailsFromURL();
+  console.warn("worldDetails", worldDetails);
   world.onUserLogin = (newUser: any) => {
     let user = world.user;
     
@@ -51,7 +53,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
     user.name = newUser.userName;
     user.id = newUser.id;
     world.initUserAvatar(coords, newUser, ()=> {
-
+      console.log("new user", newUser)
       world.initUserInput();
       user.toolbox = world.systems.toolbox
       toolMenu = systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) // method for spawning built in entities
@@ -60,12 +62,14 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
         menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
       }); 
     }); 
+     
   };
+  console.warn("about to call onUserLogin");
   world.onUserLogin(world.user);
 
-  
   initDemos(world, coords, pos, altitude);
-  setTimeout(()=>world.initChatAndLoggedInUser( localStorage.getItem("username") != null ), 1400);    
+  setTimeout(()=>world.initChatAndLoggedInUser( localStorage.getItem("username") != null ), 400);
+
  
 });
 

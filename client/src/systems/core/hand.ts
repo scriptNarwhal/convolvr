@@ -1,6 +1,6 @@
 import Component from '../../core/component'
 import Convolvr from '../../world/world'
-
+import { Vector3 } from 'three';
 export default class HandSystem {
 
     world: Convolvr
@@ -55,9 +55,30 @@ export default class HandSystem {
 
         if (cursor && cursorMesh != null && state != null) {
             avatarPos = component.entity.mesh.position
-            if (Math.round(value) == -1) {
-                if (state.hand.grabbedEntity) {
-                    console.info("Let Go")
+            if (Math.round(value) == 1) { // console.info("grab")
+                entity = cursor.state.cursor.entity
+
+                if (!!entity && !!!state.hand.grabbedEntity) {
+                    let zPosition = -entity.boundingRadius || -12;
+                    
+                    this.world.three.scene.remove(entity.mesh);
+                    state.hand.grabbedEntity = entity; 
+                    entity.addTag("no-raycast");
+                    entity.mesh.quaternion.fromArray([0, 0, 0, 1]);
+                    entity.mesh.position.fromArray([0, 0, 0]);
+
+                    if (state.hand.trackedHands) {
+                        component.mesh.add(entity.mesh);
+                    } else {
+                        cursorMesh.add(entity.mesh);
+                        entity.mesh.updateMatrix();
+                        // entity.mesh.translateZ(zPosition-2);
+                    }
+                    entity.mesh.updateMatrix();
+                }
+            } else {
+                if (state.hand.grabbedEntity) {  console.info("Let Go")
+                    
                     entity = state.hand.grabbedEntity
 
                     if (entity) {
@@ -67,14 +88,14 @@ export default class HandSystem {
                             component.mesh.remove(entity.mesh);
                             handPos = component.mesh.position
                             entity.update( (handPos as any).toArray(), component.mesh.quaternion.toArray())
-                            entity.mesh.translateZ(-entity.boundingRadius-2)
+                            // entity.mesh.translateZ(-entity.boundingRadius)
                         } else {
                             cursorMesh.remove(entity.mesh);
-                             //  // 
-                             let newEntPos = (avatarPos as any).toArray();
+                            //  let newEntPos = (avatarPos as any).toArray();
+                            let newEntPos = cursorMesh.getWorldPosition();
                             // newEntPos[2] += cursorMesh.position.z;
-                            entity.update(newEntPos, avatar.mesh.quaternion.toArray())
-                            entity.mesh.translateZ(-entity.boundingRadius+cursorMesh.position.z)
+                            entity.update(newEntPos.toArray(), avatar.mesh.quaternion.toArray())
+                            // entity.mesh.translateZ(-entity.boundingRadius-2); //+cursorMesh.position.z)
                         }
                         this.world.three.scene.add(entity.mesh);
                         
@@ -87,27 +108,6 @@ export default class HandSystem {
                     }
                 }
                 return -1;
-            } else {
-                entity = cursor.state.cursor.entity
-
-                if (!!entity && !!!state.hand.grabbedEntity) {
-                    let zPosition = -entity.boundingRadius || -12;
-                    
-                    this.world.three.scene.remove(entity.mesh);
-                    state.hand.grabbedEntity = entity; 
-                    entity.addTag("no-raycast");
-                    entity.mesh.quaternion.fromArray([0, 0, 0, 1]);
-
-                    if (state.hand.trackedHands) {
-                        entity.mesh.position.fromArray([0, 0, 0]);
-                        component.mesh.add(entity.mesh);
-                    } else {
-                        entity.mesh.position.fromArray([0, 0, 0]);
-                        cursorMesh.add(entity.mesh);
-                    }
-                    entity.mesh.updateMatrix();
-                    entity.mesh.translateZ(zPosition-2);
-                }
             }
         }
         return -1;

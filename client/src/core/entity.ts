@@ -1,6 +1,7 @@
  import {
   GRID_SIZE,
-  API_SERVER
+  API_SERVER,
+  GLOBAL_SPACE
  } from '../config'
 import Component from './component'
 import { DBComponent } from './component'
@@ -368,8 +369,11 @@ export default class Entity {
 
   public getVoxel(initial: boolean, check?: boolean) {
     let position = null,
-        coords = null
-
+        coords = null;
+        
+    if (this.voxel[1] == GLOBAL_SPACE[1] && this.voxel[0] == GLOBAL_SPACE[0] && this.voxel[2] ==GLOBAL_SPACE[2]) {
+      return GLOBAL_SPACE;
+    } 
     if (initial) {
       position = this.mesh != null ? this.mesh.position.toArray() : this.position
       coords = [Math.floor( position[ 0 ] / GRID_SIZE[ 0 ] ), 0, Math.floor( position[ 2 ] / GRID_SIZE[ 2 ] )]
