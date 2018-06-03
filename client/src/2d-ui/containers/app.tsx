@@ -115,28 +115,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
       }
     });
 
-    this.props.fetchUniverseSettings()
-    setTimeout( ()=> { 
-      let respawnCamera = () => {
-   
-        let cameraPos = world.three.camera.position,
-            voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
-            altitude = 0
-
-        // if ( world.terrain.voxels[ voxelKey ] ) {
-        //   altitude = (world.terrain.voxels[ voxelKey ].data.altitude);
-        //   cameraPos.set( cameraPos.x+Math.random()*2, world.terrain.voxels[ voxelKey ].data.altitude+20, cameraPos.z+Math.random()*2);
-        // }
-        if (worldDetails[2] && worldDetails[2][1] < 0) {
-          cameraPos.y+= 50;
-        }
-        world.user.velocity.y = -1000
-      }
-
-      world.load( worldDetails[ 0 ], worldDetails[ 1 ], () => { /* systems online */ }, ()=> { /* terrain finished loading */
-        respawnCamera()
-      })
-    }, 100);
+    this.props.fetchUniverseSettings();
 
     window.document.body.addEventListener("keydown", (e)=>this.handleKeyDown(e), true)
 

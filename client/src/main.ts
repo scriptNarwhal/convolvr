@@ -41,8 +41,8 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
       coords:    number[] = world.getVoxel( pos ),
       voxelKey:  string   = coords.join("."),
       altitude:  number   = (systems.terrain as any).voxels[ voxelKey ].data.altitude,
-      worldDetails = detectSpaceDetailsFromURL();
-  console.warn("worldDetails", worldDetails);
+      convolvr = world;
+      
   world.onUserLogin = (newUser: any) => {
     let user = world.user;
     
@@ -66,12 +66,34 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
   };
   console.warn("about to call onUserLogin");
   world.onUserLogin(world.user);
-
+  console.warn("test 222");
   initDemos(world, coords, pos, altitude);
-  setTimeout(()=>world.initChatAndLoggedInUser( localStorage.getItem("username") != null ), 400);
+  console.warn("test 2222");
 
- 
+  setTimeout(()=>{
+    world.initChatAndLoggedInUser( localStorage.getItem("username") != null );
+  }, 400);
+
 });
+
+
+setTimeout( ()=> { 
+  let respawnCamera = () => {
+
+    let cameraPos = loadingSpace.three.camera.position,
+        voxelKey = `${Math.floor(cameraPos.x / GRID_SIZE[ 0 ])}.0.${Math.floor(cameraPos.z / GRID_SIZE[ 2 ])}`,
+        altitude = 0;
+    
+    if (worldDetails[2] && worldDetails[2][1] < 0) {
+      cameraPos.y+= 50;
+    }
+    loadingSpace.user.velocity.y = -1000
+  };
+  let worldDetails = detectSpaceDetailsFromURL();
+  loadingSpace.load( worldDetails[ 0 ], worldDetails[ 1 ], () => { /* systems online */ }, ()=> { /* terrain finished loading */
+    respawnCamera()
+  });
+}, 100);
 
 ReactDOM.render(
   React.createElement(Routes, { store, history }),

@@ -516,7 +516,7 @@ export default class Convolvr {
 		camera.aspect = innerWidth / innerHeight
 		camera.updateProjectionMatrix()
 
-		if ( this.IOTMode || this.willRender == false )
+		if ( this.IOTMode )
 			animate( this, Date.now(), 0 )
 
 	}
