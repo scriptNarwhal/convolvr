@@ -22,7 +22,7 @@ export default class DebugTool extends Tool {
             attrs: {
               geometry: {
                 shape: "box",
-                size: [ 0.35, 0.35, 0.1 ]
+                size: [ 0.5, 0.34, 1.333 ]
               },
               material: {
                 name: "metal"

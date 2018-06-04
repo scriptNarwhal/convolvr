@@ -329,7 +329,7 @@ let styles = {
       overflowY: 'auto',
       overflowX: 'hidden',
       fontSize: '12pt',
-      background: 'black',
+      background: 'rgba(0,0,0,0.95)',
       borderRadius: '0.5em',
       boxShadow: 'rgba(0, 0, 0, 0.65) 0em 0.75em 5em, rgba(0,0,0,0.65) 0em 0.2em 0.25em',
       padding: '1em'

@@ -168,7 +168,8 @@ export default class ToolSystem {
 
         if (!input.trackedControls && !input.leapMotion) {
             this.world.user.avatar.mesh.add( toolMesh )
-            //toolMesh.position.set( -4.15-( 0.08 * hand ), -2.333, -2.05 )
+            toolMesh.position.set( -2+( 4 * hand ), -1, 0.26 )
+            toolMesh.updateMatrix();
         } else {
             hands[ hand ].mesh.add( toolMesh ) // add to respective hand 
         }
@@ -194,8 +195,8 @@ export default class ToolSystem {
                     let mesh: THREE.Mesh = panel.mesh;
 
                     if ( panel.name != toolPanel.name && mesh.position.distanceTo(toolPanel.mesh.position) < 25 ) {
-                        mesh.translateX(-1.2*(1+i/10.0));
-                        mesh.translateZ(-0.5*(1+i/10.0));
+                        mesh.translateX(-1.2);
+                        mesh.translateZ(-0.5);
                         mesh.updateMatrix()
                     }
                 }
@@ -216,21 +217,22 @@ export default class ToolSystem {
             attrs: {
               geometry: {
                 shape: "box",
-                size: [ 1, 0.3, 0.2 ]
+                size: [ 2, 0.6, 0.1 ]
               },
               material: {
                 name: "plastic"
               },
               text: {
                 label: true,
-                background: "#000000",
-                color: "#ffffff",
+                background: "#00000000",
+                color: "#00ff00",
                 lines: [
-                  value
+                  "> "+value
                 ]
               }
             },
-            position: [ 0.2, 0.08, 0.08 ]
+            position: [ 0.2, -0.08, 0.08 ],
+            quaternion: [0, 0, 0, 1]
         }
     }
 }

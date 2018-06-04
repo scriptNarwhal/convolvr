@@ -30,7 +30,7 @@ export default class EntityTool extends Tool  {
             attrs: {
               geometry: {
                 shape: "box",
-                size: [ 0.3, 0.2, 0.433 ]
+                size: [ 0.5, 0.34, 1.333 ]
               },
               material: {
                 name: "metal",

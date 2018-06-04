@@ -118,6 +118,7 @@ export default class LayoutSystem {
     _fibonacciLayout ( component: Component, position: number[], index: number, columns: number, gridSize: number ) {
 
         //TODO: Implement P3
+        // https://www.google.ca/search?q=fibonacci+grid&tbm=isch&source=iu&ictx=1&fir=JRP5xTh1mqh_CM%253A%252CjFxyq9GcN98ZtM%252C_&usg=__LK6T9856lEyJ4_83zhhRViZkBME%3D&sa=X&ved=0ahUKEwj6t_XwwbjbAhVn7YMKHdATBiIQ9QEILjAA#imgrc=JRP5xTh1mqh_CM:
         let pos = [ 0, index * gridSize, 0 ]
         
         return pos

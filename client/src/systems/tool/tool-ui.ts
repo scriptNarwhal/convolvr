@@ -7,12 +7,10 @@ export default class ToolUISystem {
     world: Convolvr
 
     constructor ( world: Convolvr ) {
-
         this.world = world
     }
 
     init ( component: Component ) { // allows component to cycle tools / select one for the user 
-
         let attrs = component.attrs,
             state = component.state,
             attr = attrs.toolUI,
@@ -61,7 +59,6 @@ export default class ToolUISystem {
     }
 
     switchTool (component: Component, tool: number, hand: number) {
-
         let toolbox = this.world.user.toolbox,
             currentTools = toolbox.currentTools,
             tools = toolbox.tools,
@@ -80,7 +77,6 @@ export default class ToolUISystem {
     }
 
     updatePosition (component: Component) {
-
       let mesh = component.entity.mesh,
           userMesh = this.world.user.avatar.mesh,
           userPos = userMesh.position,
@@ -91,7 +87,7 @@ export default class ToolUISystem {
       mesh.updateMatrix()
       mesh.translateZ( -1.5 )
       mesh.translateX(  0.1 )
-      mesh.translateY( -2.25 )
+      mesh.translateY( -0.25 )
       mesh.updateMatrix()
     }
 

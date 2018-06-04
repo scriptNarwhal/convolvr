@@ -21,7 +21,7 @@ export default class GeometryTool extends Tool {
             attrs: {
               geometry: {
                 shape: "box",
-                size: [ 0.5, 0.5, 0.4 ]
+                size: [ 0.5, 0.34, 1.333 ]
               },
               material: {
                 name: "metal"

@@ -59,7 +59,7 @@ let avatar = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody 
              attrs: { 
                 geometry: {
                   shape: "box",
-                  size: [ 0.48, 0.72, 0.48 ]
+                  size: [ 1.48, 1.72, 1.48 ]
                 },
                 material: {
                   color: 0xffffff,
@@ -67,7 +67,7 @@ let avatar = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody 
                 },
                 user: userData
              },
-             position: [ 0, 0.2+(n - 1)*0.16, 0 ],
+             position: [ 0, 0.4+(n - 1)*0.32, 0 ],
              quaternion: [ 0, 0, 0, 1 ]
         }
        components.push(component)
@@ -105,7 +105,7 @@ let avatar = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody 
               }
             },
             quaternion: [0, 0, 0, 1],
-            position: [ 0.4+(n - 1) * 0.8, 0, 0],
+            position: [ 0.4+(n - 1) * 0.8, 0, -2],
             components: []
           }))
           ++n

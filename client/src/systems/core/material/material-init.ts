@@ -23,6 +23,7 @@ export let _initMaterialProp = (attr: any, simpleShading: boolean) => { // mater
       attr.repeat = ['wrapping', 12, 12]
       break
     case "terrain2":
+      attr.color = 0x20ff10;
       if (!simpleShading) {
         attr.map = !!!attr.map ? '/data/images/textures/terrain1.jpg' : attr.map
       } else {

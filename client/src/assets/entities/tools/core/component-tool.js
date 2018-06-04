@@ -31,7 +31,7 @@ export default class ComponentTool extends Tool {
             attrs: {
               geometry: {
                 shape: "box",
-                size: [ 0.1, 0.14, 0.333 ]
+                size: [ 1.0, 0.34, 2.333 ]
               },
               material: {
                 name: "metal"
@@ -79,7 +79,7 @@ export default class ComponentTool extends Tool {
             ]
           }
         ],
-        [0,0,0], [0,0,0,1], coords)
+        [0,0,0], [0,0,0,1], coords);
 
     }
 

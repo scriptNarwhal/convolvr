@@ -22,13 +22,12 @@ import {
 type ComponentEditorProps = {
     title: string,
     source: string,
-    contextMenuOptions: any[]
 }
 
 class ComponentEditor extends Component<any, any> {
 
     private defaultProps: ComponentEditorProps
-
+    public contextMenuOptions = [{name:"Delete"}]
     componentWillMount () {
         this.setState({
             activated: false,
@@ -180,6 +179,7 @@ class ComponentEditor extends Component<any, any> {
             components.splice( index, 1 )
             this.setState({ components })
         } else if (action == "Edit") {
+            console.warn("editLoadedItem", this.props.editLoadedItem)
             this.props.editLoadedItem( "componentEdit", this.props.username, "Components", index, componentData)
         }
     }
@@ -328,7 +328,7 @@ class ComponentEditor extends Component<any, any> {
                                 return (
                                 <Card clickHandler={ (e: any, name: string) => { this.handlePropertyAction("Edit", { propertyIndex: i}, e) } }
                                       onContextMenu={ (name: string, data: any, e: any) => this.handlePropertyAction(name, {...data, propertyIndex: i }, e) }
-                                      contextMenuOptions={ this.props.contextMenuOptions }
+                                      contextMenuOptions={ this.contextMenuOptions }
                                       showTitle={true}
                                       compact={true}
                                       username={this.props.username}
@@ -357,7 +357,7 @@ class ComponentEditor extends Component<any, any> {
                                 return (
                                 <Card clickHandler={ (e: any, name: string) => { this.handleComponentAction("Edit", { componentIndex: i}, e) } }
                                       onContextMenu={ (name: string, data: any, e: any) => this.handleComponentAction(name, {...data, componentIndex: i }, e) }
-                                      contextMenuOptions={ this.props.contextMenuOptions }
+                                      contextMenuOptions={ this.contextMenuOptions }
                                       showTitle={true}
                                       compact={true}
                                       username={this.props.username}
