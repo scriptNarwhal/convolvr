@@ -320,9 +320,9 @@ export default class Convolvr {
 		this.ambientLight.color.set( config.light.ambientColor )
 		Array(this.ambientLight, this.sunLight, this.skyLight).forEach( light => {
 			if ( !!!light.parent ) {
-				three.scene.add( light )
+				three.scene.add( light );
 			}
-		})
+		});
 		if ( this.settings.shadows > 0 && sunLight.castShadow == false ) {
 			sunLight.castShadow = true
 			sunLight.shadowCameraVisible = true
@@ -397,20 +397,7 @@ export default class Convolvr {
 		false == deferSpaceLoading && rebuildSpace()
 	}
 
-	initRenderer (renderer: any, id: string) {
-		renderer.setClearColor(0x1b1b1b)
-		// renderer.setPixelRatio(pixelRatio)
-		let customDPR = this.settings.dpr, // dpr = 0 == use highest dpr
-			dpr = customDPR ? customDPR : window.devicePixelRatio;
-
-		console.log("%device pixel ratio"+dpr, 'color:green;')
-		renderer.setSize(window.innerWidth * dpr, window.innerHeight * dpr)
-		document.body.appendChild( renderer.domElement )
-		renderer.domElement.setAttribute("class", "viewport")
-		renderer.domElement.setAttribute("id", id)
-	}
-
-	load (userName: string, name: string, callback: Function, readyCallback: Function) { console.log("load world", userName, name)
+	public load (userName: string, name: string, callback: Function, readyCallback: Function) { console.log("load world", userName, name)
 		let world = this
 
 		this.name = name;
@@ -424,7 +411,7 @@ export default class Convolvr {
 		})
 	}
 
-	reload (user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean) {
+	public reload (user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean) {
 		let world = this,
 			octree = this.octree
 
@@ -454,7 +441,7 @@ export default class Convolvr {
 		}
 	}
 
-	sendUserData () {
+	public sendUserData () {
 		let camera 	  = this.three.camera,
 			mobile 	  = this.mobile,
 			input 	  = this.userInput,
@@ -592,6 +579,19 @@ export default class Convolvr {
 		  //this.mode = this.mode != "stereo" ? "stereo" : "web"
 		  this.onWindowResize()
 	  }
+
+	private initRenderer (renderer: any, id: string) {
+		renderer.setClearColor(0x1b1b1b)
+		// renderer.setPixelRatio(pixelRatio)
+		let customDPR = this.settings.dpr, // dpr = 0 == use highest dpr
+			dpr = customDPR ? customDPR : window.devicePixelRatio;
+
+		console.log("%device pixel ratio"+dpr, 'color:green;')
+		renderer.setSize(window.innerWidth * dpr, window.innerHeight * dpr)
+		document.body.appendChild( renderer.domElement )
+		renderer.domElement.setAttribute("class", "viewport")
+		renderer.domElement.setAttribute("id", id)
+	}
 
 	sendVideoFrame () { // probably going to remove this now that webrtc is in place
 

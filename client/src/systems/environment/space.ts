@@ -77,7 +77,6 @@ export default class SpaceSystem {
     }
 
     public tick(delta: number, time: number) {
-
       this.bufferVoxels( false, this.phase )
     }
 
@@ -341,7 +340,7 @@ export default class SpaceSystem {
       this.phase = phase
     }
 
-    initializeVoxel (cell: number[], key: string): Voxel {
+    private initializeVoxel(cell: number[], key: string): Voxel {
       let emptyVoxel = new Voxel( { 
         cell, 
         name: "empty voxel", 
@@ -356,7 +355,7 @@ export default class SpaceSystem {
       return emptyVoxel;
     }
 
-    initializeEntities (config: any) {
+    private initializeEntities(config: any) {
       let initialLoad   = this.world.initialLoad,
           showVoxels    = true,
           terrain       = this,
@@ -367,9 +366,6 @@ export default class SpaceSystem {
 
       if (!!config )
         showVoxels = config.type == "voxels" || config.type == "both"
-
-     // loadedVoxels.map((newVoxel, i) => {
-
         if (loadedVoxels.length > 0 ) {
           let newVoxel = loadedVoxels[ 0 ],
               voxelKey = newVoxel.x + ".0." + newVoxel.z,
@@ -401,10 +397,8 @@ export default class SpaceSystem {
 
           }
 
-          loadedVoxels.splice(0, 1)
+          loadedVoxels.splice(0, 1);
         }
-        //c += 1
-      //})
     }
 
 }

@@ -71,12 +71,9 @@ class App extends Component<AppContainerProps, AppContainerState> {
 
     this.world = world;
     events.on("chat message", (message: any) => {
-
       let m = JSON.parse( message.data ),
-          chatUI = (window as any).three.world.chat,
-          chatText = chatUI ? chatUI.componentsByAttr.text[ 0 ] : "",
           worldName = '',
-          from = ''
+          from = '';
 
       if (!!!m.space || m.space != this.props.world) {
         return
@@ -150,23 +147,11 @@ class App extends Component<AppContainerProps, AppContainerState> {
 
     if ( pathChange ) {
       newSpace = detectSpaceDetailsFromURL()
-      
-      if ( newSpace[ 2 ] == true && !!newSpace[ 0 ] && !!newSpace[ 1 ] ) { // not navigating to built in ui / page
-          if ( newSpace[ 0 ] != nextProps.worldUser || newSpace[ 1 ] != nextProps.world ) {
-          
-          if (newSpace[ 1 ] != nextProps.world || newSpace[ 0 ] != nextProps.worldUser ) {
-            (window as any).three.world.reload ( newSpace[ 0 ], newSpace[ 1 ], "", [ 0, 0, 0 ], true ) // load new world (that's been switched to via browser history)
-
-          }
-        }
-      }
+     
       if (!nextProps.url.nativeAPI) {
         this.props.history.push(nextProps.url.pathname);
       }
 
-    } else if ( newSpace.length >= 4 ) {
-      console.warn("detected world voxel coords ", newSpace[3]);
-      (window as any).three.camera.position.set( newSpace[3][0] * GRID_SIZE[0], newSpace[3][1] * GRID_SIZE[1], newSpace[3][2] * GRID_SIZE[2] )
     }
 
     if ( userNameChanged ) {
