@@ -4,7 +4,6 @@ import AudioSystem from './audio/audio'
 import AssetSystem from './core/assets'
 import BrowserSystem from './ui/browser'
 import CameraSystem from './video/camera'
-import ConditionSystem from './logic/condition'
 import ConveyorSystem from './vehicle/conveyor'
 import ChatSystem from './chat/chat'
 import CursorSystem from './core/cursor'
@@ -38,7 +37,6 @@ import PortalSystem from './environment/portal'
 import ProjectileSystem from './game/projectile'
 import QuestSystem from './game/quest'
 import LookAwaySystem from './core/look-away'
-import LoopSystem from './logic/loop'
 import MagicSystem from './game/magic'
 import MaterialSystem from './core/material'
 import MiniatureSystem from './core/miniature'
@@ -46,7 +44,8 @@ import ObjPluginSystem from './importers/obj-plugin'
 import ObjectiveSystem from './game/objective'
 import OimoPluginSystem from './environment/physics/oimo-plugin'
 import RESTSystem from './logic/rest'
-import RPGRaceSystem from './game/rpg-race'
+import RPGRaceSystem from './game/rpg-race';
+import ScriptSystem from './logic/script';
 import ScreenshotSystem from './environment/screenshot'
 import SignalSystem from './logic/signal'
 import SkillSystem from './game/skill'
@@ -56,7 +55,6 @@ import SpeechSystem from './audio/speech'
 import StateSystem from './logic/state'
 import StatSystem from './game/stat'
 import StaticCollisions  from './environment/physics/static-collisions'
-import SwitchSystem from './logic/switch'
 import SpaceSystem from './environment/space'
 import TextSystem from './ui/text'
 import ToolSystem from './tool/tool'
@@ -78,13 +76,13 @@ import Convolvr from '../world/world'
 import Component from '../core/component';
 import Binding from '../core/binding';
 
-type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "camera" | "chat" | "condition" | "control" |
+type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "camera" | "chat" | "control" |
 					 "conveyor" | "cursor" | "datgui" | "destructable" | "display" | "virtualDevice" | "door" | "drawing" | 
 					 "emote" | "faction" | "factory" | "fbx" | "file" | "floor" | "geometry" | "grab" | "graph" | "hand" | 
-					 "head" | "hover" | "input" | "loop" | "light" | "layout" | "lookAway" | "magic" | "material" | "media" | 
+					 "head" | "hover" | "input" | "light" | "layout" | "lookAway" | "magic" | "material" | "media" | 
 					 "metaFactory" | "miniature" | "npc" | "obj" | "oimo" | "objective" | "particles" | "propulsion" | "portal" |
-					 "projectile" | "quest" | "rest" | "rpgRace" | "signal" | "seat" | "skill" | "skybox" | "screenshot" | "socialMedia" | 
-					 "speech" | "state" | "stat" | "staticCollisions" | "switch" | "terrain" | "text" | "time" | "toolUI" | "tool" |
+					 "projectile" | "quest" | "rest" | "rpgRace" | "signal" | "seat" | "skill" | "skybox" | "script" | "screenshot" | "socialMedia" | 
+					 "speech" | "state" | "stat" | "staticCollisions" | "terrain" | "text" | "time" | "toolUI" | "tool" |
 					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "template" | "wall" | "webrtc" | "weapon";
 
 import * as THREE from 'three';
@@ -102,7 +100,6 @@ export default class Systems {
 	public browser: 		 BrowserSystem;
 	public camera: 		  	 CameraSystem;
 	public chat: 			 ChatSystem;
-	public condition: 		 ConditionSystem;
 	public control: 		 ControlSystem;
 	public conveyor: 		 ConveyorSystem;
 	public cursor: 		  	 CursorSystem;
@@ -125,7 +122,6 @@ export default class Systems {
 	public head: 			 HeadSystem;
 	public hover: 			 HoverSystem;
 	public input: 			 InputSystem;
-	public loop: 			 LoopSystem;
 	public light: 			 LightSystem;
 	public layout: 		  	 LayoutSystem;
 	public lookAway: 		 LookAwaySystem;
@@ -148,6 +144,7 @@ export default class Systems {
 	public signal: 		  	 SignalSystem;
 	public skill: 			 SkillSystem;
 	public skybox: 		  	 SkyboxSystem;
+	public script:           ScriptSystem;
 	public screenshot: 	  	 ScreenshotSystem;
 	public socialMedia: 	 SocialMediaSystem;
 	public seat:             SeatSystem;
@@ -155,7 +152,6 @@ export default class Systems {
 	public state: 			 StateSystem;
 	public stat: 			 StatSystem;
 	public staticCollisions: StaticCollisions;
-	public switch: 		  	 SwitchSystem;
 	public terrain: 		 SpaceSystem;
 	public text: 			 TextSystem;
 	public template: 	     TemplateSystem;
@@ -186,7 +182,6 @@ export default class Systems {
 			browser: 		   new BrowserSystem( world ),
 			camera: 		   new CameraSystem( world ),
 			chat: 			   new ChatSystem( world ),
-			condition: 		   new ConditionSystem( world ),
 			control: 		   new ControlSystem( world ),
 			conveyor: 		   new ConveyorSystem( world ),
 			cursor: 		   new CursorSystem( world ),
@@ -209,7 +204,6 @@ export default class Systems {
 			head: 			   new HeadSystem( world ),
 			hover: 			   new HoverSystem( world ),
 			input: 			   new InputSystem( world ),
-			loop: 			   new LoopSystem( world ),
 			light: 			   new LightSystem( world ),
 			layout: 		   new LayoutSystem( world ),
 			lookAway: 		   new LookAwaySystem( world ),
@@ -232,6 +226,7 @@ export default class Systems {
 			signal: 		   new SignalSystem( world ),
 			skill: 			   new SkillSystem( world ),
 			skybox:            new SkyboxSystem( world ),
+			script:            new ScriptSystem( world ),
 			screenshot: 	   new ScreenshotSystem( world ),
 			seat:              new SeatSystem( world ),
 			socialMedia: 	   new SocialMediaSystem( world ),
@@ -239,7 +234,6 @@ export default class Systems {
 			state:             new StateSystem( world ),
 			stat: 			   new StatSystem( world ),
 			staticCollisions:  new StaticCollisions( world ),
-			switch: 		   new SwitchSystem( world ),
 			terrain: 		   new SpaceSystem( world ),
 			text: 			   new TextSystem( world ),
 			template: 		   new TemplateSystem( world ),
