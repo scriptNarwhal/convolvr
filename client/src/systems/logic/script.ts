@@ -12,16 +12,45 @@ export default class ScriptSystem {
     }
 
     init (component: Component) {
+        let attr = component.attrs.script;
 
         return {
            
         }
 
     }
-    
-    configure (data: any) {
 
-        // implement 
+    evaluate: (code: string ) {
 
     }
+
+    addComponent() {
+
+    }
+    addEntity() {
+
+    }
+
+    updateComponent() {
+
+    }
+    updateEntity() {
+        
+    }
+    updateTelemetry() {
+
+    }
+
+    removeComponent() {
+
+    }
+    removeEntity() {
+
+    }
+
+    clear() {
+
+    }
+    
+    
 }
