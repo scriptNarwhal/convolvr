@@ -51,7 +51,6 @@ export default class ScriptSystem {
                 break;
                 case "entity.removeComponent":
                 break;
-                
             }
         }
     }
@@ -61,6 +60,8 @@ export default class ScriptSystem {
             env = [component.entity.voxel.join("."), component.entity.id, component.index],
             getReturnValue = {};
 
+        this.envComponents[env.join(",")] = component;
+
         return {
             eval: (code: string, callback: (data: any) => {}) => {
                 this.evaluate(code, env);
@@ -69,7 +70,6 @@ export default class ScriptSystem {
             getReturnValue,
             env
         }
-
     }
 
     evaluate (code: string, env: any[]) {
