@@ -1,4 +1,7 @@
-let toolMenu = (assetSystem, config, voxel) => {
+import AssetSystem from "../../../../systems/core/assets";
+import { DBComponent } from "../../../../core/component";
+
+let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
 
     let toolColors = [
         0x07ff00, 0x0707ff, 0xff0707, 0xff8007, 0x07ffff,
@@ -16,7 +19,7 @@ let toolMenu = (assetSystem, config, voxel) => {
             // '/data/images/textures/icons/files.png',
             // '/data/images/textures/icons/directories.png',
         ],
-        toolMenuIcons = [],
+        toolMenuIcons: DBComponent[] = [],
         toolMenu = null
 
     toolColors.map(( color, i ) => {
@@ -30,11 +33,11 @@ let toolMenu = (assetSystem, config, voxel) => {
                 activate: {},
                 lookAway: {}
             }),
-            components: [],
+            components: [] as DBComponent[],
             position: [ 0, 0, 0 ],
             quaternion: [ 0, 0, 0, 1 ]
         },
-            button = assetSystem._initButton(iconCube),
+            button = assetSystem["_initButton"](iconCube),
             row = Math.floor( i / 5 ) * 0.050
 
         toolMenuIcons.push(Object.assign({}, button, {

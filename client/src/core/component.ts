@@ -108,7 +108,7 @@ export default class Component {
 
       this.components.length > 0 && this.initSubComponents( this.components, entity, systems, config )
   }
-
+  
   private initSubComponents(components: any[], entity: Entity, systems: any, config: { [key:string]: any } ): void {
     let base = new THREE.Geometry(),
         three = (window as any).three,

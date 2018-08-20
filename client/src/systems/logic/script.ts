@@ -10,6 +10,10 @@ export default class ScriptSystem {
     constructor (world: Convolvr) {
         this.world = world
         this.worker = new Worker('/data/js/workers/ecs-bundle.js');
+        /**
+         * Get data FROM web worker
+         */
+
         this.worker.onmessage = (message) => {
             let msg = JSON.parse(message.data),
                 data = msg.data,
@@ -21,7 +25,7 @@ export default class ScriptSystem {
                     component.state.script.getReturnValue();
                 break;
                 case "get voxel":
-                
+                    
                 break;
                 case "get entity":
 
@@ -30,26 +34,35 @@ export default class ScriptSystem {
 
                 break;
                 case "component.setPosition":
-                break;
+                    component.mesh.position.set(data); break;
                 case "component.setRotation":
-                break;
+                    component.mesh.rotation.set(data); break;
                 case "component.setAttrs":
-                break;
+                    break;
                 case "component.setProps":
+                    
                 break;
                 case "component.setState":
                 break;
                 case "component.addComponent":
+                    component.components.push(data)
+                    component.entity.init()
                 break;
                 case "component.removeComponent":
+                    component.components.splice(data, 1)
+                    component.entity.init()
                 break;
                 case "entity.setPosition":
-                break;
+                    component.entity.update(data); break;
                 case "entity.setRotation":
-                break;
+                    component.entity.update(null, data); break;
                 case "entity.addComponent":
+                    component.entity.components.push(data)
+                    component.entity.init()
                 break;
                 case "entity.removeComponent":
+                    component.entity.components.splice(data, 1)
+                    component.entity.init()
                 break;
             }
         }
@@ -71,6 +84,10 @@ export default class ScriptSystem {
             env
         }
     }
+
+    /**
+     * Send data TO web worker
+     */
 
     evaluate (code: string, env: any[]) {
         this.worker.postMessage('{"command": "eval", "data": { "env": ["'+env[0]+'",'+env[1]+','+env[2]+'], "code": "'+code+'"}}');
