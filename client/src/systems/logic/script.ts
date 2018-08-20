@@ -7,9 +7,9 @@ export default class ScriptSystem {
     worker: Worker
     envComponents: {[_:string]: Component}
 
-    constructor (world: Convolvr) {
+    constructor (world: Convolvr, worker: Worker) {
         this.world = world
-        this.worker = new Worker('/data/js/workers/ecs-bundle.js');
+        this.worker = worker;
         /**
          * Get data FROM web worker
          */

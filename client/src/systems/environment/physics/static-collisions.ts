@@ -10,12 +10,11 @@ export default class StaticCollisions {
 	world:  Convolvr
 	worker: Worker
 
-	constructor( world: Convolvr ) {
+	constructor( world: Convolvr, worker: Worker ) {
 
-		this.worker = new Worker('/data/js/workers/static-collisions-bundle.js')
+		this.worker = worker
 
-		let worker: Worker = this.worker,
-			three:  any = (window as any).three || {}
+		let three:  any = (window as any).three || {}
 
 	      worker.onmessage = function ( event: any ) {
 

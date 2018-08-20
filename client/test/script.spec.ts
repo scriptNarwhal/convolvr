@@ -19,9 +19,17 @@ let entityMock = {
         index: mockComponentIndex
     } as Component;
 
+let postMessageMock = (message) => {
+        
+}
+
+let workerMock = {
+    postMessage: postMessageMock
+} as Worker
+
 describe("ScriptSystem", ()=>{
     beforeEach(()=>{
-        system = new ScriptSystem(worldMock);
+        system = new ScriptSystem(worldMock, workerMock);
         componentMock.state = { 
             script: system.init(componentMock) 
         };
