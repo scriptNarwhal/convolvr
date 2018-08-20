@@ -73,36 +73,35 @@ export default class ScriptSystem {
     }
 
     evaluate (code: string, env: any[]) {
-        this.worker.postMessage('{"command":"eval", "data": { "env": ["'+env[0]+'",'+env[1]+','+env[2]+'], "code": "'+code+'"}}');
+        this.worker.postMessage('{"command": "eval", "data": { "env": ["'+env[0]+'",'+env[1]+','+env[2]+'], "code": "'+code+'"}}');
     }
 
     addComponent() {
-
+        this.worker.postMessage('{"command: "add-component", "data": {}}');
     }
     addEntity() {
-        
+        this.worker.postMessage('{"command: "add-entity", "data": {}}');
     }
 
     updateComponent() {
-
+        this.worker.postMessage('{"command: "update-component", "data": {}}');
     }
     updateEntity() {
-        
+        this.worker.postMessage('{"command": "update-entity", "data": {}}');
     }
     updateTelemetry() {
-
+        this.worker.postMessage('{"command": "update-telemetry", "data": {}}');
     }
 
     removeComponent() {
-
+        this.worker.postMessage('{"command": "remove-component", "data": {}}');
     }
     removeEntity() {
-
+        this.worker.postMessage('{"command": "remove-entity", "data": {}}');
     }
 
     clear() {
-
+        this.worker.postMessage('{"command": "clear", "data": {}}');
     }
-    
     
 }

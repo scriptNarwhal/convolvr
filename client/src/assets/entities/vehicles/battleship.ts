@@ -1,17 +1,17 @@
 import Entity from '../../../core/entity'
-import Component from '../../../core/component'
-/* car.js / halo style, two front seats, one turret as back seat */
+import THREE from 'three';
+import AssetSystem from '../../../systems/core/assets';
+/* battleship.. multiple decks, turrets, multiple occupants, vehicle factory / bay, runway */
 
 let cursorAxis = new THREE.Vector3( 1, 0, 0 )
 
-let car = ( assetSystem, config, voxel ) => {  // implement
+let battleship = ( assetSystem: AssetSystem, config: any, voxel: number[] ) => {  // implement
 
         var mesh = null,
             entity = null,
             component = null,
             componentB = null,
             components = [],
-            userInput = three.world.userInput,
             cursorRot = new THREE.Quaternion(),
             cursorComponent = null,
             id = !!config && !!config.id ? config.id : assetSystem.autoEntityID(),
@@ -23,7 +23,7 @@ let car = ( assetSystem, config, voxel ) => {  // implement
               cursor: true,
               geometry: {
                 shape: "open-box",
-                size: [ 1500, 1500, 1500 ]
+                size: [ 150, 150, 150 ]
               },
               material: {
                 name: "wireframe",
@@ -52,7 +52,7 @@ let car = ( assetSystem, config, voxel ) => {  // implement
             }
           },
           position: [ 0, 0, 0 ],
-          quaternion: false,
+          quaternion: [ 0, 0, 0, 1 ],
           components: [
             Object.assign( {}, cursorComponent )
           ]
@@ -64,4 +64,4 @@ let car = ( assetSystem, config, voxel ) => {  // implement
 
 }
 
-export default car
+export default battleship
