@@ -1,5 +1,6 @@
 import Convolvr from '../../world/world'
-import Component from '../../core/component'
+import Component, { DBComponent } from '../../core/component'
+import { DBEntity } from '../../core/entity';
 
 export default class ScriptSystem { 
     
@@ -10,11 +11,7 @@ export default class ScriptSystem {
     constructor (world: Convolvr, worker: Worker) {
         this.world = world
         this.worker = worker;
-        /**
-         * Get data FROM web worker
-         */
-
-        this.worker.onmessage = (message) => {
+        this.worker.onmessage = (message: MessageEvent) => {
             let msg = JSON.parse(message.data),
                 data = msg.data,
                 env = msg.env,
@@ -24,45 +21,11 @@ export default class ScriptSystem {
                 case "return value":
                     component.state.script.getReturnValue();
                 break;
-                case "get voxel":
-                    
+                case "native call":
+                    this.nativeCall(component, data);
                 break;
-                case "get entity":
-
-                break;
-                case "get component":
-
-                break;
-                case "component.setPosition":
-                    component.mesh.position.set(data); break;
-                case "component.setRotation":
-                    component.mesh.rotation.set(data); break;
-                case "component.setAttrs":
-                    break;
-                case "component.setProps":
-                    
-                break;
-                case "component.setState":
-                break;
-                case "component.addComponent":
-                    component.components.push(data)
-                    component.entity.init()
-                break;
-                case "component.removeComponent":
-                    component.components.splice(data, 1)
-                    component.entity.init()
-                break;
-                case "entity.setPosition":
-                    component.entity.update(data); break;
-                case "entity.setRotation":
-                    component.entity.update(null, data); break;
-                case "entity.addComponent":
-                    component.entity.components.push(data)
-                    component.entity.init()
-                break;
-                case "entity.removeComponent":
-                    component.entity.components.splice(data, 1)
-                    component.entity.init()
+                case "internal error":
+                    this.internalError(data)
                 break;
             }
         }
@@ -85,6 +48,46 @@ export default class ScriptSystem {
         }
     }
 
+    private nativeCall(component: Component, data: {[_:string]: any}) { //being lazy here.. // TODO: there should be a type for worker commands
+        switch(data.method) {
+            case "component.setPosition":
+                component.mesh.position.set(data.data); break;
+            case "component.setRotation":
+                component.mesh.rotation.set(data.data); break;
+            case "component.setAttrs":
+                break;
+            case "component.setProps":
+                
+            break;
+            case "component.setState":
+            break;
+            case "component.addComponent":
+                component.components.push(data.data)
+                component.entity.init()
+            break;
+            case "component.removeComponent":
+                component.components.splice(data.removeIndex, 1)
+                component.entity.init()
+            break;
+            case "entity.setPosition":
+                component.entity.update(data.data); break;
+            case "entity.setRotation":
+                component.entity.update(null, data.data); break;
+            case "entity.addComponent":
+                component.entity.components.push(data.data)
+                component.entity.init()
+            break;
+            case "entity.removeComponent":
+                component.entity.components.splice(data.removeIndex, 1)
+                component.entity.init()
+            break;
+        }
+    }
+
+    private internalError(data: any) {
+        console.error("Internal Error: "+JSON.stringify(data))
+    }
+
     /**
      * Send data TO web worker
      */
@@ -93,32 +96,46 @@ export default class ScriptSystem {
         this.worker.postMessage('{"command": "eval", "data": { "env": ["'+env[0]+'",'+env[1]+','+env[2]+'], "code": "'+code+'"}}');
     }
 
-    addComponent() {
-        this.worker.postMessage('{"command: "add-component", "data": {}}');
-    }
-    addEntity() {
-        this.worker.postMessage('{"command: "add-entity", "data": {}}');
+    command(commandName: string, commandArgs: any[], env: any[]) {
+        this.worker.postMessage(`{"command": "command", "data": {"commandName":"${commandName}", 
+                                              commandArgs:[], "env": ["${env[0]}",${env[1]},${env[2]}],`);
     }
 
-    updateComponent() {
-        this.worker.postMessage('{"command: "update-component", "data": {}}');
+    nativeReturn(value: any, call: string, env: any[]) {
+        this.worker.postMessage(JSON.stringify({"command": "native-return", "data": { call, value, env }}));
     }
-    updateEntity() {
-        this.worker.postMessage('{"command": "update-entity", "data": {}}');
+
+
+    /**
+     * Worker Commands
+     */
+
+    addComponent(componentData: DBComponent, env: any[]) {
+        this.command("add-component", [componentData], env);
+    }
+    addEntity(entityData: DBEntity, env: any[]) {
+        this.command("add-entity", [entityData], env);
+    }
+
+    updateComponent(componentData: DBComponent, env: any[]) {
+        this.command("update-component", [componentData], env);
+    }
+    updateEntity(entityData: DBEntity, env: any[]) {
+        this.command("update-entity", [entityData], env);
     }
     updateTelemetry() {
         this.worker.postMessage('{"command": "update-telemetry", "data": {}}');
     }
 
-    removeComponent() {
-        this.worker.postMessage('{"command": "remove-component", "data": {}}');
+    removeComponent(env: any[]) {
+        this.command("remove-component", [env], env);
     }
-    removeEntity() {
-        this.worker.postMessage('{"command": "remove-entity", "data": {}}');
+    removeEntity(env: any[]) {
+        this.command("remove-component", [env], env);
     }
 
     clear() {
-        this.worker.postMessage('{"command": "clear", "data": {}}');
+        this.command("clear", [], ["", 0, 0, 0]);
     }
     
 }

@@ -18,7 +18,7 @@ let entityMock = {
         entity: entityMock,
         index: mockComponentIndex
     } as Component;
-
+ 
 let postMessageMock = (message) => {
         
 }
