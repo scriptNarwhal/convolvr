@@ -1,4 +1,5 @@
 import { Component } from "react";
+import Convolvr from "../../../world/world";
 
 export default class DisplayAdapterDevice {
     private world: Convolvr;

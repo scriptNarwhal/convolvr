@@ -11,17 +11,17 @@ export default class VirtualMachine {
     }
 
     init ( component: Component ) {
-
-        this.detectHardware(component);
+        let hardware = this.detectHardware(component);
 
         return {
-            getVirtualDevices: () => {
+            hardware,
+            getDevices: () => {
                 return this.getVirtualDevices(component)
             },
-            addVirtualDevice: (id: string, device: any) => {
+            addDevice: (id: string, device: any) => {
                 return this.addVirtualDevice(component, id, device)
             },
-            removeVirtualDevice : (id: string) => {
+            removeDevice : (id: string) => {
                 return this.removeVirtualDevice(component, id)
             }
         }
@@ -29,7 +29,14 @@ export default class VirtualMachine {
     }
 
     private detectHardware(component: Component) {
-
+        /**
+         * Hardware detection
+         * 
+         * io-controller
+         * display-adapter
+         * keyboard
+         * network-interface
+         */
     }
 
     private getVirtualDevices (component: Component) {
