@@ -9,13 +9,13 @@ import {
 import axios from 'axios';
 import { API_SERVER } from '../../../config'
 
-export function addAvatar (data) {
+export function addAvatar (data: {[_:string]: any}) {
     return {
         type: ADD_AVATAR,
         data: data
     }
 }
-export function fetchAvatars (id) {
+export function fetchAvatars (id: any) {
     return (dispatch: any) => {
         dispatch({
             type: FETCH_AVATARS,
@@ -29,7 +29,7 @@ export function fetchAvatars (id) {
         });
    }
 }
-export function receiveAvatars (avatars) {
+export function receiveAvatars (avatars: any[]) {
     return {
         type: RECEIVE_AVATARS,
         avatars: avatars
@@ -41,14 +41,14 @@ export function failedFetchAvatars(err: any) {
         err: err
     }
 }
-export function updateAvatar (id, data) {
+export function updateAvatar (id: any, data: {[_:string]: any}) {
     return {
         type: UPDATE_AVATAR,
         data: data,
         id: id
     }
 }
-export function deleteAvatar (id) {
+export function deleteAvatar (id: any) {
     return {
         type: DELETE_AVATAR
     }

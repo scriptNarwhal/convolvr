@@ -7,13 +7,13 @@ import {
     DELETE_ENTITY,
     ENTITY_IMPORT_TO_SPACE_FETCH,
     ENTITY_IMPORT_TO_SPACE_DONE,
-    ENTITY_IMPORT_TO_SPACE_FAIL
+    ENTITY_IMPORT_TO_SPACE_FAIL,
 } from '../constants/action-types';
 import axios from 'axios';
 import { API_SERVER } from '../../../config'
 
-export function addEntity (id, name, components) {
-    let physicsSpace = three.world.UserPhysics.worker; // until I can find a better way to access this
+export function addEntity (id: number|string, name: string, components: {[_:string]: any}[]) {
+    let physicsSpace = (window as any).three.world.UserPhysics.worker; // until I can find a better way to access this
 
     return {
         type: ENTITY_ADD,
@@ -36,7 +36,7 @@ export function fetchEntities (id) {
         });
    }
 }
-export function doneFetchEntities (entities) {
+export function doneFetchEntities (entities: any[]) {
     return {
         type: ENTITIES_FETCH_DONE,
         entities: entities
@@ -49,22 +49,22 @@ export function failedFetchEntities(err: any) {
     }
 }
 
-export function importEntityToSpace ( world, coords, data ) {
+export function importEntityToSpace ( world: string, coords: string, data: any ) {
     
         return (dispatch: any) => {
          dispatch({
-            type: INVENTORY_UPDATE_FETCH,
-            id: id
+            type: ENTITY_IMPORT_TO_SPACE_FETCH,
+            id: data.id
          })
-         return axios.put(API_SERVER+`/api/import-to-world/${userId}/${category}/${itemId}/${world}/${coords}`, {})
+         return axios.put(API_SERVER+`/api/import-to-world/${data.userId}/${data.category}/${data.itemId}/${world}/${coords}`, data)
             .then((response: any) => {
                 dispatch({
-                  type: INVENTORY_UPDATE_DONE,
+                  type: ENTITY_IMPORT_TO_SPACE_DONE,
                   updated: response.data
               })
             }).catch((response: any) => {
                 dispatch({
-                      type: INVENTORY_UPDATE_FAIL,
+                      type: ENTITY_IMPORT_TO_SPACE_FAIL,
                       err: response.err
                   })
             });

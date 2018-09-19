@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "lib": ["es6", "dom"], // we target Node.js(v6)
+      "module": "commonjs", // export compatibility
+      "target": "es6",
+      "allowSyntheticDefaultImports": true,
+      "moduleResolution": "node", // we target Node.js(v6)
+      "declaration": true, // generate TypeScript definitions
+      "rootDir": ".",
+      "jsx": "react", // maybe won't need this in the future
+      "outDir": "dist", // transpile JS in this directory
+      "types" : ["node"] // only use needed types
+    },
+    "include": [
+      "src/main.ts",
+      "lib/**/*",
+    ]
+  }

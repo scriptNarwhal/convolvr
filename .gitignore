@@ -1,4 +1,5 @@
 /client/node_modules/
+/client/lib/
 /api/config.js
 /simple-server.go
 /convolvr.exe

@@ -7,8 +7,10 @@ var browserify = require('browserify');
 var watchify = require("watchify");
 var source = require('vinyl-source-stream');
 var tsify = require('tsify');
+var ts = require("gulp-typescript")
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
+const merge = require('merge2');
 var es = require('event-stream'),
     rename = require('gulp-rename'),
     paths = {
@@ -42,7 +44,7 @@ let watchedBrowserify = watchify(browserify({
 .transform('babelify', {
     presets: ['es2015', 'react'],
     extensions: ['.js', '.ts']
-}))
+}));
 
 function build (all = false) {
     let entryPoints = all ? [mainBundle, ...bundles] : bundles,
@@ -72,9 +74,22 @@ function build (all = false) {
     return es.merge.apply(null, tasks);
 }
 
+gulp.task('node-build', function() {
+    const tsProject = ts.createProject('tsconfig.node.json');
+
+    var tsResult = tsProject.src()
+            .pipe(tsProject());
+    return merge([
+            tsResult.dts.pipe(gulp.dest('./definitions')),
+            tsResult.js.pipe(
+                gulp.dest(tsProject.config.compilerOptions.outDir)
+            )
+        ]);
+});            
+
 gulp.task('build', function() {
     return build(true);
-})
+});
 
 gulp.task('build-workers', function() {
     return build()

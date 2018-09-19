@@ -10,13 +10,13 @@ export default class MenuItem extends Component<any, any> {
   render() {
     return (
         <div className="menu-item" title={this.props.title }
-             onClick={ (evt) => { this.props.onClick(evt, this.props.title) } }
+             onClick={ (evt: any) => { this.props.onClick(evt, this.props.title) } }
         >
             <span>
                 { this.props.title }
             </span>
             <Button title={this.props.title}
-                    onClick={(evt, title) => { this.props.onClick(evt) }}
+                    onClick={(evt: any, title: string) => { this.props.onClick(evt) }}
                     image={this.props.image}
                     style={{ marginRight: "0.25em"}}
             />

@@ -114,7 +114,7 @@ export default class ToolActionHandler {
 
                         let handState = (userHand as any).state.hand,
                             voxelEnt = handState.grabbedEntity,
-                            handPos = [],
+                            handPos,
                             avatarMesh = avatar.mesh;
 
                         if (voxelEnt) {
