@@ -3,7 +3,7 @@
 - [Component](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/component.js) [Entity](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/entity.js) [System](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/systems/index.js) [Framework](https://github.com/Convolvr/convolvr/wiki) built on [Three.js](https://github.com/mrdoob/three.js)
 - Multiplayer telemetry, chat, action & asset persistence provided by server using [Nexus](https://github.com/ds0nt/nexus)
 - Built in tools to combine pre-made components components
-- Tools to visually build components from attrs (geometries, materials & other systems)
+- Tools to visually build and bind data between components (geometries, materials & other attributes and events)
 - [Embedded scripting language](https://github.com/Convolvr/ecs) for complex component behaviour
 - Support for keyboard/mouse, touch screen, gyro, tracked controllers
 - Supports infinite, configurable, procedural environments 
