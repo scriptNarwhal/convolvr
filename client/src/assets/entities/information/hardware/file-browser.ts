@@ -1,4 +1,4 @@
-import Component from "../../../core/component";
+import Component from "../../../../core/component";
 
 let block = {
     id: -1,
@@ -36,7 +36,7 @@ let block = {
         },
         quaternion: [ 0, 0, 0, 1 ],
         position: [ 0, 0, 0 ],
-        components: new Array<Component>()
+        components: ([] as Component[]),
     }],
     position: [ 0, 0, 0 ],
     quaternion: [ 0, 0, 0, 1 ]

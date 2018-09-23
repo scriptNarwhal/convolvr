@@ -16,7 +16,7 @@ import panel3 from '../../assets/entities/misc/panel-3'
 import block from '../../assets/entities/misc/block'
 import column1 from '../../assets/entities/misc/column-1'
 import wirebox from '../../assets/entities/misc/wirebox'
-import fileBrowser from '../../assets/entities/information/file-browser'
+import fileBrowser from '../../assets/entities/information/hardware/file-browser'
 
 import panel1Comp from '../../assets/components/misc/panel-1'
 import column1Comp from '../../assets/components/misc/column-1'
@@ -27,6 +27,9 @@ import vehicle from '../../assets/components/vehicle/seat'
 import handle from '../../assets/components/tool/handle'
 import weapon from '../../assets/components/tool/weapon'
 
+import InformationHardware from '../../assets/components/information/hardware';
+import ECSLiterals from '../../assets/components/information/software/ecs/ast/literals'
+import ECSObjects from '../../assets/components/information/software/ecs/object'
 
 import battleship from '../../assets/entities/vehicles/battleship'
 import car from '../../assets/entities/vehicles/car'
@@ -34,8 +37,10 @@ import Convolvr from '../../world/world.js';
 import Component, { DBComponent } from '../../core/component.js';
 
 import * as THREE from 'three';
+import { Flags } from '../../util';
 
 export default class AssetSystem {
+
     private world: Convolvr
     public geometries: any
     public materials: any
@@ -52,7 +57,7 @@ export default class AssetSystem {
     public componentsByName: any
     public userEntitiesByName: any
     public userComponentsByName: any
-    public loadingItemsById: any
+    public loadingItemsById: { entities: Flags, components: Flags, attrerties: Flags}
     public userEntities: any[]
     public userComponents: any[]
     public userProperties: any[]
@@ -312,7 +317,7 @@ export default class AssetSystem {
         this.directories = this.directories.concat( directories )
     }
 
-    public makeEntity ( name: string, init: boolean, config: any, voxel: number[] ) {
+    public makeEntity( name: string, init: boolean, config: any, voxel: number[] ) {
 
         let builtIn = this.entitiesByName,
             library = builtIn[ name ] != null ? builtIn : this.userEntitiesByName,
@@ -326,7 +331,7 @@ export default class AssetSystem {
         }
     }
 
-    public makeComponent ( name: string, data: any, config: any) {
+    public makeComponent( name: string, data: any, config?: any) {
         let builtIn = this.componentsByName,
             library = builtIn[ name ] != null ? builtIn : this.userComponentsByName
 
@@ -389,6 +394,18 @@ export default class AssetSystem {
         this._addBuiltInEntity( "column1", column1 )
         this._addBuiltInEntity( "wirebox", wirebox )
         this._addBuiltInEntity( "icon", this._initButton() )
+    }
+
+    private initInformationHardware() {
+
+    }
+
+    private initInformationSoftware() {
+
+    }
+
+    private initializeAllInModule() {
+
     }
 
     private _loadPlaces ( places: any[] ) {

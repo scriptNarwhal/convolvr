@@ -7,6 +7,7 @@ import Property from "./property";
 export type DBComponent = {
   id?:         number
   name?:       string
+  class?:      string
   components?: DBComponent[]
   position?:   number[]
   quaternion?: number[]
@@ -56,6 +57,15 @@ export default class Component {
         p += 1
       }
       
+      /**
+       * Templated Components
+       */
+      if (data.class) {
+        // look up component
+        data = systems.assets.makeComponent(data.class, data);
+      }
+
+
       this.entity = entity
       this.data = data
       this.attrs = data.attrs || {}
@@ -168,7 +178,7 @@ export default class Component {
     }
     
     if (s > 0) {
-      combined = new THREE.Mesh( base, materials ) //new THREE.MultiMaterial( materials ) )
+      combined = new THREE.Mesh( base, materials );
       combined.userData = {
         compsByFaceIndex: this.compsByFaceIndex,
         component: this,

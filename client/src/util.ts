@@ -5,3 +5,7 @@ export let rgb = ( r: number, g: number, b: number ) => { // because I never rem
 export let rgba = ( r: number, g: number, b: number, a: number ) => { 
     return `rgba(${r}, ${g}, ${b}, ${a})`
 }
+
+export type Flags = { [key: string]: boolean }
+
+export type AnyObject = { [_:string]: any }
