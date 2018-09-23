@@ -27,8 +27,8 @@ import vehicle from '../../assets/components/vehicle/seat'
 import handle from '../../assets/components/tool/handle'
 import weapon from '../../assets/components/tool/weapon'
 
-import InformationHardware from '../../assets/components/information/hardware';
-import ECSLiterals from '../../assets/components/information/software/ecs/ast/literals'
+import HardwareDevices from '../../assets/components/information/hardware';
+import ASTLiterals from '../../assets/components/information/software/ecs/ast/literals'
 import ECSObjects from '../../assets/components/information/software/ecs/object'
 
 import battleship from '../../assets/entities/vehicles/battleship'
@@ -37,7 +37,7 @@ import Convolvr from '../../world/world.js';
 import Component, { DBComponent } from '../../core/component.js';
 
 import * as THREE from 'three';
-import { Flags } from '../../util';
+import { Flags, AnyObject } from '../../util';
 
 export default class AssetSystem {
 
@@ -386,7 +386,6 @@ export default class AssetSystem {
         this._addBuiltInEntity( "help-screen", helpScreen )
         this._addBuiltInEntity( "chat-screen", chatScreen )
         this._addBuiltInEntity( "video-chat", videoChat )
-        this._addBuiltInEntity( "file-browser", fileBrowser )
         this._addBuiltInEntity( "panel", panel1 )
         this._addBuiltInEntity( "preview-box", previewBox )
         this._addBuiltInEntity( "panel3", panel3 )
@@ -394,18 +393,33 @@ export default class AssetSystem {
         this._addBuiltInEntity( "column1", column1 )
         this._addBuiltInEntity( "wirebox", wirebox )
         this._addBuiltInEntity( "icon", this._initButton() )
+        this.initInformationHardware();
+        this.initInformationSoftware();
     }
 
     private initInformationHardware() {
-
+        this.initializeAllInModule("component", HardwareDevices);
+        this._addBuiltInEntity( "file-browser", fileBrowser )
     }
 
     private initInformationSoftware() {
-
+        this.initializeAllInModule("component", ECSObjects);
+        this.initializeAllInModule("component", ASTLiterals);
+        this.initializeAllInModule("component", ASTLiterals);
     }
 
-    private initializeAllInModule() {
-
+    private initializeAllInModule(type: "component" | "entity", all: AnyObject) {
+        if (type == "component") {
+            for (const key in all) {
+                const add = all[key];
+                this._addBuiltInComponent(add.name, add);
+            }
+        } else if (type == "entity") {
+            for (const key in all) {
+                const add = all[key];
+                this._addBuiltInEntity(add.name, add)
+            }
+        }
     }
 
     private _loadPlaces ( places: any[] ) {

@@ -1,3 +1,5 @@
+import { DBEntity } from "../../../../core/entity";
+
 let terminal = {
     id: -1,
     name: "terminal",
@@ -5,6 +7,11 @@ let terminal = {
         { 
             class: "terminal-case",
             position: [0,0,0],
+            attrs: {
+                script: {
+                    repl: true
+                }
+            },
             components: [
                 { class: "cpu",
                     position: [0,0,-1]
@@ -32,6 +39,6 @@ let terminal = {
     ],
     position: [ 0, 0, 0 ],
     quaternion: [ 0, 0, 0, 1 ]
-}
+} as DBEntity;
 
 export default terminal;

@@ -1,11 +1,65 @@
 import  { DBComponent } from "../../../core/component";
 
 export default class HardwareDevices {
-    public static diskDrik = {
+    
+    public static cpu = {
         id: -1,
-        name: "disk-drive",
+        name: "cpu",
         components: [{
             attrs: {
+                virtualMachine: {
+
+                },
+                geometry: {
+                    shape: "box",
+                    size: [ 2, 2, 2 ]
+                },
+                material: {
+                    color: 0xffffff,
+                    name: "metal"
+                }
+            },
+            quaternion: [ 0, 0, 0, 1 ],
+            position: [ 0, 0, 0 ],
+            components: ([] as DBComponent[]),
+        }],
+        position: [ 0, 0, 0 ],
+        quaternion: [ 0, 0, 0, 1 ]
+    }
+
+    public static ioController = {
+        id: -1,
+        name: "io-controller",
+        components: [{
+            attrs: {
+                virtualDevice: {
+                    type: "io-controller"
+                },
+                geometry: {
+                    shape: "box",
+                    size: [ 2, 2, 2 ]
+                },
+                material: {
+                    color: 0xffffff,
+                    name: "metal"
+                }
+            },
+            quaternion: [ 0, 0, 0, 1 ],
+            position: [ 0, 0, 0 ],
+            components: ([] as DBComponent[]),
+        }],
+        position: [ 0, 0, 0 ],
+        quaternion: [ 0, 0, 0, 1 ]
+    }
+    
+    public static networkInterface =  {
+        id: -1,
+        name: "network-interface",
+        components: [{
+            attrs: {
+                virtualDevice: {
+                    type: "network-interface"
+                },
                 geometry: {
                     shape: "box",
                     size: [ 2, 2, 2 ]
@@ -28,6 +82,9 @@ export default class HardwareDevices {
         name: "display-adapter",
         components: [{
             attrs: {
+                virtualDevice: {
+                    type: "display-adapter"
+                },
                 geometry: {
                     shape: "box",
                     size: [ 2, 2, 2 ]
@@ -45,33 +102,12 @@ export default class HardwareDevices {
         quaternion: [ 0, 0, 0, 1 ]
     };
 
-    public static ioController = {
-        id: -1,
-        name: "io-controller",
-        components: [{
-            attrs: {
-                geometry: {
-                    shape: "box",
-                    size: [ 2, 2, 2 ]
-                },
-                material: {
-                    color: 0xffffff,
-                    name: "metal"
-                }
-            },
-            quaternion: [ 0, 0, 0, 1 ],
-            position: [ 0, 0, 0 ],
-            components: ([] as DBComponent[]),
-        }],
-        position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
-    }
-
     public static key =  {
         id: -1,
         name: "key",
         components: [{
             attrs: {
+                /* tool ??? */
                 geometry: {
                     shape: "box",
                     size: [ 2, 2, 2 ]
@@ -91,6 +127,9 @@ export default class HardwareDevices {
 
     public static keyboard = {
         attrs: {
+            virtualDevice: {
+                type: "keyboard"
+            },
             geometry: {
                 shape: "box",
                 size: [ 2, 2, 2 ]
@@ -111,11 +150,14 @@ export default class HardwareDevices {
         components: ([] as DBComponent[]),
     }
 
-    public static networkInterface =  {
+    public static diskDrive = {
         id: -1,
-        name: "network-interface",
+        name: "disk-drive",
         components: [{
             attrs: {
+                virtualDevice: {
+                    type: "disk-drive"
+                },
                 geometry: {
                     shape: "box",
                     size: [ 2, 2, 2 ]
@@ -138,6 +180,9 @@ export default class HardwareDevices {
         name: "screen",
         components: [{
             attrs: {
+                virtualDevice: {
+                    type: "screen"
+                },
                 geometry: {
                     shape: "box",
                     size: [ 2, 2, 2 ]
@@ -160,6 +205,9 @@ export default class HardwareDevices {
         name: "serial-cable",
         components: [{
             attrs: {
+                virtualDevice: {
+                    type: "serial-cable"
+                },
                 geometry: {
                     shape: "box",
                     size: [ 2, 2, 2 ]
