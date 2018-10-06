@@ -54,7 +54,6 @@ export default class LayoutSystem {
     }
 
     _listLayout (component: Component, position: number[], index: number, axis = "xy", gridSize: number) {
-
         let pos = [ 0, index * gridSize, 0 ]
 
         return pos

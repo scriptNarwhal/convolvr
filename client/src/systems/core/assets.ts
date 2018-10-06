@@ -30,6 +30,12 @@ import weapon from '../../assets/components/tool/weapon'
 import HardwareDevices from '../../assets/components/information/hardware';
 import ASTLiterals from '../../assets/components/information/software/ecs/ast/literals'
 import ECSObjects from '../../assets/components/information/software/ecs/object'
+import ASTExpressions from '../../assets/entities/information/software/ecs/ast/expressions'
+import ASTStatements from '../../assets/entities/information/software/ecs/ast/statements'
+import BuiltinPallet from '../../assets/entities/information/software/ecs/builtin-pallet'
+import ExpressionPallet from '../../assets/entities/information/software/ecs/expression-pallet'
+import LiteralPallet from '../../assets/entities/information/software/ecs/literal-pallet'
+import StatementPallet from '../../assets/entities/information/software/ecs/statement-pallet'
 
 import battleship from '../../assets/entities/vehicles/battleship'
 import car from '../../assets/entities/vehicles/car'
@@ -405,7 +411,12 @@ export default class AssetSystem {
     private initInformationSoftware() {
         this.initializeAllInModule("component", ECSObjects);
         this.initializeAllInModule("component", ASTLiterals);
-        this.initializeAllInModule("component", ASTLiterals);
+        this.initializeAllInModule("entity", ASTExpressions);
+        this.initializeAllInModule("entity", ASTStatements);
+        this._addBuiltInEntity( "builtin-pallet", BuiltinPallet );
+        this._addBuiltInEntity( "expression-pallet", ExpressionPallet );
+        this._addBuiltInEntity( "literal-pallet", LiteralPallet );
+        this._addBuiltInEntity( "statement-pallet", StatementPallet );  
     }
 
     private initializeAllInModule(type: "component" | "entity", all: AnyObject) {

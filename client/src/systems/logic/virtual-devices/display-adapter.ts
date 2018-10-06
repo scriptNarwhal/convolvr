@@ -1,7 +1,8 @@
 import { Component } from "react";
 import Convolvr from "../../../world/world";
+import { VirtualDevice } from "../virtual-device";
 
-export default class DisplayAdapterDevice {
+export default class DisplayAdapterDevice implements VirtualDevice {
     private world: Convolvr;
 
     constructor(world: Convolvr) {

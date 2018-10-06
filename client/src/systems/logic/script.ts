@@ -51,9 +51,9 @@ export default class ScriptSystem {
     private nativeCall(component: Component, data: {[_:string]: any}) { //being lazy here.. // TODO: there should be a type for worker commands
         switch(data.method) {
             case "component.setPosition":
-                component.mesh.position.set(data.data); break;
+                component.mesh.position.set(data.position); break;
             case "component.setRotation":
-                component.mesh.rotation.set(data.data); break;
+                component.mesh.rotation.set(data.rotation); break;
             case "component.setAttrs":
                 break;
             case "component.setProps":
@@ -70,9 +70,9 @@ export default class ScriptSystem {
                 component.entity.init()
             break;
             case "entity.setPosition":
-                component.entity.update(data.data); break;
+                component.entity.update(data.position); break;
             case "entity.setRotation":
-                component.entity.update(null, data.data); break;
+                component.entity.update(null, data.rotation); break;
             case "entity.addComponent":
                 component.entity.components.push(data.data)
                 component.entity.init()
@@ -98,7 +98,7 @@ export default class ScriptSystem {
 
     command(commandName: string, commandArgs: any[], env: any[]) {
         this.worker.postMessage(`{"command": "command", "data": {"commandName":"${commandName}", 
-                                              commandArgs:[], "env": ["${env[0]}",${env[1]},${env[2]}],`);
+                                              commandArgs:${JSON.stringify(commandArgs)}, "env": ["${env[0]}",${env[1]},${env[2]}],`);
     }
 
     nativeReturn(value: any, call: string, env: any[]) {

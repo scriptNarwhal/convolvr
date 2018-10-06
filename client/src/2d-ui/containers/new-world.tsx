@@ -422,7 +422,17 @@ class NewSpace extends Component<any, any> {
                 </td>
               </tr>
               <tr>
-                <td>Generate Mental Imagery</td>
+                <td></td>
+                <td>Generate Computers?</td>
+                <td>
+                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'computers', e ) }}>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>Generate Misc Entities</td>
                 <td></td>
                 <td></td>
               </tr>
@@ -463,16 +473,6 @@ class NewSpace extends Component<any, any> {
                   <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'pyramids', e ) }}>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
-                  </select>
-                </td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>Generate Indra's Net?</td>
-                <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'nets', e) }}>
-                  <option value="no">No</option>
-                  <option value="yes">Yes</option>
                   </select>
                 </td>
               </tr>
