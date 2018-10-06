@@ -1,5 +1,5 @@
 import Entity from '../../../core/entity'
-import Component from '../../../core/component'
+import Component, { DBComponent } from '../../../core/component'
 import AssetSystem from '../../../systems/core/assets';
 import THREE from 'three';
 /* car.js / halo style, two front seats, one turret as back seat */
@@ -13,35 +13,9 @@ let car = ( assetSystem: AssetSystem, config: any, voxel: number[] ) => {  // im
             component = null,
             componentB = null,
             components = [],
-            cursorRot = new THREE.Quaternion(),
-            cursorComponent = null,
-            id = !!config && !!config.id ? config.id : assetSystem.autoEntityID(),
-            n = 2
+            id = !!config && !!config.id ? config.id : assetSystem.autoEntityID()
 
-        cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
-        cursorComponent = {
-          attrs: {
-              cursor: true,
-              geometry: {
-                shape: "open-box",
-                size: [ 1500, 1500, 1500 ]
-              },
-              material: {
-                name: "wireframe",
-                color: 0xffffff
-              },
-              light: {
-                type: "point",
-                intensity: 0.9,
-                color: 0xffffff,
-                distance: 0.090
-              }
-            },
-            position: [ 0, 0, 0 ],
-            quaternion: cursorRot.toArray()
-        }
-
-        components.push(Object.assign({}, {
+        components.push({
           attrs: {
             geometry: {
                 shape: "box",
@@ -54,10 +28,8 @@ let car = ( assetSystem: AssetSystem, config: any, voxel: number[] ) => {  // im
           },
           position: [ 0, 0, 0 ],
           quaternion:  [ 0, 0, 0, 1 ],
-          components: [
-            Object.assign( {}, cursorComponent )
-          ]
-        }))
+          components: []
+        } as DBComponent);
         
     entity = new Entity( id, components, null, null, voxel )
   

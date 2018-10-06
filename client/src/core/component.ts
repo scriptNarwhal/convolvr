@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import Entity from "./entity";
 import Binding from './binding';
 import Property from "./property";
+import { Attributes } from './attribute';
 
 export type DBComponent = {
   id?:         number
@@ -12,7 +13,7 @@ export type DBComponent = {
   position?:   number[]
   quaternion?: number[]
   props?:      { [key: string]: Property }
-  attrs?:      { [key: string]: any }
+  attrs?:      Attributes
   state?:      { [key: string]: any }
   tags?:       string[]
 }

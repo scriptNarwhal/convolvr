@@ -100,8 +100,8 @@ export default class GeometrySystem {
           shape = new THREE.Shape()
 
       if ( attr.shape ) {
-        shape.moveTo( attr.shape[0][0], attr.shape[0][1] )
-        attr.shape.map( (point: any, i: number) => {
+        shape.moveTo( attr.customShape[0][0], attr.customShape[0][1] )
+        attr.customShape.map( (point: any, i: number) => {
 
           if ( i > 0 ) {
             shape.lineTo( point[ 0 ], point[ 1 ] )

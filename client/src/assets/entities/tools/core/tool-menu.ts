@@ -104,7 +104,6 @@ let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
                     },
                     captureEvents: true // pass them to child components
                 },
-                components: [ ],
                 quaternion: [0, 0, 0, 1],
                 position: [ 0, 0, 0.444 ]
             },

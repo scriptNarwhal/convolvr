@@ -75,15 +75,8 @@ import SkyboxSystem from './environment/skybox'
 import Convolvr from '../world/world'
 import Component from '../core/component';
 import Binding from '../core/binding';
+import { AttributeName } from '../core/attribute'
 
-type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "camera" | "chat" | "control" |
-					 "conveyor" | "cursor" | "datgui" | "destructable" | "display" | "virtualDevice" | "door" | "drawing" | 
-					 "emote" | "faction" | "factory" | "fbx" | "file" | "floor" | "geometry" | "grab" | "graph" | "hand" | 
-					 "head" | "hover" | "input" | "light" | "layout" | "lookAway" | "magic" | "material" | "media" | 
-					 "metaFactory" | "miniature" | "npc" | "obj" | "oimo" | "objective" | "particles" | "propulsion" | "portal" |
-					 "projectile" | "quest" | "rest" | "rpgRace" | "signal" | "seat" | "skill" | "skybox" | "script" | "screenshot" | "socialMedia" | 
-					 "speech" | "state" | "stat" | "staticCollisions" | "terrain" | "text" | "time" | "toolUI" | "tool" |
-					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "template" | "wall" | "webrtc" | "weapon";
 
 import * as THREE from 'three';
 export default class Systems {
@@ -188,7 +181,6 @@ export default class Systems {
 			datgui: 		   new DatGUIVRPluginSystem( world ),
 			destructable: 	   new DestructableSystem( world ),
 			display: 		   new DisplaySystem( world ),
-			virtualDevice:     new VirtualDeviceSystem( world ),
 			door: 			   new DoorSystem( world ),
 			drawing: 		   new DrawingSystem( world ),
 			emote: 			   new EmoteSystem( world ),
@@ -244,6 +236,7 @@ export default class Systems {
 			user: 			   new UserSystem( world ),
 			vehicle: 		   new VehicleSystem( world ),
 			video: 			   new VideoSystem( world ),
+			virtualDevice:     new VirtualDeviceSystem( world ),
 			virtualMachine:    new VirtualMachineSystem( world ),
 			wall: 			   new WallSystem( world ),
 			webrtc: 		   new WebRTCSystem( world ),

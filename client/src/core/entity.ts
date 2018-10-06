@@ -14,9 +14,9 @@ export type DBEntity = {
   components:     DBComponent[]
   position:       number[]
   quaternion:     number[]
-  voxel:          number[]
-  tags:           string[]
-  boundingRadius: number
+  voxel?:          number[]
+  tags?:           string[]
+  boundingRadius?: number
 }
 
 enum WorkerUpdateMode {

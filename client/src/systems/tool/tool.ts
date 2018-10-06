@@ -1,5 +1,5 @@
 import Entity from '../../core/entity'
-import Component from '../../core/component'
+import Component, { DBComponent } from '../../core/component'
 import { 
     GLOBAL_SPACE,
     GRID_SIZE 
@@ -99,11 +99,11 @@ export default class ToolSystem {
                                 color: 0xffffff
                             }
                         },
-                        components: [],
+                        components: [] as DBComponent[],
                         quaternion: [ 0, 0, 0, 1 ]
                     }
                 ]
-            },
+            } as DBComponent,
             {
                 position: [0, -2.25, 0], // position & init the panel once the tool is equipped
                 attrs: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel

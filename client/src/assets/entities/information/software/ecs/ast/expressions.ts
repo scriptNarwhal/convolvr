@@ -1,4 +1,5 @@
 import { DBComponent } from "../../../../../../core/component";
+import { DBEntity } from "../../../../../../core/entity";
 
 export default class ASTExpressions {
     public static PrefixExpression =  {
@@ -13,6 +14,11 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: [],
+                    color:"#2020ff",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -21,7 +27,7 @@ export default class ASTExpressions {
         }],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
-    };
+    } as DBEntity;
 
     public static InfixExpression =  {
         id: -1,
