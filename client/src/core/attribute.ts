@@ -158,7 +158,7 @@ export interface light extends Attribute {
     distance: number
 }
 export interface layout extends Attribute {
-    type: string,
+    type: "list" | "grid" | "radial" | "tube" | "fibonacci",
     columns?: number,
     isometric?: boolean,
     axis?: "x" | "y" | "xy" | "yz" | "zx"
