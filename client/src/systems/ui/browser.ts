@@ -17,43 +17,53 @@ export default class BrowserSystem {
 
             case "files":
 
-            break
+            break;
             case "directories":
-
 
             case "text":
 
-            break
+            break;
+            case "csv":
+
+            break;
+            case "json":
+
+            case "js":
+
+            break;
+            case "ecs":
+
+            break;
             case "html":
 
-            break
+            break;
             case "images":
 
-            break
+            break;
             case "video":
 
-            break
+            break;
             case "audio":
 
-            break
+            break;
             case "entities":
 
-            break
+            break;
             case "components":
 
-            break
+            break;
             case "attrs":
 
-            break
+            break;
             case "users":
 
-            break
+            break;
             case "spaces":
 
-            break
+            break;
             case "places":
 
-            break
+            break;
         }
 
         return {
