@@ -3,7 +3,8 @@ import * as THREE from 'three';
 import Entity from "./entity";
 import Binding from './binding';
 import Property from "./property";
-import { Attributes } from './attribute';
+import { Attributes, AttributeName } from './attribute';
+import { AnyObject } from '../util';
 
 export type DBComponent = {
   id?:         number
@@ -12,9 +13,9 @@ export type DBComponent = {
   components?: DBComponent[]
   position?:   number[]
   quaternion?: number[]
-  props?:      { [key: string]: Property }
   attrs?:      Attributes
-  state?:      { [key: string]: any }
+  props?:      { [key: string]: Property }
+  state?:      { [key: string]: AnyObject }
   tags?:       string[]
 }
 
@@ -22,11 +23,11 @@ export default class Component {
 
   public entity:             any
   public mesh:               any
+  public attrs:              Attributes
   public props:              { [key: string]: any }
-  public attrs:              { [key: string]: any }
   public state:              { [key: string]: any }
   public bindings:           Binding[]
-  public components:         any[]
+  public components:         DBComponent[]
   public compsByFaceIndex:   any[]
   public allComponents:      Component[]
   public combinedComponents: Component[]
@@ -62,14 +63,12 @@ export default class Component {
        * Templated Components
        */
       if (data.class) {
-        // look up component
-        data = systems.assets.makeComponent(data.class, data);
+        data = systems.assets.makeComponent(data.class, data); // look up component
       }
-
 
       this.entity = entity
       this.data = data
-      this.attrs = data.attrs || {}
+      this.attrs = attrs || {}
       this.state = {}
       this.components = data.components || []
       this.compsByFaceIndex = []

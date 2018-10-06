@@ -448,7 +448,7 @@ export default class Entity {
     if ( components == false )
       components = this.allComponents;
     if ( pathIndex + 1 < path.length ) {
-      foundComponent = this.getComponentByPath( path, pathIndex + 1, components[ path[ pathIndex ] ].components )
+      foundComponent = this.getComponentByPath( path, pathIndex + 1, components[ path[ pathIndex ] ].allComponents )
     } else {
       foundComponent = components[ path[ pathIndex ] ]
     }

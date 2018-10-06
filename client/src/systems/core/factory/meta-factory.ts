@@ -16,8 +16,7 @@ export default class MetaFactorySystem {
 
     public init(component: Component) { 
         
-        let components:     Array<Component> = component.components,
-            attr:           any           = component.attrs.metaFactory,
+        let attr:           any           = component.attrs.metaFactory,
             assetType:      string           = attr.type,
             category:       string           = attr.attrName,
             gridWidth:      number           = attr.gridWidth || 3,

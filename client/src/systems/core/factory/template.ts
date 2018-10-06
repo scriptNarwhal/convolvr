@@ -13,8 +13,7 @@ export default class TemplateSystem {
     }
 
     public init(component: Component) { 
-        let components:     Array<Component>      = component.components,
-            attr:           any                   = component.attrs.template,
+        let attr:           any                   = component.attrs.template,
             assetType:      string                = attr.type,
             assets:         {[key:string]:string} = attr.assets,
             textMap:        string[] | string[][] = attr.textMap,

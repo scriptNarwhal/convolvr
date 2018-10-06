@@ -39,10 +39,6 @@ export default class MaterialSystem {
             material: any = { notInitialized: 1 },
             basic = false,
             textureConfig: any = { },
-            diffuse = !!attr.map ? attr.map.replace(path, '') : "",
-            specular = !!attr.specularMap ? attr.specularMap.replace(path, '') : "",
-            alpha = !!attr.alphaMap ? attr.alphaMap : "",
-            bump = !!attr.bumpMap ? attr.bumpMap : "",
             envMapUrl = !! attr.envMap ? attr.envMap : assets.envMaps.default,
             reflection = !!envMapUrl ? envMapUrl.replace(path, '') : "",
             pattern = !!attr.procedural ? attr.procedural.name : "",
@@ -164,7 +160,7 @@ export default class MaterialSystem {
     }
 
     private mapCallback(
-      map: any, mapName: string, mat: any, attr: any, shading: number, basic: boolean, mobile: boolean,
+      map: any, mapName: string, mat: any, attr: any, shading: string, basic: boolean, mobile: boolean,
       anisotropy: number, simpleShading: boolean, material: any, ms: MaterialSystem
     ) {
         map.wrapS = map.wrapT = THREE.ClampToEdgeWrapping;

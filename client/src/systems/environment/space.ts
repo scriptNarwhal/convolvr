@@ -70,8 +70,7 @@ export default class SpaceSystem {
     }
 
     public init(component: Component) {
-        let attr = component.attrs.tab,
-            state: any = {}
+        let state: any = {}
             
         return state
     }

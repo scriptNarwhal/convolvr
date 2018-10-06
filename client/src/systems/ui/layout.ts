@@ -1,5 +1,6 @@
 import Component from "../../core/component";
 import Convolvr from "../../world/world";
+import { layout } from "../../core/attribute";
 
 export default class LayoutSystem {
 
@@ -12,7 +13,7 @@ export default class LayoutSystem {
     init(component: Component) { 
         
         let ownProp = component.attrs.layout,
-            attr = component.parent && component.parent.attrs.layout ? component.parent.attrs.layout : false,
+            attr = component.parent && component.parent.attrs.layout ? component.parent.attrs.layout : {} as layout,
             siblings = component.parent && component.parent.components.length,
             position = [ 0, 0, 0 ], // use parent layout to position child
             index = component.index
