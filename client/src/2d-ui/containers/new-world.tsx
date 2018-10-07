@@ -38,12 +38,12 @@ class NewSpace extends Component<any, any> {
       npcs: false,
       tools: false,
       vehicles: false,
+      computers: false,
       orbs: false,
       rocks: false,
       pyramids: true,
       columns: false,
-      wheels: false,
-      nets: false
+      wheels: false
     })
   }
 
