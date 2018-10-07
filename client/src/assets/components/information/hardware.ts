@@ -175,13 +175,13 @@ export default class HardwareDevices {
         quaternion: [ 0, 0, 0, 1 ]
     }
 
-    public static screen =  {
+    public static display =  {
         id: -1,
-        name: "screen",
+        name: "display",
         components: [{
             attrs: {
                 virtualDevice: {
-                    type: "screen"
+                    type: "display"
                 },
                 geometry: {
                     shape: "box",

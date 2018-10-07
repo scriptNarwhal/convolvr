@@ -1,7 +1,7 @@
 import Convolvr from "../../../world/world";
 import { AnyObject } from "../../../util";
 
-export default class StorageDevice {
+export default class DisplayDevice {
     private world: Convolvr;
     
     constructor (world: Convolvr ) {
@@ -13,5 +13,4 @@ export default class StorageDevice {
             
         }
     }
-    
 }

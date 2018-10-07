@@ -1,3 +1,5 @@
+import { AnyObject } from "../util";
+
 export type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "camera" | "chat" | "control" |
 					 "conveyor" | "cursor" | "datgui" | "destructable" | "display" | "virtualDevice" | "door" | "drawing" | 
 					 "emote" | "faction" | "factory" | "fbx" | "file" | "floor" | "geometry" | "grab" | "graph" | "hand" | 
@@ -261,7 +263,10 @@ export interface toolbox extends Attribute {}
 export interface user extends Attribute {}
 export interface vehicle extends Attribute {}
 export interface video extends Attribute {}
-export interface virtualDevice extends Attribute {}
+export interface virtualDevice extends Attribute {
+    type: "display" | "display-adapter" | "io-controller" | "network-interface" | "storage" | "pointing-device" | "keyboard",
+    data?: AnyObject
+}
 export interface virtualMachine extends Attribute {}
 export interface wall extends Attribute {}
 export interface webrtc extends Attribute {}

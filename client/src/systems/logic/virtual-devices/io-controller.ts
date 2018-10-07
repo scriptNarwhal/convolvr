@@ -1,5 +1,6 @@
 import { Component } from "react";
 import Convolvr from "../../../world/world";
+import { AnyObject } from "../../../util";
 
 export default class IOControllerDevice {
     private world: Convolvr;
@@ -8,8 +9,10 @@ export default class IOControllerDevice {
         this.world = world
     } 
     
-    init(component: Component) {
-        
+    public init(data: AnyObject) {
+        return {
+            
+        }
     }
     // implement
 

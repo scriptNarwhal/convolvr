@@ -18,7 +18,8 @@ export default class ASTExpressions {
                 text: {
                     lines: ["Prefix Expr <-"],
                     color:"#2020ff",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -45,7 +46,8 @@ export default class ASTExpressions {
                 text: {
                     lines: ["-> Infix Expr <-"],
                     color:"#2020ff",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -72,7 +74,8 @@ export default class ASTExpressions {
                 text: {
                     lines: ["if"],
                     color:"#2020ff",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -98,7 +101,8 @@ export default class ASTExpressions {
                 text: {
                     lines: ["for"],
                     color:"#2020ff",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -125,7 +129,8 @@ export default class ASTExpressions {
                 text: {
                     lines: ["while"],
                     color:"#2020ff",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -148,6 +153,12 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: ["sleep"],
+                    color:"#2020ff",
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -174,7 +185,8 @@ export default class ASTExpressions {
                 text: {
                     lines: ["call()"],
                     color:"#2020ff",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -201,7 +213,8 @@ export default class ASTExpressions {
                 text: {
                     lines: ["new"],
                     color:"#2020ff",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -228,7 +241,8 @@ export default class ASTExpressions {
                 text: {
                     lines: ["exec"],
                     color:"#2020ff",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],

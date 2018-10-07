@@ -1,4 +1,5 @@
 import Convolvr from "../../../world/world";
+import { AnyObject } from "../../../util";
 
 export default class PointingDevice {
     private world: Convolvr;
@@ -7,6 +8,10 @@ export default class PointingDevice {
         this.world = world
     } 
     
-    // implement
+    public init(data: AnyObject) {
+        return {
+            
+        }
+    }
     
 }

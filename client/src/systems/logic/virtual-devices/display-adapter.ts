@@ -1,6 +1,7 @@
 import { Component } from "react";
 import Convolvr from "../../../world/world";
 import { VirtualDevice } from "../virtual-device";
+import { AnyObject } from "../../../util";
 
 export default class DisplayAdapterDevice implements VirtualDevice {
     private world: Convolvr;
@@ -9,7 +10,7 @@ export default class DisplayAdapterDevice implements VirtualDevice {
         this.world = world
     }
 
-    init(component: Component) {
+    init(data: AnyObject) {
 
         // create a canvas, save the context, etc
         // implement

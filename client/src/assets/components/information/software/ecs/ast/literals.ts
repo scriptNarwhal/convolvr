@@ -9,7 +9,7 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -18,7 +18,8 @@ export default class ASTLiterals {
                 text: {
                     lines: ["Null"],
                     color: "#ff8000",
-                    background: "#000"
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -36,7 +37,7 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -45,7 +46,8 @@ export default class ASTLiterals {
                 text: {
                     lines: ["Int"],
                     color: "#ff8000",
-                    background: "#000"
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -63,7 +65,7 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -72,7 +74,8 @@ export default class ASTLiterals {
                 text: {
                     lines: ["Float"],
                     color: "#ff8000",
-                    background: "#000"
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -90,7 +93,7 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -99,7 +102,8 @@ export default class ASTLiterals {
                 text: {
                     lines: ["String"],
                     color: "#ff8000",
-                    background: "#000"
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -117,7 +121,7 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -126,7 +130,8 @@ export default class ASTLiterals {
                 text: {
                     lines: ["Array[ ]"],
                     color: "#ff8000",
-                    background: "#000"
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -144,7 +149,7 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -153,7 +158,8 @@ export default class ASTLiterals {
                 text: {
                     lines: ["Hash{ }"],
                     color: "#ff8000",
-                    background: "#000"
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -171,7 +177,7 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -180,7 +186,8 @@ export default class ASTLiterals {
                 text: {
                     lines: ["fn() { }"],
                     color: "#ff8000",
-                    background: "#000"
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],

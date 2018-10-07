@@ -9,7 +9,7 @@ export default class ECSObjects {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -20,6 +20,7 @@ export default class ECSObjects {
                         "Null",
                         "Value: Null"
                     ],
+                    fontSize: 30,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -39,7 +40,7 @@ export default class ECSObjects {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -50,6 +51,7 @@ export default class ECSObjects {
                         "Int",
                         "Value: 0"
                     ],
+                    fontSize: 30,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -69,7 +71,7 @@ export default class ECSObjects {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0xff8000,
@@ -80,6 +82,7 @@ export default class ECSObjects {
                         "Float",
                         "Value: 0.0"
                     ],
+                    fontSize: 30,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -99,7 +102,7 @@ export default class ECSObjects {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -110,6 +113,7 @@ export default class ECSObjects {
                         "String",
                         "Value: \"\""
                     ],
+                    fontSize: 30,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -129,7 +133,7 @@ export default class ECSObjects {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -140,6 +144,7 @@ export default class ECSObjects {
                         "Array",
                         "Value: [ ]"
                     ],
+                    fontSize: 30,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -159,7 +164,7 @@ export default class ECSObjects {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -170,6 +175,7 @@ export default class ECSObjects {
                         "HashMap",
                         "Value: { }"
                     ],
+                    fontSize: 30,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -189,7 +195,7 @@ export default class ECSObjects {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -200,6 +206,7 @@ export default class ECSObjects {
                         "Function",
                         "Value: fn( ) { }"
                     ],
+                    fontSize: 30,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -219,7 +226,7 @@ export default class ECSObjects {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -230,6 +237,7 @@ export default class ECSObjects {
                         "Builtin",
                         "Value: {Builtin}"
                     ],
+                    fontSize: 30,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -249,7 +257,7 @@ export default class ECSObjects {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
@@ -260,6 +268,7 @@ export default class ECSObjects {
                         "Error",
                         "Value: \"\""
                     ],
+                    fontSize: 30,
                     color: "#ff8000",
                     background: "#000"
                 }
