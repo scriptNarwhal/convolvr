@@ -4,7 +4,7 @@ export default class ECSObjects {
 
     public static null = {
         id: -1,
-        name: "ast-null",
+        name: "object-null",
         components: [{
             attrs: {
                 geometry: {
@@ -14,19 +14,27 @@ export default class ECSObjects {
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: [
+                        "Null",
+                        "Value: Null"
+                    ],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
 
     public static int = {
         id: -1,
-        name: "ast-int",
+        name: "object-int",
         components: [{
             attrs: {
                 geometry: {
@@ -36,12 +44,20 @@ export default class ECSObjects {
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: [
+                        "Int",
+                        "Value: 0"
+                    ],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     }
@@ -58,19 +74,27 @@ export default class ECSObjects {
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: [
+                        "Float",
+                        "Value: 0.0"
+                    ],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     }
 
     public static string =  {
         id: -1,
-        name: "ast-string",
+        name: "object-string",
         components: [{
             attrs: {
                 geometry: {
@@ -80,12 +104,20 @@ export default class ECSObjects {
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: [
+                        "String",
+                        "Value: \"\""
+                    ],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -102,12 +134,20 @@ export default class ECSObjects {
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: [
+                        "Array",
+                        "Value: [ ]"
+                    ],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -124,12 +164,20 @@ export default class ECSObjects {
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: [
+                        "HashMap",
+                        "Value: { }"
+                    ],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     }
@@ -146,12 +194,20 @@ export default class ECSObjects {
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: [
+                        "Function",
+                        "Value: fn( ) { }"
+                    ],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     }
@@ -168,12 +224,20 @@ export default class ECSObjects {
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: [
+                        "Builtin",
+                        "Value: {Builtin}"
+                    ],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     }
@@ -190,12 +254,20 @@ export default class ECSObjects {
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: [
+                        "Error",
+                        "Value: \"\""
+                    ],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     }

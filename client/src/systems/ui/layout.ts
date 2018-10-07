@@ -10,7 +10,7 @@ export default class LayoutSystem {
         this.world = world
     }
 
-    init(component: Component) { 
+    public init(component: Component) { 
         
         let ownProp = component.attrs.layout,
             attr = component.parent && component.parent.attrs.layout ? component.parent.attrs.layout : {} as layout,
@@ -30,37 +30,37 @@ export default class LayoutSystem {
         }
     }
 
-    useLayout ( name: string, component: Component, position = [0,0,0], index: number, axis: string, columns = 3, gridSize = 0.66, isometric = false ) {
+    public useLayout ( name: string, component: Component, position = [0,0,0], index: number, axis: string, columns = 3, gridSize = 0.66, isometric = false ) {
 
         let pos = [ 0, 0, 0 ]
 
         switch ( name ) {
             case "list":
-                pos = this._listLayout( component, position, index, axis, gridSize)
+                pos = this.listLayout( component, position, index, axis, gridSize)
             break
             case "grid":
-                pos = this._gridLayout( component, position, index, axis, columns, gridSize, isometric )
+                pos = this.gridLayout( component, position, index, axis, columns, gridSize, isometric )
             break
             case "radial":
-                pos = this._radialLayout( component, position, index, axis, columns, gridSize, isometric )
+                pos = this.radialLayout( component, position, index, axis, columns, gridSize, isometric )
             break
             case "tube":
-                pos = this._tubeLayout( component, position, index, axis, columns, gridSize, isometric )
+                pos = this.tubeLayout( component, position, index, axis, columns, gridSize, isometric )
             break
             case "fibonacci":
-                pos = this._fibonacciLayout( component, position, index, columns, gridSize )
+                pos = this.fibonacciLayout( component, position, index, columns, gridSize )
             break
         }
         return [ pos[0] + position[0], pos[1] + position[1], pos[2] + position[2] ]
     }
 
-    _listLayout (component: Component, position: number[], index: number, axis = "xy", gridSize: number) {
+    private listLayout (component: Component, position: number[], index: number, axis = "xy", gridSize: number) {
         let pos = [ 0, index * gridSize, 0 ]
 
         return pos
     }
 
-    _gridLayout (component: Component, position: number[], index: number, axis = "xy", columns: number, gridSize: number, isometric: boolean ) {
+    private gridLayout (component: Component, position: number[], index: number, axis = "xy", columns: number, gridSize: number, isometric: boolean ) {
         let x = index % columns,
             z = Math.max( 0, Math.floor( (index) / columns ) ),
             size = gridSize * 1.15,
@@ -79,7 +79,7 @@ export default class LayoutSystem {
         return pos
     }
 
-    _radialLayout (component: Component, position: number[], index: number, axis = "xy", columns: number, gridSize: number, isometric: boolean ) {
+    private radialLayout (component: Component, position: number[], index: number, axis = "xy", columns: number, gridSize: number, isometric: boolean ) {
 
         //TODO: Implement P2
         let pos = [ 0, index * gridSize, 0 ]
@@ -87,7 +87,7 @@ export default class LayoutSystem {
         return pos
     }
 
-    _tubeLayout (component: Component, position: number[], index: number, axis = "z", columns: number, gridSize: number, isometric: boolean ) {
+    private tubeLayout (component: Component, position: number[], index: number, axis = "z", columns: number, gridSize: number, isometric: boolean ) {
         let x = index % columns,
             z = Math.max( 0, Math.floor( (index) / columns ) ),
             margin = gridSize,
@@ -115,7 +115,7 @@ export default class LayoutSystem {
         return pos
     }
 
-    _fibonacciLayout ( component: Component, position: number[], index: number, columns: number, gridSize: number ) {
+    private fibonacciLayout ( component: Component, position: number[], index: number, columns: number, gridSize: number ) {
 
         //TODO: Implement P3
         // https://www.google.ca/search?q=fibonacci+grid&tbm=isch&source=iu&ictx=1&fir=JRP5xTh1mqh_CM%253A%252CjFxyq9GcN98ZtM%252C_&usg=__LK6T9856lEyJ4_83zhhRViZkBME%3D&sa=X&ved=0ahUKEwj6t_XwwbjbAhVn7YMKHdATBiIQ9QEILjAA#imgrc=JRP5xTh1mqh_CM:

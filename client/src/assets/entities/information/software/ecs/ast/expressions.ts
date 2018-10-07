@@ -16,7 +16,7 @@ export default class ASTExpressions {
                     name: "metal"
                 },
                 text: {
-                    lines: [],
+                    lines: ["Prefix Expr <-"],
                     color:"#2020ff",
                     background: "#000000"
                 }
@@ -24,7 +24,7 @@ export default class ASTExpressions {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     } as DBEntity;
@@ -41,12 +41,17 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: ["-> Infix Expr <-"],
+                    color:"#2020ff",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -63,12 +68,17 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: ["if"],
+                    color:"#2020ff",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -84,12 +94,17 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: ["for"],
+                    color:"#2020ff",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -106,12 +121,17 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: ["while"],
+                    color:"#2020ff",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -133,7 +153,7 @@ export default class ASTExpressions {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -150,12 +170,17 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: ["call()"],
+                    color:"#2020ff",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -172,12 +197,17 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: ["new"],
+                    color:"#2020ff",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -194,12 +224,17 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: ["exec"],
+                    color:"#2020ff",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -216,12 +251,19 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: ["Index[]",
+                        "Expression"
+                    ],
+                    color:"#2020ff",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -238,12 +280,19 @@ export default class ASTExpressions {
                 material: {
                     color: 0x2020ff,
                     name: "metal"
+                },
+                text: {
+                    lines: ["Index[]=Assignment",
+                        "Expression"
+                    ],
+                    color:"#2020ff",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };

@@ -14,12 +14,17 @@ export default class ASTLiterals {
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: ["Null"],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     }
@@ -34,14 +39,19 @@ export default class ASTLiterals {
                     size: [ 2, 2, 2 ]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["Int"],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -56,14 +66,19 @@ export default class ASTLiterals {
                     size: [ 2, 2, 2 ]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["Float"],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -78,14 +93,19 @@ export default class ASTLiterals {
                     size: [ 2, 2, 2 ]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["String"],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -100,14 +120,19 @@ export default class ASTLiterals {
                     size: [ 2, 2, 2 ]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["Array[ ]"],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -122,14 +147,19 @@ export default class ASTLiterals {
                     size: [ 2, 2, 2 ]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["Hash{ }"],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -144,14 +174,19 @@ export default class ASTLiterals {
                     size: [ 2, 2, 2 ]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["fn() { }"],
+                    color: "#ff8000",
+                    background: "#000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };

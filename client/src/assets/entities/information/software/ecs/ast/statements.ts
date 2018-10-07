@@ -13,12 +13,17 @@ export default class ASTStatements {
                 material: {
                     color: 0x20ff20,
                     name: "metal"
+                },
+                text: {
+                    lines: ["="],
+                    color: "#20ff20",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -35,12 +40,17 @@ export default class ASTStatements {
                 material: {
                     color: 0x20ff20,
                     name: "metal"
+                },
+                text: {
+                    lines: ["let"],
+                    color: "#20ff20",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -57,12 +67,17 @@ export default class ASTStatements {
                 material: {
                     color: 0x20ff20,
                     name: "metal"
+                },
+                text: {
+                    lines: ["class"],
+                    color: "#20ff20",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -79,12 +94,17 @@ export default class ASTStatements {
                 material: {
                     color: 0x20ff20,
                     name: "metal"
+                },
+                text: {
+                    lines: ["return"],
+                    color: "#20ff20",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -101,12 +121,17 @@ export default class ASTStatements {
                 material: {
                     color: 0x20ff20,
                     name: "metal"
+                },
+                text: {
+                    lines: ["( Expression )"],
+                    color: "#20ff20",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
@@ -123,12 +148,17 @@ export default class ASTStatements {
                 material: {
                     color: 0x20ff20,
                     name: "metal"
+                },
+                text: {
+                    lines: ["{ Block }"],
+                    color: "#20ff20",
+                    background: "#000000"
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ]
     };
