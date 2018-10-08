@@ -286,19 +286,20 @@ export default class Systems {
     registerComponent(component: Component): Mesh {
         let componentsByAttr = component.entity.componentsByAttr,
 			attrs = component.attrs,
-			attrKeys = Object.keys( attrs ),
+			attrKeys = Object.keys( attrs ) as AttributeName[],
             state = component.state,
             deferredSystems: any[] = [],
 			mesh = null;
-			
+		
+		let attr: AttributeName;
 
-        for (const attr of attrKeys) {
-            if ( (this as any)[ attr ] != null ) {
+        for (attr of attrKeys) {
+            if ((this as any)[ attr ] != null) {
 
 				if ( !!this.deferred[ attr ] ) { /* add other systems here */
 					deferredSystems.push( attr );
                 } else {
-                    state[ attr ] = ((this as any)[ attr ] as any).init( component )
+                    state[ attr ] = (this[ attr ] as System).init( component )
 				}
 				
 				if ( !!!componentsByAttr[ attr ] ) {
@@ -324,6 +325,12 @@ export default class Systems {
         return mesh;
 	}
 
+	injectSubSystemDependencies(subSystems: { [key: string]: System }): void {
+		for (const system in subSystems) {
+			this.injectDependencies(subSystems[system]);
+		}
+	}
+
 	private injectDependencies(system: System) {
 		if (!system.dependencies) {
 			system.postInject && system.postInject.call(system);
@@ -343,12 +350,6 @@ export default class Systems {
 		}
 		system.postInject && system.postInject.call(system);
 	}
-
-	public injectSubSystemDependencies(subSystems: { [key: string]: System }): void {
-		for (const system in subSystems) {
-			this.injectDependencies(subSystems[system]);
-		}
-	}
 	
 	private evaluateProperties(component: Component, properties: {[key: string]: any}): void {
 		let binding: Binding,
@@ -366,16 +367,14 @@ export default class Systems {
 	**/
 	public tick(delta: number, time: number): void {
 		let systems = this.liveSystems,
-			ln = systems.length,
-			l = 0;
+			ln = systems.length;
 		// refactor this to check time after each system/tick to avoid dropping render frames
-		if ( delta > 250 || ln == 0 ) {
+		if ( delta > 250 || ln < 1 ) {
 			return
 		}
 
-		while ( l < ln ) {
-			systems[ l ].tick( delta, time )
-			l += 1
+		while ( ln -- ) {
+			systems[ ln ].tick( delta, time );
 		}
 	}
 }
