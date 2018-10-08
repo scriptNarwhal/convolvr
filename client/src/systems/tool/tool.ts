@@ -128,8 +128,8 @@ export default class ToolSystem {
 
         if (previewBox == null && cursor) {
 
-            preview = assets.makeEntity( "preview-box", true, {}, component.entity.voxel )
-            preview.components[0].attrs.noRaycast = {}
+            preview = assets.makeEntity( "preview-box", true, {}, component.entity.voxel ) as Entity
+            preview.components[0].attrs.noRaycast = true;
             preview.init( cursor.mesh, {} )
             component.state.tool.preview.box = preview
             // preview = this.generatePreview( component, preset, data )

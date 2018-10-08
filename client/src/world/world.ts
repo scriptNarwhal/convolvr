@@ -276,12 +276,12 @@ export default class Convolvr {
 			  wholeBody: false 
 			}, 
 			GLOBAL_SPACE 
-		  ) // entity id can be passed into config object
+		  ) as Entity; // entity id can be passed into config object
 	  avatar.init( this.three.scene )
 	  this.user.useAvatar( avatar );
 	  this.initUserInput();
       this.user.toolbox = world.systems.toolbox
-      toolMenu = this.systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) // method for spawning built in entities
+      toolMenu = this.systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) as Entity // method for spawning built in entities
       this.user.hud = toolMenu
       toolMenu.init( this.three.scene, {}, (menu: Entity) => { 
         menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()

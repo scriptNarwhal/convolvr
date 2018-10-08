@@ -85,7 +85,7 @@ export default class UserUpdateHandler {
         let world = this.world,
             avatar = world.systems.assets.makeEntity(userFrame.avatar, true, 
                 { wholeBody: true, userName: userFrame.username, id: userFrame.id }, 
-            coords),
+            coords) as Entity,
             user = (world.users as any)["user" + userFrame.id] = {
                 id: userFrame.id,
                 avatar,

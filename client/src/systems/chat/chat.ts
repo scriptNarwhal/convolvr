@@ -112,13 +112,13 @@ export default class ChatSystem {
     }
 
     initChatModal() {
-        let chatModal = this.world.systems.assets.makeEntity("help-screen", true, {}, [0,1,0]),
+        const chatModal = this.world.systems.assets.makeEntity("help-screen", true, {}, [0,1,0]) as Entity,
             cPos = this.world.three.camera.position;
 
         chatModal.components[0].attrs.text.lines = ["Welcome"]
         chatModal.init(this.world.three.scene, false, ()=>{})
-        chatModal.update(cPos.x, cPos.y - 1, cPos.z - 1.7)
-        this.chatModal = chatModal
+        chatModal.update([cPos.x, cPos.y - 1, cPos.z - 1.7]);
+        this.chatModal = chatModal;
     }
 
     updateChatModal() {
