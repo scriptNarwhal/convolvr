@@ -9,7 +9,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,
@@ -37,7 +37,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,
@@ -65,7 +65,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,
@@ -92,7 +92,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,
@@ -120,7 +120,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,
@@ -148,7 +148,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,
@@ -176,7 +176,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,
@@ -204,7 +204,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,
@@ -232,7 +232,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,
@@ -260,7 +260,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,
@@ -289,7 +289,7 @@ export default class ASTExpressions {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [ 2, 1, 1 ]
                 },
                 material: {
                     color: 0x2020ff,

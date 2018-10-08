@@ -55,8 +55,9 @@ export default class ChatSystem {
 
     allSystemsLoaded () {
          // init chat modal for current user
+         
          setTimeout( ()=>{
-            
+            this.world.store.dispatch(getChatHistory(this.world.name, 0));
             this.initChatModal()
          }, 1700)
     }

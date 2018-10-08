@@ -124,9 +124,11 @@ class App extends Component<AppContainerProps, AppContainerState> {
     world.rememberUserCallback = (username: string, password: string) => {
 			  this.props.login(username, password, "", {});
     };
-    world.initChatCallback = () => {
-      this.props.getChatHistory(world.name, 0);
-    };
+    // alert("set init chat callback")
+    // world.initChatCallback = () => {
+    //   alert("get chat history")
+    //   this.props.getChatHistory(world.name, 0);
+    // };
     world.onFocusCallback = () => {
       this.setState({
 			  unread: 0
