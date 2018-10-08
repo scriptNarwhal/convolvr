@@ -90,7 +90,11 @@ export interface Attributes {
     wall?: wall
     webrtc?: webrtc
     weapon?: weapon
-}
+};
+
+export type FactoryType = "entity" | "component" | "attr" | "world" | "place" | "file" | "directory";
+
+export type FactoryAttributeType = "geometry" | "material" | "assets" | "systems";
 
 export type GeometryShape = "box" | "node" | "plane" | "octahedron" | "sphere" | "cylinder" | "open-cylinder" | "cone" | "torus" | "hexagon" | "open-box" | "frustum" | "extrude" | "lathe";
 
@@ -104,7 +108,7 @@ export type ProceduralMaterial = {
             params: number[]
         }[]
     }
-}
+};
 
 export interface ability extends Attribute {}
 export interface activate extends Attribute {}
@@ -132,7 +136,14 @@ export interface door extends Attribute {}
 export interface drawing extends Attribute {}
 export interface emote extends Attribute {}
 export interface faction extends Attribute {}
-export interface factory extends Attribute {}
+export interface factory extends Attribute {
+    type: FactoryType,
+    preset?: "",
+    attrName?: FactoryAttributeType,
+    data?: any,
+    anchorOutput?: boolean,
+    miniature?: boolean,
+}
 export interface fbx extends Attribute {
     url: string
 }
@@ -182,7 +193,8 @@ export interface material extends Attribute {
 }
 export interface media extends Attribute {}
 export interface metaFactory extends Attribute {
-
+    type: string,
+    attrName: string
 }
 export interface miniature extends Attribute {
     scale?: number
@@ -261,7 +273,14 @@ export interface tool extends Attribute {
 }
 export interface toolbox extends Attribute {}
 export interface user extends Attribute {}
-export interface vehicle extends Attribute {}
+export interface vehicle extends Attribute {
+    onActivate: {
+        driverSeat?: boolean,
+        passengerSeat?: boolean
+    },
+    flying?: boolean
+    nautical?: boolean
+}
 export interface video extends Attribute {}
 export interface virtualDevice extends Attribute {
     type: "display" | "display-adapter" | "io-controller" | "network-interface" | "storage" | "pointing-device" | "keyboard",

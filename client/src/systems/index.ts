@@ -77,8 +77,14 @@ import Component from '../core/component';
 import Binding from '../core/binding';
 import { AttributeName } from '../core/attribute'
 
+export interface System {
+	init: (component: Component) => AnyObject
+	tick?: (delta: number, time: number) => void
+}
 
 import * as THREE from 'three';
+import { AnyObject } from '../util';
+import { Mesh } from 'three';
 export default class Systems {
 
 	public world: Convolvr
@@ -245,18 +251,19 @@ export default class Systems {
 		this.systems = systems
 		this.liveSystems = []
 		let systemIndex = (this as any);
+		const systemNames = Object.keys( systems );
 
 		for (let s: number = 0; s < 2; s ++) {
-			Object.keys( systems ).map( system => {
-				if (s == 1) {
-					systemIndex[ system ].allSystemsLoaded && systemIndex[ system ].allSystemsLoaded()
-				} else {
+			for (const system of systemNames) {
+				if (s == 0) { // first pass
 					systemIndex[ system ] = (systems as any)[ system ]
-					if ( systemIndex[ system ].live ) {
+					if ( typeof systemIndex[ system ].tick == "function") {
 						systemIndex.liveSystems.push( systemIndex[ system ] )
 					}
+				} else { 
+					systemIndex[ system ].allSystemsLoaded && systemIndex[ system ].allSystemsLoaded()
 				}
-			})
+			}
 		}
 
 		this.deferred = {
@@ -268,32 +275,30 @@ export default class Systems {
 	/**
 	*  Reads component attrs, registers with systems and populates state with the resulting data
 	**/
-    registerComponent(component: Component) {
+    registerComponent(component: Component): Mesh {
         let componentsByAttr = component.entity.componentsByAttr,
-			entity = component.entity,
-			stateByProp = entity.stateByProp,
-            attrs = component.attrs,
+			attrs = component.attrs,
+			attrKeys = Object.keys( attrs ),
             state = component.state,
             deferredSystems: any[] = [],
 			mesh = null;
 			
 
-        Object.keys( attrs ).map( (attr: AttributeName) => {
-            if ( this[ attr ] != null ) {
+        for (const attr of attrKeys) {
+            if ( (this as any)[ attr ] != null ) {
 
 				if ( !!this.deferred[ attr ] ) { /* add other systems here */
 					deferredSystems.push( attr );
                 } else {
-                    state[ attr ] = (this[ attr ] as any).init( component )
+                    state[ attr ] = ((this as any)[ attr ] as any).init( component )
 				}
 				
 				if ( !!!componentsByAttr[ attr ] ) {
                     componentsByAttr[ attr ] = []
 				}
-				
 				componentsByAttr[ attr ].push( component )
             }
-        });
+        }
 
 		mesh = new THREE.Mesh( state.geometry.geometry, state.material.material )
 		if (component.props) {
@@ -304,11 +309,11 @@ export default class Systems {
         mesh.matrixAutoUpdate = false
         component.mesh = mesh
 
-        deferredSystems.map( (attr: AttributeName) => {
-            state[ attr ] = (this[ attr ] as any).init( component )
-        })
+        for (const attr of deferredSystems) {
+            state[ attr ] = ((this as any )[ attr ] as any).init( component )
+        }
 
-        return mesh
+        return mesh;
 	}
 	
 	private evaluateProperties(component: Component, properties: {[key: string]: any}): void {
@@ -325,7 +330,7 @@ export default class Systems {
 	/**
 	*  Fires once per frame, passing the delta and total time passed
 	**/
-	public tick(delta: number, time: number) {
+	public tick(delta: number, time: number): void {
 		let systems = this.liveSystems,
 			ln = systems.length,
 			l = 0;

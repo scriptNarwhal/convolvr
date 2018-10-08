@@ -1,6 +1,7 @@
 import Convolvr from '../../../world/world'
 import Component, { DBComponent } from '../../../core/component'
 import Entity from '../../../core/entity'
+import { FactoryType, FactoryAttributeType } from '../../../core/attribute';
 
 export default class MetaFactorySystem {
     
@@ -16,21 +17,21 @@ export default class MetaFactorySystem {
 
     public init(component: Component) { 
         
-        let attr:           any           = component.attrs.metaFactory,
-            assetType:      string           = attr.type,
-            category:       string           = attr.attrName,
-            gridWidth:      number           = attr.gridWidth || 3,
-            gridSize:       number           = attr.gridSize || 1,
-            vOffset:        number           = attr.vOffset || -1.2,
-            sourceCategory: any              = "none",
-            factories:      Array<any>    = [],
-            presets:        Array<any>       = [],
-            preset:         string           = "",
-            source:         Array<any>       = [],
-            index:          number           = 0,
-            keys:           any           = {},
-            x:              number           = 0,
-            y:              number           = 0
+        let attr:           any                   = component.attrs.metaFactory,
+            assetType:      FactoryType           = attr.type,
+            category:       FactoryAttributeType  = attr.attrName,
+            gridWidth:      number                = attr.gridWidth || 3,
+            gridSize:       number                = attr.gridSize || 1,
+            vOffset:        number                = attr.vOffset || -1.2,
+            sourceCategory: any                   = "none",
+            factories:      Array<any>            = [],
+            presets:        Array<any>            = [],
+            preset:         string                = "",
+            source:         Array<any>            = [],
+            index:          number                = 0,
+            keys:           any                   = {},
+            x:              number                = 0,
+            y:              number                = 0
 
         if ( assetType == "component" ) {
             Object.keys( attr.dataSource ).map( name => {
@@ -120,7 +121,7 @@ export default class MetaFactorySystem {
         return preset
     }
 
-    private addComponent(component: Component, factoryItem: any, assetType: string, assetCategory: string, preset: any, x: number, y: number, i: number, gridSize: number, vOffset: number ) {
+    private addComponent(component: Component, factoryItem: any, assetType: FactoryType, assetCategory: FactoryAttributeType, preset: any, x: number, y: number, i: number, gridSize: number, vOffset: number ) {
         let addTo:   DBComponent[] = null,
             layout:  any         = {},
             systems: any         = this.world.systems,
