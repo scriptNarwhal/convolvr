@@ -53,7 +53,7 @@ export default class ChatSystem {
         })
     }
 
-    allSystemsLoaded () {
+    postInject() {
          // init chat modal for current user
          
          setTimeout( ()=>{

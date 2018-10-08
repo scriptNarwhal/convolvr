@@ -8,11 +8,13 @@ import StorageDevice from './virtual-devices/storage'
 import PointingDevice from './virtual-devices/pointing-device'
 import DisplaySystem from '../video/display';
 import { AnyObject } from '../../util';
+import { System } from '..';
 export interface VirtualDevice {
+    world: Convolvr
     init: (data: AnyObject) => AnyObject
 }
 
-export default class VirtualDeviceSystem {
+export default class VirtualDeviceSystem implements System {
     
     world: Convolvr
     devices: {[deviceName: string]: VirtualDevice }
@@ -29,6 +31,10 @@ export default class VirtualDeviceSystem {
             "storage": new StorageDevice(world)
         }
     }
+
+    postInject() {
+        this.world.systems.injectSubSystemDependencies(this.devices);
+    }    
 
     init ( component: Component ) {
         let attr = component.attrs.virtualDevice,

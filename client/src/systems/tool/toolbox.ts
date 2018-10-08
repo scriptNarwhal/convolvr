@@ -48,14 +48,14 @@ export default class ToolboxSystem {
         }
     }
   
-      allSystemsLoaded( ) {
+    public postInject( ) {
         let world = this.world,
             user = world.user,
-            toolbox = this
+            toolbox = this;
 
         this.user = world.user
         setTimeout( ()=>{
-          console.log("allSystemsLoaded init avatar")
+          console.log("postInject toolbox: init avatar")
           console.log(user.avatar)
           if (user.avatar && user.avatar.addHandler) {
             user.avatar.addHandler("init", () => {
@@ -68,9 +68,9 @@ export default class ToolboxSystem {
           } else {
             // console.error("user.avatar hasn't loaded yet: User:", user)
           }
-          
+
         }, 5000)
-        
+
         console.info("user hands ", this.hands)
         this.tools = [
           new EntityTool({}, world, this),
@@ -86,7 +86,7 @@ export default class ToolboxSystem {
           new DebugTool({}, world, this),
           new DeleteTool({}, world, this)
         ]
-      }
+    }
   
       showMenu() { 
         this.user.hud.componentsByAttr.toolUI[0].state.toolUI.updatePosition()

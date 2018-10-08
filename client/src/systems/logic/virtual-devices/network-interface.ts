@@ -2,7 +2,7 @@ import Convolvr from "../../../world/world";
 import { AnyObject } from "../../../util";
 
 export default class NetworkInterfaceDevice {
-    private world: Convolvr;
+    public world: Convolvr;
     
     constructor (world: Convolvr ) {
         this.world = world

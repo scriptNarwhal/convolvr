@@ -3,7 +3,7 @@ import Component from '../../core/component'
 
 export default class DisplaySystem {
 
-    private world: Convolvr
+    public world: Convolvr
 
     constructor ( world: Convolvr ) {
         this.world = world

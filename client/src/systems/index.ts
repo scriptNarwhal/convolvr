@@ -77,9 +77,17 @@ import Component from '../core/component';
 import Binding from '../core/binding';
 import { AttributeName } from '../core/attribute'
 
+
+/** System Dependency
+ * [injectAsThisDotFoo, systemBar.optionallySubSystemBaz][] **/
+export type SystemDependency = [string, string];
+
 export interface System {
 	init: (component: Component) => AnyObject
+	postInject?: () => void,
 	tick?: (delta: number, time: number) => void
+	dependencies?: SystemDependency[]
+	world: Convolvr
 }
 
 import * as THREE from 'three';
@@ -253,7 +261,7 @@ export default class Systems {
 		let systemIndex = (this as any);
 		const systemNames = Object.keys( systems );
 
-		for (let s: number = 0; s < 2; s ++) {
+		for (let s = 0; s < 2; s ++) {
 			for (const system of systemNames) {
 				if (s == 0) { // first pass
 					systemIndex[ system ] = (systems as any)[ system ]
@@ -261,7 +269,7 @@ export default class Systems {
 						systemIndex.liveSystems.push( systemIndex[ system ] )
 					}
 				} else { 
-					systemIndex[ system ].allSystemsLoaded && systemIndex[ system ].allSystemsLoaded()
+					this.injectDependencies(systemIndex[system]);
 				}
 			}
 		}
@@ -314,6 +322,32 @@ export default class Systems {
         }
 
         return mesh;
+	}
+
+	private injectDependencies(system: System) {
+		if (!system.dependencies) {
+			system.postInject && system.postInject.call(system);
+			return;
+		}
+		const deps = system.dependencies as SystemDependency[];
+	
+		for (const dep of deps) {
+		   const path = dep[1].split("."),
+					length = path.length;
+	
+			if (length == 1) {
+				(system as any)[dep[0]] = (system.world.systems as any)[dep[1]];
+			} else {
+				(system as any)[dep[0]] = (system.world.systems as any)[path[0]][path[1]];
+			}
+		}
+		system.postInject && system.postInject.call(system);
+	}
+
+	public injectSubSystemDependencies(subSystems: { [key: string]: System }): void {
+		for (const system in subSystems) {
+			this.injectDependencies(subSystems[system]);
+		}
 	}
 	
 	private evaluateProperties(component: Component, properties: {[key: string]: any}): void {
