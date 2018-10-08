@@ -8,7 +8,7 @@ export default class ASTStatements {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0x20ff20,
@@ -17,7 +17,8 @@ export default class ASTStatements {
                 text: {
                     lines: ["="],
                     color: "#20ff20",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -35,7 +36,7 @@ export default class ASTStatements {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0x20ff20,
@@ -44,7 +45,8 @@ export default class ASTStatements {
                 text: {
                     lines: ["let"],
                     color: "#20ff20",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -62,7 +64,7 @@ export default class ASTStatements {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0x20ff20,
@@ -71,7 +73,8 @@ export default class ASTStatements {
                 text: {
                     lines: ["class"],
                     color: "#20ff20",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -89,7 +92,7 @@ export default class ASTStatements {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0x20ff20,
@@ -98,7 +101,8 @@ export default class ASTStatements {
                 text: {
                     lines: ["return"],
                     color: "#20ff20",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -116,7 +120,7 @@ export default class ASTStatements {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0x20ff20,
@@ -125,7 +129,8 @@ export default class ASTStatements {
                 text: {
                     lines: ["( Expression )"],
                     color: "#20ff20",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -143,7 +148,7 @@ export default class ASTStatements {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 4, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0x20ff20,
@@ -152,7 +157,8 @@ export default class ASTStatements {
                 text: {
                     lines: ["{ Block }"],
                     color: "#20ff20",
-                    background: "#000000"
+                    background: "#000000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],

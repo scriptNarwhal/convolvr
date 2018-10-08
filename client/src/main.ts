@@ -60,7 +60,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
   };
 
   world.onUserLogin(world.user);
-  initDemos(world, coords, pos, altitude);
+  initDemos(world, GLOBAL_SPACE, pos, altitude);
 
   setTimeout(()=>{
     world.initChatAndLoggedInUser( localStorage.getItem("username") != null );

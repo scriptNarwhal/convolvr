@@ -1,7 +1,7 @@
 import axios, { AxiosPromise } from 'axios';
 import { API_SERVER } from '../../config'
 
-import Entity from '../../core/entity'
+import Entity, { DBEntity } from '../../core/entity'
 import BuiltinProps from '../../assets/attributes'
 import avatar from '../../assets/entities/avatars/avatar'
 import hero from '../../assets/entities/avatars/hero'
@@ -323,17 +323,17 @@ export default class AssetSystem {
         this.directories = this.directories.concat( directories )
     }
 
-    public makeEntity( name: string, init: boolean, config: any, voxel: number[] ) {
+    public makeEntity( name: string, init: boolean, config: any, voxel: number[] ): Entity | DBEntity {
 
         let builtIn = this.entitiesByName,
             library = builtIn[ name ] != null ? builtIn : this.userEntitiesByName,
             toMake = library[ name ],
-            ent = typeof toMake == 'function' ? toMake( this, config, voxel ) : toMake
+            ent: DBEntity = typeof toMake == 'function' ? toMake( this, config, voxel ) : toMake
 
         if ( init ) {
-            return new Entity( ent.id, ent.components, ent.position, ent.quaternion, voxel )
+            return new Entity( ent.id, ent.components, ent.position, ent.quaternion, voxel );
         } else {
-            return { ...ent, voxel }
+            return { ...ent, voxel } as DBEntity;
         }
     }
 

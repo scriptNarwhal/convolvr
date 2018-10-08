@@ -12,7 +12,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {
@@ -40,7 +40,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {
@@ -68,7 +68,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {
@@ -95,7 +95,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {
@@ -123,7 +123,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {
@@ -151,7 +151,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {
@@ -179,7 +179,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {
@@ -207,7 +207,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {
@@ -235,7 +235,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {
@@ -263,7 +263,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {
@@ -292,7 +292,7 @@ export default class ASTExpressions {
                     size: [ 2, 1, 1 ]
                 },
                 material: {
-                    color: 0x2020ff,
+                    color: 0x9020ff,
                     name: "metal"
                 },
                 text: {

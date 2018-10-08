@@ -266,7 +266,7 @@ export default class ECSObjects {
                 text: {
                     lines: [
                         "Error",
-                        "Value: \"\""
+                        "Value: ''"
                     ],
                     fontSize: 30,
                     color: "#ff8000",
