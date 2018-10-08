@@ -50,7 +50,7 @@ export default class MetaFactorySystem {
                 // entity will re-init after files load              
         }
 
-        if (typeof source.map == 'function') { // array of geometries / materials, components, entities, spaces, places, files, (directories could use source[category])
+        if (source && typeof source.map == 'function') { // array of geometries / materials, components, entities, spaces, places, files, (directories could use source[category])
             //console.info( "metafactory source is ", source)
             source.map( (item, i) => {
                 if ( assetType == 'entity' && typeof item == 'function' )
@@ -70,6 +70,10 @@ export default class MetaFactorySystem {
             
         } else { // map through system categories
             source = attr.dataSource
+            if (!source) {
+                console.warn("no source for meta-factory")
+                return;
+            }
             sourceCategory = this.getSourceCategory( source, category ) // structures, vehicles, media, interactivity
         
             Object.keys( sourceCategory ).map( ( key, a ) => { // vehicle, propulsion, control, etc

@@ -6,22 +6,37 @@ import Entity from '../../../core/entity'
 import * as THREE from 'three';
 import { System } from '../..';
 import { Vector3 } from 'three';
+import { FactoryType, FactoryAttributeType } from '../../../core/attribute';
 
-export type GenerateComponentParams = [boolean, any, number[], number[], number[], string];
-export type GenerateEntityParams = [boolean, any[], number[], number[], number[], string];
+export type GenerateAttrParams = {
+    component: Component,
+    anchor: boolean,
+    args: [string, boolean, any, number[], number[], number[], string] 
+}
+export type GenerateComponentParams = {
+    component: Component, 
+    anchor: boolean, 
+    args: [boolean, any, number[], number[], number[], string] 
+};
+export type GenerateEntityParams = {
+    component: Component, 
+    anchor: boolean, 
+    args: [boolean, any[], number[], number[], number[], string]
+}
 
 
 export default class FactorySystem implements System {
 
     world: Convolvr
 
-    private rateLimit: 3; // calls to generate() per frame 
+    private rateLimit: number = 3; // calls to generate() per frame 
     private mustGenerate = false;
+    private attributeQueue: GenerateAttrParams[] = [];
     private componentQueue: GenerateComponentParams[] = [];
     private entityQueue: GenerateEntityParams[] = [];
 
     constructor (world: Convolvr) {
-        this.world = world
+        this.world = world;
     }
 
     init (component: Component) { //console.log("factory component init ", component)
@@ -40,29 +55,40 @@ export default class FactorySystem implements System {
     public tick(delta: number, time: number) { 
         if (this.mustGenerate) {
             if (this.componentQueue.length > 0) {
-                this._generateComponent.call(null, ...this.componentQueue.shift());
+                const toGenerate = this.componentQueue.shift(),
+                    created = this.generateComponent.call(this, ...toGenerate.args);
 
+                this.initGeneratedEntity(created, toGenerate.component, toGenerate.anchor)
             } else if (this.entityQueue.length > 0) {
-                this._generateEntity.call(null, ...this.entityQueue.shift());
+                const toGenerate = this.entityQueue.shift(),
+                    created = this.generateEntity.call(this, ...toGenerate.args);
+
+                this.initGeneratedEntity(created, toGenerate.component, toGenerate.anchor)
+            } else if (this.attributeQueue.length > 0) {
+                const toGenerate = this.attributeQueue.shift(),
+                    created = this.generateAttrEntity.call(this, ...toGenerate.args);
+
+                this.initGeneratedEntity(created, toGenerate.component, toGenerate.anchor)
+            } else {
+                this.mustGenerate = false;
+                this.rateLimit = 3;
             }
-        } else {
-            this.rateLimit = 3;
-        }
+        } 
     }
 
     generate(component: Component, menuItem: boolean = true) {
-        let attr:       any           = component.attrs.factory,
-            position:   Vector3    = component.entity.mesh.position,
-            voxel:      number[]    = component.entity.voxel,
-            entityPos:  number[]    = !!attr.anchorOutput ? [0, 0, 0] : position.toArray(),
-            miniature:  boolean          = !!attr.miniature,
-            type:       string           = attr.type,
-            preset:     string           = attr.preset,
-            attrName:   string           = attr.attrName,
-            data:       any           = attr.data,
-            quat:       number[]      = data ? data.quaternion : [0,0,0,1],
-            components: DBComponent[] = data ? data.components : [] as DBComponent[],
-            created:    Entity           = null;
+        let attr:       any                  = component.attrs.factory,
+            position:   Vector3              = component.entity.mesh.position,
+            voxel:      number[]             = component.entity.voxel,
+            entityPos:  number[]             = !!attr.anchorOutput ? [0, 0, 0] : position.toArray(),
+            miniature:  boolean              = !!attr.miniature,
+            type:       FactoryType          = attr.type,
+            preset:     string               = attr.preset,
+            attrName:   FactoryAttributeType = attr.attrName,
+            data:       any                  = attr.data,
+            quat:       number[]             = data ? data.quaternion : [0,0,0,1],
+            components: DBComponent[]        = data ? data.components : [] as DBComponent[],
+            created:    Entity               = null;
         
         if (!data) {
             console.warn("No data for factory to generate with")
@@ -70,38 +96,32 @@ export default class FactorySystem implements System {
         }
         if ( type == 'entity' ) {
             if (this.rateLimit > 0) {
-                created = this._generateEntity( menuItem, components, voxel, entityPos, quat, preset )
+                created = this.generateEntity( menuItem, components, voxel, entityPos, quat, preset )
                 this.rateLimit --;
             } else {
-                this.entityQueue.push([ menuItem, components, voxel, entityPos, quat, preset]);
+                this.entityQueue.push({ component, anchor: attr.anchorOutput, args: [ menuItem, components, voxel, entityPos, quat, preset]});
                 this.mustGenerate = true;
                 return;
             }
            
         } else if (type == 'component') {
             if (this.rateLimit > 0) {
-                created = this._generateComponent( menuItem, data, voxel, entityPos, quat, preset );
+                created = this.generateComponent( menuItem, data, voxel, entityPos, quat, preset );
                 this.rateLimit --;
             } else {
-                this.componentQueue.push([menuItem, data, voxel, entityPos, quat, preset]);
+                this.componentQueue.push({ component, anchor: attr.anchorOutput, args: [menuItem, data, voxel, entityPos, quat, preset]});
                 this.mustGenerate = true;
                 return;
             }
             
         } else if ( type == 'attr' ) {
-            switch ( attrName ) {
-                case "geometry":
-                    created = this._generateGeometry( menuItem, data, voxel, entityPos, quat, preset  )
-                break
-                case "material":
-                    created = this._generateMaterial( menuItem, data, voxel, entityPos, quat, preset  )
-                break
-                case "assets":
-                    created = this._generateAsset( menuItem, data, voxel, entityPos, quat )
-                break
-                case "systems":
-                    created = this._generateSystem( menuItem, data, voxel, entityPos, quat, preset )
-                break
+            if (this.rateLimit > 0) {
+                created = this.generateAttrEntity(attrName, menuItem, data, voxel, entityPos, quat, preset);
+                this.rateLimit --;
+            } else {
+                this.attributeQueue.push({ component, anchor: attr.anchorOutput, args: [attrName, menuItem, data, voxel, entityPos, quat, preset]});
+                this.mustGenerate = true;
+                return;
             }
 
         } else if ( type == "world" ) {
@@ -114,8 +134,12 @@ export default class FactorySystem implements System {
             created = this._generateDirectory( menuItem, data, voxel, entityPos, quat )
         }
 
+        this.initGeneratedEntity(created, component, attr.anchorOutput)
+    }
+
+    private initGeneratedEntity (created: Entity, component: Component, anchorOutput: boolean) {
         if ( created != null ) {
-            if ( !!attr.anchorOutput ) {
+            if (anchorOutput) {
                 created.init(component.mesh)
             } else {
                 created.init(this.world.three.scene)
@@ -126,11 +150,24 @@ export default class FactorySystem implements System {
                 created.update(created.mesh.position.toArray())
             }
         } else {
-            console.error( "error generating entity", created, attr )
+            console.error( "error generating entity", created);
         }
     }
 
-    _generateEntity(menuItem: boolean, components: DBComponent[], voxel: number[], position: number[], quaternion: number[], preset: string ) {
+    private generateAttrEntity(type: FactoryAttributeType, menuItem: boolean, data: any, voxel: number[], entityPos: number[], quat: number[], preset: string) {
+        switch (type) {
+            case "geometry":
+                return this._generateGeometry( menuItem, data, voxel, entityPos, quat, preset)
+            case "material":
+                return this._generateMaterial( menuItem, data, voxel, entityPos, quat, preset)
+            case "assets":
+                return this._generateAsset( menuItem, data, voxel, entityPos, quat)
+            case "systems":
+                return this._generateSystem( menuItem, data, voxel, entityPos, quat, preset)
+        }
+    }
+
+    private generateEntity(menuItem: boolean, components: DBComponent[], voxel: number[], position: number[], quaternion: number[], preset: string ) {
         let ent: Entity = null;
 
         if ( !! components && components.length > 0 ) {
@@ -155,7 +192,7 @@ export default class FactorySystem implements System {
         return  ent;
     }
 
-    _generateComponent(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[], preset: string ) {
+    private generateComponent(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[], preset: string ) {
         let newComponent = {
                 ...data,
                 attrs: {
