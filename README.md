@@ -31,7 +31,8 @@
 ### Initialization Example 
 (https://github.com/Convolvr/convolvr/blob/dev/client/src/main.ts)
 
-### Entity / System Mapping
+### Entity / System Mapping 
+See [core/attribute.ts](https://github.com/Convolvr/convolvr/blob/task/computer-hardware%2Bsoftware/client/src/core/attribute.ts#L95)
 ```js
 {
   id: -4,
