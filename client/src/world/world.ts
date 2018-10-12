@@ -31,6 +31,8 @@ import {
 } from '../network/util'
 import UserInput from '../input/user-input'
 import Component from '../core/component';
+import { zeroZeroZero } from '../util';
+import { Camera, Light, SpotLight, PointLight, PerspectiveCamera } from 'three';
 
 let world: any = null,
 	//THREE = (window as any).THREE,
@@ -295,15 +297,11 @@ export default class Convolvr {
 			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, Math.min(1.0, config.light.intensity) ),
 			three          = this.three,
 			camera 		   = three.camera,
-			skyMaterial    = new THREE.MeshBasicMaterial( {color: 0x303030} ),
-			skyTexture     = null,
 			rotateSky      = false,
-			shadowRes      = 1024,
 			envURL 	       = '/data/images/photospheres/sky-reflection.jpg',
 			r 		       = config.sky.red,
 			g 			   = config.sky.green,
 			b 			   = config.sky.blue,
-			shadowCam 	   = null,
 			oldConfig 	   = Object.assign({}, this.config),
 			skySize 	   = 2800+((this.settings.viewDistance+3.5)*1.4)*140,
 			oldSkyMaterial = {}
@@ -324,23 +322,7 @@ export default class Convolvr {
 			}
 		});
 		if ( this.settings.shadows > 0 && sunLight.castShadow == false ) {
-			sunLight.castShadow = true
-			sunLight.shadowCameraVisible = true
-			shadowCam = sunLight.shadow.camera
-			sunLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)
-			sunLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)
-			shadowCam.near = 0.5      // default
-			shadowCam.far = 1300000
-			shadowCam.left = -400
-			shadowCam.right = 400
-			shadowCam.top = 500
-			shadowCam.bottom = -500
-			three.scene.add(shadowCam)
-
-			if  ( !this.shadowHelper ) {
-				this.shadowHelper = new THREE.CameraHelper( sunLight.shadow.camera );
-				three.scene.add( this.shadowHelper );
-			}
+			this.initShadows(sunLight);
 		}
 
 		if ( !!config && !!config.sky.photosphere ) { console.log("init world: photosphere: ", config.sky.photosphere)
@@ -360,9 +342,7 @@ export default class Convolvr {
 		let deferSpaceLoading = false,
 			world = this,
 			rebuildSpace = () => {
-
-				let yaw = config.light.yaw - Math.PI / 2.0,
-					zeroZeroZero = new THREE.Vector3(0,0,0)
+				let yaw = config.light.yaw - Math.PI / 2.0;
 
 				!!world.skyLight && three.scene.remove( world.skyLight )
 				world.skyLight = skyLight
@@ -397,7 +377,7 @@ export default class Convolvr {
 		false == deferSpaceLoading && rebuildSpace()
 	}
 
-	public load (userName: string, name: string, callback: Function, readyCallback: Function) { console.log("load world", userName, name)
+	public load(userName: string, name: string, callback: Function, readyCallback: Function) { console.log("load world", userName, name)
 		let world = this
 
 		this.name = name;
@@ -411,7 +391,7 @@ export default class Convolvr {
 		})
 	}
 
-	public reload (user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean) {
+	public reload(user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean) {
 		let world = this,
 			octree = this.octree
 
@@ -430,7 +410,7 @@ export default class Convolvr {
 			// browserHistory.push("/"+(user||"convolvr")+"/"+name+(!!place ? `/${place}` : ''))
 	}
 
-	generateFullLOD ( coords: string) {
+	generateFullLOD( coords: string) {
 		let voxel = (this.terrain as any).voxels[coords],
 			scene = this.three.scene
 
@@ -441,7 +421,7 @@ export default class Convolvr {
 		}
 	}
 
-	public sendUserData () {
+	public sendUserData() {
 		let camera 	  = this.three.camera,
 			mobile 	  = this.mobile,
 			input 	  = this.userInput,
@@ -580,6 +560,27 @@ export default class Convolvr {
 		  this.onWindowResize()
 	  }
 
+	private initShadows(sunLight: PointLight) {
+		if (!sunLight.castShadow) {
+			sunLight.castShadow = true;
+			(sunLight as any).shadowCameraVisible = true
+			let shadowCam: any = sunLight.shadow.camera;
+			sunLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows);
+			sunLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows);
+			shadowCam.near = 0.5      // default
+			shadowCam.far = 1300000
+			shadowCam.left = -400
+			shadowCam.right = 400
+			shadowCam.top = 500
+			shadowCam.bottom = -500
+			three.scene.add(shadowCam);	
+		}
+		if  ( !this.shadowHelper ) {
+			this.shadowHelper = new THREE.CameraHelper( sunLight.shadow.camera );
+			three.scene.add( this.shadowHelper );
+		}
+	}
+
 	private initRenderer (renderer: any, id: string) {
 		renderer.setClearColor(0x1b1b1b)
 		// renderer.setPixelRatio(pixelRatio)
@@ -594,7 +595,6 @@ export default class Convolvr {
 	}
 
 	sendVideoFrame () { // probably going to remove this now that webrtc is in place
-
 		let imageSize: Array<number> = [0, 0]
 
 		if ( this.capturing ) {

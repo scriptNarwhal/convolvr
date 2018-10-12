@@ -1,8 +1,9 @@
 import Convolvr from '../../world/world'
 import Component from '../../core/component'
 import * as THREE from 'three';
+import { System } from '..';
 
-export default class GeometrySystem {
+export default class GeometrySystem implements System {
 
   world: Convolvr
   nodeGeom: any //THREE.PlaneGeometry

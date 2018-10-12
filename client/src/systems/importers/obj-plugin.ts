@@ -1,9 +1,10 @@
 import Convolvr from "../../world/world";
 import Component from "../../core/component";
 import * as THREE from 'three';
-export default class ObjPluginSystem { // allows use of imported .obj meshes
+import { System } from '../index'
+export default class ObjPluginSystem implements System { // allows use of imported .obj meshes
 
-    private world: Convolvr
+    public world: Convolvr
     public loader: any
 
     constructor ( world: Convolvr ) {

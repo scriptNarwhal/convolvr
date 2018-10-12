@@ -80,7 +80,7 @@ import { AttributeName } from '../core/attribute'
 
 /** System Dependency
  * [injectAsThisDotFoo, systemBar.optionallySubSystemBaz][] **/
-export type SystemDependency = [string, string];
+export type SystemDependency = string[];
 
 export interface System {
 	init: (component: Component) => AnyObject
@@ -339,13 +339,17 @@ export default class Systems {
 		const deps = system.dependencies as SystemDependency[];
 	
 		for (const dep of deps) {
-		   const path = dep[1].split("."),
-					length = path.length;
-	
-			if (length == 1) {
-				(system as any)[dep[0]] = (system.world.systems as any)[dep[1]];
+			if (dep.length === 1) {
+				(system as any)[dep[0]] = (system.world.systems as any)[dep[0]];
 			} else {
-				(system as any)[dep[0]] = (system.world.systems as any)[path[0]][path[1]];
+				const path = dep[1].split("."),
+					length = path.length;
+
+				if (length == 1) {
+					(system as any)[dep[0]] = (system.world.systems as any)[dep[1]];
+				} else {
+					(system as any)[dep[0]] = (system.world.systems as any)[path[0]][path[1]];
+				}
 			}
 		}
 		system.postInject && system.postInject.call(system);

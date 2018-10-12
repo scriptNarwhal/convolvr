@@ -2,8 +2,9 @@ import Convolvr from "../../../world/world";
 import { VirtualDevice } from "../virtual-device";
 import { AnyObject } from "../../../util";
 import ProceduralMaterials from "../../core/material/material-procedural";
+import { System } from "../..";
 
-export default class DisplayAdapterDevice implements VirtualDevice {
+export default class DisplayAdapterDevice implements VirtualDevice, System {
     public world: Convolvr;
     private procedural: ProceduralMaterials
     public dependencies = [

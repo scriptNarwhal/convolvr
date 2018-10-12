@@ -6,8 +6,9 @@ import {
     sendMessage
   } from '../../2d-ui/redux/actions/message-actions'
 import Component from '../../core/component';
+import { System } from '..';
 
-export default class ChatSystem {
+export default class ChatSystem implements System {
 
     world: Convolvr
     componentsByUserId: any

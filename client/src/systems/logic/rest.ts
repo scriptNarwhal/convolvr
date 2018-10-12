@@ -1,9 +1,10 @@
 import axios from 'axios'
 import Component from '../../core/component.js';
 import Convolvr from '../../world/world'
+import { rest } from '../../core/attribute.js';
+import { System } from '../index.js';
 
-export default class RESTSystem {
-
+export default class RESTSystem implements System {
     world: Convolvr
 
     constructor ( world: Convolvr ) {
@@ -12,12 +13,10 @@ export default class RESTSystem {
 
 
     init (component: Component) { 
-
-        let attr = component.attrs.rest, // specify url, method, etc
+        let attr: rest = component.attrs.rest, // specify url, method, etc
             rest = this
 
         let getCallback = (response: any, component: Component) => {
-
                 component.state.rest.getResponse = response
 
                 if ( !!component.attrs.text ) { // abstract this logic away some how.. and make it scriptable
@@ -28,13 +27,9 @@ export default class RESTSystem {
                     component.state.text.update()
 
                     if ( !!component.attrs.speech ) {
-
                         component.state.speech.speakAll( responseLines, false, 0)
-
                     }
-
                 }
-
             },
             getError =  ( error: any, component: Component ) => {
                 component.state.rest.getError = error
@@ -64,7 +59,6 @@ export default class RESTSystem {
         // add init logic... // other systems can call these methods too*
 
         return {
-
             getResponse: false,
             postResponse: false,
             getRequest: ( url: string ) => {

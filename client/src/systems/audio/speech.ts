@@ -1,5 +1,6 @@
 import Convolvr from "../../world/world";
 import Component from "../../core/component";
+import { speech } from "../../core/attribute";
 
 export default class SpeechSystem {
 
@@ -20,11 +21,11 @@ export default class SpeechSystem {
     }
 
     public init (component: Component) {
-        let attr = component.attrs.speech;
+        let attr: speech = component.attrs.speech;
 
         if ( attr.readText !== false ) {
             if ( component.attrs.text ) { // speak text
-                this.speak(component.attrs.text.lines.join(". "), "", 0)
+                this.speak(component.attrs.text.lines.join(". "), "", attr.voiceIndex === 0 || !!attr.voiceIndex ? attr.voiceIndex : 0)
             }
         }
         return {

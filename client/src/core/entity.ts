@@ -441,7 +441,6 @@ export default class Entity {
     return voxel
   }
 
-  // refactor to return instantiated component
   public getComponentByPath(path: any[], pathIndex: number, components: Component[] | false = false): Component {
     let foundComponent = null
 

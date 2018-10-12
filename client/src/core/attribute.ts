@@ -1,4 +1,5 @@
 import { AnyObject } from "../util";
+import { VirtualDevice } from "../systems/logic/virtual-device";
 
 export type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "camera" | "chat" | "control" |
 					 "conveyor" | "cursor" | "datgui" | "destructable" | "display" | "virtualDevice" | "door" | "drawing" | 
@@ -92,12 +93,13 @@ export interface Attributes {
     weapon?: weapon
 };
 
-export type FactoryType = "entity" | "component" | "attr" | "world" | "place" | "file" | "directory";
 
+export type BrowserType = "text" | "csv" | "json" | "html" | "files" | "directories" | "images" | "audio" | "video" | "js" | "ecs" | "entities" | "components" | "attrs" | "users" | "spaces" | "places"
+
+export type FactoryType = "entity" | "component" | "attr" | "world" | "place" | "file" | "directory";
 export type FactoryAttributeType = "geometry" | "material" | "assets" | "systems";
 
 export type GeometryShape = "box" | "node" | "plane" | "octahedron" | "sphere" | "cylinder" | "open-cylinder" | "cone" | "torus" | "hexagon" | "open-box" | "frustum" | "extrude" | "lathe";
-
 export type ProceduralMaterialFunction = "noise" | "fillStyle" | "strokeStyle" | "beginPath" | "moveTo" | "lineTo" | "stroke" | "fillRect" | "arc" | "text" | "loop";
 
 export type ProceduralMaterial = {
@@ -110,13 +112,19 @@ export type ProceduralMaterial = {
     }
 };
 
+export type VirtualDeviceType = "display" | "display-adapter" | "io-controller" | "network-interface" | "storage" | "pointing-device" | "keyboard"
+
 export interface ability extends Attribute {}
 export interface activate extends Attribute {}
 export interface audio extends Attribute {
     asset?: string
+    autoPlay?: boolean
+    type: "stereo" | "3d"
 }
 export interface assets extends Attribute {}
-export interface browser extends Attribute {}
+export interface browser extends Attribute {
+    type: BrowserType
+}
 export interface camera extends Attribute {
     fov: number,
     type: "perspective" | "orthagonal"
@@ -170,11 +178,17 @@ export interface light extends Attribute {
     intensity: number,
     distance: number
 }
+
+export type LayoutAxis = "x" | "y" | "z";
+export type LayoutPlane = "xy" | "yz" | "zx"
+export type LayoutOrientation = LayoutAxis | LayoutPlane
+
 export interface layout extends Attribute {
     type: "list" | "grid" | "radial" | "tube" | "fibonacci",
     columns?: number,
+    gridSize?: number
     isometric?: boolean,
-    axis?: "x" | "y" | "xy" | "yz" | "zx"
+    axis?: LayoutAxis | LayoutPlane
 }
 export interface lookAway extends Attribute {}
 export interface magic extends Attribute {}
@@ -201,7 +215,7 @@ export interface miniature extends Attribute {
 }
 export interface npc extends Attribute {}
 export interface obj extends Attribute {
-
+    url: string
 }
 export interface oimo extends Attribute {}
 export interface objective extends Attribute {}
@@ -238,7 +252,8 @@ export interface screenshot extends Attribute {}
 export interface seat extends Attribute {}
 export interface socialMedia extends Attribute {}
 export interface speech extends Attribute {
-
+    readText?: boolean
+    voiceIndex?: number
 }
 export interface state extends Attribute {}
 export interface stat extends Attribute {}
@@ -283,7 +298,7 @@ export interface vehicle extends Attribute {
 }
 export interface video extends Attribute {}
 export interface virtualDevice extends Attribute {
-    type: "display" | "display-adapter" | "io-controller" | "network-interface" | "storage" | "pointing-device" | "keyboard",
+    type: VirtualDeviceType,
     data?: AnyObject
 }
 export interface virtualMachine extends Attribute {}
