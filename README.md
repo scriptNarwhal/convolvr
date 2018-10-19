@@ -1,4 +1,4 @@
-# [Convolvr](https://convolvr.io/) &middot;[![npm version](https://badge.fury.io/js/convolvr.svg)](https://badge.fury.io/js/convolvr) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# [Convolvr](https://convolvr.io/) &middot; [![npm version](https://badge.fury.io/js/convolvr.svg)](https://badge.fury.io/js/convolvr) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![infinite procedural spaces](client/web/images/insta.gif)
 ## Overview
