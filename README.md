@@ -1,4 +1,6 @@
-[![npm version](https://badge.fury.io/js/convolvr.svg)](https://badge.fury.io/js/convolvr) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# [Convolvr](https://convolvr.io/) &middot;[![npm version](https://badge.fury.io/js/convolvr.svg)](https://badge.fury.io/js/convolvr) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+![infinite procedural spaces](client/web/images/insta.gif)
 ## Overview
 - [Component](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/component.js) [Entity](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/entity.js) [System](https://github.com/Convolvr/convolvr/blob/dev/client/src/js/systems/index.js) [Framework](https://github.com/Convolvr/convolvr/wiki) built on [Three.js](https://github.com/mrdoob/three.js)
 - Multiplayer telemetry, chat, action & asset persistence provided by server using [Nexus](https://github.com/ds0nt/nexus)
@@ -8,8 +10,6 @@
 - Support for keyboard/mouse, touch screen, gyro, tracked controllers
 - Supports infinite, configurable, procedural environments 
 - Mesh based VR UI; Multiline text rendering
-
-![infinite procedural spaces](client/web/images/insta.gif)
 
 ## Installation
 ```shell
