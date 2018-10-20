@@ -29,10 +29,17 @@ export default class DisplayAdapterDevice implements VirtualDevice, System {
         }
 
     }
+    /**
+     * 
+     * textmode is probably the first thing this should do
+     */
+
 
     /**
      * display-adapter needs a display device in the same machine
      * it also requires a virtual-machine attribute / device in the entity
+     * 
+     * ... feature => (component / attribute) dependencies?
      */
 
 

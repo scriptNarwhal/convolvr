@@ -1,5 +1,6 @@
 import { AnyObject } from "../util";
 import { VirtualDevice } from "../systems/logic/virtual-device";
+import { ComponentPath } from "./component";
 
 export type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "camera" | "chat" | "control" |
 					 "conveyor" | "cursor" | "datgui" | "destructable" | "display" | "virtualDevice" | "door" | "drawing" | 
@@ -132,13 +133,18 @@ export interface camera extends Attribute {
 export interface chat extends Attribute {
     userName?: string
 }
-export interface control extends Attribute {}
+export interface control extends Attribute {
+
+}
 export interface conveyor extends Attribute {}
 export interface cursor extends Attribute {
 
 }
 export interface datgui extends Attribute {}
-export interface destructable extends Attribute {}
+export interface destructable extends Attribute {
+    hitPoints?: number,
+    explosionType?: "particles" | "components" | "billboard" | "all"
+}
 export interface display extends Attribute {}
 export interface door extends Attribute {}
 export interface drawing extends Attribute {}
@@ -246,7 +252,16 @@ export interface signal extends Attribute {
 export interface skill extends Attribute {}
 export interface skybox extends Attribute {}
 export interface script extends Attribute {
-
+    program?: string,
+    statements?: string[],
+    modules?: string[][],
+    run?: {
+        program: string,
+        args: any[],
+        path?: ComponentPath
+    },
+    autorun?: boolean,
+    repl?: boolean
 }
 export interface screenshot extends Attribute {}
 export interface seat extends Attribute {}
@@ -301,9 +316,13 @@ export interface virtualDevice extends Attribute {
     type: VirtualDeviceType,
     data?: AnyObject
 }
-export interface virtualMachine extends Attribute {}
+export interface virtualMachine extends Attribute {
+    cores?: number
+}
 export interface wall extends Attribute {}
 export interface webrtc extends Attribute {}
-export interface weapon extends Attribute {}
+export interface weapon extends Attribute {
+
+}
 
 

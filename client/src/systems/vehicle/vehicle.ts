@@ -1,6 +1,7 @@
 import Component from "../../core/component";
 import Convolvr from "../../world/world";
 import Entity from "../../core/entity";
+import { vehicle, control } from "../../core/attribute";
 
 export default class VehicleSystem {
 
@@ -11,11 +12,17 @@ export default class VehicleSystem {
     }
 
     init (component: Component) { 
-        let attr = component.attrs.seat
+        let attr: vehicle = component.attrs.vehicle,
+            control: control = component.attrs.control;
 
         return {
             enterVehicle: (entity: Entity) => {
-                this.enterVehicle(component, entity)
+                if (attr.onActivate) {
+                    if (attr.onActivate.driverSeat) {
+                        // 
+                        this.enterVehicle(component, entity)       
+                    }
+                }
             },
             exitVehicle: (entity: Entity) => {
                 this.exitVehicle(component, entity)
@@ -24,14 +31,12 @@ export default class VehicleSystem {
     }
 
     enterVehicle (component: Component, entity: Entity) {
-
         let attr = component.attrs.vehicle,
             state = component.state.vehicle
             
     }
     
     exitVehicle (component: Component, entity: Entity) {
-
         let attr = component.attrs.vehicle,
             state = component.state.vehicle
 

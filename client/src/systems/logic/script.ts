@@ -1,6 +1,7 @@
 import Convolvr from '../../world/world'
 import Component, { DBComponent } from '../../core/component'
 import { DBEntity } from '../../core/entity';
+import { script } from '../../core/attribute';
 
 export default class ScriptSystem { 
     
@@ -32,17 +33,37 @@ export default class ScriptSystem {
     }
 
     init (component: Component) {
-        let attr = component.attrs.script,
+        let attr: script = component.attrs.script,
             env = [component.entity.voxel.join("."), component.entity.id, component.index],
             getReturnValue = {};
 
         this.envComponents[env.join(",")] = component;
 
+        const evalInComponent = (code: string, callback: (data: any) => any) => {
+            this.evaluate(code, env);
+            getReturnValue = callback;
+        };
+
+        if (attr.autorun !== false) {
+            if (attr.program) {
+                evalInComponent(attr.program, (data: any)=>{});
+            }
+    
+            if (attr.statements) {
+                //TODO: implement
+            }
+    
+            if (attr.modules) {
+                //TODO: implement
+            }
+    
+            if (attr.repl) {
+                //TODO: implement
+            }
+        }
+
         return {
-            eval: (code: string, callback: (data: any) => {}) => {
-                this.evaluate(code, env);
-                getReturnValue = callback;
-            },
+            eval: evalInComponent,
             getReturnValue,
             env
         }

@@ -21,6 +21,7 @@ import GrabSystem from './core/grab'
 import HoverSystem from './core/hover'
 import HandSystem from './core/hand'
 import HeadSystem from './core/head'
+import ImportDataSystem from './importers/data'
 import LightSystem from './environment/light'
 import LayoutSystem from './ui/layout'
 import VideoSystem from './video/video'
@@ -128,6 +129,7 @@ export default class Systems {
 	public hand: 			 HandSystem;
 	public head: 			 HeadSystem;
 	public hover: 			 HoverSystem;
+	public importData:       ImportDataSystem;
 	public input: 			 InputSystem;
 	public light: 			 LightSystem;
 	public layout: 		  	 LayoutSystem;
@@ -209,6 +211,7 @@ export default class Systems {
 			hand: 			   new HandSystem( world ),
 			head: 			   new HeadSystem( world ),
 			hover: 			   new HoverSystem( world ),
+			importData:        new ImportDataSystem( world ),
 			input: 			   new InputSystem( world ),
 			light: 			   new LightSystem( world ),
 			layout: 		   new LayoutSystem( world ),

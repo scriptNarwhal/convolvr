@@ -6,6 +6,10 @@ import Property from "./property";
 import { Attributes, AttributeName } from './attribute';
 import { AnyObject } from '../util';
 
+export type NameOrId = string|number;
+export type EntityPath = [string, NameOrId];
+export type ComponentPath = [string, NameOrId, NameOrId|NameOrId[]];
+
 export type DBComponent = {
   id?:         number
   name?:       string
