@@ -1,15 +1,13 @@
 import * as React from "react"; import { Component } from "react";
-import { withRouter } from 'react-router-dom'
-import FileButton from './file-button'
-import {
-  rgba,
-  rgb
-} from '../../../util'
+
 import { 
-  textAreaStyle,
+  FileButton,
   lightboxStyle, 
-  modalStyle 
-} from '../../styles'
+  modalStyle,
+  rgba 
+} from 'energetic-ui'
+
+import { textAreaStyle } from '../../styles'
 
 class ImportToInventory extends Component<any, any> {
 

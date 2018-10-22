@@ -1,13 +1,8 @@
 import * as React from "react"; import { Component } from "react";
-import { withRouter } from 'react-router-dom'
-import Shell from '../components/shell'
-import { 
-  textAreaStyle,
-  basicInputStyle,
-  lightboxStyle, 
-  modalStyle 
-} from '../styles'
+
+import { modalStyle } from 'energetic-ui'
 import { isMobile } from '../../config'
+import Shell from '../components/shell'
 
 class Login extends Component<any, any> {
 

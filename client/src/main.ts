@@ -7,8 +7,6 @@ import makeStore from './2d-ui/redux/makeStore'
 import initDemos from './demos'
 import { 
   clearOldData, 
-  APP_ROOT,
-  GRID_SIZE,
   GLOBAL_SPACE, 
   detectSpaceDetailsFromURL
 } from './config'
@@ -23,10 +21,7 @@ let store:        any      = makeStore(routerReducer),
     socket:       any      = events,
     token:        string   = "", 
     //progressBar:  ProgressBar,
-    loadingSpace: Convolvr = null, // built in ui entities
-    helpScreen:   Entity   = null, 
-    chatScreen:   Entity   = null,
-    httpClient:   Entity   = null
+    loadingSpace: Convolvr = null;
 
 const history = createHistory();
 
@@ -35,7 +30,6 @@ clearOldData();
 
 loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
   let systems:   Systems  = world.systems,
-      scene:     any      = world.three.scene,  
       pos:       any      = world.camera.position,
       coords:    number[] = world.getVoxel( pos ),
       voxelKey:  string   = coords.join("."),

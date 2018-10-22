@@ -41,7 +41,7 @@ export default class SignalSystem { // system for passing signals between entiti
             }
         
         if (attr.wire == true) {
-            // handle attragation 
+            // handle propagation 
         }
         
         if (attr.in) {

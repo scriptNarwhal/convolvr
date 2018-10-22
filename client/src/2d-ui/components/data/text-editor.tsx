@@ -1,6 +1,6 @@
 import * as React from "react"; import { Component } from "react";
 import { withRouter } from 'react-router-dom'
-import FileButton from './file-button'
+import { FileButton, Modal } from 'energetic-ui'
 import { isMobile } from '../../../config'
 import { 
   textAreaStyle,
@@ -14,10 +14,7 @@ import {
 
 class TextEditor extends Component<any, any> {
 
-
-
   componentWillMount () {
-
     this.setState({
       activated: false,
       text: "",
@@ -93,19 +90,18 @@ class TextEditor extends Component<any, any> {
     }
   }
 
-  toggleModal () {
-    this.props.closeTextEdit()
+  toggleModal (open?: boolean) {
+    if (open === false || this.state.activated) {
+      this.props.closeTextEdit()
+    }
     this.setState({
-      activated: !this.state.activated
+      activated: open === undefined ? !this.state.activated : open
     })
   }
 
   render() {
-
-    if ( this.state.activated ) {
       return (
-       <div style={ styles.lightbox as any}>
-          <div style={ styles.modal() } >
+        <Modal title="New File" open={this.state.activated} onToggle={ (open: boolean) => { this.toggleModal(open)}}>
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Editing</span> 
                 <input defaultValue={ this.state.name } type="text" onChange={ (e) => { this.handleTextChange(e) }} style={ styles.text } /> 
@@ -118,15 +114,8 @@ class TextEditor extends Component<any, any> {
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
-          </div>
-        </div>
+        </Modal>
       )
-
-    } else {
-      return (
-        <FileButton title="New File" onClick={ () => { this.toggleModal() } } />
-      )
-    }
   }
 }
 

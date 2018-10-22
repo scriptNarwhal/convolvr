@@ -1,15 +1,15 @@
 import * as React from "react"; 
 import { Component } from "react";
-import { withRouter } from 'react-router-dom'
-import FileButton from './file-button'
-import { rgba, rgb } from '../../../util'
+
 import { isMobile } from '../../../config'
 import { 
+  FileButton,
   textAreaStyle,
   lightboxStyle, 
   textTitleInputStyle,
-  modalStyle 
-} from '../../styles'
+  modalStyle, 
+  Modal
+} from 'energetic-ui'
 class AttributeEditor extends Component<any, any> {
 
   componentWillMount () {
@@ -82,7 +82,6 @@ class AttributeEditor extends Component<any, any> {
   }
 
   componentWillUpdate ( nextProps: any, nextState: any ) {
-
   }
 
   useTemplate( name: string ) {
@@ -157,22 +156,18 @@ class AttributeEditor extends Component<any, any> {
         return valid
     }
 
-  toggleModal () {
-    if ( this.state.activated) {
+  toggleModal (open?: boolean) {
+    if (this.state.activated || open === false) {
       this.props.closeAttributeEditor()
     }
     this.setState({
-      activated: !this.state.activated
+      activated: open === undefined ? !this.state.activated : open
     })
-
   }
 
   render() {
-    if ( this.state.activated ) {
-
-      return (
-       <div style={ styles.lightbox as any }>
-          <div style={ styles.modal() } >
+    return (
+      <Modal title={this.props.title || "New Attribute Preset"} open={this.state.activated} onToggle={ (open: boolean) => { this.toggleModal(open)}}>
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Attribute Edit</span> 
                 { !this.state.refreshing ? 
@@ -194,24 +189,14 @@ class AttributeEditor extends Component<any, any> {
               </span>
             </div>
             <div style={ styles.body }>
-              {  this.state.activated && !this.state.refreshing ? (
+             { !this.state.refreshing ? (
                 <textarea defaultValue={ this.state.text } style={ styles.textArea( isMobile() ) } onBlur={ e=> this.handleTextArea(e) } />
               ) : ""}
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
-          </div>
-        </div>
+        </Modal>
       )
-
-    } else {
-
-      return (
-        <FileButton title={this.props.title || "New Attribute Preset"} onClick={ () => { this.toggleModal() } } />
-      )
-
-    }
-    
   }
 }
 

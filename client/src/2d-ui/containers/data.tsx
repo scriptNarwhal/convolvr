@@ -1,7 +1,11 @@
 import * as React from "react"; import { Component } from "react";
+
+import { Card, LocationBar} from 'energetic-ui'
 import Shell from '../components/shell'
-import Card from '../components/card'
-import LocationBar from '../components/location-bar'
+import TextEditor from '../components/data/text-editor'
+import NewFolder from '../components/data/new-folder'
+import MoveFile from '../components/data/move-file'
+import SharingSettings from '../components/data/sharing-settings'
 
 class Data extends Component<any, any> {
 
@@ -47,7 +51,6 @@ class Data extends Component<any, any> {
   }
 
   componentWillUpdate (nextProps: any, nextState: any) {
-
 
   }
 
@@ -177,7 +180,12 @@ class Data extends Component<any, any> {
                           path.splice(index+1)
                           this.props.changeDirectory(path)
                        }}
-          />
+          >
+            <TextEditor username={this.props.username} path={this.props.path}  />
+            <NewFolder username={this.props.username} path={this.props.path} />
+            <MoveFile username={this.props.username} path={this.props.path} />
+            <SharingSettings />
+          </LocationBar>
           {
             dirs !== false && !this.props.dirsFetching &&
             dirs.map((dir: string, i: number) => {

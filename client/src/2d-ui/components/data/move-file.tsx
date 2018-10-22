@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Component } from "react";
 import { withRouter } from 'react-router-dom'
-import FileButton from './file-button'
+import { FileButton, Modal } from 'energetic-ui'
 import { rgba, rgb } from '../../../util'
 
 class MoveFile extends Component<any, any> {
@@ -63,11 +63,8 @@ class MoveFile extends Component<any, any> {
     let cwd = !! this.props.cwd ? this.props.cwd.join("/") : "",
         resultingPath = `${this.props.username}${cwd}/${this.state.name.split(' ').join('-')}`
 
-    if ( this.state.activated ) {
-
       return (
-        <div style={ styles.lightbox as any }>
-          <div style={ styles.modal as any } >
+       <Modal title="" open={this.state.activated} hiddenWhenClosed={true} >
             <div style={ styles.header as any }>
               <span style={ styles.title as any }> Rename File </span>
             </div>
@@ -79,18 +76,8 @@ class MoveFile extends Component<any, any> {
               <FileButton title="Rename" onClick={ () => { this.rename() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
-          </div>
-        </div>
+        </Modal>
       )
-
-    } else {
-
-      return (
-        <span></span>
-      )
-
-    }
-    
   }
 }
 

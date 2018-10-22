@@ -1,38 +1,32 @@
 import * as React from "react"; import { Component } from "react";
 import { withRouter } from 'react-router-dom'
-import FileButton from './file-button'
+import { FileButton, Modal } from 'energetic-ui'
 import { rgba, rgb } from '../../../util'
 
 class NewFolder extends Component<any, any> {
 
   componentWillMount () {
-
     this.setState({
       activated: false,
       resultingPath: "",
       name: ""
     })
-
   }
 
   componentWillReceiveProps ( nextProps: any) {
-
     if ( this.props.creatingDir && nextProps.creatingDir == false ) {
-
       this.props.listDirectories( nextProps.username, nextProps.cwd.join("/") )
-
     }
   }
 
   componentWillUpdate ( nextProps: any, nextState: any ) {
 
-
   }
 
-  toggleModal () {
+  toggleModal (open?: boolean) {
     this.setState({
       name: "",
-      activated: !this.state.activated
+      activated: open === undefined ? !this.state.activated : open
     })
   }
 
@@ -45,30 +39,22 @@ class NewFolder extends Component<any, any> {
   make () {
     let cwd = this.props.cwd.join("/"),
         dirName = this.state.name.indexOf(' ') > -1 ? this.state.name.split(' ').join('-') : this.state.name,
-        name = this.state.name
+        name = this.state.name;
 
     if ( name != "" ) {
-
       this.props.createDirectory( this.props.username, `${cwd}/${dirName}` )
       this.toggleModal()
-
     } else {
-
       alert("Name is required.")
-
     }
-
   }
 
   render() {
     let cwd = !! this.props.cwd ? this.props.cwd.join("/") : "",
         resultingPath = `${this.props.username}${cwd}/${this.state.name.split(' ').join('-')}`
 
-    if ( this.state.activated ) {
-
       return (
-        <div style={ styles.lightbox as any }>
-          <div style={ styles.modal as any } >
+        <Modal title="New Folder" open={this.state.activated} onToggle={ (open: boolean) => { this.toggleModal(open)}}>
             <div style={ styles.header as any }>
               <span style={ styles.title as any }> New Folder </span>
             </div>
@@ -80,26 +66,13 @@ class NewFolder extends Component<any, any> {
               <FileButton title="Make" onClick={ () => { this.make() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
-          </div>
-        </div>
-      )
-
-    } else {
-
-      return (
-        <FileButton title="New Folder" onClick={ () => { this.toggleModal() } } />
-      )
-
-    }
-    
+        </Modal>
+      );
   }
 }
 
 
 import { connect } from 'react-redux'
-// import {
-//   closeNewFolder
-// } from '../../redux/actions/util-actions'
 import {
   createDirectory,
   listDirectories

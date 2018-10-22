@@ -1,6 +1,6 @@
 import * as React from "react"; import { Component } from "react";
 import { withRouter } from 'react-router-dom'
-import FileButton from './file-button'
+import { FileButton } from 'energetic-ui'
 import {
   rgba,
   rgb
@@ -89,17 +89,15 @@ class SharingSettings extends Component<any, any> {
 
   }
 
-  toggleModal () {
+  toggleModal (open?: boolean) {
     this.setState({
-      activated: !this.state.activated
+      activated: open === undefined ? !this.state.activated : open
     })
   }
 
   render() {
-    if ( this.state.activated ) {
       return (
-       <div style={ styles.lightbox as any }>
-          <div style={ styles.modal() } >
+        <Modal title="Sharing Settings"  hiddenWhenClosed={true} open={this.state.activated} onToggle={ (open: boolean) => { this.toggleModal(open)}}>
             <div style={ styles.header }>
               <span style={ styles.title }> <span style={{marginRight: '0.5em'}}>Shared Folders</span> </span>
               <table>
@@ -130,14 +128,8 @@ class SharingSettings extends Component<any, any> {
               <FileButton title="Share Current Folder" onClick={ () => { this.shareFolder() } } />
               <FileButton title="Close" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
             </div>
-          </div>
-        </div>
+        </Modal>
       )
-    } else {
-      return (
-        <span></span>
-      )
-    }
   }
 }
 
@@ -155,6 +147,7 @@ import {
 import {
   closeSharingSettings
 } from '../../redux/actions/util-actions'
+import { Modal } from "energetic-ui";
 
 export default connect(
   (state: any, ownProps: any) => {

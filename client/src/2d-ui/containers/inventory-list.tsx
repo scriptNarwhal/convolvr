@@ -1,12 +1,11 @@
 import * as React from "react"; import { Component } from "react";
 import { isMobile } from '../../config'
-import Button from '../components/button'
-import Card from '../components/card'
-import EntityEditor from '../components/data/entity-editor'
-import ComponentEditor from '../components/data/component-editor'
-import AttributeEditor from '../components/data/attribute-editor'
-import ImportToSpace from '../components/data/import-to-world'
-import InventoryExport from '../components/data/inventory-export'
+import { Card } from 'energetic-ui'
+import EntityEditor from '../components/ecs/entity-editor'
+import ComponentEditor from '../components/ecs/component-editor'
+import AttributeEditor from '../components/ecs/attribute-editor'
+import ImportToSpace from '../components/ecs/import-to-world'
+import InventoryExport from '../components/ecs/inventory-export'
 import BuiltinProps, { getPropsList } from "../../assets/attributes";
 
 type InventoryListProps = {

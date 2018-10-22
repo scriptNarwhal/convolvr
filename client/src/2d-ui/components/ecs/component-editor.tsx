@@ -1,23 +1,20 @@
 import * as React from "react"; import { Component } from "react";
-import { withRouter } from 'react-router-dom'
-import FileButton from './file-button'
-import Card from '../card'
-import {
-    rgba,
-    rgb
-} from '../../../util'
-import { isMobile } from '../../../config'
-import AttributeEditor from './attribute-editor'
-import VectorInput from '../vector-input'
 
-import BuiltinProps from '../../../assets/attributes'
-import { getPropsList } from '../../../assets/attributes'
 import { 
+    Card, 
+    FileButton, 
+    VectorInput,
     textAreaStyle,
     basicInputStyle,
     lightboxStyle, 
-    modalStyle 
-} from '../../styles'
+    modalStyle  
+} from 'energetic-ui';
+
+import { isMobile } from '../../../config'
+import AttributeEditor from './attribute-editor'
+
+import BuiltinProps from '../../../assets/attributes'
+import { getPropsList } from '../../../assets/attributes'
 
 type ComponentEditorProps = {
     title: string,

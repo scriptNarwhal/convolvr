@@ -1,8 +1,7 @@
 import * as React from "react"; import { Component } from "react";
-import { withRouter } from 'react-router-dom'
-import Card from '../components/card'
+
+import { Card, LocationBar} from 'energetic-ui'
 import Shell from '../components/shell'
-import LocationBar from '../components/location-bar'
 
 class Network extends Component<any, any> {
 

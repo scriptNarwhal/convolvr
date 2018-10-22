@@ -1,18 +1,18 @@
-//!@flow
+
 import * as React from "react"; import { Component } from "react";
-import { withRouter } from 'react-router-dom'
-import FileButton from './file-button'
-import Card from '../card'
+
 import ComponentEditor from './component-editor'
-import VectorInput from '../vector-input'
-import { rgba, rgb } from '../../../util'
+
 import { isMobile } from '../../../config'
 import { 
+  Card,
+  FileButton,
+  VectorInput,
   textAreaStyle,
   basicInputStyle,
   lightboxStyle, 
   modalStyle 
-} from '../../styles'
+} from 'energetic-ui'
 
 type EntityEditorProps = {
   contextMenuOptions: any[],
