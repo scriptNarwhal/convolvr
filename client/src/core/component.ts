@@ -5,6 +5,7 @@ import Binding from './binding';
 import Property from "./property";
 import { Attributes, AttributeName } from './attribute';
 import { AnyObject } from '../util';
+import AssetSystem from '../systems/core/assets';
 
 export type NameOrId = string|number;
 export type EntityPath = [string, NameOrId];
@@ -67,7 +68,7 @@ export default class Component {
        * Templated Components
        */
       if (data.class) {
-        data = systems.assets.makeComponent(data.class, data); // look up component
+        data = (systems.assets as AssetSystem).makeComponent(data.class, data); 
       }
 
       this.entity = entity

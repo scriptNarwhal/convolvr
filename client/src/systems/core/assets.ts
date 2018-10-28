@@ -341,7 +341,7 @@ export default class AssetSystem {
             library = builtIn[ name ] != null ? builtIn : this.userComponentsByName
 
         if ( data ) {
-            return { ...library[ name ], data }
+            return { ...library[ name ], ...data }
         } else {
             return { ...library[ name ] }
         }
