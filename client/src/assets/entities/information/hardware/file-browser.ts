@@ -1,4 +1,5 @@
 import Component from "../../../../core/component";
+import { DBEntity } from "../../../../core/entity";
 
 let block = {
     id: -1,
@@ -25,13 +26,14 @@ let block = {
             },
             metaFactory: {
                 type: "file",
-                dataSource: "self" // implement self source
+                dataSource: "self", // implement self source
+                attrName: ""
             },
             layout: {
                 type: "grid",
                 mode: "factory",
                 columns: 6,
-                axis: "xz"
+                plane: "xz"
             }
         },
         quaternion: [ 0, 0, 0, 1 ],
@@ -39,7 +41,8 @@ let block = {
         components: ([] as Component[]),
     }],
     position: [ 0, 0, 0 ],
-    quaternion: [ 0, 0, 0, 1 ]
-}
+    quaternion: [ 0, 0, 0, 1 ],
+    tags:["information-hardware"]
+} as DBEntity
 
 export default block

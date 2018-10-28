@@ -10,6 +10,7 @@ export default class ScriptSystem {
     envComponents: {[_:string]: Component}
 
     constructor (world: Convolvr, worker: Worker) {
+        this.envComponents = {};
         this.world = world
         this.worker = worker;
         this.worker.onmessage = (message: MessageEvent) => {
@@ -17,12 +18,15 @@ export default class ScriptSystem {
                 data = msg.data,
                 env = msg.env,
                 component = this.envComponents[env];
-
+            console.log("component script env: ", env);
+            console.log("escript component: ", component);
             switch(msg.command) {
                 case "return value":
+                    console.log("script return value")
                     component.state.script.getReturnValue();
                 break;
                 case "native call":
+                    console.log("script native call")
                     this.nativeCall(component, data);
                 break;
                 case "internal error":
@@ -36,7 +40,8 @@ export default class ScriptSystem {
         let attr: script = component.attrs.script,
             env = [component.entity.voxel.join("."), component.entity.id, component.index],
             getReturnValue = {};
-
+        console.log("init script component")
+        console.log("---------------------")
         this.envComponents[env.join(",")] = component;
 
         const evalInComponent = (code: string, callback: (data: any) => any) => {

@@ -30,7 +30,8 @@ export default class ECSObjects {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-object"]
     };
 
     public static int = {
@@ -61,7 +62,8 @@ export default class ECSObjects {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-object"]
     }
 
     public static float = {
@@ -92,7 +94,8 @@ export default class ECSObjects {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-object"]
     }
 
     public static string =  {
@@ -123,7 +126,8 @@ export default class ECSObjects {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-object"]
     };
 
     public static array = {
@@ -154,7 +158,8 @@ export default class ECSObjects {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-object"]
     };
     
     public static hash = {
@@ -185,7 +190,8 @@ export default class ECSObjects {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-object"]
     }
 
     public static function = {
@@ -216,7 +222,8 @@ export default class ECSObjects {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-object"]
     }
 
     public static builtin = {
@@ -247,7 +254,8 @@ export default class ECSObjects {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-object"]
     }
 
     public static error = {
@@ -278,6 +286,7 @@ export default class ECSObjects {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-object"]
     }
 }

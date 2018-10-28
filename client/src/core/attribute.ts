@@ -214,7 +214,10 @@ export interface material extends Attribute {
 export interface media extends Attribute {}
 export interface metaFactory extends Attribute {
     type: string,
-    attrName: string
+    attrName?: string,
+    filter?: {
+        tags: string[]
+    }
 }
 export interface miniature extends Attribute {
     scale?: number

@@ -24,7 +24,8 @@ export default class HardwareDevices {
             components: ([] as DBComponent[]),
         }],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["information-hardware"]
     }
 
     public static ioController = {
@@ -49,7 +50,8 @@ export default class HardwareDevices {
             components: ([] as DBComponent[]),
         }],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["information-hardware"]
     }
     
     public static networkInterface =  {
@@ -74,7 +76,8 @@ export default class HardwareDevices {
             components: ([] as DBComponent[]),
         }],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["information-hardware"]
     }
 
     public static displayAdapter =  {
@@ -99,7 +102,8 @@ export default class HardwareDevices {
             components: ([] as DBComponent[]),
         }],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["information-hardware"]
     };
 
     public static key =  {
@@ -122,7 +126,8 @@ export default class HardwareDevices {
             components: ([] as DBComponent[]),
         }],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["information-hardware"]
     }
 
     public static keyboard = {
@@ -148,6 +153,7 @@ export default class HardwareDevices {
         quaternion: [ 0, 0, 0, 1 ],
         position: [ 0, 0, 0 ],
         components: ([] as DBComponent[]),
+        tags: ["information-hardware"]
     }
 
     public static diskDrive = {
@@ -172,7 +178,8 @@ export default class HardwareDevices {
             components: ([] as DBComponent[]),
         }],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["information-hardware"]
     }
 
     public static display =  {
@@ -197,7 +204,8 @@ export default class HardwareDevices {
             components: ([] as DBComponent[]),
         }],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["information-hardware"]
     }
 
     public static serialCable = {
@@ -222,7 +230,8 @@ export default class HardwareDevices {
             components: ([] as DBComponent[]),
         }],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["information-hardware"]
     }
 
     public static terminalCase = {
@@ -244,7 +253,8 @@ export default class HardwareDevices {
             components: ([] as DBComponent[]),
         }],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["information-hardware"]
     }
 
 }

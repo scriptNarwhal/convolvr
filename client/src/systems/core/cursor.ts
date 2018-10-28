@@ -51,7 +51,7 @@ export default class CursorSystem {
             position = cameraPos
         }
 
-        raycaster.set(position, handDirection )
+        raycaster.set({ x: position.x, y: -1+position.y, z: position.z}, handDirection )
         coords = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), 0, Math.floor( position.z / GRID_SIZE[ 2 ] ) ]
         raycaster.ray.far = 100000
         castObjects = this.getSurroundingVoxels( voxels, coords )

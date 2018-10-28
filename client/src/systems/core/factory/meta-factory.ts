@@ -1,7 +1,8 @@
 import Convolvr from '../../../world/world'
 import Component, { DBComponent } from '../../../core/component'
-import Entity from '../../../core/entity'
+import Entity, { DBEntity } from '../../../core/entity'
 import { FactoryType, FactoryAttributeType } from '../../../core/attribute';
+import { AnyObject } from '../../../util';
 
 export default class MetaFactorySystem {
     
@@ -52,10 +53,8 @@ export default class MetaFactorySystem {
 
         if (source && typeof source.map == 'function') { // array of geometries / materials, components, entities, spaces, places, files, (directories could use source[category])
             //console.info( "metafactory source is ", source)
-            source.map( (item, i) => {
-                if ( assetType == 'entity' && typeof item == 'function' )
-                
-                    return
+            const addItemFromList =  (item: AnyObject, i: number) => {
+                if ( assetType == 'entity' && typeof item == 'function' ) { return }
                 
                 preset = this.getPreset( assetType, item, i, presets ) 
                 this.addComponent( component, item, assetType, category, preset, x, y, index, gridSize, vOffset)
@@ -66,7 +65,26 @@ export default class MetaFactorySystem {
                     y += 1
                 } 
                 index += 1
-            })
+            }
+            if (attr.filter) {
+                if (attr.filter.tags.length === 0) {
+                    source.filter((item: DBComponent | DBEntity, index, all) => 
+                       item.tags == null || item.tags.length == 0
+                    ).map(addItemFromList);
+                } else {
+                    source.filter((item: DBComponent | DBEntity, index, all) => {
+                        for (const tag of attr.filter.tags) {
+                            if (item.tags && item.tags.indexOf(tag) > -1) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }).map(addItemFromList);
+                }
+            } else {
+                source.map(addItemFromList)
+            }
+            
             
         } else { // map through system categories
             source = attr.dataSource

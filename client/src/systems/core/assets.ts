@@ -206,7 +206,6 @@ export default class AssetSystem {
     }
 
     getEnvMapFromColor ( r: number, g: number, b: number ) {
-
         let envURL = '/data/images/photospheres/sky-reflection';
 
         if ( r !== g && g !== b ) {

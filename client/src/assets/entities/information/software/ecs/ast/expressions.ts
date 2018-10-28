@@ -27,7 +27,8 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     } as DBEntity;
 
     public static InfixExpression =  {
@@ -55,7 +56,8 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static IfExpression =  {
@@ -83,7 +85,8 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
     public static ForExpression =  {
         id: -1,
@@ -110,7 +113,8 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static WhileExpression =  {
@@ -138,7 +142,8 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static SleepExpression =  {
@@ -166,7 +171,8 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static CallExpression =  {
@@ -194,7 +200,8 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static NewExpression =  {
@@ -222,7 +229,8 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static ExecExpression =  {
@@ -250,7 +258,8 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static IndexExpression =  {
@@ -279,7 +288,8 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static IndexAssignmentExpression =  {
@@ -308,6 +318,7 @@ export default class ASTExpressions {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 }

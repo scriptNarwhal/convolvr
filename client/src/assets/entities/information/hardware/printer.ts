@@ -19,7 +19,8 @@ let printer = {
         components: ([] as DBComponent[]),
     }],
     position: [ 0, 0, 0 ],
-    quaternion: [ 0, 0, 0, 1 ]
+    quaternion: [ 0, 0, 0, 1 ],
+    tags:["information-hardware"]
 }
 
 export default printer;

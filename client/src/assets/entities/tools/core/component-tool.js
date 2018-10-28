@@ -45,7 +45,10 @@ export default class ComponentTool extends Tool {
                       attrs: {
                         metaFactory: { // generates factory for each item in dataSource
                           type: "component", // component, entity, attr
-                          dataSource: this.world.systems.assets.componentsByName //componentsByName
+                          dataSource: this.world.systems.assets.componentsByName,
+                          filter: { 
+                            tags: []
+                          }
                         },
                         layout: {
                           type: "grid",
@@ -55,13 +58,16 @@ export default class ComponentTool extends Tool {
                       }
                     }
                   },{ // helper to create tool configuration-panel entity ( coordinated by tool system )
-                    title: "My Components",
+                    title: "Script Literals",
                     color: 0x003bff,
                     content: {
                       attrs: {
                         metaFactory: { // generates factory for each item in dataSource
                           type: "component", // component, entity, attr
-                          dataSource: this.world.systems.assets.userComponents
+                          dataSource: this.world.systems.assets.componentsByName,
+                          filter: {
+                            tags: ["ecs-literal"]
+                          }
                         },
                         layout: {
                           type: "grid",
@@ -70,7 +76,43 @@ export default class ComponentTool extends Tool {
                         }
                       }
                     }
-                  },
+                  },{ // helper to create tool configuration-panel entity ( coordinated by tool system )
+                    title: "Script Objects",
+                    color: 0x003bff,
+                    content: {
+                      attrs: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "component", // component, entity, attr
+                          dataSource: this.world.systems.assets.componentsByName,
+                          filter: {
+                            tags: ["ecs-object"]
+                          }
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
+                      }
+                    }
+                  }
+                  // },{ // helper to create tool configuration-panel entity ( coordinated by tool system )
+                  //   title: "My Components",
+                  //   color: 0x003bff,
+                  //   content: {
+                  //     attrs: {
+                  //       metaFactory: { // generates factory for each item in dataSource
+                  //         type: "component", // component, entity, attr
+                  //         dataSource: this.world.systems.assets.userComponents
+                  //       },
+                  //       layout: {
+                  //         type: "grid",
+                  //         mode: "factory", // child components will ignore layout
+                  //         columns: 3
+                  //       }
+                  //     }
+                  //   }
+                  // },
                 ]
               }
             },

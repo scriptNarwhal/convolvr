@@ -27,7 +27,8 @@ export default class ASTLiterals {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     }
 
     public static int =  {
@@ -55,7 +56,8 @@ export default class ASTLiterals {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
     public static float = {
@@ -83,7 +85,8 @@ export default class ASTLiterals {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
     public static string = {
@@ -111,7 +114,8 @@ export default class ASTLiterals {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
     public static array = {
@@ -139,7 +143,8 @@ export default class ASTLiterals {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
     public static hash = {
@@ -167,7 +172,8 @@ export default class ASTLiterals {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
     public static function = {
@@ -195,7 +201,8 @@ export default class ASTLiterals {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
 

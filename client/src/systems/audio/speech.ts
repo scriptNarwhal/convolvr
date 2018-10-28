@@ -25,7 +25,7 @@ export default class SpeechSystem {
 
         if ( attr.readText !== false ) {
             if ( component.attrs.text ) { // speak text
-                this.speak(component.attrs.text.lines.join(". "), "", attr.voiceIndex === 0 || !!attr.voiceIndex ? attr.voiceIndex : 0)
+                this.speak((component.attrs.text.lines || ["foo"]).join(". "), "", attr.voiceIndex === 0 || !!attr.voiceIndex ? attr.voiceIndex : 0)
             }
         }
         return {

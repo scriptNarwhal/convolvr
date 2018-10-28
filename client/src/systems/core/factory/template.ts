@@ -17,7 +17,6 @@ export default class TemplateSystem {
             assetType:      string                = attr.type,
             assets:         {[key:string]:string} = attr.assets,
             textMap:        string[] | string[][] = attr.textMap,
-            dimensions:     number                = typeof assets[0] == 'string' ? 2 : 3,
             gridWidth:      number                = attr.gridWidth || 3,
             gridSize:       number                = attr.gridSize || 1,
             vOffset:        number                = attr.vOffset || -1.2,

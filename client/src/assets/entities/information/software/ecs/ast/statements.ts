@@ -26,7 +26,8 @@ export default class ASTStatements {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static LetStatement =  {
@@ -54,7 +55,8 @@ export default class ASTStatements {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static ClassStatement =  {
@@ -82,7 +84,8 @@ export default class ASTStatements {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static ReturnStatement =  {
@@ -110,7 +113,8 @@ export default class ASTStatements {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static ExpressionStatement =  {
@@ -138,7 +142,8 @@ export default class ASTStatements {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 
     public static BlockStatement =  {
@@ -166,6 +171,7 @@ export default class ASTStatements {
             components: ([] as DBComponent[]),
         } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags:["ecs-expression"]
     };
 }
