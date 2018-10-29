@@ -38,7 +38,7 @@ export default class ScriptSystem {
 
     init (component: Component) {
         let attr: script = component.attrs.script,
-            env = [component.entity.voxel.join("."), component.entity.id, component.index],
+            env = this.getComponentScriptEnv(component),
             getReturnValue = {};
         console.log("init script component")
         console.log("---------------------")
@@ -72,6 +72,65 @@ export default class ScriptSystem {
             getReturnValue,
             env
         }
+    }
+
+    
+    /**
+     * Send data TO web worker
+     */
+
+    public evaluate (code: string, env: any[]) {
+        this.worker.postMessage('{"command": "eval", "data": { "env": ["'+env[0]+'",'+env[1]+','+env[2]+'], "code": "'+code+'"}}');
+    }
+
+    public evaluateForComponent(component: Component, code: string) {
+        this.evaluate(code, this.getComponentScriptEnv(component));
+    }
+
+    public command(commandName: string, commandArgs: any[], env: any[]) {
+        this.worker.postMessage(`{"command": "command", "data": {"commandName":"${commandName}", 
+                                              commandArgs:${JSON.stringify(commandArgs)}, "env": ["${env[0]}",${env[1]},${env[2]}],`);
+    }
+
+    public nativeReturn(value: any, call: string, env: any[]) {
+        this.worker.postMessage(JSON.stringify({"command": "native-return", "data": { call, value, env }}));
+    }
+
+
+    /**
+     * Worker Commands
+     */
+
+    addComponent(componentData: DBComponent, env: any[]) {
+        this.command("add-component", [componentData], env);
+    }
+    addEntity(entityData: DBEntity, env: any[]) {
+        this.command("add-entity", [entityData], env);
+    }
+
+    updateComponent(componentData: DBComponent, env: any[]) {
+        this.command("update-component", [componentData], env);
+    }
+    updateEntity(entityData: DBEntity, env: any[]) {
+        this.command("update-entity", [entityData], env);
+    }
+    updateTelemetry() {
+        this.worker.postMessage('{"command": "update-telemetry", "data": {}}');
+    }
+
+    removeComponent(env: any[]) {
+        this.command("remove-component", [env], env);
+    }
+    removeEntity(env: any[]) {
+        this.command("remove-component", [env], env);
+    }
+
+    clear() {
+        this.command("clear", [], ["", 0, 0, 0]);
+    }
+
+    private getComponentScriptEnv(component: Component): [string,string,number] {
+        return [component.entity.voxel.join("."), component.entity.id, component.index];
     }
 
     private nativeCall(component: Component, data: {[_:string]: any}) { //being lazy here.. // TODO: there should be a type for worker commands
@@ -114,54 +173,5 @@ export default class ScriptSystem {
         console.error("Internal Error: "+JSON.stringify(data))
     }
 
-    /**
-     * Send data TO web worker
-     */
-
-    evaluate (code: string, env: any[]) {
-        this.worker.postMessage('{"command": "eval", "data": { "env": ["'+env[0]+'",'+env[1]+','+env[2]+'], "code": "'+code+'"}}');
-    }
-
-    command(commandName: string, commandArgs: any[], env: any[]) {
-        this.worker.postMessage(`{"command": "command", "data": {"commandName":"${commandName}", 
-                                              commandArgs:${JSON.stringify(commandArgs)}, "env": ["${env[0]}",${env[1]},${env[2]}],`);
-    }
-
-    nativeReturn(value: any, call: string, env: any[]) {
-        this.worker.postMessage(JSON.stringify({"command": "native-return", "data": { call, value, env }}));
-    }
-
-
-    /**
-     * Worker Commands
-     */
-
-    addComponent(componentData: DBComponent, env: any[]) {
-        this.command("add-component", [componentData], env);
-    }
-    addEntity(entityData: DBEntity, env: any[]) {
-        this.command("add-entity", [entityData], env);
-    }
-
-    updateComponent(componentData: DBComponent, env: any[]) {
-        this.command("update-component", [componentData], env);
-    }
-    updateEntity(entityData: DBEntity, env: any[]) {
-        this.command("update-entity", [entityData], env);
-    }
-    updateTelemetry() {
-        this.worker.postMessage('{"command": "update-telemetry", "data": {}}');
-    }
-
-    removeComponent(env: any[]) {
-        this.command("remove-component", [env], env);
-    }
-    removeEntity(env: any[]) {
-        this.command("remove-component", [env], env);
-    }
-
-    clear() {
-        this.command("clear", [], ["", 0, 0, 0]);
-    }
     
 }

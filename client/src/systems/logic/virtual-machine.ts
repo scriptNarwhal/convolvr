@@ -1,18 +1,32 @@
 
 import Component from '../../core/component.js';
 import Convolvr from '../../world/world'
+import { virtualMachine } from '../../core/attribute.js';
+import { SystemDependency, System } from '../index.js';
+import ScriptSystem from './script.js';
 
-export default class VirtualMachine {
-
+export default class VirtualMachine implements System {
     world: Convolvr
+    dependencies: SystemDependency[] = [["script"]]
+    private script: ScriptSystem
 
-    constructor ( world: Convolvr ) {
+    constructor(world: Convolvr) {
         this.world = world
     }
 
-    init ( component: Component ) {
+    init(component: Component) {
         let hardware = this.detectHardware(component);
-        console.log("Power on self test")
+        console.log("Power on self test");
+        const attr: virtualMachine = component.attrs.virtualMachine;
+
+        if (attr.os) {
+
+        }
+
+        if (attr.program) {
+            this.script.evaluateForComponent(component, attr.program.join(";"));
+        }
+
         return {
             hardware,
             getDevices: () => {

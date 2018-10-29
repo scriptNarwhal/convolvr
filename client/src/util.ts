@@ -13,6 +13,4 @@ export type Flags = { [key: string]: boolean }
 export type AnyObject = { [_:string]: any }
 
 
-export const zeroZeroZero = new THREE.Vector3(0,0,0)
-
-console.log("zero zero zero ", zeroZeroZero)
+export const zeroZeroZero = new THREE.Vector3(0,0,0);
