@@ -12,6 +12,9 @@ let wirebox = {
                 material: {
                     color: 0x808080,
                     name: "plastic"
+                },
+                floor: {
+                    level: 0
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -27,6 +30,9 @@ let wirebox = {
                 material: {
                     color: 0x808080,
                     name: "plastic"
+                },
+                floor: {
+                    level: 0
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],

@@ -189,75 +189,75 @@ export default class Systems {
 			audio: 			   new AudioSystem( world ),
 			assets: 		   new AssetSystem( world ),
 			browser: 		   new BrowserSystem( world ),
-			camera: 		   new CameraSystem( world ),
+			camera: 		   new CameraSystem( world ), // TODO: finish
 			chat: 			   new ChatSystem( world ),
 			control: 		   new ControlSystem( world ),
-			conveyor: 		   new ConveyorSystem( world ),
+			conveyor: 		   new ConveyorSystem( world ), // TODO: finish
 			cursor: 		   new CursorSystem( world ),
 			datgui: 		   new DatGUIVRPluginSystem( world ),
 			destructable: 	   new DestructableSystem( world ),
 			display: 		   new DisplaySystem( world ),
 			door: 			   new DoorSystem( world ),
 			drawing: 		   new DrawingSystem( world ),
-			emote: 			   new EmoteSystem( world ),
-			faction: 		   new FactionSystem( world ),
+			emote: 			   new EmoteSystem( world ), // TODO: plan out more
+			faction: 		   new FactionSystem( world ), // TODO: plan out more
 			factory: 		   new FactorySystem( world ),
 			fbx: 			   new FBXPluginSystem( world ),
 			file: 			   new FileSystem( world ),
 			floor: 			   new FloorSystem( world ),
 			geometry: 		   new GeometrySystem( world ),
 			grab:              new GrabSystem( world ),
-			graph: 		       new GraphSystem( world ),
+			graph: 		       new GraphSystem( world ), // TODO: implement
 			hand: 			   new HandSystem( world ),
 			head: 			   new HeadSystem( world ),
-			hover: 			   new HoverSystem( world ),
+			hover: 			   new HoverSystem( world ), // TODO: implement
 			importData:        new ImportDataSystem( world ),
 			input: 			   new InputSystem( world ),
 			light: 			   new LightSystem( world ),
 			layout: 		   new LayoutSystem( world ),
-			lookAway: 		   new LookAwaySystem( world ),
+			lookAway: 		   new LookAwaySystem( world ), // TODO: implement
 			magic: 			   new MagicSystem( world ),
 			material: 		   new MaterialSystem( world ),
-			media: 			   new MediaSystem( world ),
+			media: 			   new MediaSystem( world ), // TODO: how is this used?
 			metaFactory: 	   new MetaFactorySystem( world ),
 			miniature: 		   new MiniatureSystem( world ),
 			npc: 			   new NPCSystem( world ),
 			obj: 			   new ObjPluginSystem( world ),
 			oimo: 		   	   new OimoPluginSystem( world ),
-			objective:         new ObjectiveSystem( world ),
+			objective:         new ObjectiveSystem( world ), // TODO: plan out more
 			particles: 		   new ParticleSystem( world ),
-			propulsion: 	   new PropulsionSystem( world ),
+			propulsion: 	   new PropulsionSystem( world ), // TODO: test
 			portal: 		   new PortalSystem( world ),
 			projectile: 	   new ProjectileSystem( world ),
 			quest: 			   new QuestSystem( world ),
 			rest: 			   new RESTSystem( world ),
 			rpgRace:		   new RPGRaceSystem( world ),
 			signal: 		   new SignalSystem( world ),
-			skill: 			   new SkillSystem( world ),
+			skill: 			   new SkillSystem( world ), // TODO: think about this more
 			skybox:            new SkyboxSystem( world ),
 			script:            new ScriptSystem( world, new Worker('/data/js/workers/ecs-bundle.js')),
-			screenshot: 	   new ScreenshotSystem( world ),
-			seat:              new SeatSystem( world ),
-			socialMedia: 	   new SocialMediaSystem( world ),
+			screenshot: 	   new ScreenshotSystem( world ), // TODO: finish
+			seat:              new SeatSystem( world ), // TODO: finish
+			socialMedia: 	   new SocialMediaSystem( world ), // TODO: finish
 			speech: 		   new SpeechSystem( world ),
-			state:             new StateSystem( world ),
-			stat: 			   new StatSystem( world ),
+			state:             new StateSystem( world ), //TODO: how is this used?
+			stat: 			   new StatSystem( world ), // TODO: think about this more
 			staticCollisions:  new StaticCollisions( world, new Worker('/data/js/workers/static-collisions-bundle.js')),
 			terrain: 		   new SpaceSystem( world ),
 			text: 			   new TextSystem( world ),
-			template: 		   new TemplateSystem( world ),
+			template: 		   new TemplateSystem( world ), //TODO: finish
 			time: 			   new TimeSystem( world ),
 			toolUI: 		   new ToolUISystem( world ),
 			tool: 			   new ToolSystem( world ),
 			toolbox:           new ToolboxSystem( world ),
-			user: 			   new UserSystem( world ),
-			vehicle: 		   new VehicleSystem( world ),
-			video: 			   new VideoSystem( world ),
-			virtualDevice:     new VirtualDeviceSystem( world ),
-			virtualMachine:    new VirtualMachineSystem( world ),
-			wall: 			   new WallSystem( world ),
-			webrtc: 		   new WebRTCSystem( world ),
-			weapon:			   new WeaponSystem( world ),
+			user: 			   new UserSystem( world ), //TODO: assess what needs to be done
+			vehicle: 		   new VehicleSystem( world ), // TODO: finish .. plan out more
+			video: 			   new VideoSystem( world ), //TODO: finish
+			virtualDevice:     new VirtualDeviceSystem( world ), //TODO: finish
+			virtualMachine:    new VirtualMachineSystem( world ), //TODO: finish / plan out more
+			wall: 			   new WallSystem( world ), //TODO: finish
+			webrtc: 		   new WebRTCSystem( world ), //TODO: test
+			weapon:			   new WeaponSystem( world ), //TODO: finish
 		}
 		this.systems = systems
 		this.liveSystems = []

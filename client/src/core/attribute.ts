@@ -134,7 +134,7 @@ export interface chat extends Attribute {
     userName?: string
 }
 export interface control extends Attribute {
-
+    type: "position" | "orientation"
 }
 export interface conveyor extends Attribute {}
 export interface cursor extends Attribute {
@@ -222,7 +222,13 @@ export interface metaFactory extends Attribute {
 export interface miniature extends Attribute {
     scale?: number
 }
-export interface npc extends Attribute {}
+export interface npc extends Attribute {
+    personality?: string,
+    faction?: string,
+    canMove?: boolean,
+    canFight?: boolean,
+    insane?: boolean
+}
 export interface obj extends Attribute {
     url: string
 }
@@ -236,7 +242,13 @@ export interface portal extends Attribute {
     coords?: [number, number, number],
     placeName?: string
 }
-export interface projectile extends Attribute {}
+export interface projectile extends Attribute {
+    instant: boolean
+    velocity: number
+    acceleration: number
+    projectileComponent: string
+    hitPoints: number
+}
 export interface quest extends Attribute {}
 export interface rest extends Attribute {
     get?: {

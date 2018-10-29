@@ -126,7 +126,7 @@ export default class ComponentTool extends Tool {
     }
 
     // going to refactor this into the tool system.. next release
-    primaryAction ( telemetry, params = {} ) { // place component (into entity if pointing at one)
+    primaryAction(telemetry, params = {} ) { // place component (into entity if pointing at one)
 
       let cursor = telemetry.cursor,
           user = this.world.user,
@@ -202,8 +202,7 @@ export default class ComponentTool extends Tool {
       }
     }
 
-    secondaryAction ( telemetry, value ) {
-
+    secondaryAction(telemetry, value) {
       this.current += value // cycle components
 
       if ( this.current >= this.all.length ) {

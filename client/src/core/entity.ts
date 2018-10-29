@@ -332,20 +332,20 @@ export default class Entity {
     return this
   }
 
-  public save(oldVoxel: any = false): void {
-    if ( oldVoxel !== false ) {
-      this.saveUpdatedEntity( oldVoxel )
-    } else {
-      this.saveNewEntity()
-    }
+  public save(oldVoxel: any = false): Promise<any> {
     this.callHandlers("save")
+    if ( oldVoxel !== false ) {
+      return this.saveUpdatedEntity( oldVoxel )
+    } else {
+      return this.saveNewEntity()
+    }
   }
 
-  private saveNewEntity(): void {
+  private saveNewEntity(): Promise<any> {
     let data = this.serialize(),
         worldName = (window as any).three.world.name;
 
-    axios.put(
+    return axios.put(
       `${API_SERVER}/api/import-to-world/${worldName}/${this.voxel.join("x")}`,
        data
     ).then( (response: any) => {
@@ -355,13 +355,13 @@ export default class Entity {
     })
   }
 
-  private saveUpdatedEntity(oldVoxel: any): void {
+  private saveUpdatedEntity(oldVoxel: any): Promise<any> {
     let data = this.serialize(),
         worldName = (window as any).three.world.name;
 
     console.info("save", data)
     console.log("oldVoxel", oldVoxel, "newVoxel", this.voxel)
-    axios.put(
+    return axios.put(
       `${API_SERVER}/api/update-space-entity/${worldName}/${this.voxel.join("x")}/${oldVoxel.join("x")}`,
        data
     ).then( (response: any) => {

@@ -8,6 +8,9 @@ let column1Comp = {
             material: {
                 color: 0xa0a0a0,
                 name: "plastic"
+            },
+            floor: {
+                level: 0,
             }
         },
         quaternion: [ 0, 0, 0, 1 ],

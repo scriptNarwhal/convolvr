@@ -6,10 +6,13 @@ export function getPropsList ( attrs: any ) {
         out.push({ name: `geometry.${d}`, data })
     })  
     
-    attrs.material.map( (data: any, d: number) => {
+    attrs.material.color.map( (data: any, d: number) => {
         out.push({ name: `material.${d}`, data })
     })
-
+    
+    attrs.material.material.map( (data: any, d: number) => {
+        out.push({ name: `material.${d}`, data })
+    })
     const systems = [ "structures", "vehicles", "media", "interactivity" ]
 
     systems.map( cat => {
