@@ -246,7 +246,7 @@ export default class FactorySystem implements System {
                     },
                     geometry: {
                         shape: "box",
-                        size: [ 0.5, 0.5, 0.05 ]
+                        size: [ 1.5, 1.5, 1.5 ]
                     },
                     text: {
                         lines: [
@@ -280,7 +280,7 @@ export default class FactorySystem implements System {
                     miniature: {},
                     geometry: {
                         shape: "sphere",
-                        size: [ 0.05, 0.05, 0.05 ]
+                        size: [ 2, 2, 2 ]
                     },
                     ...(menuItem ? {
                         toolUI: {

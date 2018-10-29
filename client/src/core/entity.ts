@@ -230,7 +230,7 @@ export default class Entity {
       console.warn("Entity must have at least 1 component")
       return false
     }
-
+    
     while ( c < ncomps ) {
         comp = new Component( this.components[ c ], this, systems, { mobile, index: c, path: [ c ] } ) // use simpler shading for mobile gpus
         compMesh = comp.mesh;
@@ -241,6 +241,10 @@ export default class Entity {
 
         compMesh.geometry.computeBoundingSphere() // check bounding radius
         compRadius = compMesh.geometry.boundingSphere.radius
+        if (c == 0) {
+          const size = comp.attrs.geometry.size || [1,1,1];
+          dimensions = [ Math.max(1, size[0]), Math.max(1, size[1]), Math.max(1, size[2]) ];
+        }
         dimensions = [
           Math.max( dimensions[ 0 ], Math.abs( compMesh.position.x ) + compRadius ),
           Math.max( dimensions[ 1 ], Math.abs( compMesh.position.y ) + compRadius ),

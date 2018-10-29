@@ -30,25 +30,47 @@ export default class MaterialTool extends Tool {
               name: "metal"
             },
             tool: {
-              panel: {
-                title: "Materials",
-                color: 0x07ffff,
-                content: {
-                  attrs: {
-                    metaFactory: { // generates factory for each item in dataSource
-                      type: "attr", // entity, attr
-                      attrName: "material",
-                      dataSource: this.world.systems.assets.attrs.material.filter((v, i, a) => { return v.name != "stars" })
-                    },
-                    layout: {
-                      type: "grid",
-                      mode: "factory", // child components will ignore layout
-                      columns: 3,
-                      gridSize: 0.8
+              panels: [
+                {
+                  title: "Colors",
+                  color: 0x07ffff,
+                  content: {
+                    attrs: {
+                      metaFactory: { // generates factory for each item in dataSource
+                        type: "attr", // entity, attr
+                        attrName: "material",
+                        dataSource: this.world.systems.assets.attrs.material.color
+                      },
+                      layout: {
+                        type: "grid",
+                        mode: "factory", // child components will ignore layout
+                        columns: 3,
+                        gridSize: 0.8
+                      }
                     }
                   }
-                }
-              }
+                }, {
+                  title: "Materials",
+                  color: 0x07ffff,
+                  content: {
+                    attrs: {
+                      metaFactory: { // generates factory for each item in dataSource
+                        type: "attr", // entity, attr
+                        attrName: "material",
+                        dataSource: this.world.systems.assets.attrs.material.material.filter((v, i, a) => { return v.name != "stars" })
+                      },
+                      layout: {
+                        type: "grid",
+                        mode: "factory", // child components will ignore layout
+                        columns: 3,
+                        gridSize: 0.8
+                      }
+                    }
+                  }
+                },
+                
+
+              ]
             }
           },
           components: [

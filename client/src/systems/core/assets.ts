@@ -350,10 +350,16 @@ export default class AssetSystem {
     public getMaterialProp ( name: string ) {
         let attr: any = null
         
-        this.attrs.material.map(( mat: any, i: number ) => {
-            if ( mat.name == name ) 
-                attr = mat
-        })
+        for (const attribute of this.attrs.material.material) { //map(( mat: any, i: number ) => {
+            if ( attribute.name == name ) 
+                attr = attribute
+        }
+        if (!attr) {
+            for (const attribute of this.attrs.material.color) { //map(( mat: any, i: number ) => {
+                if ( attribute.name == name ) 
+                    attr = attribute
+            }
+        }
 
         return { ...attr }
     }
