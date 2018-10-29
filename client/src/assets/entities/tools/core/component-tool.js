@@ -95,6 +95,25 @@ export default class ComponentTool extends Tool {
                         }
                       }
                     }
+                  },{ // helper to create tool configuration-panel entity ( coordinated by tool system )
+                    title: "PC Devices",
+                    color: 0x003bff,
+                    content: {
+                      attrs: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "component", // component, entity, attr
+                          dataSource: this.world.systems.assets.componentsByName,
+                          filter: {
+                            tags: ["information-hardware"]
+                          }
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
+                      }
+                    }
                   }
                   // },{ // helper to create tool configuration-panel entity ( coordinated by tool system )
                   //   title: "My Components",

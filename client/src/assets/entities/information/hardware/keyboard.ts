@@ -5,7 +5,9 @@ let keyboard = {
     name: "keyboard",
     components: [
         {
-            class: "keyboard"
+            class: "keyboard",
+            position: [ 0, 0, 0 ],
+            quaternion: [ 0, 0, 0, 1 ],
         }
     ],
     position: [ 0, 0, 0 ],

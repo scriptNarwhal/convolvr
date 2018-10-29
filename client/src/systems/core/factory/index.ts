@@ -185,6 +185,9 @@ export default class FactorySystem implements System {
                 }
 
                 ent.components.forEach( (component: DBComponent) => {
+                    if (!component.attrs) {
+                        component.attrs = {};
+                    }
                     component.attrs.toolUI = component.attrs.toolUI ? { ...component.attrs.toolUI, ...toolUIProp} : toolUIProp;
                 })
             }

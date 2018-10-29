@@ -51,7 +51,7 @@ export default class Component {
       let quaternion = data.quaternion ? data.quaternion : false,
           position = data.position ? data.position : [ 0, 0, 0 ],
           path = config && config.path ? config.path : [],
-          attrs = data.attrs,
+          attrs: Attributes,
           mesh = null,
           pl = path.length,
           p = 0
@@ -70,6 +70,7 @@ export default class Component {
       if (data.class) {
         data = (systems.assets as AssetSystem).makeComponent(data.class, data); 
       }
+      attrs = data.attrs;
 
       this.entity = entity
       this.data = data

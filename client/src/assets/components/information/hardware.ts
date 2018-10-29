@@ -8,7 +8,9 @@ export default class HardwareDevices {
         components: [{
             attrs: {
                 virtualMachine: {
-
+                    program: [
+                        'print("hello machine! =)")'
+                    ]
                 },
                 geometry: {
                     shape: "box",

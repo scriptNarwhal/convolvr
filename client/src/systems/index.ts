@@ -184,11 +184,11 @@ export default class Systems {
 		world.systems = this
 
         let systems = {
-			ability: 		   new AbilitySystem( world ),
+			ability: 		   new AbilitySystem( world ), // TODO: plan out more
 			activate: 		   new ActivateSystem( world ),
 			audio: 			   new AudioSystem( world ),
 			assets: 		   new AssetSystem( world ),
-			browser: 		   new BrowserSystem( world ),
+			browser: 		   new BrowserSystem( world ), // TODO: finish
 			camera: 		   new CameraSystem( world ), // TODO: finish
 			chat: 			   new ChatSystem( world ),
 			control: 		   new ControlSystem( world ),
@@ -211,27 +211,27 @@ export default class Systems {
 			hand: 			   new HandSystem( world ),
 			head: 			   new HeadSystem( world ),
 			hover: 			   new HoverSystem( world ), // TODO: implement
-			importData:        new ImportDataSystem( world ),
+			importData:        new ImportDataSystem( world ), //TODO: implement
 			input: 			   new InputSystem( world ),
 			light: 			   new LightSystem( world ),
 			layout: 		   new LayoutSystem( world ),
 			lookAway: 		   new LookAwaySystem( world ), // TODO: implement
-			magic: 			   new MagicSystem( world ),
+			magic: 			   new MagicSystem( world ), //TODO: implement 
 			material: 		   new MaterialSystem( world ),
 			media: 			   new MediaSystem( world ), // TODO: how is this used?
 			metaFactory: 	   new MetaFactorySystem( world ),
 			miniature: 		   new MiniatureSystem( world ),
 			npc: 			   new NPCSystem( world ),
 			obj: 			   new ObjPluginSystem( world ),
-			oimo: 		   	   new OimoPluginSystem( world ),
+			oimo: 		   	   new OimoPluginSystem( world ),// TODO: plan out more
 			objective:         new ObjectiveSystem( world ), // TODO: plan out more
 			particles: 		   new ParticleSystem( world ),
 			propulsion: 	   new PropulsionSystem( world ), // TODO: test
-			portal: 		   new PortalSystem( world ),
+			portal: 		   new PortalSystem( world ), //TODO: Fix
 			projectile: 	   new ProjectileSystem( world ),
-			quest: 			   new QuestSystem( world ),
+			quest: 			   new QuestSystem( world ), // TODO: implement
 			rest: 			   new RESTSystem( world ),
-			rpgRace:		   new RPGRaceSystem( world ),
+			rpgRace:		   new RPGRaceSystem( world ), // TODO: implement
 			signal: 		   new SignalSystem( world ),
 			skill: 			   new SkillSystem( world ), // TODO: think about this more
 			skybox:            new SkyboxSystem( world ),

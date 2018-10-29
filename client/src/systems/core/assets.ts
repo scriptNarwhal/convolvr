@@ -16,7 +16,12 @@ import panel3 from '../../assets/entities/misc/panel-3'
 import block from '../../assets/entities/misc/block'
 import column1 from '../../assets/entities/misc/column-1'
 import wirebox from '../../assets/entities/misc/wirebox'
+
 import fileBrowser from '../../assets/entities/information/hardware/file-browser'
+import terminal from '../../assets/entities/information/hardware/terminal'
+import keyboard from '../../assets/entities/information/hardware/keyboard'
+import pointingDevice from '../../assets/entities/information/hardware/pointing-device'
+import printer from '../../assets/entities/information/hardware/printer'
 
 import panel1Comp from '../../assets/components/misc/panel-1'
 import column1Comp from '../../assets/components/misc/column-1'
@@ -411,6 +416,10 @@ export default class AssetSystem {
     private initInformationHardware() {
         this.initializeAllInModule("component", HardwareDevices);
         this._addBuiltInEntity( "file-browser", fileBrowser )
+        this._addBuiltInEntity( "terminal", terminal )
+        this._addBuiltInEntity( "keyboard", keyboard )
+        this._addBuiltInEntity( "pointing-device", pointingDevice )
+        this._addBuiltInEntity( "printer", printer )
     }
 
     private initInformationSoftware() {

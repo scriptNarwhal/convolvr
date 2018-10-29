@@ -178,7 +178,26 @@ export interface graph extends Attribute {}
 export interface hand extends Attribute {}
 export interface head extends Attribute {}
 export interface hover extends Attribute {}
-export interface input extends Attribute {}
+export interface input extends Attribute {
+    button?: {
+
+    },
+    keyboard?: {
+
+    },
+    controlStick?: {
+
+    },
+    webcam?: {
+
+    },
+    speech?: {
+
+    },
+    authentication?: {
+
+    }
+}
 export interface light extends Attribute {
     color: number,
     intensity: number,
@@ -297,7 +316,10 @@ export interface text extends Attribute {
     label?: boolean,
     canvasSize?: [number, number]
 }
-export interface template extends Attribute {}
+export interface template extends Attribute {
+    assets: { [mapCharacter: string]: string /* component name */ },
+    textMap: string[]
+}
 export interface time extends Attribute {}
 export interface toolUI extends Attribute {
     toolIndex?: number,
@@ -333,11 +355,14 @@ export interface virtualDevice extends Attribute {
 }
 export interface virtualMachine extends Attribute {
     cores?: number
+    program?: string[],
+    os?: string /* script name from asset system */
 }
 export interface wall extends Attribute {}
 export interface webrtc extends Attribute {}
 export interface weapon extends Attribute {
-
+    ranged?: boolean
+    projectileComponent?: string
 }
 
 

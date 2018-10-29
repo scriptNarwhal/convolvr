@@ -10,7 +10,7 @@ let column1Comp = {
                 name: "plastic"
             },
             floor: {
-                level: 0,
+                level: 0
             }
         },
         quaternion: [ 0, 0, 0, 1 ],

@@ -14,7 +14,6 @@ export default class TemplateSystem {
 
     public init(component: Component) { 
         let attr:           any                   = component.attrs.template,
-            assetType:      string                = attr.type,
             assets:         {[key:string]:string} = attr.assets,
             textMap:        string[] | string[][] = attr.textMap,
             gridWidth:      number                = attr.gridWidth || 3,

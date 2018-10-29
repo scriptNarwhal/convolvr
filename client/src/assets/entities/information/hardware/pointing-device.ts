@@ -1,4 +1,5 @@
 import  { DBComponent } from "../../../../core/component";
+import { DBEntity } from "../../../../core/entity";
 
 let pointingDevice = {
     id: -1,
@@ -21,6 +22,6 @@ let pointingDevice = {
     position: [ 0, 0, 0 ],
     quaternion: [ 0, 0, 0, 1 ],
     tags:["information-hardware"]
-}
+} as DBEntity
 
 export default pointingDevice;

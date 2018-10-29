@@ -12,7 +12,7 @@ export default class VirtualMachine {
 
     init ( component: Component ) {
         let hardware = this.detectHardware(component);
-
+        console.log("Power on self test")
         return {
             hardware,
             getDevices: () => {
