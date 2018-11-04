@@ -1,5 +1,5 @@
 import * as React from "react"; import { Component } from "react";
-import { modalStyle } from 'energetic-ui'
+import { modalStyle, ToggleInput } from 'energetic-ui'
 import { isMobile } from '../../config'
 import Shell from '../components/shell'
 
@@ -95,7 +95,7 @@ class NewSpace extends Component<any, any> {
             nets: this.state.nets
           }
       }
-
+      console.log("creating space ", JSON.stringify(data))
     data.userName = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'space' // mark as public / not tied to user if no userName
     data.userId = this.props.loggedInUser != false ? this.props.loggedInUser.id : -1
     if (this.state.name != "" || this.state.description == "") {
@@ -104,15 +104,23 @@ class NewSpace extends Component<any, any> {
       alert("Name & Description are required.")
     }
   }
-  onToggle( group: string, which: string, e: any ) {
-    let value = e.target.value;
 
-    this.setState({
-      [which]: value == 'yes' ? true : false
-    })
+  onToggle( group: string, which: string, e: any ) {
+    // if (group) {
+    //   let theGroup = this.state[group];
+
+    //   theGroup[which] = e;
+    //   this.setState({
+    //     [group]: theGroup
+    //   })
+    // } else {
+      this.setState({
+        [which]: e
+      });
+    // }
   }
+
   onSkyTypeChange (e: any) {
-    let value = e.target.value
     this.setState({
       skyType: e.target.value
     })
@@ -123,34 +131,9 @@ class NewSpace extends Component<any, any> {
       terrainType: e.target.value
     })
   }
-  onToggleTurbulentTerrain (e: any) {
-    let value= e.target.value
-    this.setState({
-      turbulentTerrain: value == 'yes' ? true : false
-    })
-  }
-  onToggleFlatAreas ( e: any ) {
-    let value = e.target.value
-    this.setState({
-      flatAreas: value == 'yes' ? true : false
-    })
-  }
   onToggleGravity (e: any) {
-    let value= e.target.value
     this.setState({
-      gravity: value == 'yes' ? 1.0 : 0.0
-    })
-  }
-  onToggleProtected (e: any) {
-    let value= e.target.value
-    this.setState({
-      protected: value == 'yes' ? true : false
-    })
-  }
-  onToggleHighAltitudeGravity (e: any) {
-    let value = e.target.value
-    this.setState({
-      highAltitudeGravity: value == 'yes' ? true : false
+      gravity: e ? 1.0 : 0.0
     })
   }
   upload (e: any) {
@@ -200,10 +183,8 @@ class NewSpace extends Component<any, any> {
               <tr>
                   <td>Write Protected?</td>
                   <td>
-                  <select onChange={ (e: any)=> { this.onToggleProtected(e) }}>
-                    <option value="no">No</option>
-                    <option value="yes">Yes</option>
-                  </select>
+                  <ToggleInput value={ this.state.protected} 
+                               onChange={ (e: any)=> { this.onToggle("", "protected", e) }} />
                   </td>
               </tr>
               <tr>
@@ -300,20 +281,16 @@ class NewSpace extends Component<any, any> {
               <tr>
                 <td>Flat Areas?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggleFlatAreas(e) }}>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
+                  <ToggleInput value={this.state.flatAreas} 
+                               onChange={ (e: any)=> { this.onToggle( null, "flatAreas", e) }} />
                 </td>
                 <td></td>
               </tr>
               <tr>
                 <td>Turbulent Terrain?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggleTurbulentTerrain(e) }}>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
+                  <ToggleInput value={this.state.turbulentTerrain}
+                               onChange={ (e: any) => { this.onToggle(null, "turbulentTerrain", e) }} />
                 </td>
                 <td></td>
               </tr>
@@ -327,20 +304,16 @@ class NewSpace extends Component<any, any> {
               <tr>
                 <td>Use Gravity?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggleGravity(e) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                    </select>
+                  <ToggleInput value={this.state.gravity != 0}
+                               onChange={ (e: any)=> { this.onToggleGravity(e) }} />  
                 </td>
                 <td></td>
               </tr>
               <tr>
                 <td>(High Altitude) Zero Gravity?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggleHighAltitudeGravity(e) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                    </select>
+                  <ToggleInput value={this.state.highAltitudeGravity} 
+                               onChange={ (e: any)=> { this.onToggle(null, "highAltitudeGravity", e) }} />
                 </td>
                 <td></td>
               </tr>
@@ -353,80 +326,64 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Trees?</td>
                   <td>
-                    <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'trees', e ) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                    </select>
+                  <ToggleInput value={this.state.trees} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'trees', e ) }} />
                   </td>
                 </tr>
               <tr>
                 <td></td>
                 <td>Generate Rocks?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'rocks', e) }}>
-                    <option value="no">No</option>
-                    <option value="yes">Yes</option>
-                  </select>
+                  <ToggleInput value={this.state.rocks} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'rocks', e) }} />
                 </td>
               </tr>
               <tr>
                 <td></td>
                 <td>Generate Roads?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'roads', e) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                    </select>
+                  <ToggleInput value={this.state.roads} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'roads', e) }} />
                 </td>
               </tr>
                <tr>
                 <td></td>
                 <td>Generate Buildings?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'structures', e ) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                  </select>
+                  <ToggleInput value={this.state.structures} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'structures', e ) }} />
                 </td>
               </tr>
               <tr>
               <td></td>
               <td>Generate Pylons?</td>
               <td>
-                <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'pylons', e ) }}>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                </select>
+                <ToggleInput value={this.state.pylons} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'pylons', e ) }} />
               </td>
             </tr>
                <tr>
                 <td></td>
                 <td>Generate Vehicles?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'vehicles', e ) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                  </select>
+                  <ToggleInput value={this.state.vehicles} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'vehicles', e ) }} />
                 </td>
               </tr>
                <tr>
                 <td></td>
                 <td>Generate Tools?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'tools', e ) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                  </select>
+                  <ToggleInput value={this.state.tools} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'tools', e ) }} />
                 </td>
               </tr>
               <tr>
                 <td></td>
                 <td>Generate Computers?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'computers', e ) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                  </select>
+                  <ToggleInput value={this.state.computers} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'computers', e ) }} />
                 </td>
               </tr>
               <tr>
@@ -438,40 +395,32 @@ class NewSpace extends Component<any, any> {
                 <td></td>
                 <td>Generate Orbs?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'orbs', e ) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                  </select>
+                  <ToggleInput value={this.state.orbs} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'orbs', e ) }} />
                 </td>
               </tr>
               <tr>
                 <td></td>
                 <td>Generate Columns?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'columns', e ) }}>
-                  <option value="no">No</option>
-                  <option value="yes">Yes</option>
-                  </select>
+                  <ToggleInput value={this.state.columns} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'columns', e ) }} />
                 </td>
               </tr>
               <tr>
                 <td></td>
                 <td>Generate Wheels?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'wheels', e) }}>
-                  <option value="no">No</option>
-                  <option value="yes">Yes</option>
-                  </select>
+                  <ToggleInput value={this.state.wheels} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'wheels', e) }} />
                 </td>
               </tr>
               <tr>
                 <td></td>
                 <td>Generate Pyramids?</td>
                 <td>
-                  <select onChange={ (e: any)=> { this.onToggle( 'spawn', 'pyramids', e ) }}>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
-                  </select>
+                  <ToggleInput value={this.state.pyramids} 
+                               onChange={ (e: any)=> { this.onToggle( 'spawn', 'pyramids', e ) }} />
                 </td>
               </tr>
               <tr>
