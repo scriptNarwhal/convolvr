@@ -2,6 +2,7 @@ import Convolvr from '../../world/world'
 import Component from '../../core/component'
 import * as THREE from 'three';
 import { System } from '..';
+import { geometry } from '../../core/attribute';
 
 export default class GeometrySystem implements System {
 
@@ -17,7 +18,7 @@ export default class GeometrySystem implements System {
 
   init ( component: Component ) { 
 
-        let attr:         any        = component.attrs.geometry,
+        let attr:         geometry        = component.attrs.geometry,
             geometry:     any        = {},
             size:         Array<number> = attr.size,
             assets:       any        = this.world.systems.assets,
@@ -79,8 +80,8 @@ export default class GeometrySystem implements System {
             break
             // define more mappings here..
           }
-
-          if ( geometry.computeVertexNormals && faceNormals && (attr.faceNormals === true || attr.faceNormals === undefined )) {
+          console.log(attr)
+          if ( geometry.computeVertexNormals && faceNormals && (attr.faceNormals === true )) {
             geometry.computeVertexNormals()
           }
           assets.geometries[ geometryCode ] = geometry

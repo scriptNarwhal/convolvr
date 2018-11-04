@@ -37,7 +37,7 @@ export default class SkyboxSystem {
             new THREE.OctahedronGeometry(skySize/32, 3), 
             new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.95, transparent: true})
         );
-
+        console.warn("create the sun")
         this.world.sunLight.add(sunMesh);
         this.world.three.scene.add(skybox)
         return skybox

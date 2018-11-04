@@ -8,10 +8,13 @@ import Component from '../../../core/component';
 import AssetSystem from '../assets';
 
 import * as THREE from 'three';
-export default class MaterialSystem {
+import { System } from '../..';
+export default class MaterialSystem implements System {
 
-  private world: Convolvr
-  public procedural: ProceduralMaterials
+  public world: Convolvr;
+  public dependencies = [["assets"]];
+  private assets: AssetSystem;
+  public procedural: ProceduralMaterials;
   private mapTypes = [
       "map",
       "roughnessMap",
@@ -21,8 +24,8 @@ export default class MaterialSystem {
     ];
 
     constructor ( world: Convolvr ) {
-        this.world = world
-        this.procedural = new ProceduralMaterials(this, world)
+        this.world = world;
+        this.procedural = new ProceduralMaterials(this, world);
     }
 
     init(component: Component) {
@@ -32,7 +35,7 @@ export default class MaterialSystem {
             attrs = component.attrs,
             attr = attrs.material,
             mat: any = { color: attr.color || 0xffffff },
-            assets = this.world.systems.assets,
+            assets = this.assets || this.world.systems.assets,
             renderer = (window as any).three.renderer,
             anisotropy = renderer.capabilities.getMaxAnisotropy() / ( mobile ? 2 : 1 ),
             path = '/data',
@@ -84,8 +87,7 @@ export default class MaterialSystem {
                         assets.loadImage(attr.roughnessMap, textureConfig)
                           .then((map) => {
                             this.mapCallback(map, "roughnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
-                          }
-                          )
+                          })
                       })
                     }
                     if (attr.metalnessMap) {
@@ -93,8 +95,7 @@ export default class MaterialSystem {
                         assets.loadImage(attr.metalnessMap, textureConfig)
                           .then((map) => {
                             this.mapCallback(map, "metalnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
-                          }
-                          )
+                          })
                       })
                     }
                     allMaps.then(() => {

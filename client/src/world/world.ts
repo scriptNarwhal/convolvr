@@ -1,5 +1,4 @@
 import axios from 'axios'
-// import { browserHistory } from 'react-router'
 import * as THREE from 'three';
 import THREEJSPluginLoader from '../lib';
 // import * as ProgressBar from 'progressbardottop';
@@ -32,7 +31,7 @@ import {
 import UserInput from '../input/user-input'
 import Component from '../core/component';
 import { zeroZeroZero } from '../util';
-import { Camera, Light, SpotLight, PointLight, PerspectiveCamera } from 'three';
+import { Camera, Light, SpotLight, PointLight, PerspectiveCamera, DirectionalLight } from 'three';
 
 let world: any = null,
 	//THREE = (window as any).THREE,
@@ -163,7 +162,7 @@ export default class Convolvr {
 		this.user.id = -Math.floor(Math.random()*1000000);
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
-		this.raycaster.near = 0.25
+		this.raycaster.near = 0.5
 		this.THREE = THREE;
 		(window as any).THREE = THREE;
 
@@ -292,9 +291,12 @@ export default class Convolvr {
 	}
 
 	public init(config: any, callback: Function ) {
+		console.log("init world")
 		let coords: any    = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
-			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.35 ),
-			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, Math.min(1.0, config.light.intensity) ),
+			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.4 ),
+			sunLight       = this.sunLight || this.settings.shadows > 0 
+				? new THREE.DirectionalLight( 0xffffff, Math.min(1.0, config.light.intensity) ) 
+				: new THREE.PointLight(0xffffff, config.light.intensity, 10000000),
 			three          = this.three,
 			camera 		   = three.camera,
 			rotateSky      = false,
@@ -304,17 +306,17 @@ export default class Convolvr {
 			b 			   = config.sky.blue,
 			oldConfig 	   = Object.assign({}, this.config),
 			skySize 	   = 2800+((this.settings.viewDistance+3.5)*1.4)*140,
-			oldSkyMaterial = {}
+			oldSkyMaterial = {};
 
+		console.log("init light distance", config.light.distance)
 		this.skyLight = skyLight
 		this.sunLight = sunLight
 		this.skyLight.color.set( config.light.color )
-		this.skyLight.intensity = config.light.intensity / 1.2
-		this.sunLight.intensity = config.light.intensity
+		this.sunLight.intensity = config.light.intensity 
 
 		this.config = config; console.info("Space config: ", config)
 		this.terrain.initTerrain(config.terrain)
-		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 1.4)
+		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 1.5)
 		this.ambientLight.color.set( config.light.ambientColor )
 		Array(this.ambientLight, this.sunLight, this.skyLight).forEach( light => {
 			if ( !!!light.parent ) {
@@ -337,6 +339,7 @@ export default class Convolvr {
 		if (this.skyboxMesh.parent) {
 			three.scene.remove(this.skyboxMesh)
 		}
+		console.log("init create skybox")
 		this.skyboxMesh = this.skybox.createSkybox( skySize, oldSkyMaterial )
 
 		let deferSpaceLoading = false,
@@ -347,7 +350,7 @@ export default class Convolvr {
 				!!world.skyLight && three.scene.remove( world.skyLight )
 				world.skyLight = skyLight
 				skyLight.position.set( 0, 5000, 0 )
-				sunLight.position.set( Math.sin(yaw)*1000, Math.sin(config.light.pitch)*1000, Math.cos(yaw)*1000)
+				sunLight.position.set( Math.sin(yaw)*2000, Math.sin(config.light.pitch)*2000, Math.cos(yaw)*2000)
 
 				skyLight.lookAt(zeroZeroZero)
 				sunLight.lookAt(zeroZeroZero)
@@ -560,7 +563,7 @@ export default class Convolvr {
 		  this.onWindowResize()
 	  }
 
-	private initShadows(sunLight: PointLight) {
+	private initShadows(sunLight: PointLight | DirectionalLight) {
 		if (!sunLight.castShadow) {
 			sunLight.castShadow = true;
 			(sunLight as any).shadowCameraVisible = true
@@ -573,11 +576,11 @@ export default class Convolvr {
 			shadowCam.right = 400
 			shadowCam.top = 500
 			shadowCam.bottom = -500
-			three.scene.add(shadowCam);	
+			this.three.scene.add(shadowCam);	
 		}
 		if  ( !this.shadowHelper ) {
 			this.shadowHelper = new THREE.CameraHelper( sunLight.shadow.camera );
-			three.scene.add( this.shadowHelper );
+			this.three.scene.add( this.shadowHelper );
 		}
 	}
 

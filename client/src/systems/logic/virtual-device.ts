@@ -1,4 +1,3 @@
-import Convolvr from '../../world/world'
 import Component from '../../core/component'
 import DisplayAdapterDevice from './virtual-devices/display-adapter'
 import IOControllerDevice from './virtual-devices/io-controller'
@@ -9,6 +8,7 @@ import PointingDevice from './virtual-devices/pointing-device'
 import DisplaySystem from '../video/display';
 import { AnyObject } from '../../util';
 import { System } from '..';
+import Convolvr from '../../world/world';
 export interface VirtualDevice {
     world: Convolvr
     init: (data: AnyObject) => AnyObject

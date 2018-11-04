@@ -13,7 +13,7 @@ class Settings extends Component<any, any> {
       welcomeMessage: 'Welcome to Convolvr!',
       network: [],
       camera: localStorage.getItem("camera") || 'fps',
-      lighting: localStorage.getItem("lighting") || 'high',
+      lighting: parseInt(localStorage.getItem("lighting")) || 2,
       postProcessing: localStorage.getItem("postProcessing") || 'off',
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
       aa: localStorage.getItem("aa") || "on",
@@ -161,12 +161,12 @@ class Settings extends Component<any, any> {
             <div style={styles.even}>
               <h3 style={styles.h3 as any}>Lighting Quality</h3>
               <div style={styles.col}>
-                <select onChange={e=> {this.setState({lighting: e.target.value})}}
+                <select onChange={e=> {this.setState({lighting: parseInt(e.target.value)})}}
                         value={ this.state.lighting }
                         style={ styles.select }
                 >
-                  <option value="high">High (recommended)</option>
-                  <option value="low">Low (mobile devices)</option>
+                  <option value="2">High (recommended)</option>
+                  <option value="1">Low (mobile devices)</option>
                 </select>
               </div>
             </div>

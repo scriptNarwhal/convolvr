@@ -99,7 +99,9 @@ scWorker.checkStaticCollisions = ( voxel: any, position: number[] ) => {
 
 			ent.components.map( (entComp: any) => {
 				let boundingRadius = entComp.boundingRadius * 1.2 ||
-				    Math.max(entComp.attrs.geometry.size[0], entComp.attrs.geometry.size[2]) * 1.2
+				entComp.attrs.geometry.size 
+				? Math.max(entComp.attrs.geometry.size[0], entComp.attrs.geometry.size[2]) * 1.2
+				: 2;
 
 				if (!!entComp.attrs.floor) {
 					let rootPos = ent.position.map( (v: any) => v-ent.boundingRadius / 2.0 )
