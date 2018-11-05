@@ -45,6 +45,7 @@ export default class ScriptSystem {
         this.envComponents[env.join(",")] = component;
 
         const evalInComponent = (code: string, callback: (data: any) => any) => {
+            console.warn("eval in component", code, env);
             this.evaluate(code, env);
             getReturnValue = callback;
         };

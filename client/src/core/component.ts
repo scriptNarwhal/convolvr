@@ -48,8 +48,8 @@ export default class Component {
 
 
   constructor (data: DBComponent, entity: Entity, systems: any, config: any = false, parent?: Component | null) {
-      let quaternion = data.quaternion ? data.quaternion : false,
-          position = data.position ? data.position : [ 0, 0, 0 ],
+      let quaternion,
+          position,
           path = config && config.path ? config.path : [],
           attrs: Attributes,
           mesh = null,
@@ -70,13 +70,17 @@ export default class Component {
       if (data.class) {
         data = (systems.assets as AssetSystem).makeComponent(data.class, data); 
       }
+
+      data.components =  data.components || []
       attrs = data.attrs;
+      quaternion = data.quaternion ? data.quaternion : false;
+      position = data.position ? data.position : [ 0, 0, 0 ];
 
       this.entity = entity
       this.data = data
       this.attrs = attrs || {}
       this.state = {}
-      this.components = data.components || []
+      this.components = data.components
       this.compsByFaceIndex = []
       this.allComponents = []
       this.combinedComponents = []

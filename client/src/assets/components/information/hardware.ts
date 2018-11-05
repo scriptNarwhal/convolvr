@@ -5,7 +5,6 @@ export default class HardwareDevices {
     public static cpu = {
         id: -1,
         name: "cpu",
-        components: [{
             attrs: {
                 virtualMachine: {
                     program: [
@@ -24,16 +23,12 @@ export default class HardwareDevices {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
-        position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ],
         tags: ["information-hardware"]
     }
 
     public static ioController = {
         id: -1,
         name: "io-controller",
-        components: [{
             attrs: {
                 virtualDevice: {
                     type: "io-controller"
@@ -50,17 +45,13 @@ export default class HardwareDevices {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
-        position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ],
         tags: ["information-hardware"]
     }
     
     public static networkInterface =  {
         id: -1,
         name: "network-interface",
-        components: [{
-            attrs: {
+        attrs: {
                 virtualDevice: {
                     type: "network-interface"
                 },
@@ -76,16 +67,12 @@ export default class HardwareDevices {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
-        position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ],
         tags: ["information-hardware"]
     }
 
     public static displayAdapter =  {
         id: -1,
         name: "display-adapter",
-        components: [{
             attrs: {
                 virtualDevice: {
                     type: "display-adapter"
@@ -102,16 +89,12 @@ export default class HardwareDevices {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
-        position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ],
         tags: ["information-hardware"]
     };
 
     public static key =  {
         id: -1,
         name: "key",
-        components: [{
             attrs: {
                 /* tool ??? */
                 geometry: {
@@ -126,9 +109,6 @@ export default class HardwareDevices {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
-        position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ],
         tags: ["information-hardware"]
     }
 
@@ -161,7 +141,6 @@ export default class HardwareDevices {
     public static diskDrive = {
         id: -1,
         name: "disk-drive",
-        components: [{
             attrs: {
                 virtualDevice: {
                     type: "disk-drive"
@@ -178,16 +157,12 @@ export default class HardwareDevices {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
-        position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ],
         tags: ["information-hardware"]
     }
 
     public static display =  {
         id: -1,
         name: "display",
-        components: [{
             attrs: {
                 virtualDevice: {
                     type: "display"
@@ -204,16 +179,12 @@ export default class HardwareDevices {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
-        position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ],
         tags: ["information-hardware"]
     }
 
     public static serialCable = {
         id: -1,
         name: "serial-cable",
-        components: [{
             attrs: {
                 virtualDevice: {
                     type: "serial-cable"
@@ -230,16 +201,12 @@ export default class HardwareDevices {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
-        position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ],
         tags: ["information-hardware"]
     }
 
     public static terminalCase = {
         id: -1,
         name: "terminal-case",
-        components: [{
             attrs: {
                 geometry: {
                     shape: "box",
@@ -253,9 +220,6 @@ export default class HardwareDevices {
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
-        position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ],
         tags: ["information-hardware"]
     }
 

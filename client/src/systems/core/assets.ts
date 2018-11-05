@@ -341,12 +341,26 @@ export default class AssetSystem {
         }
     }
 
-    public makeComponent( name: string, data: any, config?: any) {
+    public makeComponent(name: string, data: any, config?: any) {
         let builtIn = this.componentsByName,
-            library = builtIn[ name ] != null ? builtIn : this.userComponentsByName
+            library = builtIn[ name ] != null ? builtIn : this.userComponentsByName;
 
         if ( data ) {
-            return { ...library[ name ], ...data }
+            const newComp = { ...library[ name ]};
+
+            newComp.attrs =  { ...newComp.attrs, ...data.attrs };
+            if (data.position) {
+                newComp.position = data.position;
+            }
+            if (data.quaternion) {
+                newComp.quaternion = data.quaternion;
+            }
+            if (newComp.components) {
+                if (data.components) {
+                    newComp.components = newComp.components.concat(data.components);
+                }
+            }
+            return newComp;
         } else {
             return { ...library[ name ] }
         }
