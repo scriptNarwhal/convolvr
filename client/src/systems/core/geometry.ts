@@ -80,7 +80,7 @@ export default class GeometrySystem implements System {
             break
             // define more mappings here..
           }
-          console.log(attr)
+
           if ( geometry.computeVertexNormals && faceNormals && (attr.faceNormals === true )) {
             geometry.computeVertexNormals()
           }
