@@ -1,6 +1,6 @@
-import Component from "../../core/component";
+import Component from "../../model/component";
 import Convolvr from "../../world/world";
-import { layout, LayoutAxis, LayoutOrientation, LayoutPlane } from "../../core/attribute";
+import { layout, LayoutAxis, LayoutOrientation, LayoutPlane } from "../../model/attribute";
 import { System } from "..";
 
 export default class LayoutSystem implements System {

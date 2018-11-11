@@ -1,12 +1,12 @@
 //@flow
 import Convolvr from '../../../world/world'
-import Component, { DBComponent } from '../../../core/component'
-import Entity from '../../../core/entity'
+import Component, { DBComponent } from '../../../model/component'
+import Entity from '../../../model/entity'
 // import * as THREE from 'three'
 import * as THREE from 'three';
 import { System } from '../..';
 import { Vector3 } from 'three';
-import { FactoryType, FactoryAttributeType } from '../../../core/attribute';
+import { FactoryType, FactoryAttributeType } from '../../../model/attribute';
 
 export type GenerateAttrParams = {
     component: Component,

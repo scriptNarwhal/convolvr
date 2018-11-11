@@ -1,5 +1,5 @@
-import Component from "../../../../core/component";
-import { DBEntity } from "../../../../core/entity";
+import Component from "../../../../model/component";
+import { DBEntity } from "../../../../model/entity";
 
 let block = {
     id: -1,

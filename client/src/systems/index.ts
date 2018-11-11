@@ -74,9 +74,9 @@ import VirtualMachineSystem from './logic/virtual-machine'
 import SkyboxSystem from './environment/skybox'
 
 import Convolvr from '../world/world'
-import Component from '../core/component';
-import Binding from '../core/binding';
-import { AttributeName } from '../core/attribute'
+import Component from '../model/component';
+import Binding from '../model/binding';
+import { AttributeName } from '../model/attribute'
 
 
 /** System Dependency

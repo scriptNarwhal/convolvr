@@ -15,7 +15,7 @@ import Convolvr from './world/world'
 import Systems from './systems/index'
 import { events } from './network/socket'
 import User from './world/user'
-import Entity from './core/entity'
+import Entity from './model/entity'
 
 let store:        any      = makeStore(routerReducer),
     socket:       any      = events,

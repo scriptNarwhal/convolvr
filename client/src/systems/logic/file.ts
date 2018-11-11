@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { API_SERVER } from '../../config'
-import Component from '../../core/component.js';
+import Component from '../../model/component.js';
 import Convolvr from '../../world/world'
 
 export default class FileSystem {

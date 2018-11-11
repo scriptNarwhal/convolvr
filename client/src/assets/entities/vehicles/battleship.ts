@@ -1,7 +1,7 @@
-import Entity from '../../../core/entity'
+import Entity from '../../../model/entity'
 import THREE from 'three';
 import AssetSystem from '../../../systems/core/assets';
-import { DBComponent } from '../../../core/component';
+import { DBComponent } from '../../../model/component';
 /* battleship.. multiple decks, turrets, multiple occupants, vehicle factory / bay, runway */
 
 let cursorAxis = new THREE.Vector3( 1, 0, 0 )

@@ -4,11 +4,12 @@ import {
 } from './material-init'
 import ProceduralMaterials from './material-procedural'
 import Convolvr from '../../../world/world';
-import Component from '../../../core/component';
+import Component from '../../../model/component';
 import AssetSystem from '../assets';
 
 import * as THREE from 'three';
 import { System } from '../..';
+import { material } from '../../../model/attribute';
 export default class MaterialSystem implements System {
 
   public world: Convolvr;
@@ -33,7 +34,7 @@ export default class MaterialSystem implements System {
         let materialSystem = this,
             mobile = this.world.mobile,
             attrs = component.attrs,
-            attr = attrs.material,
+            attr: material = attrs.material,
             mat: any = { color: attr.color || 0xffffff },
             assets = this.assets || this.world.systems.assets,
             renderer = (window as any).three.renderer,

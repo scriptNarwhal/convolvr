@@ -1,6 +1,6 @@
 import {send} from '../../network/socket'
 import Convolvr from '../../world/world';
-import Component from '../../core/component';
+import Component from '../../model/component';
 //WebRTC boilerplate stuff based off of https://github.com/dimircea/WebRTC
 
 export default class WebRTCSystem {

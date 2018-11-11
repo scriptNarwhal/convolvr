@@ -1,5 +1,5 @@
-import Entity from '../../../core/entity'
-import Component, { DBComponent } from '../../../core/component'
+import Entity from '../../../model/entity'
+import Component, { DBComponent } from '../../../model/component'
 import AssetSystem from '../../../systems/core/assets';
 import THREE from 'three';
 /* car.js / halo style, two front seats, one turret as back seat */

@@ -1,5 +1,5 @@
 import Convolvr from "./world/world";
-import Entity from "./core/entity";
+import Entity from "./model/entity";
 
 export default function initDemos(world: Convolvr, coords: number[], pos: any, altitude: number) {
     let scene = world.three.scene,

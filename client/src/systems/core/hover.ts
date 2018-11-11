@@ -1,5 +1,5 @@
 import Convolvr from "../../world/world";
-import Component from "../../core/component";
+import Component from "../../model/component";
 import { System } from "..";
 
 export default class HoverSystem implements System { // respond to hover pointer events / register callbacks

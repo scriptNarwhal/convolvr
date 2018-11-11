@@ -13,10 +13,11 @@ import {
 	isMobile,
 	GLOBAL_SPACE
 } from '../config'
+import { SpaceConfig } from '../model/space'
 import { send } from '../network/socket'
 import User from './user'
 import Avatar from '../assets/entities/avatars/avatar'
-import Entity from '../core/entity'
+import Entity from '../model/entity'
 import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
@@ -29,7 +30,7 @@ import {
 	compressVector4
 } from '../network/util'
 import UserInput from '../input/user-input'
-import Component from '../core/component';
+import Component from '../model/component';
 import { zeroZeroZero } from '../util';
 import { Camera, Light, SpotLight, PointLight, PerspectiveCamera, DirectionalLight } from 'three';
 
@@ -239,7 +240,7 @@ export default class Convolvr {
 		this.animate(this, 0, 0)
 	}
 
-	public initChatAndLoggedInUser( doLogin = false ) {
+	public initChatAndLoggedInUser(doLogin = false) {
 		this.initChatCallback();
 		if ( doLogin ) {
 			console.log("do login");
@@ -290,13 +291,19 @@ export default class Convolvr {
 	  callback && callback(avatar);
 	}
 
-	public init(config: any, callback: Function ) {
+	public init(config: SpaceConfig, callback: Function ) {
 		console.log("init world")
+		const sky = config.sky,
+			terrainColor = [config.terrain.red, config.terrain.green, config.terrain.blue];
+
 		let coords: any    = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
-			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.4 ),
-			sunLight       = this.sunLight || this.settings.shadows > 0 
-				? new THREE.DirectionalLight( 0xffffff, Math.min(1.0, config.light.intensity) ) 
-				: new THREE.PointLight(0xffffff, config.light.intensity, 10000000),
+			skyLight 	   = this.skyLight 
+				|| new THREE.HemisphereLight( 
+					new THREE.Color().fromArray([sky.red, sky.green, sky.blue]), 
+					new THREE.Color().fromArray(terrainColor), config.light.intensity * 0.6 ) /* new THREE.DirectionalLight( config.light.color, 0.4 )*/, 
+			sunLight       = this.sunLight || //this.settings.shadows > 0 
+				 new THREE.DirectionalLight( 0xfff0e6, Math.min(1.0, config.light.intensity) ),
+				// : new THREE.PointLight(0xffffff, config.light.intensity, 10000000),
 			three          = this.three,
 			camera 		   = three.camera,
 			rotateSky      = false,
@@ -308,10 +315,9 @@ export default class Convolvr {
 			skySize 	   = 2800+((this.settings.viewDistance+3.5)*1.4)*140,
 			oldSkyMaterial = {};
 
-		console.log("init light distance", config.light.distance)
 		this.skyLight = skyLight
 		this.sunLight = sunLight
-		this.skyLight.color.set( config.light.color )
+		// this.skyLight.color.set( config.light.color )
 		this.sunLight.intensity = config.light.intensity 
 
 		this.config = config; console.info("Space config: ", config)

@@ -1,7 +1,7 @@
 import axios, { AxiosPromise } from 'axios';
 import { API_SERVER } from '../../config'
 
-import Entity, { DBEntity } from '../../core/entity'
+import Entity, { DBEntity } from '../../model/entity'
 import BuiltinProps from '../../assets/attributes'
 import avatar from '../../assets/entities/avatars/avatar'
 import hero from '../../assets/entities/avatars/hero'
@@ -45,10 +45,12 @@ import StatementPallet from '../../assets/entities/information/software/ecs/stat
 import battleship from '../../assets/entities/vehicles/battleship'
 import car from '../../assets/entities/vehicles/car'
 import Convolvr from '../../world/world.js';
-import Component, { DBComponent } from '../../core/component.js';
+import Component, { DBComponent } from '../../model/component.js';
 
 import * as THREE from 'three';
 import { Flags, AnyObject } from '../../util';
+import ObjPluginSystem from '../importers/obj-plugin';
+import FBXPluginSystem from '../importers/fbx-plugin';
 
 export default class AssetSystem {
 
@@ -177,8 +179,8 @@ export default class AssetSystem {
 
     public loadModel(asset: string) { // use obj and fbx systems
         let systems = this.world.systems,
-            obj = systems.obj,
-            fbx = systems.fbx
+            obj: ObjPluginSystem = systems.obj,
+            fbx: FBXPluginSystem = systems.fbx
 
         // implement
         // check format from file extension

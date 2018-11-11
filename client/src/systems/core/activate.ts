@@ -1,5 +1,5 @@
 import Convolvr from "../../world/world";
-import Component from "../../core/component";
+import Component from "../../model/component";
 import { System } from "..";
 // ActivateSystem exposes behaviors of components that require a trigger to user interaction
 export default class ActivateSystem implements System { // respond to activate / click pointer events & register callbacks

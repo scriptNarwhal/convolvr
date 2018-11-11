@@ -1,4 +1,4 @@
-import { DBEntity } from "../../../../core/entity";
+import { DBEntity } from "../../../../model/entity";
 
 let terminal = {
     id: -1,

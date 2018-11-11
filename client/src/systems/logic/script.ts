@@ -1,7 +1,8 @@
 import Convolvr from '../../world/world'
-import Component, { DBComponent } from '../../core/component'
-import { DBEntity } from '../../core/entity';
-import { script } from '../../core/attribute';
+import Component, { DBComponent } from '../../model/component'
+import { DBEntity } from '../../model/entity';
+import { script } from '../../model/attribute';
+
 
 export default class ScriptSystem { 
     

@@ -27,6 +27,7 @@ enum WorkerUpdateMode {
 }
 
 import * as THREE from 'three';
+import { Vector3 } from 'three';
 
 export default class Entity {
 
@@ -537,7 +538,7 @@ export default class Entity {
     //systems.oimo.worker.postMessage( message )
   }
 
-  public getClosestComponent( position: any, recursive = true ) {
+  public getClosestComponent( position: Vector3, recursive = true ) {
     let compPos = this.compPos,
         entMesh = this.mesh,
         worldCompPos = null,

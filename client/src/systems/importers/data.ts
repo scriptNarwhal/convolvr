@@ -1,6 +1,6 @@
 /** TODO: implement */
 import { System } from '../index'
-import Component from '../../core/component';
+import Component from '../../model/component';
 import Convolvr from '../../world/world';
 export default class ImportDataSystem implements System {
     world: Convolvr

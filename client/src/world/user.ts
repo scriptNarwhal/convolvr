@@ -1,4 +1,4 @@
-import Entity from '../core/entity'
+import Entity from '../model/entity'
 
 import * as THREE from 'three';
 

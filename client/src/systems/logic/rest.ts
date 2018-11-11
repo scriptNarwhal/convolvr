@@ -1,7 +1,7 @@
 import axios from 'axios'
-import Component from '../../core/component.js';
+import Component from '../../model/component.js';
 import Convolvr from '../../world/world'
-import { rest } from '../../core/attribute.js';
+import { rest } from '../../model/attribute.js';
 import { System } from '../index.js';
 
 export default class RESTSystem implements System {

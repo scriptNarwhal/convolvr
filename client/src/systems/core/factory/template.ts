@@ -1,6 +1,6 @@
 import Convolvr from '../../../world/world'
-import Component, { DBComponent } from '../../../core/component'
-import Entity from '../../../core/entity'
+import Component, { DBComponent } from '../../../model/component'
+import Entity from '../../../model/entity'
 import LayoutSystem from '../../ui/layout';
 
 export default class TemplateSystem {

@@ -1,11 +1,11 @@
 import { events } from '../../network/socket'
 import Convolvr from '../../world/world';
-import Entity from '../../core/entity';
+import Entity from '../../model/entity';
 import {
     getChatHistory,
     sendMessage
   } from '../../2d-ui/redux/actions/message-actions'
-import Component from '../../core/component';
+import Component from '../../model/component';
 import { System } from '..';
 
 export default class ChatSystem implements System {

@@ -1,5 +1,5 @@
 import Tool from '../../../../world/tool'
-import Entity from '../../../../core/entity'
+import Entity from '../../../../model/entity'
 import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
 export default class FileTool extends Tool {

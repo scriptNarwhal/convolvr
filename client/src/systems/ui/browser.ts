@@ -1,10 +1,10 @@
 import Convolvr from "../../world/world";
-import Component from "../../core/component";
+import Component from "../../model/component";
 import { System } from "..";
 import LayoutSystem from "./layout";
 import TextSystem from "./text";
 import ImportDataSystem from '../importers/data'
-import { browser } from "../../core/attribute";
+import { browser } from "../../model/attribute";
 
 export default class BrowserSystem implements System {
     public world: Convolvr

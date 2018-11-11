@@ -1,4 +1,4 @@
-import  { DBComponent } from "../../../core/component";
+import  { DBComponent } from "../../../model/component";
 
 export default class HardwareDevices {
     
@@ -8,7 +8,8 @@ export default class HardwareDevices {
             attrs: {
                 virtualMachine: {
                     program: [
-                        'print("hello machine! =)")'
+                        'let foo = 1234',
+                        'print(foo + 5)'
                     ]
                 },
                 geometry: {

@@ -6,6 +6,7 @@ import Property from "./property";
 import { Attributes, AttributeName } from './attribute';
 import { AnyObject } from '../util';
 import AssetSystem from '../systems/core/assets';
+import { Vector3 } from 'three';
 
 export type NameOrId = string|number;
 export type EntityPath = [string, NameOrId];
@@ -228,7 +229,7 @@ export default class Component {
     return false;
   }
 
-  public getClosestComponent(position: number[], recursive = false): Component {
+  public getClosestComponent(position: Vector3, recursive = false): Component {
     let compPos = this._compPos, 
         entMesh = this.mesh,
         parentMesh = this.parent ? this.parent.mesh : false,

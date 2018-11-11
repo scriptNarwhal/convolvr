@@ -220,7 +220,7 @@ export interface magic extends Attribute {}
 export interface material extends Attribute {
     color?: number,
     map?: string,
-    repeat?: [number, number],
+    repeat?: [string, number, number],
     specularMap?: string,
     alphaMap?: string,
     bumpMap?: string,

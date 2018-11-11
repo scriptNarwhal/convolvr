@@ -97,21 +97,25 @@ scWorker.checkStaticCollisions = ( voxel: any, position: number[] ) => {
 			ent.position[2] - entRadius/2.0], (entRadius * 1.6 || 3) + 2.5
 		)) {
 
-			ent.components.map( (entComp: any) => {
+			for (const entComp of ent.components) {
 				let boundingRadius = entComp.boundingRadius * 1.2 ||
-				entComp.attrs.geometry && entComp.attrs.geometry.size 
-				? Math.max(entComp.attrs.geometry.size[0], entComp.attrs.geometry.size[2]) * 1.2
-				: 2;
+					entComp.attrs.geometry && entComp.attrs.geometry.size 
+					? Math.max(entComp.attrs.geometry.size[0], entComp.attrs.geometry.size[2]) * 1.2
+					: 2;
 
 				if (!!entComp.attrs.floor) {
-					let rootPos = ent.position.map( (v: any) => v-ent.boundingRadius / 2.0 )
+					const rootPos = ent.position.map( (v: any) => v-ent.boundingRadius / 2.0 ),
+						size = entComp.attrs.geometry.size,
+						rotation = entComp.quaternion[3],
+						relativePosition = [rootPos[0] + entComp.position[0]-(rotation == 1 ? size[0]/2.0 : 0), 0, rootPos[2] + entComp.position[2]];
 					if (distance2dCompare(
 						position,
-						[rootPos[0] + entComp.position[0], 0, rootPos[2] + entComp.position[2]],
-						boundingRadius * 1.7
+						relativePosition,
+						boundingRadius * 1.2
 					)) {
-						let verticalOffset = (position[1] + 2 - (entComp.position[1] + ent.position[1] )) //  + entComp.geometry ? entComp.geometry.size[1] : 1
-						if (verticalOffset > 0 && verticalOffset < 5) {
+						// if (boxCollision(relativePosition[0], relativePosition[2], size[0], size[2], position[0], position[2])) {
+							const verticalOffset = (position[1] + 2 - (entComp.position[1] + ent.position[1] )); //  + entComp.geometry ? entComp.geometry.size[1] : 1
+						if (verticalOffset > 0 && verticalOffset < 4) {
 							scWorker.postMessage(JSON.stringify({
 								command: "floor collision", data: {
 									position: entComp.position,
@@ -120,6 +124,7 @@ scWorker.checkStaticCollisions = ( voxel: any, position: number[] ) => {
 							}))
 							collision = true
 						}
+						// }
 					}
 				} else if (distance3dCompare(
 					position,
@@ -130,11 +135,20 @@ scWorker.checkStaticCollisions = ( voxel: any, position: number[] ) => {
 					scWorker.postMessage(JSON.stringify({ command: "entity-user collision", data: { position: entComp.position } }))
 				}
 
-			})
+			}
 		}
 		e -= 1
 	}
 	return collision
+}
+
+function boxCollision(x: number, z: number, w: number, l: number, cx: number, cz: number) {
+	const box = [x+w, z+l];
+
+	if (cx < x || cx > box[0] || cz < z || cz > box[1]) {
+		return false;
+	} 
+	return true;
 }
 
 scWorker.onmessage = (event: any) => {

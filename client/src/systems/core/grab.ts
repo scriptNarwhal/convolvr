@@ -1,5 +1,5 @@
 import Convolvr from "../../world/world";
-import Component from "../../core/component";
+import Component from "../../model/component";
 import { System } from "..";
 
 export default class GrabSystem implements System { // respond to grab / drag events / register callbacks

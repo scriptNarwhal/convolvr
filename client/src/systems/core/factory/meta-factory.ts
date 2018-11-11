@@ -1,7 +1,7 @@
 import Convolvr from '../../../world/world'
-import Component, { DBComponent } from '../../../core/component'
-import Entity, { DBEntity } from '../../../core/entity'
-import { FactoryType, FactoryAttributeType } from '../../../core/attribute';
+import Component, { DBComponent } from '../../../model/component'
+import Entity, { DBEntity } from '../../../model/entity'
+import { FactoryType, FactoryAttributeType } from '../../../model/attribute';
 import { AnyObject } from '../../../util';
 
 export default class MetaFactorySystem {

@@ -1,5 +1,5 @@
-import Entity from '../../../core/entity'
-import Component from '../../../core/component'
+import Entity from '../../../model/entity'
+import Component from '../../../model/component'
 import chatText from '../../components/chat-text'
 
 import * as THREE from 'three';

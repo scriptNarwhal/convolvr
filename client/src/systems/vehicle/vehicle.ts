@@ -1,7 +1,7 @@
-import Component from "../../core/component";
+import Component from "../../model/component";
 import Convolvr from "../../world/world";
-import Entity from "../../core/entity";
-import { vehicle, control } from "../../core/attribute";
+import Entity from "../../model/entity";
+import { vehicle, control } from "../../model/attribute";
 
 export default class VehicleSystem {
 

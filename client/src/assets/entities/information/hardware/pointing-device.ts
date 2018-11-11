@@ -1,5 +1,5 @@
-import  { DBComponent } from "../../../../core/component";
-import { DBEntity } from "../../../../core/entity";
+import  { DBComponent } from "../../../../model/component";
+import { DBEntity } from "../../../../model/entity";
 
 let pointingDevice = {
     id: -1,

@@ -1,7 +1,7 @@
 import Convolvr from '../../../world/world'
-import Component from '../../../core/component'
-import Entity from '../../../core/entity'
-import Voxel from '../../../core/voxel'
+import Component from '../../../model/component'
+import Entity from '../../../model/entity'
+import Voxel from '../../../model/voxel'
 
 
 export default class OimoPluginSystem {

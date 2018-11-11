@@ -1,6 +1,6 @@
 // not using flow yet..
 import Convolvr from '../../world/world'
-import Component from '../../core/component'
+import Component from '../../model/component'
 import * as THREE from 'three';
 import { System } from '..';
 

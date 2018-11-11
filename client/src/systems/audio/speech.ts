@@ -1,6 +1,6 @@
 import Convolvr from "../../world/world";
-import Component from "../../core/component";
-import { speech } from "../../core/attribute";
+import Component from "../../model/component";
+import { speech } from "../../model/attribute";
 
 export default class SpeechSystem {
 

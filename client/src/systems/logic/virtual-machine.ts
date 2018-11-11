@@ -1,7 +1,7 @@
 
-import Component from '../../core/component.js';
+import Component from '../../model/component.js';
 import Convolvr from '../../world/world'
-import { virtualMachine } from '../../core/attribute.js';
+import { virtualMachine } from '../../model/attribute.js';
 import { SystemDependency, System } from '../index.js';
 import ScriptSystem from './script.js';
 

@@ -1,8 +1,8 @@
-import Component from "../../core/component";
+import Component from "../../model/component";
 import Convolvr from "../../world/world";
 import { SystemDependency } from "..";
 import ScriptSystem from "../logic/script";
-import { npc } from "../../core/attribute";
+import { npc } from "../../model/attribute";
 
 export default class NPCSystem { // for client side aspects of npcs
 

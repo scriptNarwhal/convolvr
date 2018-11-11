@@ -1,5 +1,5 @@
 import AssetSystem from "../../../../systems/core/assets";
-import { DBComponent } from "../../../../core/component";
+import { DBComponent } from "../../../../model/component";
 
 let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
 

@@ -1,4 +1,4 @@
-import Component from '../../core/component'
+import Component from '../../model/component'
 import DisplayAdapterDevice from './virtual-devices/display-adapter'
 import IOControllerDevice from './virtual-devices/io-controller'
 import Keyboard from './virtual-devices/keyboard'

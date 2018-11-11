@@ -1,7 +1,7 @@
 import { animate } from '../../world/render'
 import { GRID_SIZE } from '../../config'
 import Avatar from '../../assets/entities/avatars/avatar'
-import Entity from '../../core/entity'
+import Entity from '../../model/entity'
 import Convolvr from '../../world/world';
 import { Component } from 'react';
 

@@ -1,8 +1,8 @@
 import Convolvr from '../../world/world'
-import Component from '../../core/component'
+import Component from '../../model/component'
 // import { THREE } from 'three'
 import * as THREE from 'three';
-import { audio } from '../../core/attribute';
+import { audio } from '../../model/attribute';
 export default class AudioSystem {
 
     world: Convolvr

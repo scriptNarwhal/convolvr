@@ -1,4 +1,4 @@
-import { DBComponent } from "../../../core/component";
+import { DBComponent } from "../../../model/component";
 
 let previewBox = {
             id: 0,

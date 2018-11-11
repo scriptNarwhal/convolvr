@@ -1,7 +1,7 @@
 import { GRID_SIZE } from '../../config'
 import Convolvr from '../../world/world';
-import Component from '../../core/component';
-import Entity from '../../core/entity';
+import Component from '../../model/component';
+import Entity from '../../model/entity';
 import * as THREE from 'three';
 
 let handDirection = new THREE.Vector3(0, 0, 0),

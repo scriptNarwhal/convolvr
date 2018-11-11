@@ -1,4 +1,4 @@
-import Component from '../../core/component'
+import Component from '../../model/component'
 import Convolvr from '../../world/world'
 import { Vector3 } from 'three';
 export default class HandSystem {

@@ -1,5 +1,5 @@
-import Entity from '../../core/entity'
-import Component, { DBComponent } from '../../core/component'
+import Entity from '../../model/entity'
+import Component, { DBComponent } from '../../model/component'
 import { 
     GLOBAL_SPACE,
     GRID_SIZE 
