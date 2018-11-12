@@ -302,7 +302,7 @@ export default class Convolvr {
 					new THREE.Color().fromArray([sky.red, sky.green, sky.blue]), 
 					new THREE.Color().fromArray(terrainColor), config.light.intensity * 0.6 ) /* new THREE.DirectionalLight( config.light.color, 0.4 )*/, 
 			sunLight       = this.sunLight || //this.settings.shadows > 0 
-				 new THREE.DirectionalLight( 0xfff0e6, Math.min(1.0, config.light.intensity) ),
+				 new THREE.DirectionalLight( 0xffffff, Math.min(1.0, config.light.intensity) ),
 				// : new THREE.PointLight(0xffffff, config.light.intensity, 10000000),
 			three          = this.three,
 			camera 		   = three.camera,
@@ -322,13 +322,9 @@ export default class Convolvr {
 
 		this.config = config; console.info("Space config: ", config)
 		this.terrain.initTerrain(config.terrain)
-		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 1.5)
+		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 0.5)
 		this.ambientLight.color.set( config.light.ambientColor )
-		Array(this.ambientLight, this.sunLight, this.skyLight).forEach( light => {
-			if ( !!!light.parent ) {
-				three.scene.add( light );
-			}
-		});
+		
 		if ( this.settings.shadows > 0 && sunLight.castShadow == false ) {
 			this.initShadows(sunLight);
 		}
@@ -347,7 +343,11 @@ export default class Convolvr {
 		}
 		console.log("init create skybox")
 		this.skyboxMesh = this.skybox.createSkybox( skySize, oldSkyMaterial )
-
+		Array(this.ambientLight, this.sunLight, this.skyLight).forEach( light => {
+			if ( !!!light.parent ) {
+				this.skyboxMesh.add( light );
+			}
+		});
 		let deferSpaceLoading = false,
 			world = this,
 			rebuildSpace = () => {
@@ -550,7 +550,7 @@ export default class Convolvr {
 					  console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
 					  three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
 					
-					}, 0.09)
+					}, 400)
 				  }
 				  three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
 					vrAnimate( three.world, three.vrDisplay, Date.now(), [0,0,0], 0)

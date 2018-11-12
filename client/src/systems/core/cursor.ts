@@ -64,7 +64,7 @@ export default class CursorSystem {
             while ( i > -1 ) {
                 obj = intersections[ i ];
                 entity = obj.object.userData.entity;
-                if (entity && (entity.componentsByAttr.terrain || entity.hasTag("no-raycast"))) {
+                if (entity &&  entity.hasTag("no-raycast")) { // (entity.componentsByAttr.terrain && entity.allComponents[0].components.length == 0 ||
                     i -= 1
                     continue
                 }
