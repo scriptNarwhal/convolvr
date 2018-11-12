@@ -10,4 +10,5 @@ gulp browserify-worker
 if [ -d "../../convolvr/client/web/js/workers/ecs-bundle.js" ]; then rm ../../convolvr/client/web/js/workers/ecs-bundle.js; fi
 cp ./dist/browserify/worker-bundle.js ../../convolvr/client/web/js/workers/ecs-bundle.js
 cd ../;
-rm -Rf $ECS_DIR;
+cd ../;
+rm -rf $ECS_DIR;

@@ -1,8 +1,26 @@
 import Convolvr from '../../world/world'
-import Component, { DBComponent } from '../../model/component'
+import Component, { DBComponent, EntityPath } from '../../model/component'
 import { DBEntity } from '../../model/entity';
 import { script } from '../../model/attribute';
+import { AnyObject } from '../../util';
 
+type ECSMessage = {
+    command: "return value" | "native call" | "internal error",
+    path: string
+    data: AnyObject | ECSNativeCall
+}
+
+type ECSNativeCall = {
+    method: string,
+    args: any[]
+    env?: any
+}
+
+export type ScriptState = {
+    eval: (code: string, callback: (data: any) => void) => void,
+    handleReturnValue: (value: any) => void,
+    env: [string, string, number]
+}
 
 export default class ScriptSystem { 
     
@@ -15,20 +33,20 @@ export default class ScriptSystem {
         this.world = world
         this.worker = worker;
         this.worker.onmessage = (message: MessageEvent) => {
-            let msg = JSON.parse(message.data),
+            let msg: ECSMessage = JSON.parse(message.data),
                 data = msg.data,
-                env = msg.env,
+                env = msg.path,
                 component = this.envComponents[env];
-            console.log("component script env: ", env);
-            console.log("escript component: ", component);
+
             switch(msg.command) {
                 case "return value":
-                    console.log("script return value")
-                    component.state.script.getReturnValue();
+                    if (component && component.state) {
+                        component.state.script.handleReturnValue(data);
+                    }
                 break;
                 case "native call":
                     console.log("script native call")
-                    this.nativeCall(component, data);
+                    this.nativeCall(component, data  as ECSNativeCall);
                 break;
                 case "internal error":
                     this.internalError(data)
@@ -37,19 +55,18 @@ export default class ScriptSystem {
         }
     }
 
-    init (component: Component) {
+    init (component: Component): ScriptState {
         let attr: script = component.attrs.script,
             env = this.getComponentScriptEnv(component),
-            getReturnValue = {};
-        console.log("init script component")
-        console.log("---------------------")
+            handleReturnValue = (data: any) => {};
+
         this.envComponents[env.join(",")] = component;
 
-        const evalInComponent = (code: string, callback: (data: any) => any) => {
+        const evalInComponent = (code: string, callback: (data: any) => void) => {
             console.warn("eval in component", code, env);
             this.evaluate(code, env);
 
-            getReturnValue = callback;
+            handleReturnValue = callback;
         };
 
         if (attr.autorun !== false) {
@@ -72,7 +89,7 @@ export default class ScriptSystem {
 
         return {
             eval: evalInComponent,
-            getReturnValue,
+            handleReturnValue,
             env
         }
     }
@@ -136,12 +153,12 @@ export default class ScriptSystem {
         return [component.entity.voxel.join("."), component.entity.id, component.index];
     }
 
-    private nativeCall(component: Component, data: {[_:string]: any}) { //being lazy here.. // TODO: there should be a type for worker commands
+    private nativeCall(component: Component, data: ECSNativeCall) {
         switch(data.method) {
             case "component.setPosition":
-                component.mesh.position.set(data.position); break;
+                component.mesh.position.set(data.args[0]); break;
             case "component.setRotation":
-                component.mesh.rotation.set(data.rotation); break;
+                component.mesh.rotation.set(data.args[0]); break;
             case "component.setAttrs":
                 break;
             case "component.setProps":
@@ -150,24 +167,27 @@ export default class ScriptSystem {
             case "component.setState":
             break;
             case "component.addComponent":
-                component.components.push(data.data)
+                component.components.push(data.args[0])
                 component.entity.init()
             break;
             case "component.removeComponent":
-                component.components.splice(data.removeIndex, 1)
+                component.components.splice(data.args[0], 1)
                 component.entity.init()
             break;
             case "entity.setPosition":
-                component.entity.update(data.position); break;
+                component.entity.update(data.args[0]); break;
             case "entity.setRotation":
-                component.entity.update(null, data.rotation); break;
+                component.entity.update(null, data.args[0]); break;
             case "entity.addComponent":
-                component.entity.components.push(data.data)
+                component.entity.components.push(data.args[0])
                 component.entity.init()
             break;
             case "entity.removeComponent":
-                component.entity.components.splice(data.removeIndex, 1)
+                component.entity.components.splice(data.args[0], 1)
                 component.entity.init()
+            break;
+            case "print":
+                console.log("printing from ecs: ", data.args[0])
             break;
         }
     }
