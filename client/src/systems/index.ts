@@ -328,6 +328,12 @@ export default class Systems {
         return mesh;
 	}
 
+	// need something here to register a component to one system
+	extendComponent(component: Component, system: AttributeName, data = {}) {
+		component.attrs[system] = data;
+		component.state[system] = ((this as any)[system] as System).init(component);
+	}
+
 	injectSubSystemDependencies(subSystems: { [key: string]: System }): void {
 		for (const system in subSystems) {
 			this.injectDependencies(subSystems[system]);

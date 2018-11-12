@@ -2,16 +2,18 @@
 import Component from '../../model/component.js';
 import Convolvr from '../../world/world'
 import { virtualMachine } from '../../model/attribute.js';
-import { SystemDependency, System } from '../index.js';
+import Systems, { SystemDependency, System } from '../index.js';
 import ScriptSystem from './script.js';
 
 export default class VirtualMachine implements System {
     world: Convolvr
     dependencies: SystemDependency[] = [["script"]]
     private script: ScriptSystem
+    private systems: Systems;
 
     constructor(world: Convolvr) {
         this.world = world
+        this.systems = world.systems;
     }
 
     init(component: Component) {
@@ -19,13 +21,14 @@ export default class VirtualMachine implements System {
         console.log("Power on self test");
         const attr: virtualMachine = component.attrs.virtualMachine;
 
-        if (attr.os) {
-
-        }
+        if (attr.os) { }
 
         if (attr.program) {
             this.script.evaluateForComponent(component, attr.program.join(";"));
         }
+
+        // need to intialize other systems here
+        this.systems.extendComponent(component, "script", {});
 
         return {
             hardware,
