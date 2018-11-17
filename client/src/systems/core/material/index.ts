@@ -12,6 +12,7 @@ import { System } from '../..';
 import { material } from '../../../model/attribute';
 import { Texture } from 'three';
 import { AnyObject } from '../../../util';
+
 export default class MaterialSystem implements System {
 
   public world: Convolvr;

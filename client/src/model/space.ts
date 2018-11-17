@@ -30,7 +30,9 @@ export type Sky = {
 	blue:        number  
 	layers:      Layer[] 
 	skybox:      string[] 
-	photosphere: string   
+	photosphere: string 
+	vertexShader?: string // absolute url on convolvr host /data/user/foo/bar.glsl
+	fragmentShader?: string  // absolute url on convolvr host /data/user/foo/bar.glsl
 }
 
 export type Layer = {

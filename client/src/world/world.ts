@@ -56,7 +56,7 @@ export default class Convolvr {
 	public socketHandlers: any
 	public userInput:    UserInput = new UserInput(null);
 	public settings: 	 Settings
-	public config: 		 any
+	public config: 		 SpaceConfig
 	public windowFocus:  boolean
 	public willRender:   boolean
 	public name: 	     string
@@ -132,7 +132,7 @@ export default class Convolvr {
 
 		this.postProcessing = postProcessing
 		this.socket = socket
-		this.config = false
+		this.config = null
 		this.windowFocus = true
 		this.name = ""
 		this.userName = "world"

@@ -2,6 +2,7 @@ import Convolvr from "../../world/world";
 import Component from "../../model/component";
 
 import * as THREE from 'three';
+import { Mesh } from "three";
 
 export default class SkyboxSystem {
 
@@ -27,10 +28,14 @@ export default class SkyboxSystem {
     createSkybox(skySize: number, oldSkyMaterial: any, cylinderMode = false) {
         let skybox = null
 
+        if (!oldSkyMaterial) {
+
+        }
+
         if ( cylinderMode ) {
-            skybox = new THREE.Mesh(new THREE.CylinderGeometry(2800+skySize / 2, skySize / 2, skySize, 24), oldSkyMaterial)
+            skybox = new THREE.Mesh(new THREE.CylinderGeometry(2800+skySize / 2, skySize / 2, skySize, 24), oldSkyMaterial);
         } else {
-            skybox = new THREE.Mesh(new THREE.OctahedronGeometry(2800+skySize, 4), oldSkyMaterial)
+            skybox = new THREE.Mesh(new THREE.OctahedronGeometry(2800+skySize, 4), oldSkyMaterial);
         }
 
         let sunMesh = new THREE.Mesh(
@@ -50,7 +55,7 @@ export default class SkyboxSystem {
 		}
     }
 
-    loadTexturedSky(config: any, mesh: any, skySize: number, callback: Function) {
+    loadTexturedSky(config: any, mesh: Mesh, skySize: number, callback: Function) {
         let world = this.world,
             systems = world.systems
 
@@ -67,7 +72,7 @@ export default class SkyboxSystem {
             image = material.map.image
             ratio = image.naturalWidth / image.naturalHeight
             if (!!config && !!config.photosphere && ratio > 2.2 || ratio < 1.9 ) {
-                oldMaterial = world.skyBoxMesh.material
+                oldMaterial =  world.skyBoxMesh ? world.skyBoxMesh.material : null;
                 (window as any).three.scene.remove(world.skyboxMesh)
                 if (ratio < 2) {
                     material.map.setRepeat
@@ -80,13 +85,17 @@ export default class SkyboxSystem {
         })
     }
 
-    loadShaderSky(config: any, oldConfig: any, mesh: any, callback: Function) {
+    loadShaderSky(config: any, oldConfig: any, mesh: Mesh, callback: Function) {
         let systems = this.world.systems,
             starMatProp = systems.assets.getMaterialProp("stars"),
             starSkyTexture = systems.material.procedural.generateTexture(starMatProp),
             world = this.world
 
-        systems.assets.loadShaders("/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl", (vert: any, frag: any) => {
+        const shaderURLs = world.config.sky['vertexShader'] 
+            ? [world.config.sky.vertexShader, world.config.sky.fragmentShader] 
+            : ["/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl"];
+
+        systems.assets.loadShaders(shaderURLs[0], shaderURLs[1], (vert: any, frag: any) => {
             let skyMaterial = new THREE.ShaderMaterial({
                 side: 1,
                 fog: false,

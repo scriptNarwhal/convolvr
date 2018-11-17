@@ -54,6 +54,12 @@ export default class VirtualMachine implements System {
          * keyboard
          * network-interface
          */
+
+         // check child components
+
+         // check parent components
+
+         
     }
 
     private getVirtualDevices (component: Component) {
