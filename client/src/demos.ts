@@ -50,7 +50,6 @@ export default function initDemos(world: Convolvr, coords: number[], pos: any, a
     world.help = helpScreen;
 }
 
-
 export const DemoProgram = [
     "let colors = [' ', '`', '.', ',', '-', '+', 'x', '=', 'L', 'X', 'H', '$', '#', '@']",
     "let size = [58,14]",

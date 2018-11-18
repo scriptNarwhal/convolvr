@@ -11,8 +11,8 @@ export default class HardwareDevices {
                     program: [
                         "print('Convolvr OS    v0.1')",
                         "print('-------------------')",
-                        "print('Power on self test:')",
-                        ...DemoProgram
+                        "print('Power on self test:')"
+                        // ...DemoProgram
                     ]
                 },
                 geometry: {
