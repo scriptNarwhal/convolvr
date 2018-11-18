@@ -137,8 +137,6 @@ export default class TextSystem implements System {
             color        = attr.color,
             background   = attr.background,
             textTexture  = state.textTexture,
-            textMaterial = null,
-            textCanvas   = state.textCanvas,
             canvasSize   = state.canvasSize,
             context      = state.context,
             config       = state.config;
@@ -148,8 +146,7 @@ export default class TextSystem implements System {
     }
 
    public renderText(context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: any) {
-        let textLine = '',
-            label = config.label,
+        let label = config.label,
             fontSize = (config.fontSize > 0 ? config.fontSize : (label ? 58 : 39)),
             lineHeight = fontSize*1.35,
             textRenderState: any = {
@@ -230,7 +227,7 @@ export default class TextSystem implements System {
         let xSize = textState.canvasSize[0],
             lineHeight = textState.fontSize,
             height = 960-(1 + (lines-l)*lineHeight),
-            toggleCodeBlock = line.indexOf('```') > -1;
+            toggleCodeBlock = line.indexOf && line.indexOf('```') > -1;
           
         if ( line[0] == '#' ) { // markdown heading
             context.fillStyle = '#ffffff'

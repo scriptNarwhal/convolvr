@@ -80,6 +80,26 @@ export default class EntityTool extends Tool  {
                     }
                   },
                   {
+                    title: "Script Statements",
+                    color: 0x07ff00,
+                    content: {
+                      attrs: {
+                        metaFactory: { // generates factory for each item in dataSource
+                          type: "entity", 
+                          dataSource: this.world.systems.assets.entities,
+                          filter: {
+                            tags: ["ecs-statement"]
+                          }
+                        },
+                        layout: {
+                          type: "grid",
+                          mode: "factory", // child components will ignore layout
+                          columns: 3
+                        }
+                      }
+                    }
+                  },
+                  {
                     title: "Computer Hardware",
                     color: 0x07ff00,
                     content: {

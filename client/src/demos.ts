@@ -49,3 +49,23 @@ export default function initDemos(world: Convolvr, coords: number[], pos: any, a
     helpScreen.update( [ pos.x+4, altitude + 21, pos.z+10 ] );
     world.help = helpScreen;
 }
+
+
+export const DemoProgram = [
+    "let colors = [' ', '`', '.', ',', '-', '+', 'x', '=', 'L', 'X', 'H', '$', '#', '@']",
+    "let size = [58,14]",
+    "for (y, size[1]) {" +
+    "    let s = '-'" +
+    "    let idx = 0" +
+    "    for (x, size[0]-1) {" + 
+    "        if ((x/2+y/2) % 10 <5) {" +
+    "            idx = (x/1+y)%4" +
+    "        }",
+    "        if ((x/2-y/2)% 10 <5) {" +
+    "            idx = 2+(x*y)%8" +
+    "        }",
+    "        s = s + colors[idx];" + 
+    "    }" +
+    "    print(s)" + 
+    "}"
+]

@@ -18,12 +18,9 @@ export default class VirtualMachine implements System {
 
     init(component: Component) {
         let hardware = this.detectHardware(component);
-        console.log("Power on self test");
+
         const attr: virtualMachine = component.attrs.virtualMachine;
 
-        // this.script.registerComponent(component);
-        
-        // need to intialize other systems here
         this.systems.extendComponent(component, "script", {});
 
         if (attr.os) { }
@@ -31,7 +28,6 @@ export default class VirtualMachine implements System {
         if (attr.program) {
             this.script.evaluateForComponent(component, attr.program.join(";"));
         }
-
 
         return {
             hardware,
@@ -45,7 +41,6 @@ export default class VirtualMachine implements System {
                 return this.removeVirtualDevice(component, id)
             }
         }
-
     }
 
     private detectHardware(component: Component) {

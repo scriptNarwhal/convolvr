@@ -7,7 +7,8 @@ import { TextState } from '../ui/text';
 
 type ECSMessage = {
     command: "return value" | "native call" | "internal error",
-    path: string
+    env: string
+    path?: string
     data: AnyObject | ECSNativeCall
 }
 
@@ -36,9 +37,9 @@ export default class ScriptSystem {
         this.worker.onmessage = (message: MessageEvent) => {
             let msg: ECSMessage = JSON.parse(message.data),
                 data = msg.data,
-                env = msg.path,
+                env = msg.env ? msg.env : msg.path,
                 component = this.envComponents[env];
-            console.log("env components: ",  this.envComponents)
+
             switch(msg.command) {
                 case "return value":
                     if (component && component.state) {
@@ -46,7 +47,6 @@ export default class ScriptSystem {
                     }
                 break;
                 case "native call":
-                    console.log("script native call")
                     this.nativeCall(component, data  as ECSNativeCall);
                 break;
                 case "internal error":
@@ -64,7 +64,6 @@ export default class ScriptSystem {
         this.envComponents[env.join(",")] = component;
 
         const evalInComponent = (code: string, callback: (data: any) => void) => {
-            console.warn("eval in component", code, env);
             this.evaluate(code, env);
 
             handleReturnValue = callback;
@@ -95,17 +94,12 @@ export default class ScriptSystem {
         }
     }
 
-    public registerComponent(component: Component) {
-        this.envComponents[this.getComponentScriptEnv(component).join(",")] = component
-    }
-
     
     /**
      * Send data TO web worker
      */
 
     public evaluate (code: string, env: any[]) {
-        console.log("env", env)
         this.worker.postMessage('{"command": "eval", "data": { "env": ["'+env[0]+'",'+env[1]+','+env[2]+'], "code": "'+code+'"}}');
     }
 
@@ -202,15 +196,13 @@ export default class ScriptSystem {
         const entity: Entity = component && component.entity;
 
         if (!entity) {
-            return;
+            return; 
         }
         
         const outputComponent = entity.componentsByAttr.text ? entity.componentsByAttr.text[0] : null,
         stdout: TextState = outputComponent ? outputComponent.state.text : null;
-
         if (stdout) {
             for (const line of args) {
-                console.log("printing arg", line)
                 stdout.write(line);
             }
         }
@@ -219,6 +211,4 @@ export default class ScriptSystem {
     private internalError(data: any) {
         console.error("Internal Error: "+JSON.stringify(data))
     }
-
-    
 }

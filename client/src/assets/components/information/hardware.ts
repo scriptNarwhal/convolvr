@@ -1,4 +1,5 @@
 import  { DBComponent } from "../../../model/component";
+import { DemoProgram } from "../../../demos";
 
 export default class HardwareDevices {
     
@@ -8,8 +9,10 @@ export default class HardwareDevices {
             attrs: {
                 virtualMachine: {
                     program: [
-                        'let foo = 1234',
-                        'print(foo + 5)'
+                        "print('Convolvr OS    v0.1')",
+                        "print('-------------------')",
+                        "print('Power on self test:')",
+                        ...DemoProgram
                     ]
                 },
                 geometry: {
@@ -172,6 +175,7 @@ export default class HardwareDevices {
                     lines: [
                         ""
                     ],
+                    fontSize: 40,
                     color: "#fff",
                     background: "#000"
                 },
