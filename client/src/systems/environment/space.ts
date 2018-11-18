@@ -40,7 +40,7 @@ export default class SpaceSystem {
 
     constructor (world: Convolvr) {
       this.world            = world
-      this.config           = world.config.terrain
+      this.config           = null
       this.octree           = world.octree
       this.phase            = 0
       this.mesh             = null

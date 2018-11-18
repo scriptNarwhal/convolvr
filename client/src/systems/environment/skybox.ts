@@ -2,12 +2,18 @@ import Convolvr from "../../world/world";
 import Component from "../../model/component";
 
 import * as THREE from 'three';
-import { Mesh } from "three";
+import { Mesh, Material, Texture } from "three";
+import { SpaceConfig, Sky } from "../../model/space";
+import { System } from "..";
+import AssetSystem from "../core/assets";
 
-export default class SkyboxSystem {
+export default class SkyboxSystem implements System {
 
     public live = true;
-    private world: Convolvr
+    public world: Convolvr
+    public dependencies = [["assets"]]
+
+    private assets: AssetSystem
 
     constructor(world: Convolvr) {
         this.world = world
@@ -25,12 +31,8 @@ export default class SkyboxSystem {
         this.followUser( delta )
     }
 
-    createSkybox(skySize: number, oldSkyMaterial: any, cylinderMode = false) {
+    createSkybox(skySize: number, oldSkyMaterial: any, cylinderMode = false): Mesh {
         let skybox = null
-
-        if (!oldSkyMaterial) {
-
-        }
 
         if ( cylinderMode ) {
             skybox = new THREE.Mesh(new THREE.CylinderGeometry(2800+skySize / 2, skySize / 2, skySize, 24), oldSkyMaterial);
@@ -42,7 +44,8 @@ export default class SkyboxSystem {
             new THREE.OctahedronGeometry(skySize/32, 3), 
             new THREE.MeshBasicMaterial({color: 0xffffff, opacity: 0.95, transparent: true})
         );
-        console.warn("create the sun")
+
+        console.warn("create the sun");
         this.world.sunLight.add(sunMesh);
         this.world.three.scene.add(skybox)
         return skybox
@@ -55,29 +58,29 @@ export default class SkyboxSystem {
 		}
     }
 
-    loadTexturedSky(config: any, mesh: Mesh, skySize: number, callback: Function) {
-        let world = this.world,
-            systems = world.systems
+    loadTexturedSky(config: Sky, mesh: Mesh, skySize: number, callback: Function) {
+        let world = this.world
 
-        systems.assets.loadImage('/data/user/' + config.photosphere, {}).then((texture: any) => {
+        this.assets.loadImage('/data/user/' + config.photosphere, {}).then((texture: any) => {
 
             let skySize = 1000 + ((world.settings.viewDistance + 3.5) * 1.4) * 140,
                 image: any = {},
                 oldMaterial = {},
-                material: any = {},
+                material: THREE.MeshBasicMaterial = null,
                 ratio = 1.7
 
             texture.magFilter = THREE.LinearFilter
             material = new THREE.MeshBasicMaterial({ map: texture, side: 1, fog: false })
             image = material.map.image
             ratio = image.naturalWidth / image.naturalHeight
+
             if (!!config && !!config.photosphere && ratio > 2.2 || ratio < 1.9 ) {
                 oldMaterial =  world.skyBoxMesh ? world.skyBoxMesh.material : null;
                 (window as any).three.scene.remove(world.skyboxMesh)
                 if (ratio < 2) {
-                    material.map.setRepeat
+                    material.map.repeat.set(2,1)
                 }
-                this.createSkybox(skySize, oldMaterial, true )
+                world.skyboxMesh = this.createSkybox(skySize, material, true)
             } else {
                 mesh.material = material
             }
@@ -85,7 +88,7 @@ export default class SkyboxSystem {
         })
     }
 
-    loadShaderSky(config: any, oldConfig: any, mesh: Mesh, callback: Function) {
+    loadShaderSky(config: SpaceConfig, oldConfig: any, mesh: Mesh, callback: Function) {
         let systems = this.world.systems,
             starMatProp = systems.assets.getMaterialProp("stars"),
             starSkyTexture = systems.material.procedural.generateTexture(starMatProp),

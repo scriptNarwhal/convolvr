@@ -182,6 +182,7 @@ export default class Convolvr {
 		this.skybox = this.systems.skybox
 		this.workers = {
 			staticCollisions: this.systems.staticCollisions.worker,
+			ecsWorker: this.systems.script.worker
 			// oimo: this.systems.oimo.worker
 		}
 		camera.add(this.systems.audio.listener)
@@ -300,9 +301,9 @@ export default class Convolvr {
 			skyLight 	   = this.skyLight 
 				|| new THREE.HemisphereLight( 
 					new THREE.Color().fromArray([sky.red, sky.green, sky.blue]), 
-					new THREE.Color().fromArray(terrainColor), config.light.intensity * 0.6 ) /* new THREE.DirectionalLight( config.light.color, 0.4 )*/, 
+					new THREE.Color().fromArray(terrainColor), config.light.intensity * 0.4 ) /* new THREE.DirectionalLight( config.light.color, 0.4 )*/, 
 			sunLight       = this.sunLight || //this.settings.shadows > 0 
-				 new THREE.DirectionalLight( 0xffffff, Math.min(1.0, config.light.intensity) ),
+				 new THREE.DirectionalLight( 0xfffff0, Math.min(0.9, config.light.intensity) ),
 				// : new THREE.PointLight(0xffffff, config.light.intensity, 10000000),
 			three          = this.three,
 			camera 		   = three.camera,
@@ -338,23 +339,25 @@ export default class Convolvr {
 		}
 
 		oldSkyMaterial = this.skyboxMesh.material
-		if (this.skyboxMesh.parent) {
+		if (this.skyboxMesh && this.skyboxMesh.parent) {
 			three.scene.remove(this.skyboxMesh)
 		}
 		console.log("init create skybox")
 		this.skyboxMesh = this.skybox.createSkybox( skySize, oldSkyMaterial )
-		Array(this.ambientLight, this.sunLight, this.skyLight).forEach( light => {
-			if ( !!!light.parent ) {
-				this.skyboxMesh.add( light );
-			}
-		});
+		
+		const addLightsCallback = () => {
+			for (const light of [world.ambientLight, world.sunLight, world.skyLight]) {
+				if ( !!!light.parent ) {
+					world.skyboxMesh.add( light );
+				} 
+			};
+		}
 		let deferSpaceLoading = false,
 			world = this,
 			rebuildSpace = () => {
 				let yaw = config.light.yaw - Math.PI / 2.0;
 
-				!!world.skyLight && three.scene.remove( world.skyLight )
-				world.skyLight = skyLight
+				//!!world.skyLight && three.scene.remove( world.skyLight )
 				skyLight.position.set( 0, 5000, 0 )
 				sunLight.position.set( Math.sin(yaw)*2000, Math.sin(config.light.pitch)*2000, Math.cos(yaw)*2000)
 
@@ -368,11 +371,13 @@ export default class Convolvr {
 
 		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
 			this.skybox.loadShaderSky( config, oldConfig, world.skyboxMesh, ()=>{})
+			addLightsCallback();
 		} else {
 			// load sky texture
 			deferSpaceLoading = true
 			this.skybox.loadTexturedSky( config.sky, this.skyboxMesh, skySize, ()=> {
-				rebuildSpace()
+				addLightsCallback();
+				rebuildSpace();
 			})
 		}
 
@@ -406,6 +411,7 @@ export default class Convolvr {
 
 		this.terrain.destroy()
 		this.workers.staticCollisions.postMessage(JSON.stringify( { command: "clear", data: {}} ))
+		this.workers.ecsWorker.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		//this.workers.oimo.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		// problem here
 		console.info("reload ", this.skyboxMesh)
