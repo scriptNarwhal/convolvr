@@ -168,6 +168,13 @@ export default class HardwareDevices {
                 virtualDevice: {
                     type: "display"
                 },
+                text: {
+                    lines: [
+                        ""
+                    ],
+                    color: "#fff",
+                    background: "#000"
+                },
                 geometry: {
                     shape: "box",
                     size: [ 2, 2, 2 ]
@@ -181,7 +188,7 @@ export default class HardwareDevices {
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
         tags: ["information-hardware"]
-    }
+    } as DBComponent
 
     public static serialCable = {
         id: -1,

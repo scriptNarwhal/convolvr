@@ -301,9 +301,9 @@ export default class Convolvr {
 			skyLight 	   = this.skyLight 
 				|| new THREE.HemisphereLight( 
 					new THREE.Color().fromArray([sky.red, sky.green, sky.blue]), 
-					new THREE.Color().fromArray(terrainColor), config.light.intensity * 0.4 ) /* new THREE.DirectionalLight( config.light.color, 0.4 )*/, 
+					new THREE.Color().fromArray(terrainColor), config.light.intensity * 0.6 ) /* new THREE.DirectionalLight( config.light.color, 0.4 )*/, 
 			sunLight       = this.sunLight || //this.settings.shadows > 0 
-				 new THREE.DirectionalLight( 0xfffff0, Math.min(0.9, config.light.intensity) ),
+				 new THREE.DirectionalLight( 0xfffff0, Math.min(1.0, config.light.intensity) ),
 				// : new THREE.PointLight(0xffffff, config.light.intensity, 10000000),
 			three          = this.three,
 			camera 		   = three.camera,
@@ -358,7 +358,7 @@ export default class Convolvr {
 				let yaw = config.light.yaw - Math.PI / 2.0;
 
 				//!!world.skyLight && three.scene.remove( world.skyLight )
-				skyLight.position.set( 0, 5000, 0 )
+				skyLight.position.set( 0, 0, 0 )
 				sunLight.position.set( Math.sin(yaw)*2000, Math.sin(config.light.pitch)*2000, Math.cos(yaw)*2000)
 
 				skyLight.lookAt(zeroZeroZero)

@@ -1,9 +1,24 @@
 import Convolvr from '../../world/world'
 import Component from '../../model/component'
+import { Material, Mesh, Texture } from 'three';
+import { text } from '../../model/attribute';
+import { System } from '..';
 
 let _THREE: any;
 
-export default class TextSystem {
+export interface TextState  {
+    textMaterial?: Material,
+    textMesh: Mesh,
+    textTexture: Texture,
+    textCanvas: Element,
+    canvasSize: number[],
+    context: any,
+    config: any,
+    update: ( textProp: text ) => void,
+    write: ( text: string ) => void
+}
+
+export default class TextSystem implements System {
 
     mappedColors: string[]
     world: Convolvr
@@ -19,7 +34,7 @@ export default class TextSystem {
         ]
     }
 
-    public init(component: Component) {
+    public init(component: Component): TextState {
         let attr = component.attrs.text,
             text = attr.lines,
             color = attr.color,

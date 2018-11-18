@@ -21,14 +21,17 @@ export default class VirtualMachine implements System {
         console.log("Power on self test");
         const attr: virtualMachine = component.attrs.virtualMachine;
 
+        // this.script.registerComponent(component);
+        
+        // need to intialize other systems here
+        this.systems.extendComponent(component, "script", {});
+
         if (attr.os) { }
 
         if (attr.program) {
             this.script.evaluateForComponent(component, attr.program.join(";"));
         }
 
-        // need to intialize other systems here
-        this.systems.extendComponent(component, "script", {});
 
         return {
             hardware,
@@ -59,7 +62,7 @@ export default class VirtualMachine implements System {
 
          // check parent components
 
-         
+
     }
 
     private getVirtualDevices (component: Component) {

@@ -1,8 +1,9 @@
 import Convolvr from '../../world/world'
 import Component, { DBComponent, EntityPath } from '../../model/component'
-import { DBEntity } from '../../model/entity';
+import Entity, { DBEntity } from '../../model/entity';
 import { script } from '../../model/attribute';
 import { AnyObject } from '../../util';
+import { TextState } from '../ui/text';
 
 type ECSMessage = {
     command: "return value" | "native call" | "internal error",
@@ -37,7 +38,7 @@ export default class ScriptSystem {
                 data = msg.data,
                 env = msg.path,
                 component = this.envComponents[env];
-
+            console.log("env components: ",  this.envComponents)
             switch(msg.command) {
                 case "return value":
                     if (component && component.state) {
@@ -94,12 +95,17 @@ export default class ScriptSystem {
         }
     }
 
+    public registerComponent(component: Component) {
+        this.envComponents[this.getComponentScriptEnv(component).join(",")] = component
+    }
+
     
     /**
      * Send data TO web worker
      */
 
     public evaluate (code: string, env: any[]) {
+        console.log("env", env)
         this.worker.postMessage('{"command": "eval", "data": { "env": ["'+env[0]+'",'+env[1]+','+env[2]+'], "code": "'+code+'"}}');
     }
 
@@ -187,8 +193,26 @@ export default class ScriptSystem {
                 component.entity.init()
             break;
             case "print":
-                console.log("printing from ecs: ", data.args[0])
+                this.print(component, data.args);
             break;
+        }
+    }
+
+    private print(component: Component, args: any[]) {
+        const entity: Entity = component && component.entity;
+
+        if (!entity) {
+            return;
+        }
+        
+        const outputComponent = entity.componentsByAttr.text ? entity.componentsByAttr.text[0] : null,
+        stdout: TextState = outputComponent ? outputComponent.state.text : null;
+
+        if (stdout) {
+            for (const line of args) {
+                console.log("printing arg", line)
+                stdout.write(line);
+            }
         }
     }
 
