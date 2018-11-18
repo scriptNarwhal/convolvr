@@ -1,4 +1,4 @@
-import { DBComponent } from "../../../../../../core/component";
+import { DBComponent } from "../../../../../../model/component";
 
 export default class ASTLiterals {
     
@@ -9,19 +9,26 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
                     color: 0xff8000,
                     name: "metal"
+                },
+                text: {
+                    lines: ["Null"],
+                    color: "#ff8000",
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     }
 
     public static int =  {
@@ -31,19 +38,26 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["Int"],
+                    color: "#ff8000",
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
     public static float = {
@@ -53,19 +67,26 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["Float"],
+                    color: "#ff8000",
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
     public static string = {
@@ -75,19 +96,26 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["String"],
+                    color: "#ff8000",
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
     public static array = {
@@ -97,19 +125,26 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["Array[ ]"],
+                    color: "#ff8000",
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
     public static hash = {
@@ -119,19 +154,26 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["Hash{ }"],
+                    color: "#ff8000",
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
     public static function = {
@@ -141,19 +183,26 @@ export default class ASTLiterals {
             attrs: {
                 geometry: {
                     shape: "box",
-                    size: [ 2, 2, 2 ]
+                    size: [2, 1, 1]
                 },
                 material: {
-                    color: 0x00ffff,
-                    name: "plastic"
+                    color: 0xff8000,
+                    name: "metal"
+                },
+                text: {
+                    lines: ["fn() { }"],
+                    color: "#ff8000",
+                    background: "#000",
+                    label: true
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
             position: [ 0, 0, 0 ],
             components: ([] as DBComponent[]),
-        }],
+        } as DBComponent],
         position: [ 0, 0, 0 ],
-        quaternion: [ 0, 0, 0, 1 ]
+        quaternion: [ 0, 0, 0, 1 ],
+        tags: ["ecs-literal"]
     };
 
 

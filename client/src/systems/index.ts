@@ -21,6 +21,7 @@ import GrabSystem from './core/grab'
 import HoverSystem from './core/hover'
 import HandSystem from './core/hand'
 import HeadSystem from './core/head'
+import ImportDataSystem from './importers/data'
 import LightSystem from './environment/light'
 import LayoutSystem from './ui/layout'
 import VideoSystem from './video/video'
@@ -73,19 +74,26 @@ import VirtualMachineSystem from './logic/virtual-machine'
 import SkyboxSystem from './environment/skybox'
 
 import Convolvr from '../world/world'
-import Component from '../core/component';
-import Binding from '../core/binding';
+import Component from '../model/component';
+import Binding from '../model/binding';
+import { AttributeName } from '../model/attribute'
 
-type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "camera" | "chat" | "control" |
-					 "conveyor" | "cursor" | "datgui" | "destructable" | "display" | "virtualDevice" | "door" | "drawing" | 
-					 "emote" | "faction" | "factory" | "fbx" | "file" | "floor" | "geometry" | "grab" | "graph" | "hand" | 
-					 "head" | "hover" | "input" | "light" | "layout" | "lookAway" | "magic" | "material" | "media" | 
-					 "metaFactory" | "miniature" | "npc" | "obj" | "oimo" | "objective" | "particles" | "propulsion" | "portal" |
-					 "projectile" | "quest" | "rest" | "rpgRace" | "signal" | "seat" | "skill" | "skybox" | "script" | "screenshot" | "socialMedia" | 
-					 "speech" | "state" | "stat" | "staticCollisions" | "terrain" | "text" | "time" | "toolUI" | "tool" |
-					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "template" | "wall" | "webrtc" | "weapon";
+
+/** System Dependency
+ * [injectAsThisDotFoo, systemBar.optionallySubSystemBaz][] **/
+export type SystemDependency = string[];
+
+export interface System {
+	init: (component: Component) => AnyObject
+	postInject?: () => void,
+	tick?: (delta: number, time: number) => void
+	dependencies?: SystemDependency[]
+	world: Convolvr
+}
 
 import * as THREE from 'three';
+import { AnyObject } from '../util';
+import { Mesh } from 'three';
 export default class Systems {
 
 	public world: Convolvr
@@ -121,6 +129,7 @@ export default class Systems {
 	public hand: 			 HandSystem;
 	public head: 			 HeadSystem;
 	public hover: 			 HoverSystem;
+	public importData:       ImportDataSystem;
 	public input: 			 InputSystem;
 	public light: 			 LightSystem;
 	public layout: 		  	 LayoutSystem;
@@ -175,95 +184,97 @@ export default class Systems {
 		world.systems = this
 
         let systems = {
-			ability: 		   new AbilitySystem( world ),
+			ability: 		   new AbilitySystem( world ), // TODO: plan out more
 			activate: 		   new ActivateSystem( world ),
 			audio: 			   new AudioSystem( world ),
 			assets: 		   new AssetSystem( world ),
-			browser: 		   new BrowserSystem( world ),
-			camera: 		   new CameraSystem( world ),
+			browser: 		   new BrowserSystem( world ), // TODO: finish
+			camera: 		   new CameraSystem( world ), // TODO: finish
 			chat: 			   new ChatSystem( world ),
 			control: 		   new ControlSystem( world ),
-			conveyor: 		   new ConveyorSystem( world ),
+			conveyor: 		   new ConveyorSystem( world ), // TODO: finish
 			cursor: 		   new CursorSystem( world ),
 			datgui: 		   new DatGUIVRPluginSystem( world ),
 			destructable: 	   new DestructableSystem( world ),
 			display: 		   new DisplaySystem( world ),
-			virtualDevice:     new VirtualDeviceSystem( world ),
 			door: 			   new DoorSystem( world ),
 			drawing: 		   new DrawingSystem( world ),
-			emote: 			   new EmoteSystem( world ),
-			faction: 		   new FactionSystem( world ),
+			emote: 			   new EmoteSystem( world ), // TODO: plan out more
+			faction: 		   new FactionSystem( world ), // TODO: plan out more
 			factory: 		   new FactorySystem( world ),
 			fbx: 			   new FBXPluginSystem( world ),
 			file: 			   new FileSystem( world ),
 			floor: 			   new FloorSystem( world ),
 			geometry: 		   new GeometrySystem( world ),
 			grab:              new GrabSystem( world ),
-			graph: 		       new GraphSystem( world ),
+			graph: 		       new GraphSystem( world ), // TODO: implement
 			hand: 			   new HandSystem( world ),
 			head: 			   new HeadSystem( world ),
-			hover: 			   new HoverSystem( world ),
+			hover: 			   new HoverSystem( world ), // TODO: implement
+			importData:        new ImportDataSystem( world ), //TODO: implement
 			input: 			   new InputSystem( world ),
 			light: 			   new LightSystem( world ),
 			layout: 		   new LayoutSystem( world ),
-			lookAway: 		   new LookAwaySystem( world ),
-			magic: 			   new MagicSystem( world ),
+			lookAway: 		   new LookAwaySystem( world ), // TODO: implement
+			magic: 			   new MagicSystem( world ), //TODO: implement 
 			material: 		   new MaterialSystem( world ),
-			media: 			   new MediaSystem( world ),
+			media: 			   new MediaSystem( world ), // TODO: how is this used?
 			metaFactory: 	   new MetaFactorySystem( world ),
 			miniature: 		   new MiniatureSystem( world ),
 			npc: 			   new NPCSystem( world ),
 			obj: 			   new ObjPluginSystem( world ),
-			oimo: 		   	   new OimoPluginSystem( world ),
-			objective:         new ObjectiveSystem( world ),
+			oimo: 		   	   new OimoPluginSystem( world ),// TODO: plan out more
+			objective:         new ObjectiveSystem( world ), // TODO: plan out more
 			particles: 		   new ParticleSystem( world ),
-			propulsion: 	   new PropulsionSystem( world ),
-			portal: 		   new PortalSystem( world ),
+			propulsion: 	   new PropulsionSystem( world ), // TODO: test
+			portal: 		   new PortalSystem( world ), //TODO: Fix
 			projectile: 	   new ProjectileSystem( world ),
-			quest: 			   new QuestSystem( world ),
+			quest: 			   new QuestSystem( world ), // TODO: implement
 			rest: 			   new RESTSystem( world ),
-			rpgRace:		   new RPGRaceSystem( world ),
+			rpgRace:		   new RPGRaceSystem( world ), // TODO: implement
 			signal: 		   new SignalSystem( world ),
-			skill: 			   new SkillSystem( world ),
+			skill: 			   new SkillSystem( world ), // TODO: think about this more
 			skybox:            new SkyboxSystem( world ),
 			script:            new ScriptSystem( world, new Worker('/data/js/workers/ecs-bundle.js')),
-			screenshot: 	   new ScreenshotSystem( world ),
-			seat:              new SeatSystem( world ),
-			socialMedia: 	   new SocialMediaSystem( world ),
+			screenshot: 	   new ScreenshotSystem( world ), // TODO: finish
+			seat:              new SeatSystem( world ), // TODO: finish
+			socialMedia: 	   new SocialMediaSystem( world ), // TODO: finish
 			speech: 		   new SpeechSystem( world ),
-			state:             new StateSystem( world ),
-			stat: 			   new StatSystem( world ),
+			state:             new StateSystem( world ), //TODO: how is this used?
+			stat: 			   new StatSystem( world ), // TODO: think about this more
 			staticCollisions:  new StaticCollisions( world, new Worker('/data/js/workers/static-collisions-bundle.js')),
 			terrain: 		   new SpaceSystem( world ),
 			text: 			   new TextSystem( world ),
-			template: 		   new TemplateSystem( world ),
+			template: 		   new TemplateSystem( world ), //TODO: finish
 			time: 			   new TimeSystem( world ),
 			toolUI: 		   new ToolUISystem( world ),
 			tool: 			   new ToolSystem( world ),
 			toolbox:           new ToolboxSystem( world ),
-			user: 			   new UserSystem( world ),
-			vehicle: 		   new VehicleSystem( world ),
-			video: 			   new VideoSystem( world ),
-			virtualMachine:    new VirtualMachineSystem( world ),
-			wall: 			   new WallSystem( world ),
-			webrtc: 		   new WebRTCSystem( world ),
-			weapon:			   new WeaponSystem( world ),
+			user: 			   new UserSystem( world ), //TODO: assess what needs to be done
+			vehicle: 		   new VehicleSystem( world ), // TODO: finish .. plan out more
+			video: 			   new VideoSystem( world ), //TODO: finish
+			virtualDevice:     new VirtualDeviceSystem( world ), //TODO: finish
+			virtualMachine:    new VirtualMachineSystem( world ), //TODO: finish / plan out more
+			wall: 			   new WallSystem( world ), //TODO: finish
+			webrtc: 		   new WebRTCSystem( world ), //TODO: test
+			weapon:			   new WeaponSystem( world ), //TODO: finish
 		}
 		this.systems = systems
 		this.liveSystems = []
 		let systemIndex = (this as any);
+		const systemNames = Object.keys( systems );
 
-		for (let s: number = 0; s < 2; s ++) {
-			Object.keys( systems ).map( system => {
-				if (s == 1) {
-					systemIndex[ system ].allSystemsLoaded && systemIndex[ system ].allSystemsLoaded()
-				} else {
+		for (let s = 0; s < 2; s ++) {
+			for (const system of systemNames) {
+				if (s == 0) { // first pass
 					systemIndex[ system ] = (systems as any)[ system ]
-					if ( systemIndex[ system ].live ) {
+					if ( typeof systemIndex[ system ].tick == "function") {
 						systemIndex.liveSystems.push( systemIndex[ system ] )
 					}
+				} else { 
+					this.injectDependencies(systemIndex[system]);
 				}
-			})
+			}
 		}
 
 		this.deferred = {
@@ -275,32 +286,31 @@ export default class Systems {
 	/**
 	*  Reads component attrs, registers with systems and populates state with the resulting data
 	**/
-    registerComponent(component: Component) {
+    registerComponent(component: Component): Mesh {
         let componentsByAttr = component.entity.componentsByAttr,
-			entity = component.entity,
-			stateByProp = entity.stateByProp,
-            attrs = component.attrs,
+			attrs = component.attrs,
+			attrKeys = Object.keys( attrs ) as AttributeName[],
             state = component.state,
             deferredSystems: any[] = [],
 			mesh = null;
-			
+		
+		let attr: AttributeName;
 
-        Object.keys( attrs ).map( (attr: AttributeName) => {
-            if ( this[ attr ] != null ) {
+        for (attr of attrKeys) {
+            if ((this as any)[ attr ] != null) {
 
 				if ( !!this.deferred[ attr ] ) { /* add other systems here */
 					deferredSystems.push( attr );
                 } else {
-                    state[ attr ] = (this[ attr ] as any).init( component )
+                    state[ attr ] = (this[ attr ] as System).init( component )
 				}
 				
 				if ( !!!componentsByAttr[ attr ] ) {
                     componentsByAttr[ attr ] = []
 				}
-				
 				componentsByAttr[ attr ].push( component )
             }
-        });
+        }
 
 		mesh = new THREE.Mesh( state.geometry.geometry, state.material.material )
 		if (component.props) {
@@ -311,11 +321,47 @@ export default class Systems {
         mesh.matrixAutoUpdate = false
         component.mesh = mesh
 
-        deferredSystems.map( (attr: AttributeName) => {
-            state[ attr ] = (this[ attr ] as any).init( component )
-        })
+        for (const attr of deferredSystems) {
+            state[ attr ] = ((this as any )[ attr ] as any).init( component )
+        }
 
-        return mesh
+        return mesh;
+	}
+
+	// need something here to register a component to one system
+	extendComponent(component: Component, system: AttributeName, data = {}) {
+		component.attrs[system] = data;
+		component.state[system] = ((this as any)[system] as System).init(component);
+	}
+
+	injectSubSystemDependencies(subSystems: { [key: string]: System }): void {
+		for (const system in subSystems) {
+			this.injectDependencies(subSystems[system]);
+		}
+	}
+
+	private injectDependencies(system: System) {
+		if (!system.dependencies) {
+			system.postInject && system.postInject.call(system);
+			return;
+		}
+		const deps = system.dependencies as SystemDependency[];
+	
+		for (const dep of deps) {
+			if (dep.length === 1) {
+				(system as any)[dep[0]] = (system.world.systems as any)[dep[0]];
+			} else {
+				const path = dep[1].split("."),
+					length = path.length;
+
+				if (length == 1) {
+					(system as any)[dep[0]] = (system.world.systems as any)[dep[1]];
+				} else {
+					(system as any)[dep[0]] = (system.world.systems as any)[path[0]][path[1]];
+				}
+			}
+		}
+		system.postInject && system.postInject.call(system);
 	}
 	
 	private evaluateProperties(component: Component, properties: {[key: string]: any}): void {
@@ -332,18 +378,16 @@ export default class Systems {
 	/**
 	*  Fires once per frame, passing the delta and total time passed
 	**/
-	public tick(delta: number, time: number) {
+	public tick(delta: number, time: number): void {
 		let systems = this.liveSystems,
-			ln = systems.length,
-			l = 0;
+			ln = systems.length;
 		// refactor this to check time after each system/tick to avoid dropping render frames
-		if ( delta > 250 || ln == 0 ) {
+		if ( delta > 250 || ln < 1 ) {
 			return
 		}
 
-		while ( l < ln ) {
-			systems[ l ].tick( delta, time )
-			l += 1
+		while ( ln -- ) {
+			systems[ ln ].tick( delta, time );
 		}
 	}
 }

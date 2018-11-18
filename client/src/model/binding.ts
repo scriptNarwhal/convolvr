@@ -96,7 +96,7 @@ export default class Binding  {
             case PropType.PROPERTY:
                 return this.getAtPath(node.props[sourcePath[0]], sourcePath[1]);
             case PropType.ATTRIBUTE:
-                return this.getAtPath(node.attrs[sourcePath[0]], sourcePath[1]);
+                return this.getAtPath((node.attrs as any)[sourcePath[0]], sourcePath[1]);
             case PropType.BINDING:
                 let binding = node.getBindingByName(sourcePath);
 

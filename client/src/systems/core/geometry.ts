@@ -1,8 +1,10 @@
 import Convolvr from '../../world/world'
-import Component from '../../core/component'
+import Component from '../../model/component'
 import * as THREE from 'three';
+import { System } from '..';
+import { geometry } from '../../model/attribute';
 
-export default class GeometrySystem {
+export default class GeometrySystem implements System {
 
   world: Convolvr
   nodeGeom: any //THREE.PlaneGeometry
@@ -16,7 +18,7 @@ export default class GeometrySystem {
 
   init ( component: Component ) { 
 
-        let attr:         any        = component.attrs.geometry,
+        let attr:         geometry        = component.attrs.geometry,
             geometry:     any        = {},
             size:         Array<number> = attr.size,
             assets:       any        = this.world.systems.assets,
@@ -79,7 +81,7 @@ export default class GeometrySystem {
             // define more mappings here..
           }
 
-          if ( geometry.computeVertexNormals && faceNormals && (attr.faceNormals === true || attr.faceNormals === undefined )) {
+          if ( geometry.computeVertexNormals && faceNormals && (attr.faceNormals === true )) {
             geometry.computeVertexNormals()
           }
           assets.geometries[ geometryCode ] = geometry
@@ -100,8 +102,8 @@ export default class GeometrySystem {
           shape = new THREE.Shape()
 
       if ( attr.shape ) {
-        shape.moveTo( attr.shape[0][0], attr.shape[0][1] )
-        attr.shape.map( (point: any, i: number) => {
+        shape.moveTo( attr.customShape[0][0], attr.customShape[0][1] )
+        attr.customShape.map( (point: any, i: number) => {
 
           if ( i > 0 ) {
             shape.lineTo( point[ 0 ], point[ 1 ] )

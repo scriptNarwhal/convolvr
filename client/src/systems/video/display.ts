@@ -1,9 +1,9 @@
 import Convolvr from '../../world/world'
-import Component from '../../core/component'
+import Component from '../../model/component'
 
 export default class DisplaySystem {
 
-    private world: Convolvr
+    public world: Convolvr
 
     constructor ( world: Convolvr ) {
         this.world = world

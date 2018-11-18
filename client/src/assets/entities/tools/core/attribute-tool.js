@@ -1,5 +1,5 @@
 import Tool from '../../../../world/tool'
-import Entity from '../../../../core/entity'
+import Entity from '../../../../model/entity'
 import { GRID_SIZE, GLOBAL_SPACE } from '../../../../config'
 
 export default class AttributeTool extends Tool {
@@ -116,8 +116,7 @@ export default class AttributeTool extends Tool {
         
     }
 
-    primaryAction ( telemetry ) {
-      
+    primaryAction (telemetry) {
       let options         = this.options,
           cursor          = telemetry.cursor,
           user            = this.world.user,
@@ -144,13 +143,11 @@ export default class AttributeTool extends Tool {
       if ( !!!selected || attrs.miniature || attrs.activate ) {
           console.warn("no tool action, calling activation callbacks")
           return false 
-      
       } else {
           coords = selected.voxel
       }
 
       if ( !! cursorComponent && !! selected ) {
-
         componentPath = cursorComponent.path
         component = Object.assign({}, {
           position: cursorComponent.data.position,
@@ -163,9 +160,7 @@ export default class AttributeTool extends Tool {
         components = [ component ]
 
       } else {
-
         return false
-
       }
 
       return {
@@ -185,21 +180,17 @@ export default class AttributeTool extends Tool {
     }
 
     configure ( config ) {
-      
       if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
         this.options = Object.assign( {}, config.data )
         this.preset = config.preset
         console.log("Configuring tool ", this.options)
       }
-      
   }
 
   generatePreview( component, preset, data ) {
-    
     let preview = null
     
     return preview
-    
   }
     
 }

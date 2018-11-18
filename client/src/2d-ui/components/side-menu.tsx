@@ -1,6 +1,13 @@
 import * as React from "react"; import { Component } from "react";
 import { withRouter } from 'react-router-dom'
-import Tab from './tab'
+import { Tab } from 'energetic-ui'
+import { connect } from 'react-redux';
+import {
+    toggleMenu,
+    toggleVR
+} from '../../2d-ui/redux/actions/app-actions'
+
+// import Tab from './tab'
 import { isMobile } from '../../config'
 
 class SideMenu extends Component<any, any> {
@@ -116,12 +123,6 @@ class SideMenu extends Component<any, any> {
   }
 }
 
-import { connect } from 'react-redux';
-import {
-    toggleMenu,
-    toggleVR
-} from '../../2d-ui/redux/actions/app-actions'
-
 export default connect(
   (state: any, ownProps: any) => {
     return {
@@ -142,6 +143,7 @@ export default connect(
     }
   }
 )(withRouter(SideMenu) as React.ComponentType<any>)
+
 
 let styles = {
   sideMenu: () => {

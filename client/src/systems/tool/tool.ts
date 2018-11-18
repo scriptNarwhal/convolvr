@@ -1,5 +1,5 @@
-import Entity from '../../core/entity'
-import Component from '../../core/component'
+import Entity from '../../model/entity'
+import Component, { DBComponent } from '../../model/component'
 import { 
     GLOBAL_SPACE,
     GRID_SIZE 
@@ -99,11 +99,11 @@ export default class ToolSystem {
                                 color: 0xffffff
                             }
                         },
-                        components: [],
+                        components: [] as DBComponent[],
                         quaternion: [ 0, 0, 0, 1 ]
                     }
                 ]
-            },
+            } as DBComponent,
             {
                 position: [0, -2.25, 0], // position & init the panel once the tool is equipped
                 attrs: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel
@@ -128,8 +128,8 @@ export default class ToolSystem {
 
         if (previewBox == null && cursor) {
 
-            preview = assets.makeEntity( "preview-box", true, {}, component.entity.voxel )
-            preview.components[0].attrs.noRaycast = {}
+            preview = assets.makeEntity( "preview-box", true, {}, component.entity.voxel ) as Entity
+            preview.components[0].attrs.noRaycast = true;
             preview.init( cursor.mesh, {} )
             component.state.tool.preview.box = preview
             // preview = this.generatePreview( component, preset, data )

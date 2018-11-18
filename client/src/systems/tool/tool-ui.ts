@@ -1,6 +1,6 @@
-import Component from '../../core/component'
+import Component from '../../model/component'
 import Convolvr from '../../world/world'
-import Entity from '../../core/entity';
+import Entity from '../../model/entity';
 
 export default class ToolUISystem {
 

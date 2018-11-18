@@ -1,5 +1,5 @@
 import Convolvr from "../../world/world";
-import Component from "../../core/component";
+import Component from "../../model/component";
 
 export default class RPGRaceSystem {
     private world: Convolvr;

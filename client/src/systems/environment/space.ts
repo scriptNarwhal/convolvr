@@ -1,14 +1,14 @@
 import axios from 'axios'
-import Voxel from '../../core/voxel'
+import Voxel from '../../model/voxel'
 import { animate } from '../../world/render'
-import Entity from '../../core/entity'
+import Entity from '../../model/entity'
 import { 
   GLOBAL_SPACE,
   GRID_SIZE,
   API_SERVER
 } from '../../config'
 import StaticCollisions from './physics/static-collisions';
-import Component from '../../core/component';
+import Component from '../../model/component';
 import Convolvr from '../../world/world';
 import { navigateTo } from '../../2d-ui/redux/actions/app-actions';
 
@@ -40,7 +40,7 @@ export default class SpaceSystem {
 
     constructor (world: Convolvr) {
       this.world            = world
-      this.config           = world.config.terrain
+      this.config           = null
       this.octree           = world.octree
       this.phase            = 0
       this.mesh             = null
@@ -70,8 +70,7 @@ export default class SpaceSystem {
     }
 
     public init(component: Component) {
-        let attr = component.attrs.tab,
-            state: any = {}
+        let state: any = {}
             
         return state
     }

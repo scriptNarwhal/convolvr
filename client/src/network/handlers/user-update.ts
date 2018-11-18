@@ -2,8 +2,8 @@
 import { animate } from '../../world/render'
 import { GRID_SIZE, GLOBAL_SPACE } from '../../config'
 import Avatar from '../../assets/entities/avatars/avatar'
-import Entity from '../../core/entity';
-import Voxel from '../../core/voxel';
+import Entity from '../../model/entity';
+import Voxel from '../../model/voxel';
 import Convolvr from '../../world/world';
 
 export default class UserUpdateHandler {
@@ -85,7 +85,7 @@ export default class UserUpdateHandler {
         let world = this.world,
             avatar = world.systems.assets.makeEntity(userFrame.avatar, true, 
                 { wholeBody: true, userName: userFrame.username, id: userFrame.id }, 
-            coords),
+            coords) as Entity,
             user = (world.users as any)["user" + userFrame.id] = {
                 id: userFrame.id,
                 avatar,

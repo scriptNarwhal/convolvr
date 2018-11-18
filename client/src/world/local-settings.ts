@@ -1,10 +1,5 @@
 import Convolvr from '../world/world'
 
-const str = "string",
-	  int = "integer",
-	  float = "float",
-	  bool = "boolean";
-
 enum SettingType {
 	str,
 	int,

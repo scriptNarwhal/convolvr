@@ -1,5 +1,5 @@
 import Convolvr from "../../world/world";
-import Component from "../../core/component";
+import Component from "../../model/component";
 
 type SignalState = {
     oscillator: any,
@@ -41,7 +41,7 @@ export default class SignalSystem { // system for passing signals between entiti
             }
         
         if (attr.wire == true) {
-            // handle attragation 
+            // handle propagation 
         }
         
         if (attr.in) {

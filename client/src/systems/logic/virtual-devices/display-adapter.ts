@@ -1,15 +1,21 @@
-import { Component } from "react";
 import Convolvr from "../../../world/world";
+import { VirtualDevice } from "../virtual-device";
+import { AnyObject } from "../../../util";
+import ProceduralMaterials from "../../core/material/material-procedural";
+import { System } from "../..";
 
-export default class DisplayAdapterDevice {
-    private world: Convolvr;
+export default class DisplayAdapterDevice implements VirtualDevice, System {
+    public world: Convolvr;
+    private procedural: ProceduralMaterials
+    public dependencies = [
+        ["procedural", "material.procedural"]
+    ];
 
     constructor(world: Convolvr) {
         this.world = world
     }
 
-    init(component: Component) {
-
+    init(data: AnyObject) {
         // create a canvas, save the context, etc
         // implement
 
@@ -23,6 +29,19 @@ export default class DisplayAdapterDevice {
         }
 
     }
+    /**
+     * 
+     * textmode is probably the first thing this should do
+     */
+
+
+    /**
+     * display-adapter needs a display device in the same machine
+     * it also requires a virtual-machine attribute / device in the entity
+     * 
+     * ... feature => (component / attribute) dependencies?
+     */
+
 
     configure(data: Object) {
 
@@ -34,7 +53,6 @@ export default class DisplayAdapterDevice {
     draw(type: string, data: Object) {
 
         switch (type) {
-
             case "text":
                 this.renderText(data)
                 break

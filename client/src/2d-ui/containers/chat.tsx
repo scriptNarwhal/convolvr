@@ -1,12 +1,8 @@
 /* chat container */
 import * as React from "react"; import { Component } from "react";
-import Shell from '../components/shell'
-import Card from '../components/card'
-import Button from '../components/button'
-import { withRouter } from 'react-router-dom'
-import LocationBar from '../components/location-bar'
-import { rgba, rgb } from '../../util'
 
+import { Card, Button, rgb} from 'energetic-ui'
+import Shell from '../components/shell'
 let linkRegex = /(?:(?:https?|ftp|file):\/\/|www\.|ftp\.)(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#\/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#\/%=~_|$?!:,.]*\)|[A-Z0-9+&@#\/%=~_|$])/igm,
     imageRegex = /(\.png|\.jpg|\.jpeg|\.gif|\.svg|\.webp)/
 

@@ -1,14 +1,13 @@
 import * as React from "react"; import { Component } from "react";
-import { withRouter } from 'react-router-dom'
-import FileButton from './file-button'
-import VectorInput from '../vector-input'
-import { rgba, rgb } from '../../../util'
+
 import { isMobile } from '../../../config'
 import {
+  FileButton,
+  VectorInput,
   textAreaStyle,
   lightboxStyle,
   modalStyle
-} from '../../styles'
+} from 'energetic-ui'
 
 class ImportToSpace extends Component<any, any> {
 

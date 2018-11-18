@@ -1,4 +1,4 @@
-import { DBEntity } from "../../../../core/entity";
+import { DBEntity } from "../../../../model/entity";
 
 let terminal = {
     id: -1,
@@ -7,26 +7,34 @@ let terminal = {
         { 
             class: "terminal-case",
             position: [0,0,0],
+            quaternion: [ 0, 0, 0, 1 ],
             attrs: {
-                script: {
-                    repl: true
+                virtualMachine: {
+                    program: [
+                        'print("hello world!!!");'
+                    ]
                 }
             },
             components: [
                 { class: "cpu",
-                    position: [0,0,-1]
+                    position: [0,0,-1],
+                    quaternion: [ 0, 0, 0, 1 ]
                 },
                 { class: "io-controller",
-                    position: [-1,0,0]
+                    position: [-1,0,0],
+                    quaternion: [ 0, 0, 0, 1 ]
                 },
                 { class: "display-adapter",
-                    position: [1,0,-1]
+                    position: [1,0,-1],
+                    quaternion: [ 0, 0, 0, 1 ]
                 },
                 { class: "network-interface",
-                    position: [-1,0,-1]
+                    position: [-1,0,-1],
+                    quaternion: [ 0, 0, 0, 1 ]
                 },
                 { class: "disk-drive",
-                    position: [-1,0,1]
+                    position: [-1,0,1],
+                    quaternion: [ 0, 0, 0, 1 ]
                 }
             ]
         },
@@ -38,7 +46,8 @@ let terminal = {
         },
     ],
     position: [ 0, 0, 0 ],
-    quaternion: [ 0, 0, 0, 1 ]
+    quaternion: [ 0, 0, 0, 1 ],
+    tags:["information-hardware"]
 } as DBEntity;
 
 export default terminal;

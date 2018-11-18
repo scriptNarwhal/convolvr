@@ -1,4 +1,4 @@
-import Component from '../../core/component.js';
+import Component from '../../model/component.js';
 import Convolvr from '../../world/world'
 
 export default class InputSystem {

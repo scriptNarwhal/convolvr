@@ -1,6 +1,7 @@
-import Entity from '../../../core/entity'
+import Entity from '../../../model/entity'
 import THREE from 'three';
 import AssetSystem from '../../../systems/core/assets';
+import { DBComponent } from '../../../model/component';
 /* battleship.. multiple decks, turrets, multiple occupants, vehicle factory / bay, runway */
 
 let cursorAxis = new THREE.Vector3( 1, 0, 0 )
@@ -9,38 +10,11 @@ let battleship = ( assetSystem: AssetSystem, config: any, voxel: number[] ) => {
 
         var mesh = null,
             entity = null,
-            component = null,
-            componentB = null,
-            components = [],
-            cursorRot = new THREE.Quaternion(),
-            cursorComponent = null,
+            components = [] as DBComponent[],
             id = !!config && !!config.id ? config.id : assetSystem.autoEntityID(),
             n = 2
-
-        cursorRot.setFromAxisAngle( cursorAxis, Math.PI / 2 )
-        cursorComponent = {
-          attrs: {
-              cursor: true,
-              geometry: {
-                shape: "open-box",
-                size: [ 150, 150, 150 ]
-              },
-              material: {
-                name: "wireframe",
-                color: 0xffffff
-              },
-              light: {
-                type: "point",
-                intensity: 0.9,
-                color: 0xffffff,
-                distance: 0.090
-              }
-            },
-            position: [ 0, 0, 0 ],
-            quaternion: cursorRot.toArray()
-        }
-
-        components.push(Object.assign({}, {
+       
+        components.push({
           attrs: {
             geometry: {
                 shape: "box",
@@ -54,9 +28,9 @@ let battleship = ( assetSystem: AssetSystem, config: any, voxel: number[] ) => {
           position: [ 0, 0, 0 ],
           quaternion: [ 0, 0, 0, 1 ],
           components: [
-            Object.assign( {}, cursorComponent )
+            
           ]
-        }))
+        } as DBComponent)
         
     entity = new Entity( id, components, null, null, voxel )
   

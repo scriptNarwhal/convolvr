@@ -1,10 +1,7 @@
 import * as React from "react"; import { Component } from "react";
-import Shell from '../components/shell'
-import { withRouter } from 'react-router-dom'
-import { 
-  modalStyle 
-} from '../styles'
+import { modalStyle } from 'energetic-ui'
 import { isMobile } from '../../config'
+import Shell from '../components/shell'
 
 class Profile extends Component<any, any> {
 

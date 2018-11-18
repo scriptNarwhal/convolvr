@@ -1,4 +1,4 @@
-import { DBComponent } from "../../../core/component";
+import { DBComponent } from "../../../model/component";
 
 let block = {
         id: -1,
@@ -13,6 +13,9 @@ let block = {
                 material: {
                     color: 0x808080,
                     name: "hard-light"
+                },
+                floor: {
+                    level: 0
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],

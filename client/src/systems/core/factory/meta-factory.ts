@@ -1,6 +1,8 @@
 import Convolvr from '../../../world/world'
-import Component, { DBComponent } from '../../../core/component'
-import Entity from '../../../core/entity'
+import Component, { DBComponent } from '../../../model/component'
+import Entity, { DBEntity } from '../../../model/entity'
+import { FactoryType, FactoryAttributeType } from '../../../model/attribute';
+import { AnyObject } from '../../../util';
 
 export default class MetaFactorySystem {
     
@@ -16,22 +18,21 @@ export default class MetaFactorySystem {
 
     public init(component: Component) { 
         
-        let components:     Array<Component> = component.components,
-            attr:           any           = component.attrs.metaFactory,
-            assetType:      string           = attr.type,
-            category:       string           = attr.attrName,
-            gridWidth:      number           = attr.gridWidth || 3,
-            gridSize:       number           = attr.gridSize || 1,
-            vOffset:        number           = attr.vOffset || -1.2,
-            sourceCategory: any              = "none",
-            factories:      Array<any>    = [],
-            presets:        Array<any>       = [],
-            preset:         string           = "",
-            source:         Array<any>       = [],
-            index:          number           = 0,
-            keys:           any           = {},
-            x:              number           = 0,
-            y:              number           = 0
+        let attr:           any                   = component.attrs.metaFactory,
+            assetType:      FactoryType           = attr.type,
+            category:       FactoryAttributeType  = attr.attrName,
+            gridWidth:      number                = attr.gridWidth || 3,
+            gridSize:       number                = attr.gridSize || 1,
+            vOffset:        number                = attr.vOffset || -1.2,
+            sourceCategory: any                   = "none",
+            factories:      Array<any>            = [],
+            presets:        Array<any>            = [],
+            preset:         string                = "",
+            source:         Array<any>            = [],
+            index:          number                = 0,
+            keys:           any                   = {},
+            x:              number                = 0,
+            y:              number                = 0
 
         if ( assetType == "component" ) {
             Object.keys( attr.dataSource ).map( name => {
@@ -50,12 +51,10 @@ export default class MetaFactorySystem {
                 // entity will re-init after files load              
         }
 
-        if (typeof source.map == 'function') { // array of geometries / materials, components, entities, spaces, places, files, (directories could use source[category])
+        if (source && typeof source.map == 'function') { // array of geometries / materials, components, entities, spaces, places, files, (directories could use source[category])
             //console.info( "metafactory source is ", source)
-            source.map( (item, i) => {
-                if ( assetType == 'entity' && typeof item == 'function' )
-                
-                    return
+            const addItemFromList =  (item: AnyObject, i: number) => {
+                if ( assetType == 'entity' && typeof item == 'function' ) { return }
                 
                 preset = this.getPreset( assetType, item, i, presets ) 
                 this.addComponent( component, item, assetType, category, preset, x, y, index, gridSize, vOffset)
@@ -66,10 +65,33 @@ export default class MetaFactorySystem {
                     y += 1
                 } 
                 index += 1
-            })
+            }
+            if (attr.filter) {
+                if (attr.filter.tags.length === 0) {
+                    source.filter((item: DBComponent | DBEntity, index, all) => 
+                       item.tags == null || item.tags.length == 0
+                    ).map(addItemFromList);
+                } else {
+                    source.filter((item: DBComponent | DBEntity, index, all) => {
+                        for (const tag of attr.filter.tags) {
+                            if (item.tags && item.tags.indexOf(tag) > -1) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }).map(addItemFromList);
+                }
+            } else {
+                source.map(addItemFromList)
+            }
+            
             
         } else { // map through system categories
             source = attr.dataSource
+            if (!source) {
+                console.warn("no source for meta-factory")
+                return;
+            }
             sourceCategory = this.getSourceCategory( source, category ) // structures, vehicles, media, interactivity
         
             Object.keys( sourceCategory ).map( ( key, a ) => { // vehicle, propulsion, control, etc
@@ -121,7 +143,7 @@ export default class MetaFactorySystem {
         return preset
     }
 
-    private addComponent(component: Component, factoryItem: any, assetType: string, assetCategory: string, preset: any, x: number, y: number, i: number, gridSize: number, vOffset: number ) {
+    private addComponent(component: Component, factoryItem: any, assetType: FactoryType, assetCategory: FactoryAttributeType, preset: any, x: number, y: number, i: number, gridSize: number, vOffset: number ) {
         let addTo:   DBComponent[] = null,
             layout:  any         = {},
             systems: any         = this.world.systems,

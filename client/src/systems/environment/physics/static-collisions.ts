@@ -1,6 +1,6 @@
 import Convolvr from '../../../world/world'
-import Component from '../../../core/component'
-import Entity from '../../../core/entity'
+import Component from '../../../model/component'
+import Entity from '../../../model/entity'
 
 import * as THREE from 'three';
 let entPos = new THREE.Vector3()

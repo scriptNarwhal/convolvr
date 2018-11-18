@@ -1,6 +1,5 @@
 import * as React from "react"; import { Component } from "react";
-import { withRouter } from 'react-router-dom'
-import FileButton from './file-button'
+import { FileButton } from 'energetic-ui'
 
 
 class UploadFiles extends Component<any, any> {

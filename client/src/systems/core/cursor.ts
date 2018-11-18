@@ -1,7 +1,7 @@
 import { GRID_SIZE } from '../../config'
 import Convolvr from '../../world/world';
-import Component from '../../core/component';
-import Entity from '../../core/entity';
+import Component from '../../model/component';
+import Entity from '../../model/entity';
 import * as THREE from 'three';
 
 let handDirection = new THREE.Vector3(0, 0, 0),
@@ -51,7 +51,7 @@ export default class CursorSystem {
             position = cameraPos
         }
 
-        raycaster.set( { ...position, x: position.x, y: position.y-0.12 }, handDirection )
+        raycaster.set(position, handDirection )
         coords = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), 0, Math.floor( position.z / GRID_SIZE[ 2 ] ) ]
         raycaster.ray.far = 100000
         castObjects = this.getSurroundingVoxels( voxels, coords )
@@ -64,7 +64,7 @@ export default class CursorSystem {
             while ( i > -1 ) {
                 obj = intersections[ i ];
                 entity = obj.object.userData.entity;
-                if (entity && (entity.componentsByAttr.terrain || entity.hasTag("no-raycast"))) {
+                if (entity &&  entity.hasTag("no-raycast")) { // (entity.componentsByAttr.terrain && entity.allComponents[0].components.length == 0 ||
                     i -= 1
                     continue
                 }

@@ -3,6 +3,14 @@ import * as THREE from 'three';
 import Entity from "./entity";
 import Binding from './binding';
 import Property from "./property";
+import { Attributes, AttributeName } from './attribute';
+import { AnyObject } from '../util';
+import AssetSystem from '../systems/core/assets';
+import { Vector3 } from 'three';
+
+export type NameOrId = string|number;
+export type EntityPath = [string, NameOrId];
+export type ComponentPath = [string, NameOrId, NameOrId|NameOrId[]];
 
 export type DBComponent = {
   id?:         number
@@ -11,9 +19,9 @@ export type DBComponent = {
   components?: DBComponent[]
   position?:   number[]
   quaternion?: number[]
+  attrs?:      Attributes
   props?:      { [key: string]: Property }
-  attrs?:      { [key: string]: any }
-  state?:      { [key: string]: any }
+  state?:      { [key: string]: AnyObject }
   tags?:       string[]
 }
 
@@ -21,11 +29,11 @@ export default class Component {
 
   public entity:             any
   public mesh:               any
+  public attrs:              Attributes
   public props:              { [key: string]: any }
-  public attrs:              { [key: string]: any }
   public state:              { [key: string]: any }
   public bindings:           Binding[]
-  public components:         any[]
+  public components:         DBComponent[]
   public compsByFaceIndex:   any[]
   public allComponents:      Component[]
   public combinedComponents: Component[]
@@ -41,10 +49,10 @@ export default class Component {
 
 
   constructor (data: DBComponent, entity: Entity, systems: any, config: any = false, parent?: Component | null) {
-      let quaternion = data.quaternion ? data.quaternion : false,
-          position = data.position ? data.position : [ 0, 0, 0 ],
+      let quaternion,
+          position,
           path = config && config.path ? config.path : [],
-          attrs = data.attrs,
+          attrs: Attributes,
           mesh = null,
           pl = path.length,
           p = 0
@@ -61,16 +69,19 @@ export default class Component {
        * Templated Components
        */
       if (data.class) {
-        // look up component
-        data = systems.assets.makeComponent(data.class, data);
+        data = (systems.assets as AssetSystem).makeComponent(data.class, data); 
       }
 
+      data.components =  data.components || []
+      attrs = data.attrs;
+      quaternion = data.quaternion ? data.quaternion : false;
+      position = data.position ? data.position : [ 0, 0, 0 ];
 
       this.entity = entity
       this.data = data
-      this.attrs = data.attrs || {}
+      this.attrs = attrs || {}
       this.state = {}
-      this.components = data.components || []
+      this.components = data.components
       this.compsByFaceIndex = []
       this.allComponents = []
       this.combinedComponents = []
@@ -218,7 +229,7 @@ export default class Component {
     return false;
   }
 
-  public getClosestComponent(position: number[], recursive = false): Component {
+  public getClosestComponent(position: Vector3, recursive = false): Component {
     let compPos = this._compPos, 
         entMesh = this.mesh,
         parentMesh = this.parent ? this.parent.mesh : false,

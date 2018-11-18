@@ -1,9 +1,24 @@
 import Convolvr from '../../world/world'
-import Component from '../../core/component'
+import Component from '../../model/component'
+import { Material, Mesh, Texture } from 'three';
+import { text } from '../../model/attribute';
+import { System } from '..';
 
 let _THREE: any;
 
-export default class TextSystem {
+export interface TextState  {
+    textMaterial?: Material,
+    textMesh: Mesh,
+    textTexture: Texture,
+    textCanvas: Element,
+    canvasSize: number[],
+    context: any,
+    config: any,
+    update: ( textProp: text ) => void,
+    write: ( text: string ) => void
+}
+
+export default class TextSystem implements System {
 
     mappedColors: string[]
     world: Convolvr
@@ -19,7 +34,7 @@ export default class TextSystem {
         ]
     }
 
-    public init(component: Component) {
+    public init(component: Component): TextState {
         let attr = component.attrs.text,
             text = attr.lines,
             color = attr.color,
@@ -122,8 +137,6 @@ export default class TextSystem {
             color        = attr.color,
             background   = attr.background,
             textTexture  = state.textTexture,
-            textMaterial = null,
-            textCanvas   = state.textCanvas,
             canvasSize   = state.canvasSize,
             context      = state.context,
             config       = state.config;
@@ -133,8 +146,7 @@ export default class TextSystem {
     }
 
    public renderText(context: any, text: Array<string>, color: string, background: string, canvasSize: Array<number>, config: any) {
-        let textLine = '',
-            label = config.label,
+        let label = config.label,
             fontSize = (config.fontSize > 0 ? config.fontSize : (label ? 58 : 39)),
             lineHeight = fontSize*1.35,
             textRenderState: any = {
@@ -215,7 +227,7 @@ export default class TextSystem {
         let xSize = textState.canvasSize[0],
             lineHeight = textState.fontSize,
             height = 960-(1 + (lines-l)*lineHeight),
-            toggleCodeBlock = line.indexOf('```') > -1;
+            toggleCodeBlock = line.indexOf && line.indexOf('```') > -1;
           
         if ( line[0] == '#' ) { // markdown heading
             context.fillStyle = '#ffffff'

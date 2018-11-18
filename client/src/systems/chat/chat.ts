@@ -1,13 +1,14 @@
 import { events } from '../../network/socket'
 import Convolvr from '../../world/world';
-import Entity from '../../core/entity';
+import Entity from '../../model/entity';
 import {
     getChatHistory,
     sendMessage
   } from '../../2d-ui/redux/actions/message-actions'
-import Component from '../../core/component';
+import Component from '../../model/component';
+import { System } from '..';
 
-export default class ChatSystem {
+export default class ChatSystem implements System {
 
     world: Convolvr
     componentsByUserId: any
@@ -53,10 +54,11 @@ export default class ChatSystem {
         })
     }
 
-    allSystemsLoaded () {
+    postInject() {
          // init chat modal for current user
+         
          setTimeout( ()=>{
-            
+            this.world.store.dispatch(getChatHistory(this.world.name, 0));
             this.initChatModal()
          }, 1700)
     }
@@ -111,13 +113,13 @@ export default class ChatSystem {
     }
 
     initChatModal() {
-        let chatModal = this.world.systems.assets.makeEntity("help-screen", true, {}, [0,1,0]),
+        const chatModal = this.world.systems.assets.makeEntity("help-screen", true, {}, [0,1,0]) as Entity,
             cPos = this.world.three.camera.position;
 
         chatModal.components[0].attrs.text.lines = ["Welcome"]
         chatModal.init(this.world.three.scene, false, ()=>{})
-        chatModal.update(cPos.x, cPos.y - 1, cPos.z - 1.7)
-        this.chatModal = chatModal
+        chatModal.update([cPos.x, cPos.y - 1, cPos.z - 1.7]);
+        this.chatModal = chatModal;
     }
 
     updateChatModal() {

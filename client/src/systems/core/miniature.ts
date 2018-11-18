@@ -1,5 +1,5 @@
 import Convolvr from "../../world/world";
-import Component from "../../core/component";
+import Component from "../../model/component";
 
 export default class MiniatureSystem {
 
@@ -40,8 +40,8 @@ export default class MiniatureSystem {
 
             if ( !!! component.entity || !!! component.entity.mesh )
                 return
-
-            scale = 1 / ( component.entity.boundingRadius / ( finalScale || 0.5 ) )
+                
+            scale = 1 / ( Math.max(1, component.entity.boundingRadius / ( finalScale || 0.5 )))
 
             if ( revert ) {
                 component.entity.mesh.scale.set( 1, 1, 1 )

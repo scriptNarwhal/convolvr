@@ -1,15 +1,29 @@
 import { Component } from "react";
 import Convolvr from "../../../world/world";
+import { AnyObject } from "../../../util";
 
 export default class IOControllerDevice {
-    private world: Convolvr;
+    public world: Convolvr;
     
     constructor (world: Convolvr ) {
         this.world = world
     } 
     
-    init(component: Component) {
-        
+    /**
+     * 
+     * What does this do?
+     * 
+     * 
+     * it allows reading and writing to GPIO ports
+     * 
+     * 
+     */
+
+
+    public init(data: AnyObject) {
+        return {
+            
+        }
     }
     // implement
 

@@ -1,12 +1,17 @@
 import Convolvr from "../../../world/world";
+import { AnyObject } from "../../../util";
 
 export default class PointingDevice {
-    private world: Convolvr;
+    public world: Convolvr;
     
     constructor (world: Convolvr ) {
         this.world = world
     } 
     
-    // implement
+    public init(data: AnyObject) {
+        return {
+            
+        }
+    }
     
 }

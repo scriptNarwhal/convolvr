@@ -1,14 +1,15 @@
 // not using flow yet..
 import Convolvr from '../../world/world'
-import Component from '../../core/component'
+import Component from '../../model/component'
 import * as THREE from 'three';
+import { System } from '..';
 
 type FBXState = {
     url: string
     fbx: any
 }
 
-export default class FBXPluginSystem { // allows use of imported .fbx models
+export default class FBXPluginSystem implements System { // allows use of imported .fbx models
     public world: Convolvr
     public loader: any
     public manager: any

@@ -1,7 +1,8 @@
 import Convolvr from '../../world/world'
-import Component from '../../core/component'
+import Component from '../../model/component'
 // import { THREE } from 'three'
 import * as THREE from 'three';
+import { audio } from '../../model/attribute';
 export default class AudioSystem {
 
     world: Convolvr
@@ -13,7 +14,7 @@ export default class AudioSystem {
     }
 
     init ( component: Component ) { 
-        let attr = component.attrs.audio,
+        let attr: audio = component.attrs.audio,
             assets = this.world.systems.assets,
             sound: any = null,
             element: any = null

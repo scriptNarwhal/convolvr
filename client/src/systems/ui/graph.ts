@@ -1,11 +1,20 @@
 import Convolvr from "../../world/world";
-import Component from "../../core/component";
+import Component from "../../model/component";
+import { System } from "..";
+import LayoutSystem from "./layout";
 
-export default class GraphSystem {
-    private world: Convolvr;
+export default class GraphSystem implements System {
+    world: Convolvr;
+    dependencies = [["layout"]]
 
+    private layout: LayoutSystem
+    
     constructor ( world: Convolvr ) {
         this.world = world
+    }
+
+    postInject() {
+
     }
 
     init(component: Component) {

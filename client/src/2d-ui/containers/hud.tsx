@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Component } from "react";
-import Button from '../components/button'
-import { withRouter } from 'react-router-dom'
+import { Button } from 'energetic-ui'
 
 const styles = {
     optionButton: {

@@ -1,6 +1,6 @@
 import ToolboxSystem from "../systems/tool/toolbox";
-import Component from "../core/component";
-import Entity from "../core/entity";
+import Component from "../model/component";
+import Entity from "../model/entity";
 import Convolvr from "./world";
 
 export default class Tool {

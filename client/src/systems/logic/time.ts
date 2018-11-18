@@ -1,5 +1,5 @@
 import Convolvr from "../../world/world";
-import Component from "../../core/component";
+import Component from "../../model/component";
 
 export default class TimeSystem {
 
@@ -28,8 +28,8 @@ export default class TimeSystem {
         // implement
     }
 
-    getTime ( component: Component ) {
-
+    getTime ( component: Component ): number {
+        return Date.now(); // hmm
     }
 
 }

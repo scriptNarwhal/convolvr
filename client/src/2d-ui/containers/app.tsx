@@ -1,9 +1,10 @@
 import * as React from "react"; import { Component } from "react";
 import { withRouter } from 'react-router-dom'
-import { Router, Route, Switch} from 'react-router'
+import { Route, Switch} from 'react-router'
 import { events } from '../../network/socket'
 import Shell from '../components/shell'
-import Button from '../components/button'
+import SideMenu from '../components/side-menu'
+import { Button } from 'energetic-ui'
 import Data from '../../2d-ui/containers/data'
 import Spaces from '../../2d-ui/containers/worlds'
 import Places from '../../2d-ui/containers/places'
@@ -18,7 +19,6 @@ import HUD from '../../2d-ui/containers/hud'
 import { APP_ROOT} from '../../config'
 import { 
   detectSpaceDetailsFromURL,
-  GRID_SIZE,
   APP_NAME
 } from '../../config';
 import * as THREE from 'three'; 
@@ -66,8 +66,7 @@ class App extends Component<AppContainerProps, AppContainerState> {
     this.props.getInventory(this.props.username, "Components")
     this.props.getInventory(this.props.username, "Properties")
 
-    let world = (window as any).three.world, 
-        worldDetails = detectSpaceDetailsFromURL()
+    let world = (window as any).three.world;
 
     this.world = world;
     events.on("chat message", (message: any) => {
@@ -103,9 +102,6 @@ class App extends Component<AppContainerProps, AppContainerState> {
         document.title = worldName
       }
 
-      let worldMode = (window as any).three.world.mode,
-          worldUser = worldDetails[ 0 ]
-
       if ( !this.props.menuOpen ) {
         // TODO: implement show chat modal
         // world.chatModal.componentsByAttr.text[0].state.text. 
@@ -124,9 +120,11 @@ class App extends Component<AppContainerProps, AppContainerState> {
     world.rememberUserCallback = (username: string, password: string) => {
 			  this.props.login(username, password, "", {});
     };
-    world.initChatCallback = () => {
-      this.props.getChatHistory(world.name, 0);
-    };
+    // alert("set init chat callback")
+    // world.initChatCallback = () => {
+    //   alert("get chat history")
+    //   this.props.getChatHistory(world.name, 0);
+    // };
     world.onFocusCallback = () => {
       this.setState({
 			  unread: 0
@@ -185,34 +183,25 @@ class App extends Component<AppContainerProps, AppContainerState> {
   }
 
   notify (chatMessage: string, from: string) {
-
-    function doNotification() {
-      function onNotifyShow() {
-          console.log('notification was shown!');
-      }
-      let Notify = (window as any).Notify.default,
-          myNotification = new Notify(`Message from ${from}`, {
-          body: chatMessage,
-          notifyShow: onNotifyShow
+    if (!("Notification" in window)) {
+      console.warn("This browser does not support desktop notification");
+    } else if ((Notification as any).permission === "granted") {
+      const notification = new Notification(`Message from ${from}`, {
+        body: chatMessage
+      } as NotificationOptions);
+    } else if ((Notification as any ).permission !== "denied") {
+      Notification.requestPermission().then(function (permission) {
+        // If the user accepts, let's create a notification
+        if (permission === "granted") {
+          const notification = new Notification(`Message from ${from}`, {
+            body: chatMessage
+          }as NotificationOptions);
+        }
       });
-      myNotification.show()
     }
-    function onPermissionGranted() {
-        console.log('Permission has been granted by the user');
-        doNotification();
-    }
-    function onPermissionDenied() {
-        console.warn('Permission has been denied by the user');
-    }
-    if (!(window as any).Notify.needsPermission) {
-        doNotification();
-    } else if ((window as any).Notify.isSupported()) {
-      (window as any).Notify.requestPermission(onPermissionGranted, onPermissionDenied);
-    }
+
   }
   
-  
-
   renderVRButtons () {
     return this.props.stereoMode ?
         [<Button title="Exit VR"
@@ -245,13 +234,12 @@ class App extends Component<AppContainerProps, AppContainerState> {
   }
 
   render() {
-
     return (
         <div className="root">
          <Shell noBackground={true}
                 hasMenu={true}
                 menuOnly={true}
-                menuOpen={this.props.menuOpen} ></Shell>
+                menuOpen={this.props.menuOpen}></Shell>
          { this.renderVRButtons() }
          <Button title="Close Menu"
                  image="/data/images/x.png"
@@ -295,7 +283,6 @@ class App extends Component<AppContainerProps, AppContainerState> {
         </div>
     )
   }
-
 }
 
 import { connect } from 'react-redux'
@@ -322,6 +309,7 @@ import {
   getInventory
 } from '../../2d-ui/redux/actions/inventory-actions'
 import Convolvr from "../../world/world";
+import sideMenu from "../components/side-menu";
 
 export default connect(
   (state: any) => {

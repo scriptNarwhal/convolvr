@@ -1,4 +1,6 @@
-export let rgb = ( r: number, g: number, b: number ) => { // because I never remeber to quote that rofl..
+import * as THREE from "three";
+
+export let rgb = ( r: number, g: number, b: number ) => { 
     return `rgb(${r}, ${g}, ${b})`
 }
 
@@ -9,3 +11,6 @@ export let rgba = ( r: number, g: number, b: number, a: number ) => {
 export type Flags = { [key: string]: boolean }
 
 export type AnyObject = { [_:string]: any }
+
+
+export const zeroZeroZero = new THREE.Vector3(0,0,0);

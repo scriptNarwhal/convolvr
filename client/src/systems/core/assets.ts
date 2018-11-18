@@ -1,7 +1,7 @@
 import axios, { AxiosPromise } from 'axios';
 import { API_SERVER } from '../../config'
 
-import Entity from '../../core/entity'
+import Entity, { DBEntity } from '../../model/entity'
 import BuiltinProps from '../../assets/attributes'
 import avatar from '../../assets/entities/avatars/avatar'
 import hero from '../../assets/entities/avatars/hero'
@@ -16,7 +16,12 @@ import panel3 from '../../assets/entities/misc/panel-3'
 import block from '../../assets/entities/misc/block'
 import column1 from '../../assets/entities/misc/column-1'
 import wirebox from '../../assets/entities/misc/wirebox'
+
 import fileBrowser from '../../assets/entities/information/hardware/file-browser'
+import terminal from '../../assets/entities/information/hardware/terminal'
+import keyboard from '../../assets/entities/information/hardware/keyboard'
+import pointingDevice from '../../assets/entities/information/hardware/pointing-device'
+import printer from '../../assets/entities/information/hardware/printer'
 
 import panel1Comp from '../../assets/components/misc/panel-1'
 import column1Comp from '../../assets/components/misc/column-1'
@@ -30,14 +35,22 @@ import weapon from '../../assets/components/tool/weapon'
 import HardwareDevices from '../../assets/components/information/hardware';
 import ASTLiterals from '../../assets/components/information/software/ecs/ast/literals'
 import ECSObjects from '../../assets/components/information/software/ecs/object'
+import ASTExpressions from '../../assets/entities/information/software/ecs/ast/expressions'
+import ASTStatements from '../../assets/entities/information/software/ecs/ast/statements'
+import BuiltinPallet from '../../assets/entities/information/software/ecs/builtin-pallet'
+import ExpressionPallet from '../../assets/entities/information/software/ecs/expression-pallet'
+import LiteralPallet from '../../assets/entities/information/software/ecs/literal-pallet'
+import StatementPallet from '../../assets/entities/information/software/ecs/statement-pallet'
 
 import battleship from '../../assets/entities/vehicles/battleship'
 import car from '../../assets/entities/vehicles/car'
 import Convolvr from '../../world/world.js';
-import Component, { DBComponent } from '../../core/component.js';
+import Component, { DBComponent } from '../../model/component.js';
 
 import * as THREE from 'three';
 import { Flags, AnyObject } from '../../util';
+import ObjPluginSystem from '../importers/obj-plugin';
+import FBXPluginSystem from '../importers/fbx-plugin';
 
 export default class AssetSystem {
 
@@ -166,8 +179,8 @@ export default class AssetSystem {
 
     public loadModel(asset: string) { // use obj and fbx systems
         let systems = this.world.systems,
-            obj = systems.obj,
-            fbx = systems.fbx
+            obj: ObjPluginSystem = systems.obj,
+            fbx: FBXPluginSystem = systems.fbx
 
         // implement
         // check format from file extension
@@ -200,7 +213,6 @@ export default class AssetSystem {
     }
 
     getEnvMapFromColor ( r: number, g: number, b: number ) {
-
         let envURL = '/data/images/photospheres/sky-reflection';
 
         if ( r !== g && g !== b ) {
@@ -317,26 +329,40 @@ export default class AssetSystem {
         this.directories = this.directories.concat( directories )
     }
 
-    public makeEntity( name: string, init: boolean, config: any, voxel: number[] ) {
+    public makeEntity( name: string, init: boolean, config: any, voxel: number[] ): Entity | DBEntity {
 
         let builtIn = this.entitiesByName,
             library = builtIn[ name ] != null ? builtIn : this.userEntitiesByName,
             toMake = library[ name ],
-            ent = typeof toMake == 'function' ? toMake( this, config, voxel ) : toMake
+            ent: DBEntity = typeof toMake == 'function' ? toMake( this, config, voxel ) : toMake
 
         if ( init ) {
-            return new Entity( ent.id, ent.components, ent.position, ent.quaternion, voxel )
+            return new Entity( ent.id, ent.components, ent.position, ent.quaternion, voxel );
         } else {
-            return { ...ent, voxel }
+            return { ...ent, voxel } as DBEntity;
         }
     }
 
-    public makeComponent( name: string, data: any, config?: any) {
+    public makeComponent(name: string, data: any, config?: any) {
         let builtIn = this.componentsByName,
-            library = builtIn[ name ] != null ? builtIn : this.userComponentsByName
+            library = builtIn[ name ] != null ? builtIn : this.userComponentsByName;
 
         if ( data ) {
-            return { ...library[ name ], data }
+            const newComp = { ...library[ name ]};
+
+            newComp.attrs =  { ...newComp.attrs, ...data.attrs };
+            if (data.position) {
+                newComp.position = data.position;
+            }
+            if (data.quaternion) {
+                newComp.quaternion = data.quaternion;
+            }
+            if (newComp.components) {
+                if (data.components) {
+                    newComp.components = newComp.components.concat(data.components);
+                }
+            }
+            return newComp;
         } else {
             return { ...library[ name ] }
         }
@@ -345,10 +371,16 @@ export default class AssetSystem {
     public getMaterialProp ( name: string ) {
         let attr: any = null
         
-        this.attrs.material.map(( mat: any, i: number ) => {
-            if ( mat.name == name ) 
-                attr = mat
-        })
+        for (const attribute of this.attrs.material.material) { //map(( mat: any, i: number ) => {
+            if ( attribute.name == name ) 
+                attr = attribute
+        }
+        if (!attr) {
+            for (const attribute of this.attrs.material.color) { //map(( mat: any, i: number ) => {
+                if ( attribute.name == name ) 
+                    attr = attribute
+            }
+        }
 
         return { ...attr }
     }
@@ -400,12 +432,21 @@ export default class AssetSystem {
     private initInformationHardware() {
         this.initializeAllInModule("component", HardwareDevices);
         this._addBuiltInEntity( "file-browser", fileBrowser )
+        this._addBuiltInEntity( "terminal", terminal )
+        this._addBuiltInEntity( "keyboard", keyboard )
+        this._addBuiltInEntity( "pointing-device", pointingDevice )
+        this._addBuiltInEntity( "printer", printer )
     }
 
     private initInformationSoftware() {
         this.initializeAllInModule("component", ECSObjects);
         this.initializeAllInModule("component", ASTLiterals);
-        this.initializeAllInModule("component", ASTLiterals);
+        this.initializeAllInModule("entity", ASTExpressions);
+        this.initializeAllInModule("entity", ASTStatements);
+        this._addBuiltInEntity( "builtin-pallet", BuiltinPallet );
+        this._addBuiltInEntity( "expression-pallet", ExpressionPallet );
+        this._addBuiltInEntity( "literal-pallet", LiteralPallet );
+        this._addBuiltInEntity( "statement-pallet", StatementPallet );  
     }
 
     private initializeAllInModule(type: "component" | "entity", all: AnyObject) {

@@ -17,6 +17,7 @@ import messages from './reducers/message'
 import files from './reducers/file'
 import util from './reducers/util'
 import inventory from './reducers/inventory'
+import { USE_REDUX_LOG } from '../../config';
 
 export default function configureStore(router: any, initialState = {}) {
   return createStore(
@@ -35,9 +36,13 @@ export default function configureStore(router: any, initialState = {}) {
                      inventory
         }),
         initialState,
-        applyMiddleware(
-            ReduxThunk,
-            loggerMiddleware
-        )
+        USE_REDUX_LOG 
+            ? applyMiddleware(
+                ReduxThunk,
+                loggerMiddleware
+            ) 
+            : applyMiddleware(
+                ReduxThunk
+            ) 
   )
 }

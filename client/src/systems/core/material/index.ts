@@ -4,14 +4,21 @@ import {
 } from './material-init'
 import ProceduralMaterials from './material-procedural'
 import Convolvr from '../../../world/world';
-import Component from '../../../core/component';
+import Component from '../../../model/component';
 import AssetSystem from '../assets';
 
 import * as THREE from 'three';
-export default class MaterialSystem {
+import { System } from '../..';
+import { material } from '../../../model/attribute';
+import { Texture } from 'three';
+import { AnyObject } from '../../../util';
 
-  private world: Convolvr
-  public procedural: ProceduralMaterials
+export default class MaterialSystem implements System {
+
+  public world: Convolvr;
+  public dependencies = [["assets"]];
+  private assets: AssetSystem;
+  public procedural: ProceduralMaterials;
   private mapTypes = [
       "map",
       "roughnessMap",
@@ -21,8 +28,8 @@ export default class MaterialSystem {
     ];
 
     constructor ( world: Convolvr ) {
-        this.world = world
-        this.procedural = new ProceduralMaterials(this, world)
+        this.world = world;
+        this.procedural = new ProceduralMaterials(this, world);
     }
 
     init(component: Component) {
@@ -30,19 +37,15 @@ export default class MaterialSystem {
         let materialSystem = this,
             mobile = this.world.mobile,
             attrs = component.attrs,
-            attr = attrs.material,
+            attr: material = attrs.material,
             mat: any = { color: attr.color || 0xffffff },
-            assets = this.world.systems.assets,
+            assets = this.assets || this.world.systems.assets,
             renderer = (window as any).three.renderer,
             anisotropy = renderer.capabilities.getMaxAnisotropy() / ( mobile ? 2 : 1 ),
             path = '/data',
             material: any = { notInitialized: 1 },
             basic = false,
             textureConfig: any = { },
-            diffuse = !!attr.map ? attr.map.replace(path, '') : "",
-            specular = !!attr.specularMap ? attr.specularMap.replace(path, '') : "",
-            alpha = !!attr.alphaMap ? attr.alphaMap : "",
-            bump = !!attr.bumpMap ? attr.bumpMap : "",
             envMapUrl = !! attr.envMap ? attr.envMap : assets.envMaps.default,
             reflection = !!envMapUrl ? envMapUrl.replace(path, '') : "",
             pattern = !!attr.procedural ? attr.procedural.name : "",
@@ -88,8 +91,7 @@ export default class MaterialSystem {
                         assets.loadImage(attr.roughnessMap, textureConfig)
                           .then((map) => {
                             this.mapCallback(map, "roughnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
-                          }
-                          )
+                          })
                       })
                     }
                     if (attr.metalnessMap) {
@@ -97,8 +99,7 @@ export default class MaterialSystem {
                         assets.loadImage(attr.metalnessMap, textureConfig)
                           .then((map) => {
                             this.mapCallback(map, "metalnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
-                          }
-                          )
+                          })
                       })
                     }
                     allMaps.then(() => {
@@ -163,8 +164,8 @@ export default class MaterialSystem {
       }
     }
 
-    private mapCallback(
-      map: any, mapName: string, mat: any, attr: any, shading: number, basic: boolean, mobile: boolean,
+    private mapCallback( 
+      map: Texture, mapName: string, mat: AnyObject, attr: material, shading: string, basic: boolean, mobile: boolean,
       anisotropy: number, simpleShading: boolean, material: any, ms: MaterialSystem
     ) {
         map.wrapS = map.wrapT = THREE.ClampToEdgeWrapping;
@@ -173,11 +174,11 @@ export default class MaterialSystem {
         mat[mapName] = map;
     }
 
-    public getTextureCode( attr: any, mapType: string ) {
+    public getTextureCode( attr: material, mapType: string ) {
      return `${attr[mapType]}:${attr.repeat ? attr.repeat.join(".") : ""}`;
     }
 
-    private _loadAlphaMap ( attr: any, textureConfig: any, material: any, assets: AssetSystem, callback: Function ) {
+    private _loadAlphaMap ( attr: material, textureConfig: any, material: any, assets: AssetSystem, callback: Function ) {
       assets.loadImage( attr.alphaMap, textureConfig)
       .then((texture: any) => { 
         let renderer = this.world.three.renderer
@@ -193,7 +194,7 @@ export default class MaterialSystem {
       })
     }
 
-    private _loadBumpMap (attr: any, textureConfig: any, material: any, assets: AssetSystem, callback: Function) {
+    private _loadBumpMap (attr: material, textureConfig: any, material: any, assets: AssetSystem, callback: Function) {
             assets.loadImage( attr.bumpMap, textureConfig)
             .then((texture: any) => { 
               let renderer = this.world.three.renderer
@@ -210,7 +211,7 @@ export default class MaterialSystem {
       
       }
 
-    _initMaterial(attr: any, config: any, shading: any, basic: boolean, mobile: boolean) {
+    _initMaterial(attr: material, config: AnyObject, shading: any, basic: boolean, mobile: boolean) {
       let material = null
 
       shading = mobile ? "lambert" : shading
@@ -227,7 +228,7 @@ export default class MaterialSystem {
         return material
     }
 
-    _setTextureRepeat ( texture: any, repeat: any[] ) {
+    _setTextureRepeat (texture: Texture, repeat: [string, number, number] ) {
       if ( repeat[0] == "wrapping" ) {
           texture.wrapS = texture.wrapT = THREE.RepeatWrapping
 			    texture.repeat.set(repeat[1], repeat[2])

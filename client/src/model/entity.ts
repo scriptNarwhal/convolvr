@@ -14,9 +14,9 @@ export type DBEntity = {
   components:     DBComponent[]
   position:       number[]
   quaternion:     number[]
-  voxel:          number[]
-  tags:           string[]
-  boundingRadius: number
+  voxel?:          number[]
+  tags?:           string[]
+  boundingRadius?: number
 }
 
 enum WorkerUpdateMode {
@@ -27,6 +27,7 @@ enum WorkerUpdateMode {
 }
 
 import * as THREE from 'three';
+import { Vector3 } from 'three';
 
 export default class Entity {
 
@@ -230,7 +231,7 @@ export default class Entity {
       console.warn("Entity must have at least 1 component")
       return false
     }
-
+    
     while ( c < ncomps ) {
         comp = new Component( this.components[ c ], this, systems, { mobile, index: c, path: [ c ] } ) // use simpler shading for mobile gpus
         compMesh = comp.mesh;
@@ -241,6 +242,10 @@ export default class Entity {
 
         compMesh.geometry.computeBoundingSphere() // check bounding radius
         compRadius = compMesh.geometry.boundingSphere.radius
+        if (c == 0) {
+          const size = comp.attrs.geometry.size || [1,1,1];
+          dimensions = [ Math.max(1, size[0]), Math.max(1, size[1]), Math.max(1, size[2]) ];
+        }
         dimensions = [
           Math.max( dimensions[ 0 ], Math.abs( compMesh.position.x ) + compRadius ),
           Math.max( dimensions[ 1 ], Math.abs( compMesh.position.y ) + compRadius ),
@@ -328,20 +333,20 @@ export default class Entity {
     return this
   }
 
-  public save(oldVoxel: any = false): void {
-    if ( oldVoxel !== false ) {
-      this.saveUpdatedEntity( oldVoxel )
-    } else {
-      this.saveNewEntity()
-    }
+  public save(oldVoxel: any = false): Promise<any> {
     this.callHandlers("save")
+    if ( oldVoxel !== false ) {
+      return this.saveUpdatedEntity( oldVoxel )
+    } else {
+      return this.saveNewEntity()
+    }
   }
 
-  private saveNewEntity(): void {
+  private saveNewEntity(): Promise<any> {
     let data = this.serialize(),
         worldName = (window as any).three.world.name;
 
-    axios.put(
+    return axios.put(
       `${API_SERVER}/api/import-to-world/${worldName}/${this.voxel.join("x")}`,
        data
     ).then( (response: any) => {
@@ -351,13 +356,13 @@ export default class Entity {
     })
   }
 
-  private saveUpdatedEntity(oldVoxel: any): void {
+  private saveUpdatedEntity(oldVoxel: any): Promise<any> {
     let data = this.serialize(),
         worldName = (window as any).three.world.name;
 
     console.info("save", data)
     console.log("oldVoxel", oldVoxel, "newVoxel", this.voxel)
-    axios.put(
+    return axios.put(
       `${API_SERVER}/api/update-space-entity/${worldName}/${this.voxel.join("x")}/${oldVoxel.join("x")}`,
        data
     ).then( (response: any) => {
@@ -441,14 +446,13 @@ export default class Entity {
     return voxel
   }
 
-  // refactor to return instantiated component
   public getComponentByPath(path: any[], pathIndex: number, components: Component[] | false = false): Component {
     let foundComponent = null
 
     if ( components == false )
       components = this.allComponents;
     if ( pathIndex + 1 < path.length ) {
-      foundComponent = this.getComponentByPath( path, pathIndex + 1, components[ path[ pathIndex ] ].components )
+      foundComponent = this.getComponentByPath( path, pathIndex + 1, components[ path[ pathIndex ] ].allComponents )
     } else {
       foundComponent = components[ path[ pathIndex ] ]
     }
@@ -534,7 +538,7 @@ export default class Entity {
     //systems.oimo.worker.postMessage( message )
   }
 
-  public getClosestComponent( position: any, recursive = true ) {
+  public getClosestComponent( position: Vector3, recursive = true ) {
     let compPos = this.compPos,
         entMesh = this.mesh,
         worldCompPos = null,

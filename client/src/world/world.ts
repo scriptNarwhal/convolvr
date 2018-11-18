@@ -1,5 +1,4 @@
 import axios from 'axios'
-// import { browserHistory } from 'react-router'
 import * as THREE from 'three';
 import THREEJSPluginLoader from '../lib';
 // import * as ProgressBar from 'progressbardottop';
@@ -14,10 +13,11 @@ import {
 	isMobile,
 	GLOBAL_SPACE
 } from '../config'
+import { SpaceConfig } from '../model/space'
 import { send } from '../network/socket'
 import User from './user'
 import Avatar from '../assets/entities/avatars/avatar'
-import Entity from '../core/entity'
+import Entity from '../model/entity'
 import Systems from '../systems'
 import PostProcessing from './post-processing'
 import SocketHandlers from '../network/handlers'
@@ -30,7 +30,9 @@ import {
 	compressVector4
 } from '../network/util'
 import UserInput from '../input/user-input'
-import Component from '../core/component';
+import Component from '../model/component';
+import { zeroZeroZero } from '../util';
+import { Camera, Light, SpotLight, PointLight, PerspectiveCamera, DirectionalLight } from 'three';
 
 let world: any = null,
 	//THREE = (window as any).THREE,
@@ -54,7 +56,7 @@ export default class Convolvr {
 	public socketHandlers: any
 	public userInput:    UserInput = new UserInput(null);
 	public settings: 	 Settings
-	public config: 		 any
+	public config: 		 SpaceConfig
 	public windowFocus:  boolean
 	public willRender:   boolean
 	public name: 	     string
@@ -130,7 +132,7 @@ export default class Convolvr {
 
 		this.postProcessing = postProcessing
 		this.socket = socket
-		this.config = false
+		this.config = null
 		this.windowFocus = true
 		this.name = ""
 		this.userName = "world"
@@ -161,7 +163,7 @@ export default class Convolvr {
 		this.user.id = -Math.floor(Math.random()*1000000);
 		this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
-		this.raycaster.near = 0.25
+		this.raycaster.near = 0.5
 		this.THREE = THREE;
 		(window as any).THREE = THREE;
 
@@ -180,6 +182,7 @@ export default class Convolvr {
 		this.skybox = this.systems.skybox
 		this.workers = {
 			staticCollisions: this.systems.staticCollisions.worker,
+			ecsWorker: this.systems.script.worker
 			// oimo: this.systems.oimo.worker
 		}
 		camera.add(this.systems.audio.listener)
@@ -238,7 +241,7 @@ export default class Convolvr {
 		this.animate(this, 0, 0)
 	}
 
-	public initChatAndLoggedInUser( doLogin = false ) {
+	public initChatAndLoggedInUser(doLogin = false) {
 		this.initChatCallback();
 		if ( doLogin ) {
 			console.log("do login");
@@ -276,12 +279,12 @@ export default class Convolvr {
 			  wholeBody: false 
 			}, 
 			GLOBAL_SPACE 
-		  ) // entity id can be passed into config object
+		  ) as Entity; // entity id can be passed into config object
 	  avatar.init( this.three.scene )
 	  this.user.useAvatar( avatar );
 	  this.initUserInput();
       this.user.toolbox = world.systems.toolbox
-      toolMenu = this.systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) // method for spawning built in entities
+      toolMenu = this.systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) as Entity // method for spawning built in entities
       this.user.hud = toolMenu
       toolMenu.init( this.three.scene, {}, (menu: Entity) => { 
         menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
@@ -289,58 +292,42 @@ export default class Convolvr {
 	  callback && callback(avatar);
 	}
 
-	public init(config: any, callback: Function ) {
+	public init(config: SpaceConfig, callback: Function ) {
+		console.log("init world")
+		const sky = config.sky,
+			terrainColor = [config.terrain.red, config.terrain.green, config.terrain.blue];
+
 		let coords: any    = window.location.href.indexOf("/at/") > -1 ? window.location.href.split('/at/')[1] : false,
-			skyLight 	   = this.skyLight || new THREE.DirectionalLight( config.light.color, 0.35 ),
-			sunLight       = this.sunLight || new THREE.DirectionalLight( 0xffffff, Math.min(1.0, config.light.intensity) ),
+			skyLight 	   = this.skyLight 
+				|| new THREE.HemisphereLight( 
+					new THREE.Color().fromArray([sky.red, sky.green, sky.blue]), 
+					new THREE.Color().fromArray(terrainColor), config.light.intensity * 0.6 ) /* new THREE.DirectionalLight( config.light.color, 0.4 )*/, 
+			sunLight       = this.sunLight || //this.settings.shadows > 0 
+				 new THREE.DirectionalLight( 0xfffff0, Math.min(1.0, config.light.intensity) ),
+				// : new THREE.PointLight(0xffffff, config.light.intensity, 10000000),
 			three          = this.three,
 			camera 		   = three.camera,
-			skyMaterial    = new THREE.MeshBasicMaterial( {color: 0x303030} ),
-			skyTexture     = null,
 			rotateSky      = false,
-			shadowRes      = 1024,
 			envURL 	       = '/data/images/photospheres/sky-reflection.jpg',
 			r 		       = config.sky.red,
 			g 			   = config.sky.green,
 			b 			   = config.sky.blue,
-			shadowCam 	   = null,
 			oldConfig 	   = Object.assign({}, this.config),
 			skySize 	   = 2800+((this.settings.viewDistance+3.5)*1.4)*140,
-			oldSkyMaterial = {}
+			oldSkyMaterial = {};
 
 		this.skyLight = skyLight
 		this.sunLight = sunLight
-		this.skyLight.color.set( config.light.color )
-		this.skyLight.intensity = config.light.intensity / 1.2
-		this.sunLight.intensity = config.light.intensity
+		// this.skyLight.color.set( config.light.color )
+		this.sunLight.intensity = config.light.intensity 
 
 		this.config = config; console.info("Space config: ", config)
 		this.terrain.initTerrain(config.terrain)
-		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 1.4)
+		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 0.5)
 		this.ambientLight.color.set( config.light.ambientColor )
-		Array(this.ambientLight, this.sunLight, this.skyLight).forEach( light => {
-			if ( !!!light.parent ) {
-				three.scene.add( light );
-			}
-		});
+		
 		if ( this.settings.shadows > 0 && sunLight.castShadow == false ) {
-			sunLight.castShadow = true
-			sunLight.shadowCameraVisible = true
-			shadowCam = sunLight.shadow.camera
-			sunLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)
-			sunLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows)
-			shadowCam.near = 0.5      // default
-			shadowCam.far = 1300000
-			shadowCam.left = -400
-			shadowCam.right = 400
-			shadowCam.top = 500
-			shadowCam.bottom = -500
-			three.scene.add(shadowCam)
-
-			if  ( !this.shadowHelper ) {
-				this.shadowHelper = new THREE.CameraHelper( sunLight.shadow.camera );
-				three.scene.add( this.shadowHelper );
-			}
+			this.initShadows(sunLight);
 		}
 
 		if ( !!config && !!config.sky.photosphere ) { console.log("init world: photosphere: ", config.sky.photosphere)
@@ -352,22 +339,27 @@ export default class Convolvr {
 		}
 
 		oldSkyMaterial = this.skyboxMesh.material
-		if (this.skyboxMesh.parent) {
+		if (this.skyboxMesh && this.skyboxMesh.parent) {
 			three.scene.remove(this.skyboxMesh)
 		}
+		console.log("init create skybox")
 		this.skyboxMesh = this.skybox.createSkybox( skySize, oldSkyMaterial )
-
+		
+		const addLightsCallback = () => {
+			for (const light of [world.ambientLight, world.sunLight, world.skyLight]) {
+				if ( !!!light.parent ) {
+					world.skyboxMesh.add( light );
+				} 
+			};
+		}
 		let deferSpaceLoading = false,
 			world = this,
 			rebuildSpace = () => {
+				let yaw = config.light.yaw - Math.PI / 2.0;
 
-				let yaw = config.light.yaw - Math.PI / 2.0,
-					zeroZeroZero = new THREE.Vector3(0,0,0)
-
-				!!world.skyLight && three.scene.remove( world.skyLight )
-				world.skyLight = skyLight
-				skyLight.position.set( 0, 5000, 0 )
-				sunLight.position.set( Math.sin(yaw)*1000, Math.sin(config.light.pitch)*1000, Math.cos(yaw)*1000)
+				//!!world.skyLight && three.scene.remove( world.skyLight )
+				skyLight.position.set( 0, 0, 0 )
+				sunLight.position.set( Math.sin(yaw)*2000, Math.sin(config.light.pitch)*2000, Math.cos(yaw)*2000)
 
 				skyLight.lookAt(zeroZeroZero)
 				sunLight.lookAt(zeroZeroZero)
@@ -379,11 +371,13 @@ export default class Convolvr {
 
 		if ( config.sky.skyType == 'shader' || config.sky.skyType == 'standard' ) {
 			this.skybox.loadShaderSky( config, oldConfig, world.skyboxMesh, ()=>{})
+			addLightsCallback();
 		} else {
 			// load sky texture
 			deferSpaceLoading = true
 			this.skybox.loadTexturedSky( config.sky, this.skyboxMesh, skySize, ()=> {
-				rebuildSpace()
+				addLightsCallback();
+				rebuildSpace();
 			})
 		}
 
@@ -397,7 +391,7 @@ export default class Convolvr {
 		false == deferSpaceLoading && rebuildSpace()
 	}
 
-	public load (userName: string, name: string, callback: Function, readyCallback: Function) { console.log("load world", userName, name)
+	public load(userName: string, name: string, callback: Function, readyCallback: Function) { console.log("load world", userName, name)
 		let world = this
 
 		this.name = name;
@@ -411,12 +405,13 @@ export default class Convolvr {
 		})
 	}
 
-	public reload (user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean) {
+	public reload(user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean) {
 		let world = this,
 			octree = this.octree
 
 		this.terrain.destroy()
 		this.workers.staticCollisions.postMessage(JSON.stringify( { command: "clear", data: {}} ))
+		this.workers.ecsWorker.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		//this.workers.oimo.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		// problem here
 		console.info("reload ", this.skyboxMesh)
@@ -430,7 +425,7 @@ export default class Convolvr {
 			// browserHistory.push("/"+(user||"convolvr")+"/"+name+(!!place ? `/${place}` : ''))
 	}
 
-	generateFullLOD ( coords: string) {
+	generateFullLOD( coords: string) {
 		let voxel = (this.terrain as any).voxels[coords],
 			scene = this.three.scene
 
@@ -441,7 +436,7 @@ export default class Convolvr {
 		}
 	}
 
-	public sendUserData () {
+	public sendUserData() {
 		let camera 	  = this.three.camera,
 			mobile 	  = this.mobile,
 			input 	  = this.userInput,
@@ -561,7 +556,7 @@ export default class Convolvr {
 					  console.warn("Falling back to Convolvr lens distance settings: ", world.manualLensDistance)
 					  three.vrDisplay.deviceInfo_.viewer.interLensDistance = world.manualLensDistance || 0.057 
 					
-					}, 0.09)
+					}, 400)
 				  }
 				  three.vrDisplay.requestAnimationFrame(()=> { // Request animation frame loop function
 					vrAnimate( three.world, three.vrDisplay, Date.now(), [0,0,0], 0)
@@ -580,6 +575,27 @@ export default class Convolvr {
 		  this.onWindowResize()
 	  }
 
+	private initShadows(sunLight: PointLight | DirectionalLight) {
+		if (!sunLight.castShadow) {
+			sunLight.castShadow = true;
+			(sunLight as any).shadowCameraVisible = true
+			let shadowCam: any = sunLight.shadow.camera;
+			sunLight.shadow.mapSize.width = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows);
+			sunLight.shadow.mapSize.height = this.mobile ? 256 : Math.pow( 2, 8+this.settings.shadows);
+			shadowCam.near = 0.5      // default
+			shadowCam.far = 1300000
+			shadowCam.left = -400
+			shadowCam.right = 400
+			shadowCam.top = 500
+			shadowCam.bottom = -500
+			this.three.scene.add(shadowCam);	
+		}
+		if  ( !this.shadowHelper ) {
+			this.shadowHelper = new THREE.CameraHelper( sunLight.shadow.camera );
+			this.three.scene.add( this.shadowHelper );
+		}
+	}
+
 	private initRenderer (renderer: any, id: string) {
 		renderer.setClearColor(0x1b1b1b)
 		// renderer.setPixelRatio(pixelRatio)
@@ -594,7 +610,6 @@ export default class Convolvr {
 	}
 
 	sendVideoFrame () { // probably going to remove this now that webrtc is in place
-
 		let imageSize: Array<number> = [0, 0]
 
 		if ( this.capturing ) {

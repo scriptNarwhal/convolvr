@@ -1,5 +1,5 @@
 import AssetSystem from "../../../../systems/core/assets";
-import { DBComponent } from "../../../../core/component";
+import { DBComponent } from "../../../../model/component";
 
 let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
 
@@ -104,7 +104,6 @@ let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
                     },
                     captureEvents: true // pass them to child components
                 },
-                components: [ ],
                 quaternion: [0, 0, 0, 1],
                 position: [ 0, 0, 0.444 ]
             },

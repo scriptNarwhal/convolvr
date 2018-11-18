@@ -106,7 +106,7 @@ export function createSpace (data: any) {
      return axios.post(API_SERVER+"/api/spaces", data)
         .then((response: any) => {
             dispatch(createSpaceDone(response));
-            /* hack */ window.location.href = window.location.hostname+"/"+data.userName+"/"+data.name;
+            /* hack */ window.location.href = "/"+data.userName+"/"+data.name;
             // (window as any).three.world.reload( data.userName, data.name, false, false ) // until this works perfectly, refresh the page
             // dispatch(navigateTo("/"+data.userName+"/"+data.name));
         }).catch((response: any) => {
