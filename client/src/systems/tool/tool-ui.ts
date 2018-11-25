@@ -77,6 +77,7 @@ export default class ToolUISystem {
     }
 
     updatePosition (component: Component) {
+        console.log("    updatePosition", component)
       let mesh = component.entity.mesh,
           userMesh = this.world.user.avatar.mesh,
           userPos = userMesh.position,

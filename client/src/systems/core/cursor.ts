@@ -64,7 +64,7 @@ export default class CursorSystem {
             while ( i > -1 ) {
                 obj = intersections[ i ];
                 entity = obj.object.userData.entity;
-                if (!entity || entity &&  entity.hasTag("no-raycast") || entity.componentsByAttr.terrain && entity.allComponents[0].components.length == 0) { // (entity.componentsByAttr.terrain && entity.allComponents[0].components.length == 0 ||
+                if (!entity || entity &&  entity.hasTag("no-raycast") || entity.componentsByAttr.terrain && entity.allComponents[0].length === 1) { // (entity.componentsByAttr.terrain && entity.allComponents[0].components.length == 0 ||
                     i -= 1
                     continue
                 }
@@ -189,7 +189,7 @@ export default class CursorSystem {
 
         newCursorState.entity = noRayCast ? cursorState.cursor.entity : entity
         newCursorState.lookingAtEntity = noRayCast ? cursorState.cursor.entity : entity
-        //_changeCursorColor( cursor, newCursorState.entity && newCursorState.entity.componentsByAttr.terrain == null )
+        _changeCursorColor( cursor, newCursorState.entity && newCursorState.entity.componentsByAttr.terrain == null )
         if ( !!!component && cursorState.cursor.component ) {
             if ( lookAway ) {
                 callbacks = cursorState.component.state.lookAway.callbacks

@@ -131,7 +131,7 @@ export default class FileSystem {
                     };
               
             console.log("render files", files)
-        this.systems.extendComponent(component, "metaFactory", fileViewer);
+        this.systems.extendComponent(component, "factoryProvider", fileViewer);
     }
 
     _renderDirectories( component: Component, dirs: any[] ) {
@@ -142,7 +142,7 @@ export default class FileSystem {
             
                 };
 
-        this.systems.extendComponent(component, "metaFactory", directoryViewer);
+        this.systems.extendComponent(component, "factoryProvider", directoryViewer);
     }
 
     _createFile (component: Component, username: string, dir: string ) {

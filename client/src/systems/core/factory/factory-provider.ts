@@ -4,7 +4,7 @@ import Entity, { DBEntity } from '../../../model/entity'
 import { FactoryType, FactoryAttributeType } from '../../../model/attribute';
 import { AnyObject } from '../../../util';
 
-export default class MetaFactorySystem {
+export default class FactoryProviderSystem {
     
     private world: Convolvr
 
@@ -18,7 +18,7 @@ export default class MetaFactorySystem {
 
     public init(component: Component) { 
         
-        let attr:           any                   = component.attrs.metaFactory,
+        let attr:           any                   = component.attrs.factoryProvider,
             assetType:      FactoryType           = attr.type,
             category:       FactoryAttributeType  = attr.attrName,
             gridWidth:      number                = attr.gridWidth || 3,
@@ -189,8 +189,8 @@ export default class MetaFactorySystem {
                         anchorOutput: true
                     },
                     geometry: {
-                        shape: 'box',
-                        size: [2.1,2.1,2.1]
+                        shape: 'plane',
+                        size: [0.1,0.1,0.1]
                     },
                     material: {
                         name: 'wireframe',

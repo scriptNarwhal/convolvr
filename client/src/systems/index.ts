@@ -32,7 +32,7 @@ import DisplaySystem from './video/display'
 import DrawingSystem from './video/drawing'
 import ControlSystem from './vehicle/control'
 import PropulsionSystem from './vehicle/propulsion'
-import MetaFactorySystem from './core/factory/meta-factory'
+import MetaFactorySystem from './core/factory/factory-provider'
 import ParticleSystem from './environment/particle'
 import PortalSystem from './environment/portal'
 import ProjectileSystem from './game/projectile'
@@ -94,6 +94,7 @@ export interface System {
 import * as THREE from 'three';
 import { AnyObject } from '../util';
 import { Mesh } from 'three';
+import FactoryProviderSystem from './core/factory/factory-provider';
 export default class Systems {
 
 	public world: Convolvr
@@ -120,6 +121,7 @@ export default class Systems {
 	public emote: 			 EmoteSystem;
 	public faction: 		 FactionSystem;
 	public factory: 		 FactorySystem;
+	public factoryProvider:  FactoryProviderSystem;
 	public fbx: 			 FBXPluginSystem;
 	public file: 			 FileSystem;
 	public floor: 			 FloorSystem;
@@ -137,7 +139,6 @@ export default class Systems {
 	public magic: 			 MagicSystem;
 	public material: 		 MaterialSystem;
 	public media: 			 MediaSystem;
-	public metaFactory: 	 MetaFactorySystem;
 	public miniature: 		 MiniatureSystem;
 	public npc: 			 NPCSystem;
 	public obj: 			 ObjPluginSystem;
@@ -219,7 +220,7 @@ export default class Systems {
 			magic: 			   new MagicSystem( world ), //TODO: implement 
 			material: 		   new MaterialSystem( world ),
 			media: 			   new MediaSystem( world ), // TODO: how is this used?
-			metaFactory: 	   new MetaFactorySystem( world ),
+			factoryProvider:   new FactoryProviderSystem( world ),
 			miniature: 		   new MiniatureSystem( world ),
 			npc: 			   new NPCSystem( world ),
 			obj: 			   new ObjPluginSystem( world ),

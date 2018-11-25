@@ -150,21 +150,21 @@ export default class ToolSystem {
             mesh = toolPanel.mesh
 
         toolPanel.update(userPosition)
-        mesh.rotation.y = this.world.three.camera.rotation.y - Math.PI / 8
-        mesh.translateZ( -4 )
-        mesh.translateX( 1.25 + (index * 3) )
+        mesh.rotation.y = this.world.three.camera.rotation.y - ( Math.PI / 8 ) * index
+        mesh.translateZ( -4 + Math.sin(index/2)/2)
+        mesh.translateX( 1.25 + (index * 1.8) )
         mesh.updateMatrix()
     }
 
     private equip (component: Component, hand: number ) { // refactor for panels[]
-        let hands:            Array<Component> = this.world.user.avatar.componentsByAttr.hand, //this.toolbox.hands,
-            componentsByAttr: any              = component.entity.componentsByAttr,
-            input                              = this.world.userInput,
-            toolSystem                         = this,
-            toolPanel:        Entity           = componentsByAttr.tool[0].state.tool.panel,
-            toolPanels:       Array<Entity>    = componentsByAttr.tool[0].state.tool.panels,
-            toolMesh:         any              = component.entity.mesh,
-            userPos:          Array<number>    = this.world.user.avatar.mesh.position.toArray()
+        let hands:            Component[] = this.world.user.avatar.componentsByAttr.hand, //this.toolbox.hands,
+            componentsByAttr: any         = component.entity.componentsByAttr,
+            input                         = this.world.userInput,
+            toolSystem                    = this,
+            toolPanel:        Entity      = componentsByAttr.tool[0].state.tool.panel,
+            toolPanels:       Entity[]    = componentsByAttr.tool[0].state.tool.panels,
+            toolMesh:         any         = component.entity.mesh,
+            userPos:          number[]    = this.world.user.avatar.mesh.position.toArray()
 
         if (!input.trackedControls && !input.leapMotion) {
             this.world.user.avatar.mesh.add( toolMesh )

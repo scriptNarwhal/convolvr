@@ -138,17 +138,17 @@ export default class SpaceSystem {
 
   public destroy() {
     let world = this.world;
-    this.voxelList.map( v => {
-			v.entities.map((e: any) => {
+    for (const v of this.voxelList) {
+			for (const e of v.entities) {
 				if (e.mesh ) {
 					// world.octree.remove( e.mesh )
 					world.three.scene.remove( e.mesh )
 				}					
-			})
+			}
 
 			if (v.mesh )				
         world.three.scene.remove( v.mesh )
-    })
+    }
 
 		this.voxels = { GLOBAL_SPACE: this.voxels[GLOBAL_SPACE.join(".")]};
 		this.voxelList = []
@@ -243,7 +243,9 @@ export default class SpaceSystem {
       c = 0
       cleanUpVoxels = this.cleanUpVoxels
 
-      this.cleanUpVoxels.map(( cleanUp, i ) => {
+      for (let i = 0, cuvl = this.cleanUpVoxels.length; i < cuvl; i++) {
+        const cleanUp = this.cleanUpVoxels[i];
+
         if (c < 3 && cleanUp ) {
           voxelToRemove = voxels[ cleanUp.cell ];
 
@@ -262,7 +264,7 @@ export default class SpaceSystem {
           }   
           c += 1
         }
-      });
+      }
 
       c = 0;
       while ( x <= endCoords[ 0 ] && c < 2 ) { // load new terrain voxels
@@ -369,7 +371,6 @@ export default class SpaceSystem {
         if (loadedVoxels.length > 0 ) {
           let newVoxel = loadedVoxels[ 0 ],
               voxelKey = newVoxel.x + ".0." + newVoxel.z,
-              voxelData = { coords: [newVoxel.x, 0, newVoxel.z], name: newVoxel.name, visible: showVoxels, altitude: newVoxel.altitude, entities: newVoxel.entities },
               v = this.voxels[ voxelKey ]
               
           if (!!!v )

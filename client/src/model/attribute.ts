@@ -7,7 +7,7 @@ export type AttributeName = "ability" | "activate" | "audio" | "assets" | "brows
 					 "conveyor" | "cursor" | "datgui" | "destructable" | "display" | "virtualDevice" | "door" | "drawing" | 
 					 "emote" | "faction" | "factory" | "fbx" | "file" | "floor" | "geometry" | "grab" | "graph" | "hand" | 
 					 "head" | "hover" | "input" | "light" | "layout" | "lookAway" | "magic" | "material" | "media" | 
-					 "metaFactory" | "miniature" | "npc" | "obj" | "oimo" | "objective" | "particles" | "propulsion" | "portal" |
+					 "factoryProvider" | "miniature" | "npc" | "obj" | "oimo" | "objective" | "particles" | "propulsion" | "portal" |
 					 "projectile" | "quest" | "rest" | "rpgRace" | "signal" | "seat" | "skill" | "skybox" | "script" | "screenshot" | "socialMedia" | 
 					 "speech" | "state" | "stat" | "staticCollisions" | "terrain" | "text" | "time" | "toolUI" | "tool" |
 					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "template" | "wall" | "webrtc" | "weapon";
@@ -38,6 +38,7 @@ export interface Attributes {
     emote?: emote
     faction?: faction
     factory?: factory
+    factoryProvider?: factoryProvider
     fbx?: fbx
     file?: file
     floor?: floor
@@ -54,7 +55,6 @@ export interface Attributes {
     magic?: magic
     material?: material
     media?: media
-    metaFactory?: metaFactory
     miniature?: miniature
     noRaycast?: boolean
     npc?: npc
@@ -159,6 +159,13 @@ export interface factory extends Attribute {
     anchorOutput?: boolean,
     miniature?: boolean,
 }
+export interface factoryProvider extends Attribute {
+    type: string,
+    attrName?: string,
+    filter?: {
+        tags: string[]
+    }
+}
 export interface fbx extends Attribute {
     url: string
 }
@@ -243,13 +250,6 @@ export interface material extends Attribute {
     procedural?: ProceduralMaterial
 }
 export interface media extends Attribute {}
-export interface metaFactory extends Attribute {
-    type: string,
-    attrName?: string,
-    filter?: {
-        tags: string[]
-    }
-}
 export interface miniature extends Attribute {
     scale?: number
 }

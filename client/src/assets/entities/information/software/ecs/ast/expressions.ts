@@ -280,7 +280,8 @@ export default class ASTExpressions {
                         "Expression"
                     ],
                     color:"#20ffff",
-                    background: "#000000"
+                    background: "#000000",
+                    fontSize: 130
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
@@ -310,7 +311,8 @@ export default class ASTExpressions {
                         "Expression"
                     ],
                     color:"#20ffff",
-                    background: "#000000"
+                    background: "#000000",
+                    fontSize: 130
                 }
             },
             quaternion: [ 0, 0, 0, 1 ],
