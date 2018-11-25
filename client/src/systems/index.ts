@@ -32,7 +32,7 @@ import DisplaySystem from './video/display'
 import DrawingSystem from './video/drawing'
 import ControlSystem from './vehicle/control'
 import PropulsionSystem from './vehicle/propulsion'
-import factoryProviderSystem from './core/factory/factory-provider'
+import FactoryProviderSystem from './core/factory/factory-provider'
 import ParticleSystem from './environment/particle'
 import PortalSystem from './environment/portal'
 import ProjectileSystem from './game/projectile'
@@ -94,7 +94,6 @@ export interface System {
 import * as THREE from 'three';
 import { AnyObject } from '../util';
 import { Mesh } from 'three';
-import FactoryProviderSystem from './core/factory/factory-provider';
 export default class Systems {
 
 	public world: Convolvr
