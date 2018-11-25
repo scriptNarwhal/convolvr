@@ -33,7 +33,7 @@ export default class PlaceTool extends Tool {
                   color: 0x07ff07,
                   content: {
                     attrs: {
-                      metaFactory: { // generates factory for each item in dataSource
+                      factoryProvider: { // generates factory for each item in dataSource
                         type: "place", // entity, attr, place, world, user, file, directory
                         //attrName: "geometry",
                         dataSource: this.world.systems.assets.places

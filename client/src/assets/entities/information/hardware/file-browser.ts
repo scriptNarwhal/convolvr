@@ -24,7 +24,7 @@ let block = {
                     dir: ""
                 }
             },
-            metaFactory: {
+            factoryProvider: {
                 type: "file",
                 dataSource: "self", // implement self source
                 attrName: ""

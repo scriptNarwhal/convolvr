@@ -38,7 +38,7 @@ export default class AttributeTool extends Tool {
                     color: 0xff0707,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "attr", // entity, component, attr
                           attrName: "structures",
                           dataSource: this.world.systems.assets.attrs.systems
@@ -56,7 +56,7 @@ export default class AttributeTool extends Tool {
                     color: 0xff0707,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "attr", // entity, component, attr
                           attrName: "vehicles",
                           dataSource: this.world.systems.assets.attrs.systems
@@ -74,7 +74,7 @@ export default class AttributeTool extends Tool {
                     color: 0xff0707,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "attr", // entity, component, attr
                           attrName: "media",
                           dataSource: this.world.systems.assets.attrs.systems
@@ -92,7 +92,7 @@ export default class AttributeTool extends Tool {
                     color: 0xff0707,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "attr", // entity, component, attr
                           attrName: "interactivity",
                           dataSource: this.world.systems.assets.attrs.systems

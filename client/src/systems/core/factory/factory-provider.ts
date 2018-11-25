@@ -42,7 +42,7 @@ export default class FactoryProviderSystem {
         } else { 
             source = attr.dataSource
         }
-        //console.info("init metafactory attr ", attr)
+        //console.info("init factoryProvider attr ", attr)
         if (typeof source == 'string' && source == 'self' ) {
             console.info( "source is string", source)
             if ( assetType == "file" ) {
@@ -56,7 +56,7 @@ export default class FactoryProviderSystem {
         }     
 
         if (source && typeof source.map == 'function') { // array of geometries / materials, components, entities, spaces, places, files, (directories could use source[category])
-            //console.info( "metafactory source is ", source)
+            //console.info( "factoryProvider source is ", source)
             const addItemFromList =  (item: AnyObject, i: number) => {
                 if ( assetType == 'entity' && typeof item == 'function' ) { return }
                 

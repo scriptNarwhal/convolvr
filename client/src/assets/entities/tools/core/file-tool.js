@@ -40,7 +40,7 @@ export default class FileTool extends Tool {
                             dir: "/"
                           }
                         },
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "file", // entity, attr, place, world, user, file, directory
                           //attrName: "geometry",
                           dataSource: this.world.systems.assets.files
@@ -59,7 +59,7 @@ export default class FileTool extends Tool {
                             dir: "/"
                           }
                         },
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "directory", // entity, attr, place, world, user, file, directory
                           //attrName: "geometry",
                           dataSource: this.world.systems.assets.directories

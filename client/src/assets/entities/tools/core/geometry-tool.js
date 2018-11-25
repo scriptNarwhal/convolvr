@@ -32,7 +32,7 @@ export default class GeometryTool extends Tool {
                   color: 0xff8007,
                   content: {
                     attrs: {
-                      metaFactory: { // generates factory for each item in dataSource
+                      factoryProvider: { // generates factory for each item in dataSource
                         type: "attr", // entity, attr
                         attrName: "geometry",
                         dataSource: this.world.systems.assets.attrs.geometry

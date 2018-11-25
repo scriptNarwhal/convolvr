@@ -154,7 +154,7 @@ export default function BuiltinProps () {
                 destructable: [{}],
                 particles: [{}],
                 factory: [{}],
-                metaFactory: [{}],
+                factoryProvider: [{}],
                 input: [ 
                     { type: 'button' },
                     { type: 'keyboard' },

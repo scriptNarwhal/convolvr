@@ -33,7 +33,7 @@ export default class SocialTool extends Tool {
                   color: 0x07ff07,
                   content: {
                     attrs: {
-                      metaFactory: { // generates factory for each item in dataSource
+                      factoryProvider: { // generates factory for each item in dataSource
                         type: "social", // entity, attr, place, world, user, file, directory
                         //attrName: "geometry",
                         dataSource: this.world.systems.socialMedia.friends

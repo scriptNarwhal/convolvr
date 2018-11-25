@@ -32,7 +32,7 @@ import DisplaySystem from './video/display'
 import DrawingSystem from './video/drawing'
 import ControlSystem from './vehicle/control'
 import PropulsionSystem from './vehicle/propulsion'
-import MetaFactorySystem from './core/factory/factory-provider'
+import factoryProviderSystem from './core/factory/factory-provider'
 import ParticleSystem from './environment/particle'
 import PortalSystem from './environment/portal'
 import ProjectileSystem from './game/projectile'
@@ -279,7 +279,7 @@ export default class Systems {
 		}
 
 		this.deferred = {
-			hand: true, light: true, particles: true, text: true, audio: true, video: true, metaFactory: true, miniature: true,
+			hand: true, light: true, particles: true, text: true, audio: true, video: true, factoryProvider: true, miniature: true,
 			tool: true, toolUI: true, layout: true, datgui: true, obj: true, fbx: true
 		}
     }

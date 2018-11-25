@@ -43,7 +43,7 @@ export default class ComponentTool extends Tool {
                     color: 0x003bff,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "component", // component, entity, attr
                           dataSource: this.world.systems.assets.componentsByName,
                           filter: { 
@@ -62,7 +62,7 @@ export default class ComponentTool extends Tool {
                     color: 0x003bff,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "component", // component, entity, attr
                           dataSource: this.world.systems.assets.componentsByName,
                           filter: {
@@ -81,7 +81,7 @@ export default class ComponentTool extends Tool {
                     color: 0x003bff,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "component", // component, entity, attr
                           dataSource: this.world.systems.assets.componentsByName,
                           filter: {
@@ -100,7 +100,7 @@ export default class ComponentTool extends Tool {
                     color: 0x003bff,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "component", // component, entity, attr
                           dataSource: this.world.systems.assets.componentsByName,
                           filter: {
@@ -120,7 +120,7 @@ export default class ComponentTool extends Tool {
                   //   color: 0x003bff,
                   //   content: {
                   //     attrs: {
-                  //       metaFactory: { // generates factory for each item in dataSource
+                  //       factoryProvider: { // generates factory for each item in dataSource
                   //         type: "component", // component, entity, attr
                   //         dataSource: this.world.systems.assets.userComponents
                   //       },

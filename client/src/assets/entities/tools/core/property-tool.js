@@ -30,10 +30,10 @@ export default class PropertyTool extends Tool {
                   color: 0x07ffff,
                   content: {
                     attrs: {
-                      // implement  metafactory.type == "prop"
+                      // implement  factoryProvider.type == "prop"
                       // get a data source of props.. for the current user + some generic ones
                       
-                      // metaFactory: { // generates factory for each item in dataSource
+                      // factoryProvider: { // generates factory for each item in dataSource
                       //   type: "attr", // entity, attr
                       //   attrName: "assets",
                       //   dataSource: this.world.systems.assets.attrs.assets

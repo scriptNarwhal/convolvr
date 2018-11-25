@@ -43,7 +43,7 @@ export default class EntityTool extends Tool  {
                     color: 0x07ff00,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "entity", // component, attr
                           // attrName: "userEntities", // toggle to user's entities
                           dataSource: this.world.systems.assets.entities,
@@ -64,7 +64,7 @@ export default class EntityTool extends Tool  {
                     color: 0x07ff00,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "entity", 
                           dataSource: this.world.systems.assets.entities,
                           filter: {
@@ -84,7 +84,7 @@ export default class EntityTool extends Tool  {
                     color: 0x07ff00,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "entity", 
                           dataSource: this.world.systems.assets.entities,
                           filter: {
@@ -104,7 +104,7 @@ export default class EntityTool extends Tool  {
                     color: 0x07ff00,
                     content: {
                       attrs: {
-                        metaFactory: { // generates factory for each item in dataSource
+                        factoryProvider: { // generates factory for each item in dataSource
                           type: "entity", 
                           dataSource: this.world.systems.assets.entities,
                           filter: {
@@ -124,7 +124,7 @@ export default class EntityTool extends Tool  {
                   //   color: 0x07ff00,
                   //   content: {
                   //     attrs: {
-                  //       metaFactory: { // generates factory for each item in dataSource
+                  //       factoryProvider: { // generates factory for each item in dataSource
                   //         type: "entity", // component, attr
                   //         // attrName: "userEntities", // toggle to user's entities
                   //         dataSource: this.world.systems.assets.userEntities

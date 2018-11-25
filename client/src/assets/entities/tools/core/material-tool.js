@@ -36,7 +36,7 @@ export default class MaterialTool extends Tool {
                   color: 0x07ffff,
                   content: {
                     attrs: {
-                      metaFactory: { // generates factory for each item in dataSource
+                      factoryProvider: { // generates factory for each item in dataSource
                         type: "attr", // entity, attr
                         attrName: "material",
                         dataSource: this.world.systems.assets.attrs.material.color
@@ -54,7 +54,7 @@ export default class MaterialTool extends Tool {
                   color: 0x07ffff,
                   content: {
                     attrs: {
-                      metaFactory: { // generates factory for each item in dataSource
+                      factoryProvider: { // generates factory for each item in dataSource
                         type: "attr", // entity, attr
                         attrName: "material",
                         dataSource: this.world.systems.assets.attrs.material.material.filter((v, i, a) => { return v.name != "stars" })
