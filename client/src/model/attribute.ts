@@ -1,6 +1,7 @@
 import { AnyObject } from "../util";
 import { VirtualDevice } from "../systems/logic/virtual-device";
 import { ComponentPath } from "./component";
+import { listDirectories } from "../2d-ui/redux/actions/file-actions";
 
 export type AttributeName = "ability" | "activate" | "audio" | "assets" | "browser" | "camera" | "chat" | "control" |
 					 "conveyor" | "cursor" | "datgui" | "destructable" | "display" | "virtualDevice" | "door" | "drawing" | 
@@ -161,7 +162,18 @@ export interface factory extends Attribute {
 export interface fbx extends Attribute {
     url: string
 }
-export interface file extends Attribute {}
+export interface file extends Attribute {
+    listFiles?: {
+        username: string,
+        dir?: string
+    },
+    listDirectories?: {
+        username: string,
+        dir?: string
+    },
+    refresh?: boolean,
+    renderResponse?: boolean
+}
 export interface floor extends Attribute {}
 export interface geometry extends Attribute {
     shape: GeometryShape,

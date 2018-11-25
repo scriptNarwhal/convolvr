@@ -53,7 +53,6 @@ export default class MetaFactorySystem {
 
         if (assetType == "world") {
             source = this.world.systems.assets.spaces;
-            console.log("asset type is space", source)
         }     
 
         if (source && typeof source.map == 'function') { // array of geometries / materials, components, entities, spaces, places, files, (directories could use source[category])
@@ -91,7 +90,7 @@ export default class MetaFactorySystem {
             }
             
             
-        } else { // map through system categories
+        } else { // loop through system categories
             source = attr.dataSource
             if (!source) {
                 console.warn("no source for meta-factory")
@@ -99,9 +98,11 @@ export default class MetaFactorySystem {
             }
             sourceCategory = this.getSourceCategory( source, category ) // structures, vehicles, media, interactivity
         
-            Object.keys( sourceCategory ).map( ( key, a ) => { // vehicle, propulsion, control, etc
-                let categorySystems = sourceCategory[ key ]
-                Object.keys( categorySystems ).map( systemPreset => {
+            const sourceKeys = Object.keys( sourceCategory );
+            for (const key of sourceKeys) { // vehicle, propulsion, control, etc
+                const categorySystems = sourceCategory[ key ]
+                const categorySystemKeys = Object.keys(categorySystems);
+                for (const systemPreset of categorySystemKeys)  {
                         this.addComponent( component, {[key]: categorySystems[systemPreset]}, assetType, "systems", key, x, y, index, gridSize, vOffset)
                         x += 1
                         index += 1
@@ -109,8 +110,14 @@ export default class MetaFactorySystem {
                             x = 0
                             y += 1
                         }
-                }) 
-            })
+                } 
+            }
+        }
+
+        return {
+            generate: () => {
+                this.init(component);
+            }
         }
     }
 
@@ -183,7 +190,7 @@ export default class MetaFactorySystem {
                     },
                     geometry: {
                         shape: 'box',
-                        size: [0.1,0.1,0.1]
+                        size: [2.1,2.1,2.1]
                     },
                     material: {
                         name: 'wireframe',

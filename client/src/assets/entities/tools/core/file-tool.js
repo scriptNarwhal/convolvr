@@ -34,6 +34,12 @@ export default class FileTool extends Tool {
                     color: 0x07ff07,
                     content: {
                       attrs: {
+                        file: {
+                          listFiles: {
+                            username: "Public",
+                            dir: "/"
+                          }
+                        },
                         metaFactory: { // generates factory for each item in dataSource
                           type: "file", // entity, attr, place, world, user, file, directory
                           //attrName: "geometry",
@@ -47,6 +53,12 @@ export default class FileTool extends Tool {
                     color: 0x07ff07,
                     content: {
                       attrs: {
+                        file: {
+                          listDirectories: {
+                            username: "Public",
+                            dir: "/"
+                          }
+                        },
                         metaFactory: { // generates factory for each item in dataSource
                           type: "directory", // entity, attr, place, world, user, file, directory
                           //attrName: "geometry",

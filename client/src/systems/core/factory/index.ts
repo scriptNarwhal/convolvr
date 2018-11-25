@@ -332,7 +332,6 @@ export default class FactorySystem implements System {
     }
 
     _generateSpace(menuItem: boolean, data: SpaceConfig, voxel: number[], position: number[], quaternion: number[] ) {
-        console.log("generate space, data: ", data)
         return new Entity(-1, [{
             attrs: {
                     miniature: {},
@@ -415,13 +414,6 @@ export default class FactorySystem implements System {
             attrs: Object.assign({}, data, {
                     mixin: true,
                     miniature: {},
-                    // text: {
-                    //     color: 0xffffff,
-                    //     background: 0x000000,
-                    //     lines: [
-                    //         data
-                    //     ]
-                    // },
                     file: {
                         filename: data
                         // implement
@@ -438,7 +430,7 @@ export default class FactorySystem implements System {
                     },
                     geometry: {
                         shape: "box",
-                        size: [0.25, 0.25, 0.05]
+                        size: [2.25, 2.25, 2.05]
                     }
                 }
             )}
@@ -451,13 +443,6 @@ export default class FactorySystem implements System {
             attrs: Object.assign({}, data, {
                     mixin: true,
                     miniature: {},
-                    // text: {
-                    //     color: 0xffffff,
-                    //     background: 0x000000,
-                    //     lines: [
-                    //         data
-                    //     ]
-                    // },
                     file: {
                         workingDir: data
                         // implement
@@ -474,7 +459,7 @@ export default class FactorySystem implements System {
                     },
                     geometry: {
                         shape: "box",
-                        size: [0.25, 0.25, 0.05]
+                        size: [2.25, 2.25, 2.05]
                     }
                 }
             )}
