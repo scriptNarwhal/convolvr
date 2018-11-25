@@ -45,11 +45,16 @@ export default class MetaFactorySystem {
         //console.info("init metafactory attr ", attr)
         if (typeof source == 'string' && source == 'self' ) {
             console.info( "source is string", source)
-            if ( assetType == "file" )
-                            
+            if ( assetType == "file" ) {
                 source = component.state.file.res.listFiles.data || []
-                // entity will re-init after files load              
+                // entity will re-init after files load
+            }         
         }
+
+        if (assetType == "world") {
+            source = this.world.systems.assets.spaces;
+            console.log("asset type is space", source)
+        }     
 
         if (source && typeof source.map == 'function') { // array of geometries / materials, components, entities, spaces, places, files, (directories could use source[category])
             //console.info( "metafactory source is ", source)
@@ -187,7 +192,7 @@ export default class MetaFactorySystem {
                 },
                 position:  pos,
                 quaternion: [0, 0, 0, 1]
-        })
+        } as DBComponent)
 
     }
 }

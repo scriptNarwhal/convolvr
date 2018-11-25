@@ -213,7 +213,7 @@ export default class Entity {
     this.allComponents = []
 
     if ( this.mesh != null ) {
-      world.octree.remove( this.mesh )
+      //world.octree.remove( this.mesh )
       if ( this.mount ) {
         this.mount.remove( this.mesh )
       } else {
@@ -319,7 +319,7 @@ export default class Entity {
       compsByFaceIndex: this.compsByFaceIndex
     }
 
-    addToOctree && world.octree.add( mesh )
+    // addToOctree && world.octree.add( mesh )
     mount.add( mesh );
     this.mesh = mesh
 
@@ -548,7 +548,7 @@ export default class Entity {
         closestSubComp = null;
 
     entMesh.updateMatrixWorld()
-    this.allComponents.map( (component: Component) => {
+    for (const component of this.allComponents) {
 
       if ( !! component.merged ) {
         return false
@@ -561,12 +561,12 @@ export default class Entity {
         distance = newDist
         closest = component
       }
-    })
+    }
 
     if ( !!!closest ) {
       distance = 0.0900
       newDist = 0
-      this.combinedComponents.map( (component: Component) => {
+      for (const component of this.combinedComponents) {
         if ( component.data ) {
           compPos.fromArray( component.data.position )
           worldCompPos = entMesh.localToWorld( compPos )
@@ -577,7 +577,7 @@ export default class Entity {
             closest = component
           }
         }
-      })
+      }
     }
 
     if ( !!closest && recursive && closest.components.length > 1 ) {
@@ -590,11 +590,11 @@ export default class Entity {
   public getComponentByFace ( face: number ) {
     let component = false
 
-    this.compsByFaceIndex.forEach((comp: any) => {
+    for (const comp of this.compsByFaceIndex) {
       if ( face >= comp.from && face <= comp.to ) {
         component = comp.component
       }
-    })
+    }
 
     return component
   }

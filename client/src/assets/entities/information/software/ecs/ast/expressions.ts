@@ -17,7 +17,7 @@ export default class ASTExpressions {
                 },
                 text: {
                     lines: ["Prefix Expr <-"],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000",
                     label: true
                 }
@@ -46,7 +46,7 @@ export default class ASTExpressions {
                 },
                 text: {
                     lines: ["-> Infix Expr <-"],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000",
                     label: true
                 }
@@ -75,7 +75,7 @@ export default class ASTExpressions {
                 },
                 text: {
                     lines: ["if"],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000",
                     label: true
                 }
@@ -103,7 +103,7 @@ export default class ASTExpressions {
                 },
                 text: {
                     lines: ["for"],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000",
                     label: true
                 }
@@ -132,7 +132,7 @@ export default class ASTExpressions {
                 },
                 text: {
                     lines: ["while"],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000",
                     label: true
                 }
@@ -161,7 +161,7 @@ export default class ASTExpressions {
                 },
                 text: {
                     lines: ["sleep"],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000",
                     label: true
                 }
@@ -190,7 +190,7 @@ export default class ASTExpressions {
                 },
                 text: {
                     lines: ["call()"],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000",
                     label: true
                 }
@@ -219,7 +219,7 @@ export default class ASTExpressions {
                 },
                 text: {
                     lines: ["new"],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000",
                     label: true
                 }
@@ -248,7 +248,7 @@ export default class ASTExpressions {
                 },
                 text: {
                     lines: ["exec"],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000",
                     label: true
                 }
@@ -279,7 +279,7 @@ export default class ASTExpressions {
                     lines: ["Index[]",
                         "Expression"
                     ],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000"
                 }
             },
@@ -309,7 +309,7 @@ export default class ASTExpressions {
                     lines: ["Index[]=Assignment",
                         "Expression"
                     ],
-                    color:"#2020ff",
+                    color:"#20ffff",
                     background: "#000000"
                 }
             },

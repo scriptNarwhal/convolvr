@@ -150,18 +150,18 @@ export default class Convolvr {
 		this.screenResX = screenResX
 		this.initRenderer( renderer, "viewport" );
 		this.threeJsPluginLoader = new THREEJSPluginLoader(THREE);
-		this.octree = new THREE.Octree({
-			undeferred: false,
-			depthMax: Infinity,
-			// max number of objects before nodes split or merge
-			objectsThreshold: 8,
-			// percent between 0 and 1 that nodes will overlap each other
-			// helps insert objects that lie over more than one node
-			overlapPct: 0.15,
-			scene
-		});
+		// this.octree = new THREE.Octree({
+		// 	undeferred: false,
+		// 	depthMax: Infinity,
+		// 	// max number of objects before nodes split or merge
+		// 	objectsThreshold: 8,
+		// 	// percent between 0 and 1 that nodes will overlap each other
+		// 	// helps insert objects that lie over more than one node
+		// 	overlapPct: 0.15,
+		// 	scene
+		// });
 		this.user.id = -Math.floor(Math.random()*1000000);
-		this.octree.visualMaterial.visible = false
+		// this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
 		this.raycaster.near = 0.5
 		this.THREE = THREE;
@@ -186,6 +186,8 @@ export default class Convolvr {
 			// oimo: this.systems.oimo.worker
 		}
 		camera.add(this.systems.audio.listener)
+		// ^^^ have to get permission first now with new webaudio api
+
 		this.socketHandlers = new SocketHandlers( this, socket )
 		window.addEventListener('resize', e => this.onWindowResize(), true)
 		this.onWindowResize();
@@ -318,12 +320,12 @@ export default class Convolvr {
 
 		this.skyLight = skyLight
 		this.sunLight = sunLight
-		// this.skyLight.color.set( config.light.color )
+		this.skyLight.color.set( config.light.color )
 		this.sunLight.intensity = config.light.intensity 
 
 		this.config = config; console.info("Space config: ", config)
 		this.terrain.initTerrain(config.terrain)
-		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 0.5)
+		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 0.2)
 		this.ambientLight.color.set( config.light.ambientColor )
 		
 		if ( this.settings.shadows > 0 && sunLight.castShadow == false ) {

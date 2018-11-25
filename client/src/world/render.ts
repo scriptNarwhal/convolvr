@@ -33,7 +33,7 @@ export let animate = (world: Convolvr, last: number, cursorIndex: number) => {
     } else {
       three.renderer.render( three.scene, camera )
     }
-    world.octree.update()
+    // world.octree.update()
    
   }
 
@@ -80,6 +80,6 @@ export let vrAnimate = (world: Convolvr, display: VRDisplay, time: number, oldPo
     world.systems.tick( delta, time )
     camera.updateMatrix();
     t.vrEffect.render(t.scene, t.camera) // Render the scene.
-    world.octree.update()
+    // world.octree.update()
     display.requestAnimationFrame(()=> { vrAnimate( world, display, now, vrSpacePos, cursorIndex) }) // Keep looping.
 }

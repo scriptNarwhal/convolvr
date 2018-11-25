@@ -28,7 +28,7 @@ import { API_SERVER } from '../../../config'
 import { getChatHistory } from './message-actions'
 import { navigateTo } from './app-actions';
 
-export function fetchSpaces () {
+export function fetchSpaces (callback?: Function) {
     return (dispatch: any) => {
      dispatch({
         type: SPACES_FETCH
@@ -40,6 +40,7 @@ export function fetchSpaces () {
                 type: SPACES_FETCH_DONE,
                 spaces: res.data
             })
+            callback && callback(res.data);
         }).catch(err => {
             dispatch({
                 type: SPACES_FETCH_FAIL,

@@ -11,6 +11,8 @@ import StaticCollisions from './physics/static-collisions';
 import Component from '../../model/component';
 import Convolvr from '../../world/world';
 import { navigateTo } from '../../2d-ui/redux/actions/app-actions';
+import { fetchSpaces } from '../../2d-ui/redux/actions/world-actions';
+import { SpaceConfig } from '../../model/space';
 
 export default class SpaceSystem {
 
@@ -37,6 +39,7 @@ export default class SpaceSystem {
   public physicsVoxels: any
   public voxelList: any[]
   public voxels: { [coords: string]: Voxel }
+  public dispatchAction: Function
 
     constructor (world: Convolvr) {
       this.world            = world
@@ -67,6 +70,11 @@ export default class SpaceSystem {
         entities: [] 
       }, GLOBAL_SPACE, this.world )
       this.voxels[ GLOBAL_SPACE.join(".") ] = globalVoxel
+      this.dispatchAction = this.world.store ? this.world.store.dispatch : () => {};
+      this.dispatchAction(fetchSpaces((spaces: SpaceConfig[])=>{
+        console.log("fetch spaces ", spaces)
+        this.world.systems.assets.setSpaces(spaces);
+      }));
     }
 
     public init(component: Component) {
@@ -88,17 +96,14 @@ export default class SpaceSystem {
       this.config = config
 
       let type           = this.config.type,
-          red            = this.config.red,
-          green          = this.config.green,
-          blue           = this.config.blue,
+          // red            = this.config.red,
+          // green          = this.config.green,
+          // blue           = this.config.blue,
           distantTerrain = null,
-          yPosition      = 0,
-          geom           = null,
-          mesh           = null,
-          mat            = null
+          yPosition      = 0;
 
       if (!!this.mesh) {
-        world.octree.remove(this.mesh)
+        // world.octree.remove(this.mesh)
         world.three.scene.remove(this.mesh)
         this.distantTerrain = null
       }
@@ -136,7 +141,7 @@ export default class SpaceSystem {
     this.voxelList.map( v => {
 			v.entities.map((e: any) => {
 				if (e.mesh ) {
-					world.octree.remove( e.mesh )
+					// world.octree.remove( e.mesh )
 					world.three.scene.remove( e.mesh )
 				}					
 			})
@@ -177,25 +182,22 @@ export default class SpaceSystem {
         config              = this.config,
         terrain             = this,
         world               = this.world,
-        scene               = this.world.three.scene,
         systems             = world.systems,
-        octree              = world.octree,
         voxel               = null,
         removePhysicsVoxels: any[] = [],
         cleanUpVoxels:       any[] = [],
-        loadedVoxels        = [],
-        chunkPos            = [],
         pCell               = [ 0, 0, 0 ],
-        position            = this.world.three.camera.position,
-        voxelToRemove        = null,
+        position            = world.three.camera.position,
+        voxelToRemove       = null,
         coords              = [ Math.floor( position.x / GRID_SIZE[ 0 ] ), Math.floor( position.y / GRID_SIZE[ 1 ] ), Math.floor( position.z / GRID_SIZE[ 2 ] ) ],
         lastCoords          = this.lastChunkCoords,
-        moveDir             = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
-        viewDistance        = (this.world.mobile ? 5 : 7) + this.world.settings.viewDistance,
+        // moveDir             = [coords[0]-lastCoords[0], coords[2] - lastCoords[2]],
+        viewDistance        = (world.mobile ? 5 : 7) + world.settings.viewDistance,
         removeDistance      = viewDistance + 2,
         x                   = coords[ 0 ] - phase,
         y                   = coords[ 2 ] - phase,
         c                   = 0;
+
  if ((window as any).noBuffer) {
    return;
  }
@@ -240,7 +242,6 @@ export default class SpaceSystem {
 
       c = 0
       cleanUpVoxels = this.cleanUpVoxels
-      loadedVoxels = this.loadedVoxels
 
       this.cleanUpVoxels.map(( cleanUp, i ) => {
         if (c < 3 && cleanUp ) {
@@ -249,7 +250,7 @@ export default class SpaceSystem {
           if (voxelToRemove && voxelToRemove.entities ) {
             voxelToRemove.entities.map( (e: any) => {
               if (!!e && !!e.mesh ) {
-                this.world.octree.remove( e.mesh );
+                // this.world.octree.remove( e.mesh );
                 this.world.three.scene.remove( e.mesh );
               } 
             })

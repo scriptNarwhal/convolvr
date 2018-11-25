@@ -71,7 +71,7 @@ export default class ToolActionHandler {
                     voxel.entities.map((voxelEnt: Entity, i: number) => { // find & re-init entity ^^^^^^
                         if (voxelEnt.id == data.entityId) {
                             console.log("got delete tool message", data.entityId) // concat with existing components array
-                            world.octree.remove(voxelEnt.mesh)
+                            // world.octree.remove(voxelEnt.mesh)
                             world.three.scene.remove(voxelEnt.mesh)
                             voxel.entities.splice(i, 1)
                         }

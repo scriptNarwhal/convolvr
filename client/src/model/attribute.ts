@@ -324,7 +324,11 @@ export interface time extends Attribute {}
 export interface toolUI extends Attribute {
     toolIndex?: number,
     toolHand?: 0|1,
-    configureTool?: { tool: number, preset: string }
+    configureTool?: { 
+        tool: number, 
+        preset?: string, 
+        data?: any 
+    }
 }
 export interface tool extends Attribute {
     panel?: {

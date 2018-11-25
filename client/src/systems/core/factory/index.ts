@@ -6,7 +6,8 @@ import Entity from '../../../model/entity'
 import * as THREE from 'three';
 import { System } from '../..';
 import { Vector3 } from 'three';
-import { FactoryType, FactoryAttributeType } from '../../../model/attribute';
+import { FactoryType, FactoryAttributeType, portal, GeometryShape, geometry, material } from '../../../model/attribute';
+import { SpaceConfig } from '../../../model/space';
 
 export type GenerateAttrParams = {
     component: Component,
@@ -157,6 +158,7 @@ export default class FactorySystem implements System {
     private generateAttrEntity(type: FactoryAttributeType, menuItem: boolean, data: any, voxel: number[], entityPos: number[], quat: number[], preset: string) {
         switch (type) {
             case "geometry":
+            console.log("generate geometry", data)
                 return this._generateGeometry( menuItem, data, voxel, entityPos, quat, preset)
             case "material":
                 return this._generateMaterial( menuItem, data, voxel, entityPos, quat, preset)
@@ -215,7 +217,7 @@ export default class FactorySystem implements System {
         return new Entity( -1, [ newComponent ], position, quaternion, voxel )
     }
 
-    _generateGeometry(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[], preset: string ) {
+    _generateGeometry(menuItem: boolean, data: geometry, voxel: number[], position: number[], quaternion: number[], preset: string ) {
         return new Entity(-1, [{
                 attrs: Object.assign({}, {geometry: data}, {
                     mixin: true,
@@ -275,7 +277,7 @@ export default class FactorySystem implements System {
         ], position, quaternion, voxel)
     }
 
-    _generateMaterial(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[], preset: string ) {
+    _generateMaterial(menuItem: boolean, data: material, voxel: number[], position: number[], quaternion: number[], preset: string ) {
 
         return new Entity(-1, [{
                 attrs: Object.assign({}, {material: data}, {
@@ -329,20 +331,23 @@ export default class FactorySystem implements System {
         ], position, quaternion, voxel)
     }
 
-    _generateSpace(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[] ) {
-
+    _generateSpace(menuItem: boolean, data: SpaceConfig, voxel: number[], position: number[], quaternion: number[] ) {
+        console.log("generate space, data: ", data)
         return new Entity(-1, [{
-            attrs: Object.assign({}, data, {
-                    mixin: true,
+            attrs: {
                     miniature: {},
                     portal: {
-                        username: data.username,
+                        username: data.userName,
                         world: data.name
                     },
                     toolUI: {
                         configureTool: {
-                            tool: 5,
-                            data
+                            tool: 2,
+                            preset: "portal",
+                            data: {
+                                user: data.userName,
+                                world: data.name
+                            } as portal
                         }
                     },  
                     material: {
@@ -351,20 +356,19 @@ export default class FactorySystem implements System {
                     },
                     text: {
                         lines: [
-                            data.name,
-                            ...(JSON.stringify(data) .match(/.{1,20}/g) || [""])
+                            data.name
                         ],
-                        fontSize: 80,
-                        color: "#ff0000",
+                        fontSize: 120,
+                        color: "#00ffff",
                         background: "#000000",
                         label: false
                     },
                     geometry: {
-                        shape: "box",
-                        size: [0.25, 0.25, 0.05]
+                        shape: <GeometryShape>"box",
+                        size: [2.25, 2.25, 2.05] as [number, number, number]
                     }
                 }
-            )}
+            }
         ], position, quaternion, voxel)
     }
 
@@ -379,19 +383,26 @@ export default class FactorySystem implements System {
                         world: data.world,
                         place: data.name
                     },
+                    toolUI: {
+                        configureTool: {
+                            tool: 2,
+                            data
+                        }
+                    },  
                     material: {
                         name: "metal",
                         color: 0xff8000
                     },
                     text: {
-                        lines: [JSON.stringify(data)],
+                        lines: [data.name],
+                        fontSize: 120,
                         color: "#ff0000",
                         background: "#000000",
                         label: false
                     },
                     geometry: {
                         shape: "box",
-                        size: [0.25, 0.25, 0.05]
+                        size: [2.25, 2.25, 2.05]
                     }
                 }
             )}

@@ -82,7 +82,7 @@ export default class ToolboxSystem {
           new PlaceTool({}, world, this),
           new PropertyTool({}, world, this),
           new FileTool({}, world, this),
-          new SocialTool({}, world, this),
+          new DebugTool({}, world, this), // new SocialTool({}, world, this),
           new DebugTool({}, world, this),
           new DeleteTool({}, world, this)
         ]

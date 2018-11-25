@@ -203,26 +203,6 @@ export default class TextSystem implements System {
         }
     }
 
-    private highlightSynesthesia(l: number, line: string, lines: number, context: any, textState: any) {
-        let xSize = textState.canvasSize[0],
-            lineHeight = textState.fontSize*1.35,
-            height = 960-(1 + (lines-l)*lineHeight),
-            letters = [],
-            len = 0;
-      
-        letters = line.split("")
-        len = letters.length
-        line.split("").map((letter, lIndex) => {
-            let parsed = parseInt(letter);
-            
-            if (parsed || parsed === 0) {
-                context.fillStyle = this.mappedColors[ parsed ]
-            }
-            context.fillText(letter, -22+lIndex*22, 960-((lines-l)*lineHeight))
-        })
-        context.fillStyle = textState.fillStyle;
-    }
-
     private highlightMarkdown(l: number, line: string, lines: number, context: any, textState: any) {
         let xSize = textState.canvasSize[0],
             lineHeight = textState.fontSize,
@@ -247,5 +227,26 @@ export default class TextSystem implements System {
             }
         }
     }
+    
+    private highlightSynesthesia(l: number, line: string, lines: number, context: any, textState: any) {
+        let xSize = textState.canvasSize[0],
+            lineHeight = textState.fontSize*1.35,
+            height = 960-(1 + (lines-l)*lineHeight),
+            letters = [],
+            len = 0;
+      
+        letters = line.split("")
+        len = letters.length
+        line.split("").map((letter, lIndex) => {
+            let parsed = parseInt(letter);
+            
+            if (parsed || parsed === 0) {
+                context.fillStyle = this.mappedColors[ parsed ]
+            }
+            context.fillText(letter, -22+lIndex*22, 960-((lines-l)*lineHeight))
+        })
+        context.fillStyle = textState.fillStyle;
+    }
+
 }
 

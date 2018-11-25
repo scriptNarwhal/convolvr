@@ -65,7 +65,7 @@ export default class ToolSystem {
     }
 
     private initPanelUIEntity(panelProp: any, contentProps: any) {
-        return new Entity(-1, [ // move panels to asset system perhaps.. or define below*
+        return new Entity(-1, [
             {
                 position: [0, 0, 0],
                 attrs: { // colored top bar                      
@@ -105,8 +105,8 @@ export default class ToolSystem {
                 ]
             } as DBComponent,
             {
-                position: [0, -2.25, 0], // position & init the panel once the tool is equipped
-                attrs: Object.assign({}, contentProps, { // content area, holds all factories, controls for this panel
+                position: [0, -2.25, 0], 
+                attrs: Object.assign({}, contentProps, { 
                     geometry: {
                         shape: "box",
                         size: [ 3, 4, 0.1 ]
