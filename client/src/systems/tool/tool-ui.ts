@@ -88,7 +88,7 @@ export default class ToolUISystem {
       mesh.updateMatrix()
       mesh.translateZ( -1.5 )
       mesh.translateX(  0.1 )
-      mesh.translateY( -0.25 )
+      mesh.translateY( 1.25 )
       mesh.updateMatrix()
     }
 

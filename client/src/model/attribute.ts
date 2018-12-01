@@ -196,7 +196,9 @@ export interface grab extends Attribute {}
 export interface graph extends Attribute {}
 export interface hand extends Attribute {}
 export interface head extends Attribute {}
-export interface hover extends Attribute {}
+export interface hover extends Attribute {
+    
+}
 export interface input extends Attribute {
     button?: {
 

@@ -431,7 +431,7 @@ export default class AssetSystem {
 
     private initInformationHardware() {
         this.initializeAllInModule("component", HardwareDevices);
-        this._addBuiltInEntity( "file-browser", fileBrowser )
+        // this._addBuiltInEntity( "file-browser", fileBrowser ) // problem with file system ???
         this._addBuiltInEntity( "terminal", terminal )
         this._addBuiltInEntity( "keyboard", keyboard )
         this._addBuiltInEntity( "pointing-device", pointingDevice )

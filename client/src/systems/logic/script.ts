@@ -21,7 +21,7 @@ type ECSNativeCall = {
 export type ScriptState = {
     eval: (code: string, callback: (data: any) => void) => void,
     handleReturnValue: (value: any) => void,
-    env: [string, string, number]
+    env: [string, number, number]
 }
 
 export default class ScriptSystem { 
@@ -149,7 +149,7 @@ export default class ScriptSystem {
         this.command("clear", [], ["", 0, 0, 0]);
     }
 
-    private getComponentScriptEnv(component: Component): [string,string,number] {
+    private getComponentScriptEnv(component: Component): [string,number,number] {
         return [component.entity.voxel.join("."), component.entity.id, component.index];
     }
 
@@ -168,11 +168,11 @@ export default class ScriptSystem {
             break;
             case "component.addComponent":
                 component.components.push(data.args[0])
-                component.entity.init()
+                component.entity.init(this.world.three.scene);
             break;
             case "component.removeComponent":
                 component.components.splice(data.args[0], 1)
-                component.entity.init()
+                component.entity.init(this.world.three.scene);
             break;
             case "entity.setPosition":
                 component.entity.update(data.args[0]); break;
@@ -180,11 +180,11 @@ export default class ScriptSystem {
                 component.entity.update(null, data.args[0]); break;
             case "entity.addComponent":
                 component.entity.components.push(data.args[0])
-                component.entity.init()
+                component.entity.init(this.world.three.scene);
             break;
             case "entity.removeComponent":
                 component.entity.components.splice(data.args[0], 1)
-                component.entity.init()
+                component.entity.init(this.world.three.scene);
             break;
             case "print":
                 this.print(component, data.args);

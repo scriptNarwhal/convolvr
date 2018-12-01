@@ -20,7 +20,6 @@ export default class SpaceSystem {
   config: any
   live: boolean
 
-  public octree: any
   public mesh: any
   public phase: number
   public distantTerrain: any
@@ -44,7 +43,6 @@ export default class SpaceSystem {
     constructor (world: Convolvr) {
       this.world            = world
       this.config           = null
-      this.octree           = world.octree
       this.phase            = 0
       this.mesh             = null
       this.distantTerrain   = null

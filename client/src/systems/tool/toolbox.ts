@@ -113,8 +113,9 @@ export default class ToolboxSystem {
         this.tools[ index ].equip( hand )
   
         if ( !!!noHUDUpdate ) {
-          this.showMenu()
-          this.user.hud.componentsByAttr.toolUI[ 0 ].state.toolUI.switchTool( index, hand )
+          this.showMenu();
+          console.log("move tool ui", this.user.hud);
+          this.user.hud.componentsByAttr.toolUI[ 0 ].state.toolUI.switchTool( index, hand );
         }
       }
   

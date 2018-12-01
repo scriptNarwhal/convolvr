@@ -116,9 +116,9 @@ export default class ToolSystem {
                         color: 0xffffff
                     },
                 }),
-                components: []
+                components: [],
             }
-        ], [0, -0.75, 0], [0,0,0,1], GLOBAL_SPACE, panelProp.title)
+        ], [0, -0.75, 0], [0,0,0,1], GLOBAL_SPACE, panelProp.title, ["no-raycast"])
     }
 
     private showPreview(component: Component, cursor: Component) {
@@ -145,15 +145,24 @@ export default class ToolSystem {
             previewBox.mesh.visible = false
     }
 
-    private positionToolPanel(toolPanel: Entity, userPos: Array<number>, index: number ) {
+    private positionToolPanel(toolPanel: Entity, userPos: Array<number>, index: number, length = 0) {
         let userPosition = [userPos[0], userPos[ 1 ] + 3, userPos[2]],
             mesh = toolPanel.mesh
 
         toolPanel.update(userPosition)
-        mesh.rotation.y = this.world.three.camera.rotation.y - ( Math.PI / 8 ) * index
-        mesh.translateZ( -4 + Math.sin(index/2)/2)
-        mesh.translateX( 1.25 + (index * 1.8) )
+        const span = ( index) * (2 /9 * Math.PI);
+        // mesh.rotation.y = this.world.three.camera.rotation.y - span * (index/length)
+        
+        
+        mesh.rotation.y = (this.world.three.camera.rotation.y - Math.PI / 8);
+
+        mesh.translateZ( -4 )
+        mesh.translateX( 1.25 + index * 3.2 )
+        
+        // mesh.translateZ( -2) //Math.cos(span * (index/length))/5)
+        // mesh.translateX(2+index*3) //Math.sin(span * (index/length))*4.0 )
         mesh.updateMatrix()
+         
     }
 
     private equip (component: Component, hand: number ) { // refactor for panels[]
@@ -185,7 +194,7 @@ export default class ToolSystem {
                 if ( toolPanel.mesh == null )
                     toolPanel.init( this.world.three.scene )
 
-                toolSystem.positionToolPanel( toolPanel, userPos, i )
+                toolSystem.positionToolPanel( toolPanel, userPos, i, toolPanels.length)
             })
         }
 

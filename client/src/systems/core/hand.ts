@@ -59,6 +59,9 @@ export default class HandSystem {
                 entity = cursor.state.cursor.entity
 
                 if (!!entity && !!!state.hand.grabbedEntity) {
+                    if (entity.componentsByAttr.terrain && entity.allComponents.length === 1 ) {
+                        return -1;
+                    }
                     let zPosition = entity.boundingRadius || 15;
                     
                     this.world.three.scene.remove(entity.mesh);
@@ -72,7 +75,7 @@ export default class HandSystem {
                     } else {
                         cursorMesh.add(entity.mesh);
                         entity.mesh.updateMatrix();
-                        console.warn("bounding radius", entity.boundingRadius);
+                        // console.warn("bounding radius", entity.boundingRadius);
                        
                         entity.mesh.position.y -= zPosition;
                     }

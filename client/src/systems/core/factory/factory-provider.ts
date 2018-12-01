@@ -160,7 +160,10 @@ export default class FactoryProviderSystem {
             layout:  any         = {},
             systems: any         = this.world.systems,
             pos:     Array<number> = [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 0.120 ]
-
+        // if (assetType === "file") {
+        //     console.warn("its happening");
+        //     console.info("factoryItem", factoryItem)
+        // }
         if ( component.attrs.layout ) {
             pos = [ 0, vOffset, 0.1 ]
             layout = component.attrs.layout

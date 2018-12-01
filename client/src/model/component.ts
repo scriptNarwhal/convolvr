@@ -7,6 +7,7 @@ import { Attributes, AttributeName } from './attribute';
 import { AnyObject } from '../util';
 import AssetSystem from '../systems/core/assets';
 import { Vector3 } from 'three';
+import Systems from '../systems';
 
 export type NameOrId = string|number;
 export type EntityPath = [string, NameOrId];
@@ -27,7 +28,7 @@ export type DBComponent = {
 
 export default class Component {
 
-  public entity:             any
+  public entity:             Entity
   public mesh:               any
   public attrs:              Attributes
   public props:              { [key: string]: any }
@@ -48,8 +49,22 @@ export default class Component {
   private _compPos:          any;
 
 
-  constructor (data: DBComponent, entity: Entity, systems: any, config: any = false, parent?: Component | null) {
-      let quaternion,
+  constructor (data: DBComponent, entity: Entity, systems: Systems, config: any = false, parent?: Component | null) {
+      this.init(systems, data, entity, config, parent)
+  }
+
+  public reInit(systems: Systems, data: DBComponent = {}, config?: any, parent?: Component | null) {
+    console.log("do reinit")
+    if (this.mesh && this.mesh.parent) {
+      this.mesh.parent.remove(this.mesh);
+    }
+    this.init(systems, this.data ? {...this.data, ...data} : data, this.entity, config, this.parent)
+    console.log("reinit", this.mesh)
+    this.parent.mesh.add(this.mesh);
+  }
+
+  private init(systems: Systems, data: DBComponent, entity?: Entity, config?: any, parent?: Component | null) {
+    let quaternion,
           position,
           path = config && config.path ? config.path : [],
           attrs: Attributes,
@@ -57,7 +72,7 @@ export default class Component {
           pl = path.length,
           p = 0
           
-      this.index = config.index ? config.index : 0
+      this.index = this.index || config && config.index ? config.index : 0
       this.path = []
 
       while ( p < pl ) {
@@ -74,12 +89,12 @@ export default class Component {
 
       data.components =  data.components || []
       attrs = data.attrs;
-      quaternion = data.quaternion ? data.quaternion : false;
+      quaternion = data.quaternion ? data.quaternion : null;
       position = data.position ? data.position : [ 0, 0, 0 ];
 
       this.entity = entity
       this.data = data
-      this.attrs = attrs || {}
+      this.attrs = attrs || this.attrs || {}
       this.state = {}
       this.components = data.components
       this.compsByFaceIndex = []
@@ -263,7 +278,7 @@ export default class Component {
         if ( parentMesh ) {
           worldCompPos = parentMesh.localToWorld( compPos ); console.log("worldCompPos", worldCompPos )
         } else {
-          worldCompPos = new THREE.Vector3().fromArray(this.entity.position).add( compPos )
+          worldCompPos = new THREE.Vector3().fromArray(this.entity.position || [0,0,0]).add( compPos )
         }
         newDist = worldCompPos.distanceTo( position ); console.log("newDist", newDist)
         

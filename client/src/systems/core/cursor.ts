@@ -189,7 +189,7 @@ export default class CursorSystem {
 
         newCursorState.entity = noRayCast ? cursorState.cursor.entity : entity
         newCursorState.lookingAtEntity = noRayCast ? cursorState.cursor.entity : entity
-        _changeCursorColor( cursor, newCursorState.entity && newCursorState.entity.componentsByAttr.terrain == null )
+        // _changeCursorColor( cursor, newCursorState.entity && newCursorState.entity.componentsByAttr.terrain == null )
         if ( !!!component && cursorState.cursor.component ) {
             if ( lookAway ) {
                 callbacks = cursorState.component.state.lookAway.callbacks

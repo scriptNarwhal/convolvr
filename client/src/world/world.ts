@@ -62,7 +62,6 @@ export default class Convolvr {
 	public name: 	     string
 	public userName: 	 string
 	public mode: 	     string
-	public rPos: 	     boolean
 	public users: 		 Array<User>
 	public user:         User     = new User({});
 	public camera: 		 any
@@ -76,7 +75,7 @@ export default class Convolvr {
 	public IOTMode: 	 any
 	public vrHeight: 	 number
 	public screenResX: 	 number
-	public octree: 		 any
+	// public octree: 		 any
 	public raycaster: 	 any
 	public systems: 	 Systems
 	public terrain: 	 SpaceSystem
@@ -137,7 +136,6 @@ export default class Convolvr {
 		this.name = ""
 		this.userName = "world"
 		this.mode = "3d" // web, stereo ( IOTmode should be set this way )
-		this.rPos = false
 		this.users = []
  		this.camera = camera
 		this.skyboxMesh = false
@@ -289,6 +287,7 @@ export default class Convolvr {
       toolMenu = this.systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) as Entity // method for spawning built in entities
       this.user.hud = toolMenu
       toolMenu.init( this.three.scene, {}, (menu: Entity) => { 
+		  console.warn("Tool menu callback", menu)
         menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
       }); 
 	  callback && callback(avatar);
@@ -380,13 +379,13 @@ export default class Convolvr {
 			this.skybox.loadTexturedSky( config.sky, this.skyboxMesh, skySize, ()=> {
 				addLightsCallback();
 				rebuildSpace();
-			})
+			});
 		}
 
 		if ( coords ) {
 			coords = coords.split(".")
 			three.camera.position.fromArray([parseInt(coords[0])*GRID_SIZE[0], parseInt(coords[1])*GRID_SIZE[1], parseInt(coords[2])* GRID_SIZE[2] ])
-			three.camera.updateMatrix()
+			three.camera.updateMatrix();
 		}
 
 		document.title = config.name.toLowerCase() == 'overworld' && config.userName == APP_NAME.toLowerCase() ? APP_NAME : config.name // make "Convolvr" default configurable via admin settings
@@ -408,9 +407,6 @@ export default class Convolvr {
 	}
 
 	public reload(user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean) {
-		let world = this,
-			octree = this.octree
-
 		this.terrain.destroy()
 		this.workers.staticCollisions.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		this.workers.ecsWorker.postMessage(JSON.stringify( { command: "clear", data: {}} ))

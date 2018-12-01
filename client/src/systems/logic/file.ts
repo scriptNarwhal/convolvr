@@ -141,7 +141,7 @@ export default class FileSystem {
                         dataSource: dirs
             
                 };
-
+                console.log("extend component for files")
         this.systems.extendComponent(component, "factoryProvider", directoryViewer);
     }
 

@@ -6,8 +6,10 @@ import Entity from '../../../model/entity'
 import * as THREE from 'three';
 import { System } from '../..';
 import { Vector3 } from 'three';
-import { FactoryType, FactoryAttributeType, portal, GeometryShape, geometry, material } from '../../../model/attribute';
+import { FactoryType, FactoryAttributeType, portal, GeometryShape, geometry, material, AttributeName } from '../../../model/attribute';
 import { SpaceConfig } from '../../../model/space';
+import { AnyObject } from '../../../util';
+import EmoteSystem from '../../chat/emote';
 
 export type GenerateAttrParams = {
     component: Component,
@@ -29,12 +31,21 @@ export type GenerateEntityParams = {
 export default class FactorySystem implements System {
 
     world: Convolvr
+    dependencies = [["emote"]]
+
+    private emote: EmoteSystem
 
     private rateLimit: number = 3; // calls to generate() per frame 
     private mustGenerate = false;
     private attributeQueue: GenerateAttrParams[] = [];
     private componentQueue: GenerateComponentParams[] = [];
     private entityQueue: GenerateEntityParams[] = [];
+   
+
+    private getSystemIcon = (presetName: AttributeName) => {
+        const icon = this.emote.systemIcons[presetName];
+        return icon ? icon : "🔧";
+    }
 
     constructor (world: Convolvr) {
         this.world = world;
@@ -165,7 +176,7 @@ export default class FactorySystem implements System {
             case "assets":
                 return this._generateAsset( menuItem, data, voxel, entityPos, quat)
             case "systems":
-                return this._generateSystem( menuItem, data, voxel, entityPos, quat, preset)
+                return this._generateSystem( menuItem, data, voxel, entityPos, quat, preset as AttributeName)
         }
     }
 
@@ -240,7 +251,9 @@ export default class FactorySystem implements System {
         ], position, quaternion, voxel)
     }
 
-    _generateSystem(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[], preset: string ) {
+    _generateSystem(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[], preset: AttributeName ) {
+        const getSystemIcon = this.getSystemIcon;
+
         return new Entity(-1, [{
             attrs: Object.assign({}, data, {
                     mixin: true,
@@ -255,11 +268,11 @@ export default class FactorySystem implements System {
                     },
                     text: {
                         lines: [
-                            preset,
+                            `#${getSystemIcon(preset)}${preset}`,
                             ...(JSON.stringify(data).match(/.{1,20}/g) || [""])
                             ],
-                        fontSize: 80,
-                        color: "#ffffff",
+                        fontSize: 120,
+                        color: "#00ff00",
                         background: "#000000",
                         label: false
                     },
@@ -423,7 +436,7 @@ export default class FactorySystem implements System {
                         color: 0x0080ff
                     },
                     text: {
-                        lines: [JSON.stringify(data)],
+                        lines: [data],
                         color: "#ff0000",
                         background: "#000000",
                         label: false

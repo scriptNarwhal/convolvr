@@ -40,11 +40,11 @@ export default class FileTool extends Tool {
                             dir: "/"
                           }
                         },
-                        factoryProvider: { // generates factory for each item in dataSource
-                          type: "file", // entity, attr, place, world, user, file, directory
-                          //attrName: "geometry",
-                          dataSource: this.world.systems.assets.files
-                        }
+                        // factoryProvider: { // generates factory for each item in dataSource
+                        //   type: "file", // entity, attr, place, world, user, file, directory
+                        //   //attrName: "geometry",
+                        //   dataSource: this.world.systems.assets.files
+                        // }
                       }
                     }
                   },
@@ -59,11 +59,11 @@ export default class FileTool extends Tool {
                             dir: "/"
                           }
                         },
-                        factoryProvider: { // generates factory for each item in dataSource
-                          type: "directory", // entity, attr, place, world, user, file, directory
-                          //attrName: "geometry",
-                          dataSource: this.world.systems.assets.directories
-                        }
+                        // factoryProvider: { // generates factory for each item in dataSource
+                        //   type: "directory", // entity, attr, place, world, user, file, directory
+                        //   //attrName: "geometry",
+                        //   dataSource: this.world.systems.assets.directories
+                        // }
                       }
                     }
                   }
