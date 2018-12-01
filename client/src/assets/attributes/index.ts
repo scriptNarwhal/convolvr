@@ -1,3 +1,5 @@
+import { AttributeName, Attribute, propulsion, portal } from "../../model/attribute";
+
 export function getPropsList ( attrs: any ) {
 
     let out: any[] = []
@@ -99,8 +101,7 @@ export default function BuiltinProps () {
                 floor: [{}],
                 wall: [{}],
                 door: [{}],
-                terrain: [{}],
-                container: [{}]
+                space: [{}],
             },
             tools: {
                 toolUI: [
@@ -124,7 +125,7 @@ export default function BuiltinProps () {
                 propulsion: [
                     { thrust: 0.09 },
                     { thrust: 0.333 }
-                ],
+                ] as propulsion[],
                 projectile: [
                     { type: 'instant' },
                     { type: 'slow', thrust: 0.050 }
@@ -136,7 +137,7 @@ export default function BuiltinProps () {
                     { worldName: "" },
                     { place: "" },
                     { domain: "" }
-                ]   
+                ] as portal[]
             },
             media: {
                 layout: [{}],
@@ -162,14 +163,6 @@ export default function BuiltinProps () {
                     { type: 'speech' }
                 ],
                 signal: [{}],
-                switch: [{}],
-                loop: [{}],
-                memory: [{}],
-                cpu: [{}],
-                ioController: [{}],
-                networkInterface: [{}],
-                driveController: [{}],
-                displayAdapter: [{}],
                 display: [{}],
                 cursor: [{}],
                 hand: [{}],
@@ -179,6 +172,6 @@ export default function BuiltinProps () {
                 tabView: [{}],
                 tab: [{}],
             }
-        }
+        } as {[key: string]: { [key in AttributeName]?: Attribute[]} }
     }
 }
