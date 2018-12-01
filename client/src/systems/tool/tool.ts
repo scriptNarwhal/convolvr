@@ -5,6 +5,7 @@ import {
     GRID_SIZE 
 } from '../../config'
 import Convolvr from '../../world/world'
+import { AnyObject } from '../../util';
 
 export default class ToolSystem {
 
@@ -64,7 +65,7 @@ export default class ToolSystem {
         }
     }
 
-    private initPanelUIEntity(panelProp: any, contentProps: any) {
+    private initPanelUIEntity(panelProp: AnyObject, contentProps: any) {
         return new Entity(-1, [
             {
                 position: [0, 0, 0],
@@ -87,8 +88,8 @@ export default class ToolSystem {
                             text: {
                                 label: true,
                                 lines: [ panelProp.title ],
-                                color: "#ffffff",
-                                background: "#000000"
+                                color: panelProp.titleColor || "#ffffff",
+                                background: panelProp.titleBackground || "#000000"
                             },
                             geometry: {
                                 shape: "box",

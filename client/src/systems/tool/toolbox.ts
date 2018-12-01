@@ -11,6 +11,7 @@ import PlaceTool from '../../assets/entities/tools/core/place-tool'
 import SpaceTool from '../../assets/entities/tools/core/world-tool'
 import FileTool from '../../assets/entities/tools/core/file-tool'
 import SocialTool from '../../assets/entities/tools/core/social-tool'
+import TextTool from '../../assets/entities/tools/core/text-tool'
 import DebugTool from '../../assets/entities/tools/core/debug-tool.js'
 import CustomTool from '../../assets/entities/tools/core/custom-tool'
 import { GRID_SIZE } from '../../config'
@@ -55,11 +56,8 @@ export default class ToolboxSystem {
 
         this.user = world.user
         setTimeout( ()=>{
-          console.log("postInject toolbox: init avatar")
-          console.log(user.avatar)
           if (user.avatar && user.avatar.addHandler) {
             user.avatar.addHandler("init", () => {
-              console.log("user avatar init event handler ", user.avatar)
                user.avatar.componentsByAttr.hand.map((m: Component, i: number) => {
                  if (i < 3)
                    toolbox.hands.push(m)
@@ -78,11 +76,12 @@ export default class ToolboxSystem {
           new AttributeTool({}, world, this),
           new GeometryTool({}, world, this),
           new MaterialTool({}, world, this),
+          new TextTool({}, world, this), 
+          // new PlaceTool({}, world, this),
+          // new PropertyTool({}, world, this),
           new SpaceTool({}, world, this),
-          new PlaceTool({}, world, this),
-          new PropertyTool({}, world, this),
           new FileTool({}, world, this),
-          new DebugTool({}, world, this), // new SocialTool({}, world, this),
+          // new SocialTool({}, world, this),
           new DebugTool({}, world, this),
           new DeleteTool({}, world, this)
         ]
@@ -225,8 +224,10 @@ export default class ToolboxSystem {
           if ( cursorState.component && cursorState.component.attrs.activate ) { 
             !!cursorState.component && console.warn("Activate ", cursorState.component )
             if (cursorState.component) {
+              const component = telemetry.cursor.component;
+
               for (let callback of cursorState.component.state.activate.callbacks) {
-                callback() // action is handled by checking component attrs ( besides .activate )
+                callback(component) // action is handled by checking component attrs ( besides .activate )
               }
             }
             return // cursor system has found the component ( provided all has gone according to plan.. )
@@ -235,8 +236,8 @@ export default class ToolboxSystem {
           miniature = cursorEntity.componentsByAttr.miniature
         
           if ( miniature && cursorComponent && cursorComponent.attrs.toolUI ) {
-            configureTool = componentsByAttr.toolUI[ 0 ].attrs.toolUI.configureTool 
-            console.log("ToolUI! configure tool", configureTool)
+            configureTool = componentsByAttr.toolUI[ 0 ].attrs.toolUI.configureTool;
+
               if ( configureTool ) {
                 if ( toolIndex != configureTool.tool ) {
                   this.currentTools[ hand ] = configureTool.tool

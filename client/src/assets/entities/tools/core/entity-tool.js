@@ -12,11 +12,13 @@ export default class EntityTool extends Tool  {
         cameraPos = world.three.camera.position,
         coords = GLOBAL_SPACE
 
-      Object.keys( allEntities ).map( name => {
-        if ( name != "default-avatar" && name != "tool-menu" && name != "help-screen" && name != "chat-screen" )
-          allOptions.push( name ) 
-
-      })
+    const entityKeys = Object.keys( allEntities );
+    
+    for ( const name of entityKeys) {
+      if ( name != "default-avatar" && name != "tool-menu" && name != "help-screen" && name != "chat-screen" ) {
+        allOptions.push( name );
+      }
+    }
 
       this.mesh = null
       this.name = "Entity Tool"
@@ -171,7 +173,7 @@ export default class EntityTool extends Tool  {
   
       console.log( "( Entity Tool )", telemetry, params, entity )
 
-      if ( ! tooManyComponents ) {
+      if ( ! tooManyComponents || pointingAtTerrain ) {
         if ( 
           selected && selected.componentsByAttr &&
           !!!selected.componentsByAttr.miniature && 

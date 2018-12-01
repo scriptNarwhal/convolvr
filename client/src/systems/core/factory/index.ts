@@ -264,7 +264,7 @@ export default class FactorySystem implements System {
                     },
                     geometry: {
                         shape: "box",
-                        size: [ 1.5, 1.5, 1.5 ]
+                        size: [ 2.9, 2.9, 0.25 ]
                     },
                     text: {
                         lines: [

@@ -177,7 +177,7 @@ export default class ComponentTool extends Tool {
         console.warn(" Problem ")
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByAttr.toolUI[ 0 ].state.toolUI.show()
-        user.toolbox.usePrimary( telemetry.hand, entity  )
+        // user.toolbox.usePrimary( telemetry.hand, entity  )
         return false
       }
 

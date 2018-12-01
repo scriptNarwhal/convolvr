@@ -12,10 +12,10 @@ export type AttributeName = "ability" | "activate" | "audio" | "assets" | "brows
 					 "speech" | "state" | "stat" | "staticCollisions" | "terrain" | "text" | "time" | "toolUI" | "tool" |
 					 "toolbox" | "user" | "vehicle" | "video" | "virtualMachine" | "template" | "wall" | "webrtc" | "weapon";
 
-export type AttributeData = number | string | boolean | any[] | Attribute | Attributes
+export type AttributeData = number | string | boolean | any[] | AnyObject | Attribute | Attributes
 
 export interface Attribute {
-    [parameter: string]: AttributeData
+    [key: string]: AttributeData //[parameter: string]: AttributeData
 }
 
 export interface Attributes {
@@ -328,7 +328,8 @@ export interface text extends Attribute {
     background: string,
     fontSize?: number,
     label?: boolean,
-    canvasSize?: [number, number]
+    canvasSize?: [number, number],
+    editable?: boolean
 }
 export interface template extends Attribute {
     assets: { [mapCharacter: string]: string /* component name */ },
@@ -344,17 +345,19 @@ export interface toolUI extends Attribute {
         data?: any 
     }
 }
-export interface tool extends Attribute {
-    panel?: {
-        content: {
-            attrs?: Attributes
-        }
+
+export interface ToolPanel {
+    title: string,
+    color: number,
+    titleColor?: string,
+    titleBackground?: string,
+    content: {
+        attrs?: Attributes
     }
-    panels?: {
-        content: {
-            attrs?: Attributes
-        } 
-    }[]
+}
+export interface tool extends Attribute {
+    panel?: ToolPanel,
+    panels?: ToolPanel[]
 }
 export interface toolbox extends Attribute {}
 export interface user extends Attribute {}

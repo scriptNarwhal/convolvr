@@ -1,4 +1,4 @@
-import { AttributeName, Attribute, propulsion, portal } from "../../model/attribute";
+import { AttributeName, Attribute, propulsion, portal, material, assets, toolUI, tool, script } from "../../model/attribute";
 
 export function getPropsList ( attrs: any ) {
 
@@ -58,7 +58,7 @@ export default function BuiltinProps () {
                 { mixin: true,       color: 0xff8707 },
                 { mixin: true,       color: 0x87ff87 },
                 { mixin: true,       color: 0x878787 }
-            ],
+            ] as material[],
             material: [
                 { name: "basic",     color: 0xffffff },
                 { name: "plastic",   color: 0xffffff },
@@ -78,7 +78,7 @@ export default function BuiltinProps () {
                         ]
                     } 
                 },
-            ]
+            ] as material[]
         },
         assets: [ 
             { path: "/data/images/textures/tiles.png" },
@@ -95,13 +95,16 @@ export default function BuiltinProps () {
             { path: "/data/images/photospheres/sky-reflection-g.jpg" }, 
             { path: "/data/images/photospheres/sky-reflection-r.jpg" },  
             { path: "/data/images/photospheres/sky-reflection-o.jpg" }
-        ],
+        ] as assets[],
         systems: { // load these from ../assets/attrs eventually
             structures: {
                 floor: [{}],
                 wall: [{}],
                 door: [{}],
                 space: [{}],
+                particles: [{}],
+                miniature: [{}]
+
             },
             tools: {
                 toolUI: [
@@ -113,7 +116,7 @@ export default function BuiltinProps () {
                     { toolIndex: 3 },
                     { toolIndex: 4 },
                     { toolIndex: 5 }
-                ],
+                ] as toolUI[],
                 tool: [
                     // tool templates
                 ] as any[],
@@ -147,13 +150,12 @@ export default function BuiltinProps () {
                 audio: [{}],
                 video: [{}],
                 webrtc: [{}],
-                drawing : [{}],
+                // drawing : [{}],
                 file: [{}],
                 rest: [{}],
             },
             interactivity: {
                 destructable: [{}],
-                particles: [{}],
                 factory: [{}],
                 factoryProvider: [{}],
                 input: [ 
@@ -162,13 +164,15 @@ export default function BuiltinProps () {
                     { type: 'webcam' },
                     { type: 'speech' }
                 ],
-                signal: [{}],
-                display: [{}],
+                script: [
+                    { statements: [] } as script
+                ],
+                // signal: [{}],
+                // display: [{}],
                 cursor: [{}],
                 hand: [{}],
                 activate: [{}],
                 hover: [{}],
-                miniature: [{}],
                 tabView: [{}],
                 tab: [{}],
             }

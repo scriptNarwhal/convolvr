@@ -324,7 +324,7 @@ export default class Convolvr {
 
 		this.config = config; console.info("Space config: ", config)
 		this.terrain.initTerrain(config.terrain)
-		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 0.2)
+		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 0.25)
 		this.ambientLight.color.set( config.light.ambientColor )
 		
 		if ( this.settings.shadows > 0 && sunLight.castShadow == false ) {

@@ -55,19 +55,9 @@ export default class GeometryTool extends Tool {
     }
 
     primaryAction ( telemetry ) {
-      
-      let color           = this.options.color,
-          material        = this.options.material,
-          basic           = this.options.basic,
-          cursor          = telemetry.cursor,
-          user            = this.world.user,
-          systems         = this.world.systems,
-          assetSystem     = systems.assets,
-          cursorSystem    = systems.cursor,
+      let  cursor          = telemetry.cursor,
           cursorState     = cursor.state.cursor || {},
           componentPath   = cursorState.componentPath,
-          position        = telemetry.position,
-          quat            = telemetry.quaternion,
           selected        = !!cursorState.entity ? cursorState.entity : false,
           coords          = telemetry.voxel,
           attrs           = {},
@@ -75,12 +65,9 @@ export default class GeometryTool extends Tool {
           component       = {}, 
           cursorComponent = cursorState.component,
           entity          = telemetry.entity,
-          entityId        = selected ? selected.id : -1,
-          size            = [1,1,1]
+          entityId        = selected ? selected.id : -1;
           
-      console.log(" ( Geometry Tool ) ", componentPath )
-      
-      attrs = selected.componentsByAttr
+      attrs = selected.componentsByAttr;
       
       if ( !!!selected || attrs.miniature || attrs.activate ) {
           console.warn("no tool action, calling activation callbacks")
@@ -96,8 +83,8 @@ export default class GeometryTool extends Tool {
           quaternion: cursorComponent.data.quaternion,
           attrs: cursorComponent.attrs,
           components: cursorComponent.components
-        })
-        console.log("set geometry", component)
+        });
+        
         if (component.attrs.geometry.size) {
           component.attrs.geometry = Object.assign( {}, cursorComponent.attrs.geometry, this.options, { size: component.attrs.geometry.size } )  
         } else {
