@@ -209,12 +209,19 @@ class Settings extends Component<any, any> {
             </div>
           <div style={styles.odd}>
             <h3 style={styles.h3 as any}>Antialiasing</h3>
-            <div style={styles.col}>
+            <div style={{ ...styles.col, marginTop: "0.3em"}}>
               <ToggleInput value={this.state.aa} 
                            onChange={ (e: any)=> { this.onToggle( null, "aa", e) }} />
             </div>
           </div>
           <div style={styles.even}>
+            <h3 style={styles.h3 as any}>Mirror VR Display Output</h3>
+            <div style={{ ...styles.col, marginTop: "0.3em"}} >
+              <ToggleInput value={this.state.mirrorOutput} 
+                           onChange={ (e: any)=> { this.onToggle( null, "mirrorOutput", e) }} />
+            </div>
+          </div>
+          <div style={styles.odd}>
             <h3 style={styles.h3 as any}>Override Lens Spacing</h3>
             <div style={styles.col}>
               <input onChange={e=> {this.setState({manualLensDistance: parseFloat(e.target.value)})}}
@@ -230,7 +237,7 @@ class Settings extends Component<any, any> {
               </span>
             </div>
           </div>
-          <div style={styles.odd}>
+          <div style={styles.even}>
             <h3 style={styles.h3 as any}>Floor Height (VR)</h3>
             <div style={styles.col}>
               <input onChange={e=> {this.setState({floorHeight: parseInt(e.target.value)})}}
@@ -246,7 +253,7 @@ class Settings extends Component<any, any> {
               </span>
             </div>
           </div>
-          <div style={styles.even}>
+          <div style={styles.odd}>
             <h3 style={styles.h3 as any}>Leap Motion Mode</h3>
             <div style={styles.col}>
               <select onChange={e=> {this.setState({leapMode: e.target.value})}}
@@ -259,7 +266,7 @@ class Settings extends Component<any, any> {
               </select>
             </div>
           </div>
-          <div style={styles.odd}>
+          <div style={styles.even}>
             <h3 style={styles.h3 as any}>Camera Control Mode</h3>
             <div style={styles.col}>
               <select onChange={e=> { this.setState({camera: e.target.value})}}
@@ -271,16 +278,16 @@ class Settings extends Component<any, any> {
             </select>
             </div>
           </div>
-          <div style={styles.even}>
+          <div style={styles.odd}>
             <h3 style={styles.h3 as any}>IOT Mode</h3>
-            <div style={styles.col}>
+            <div style={{ ...styles.col, marginTop: "0.3em"}}>
               <ToggleInput value={ this.state.IOTMode} 
                            onChange={ (e: any)=> { this.onToggle( null, "IOTMode", e) }} />
             </div>
           </div>
-          <div  style={{ ...styles.odd, ...styles.bottom }}>
+          <div  style={{ ...styles.even, ...styles.bottom }}>
             <h3 style={styles.h3 as any}>Post Processing</h3>
-            <div style={styles.col}>
+            <div style={{ ...styles.col, marginTop: "0.3em"}}>
               <ToggleInput value={this.state.postProcessing} 
                            onChange={ (e: any)=> { this.onToggle( null, "postProcessing", e) }} />
             </div>
@@ -491,7 +498,8 @@ const styles = {
     width: '42%',
     fontSize: '14px',
     display: 'inline-block',
-    marginLeft: '3%'
+    marginLeft: '3%',
+    verticalAlign: 'top'
   },
   col: {
     width: '55%',

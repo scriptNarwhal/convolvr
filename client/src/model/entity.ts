@@ -462,7 +462,6 @@ export default class Entity {
   public updateComponentAtPath( component: DBComponent, path: any[], pathIndex = 0, components: DBComponent[] | false = false, resetState = false) {
     let oldState: any = {},
         sanitizedState: any = {};
-    console.log( "update component at path", component, path, pathIndex, components )
 
     if ( components == false ) {
       components = this.components;

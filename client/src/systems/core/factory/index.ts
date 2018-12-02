@@ -6,7 +6,7 @@ import Entity from '../../../model/entity'
 import * as THREE from 'three';
 import { System } from '../..';
 import { Vector3 } from 'three';
-import { FactoryType, FactoryAttributeType, portal, GeometryShape, geometry, material, AttributeName } from '../../../model/attribute';
+import { FactoryType, FactoryAttributeType, portal, GeometryShape, geometry, material, AttributeName, Attributes } from '../../../model/attribute';
 import { SpaceConfig } from '../../../model/space';
 import { AnyObject } from '../../../util';
 import EmoteSystem from '../../chat/emote';
@@ -137,13 +137,13 @@ export default class FactorySystem implements System {
             }
 
         } else if ( type == "world" ) {
-            created = this._generateSpace( menuItem, data, voxel, entityPos, quat )
+            created = this.generateSpace( menuItem, data, voxel, entityPos, quat )
         } else if ( type == "place" ) {
-            created = this._generatePlace( menuItem, data, voxel, entityPos, quat )
+            created = this.generatePlace( menuItem, data, voxel, entityPos, quat )
         } else if ( type == "file" ) {
-            created = this._generateFile( menuItem, data, voxel, entityPos, quat )
+            created = this.generateFile( menuItem, data, voxel, entityPos, quat )
         } else if ( type == "directory" ) {
-            created = this._generateDirectory( menuItem, data, voxel, entityPos, quat )
+            created = this.generateDirectory( menuItem, data, voxel, entityPos, quat )
         }
 
         this.initGeneratedEntity(created, component, attr.anchorOutput)
@@ -170,13 +170,13 @@ export default class FactorySystem implements System {
         switch (type) {
             case "geometry":
             console.log("generate geometry", data)
-                return this._generateGeometry( menuItem, data, voxel, entityPos, quat, preset)
+                return this.generateGeometry( menuItem, data, voxel, entityPos, quat, preset)
             case "material":
-                return this._generateMaterial( menuItem, data, voxel, entityPos, quat, preset)
+                return this.generateMaterial( menuItem, data, voxel, entityPos, quat, preset)
             case "assets":
-                return this._generateAsset( menuItem, data, voxel, entityPos, quat)
+                return this.generateAsset( menuItem, data, voxel, entityPos, quat)
             case "systems":
-                return this._generateSystem( menuItem, data, voxel, entityPos, quat, preset as AttributeName)
+                return this.generateSystem( menuItem, data, voxel, entityPos, quat, preset as AttributeName)
         }
     }
 
@@ -228,7 +228,7 @@ export default class FactorySystem implements System {
         return new Entity( -1, [ newComponent ], position, quaternion, voxel )
     }
 
-    _generateGeometry(menuItem: boolean, data: geometry, voxel: number[], position: number[], quaternion: number[], preset: string ) {
+    private generateGeometry(menuItem: boolean, data: geometry, voxel: number[], position: number[], quaternion: number[], preset: string ) {
         return new Entity(-1, [{
                 attrs: Object.assign({}, {geometry: data}, {
                     mixin: true,
@@ -251,7 +251,7 @@ export default class FactorySystem implements System {
         ], position, quaternion, voxel)
     }
 
-    _generateSystem(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[], preset: AttributeName ) {
+    private generateSystem(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[], preset: AttributeName ) {
         const getSystemIcon = this.getSystemIcon;
 
         return new Entity(-1, [{
@@ -290,7 +290,7 @@ export default class FactorySystem implements System {
         ], position, quaternion, voxel)
     }
 
-    _generateMaterial(menuItem: boolean, data: material, voxel: number[], position: number[], quaternion: number[], preset: string ) {
+    private generateMaterial(menuItem: boolean, data: material, voxel: number[], position: number[], quaternion: number[], preset: string ) {
 
         return new Entity(-1, [{
                 attrs: Object.assign({}, {material: data}, {
@@ -313,38 +313,35 @@ export default class FactorySystem implements System {
         ], position, quaternion, voxel)
     }
 
-    _generateAsset(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[] ) {
-
+    private generateAsset(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[] ) {
         return new Entity(-1, [{
-                attrs: Object.assign({}, {material: {diffuse: data}}, {
-                    mixin: true,
+                attrs: Object.assign({}, {
                     miniature: {},
-                    assets: {
-                        images: [data]
-                    },
+                    // assets: {
+                    //     images: [data]
+                    // },
                     material: {
-                        name: "plastic",
                         color: 0xffffff,
-                        map: data
+                        map: data.path as string
                     },
                     geometry: {
-                        shape: "box",
-                        size: [0.5, 0.5, 0.5]
+                        shape: "sphere",
+                        size: [2, 2, 2]
                     },
                     ...(menuItem ? {
                         toolUI: {
                             configureTool: {
-                                tool: 7,
-                                data
+                                tool: 4,
+                                data: { map: data.path }
                             }
                         }
                     } : {})
-                }
+                } as Attributes
             )}
         ], position, quaternion, voxel)
     }
 
-    _generateSpace(menuItem: boolean, data: SpaceConfig, voxel: number[], position: number[], quaternion: number[] ) {
+    private generateSpace(menuItem: boolean, data: SpaceConfig, voxel: number[], position: number[], quaternion: number[] ) {
         return new Entity(-1, [{
             attrs: {
                     miniature: {},
@@ -384,7 +381,7 @@ export default class FactorySystem implements System {
         ], position, quaternion, voxel)
     }
 
-    _generatePlace(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[] ) {
+    private generatePlace(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[] ) {
 
          return new Entity(-1, [{
             attrs: Object.assign({}, data, {
@@ -421,7 +418,7 @@ export default class FactorySystem implements System {
         ], position, quaternion, voxel)
     }
 
-    _generateFile(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[] ) {
+    private generateFile(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[] ) {
 
         return new Entity(-1, [{
             attrs: Object.assign({}, data, {
@@ -450,7 +447,7 @@ export default class FactorySystem implements System {
         ], position, quaternion, voxel)
     }
 
-    _generateDirectory(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[] ) {
+    private generateDirectory(menuItem: boolean, data: any, voxel: number[], position: number[], quaternion: number[] ) {
 
         return new Entity(-1, [{
             attrs: Object.assign({}, data, {

@@ -32,7 +32,7 @@ export default class CursorSystem {
         let voxels = world.systems.terrain.voxels,
             raycaster = world.raycaster,
             coords = [ 0, 0, 0 ],
-            octreeObjects = [],
+            // octreeObjects = [],
             castObjects = [],
             intersections = [],
             component = null,
@@ -47,8 +47,9 @@ export default class CursorSystem {
             position = handMesh.position
         } else {
             camera.getWorldDirection(handDirection)
-            cameraPos.fromArray(camera.position.toArray())
-            position = cameraPos
+            cameraPos.fromArray(camera.position.toArray());
+            // cameraPos.y += 0.1;
+            position = cameraPos;
         }
 
         raycaster.set(position, handDirection )
@@ -153,16 +154,16 @@ export default class CursorSystem {
 
     private cursorCallback(cursor: any, hand: number, world: Convolvr, obj: any, entity: Entity, component: Component) {
         let cursorState = cursor.state,
-            distance = !!cursorState.cursor ? cursorState.cursor.distance : 2,
+            // distance = !!cursorState.cursor ? cursorState.cursor.distance : 2,
             attrs = !!component ? component.attrs : false,
             hover = !!attrs ? attrs.hover : false,
             lookAway = !!attrs ? attrs.lookAway : false,
-            activate = !!attrs ? attrs.activate : false,
-            cursorSystem = world.systems.cursor,
+            // activate = !!attrs ? attrs.activate : false,
+            // cursorSystem = world.systems.cursor,
             newCursorState: any = null,
             noRayCast = entity && entity.componentsByAttr.noRayCast,
             callbacks = null,
-            comp = false,
+            // comp = false,
             cb = 0
 
         if (!!obj) {

@@ -68,6 +68,25 @@ export default class MaterialTool extends Tool {
                     }
                   }
                 },
+                , {
+                  title: "Textures",
+                  color: 0x07ffff,
+                  content: {
+                    attrs: {
+                      factoryProvider: { // generates factory for each item in dataSource
+                        type: "attr", // entity, attr
+                        attrName: "assets",
+                        dataSource: this.world.systems.assets.attrs.assets.slice(0, 6)
+                      },
+                      layout: {
+                        type: "grid",
+                        mode: "factory", // child components will ignore layout
+                        columns: 3,
+                        gridSize: 0.8
+                      }
+                    }
+                  }
+                },
               ]
             }
           },
@@ -101,8 +120,6 @@ export default class MaterialTool extends Tool {
           entity          = telemetry.entity,
           entityId        = selected ? selected.id : -1
           
-
-      console.log(" ( Material Tool ) ", componentPath )
       attrs = selected.componentsByAttr
       
       if ( !!!selected || attrs.miniature || attrs.activate ) {

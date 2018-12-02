@@ -35,9 +35,9 @@ export let detectSpaceDetailsFromURL = () => {
 
 export let clearOldData = () => {
   if (localStorage.getItem("postProcessing") != null) {
-    if (localStorage.getItem("version0.55") == null) {
+    if (localStorage.getItem("version0.68") == null) {
         localStorage.clear();
-        localStorage.setItem("version0.55", "1")
+        localStorage.setItem("version0.68", "1")
     }
   }
 }

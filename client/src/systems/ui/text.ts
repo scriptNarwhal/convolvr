@@ -84,17 +84,22 @@ export default class TextSystem implements System {
     }
 
     public createTextMaterial(textCanvas: HTMLCanvasElement, background?: string): any {
-        let textTexture = new THREE.Texture( textCanvas )
-        
-        textTexture.anisotropy = this.world.three.renderer.capabilities.getMaxAnisotropy()
+        const textTexture = new THREE.Texture( textCanvas )
+         
+        if (textCanvas.width < 512 || textCanvas.height < 256) {
+            textTexture.magFilter = THREE.NearestFilter;
+            textTexture.minFilter = THREE.LinearMipMapLinearFilter;    
+        } else {
+            textTexture.anisotropy = this.world.three.renderer.capabilities.getMaxAnisotropy()
+        }
+
         let textMaterial = new THREE.MeshBasicMaterial({
             map: textTexture,
             side: 0,
             transparent: background != null ? background.length == 9 : false
         });
-        // textTexture.magFilter = THREE.NearestFilter;
-        // textTexture.minFilter = THREE.LinearMipMapLinearFilter;
-        textMaterial.map.needsUpdate = true
+      
+        textTexture.needsUpdate = true;
         return textMaterial;
     }
 
