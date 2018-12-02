@@ -20,7 +20,7 @@ export default class ECSObjects {
                         "Null",
                         "null"
                     ],
-                    fontSize: 170,
+                    fontSize: 180,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -52,7 +52,7 @@ export default class ECSObjects {
                         "Int",
                         "0"
                     ],
-                    fontSize: 170,
+                    fontSize: 180,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -84,7 +84,7 @@ export default class ECSObjects {
                         "Float",
                         "0.0"
                     ],
-                    fontSize: 170,
+                    fontSize: 180,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -116,7 +116,7 @@ export default class ECSObjects {
                         "String",
                         "\"\""
                     ],
-                    fontSize: 170,
+                    fontSize: 180,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -148,7 +148,7 @@ export default class ECSObjects {
                         "Array",
                         "[ ]"
                     ],
-                    fontSize: 170,
+                    fontSize: 180,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -180,7 +180,7 @@ export default class ECSObjects {
                         "HashMap",
                         "{ }"
                     ],
-                    fontSize: 170,
+                    fontSize: 180,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -212,7 +212,7 @@ export default class ECSObjects {
                         "Function",
                         "fn( ) { }"
                     ],
-                    fontSize: 170,
+                    fontSize: 180,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -244,7 +244,7 @@ export default class ECSObjects {
                         "Builtin",
                         "{Builtin}"
                     ],
-                    fontSize: 170,
+                    fontSize: 180,
                     color: "#ff8000",
                     background: "#000"
                 }
@@ -276,7 +276,7 @@ export default class ECSObjects {
                         "Error",
                         "\"\""
                     ],
-                    fontSize: 170,
+                    fontSize: 180,
                     color: "#ff8000",
                     background: "#000"
                 }

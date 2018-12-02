@@ -95,29 +95,20 @@ class NewSpace extends Component<any, any> {
             nets: this.state.nets
           }
       }
-      console.log("creating space ", JSON.stringify(data))
-    data.userName = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'space' // mark as public / not tied to user if no userName
-    data.userId = this.props.loggedInUser != false ? this.props.loggedInUser.id : -1
+
+    data.userName = this.props.loggedInUser != false ? this.props.loggedInUser.name : 'space'; // mark as public / not tied to user if no userName
+    data.userId = this.props.loggedInUser != false ? this.props.loggedInUser.id : -1;
     if (this.state.name != "" || this.state.description == "") {
-      this.props.createSpace( data )
+      this.props.createSpace( data );
     } else {
       alert("Name & Description are required.")
     }
   }
 
   onToggle( group: string, which: string, e: any ) {
-    // if (group) {
-    //   let theGroup = this.state[group];
-
-    //   theGroup[which] = e;
-    //   this.setState({
-    //     [group]: theGroup
-    //   })
-    // } else {
       this.setState({
         [which]: e
       });
-    // }
   }
 
   onSkyTypeChange (e: any) {

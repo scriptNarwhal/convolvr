@@ -110,7 +110,7 @@ export default class Convolvr {
 		this.willRender = true;
 		this.settings = new Settings( this )
 		viewDist = [ 0.1, 2000 + (3+this.settings.viewDistance)*GRID_SIZE[0]*150 ]
-		usePostProcessing = (this.settings as any).enablePostProcessing == 'on'
+		usePostProcessing = (this.settings as any).enablePostProcessing
 		camera = new THREE.PerspectiveCamera( this.settings.fov, window.innerWidth / window.innerHeight, viewDist[ 0 ], viewDist[ 1 ] )
 		this.onUserLogin = () => {}
 		this.initChatAndLoggedInUser = () => {}

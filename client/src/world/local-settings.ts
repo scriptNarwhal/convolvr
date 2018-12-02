@@ -35,9 +35,9 @@ export default class Settings {
 			types: SettingType[] = [ SettingType.str,  SettingType.str,      SettingType.bool, SettingType.int,   SettingType.int,
 									 SettingType.bool, SettingType.bool, 	 SettingType.int,  SettingType.float, SettingType.int,            
 									 SettingType.str,  SettingType.float,    SettingType.int,  SettingType.bool,  SettingType.float],
-			defaults = 			   ["fps",             "stick",              "off",            2,                 window.innerWidth < 720 ? 1 : 2, 
-									"off",   		   "off",  				 0, 			   0, 				  0, 
-									"hybrid",  		   0, 					 75, 			   "off", 			  0],
+			defaults = 			   ["fps",             "stick",              "false",            2,                 window.innerWidth < 720 ? 1 : 2, 
+									"false",   		   "false",  				 0, 			   0, 				  0, 
+									"hybrid",  		   0, 					 75, 			   "false", 			  0],
 			settings = this
 
 		options.map( (setting, i) => {
@@ -56,7 +56,7 @@ export default class Settings {
 	setValueWithType(value: any, type: SettingType ): any {
 		switch (type) {
 			case SettingType.bool:
-				return value == "on" ? true : false;
+				return value === true || value == "true" ? true : false;
 			case SettingType.int:
 				return parseInt( value );
 			case SettingType.float:

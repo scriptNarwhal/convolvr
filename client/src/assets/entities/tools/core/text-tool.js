@@ -82,14 +82,14 @@ export default class TextTool extends Tool {
           attrs: cursorComponent.attrs,
           components: cursorComponent.components
         });
-        const attr = component.attrs.text;
+        const attr = cursorComponent.attrs.text;
 
         if (attr) {
-            component.state.text.update({
+            cursorComponent.state.text.update({
                 lines: this.options
             })
         } else {
-            this.world.systems.extendComponent(component, "text", {
+            this.world.systems.extendComponent(cursorComponent, "text", {
                 lines: this.options,
                 color: "#ffffff", 
                 background:  "#000000"
@@ -118,10 +118,9 @@ export default class TextTool extends Tool {
       
     }
 
-    configure ( config ) {
-      if ( typeof config == 'object' && Object.keys(config).length > 0 ) {
+    configure ( config) {
+      if ( typeof config == 'object' ) {
         this.options = config.data;
-        this.preset = config.preset;
         console.log("Configuring tool ", this.options)
       }
   }

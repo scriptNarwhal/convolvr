@@ -1,10 +1,9 @@
 import Convolvr from '../../world/world'
 import Component from '../../model/component'
 import { Material, Mesh, Texture } from 'three';
+import * as THREE from 'three'
 import { text } from '../../model/attribute';
 import { System } from '..';
-
-let _THREE: any;
 
 export interface TextState  {
     textMaterial?: Material,
@@ -26,7 +25,6 @@ export default class TextSystem implements System {
 
     constructor ( world: Convolvr ) {
         this.world = world;
-        _THREE = world.THREE;
         this.systems = world.systems;
         this.mappedColors = [
             "#505050", "#ffffff", "#ffff00", "#ff0020", "#0080ff", 
@@ -50,8 +48,8 @@ export default class TextSystem implements System {
         textCanvas = this.createTextCanvas(canvasSize);
         context = textCanvas.getContext("2d");
         //get old diffuse map / color
-        let oldDiffuseCode = component.state.material.getTextureCode("map"),
-            oldMapImg = this.systems.assets.textures[ oldDiffuseCode ]
+        let oldDiffuseCode = component.state && component.state.material.getTextureCode("map"),
+            oldMapImg = oldDiffuseCode ? this.systems.assets.textures[ oldDiffuseCode ] : null;
 
         if (oldMapImg) {
             oldMapImg = oldMapImg.image;
@@ -86,13 +84,16 @@ export default class TextSystem implements System {
     }
 
     public createTextMaterial(textCanvas: HTMLCanvasElement, background?: string): any {
-        let textTexture = new _THREE.Texture( textCanvas )
+        let textTexture = new THREE.Texture( textCanvas )
+        
         textTexture.anisotropy = this.world.three.renderer.capabilities.getMaxAnisotropy()
-        let textMaterial = new _THREE.MeshBasicMaterial({
+        let textMaterial = new THREE.MeshBasicMaterial({
             map: textTexture,
             side: 0,
             transparent: background != null ? background.length == 9 : false
         });
+        // textTexture.magFilter = THREE.NearestFilter;
+        // textTexture.minFilter = THREE.LinearMipMapLinearFilter;
         textMaterial.map.needsUpdate = true
         return textMaterial;
     }

@@ -1,6 +1,6 @@
 import * as React from "react"; import { Component } from "react";
 
-import { modalStyle } from 'energetic-ui'
+import { modalStyle, ToggleInput } from 'energetic-ui'
 import { isMobile } from '../../config'
 import Shell from '../components/shell'
 
@@ -14,15 +14,16 @@ class Settings extends Component<any, any> {
       network: [],
       camera: localStorage.getItem("camera") || 'fps',
       lighting: parseInt(localStorage.getItem("lighting")) || 2,
-      postProcessing: localStorage.getItem("postProcessing") || 'off',
+      postProcessing: localStorage.getItem("postProcessing") === "true",
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
-      aa: localStorage.getItem("aa") || "on",
+      mirrorOutput: localStorage.getItem("mirrorOutput") == "true",
+      aa: localStorage.getItem("aa") === "true",
       shadows: localStorage.getItem("shadows") != null ? parseInt(localStorage.getItem("shadows")) : window.innerWidth < 720 ? 0 : 1,
       geometry: parseInt(localStorage.getItem("geometry") || "2"),
       floorHeight: parseInt(localStorage.getItem("floorHeight") || "1"),
-      IOTMode: localStorage.getItem("IOTMode") || 'off',
+      IOTMode: localStorage.getItem("IOTMode") === "true",
       leapMode: localStorage.getItem("leapMode") || "hybrid",
-      blurEffect: localStorage.getItem("blurEffect") == "on" ? true : window.innerWidth > 720 ? true : false,
+      blurEffect: localStorage.getItem("blurEffect") === "true" ? true : window.innerWidth > 720 ? true : false,
       viewDistance: localStorage.getItem("viewDistance") != null ? localStorage.getItem("viewDistance") : 0,
       fov: localStorage.getItem("fov") != null ? localStorage.getItem("fov") : 75,
       manualLensDistance: localStorage.getItem("manualLensDistance") != null ? localStorage.getItem("manualLensDistance") : 0,
@@ -53,6 +54,7 @@ class Settings extends Component<any, any> {
     localStorage.setItem( 'geometry', this.state.geometry )
     localStorage.setItem( 'shadows', this.state.shadows )
     localStorage.setItem( 'postProcessing', this.state.postProcessing )
+    localStorage.setItem( 'mirrorOutput', this.state.mirrorOutput)
     localStorage.setItem( 'vrMovement', this.state.vrMovement ) 
     localStorage.setItem( 'IOTMode', this.state.IOTMode )
     localStorage.setItem( 'floorHeight', this.state.floorHeight )
@@ -100,6 +102,13 @@ class Settings extends Component<any, any> {
   resetToDefault () {
     window.localStorage.clear()
     window.location.href = window.location.href
+  }
+
+  
+  onToggle( group: string, which: string, e: any ) {
+      this.setState({
+        [which]: e
+      });
   }
 
   render() {
@@ -201,13 +210,8 @@ class Settings extends Component<any, any> {
           <div style={styles.odd}>
             <h3 style={styles.h3 as any}>Antialiasing</h3>
             <div style={styles.col}>
-              <select onChange={e=> {this.setState({aa: e.target.value})}}
-                      value={ this.state.aa }
-                      style={ styles.select }
-              >
-                <option value="on">On (recommended)</option>
-                <option value="off">Off (for older GPUs)</option>
-              </select>
+              <ToggleInput value={this.state.aa} 
+                           onChange={ (e: any)=> { this.onToggle( null, "aa", e) }} />
             </div>
           </div>
           <div style={styles.even}>
@@ -270,25 +274,15 @@ class Settings extends Component<any, any> {
           <div style={styles.even}>
             <h3 style={styles.h3 as any}>IOT Mode</h3>
             <div style={styles.col}>
-              <select onChange={e=> {this.setState({IOTMode: e.target.value})}}
-                    value={ this.state.IOTMode }
-                    style={ styles.select }
-              >
-                <option value="off">Off (Recommended)</option>
-                <option value="on">On (Only renders after world update)</option>
-              </select>
+              <ToggleInput value={ this.state.IOTMode} 
+                           onChange={ (e: any)=> { this.onToggle( null, "IOTMode", e) }} />
             </div>
           </div>
           <div  style={{ ...styles.odd, ...styles.bottom }}>
             <h3 style={styles.h3 as any}>Post Processing</h3>
             <div style={styles.col}>
-              <select onChange={e=> {this.setState({postProcessing: e.target.value})}}
-                      value={ this.state.postProcessing }
-                      style={ styles.select }
-              >
-                <option value="on">On (Bloom HDR Effect)</option>
-                <option value="off">Off (Better Performance)</option>
-              </select>
+              <ToggleInput value={this.state.postProcessing} 
+                           onChange={ (e: any)=> { this.onToggle( null, "postProcessing", e) }} />
             </div>
           </div>
           {/* <div style={{ ...styles.even, ...styles.bottom }}>
