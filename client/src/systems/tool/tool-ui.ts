@@ -60,10 +60,10 @@ export default class ToolUISystem {
 
     switchTool (component: Component, tool: number, hand: number) {
         let toolbox = this.world.user.toolbox,
-            currentTools = toolbox.currentTools,
-            tools = toolbox.tools,
-            attrs = component.attrs,
-            state = component.state,
+            // currentTools = toolbox.currentTools,
+            // tools = toolbox.tools,
+            // attrs = component.attrs,
+            // state = component.state,
             entity = component.entity,
             toolUIs = entity.componentsByAttr.toolUI
         
@@ -77,26 +77,29 @@ export default class ToolUISystem {
     }
 
     updatePosition (component: Component) {
-        console.log("    updatePosition", component)
+        console.log("    updatePosition", component, component.entity)
       let mesh = component.entity.mesh,
           userMesh = this.world.user.avatar.mesh,
-          userPos = userMesh.position,
-          pPos = mesh.position
+          userPos = userMesh.position;
+          
+        component.entity.update([ userPos.x, userPos.y, userPos.z]);
+      //mesh.position.set( userPos.x, userPos.y, userPos.z )
 
-      mesh.position.set( userPos.x, userPos.y, userPos.z )
       mesh.rotation.y = this.world.three.camera.rotation.y
       mesh.updateMatrix()
-      mesh.translateZ( -1.5 )
+      mesh.translateZ( -2 )
       mesh.translateX(  0.1 )
-      mesh.translateY( 1.25 )
-      mesh.updateMatrix()
+      mesh.translateY( 2 )
+    //   mesh.updateMatrix()
     }
 
     hide ( component: Component ) {
+        console.log("hide tools", component);
       component.entity.mesh.visible = false
     }
 
     show ( component: Component ) {
+        console.log("show tools", component);
       component.entity.mesh.visible = true
       this.updatePosition( component )
     }

@@ -110,9 +110,9 @@ export default class ToolboxSystem {
         this.tools[ this.currentTools[ hand ] ].unequip()
         this.currentTools[ hand ] = index
         this.tools[ index ].equip( hand )
-  
+        console.info("show menu!!!")
+        this.showMenu();
         if ( !!!noHUDUpdate ) {
-          this.showMenu();
           console.log("move tool ui", this.user.hud);
           this.user.hud.componentsByAttr.toolUI[ 0 ].state.toolUI.switchTool( index, hand );
         }

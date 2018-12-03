@@ -30,6 +30,7 @@ export interface Attributes {
     conveyor?: conveyor
     cursor?: cursor
     datgui?: datgui
+    debug?: debug
     destructable?: destructable
     display?: display
     virtualDevice?: virtualDevice
@@ -142,6 +143,12 @@ export interface cursor extends Attribute {
 
 }
 export interface datgui extends Attribute {}
+
+export interface debug extends Attribute {
+    user?: boolean,
+    position?: boolean,
+    voxel?: boolean
+}
 export interface destructable extends Attribute {
     hitPoints?: number,
     explosionType?: "particles" | "components" | "billboard" | "all"

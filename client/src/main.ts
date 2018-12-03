@@ -60,13 +60,17 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
     world.initChatAndLoggedInUser( localStorage.getItem("username") != null );
   }, 400);
 
+  const dummy = world.systems.assets.makeEntity("tool-menu", true, {}, [0,1,1]) as Entity;
+
+  dummy.init(world.three.scene);
+  dummy.update([0,40,0]);
 });
 
 setTimeout( ()=> { 
   let worldDetails = detectSpaceDetailsFromURL();
 
   loadingSpace.load( worldDetails[ 0 ], worldDetails[ 1 ], () => { /* systems online */ }, ()=> { /* terrain finished loading */
-    
+
   });
 }, 500);
 

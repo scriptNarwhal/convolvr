@@ -51,6 +51,7 @@ import * as THREE from 'three';
 import { Flags, AnyObject } from '../../util';
 import ObjPluginSystem from '../importers/obj-plugin';
 import FBXPluginSystem from '../importers/fbx-plugin';
+import { material, Attributes } from '../../model/attribute';
 
 export default class AssetSystem {
 
@@ -529,7 +530,7 @@ export default class AssetSystem {
 
     initIconProps ( color: number, texture: any ) {
 
-        let material: any = {
+        let material: material = {
             name: "metal",
             color,
             config: {
@@ -538,17 +539,17 @@ export default class AssetSystem {
             }
         }
 
-        if ( !!texture )
-
+        if ( !!texture ) {
             material.map = texture
+        }
 
         return {
             material,
             geometry: {
                 shape: "box",
                 faceNormals: true,
-                size: [ 0.333, 0.333, 0.333 ]
+                size: [ 0.75, 0.75, 0.75 ]
             }
-        }
+        } as Attributes
     }
 }

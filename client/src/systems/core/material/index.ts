@@ -63,10 +63,10 @@ export default class MaterialSystem implements System {
           loadedMat.map = this.procedural.generateTexture(attr.procedural)
         }
         assets.materials[materialCode] = loadedMat
-      }
+      };
 
       if (assets.materials[materialCode] == null) {
-        if (!!attr.config) // raw, three.js material attrerties, to override things
+        if (!!attr.config) // raw, three.js material properties, to override things
           mat = Object.assign({}, mat, attr.config)
 
         if (!!attr.repeat)
@@ -75,50 +75,56 @@ export default class MaterialSystem implements System {
         if (envMapUrl && envMapUrl != "none" && (attr.roughnessMap || attr.metalnessMap) || shading == 'physical') {
 
           shading = 'physical'
+          material = this._initMaterial(attr, mat, shading, basic, mobile);
+
           let allMaps = assets.loadImage(envMapUrl, textureConfig);
 
-          allMaps.then((envMap: any) => {
+          allMaps = allMaps.then((envMap: any) => {
             envMap.mapping = THREE.EquirectangularReflectionMapping;
             mat.envMap = envMap;
-
-            if (attr.map) {
-              allMaps.then(() => {
-                assets.loadImage(attr.map, textureConfig)
-                  .then((map) => {
-                    this.mapCallback(map, "map", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
-                    if (attr.roughnessMap) {
-                      allMaps.then(() => {
-                        assets.loadImage(attr.roughnessMap, textureConfig)
-                          .then((map) => {
-                            this.mapCallback(map, "roughnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
-                          })
-                      })
-                    }
-                    if (attr.metalnessMap) {
-                      allMaps.then(() => {
-                        assets.loadImage(attr.metalnessMap, textureConfig)
-                          .then((map) => {
-                            this.mapCallback(map, "metalnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
-                          })
-                      })
-                    }
-                    allMaps.then(() => {
-                      material = this._initMaterial(attr, mat, shading, basic, mobile)
-                      if (attr.alphaMap || attr.bumpMap) {
-                        this._loadAlphaMap(attr, textureConfig, material, assets, () => {
-                          if (!!!attr.bumpMap) { onMapsLoaded(material) } // cache material for later
-                        });
-                        this._loadBumpMap(attr, textureConfig, material, assets, () => {
-                          onMapsLoaded(material) // cache material for later
-                        })
-                      } else {
-                        onMapsLoaded(material)
-                      }
-                    });
-                  });
-              });
-            }
           }); 
+
+          if (attr.map) {
+            allMaps.then(() => {
+              assets.loadImage(attr.map, textureConfig)
+                .then((diffuse) => {
+                  this.mapCallback(diffuse, "map", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
+
+                  if (attr.roughnessMap) {
+                    allMaps = allMaps.then(() => {
+                      assets.loadImage(attr.roughnessMap, textureConfig)
+                        .then((map) => {
+                          this.mapCallback(map, "roughnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
+                          console.log("before create physical mat, ", mat.map);
+                          material = this._initMaterial(attr, mat, shading, basic, mobile);
+                        });
+                    })
+                  }
+                  if (attr.metalnessMap) {
+                    allMaps = allMaps.then(() => {
+                      assets.loadImage(attr.metalnessMap, textureConfig)
+                        .then((map) => {
+                          this.mapCallback(map, "metalnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
+                          console.log("before create physical mat, ", mat.map);
+                          material = this._initMaterial(attr, mat, shading, basic, mobile);
+                        });
+                    })
+                  }
+                  allMaps.then(() => {
+                    if (attr.alphaMap || attr.bumpMap) {
+                      this._loadAlphaMap(attr, textureConfig, material, assets, () => {
+                        if (!!!attr.bumpMap) { onMapsLoaded(material) } // cache material for later
+                      });
+                      this._loadBumpMap(attr, textureConfig, material, assets, () => {
+                        onMapsLoaded(material) // cache material for later
+                      })
+                    } else {
+                      onMapsLoaded(material)
+                    }
+                  });
+                });
+            });
+          }
         } else {
 
             shading = 'phong'
@@ -156,7 +162,7 @@ export default class MaterialSystem implements System {
           material = assets.materials[ materialCode ]
         }
       return {
-          material,
+          material: !material.notInitialized ? material : new THREE.MeshBasicMaterial({color: 0xffffff}),
           materialCode,
           getTextureCode: (mapType: string) => {
             this.getTextureCode(attr, mapType)
@@ -217,7 +223,7 @@ export default class MaterialSystem implements System {
       shading = mobile ? "lambert" : shading
 
       _initMaterialConfig( attr, config, shading, basic, mobile)
-     
+   
       if ( basic ) {
           material = new THREE.MeshBasicMaterial( config )
         } else if ( shading == 'physical' ) {

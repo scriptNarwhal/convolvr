@@ -23,10 +23,7 @@ export default class Tool {
     }
 
     equip (hand: number) {
-      let input = this.world.userInput,
-          hands = this.world.user.avatar.componentsByAttr.hand, //this.toolbox.hands,
-          //toolPanel = this.entity.componentsByAttr.tool ? this.entity.componentsByAttr.tool[0].state.tool.panel : false,
-          component = null,
+      let component = null,
           toolMesh = null
 
       if ( this.mesh == null ) {

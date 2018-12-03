@@ -129,7 +129,7 @@ export let _initMaterialProp = (attr: material, simpleShading: boolean) => { // 
       attr.map = !!!attr.map ? '/data/images/textures/gplaypattern_@2X-2.png' : attr.map
 
       if (!simpleShading)
-        attr.metalnessMap = "/data/images/textures/tiles.png"
+        attr.metalnessMap = attr.metalnessMap ? attr.metalnessMap : "/data/images/textures/gplaypattern_@2X-2.png"
     break
     case "stars":
       attr.repeat = attr.repeat ||  ['wrapping', 4, 2]

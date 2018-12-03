@@ -1,5 +1,6 @@
 import AssetSystem from "../../../../systems/core/assets";
 import { DBComponent } from "../../../../model/component";
+import { DBEntity } from "../../../../model/entity";
 
 let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
 
@@ -22,8 +23,8 @@ let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
         ],
         toolMenuIcons: DBComponent[] = [],
         toolMenu = null
-
-    toolColors.map(( color, i ) => {
+    let i = 0;
+    for (const color of toolColors) { //toolColors.map(( color, i ) => {
 
         let iconCube = {
             attrs: Object.assign({}, assetSystem.initIconProps(color, iconTextures[i]), {
@@ -37,22 +38,30 @@ let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
             components: [] as DBComponent[],
             position: [ 0, 0, 0 ],
             quaternion: [ 0, 0, 0, 1 ]
-        },
-            button = assetSystem["_initButton"](iconCube),
+        } as DBComponent,
+            // button = assetSystem["_initButton"](iconCube),
             row = Math.floor( i / 5 ) * 0.050
 
-        toolMenuIcons.push(Object.assign({}, button, {
-            position: [ -1 + (i % 5) * 0.5, row - 0.05, 0.25 ],
-            quaternion: [ 0, 0, 0, 1 ]
-        }))
+        toolMenuIcons.push(
+            Object.assign(
+                {}, 
+                iconCube, 
+                {
+                    position: [ -1 + (i % 5) * 0.8, row - 0.05, 0.25 ],
+                    quaternion: [ 0, 0, 0, 1 ]
+                }
+            )
+        );
+        i ++;
+    }
 
-    })
+    console.log("toolMenuIcons", toolMenuIcons)
 
     let currentIndicator = {
         attrs: {
             geometry: {
                 shape: "box",
-                size: [ 0.75, 0.25, 0.75 ]
+                size: [ 0.75, 0.75, 0.75 ]
             },
             material: {
                 color: 0xffffff,
@@ -76,7 +85,7 @@ let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
                         distance: 320
                     }
                 },
-                position: [ 0, -0.25, -0.050 ],
+                position: [ 0, -1.5, -1.50 ],
                 quaternion: [ 0, 0, 0, 1 ]
 
             }
@@ -94,16 +103,15 @@ let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
                 attrs: {
                     geometry: {
                         shape: "box",
-                        size: [ 3, 0.1, 0.15 ]
+                        size: [ 1, 1.5, 1.15 ]
                     },
                     material: {
                         color: 0x404040,
-                        name: "plastic"
+                        name: "wireframe"
                     },
                     toolUI: {
                         menu: true
-                    },
-                    captureEvents: true // pass them to child components
+                    }
                 },
                 quaternion: [0, 0, 0, 1],
                 position: [ 0, 0, 0.444 ]
@@ -112,8 +120,8 @@ let toolMenu = (assetSystem: AssetSystem, config: any, voxel: number[]) => {
         ],
         position: [ 0, 0, 0 ],
         quaternion: [ 0, 0, 0, 1 ],
-        voxel: voxel || [ 0, 0, 0 ]
-    }
+        voxel: voxel || [ 0, 1, 0 ]
+    } as DBEntity
 
 }
 
