@@ -152,56 +152,59 @@ function boxCollision(x: number, z: number, w: number, l: number, cx: number, cz
 }
 
 scWorker.onmessage = (event: any) => {
+	let message = JSON.parse( event.data ),
+		data 	= message.data,
+		user 	= observer;
 
-	var message  = JSON.parse( event.data ),
-		data 	 = message.data,
-		user 	 = observer,
-		voxel 	 = null,
-		toRemove = null,
-		items 	 = [],
-		entities = [],
-		c 		 = 0,
-		p 		 = 0
-
-	if ( message.command == "update" ) {
-		// user.prevPos = [user.position[0], user.position[1], user.position[2]];
-		user.position = data.position
-		user.velocity = data.velocity
-		user.vrHeight = data.vrHeight
-		//scWorker.postMessage(JSON.stringify(scWorker.observer));
-	} else if ( message.command == "add voxels" ) {
-		scWorker.addVoxels( message, data )
-	} else if ( message.command == "remove voxels" ) {
-		scWorker.removeVoxels( message, data )
-	} else if ( message.command == "add entity" ) {
-		scWorker.addEntity()
-  	} else if ( message.command == "remove entity" ) {
-    	scWorker.removeEntity( message, data )
-	} else if ( message.command == "update entity" || message.command == "update telemetry" ) {
-		if ( message.command == "update entity" ) {
-			scWorker.updateEntity( message, data )
-		} else {
-			scWorker.updateTelemetry( message, data )
-		}
-	} else if ( message.command == "clear" ) {
-		voxels = []
-		voxelList = []
-	} else if ( message.command == "start" ) {
-		scWorker.update()
-	} else if ( message.command == "stop" ) {
-		scWorker.stop()
-	} else if ( message.command == "log" ) {
-		if (data == "") {
-			scWorker.postMessage('{"command":"log","data":[' + user.position[0] + ',' + user.position[1] + ',' + user.position[2] + ']}');
-			scWorker.postMessage('{"command":"log","data":' + JSON.stringify(voxels)+ '}');
-		}
+	switch ( message.command ) {
+		case "update":
+			// user.prevPos = [user.position[0], user.position[1], user.position[2]];
+			user.position = data.position
+			user.velocity = data.velocity
+			user.vrHeight = data.vrHeight
+			//scWorker.postMessage(JSON.stringify(scWorker.observer));
+		break;
+		case "add voxels":
+			scWorker.addVoxels( message, data );
+		break;
+		case "remove voxels":
+			scWorker.removeVoxels( message, data )
+		break;
+		case "add entity":
+			scWorker.addEntity();
+		break;
+		case "remove entity":
+			scWorker.removeEntity( message, data );
+		break;
+		case "update entity":
+				scWorker.updateEntity( message, data )
+		break;
+		case "update telemetry":
+				scWorker.updateTelemetry( message, data )
+		break;
+		case "clear":
+			voxels = [];
+			voxelList = [];
+		break;
+		case "start":
+			scWorker.update();
+		break;
+		case "stop":
+			scWorker.stop();
+		break;
+		case "log":
+			if (data == "") {
+				scWorker.postMessage('{"command":"log","data":[' + user.position[0] + ',' + user.position[1] + ',' + user.position[2] + ']}');
+				scWorker.postMessage('{"command":"log","data":' + JSON.stringify(voxels)+ '}');
+			}
+		break;
 	}
 };
 
 scWorker.addVoxels = (message: any, data: any) => {
 	voxelList = voxelList.concat(data)
-	for (let v of data) {
-		voxels[ v.cell.join(".") ] = v
+	for (let v in data) {
+		voxels[ data[v].cell.join(".") ] = data[v];
 	}
 }
 
@@ -284,8 +287,6 @@ scWorker.updateEntity = (message: any, data: any) => {
 }
 
 scWorker.updateTelemetry = (message: any, data: any) => {
-	
-	console.warn("physics worker: updateTelemetry()", message, data)
 	if (!data || !data.coords) {
 		console.warn("no data to update entity")
 		return
@@ -298,14 +299,17 @@ scWorker.updateTelemetry = (message: any, data: any) => {
 	}
 	let entities = voxels[ cell ].entities,
 		oldCell = message.data.oldCoords.join("."),
-		oldEntities = voxels[oldCell];
+		oldEntities = voxels[oldCell].entities;
 
+	
 	if (oldCell != cell) {
 		let c = oldEntities.length - 1;
 
 		while (c >= 0) {
-			let movedEnt = oldEntities[c]
+			let movedEnt = oldEntities[c];
+			console.info("checking moved entity", movedEnt);
 			if (movedEnt.id == data.entityId) {
+				console.log("found entity to move &&&&&& ", movedEnt);
 				oldEntities.splice(oldEntities.indexOf(movedEnt), 1)
 				entities.push(movedEnt)
 				console.log("physics worker: update telemetry: moved between voxels")
@@ -320,7 +324,7 @@ scWorker.updateTelemetry = (message: any, data: any) => {
 	} else {
 		if (entities != null) {
 			let c = entities.length - 1;
-			
+			console.info("checking not moved very-far entity", entities[c])
 			while (c >= 0) {
 				if (entities[c].id == data.entityId) {
 					console.info("physics worker: update telemetry")

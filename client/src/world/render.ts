@@ -6,7 +6,6 @@ export let animate = (world: Convolvr, last: number, cursorIndex: number) => {
       willRender = world.willRender,
       mirrorOutput = world.settings.mirrorOutput && world.mode == "stereo";
       
-  if (willRender || mirrorOutput) {
     let camera = three.camera,
         cPos = camera.position,
         delta = (Date.now() - last) / 0.080,
@@ -28,12 +27,14 @@ export let animate = (world: Convolvr, last: number, cursorIndex: number) => {
         world.sendUserData()
         world.systems.tick( delta, time );
 
-        if (world.postProcessing.enabled) {
+        if (willRender) {
+          if (world.postProcessing.enabled) {
             world.postProcessing.composer.render();
-        } else {
-            three.renderer.render( three.scene, camera );
+          } else {
+              three.renderer.render( three.scene, camera );
+          }
         }
-          
+        
         requestAnimationFrame( () => { animate( world, time, cursorIndex ) } );
       } else if (mirrorOutput) {
 
@@ -46,7 +47,6 @@ export let animate = (world: Convolvr, last: number, cursorIndex: number) => {
         requestAnimationFrame( () => { animate( world, time, cursorIndex ) } );
       }
       // world.octree.update()
-  }
 }
 
 export let vrAnimate = (world: Convolvr, display: VRDisplay, time: number, oldPos: number[], cursorIndex: number) => {
