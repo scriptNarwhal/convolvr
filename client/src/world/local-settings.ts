@@ -10,6 +10,7 @@ export default class Settings {
 
 	public cameraMode: any
 	public vrMovement: string
+	public mirrorOutput = false
 	public IOTMode: boolean
 	public lighting: number
 	public geometry: number
@@ -31,13 +32,13 @@ export default class Settings {
 
 		let options: string[]   =  ["cameraMode", 	  'vrMovement',         'IOTMode',         'lighting',       'geometry',
 					  			    'postProcessing', 'aa', 		        'shadows',         'floorHeight',    'viewDistance', 
-					  			    'leapMode',       'manualLensDistance', 'fov',             'blurEffect',     'dpr'],
+					  			    'leapMode',       'manualLensDistance', 'fov',             'blurEffect',     'dpr',              'mirrorOutput'],
 			types: SettingType[] = [ SettingType.str,  SettingType.str,      SettingType.bool, SettingType.int,   SettingType.int,
 									 SettingType.bool, SettingType.bool, 	 SettingType.int,  SettingType.float, SettingType.int,            
-									 SettingType.str,  SettingType.float,    SettingType.int,  SettingType.bool,  SettingType.float],
+									 SettingType.str,  SettingType.float,    SettingType.int,  SettingType.bool,  SettingType.float, SettingType.bool],
 			defaults = 			   ["fps",             "stick",              "false",            2,                 window.innerWidth < 720 ? 1 : 2, 
 									"false",   		   "false",  				 0, 			   0, 				  0, 
-									"hybrid",  		   0, 					 75, 			   "false", 			  0],
+									"hybrid",  		   0, 					 75, 			   "false", 			  0,             'false'],
 			settings = this
 
 		options.map( (setting, i) => {
@@ -46,11 +47,12 @@ export default class Settings {
 					settingValue = defaults[ i ];
 					localStorage.setItem( setting, settingValue )
 				}
-				settings.setValue( settingValue, setting, types[ i ] )
-			})
 
-		world.userInput.leapMode = this.leapMode
-		this.gravity = 1
+				settings.setValue( settingValue, setting, types[ i ] )
+			});
+
+		world.userInput.leapMode = this.leapMode;
+		this.gravity = 1;
 	}
 
 	setValueWithType(value: any, type: SettingType ): any {
@@ -66,53 +68,8 @@ export default class Settings {
 		}
 	}
 
-	setValue( value: any, key: string, type: SettingType): void {
-		switch (key) {
-			case "cameraMode":
-			this.cameraMode = this.setValueWithType(value, type)
-			break
-			case 'vrMovement':
-			this.vrMovement = this.setValueWithType(value, type)
-			break
-			case 'IOTMode':
-			this.IOTMode = this.setValueWithType(value, type)
-			break 
-			case 'lighting':
-			this.lighting = this.setValueWithType(value, type)
-			break
-			case 'geometry':
-			this.geometry = this.setValueWithType(value, type)
-			break
-			case 'postProcessing':
-			this.postProcessing = this.setValueWithType(value, type)
-			break
-			case 'aa':
-			this.aa = this.setValueWithType(value, type)
-			break
-			case 'shadows':
-			this.shadows = this.setValueWithType(value, type)
-			break
-			case 'floorHeight':
-			this.floorHeight = this.setValueWithType(value, type)
-			break
-			case 'viewDistance':
-			this.viewDistance = this.setValueWithType(value, type)
-			break
-			case 'leapMode':
-			this.leapMode = this.setValueWithType(value, type)
-			break
-			case 'manualLensDistance':
-			this.manualLensDistance = this.setValueWithType(value, type)
-			break
-			case 'fov':
-			this.fov = this.setValueWithType(value, type)
-			break
-			case 'blurEffect':
-			this.blurEffect = this.setValueWithType(value, type)
-			break
-			case 'dpr':
-			this.dpr = this.setValueWithType(value, type)
-			break
-		}
+	setValue = ( value: any, key: string, type: SettingType) => {
+		const settings = <any>this;
+		settings[key as string] = this.setValueWithType(value, type) ;
 	}
 }

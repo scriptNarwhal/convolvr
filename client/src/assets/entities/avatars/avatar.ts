@@ -78,7 +78,7 @@ let avatar = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody 
              attrs: { 
                 geometry: {
                   shape: "frustum",
-                  size: [ 0.8, 0.8, 0.8 ],
+                  size: [ 1.8, 1.8, 1.8 ],
                 },
                 material: {
                   color: 0xf0f0f0,
@@ -100,7 +100,7 @@ let avatar = (assetSystem: any, config: any, voxel: number[]) => { // wholeBody 
                 shape: "box"
               },
               material: {
-                name: "metal",
+                name: "plastic",
                 color: 0x3b3b3b,
               }
             },

@@ -19,7 +19,8 @@ class AttributeEditor extends Component<any, any> {
       text: "",
       name: "",
       data: {},
-      refreshing: false
+      refreshing: false,
+      validSyntax: true
     })
 
     if ( !this.props.editLoadedItemActivated )
@@ -35,7 +36,7 @@ class AttributeEditor extends Component<any, any> {
       if (this.props.activated == false && nextProps.activated == true)
         this.setState({
           activated: true
-        })
+        });
 
       let loadEditItemActiveChanged = this.props.editLoadedItemActivated == false && nextProps.editLoadedItemActivated,
         itemIndexChanged = this.props.loadedItemIndex != nextProps.loadedItemIndex,
@@ -108,13 +109,13 @@ class AttributeEditor extends Component<any, any> {
   handleTextChange(e: any) {
     this.setState({
       name: e.target.value
-    })
+    });
   }
 
   handleTextArea(e: any) {
     this.setState({
       text: e.target.value
-    })
+    });
   }
 
     save () {
@@ -142,12 +143,12 @@ class AttributeEditor extends Component<any, any> {
         this.toggleModal()
     }
 
-    validate() {
+    validate(text?: string) {
         let valid: boolean = null,
             output: Object = {}
 
         try {
-          output = JSON.parse(this.state.text)
+          output = JSON.parse(text || this.state.text)
         } catch (e) {
           console.warn("invalid json ", e)
           return true
@@ -190,7 +191,11 @@ class AttributeEditor extends Component<any, any> {
             </div>
             <div style={ styles.body }>
              { !this.state.refreshing ? (
-                <textarea defaultValue={ this.state.text } style={ styles.textArea( isMobile() ) } onBlur={ e=> this.handleTextArea(e) } />
+                <textarea defaultValue={ this.state.text } 
+                  style={ styles.textArea( this.state.validSyntax, isMobile() ) } 
+                  onBlur={ e=> this.handleTextArea(e) } 
+                  onKeyUp={ (e) => { this.setState({validSyntax: !this.validate((e.target as any).value)})} } 
+                />
               ) : ""}
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
@@ -275,7 +280,14 @@ let styles = {
       marginBotto: '0.5em'
   },
   text: textTitleInputStyle,
-  textArea: textAreaStyle,
+  textArea: (validSyntax = true, isMobile: boolean) => {
+    const areaStyle = textAreaStyle(isMobile);
+  
+    return validSyntax ? areaStyle : {
+      ...areaStyle,
+      background: 'rgba(255, 0, 0, 0.16) none'
+    }
+  },
   body: {
   },
   title: {

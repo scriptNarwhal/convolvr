@@ -16,7 +16,7 @@ class Settings extends Component<any, any> {
       lighting: parseInt(localStorage.getItem("lighting")) || 2,
       postProcessing: localStorage.getItem("postProcessing") === "true",
       vrMovement: localStorage.getItem("vrMovement") || 'stick',
-      mirrorOutput: localStorage.getItem("mirrorOutput") == "true",
+      mirrorOutput: localStorage.getItem("mirrorOutput") === "true",
       aa: localStorage.getItem("aa") === "true",
       shadows: localStorage.getItem("shadows") != null ? parseInt(localStorage.getItem("shadows")) : window.innerWidth < 720 ? 0 : 1,
       geometry: parseInt(localStorage.getItem("geometry") || "2"),

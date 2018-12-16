@@ -77,19 +77,17 @@ export default class ToolUISystem {
     }
 
     updatePosition (component: Component) {
-        console.log("    updatePosition", component, component.entity)
-      let mesh = component.entity.mesh,
-          userMesh = this.world.user.avatar.mesh,
-          userPos = userMesh.position;
+    //   let mesh = component.entity.mesh,
+    //       userMesh = this.world.user.avatar.mesh,
+    //       userPos = userMesh.position;
           
-        component.entity.update([ userPos.x, userPos.y, userPos.z]);
-      //mesh.position.set( userPos.x, userPos.y, userPos.z )
+    //     component.entity.update([ userPos.x, userPos.y, userPos.z]);
 
-      mesh.rotation.y = this.world.three.camera.rotation.y
-      mesh.updateMatrix()
-      mesh.translateZ( -2 )
-      mesh.translateX(  0.1 )
-      mesh.translateY( 2 )
+    //   mesh.rotation.y = this.world.three.camera.rotation.y
+    //   mesh.updateMatrix()
+    //   mesh.translateZ( -2 )
+    //   mesh.translateX(  0.1 )
+    //   mesh.translateY( 2 )
     //   mesh.updateMatrix()
     }
 
@@ -100,7 +98,7 @@ export default class ToolUISystem {
 
     show ( component: Component ) {
         console.log("show tools", component);
-      component.entity.mesh.visible = true
+      //component.entity.mesh.visible = true
       this.updatePosition( component )
     }
 }

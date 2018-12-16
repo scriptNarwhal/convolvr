@@ -12,19 +12,37 @@ import {
   rgb
 } from '../../../util'
 
-class TextEditor extends Component<any, any> {
+export interface TextEditorProps {
+  /* redux props */
+  activated: boolean
+  filename: string
+  dir: string
+  cwd: string[]
+  fileURL: string
+  username: string
+  fileUser: string /* idk what this does */
+  readTextFetching: boolean
+  writeTextFetching: boolean
+  writeText: (text: string, name: string, user: string, dir: string) => void
+  readText: (name: string, user: string, dir: string) => void
+  closeTextEdit: () => void
+  listFiles: (user: string, dir: string) => void
+  /* attribute props */
+  fileMode?: "json" | "ecs"
+}
+
+class TextEditor extends Component<TextEditorProps, any> {
 
   componentWillMount () {
     this.setState({
       activated: false,
+      validSyntax: true,
       text: "",
       name: ""
     })
 
     if ( !!this.props.fileURL ) {
-
       this.props.readText( this.props.fileURL, this.props.username, this.props.cwd.join("/") )
-
     }
     
   }
@@ -61,9 +79,7 @@ class TextEditor extends Component<any, any> {
     }
   }
 
-  componentWillUpdate ( nextProps: any, nextState: any ) {
-
-  }
+  componentWillUpdate ( nextProps: any, nextState: any ) {}
 
   handleTextChange(e: any) {
     this.setState({
@@ -74,17 +90,16 @@ class TextEditor extends Component<any, any> {
   handleTextArea(e: any) {
     this.setState({
       text: e.target.value
-    })
+    });
   }
 
   save () {
-
     let name = this.state.name,
         dir = this.props.activated ? this.props.dir : this.props.cwd.join("/") 
 
     if ( name != "" ) {
-      this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir )
-      this.toggleModal()
+      this.props.writeText( this.state.text, name, this.props.fileUser || this.props.username, dir );
+      this.toggleModal();
     } else {
       alert("Name is required.")
     }
@@ -99,6 +114,23 @@ class TextEditor extends Component<any, any> {
     })
   }
 
+  validate(text: string) {
+    if (this.props.fileMode) {
+      if (this.props.fileMode === "json") {
+        let valid = false;
+        try {
+          valid = JSON.parse(text);
+        } catch {
+          valid = false;
+        }
+
+        this.setState({
+          validSyntax: !!valid
+        });
+      }
+    }
+  }
+
   render() {
       return (
         <Modal title="New File" open={this.state.activated} onToggle={ (open: boolean) => { this.toggleModal(open)}}>
@@ -109,7 +141,12 @@ class TextEditor extends Component<any, any> {
             </div>
             <div style={ styles.body }>
               { this.props.readTextFetching == false  ? (
-                <textarea defaultValue={ this.state.text } style={ styles.textArea(isMobile()) } onBlur={ e=> this.handleTextArea(e) } />
+                <textarea 
+                  defaultValue={ this.state.text } 
+                  style={ styles.textArea(this.state.validSyntax, isMobile()) } 
+                  onBlur={ e=> this.handleTextArea(e) } ref="textEditorInput" 
+                  onKeyUp={ (e) => { this.setState({validSyntax: this.validate((e.target as any).value)})} }
+                />
               ) : ""}
               <FileButton title="Save" onClick={ () => { this.save() } } />
               <FileButton title="Cancel" onClick={ () => { this.toggleModal() } } style={ styles.cancelButton } />
@@ -196,7 +233,14 @@ text: {
   fontSize: '1em',
   color: 'white',
 },
-textArea: textAreaStyle,
+textArea: (validSyntax = true, isMobile: boolean) => {
+  const areaStyle = textAreaStyle(isMobile);
+
+  return validSyntax ? areaStyle : {
+    ...areaStyle,
+    background: 'rgba(255, 0, 0, 0.16) none'
+  }
+},
 body: {
 
 },

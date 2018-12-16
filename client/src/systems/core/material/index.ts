@@ -95,7 +95,6 @@ export default class MaterialSystem implements System {
                       assets.loadImage(attr.roughnessMap, textureConfig)
                         .then((map) => {
                           this.mapCallback(map, "roughnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
-                          console.log("before create physical mat, ", mat.map);
                           material = this._initMaterial(attr, mat, shading, basic, mobile);
                         });
                     })
@@ -105,7 +104,6 @@ export default class MaterialSystem implements System {
                       assets.loadImage(attr.metalnessMap, textureConfig)
                         .then((map) => {
                           this.mapCallback(map, "metalnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
-                          console.log("before create physical mat, ", mat.map);
                           material = this._initMaterial(attr, mat, shading, basic, mobile);
                         });
                     })

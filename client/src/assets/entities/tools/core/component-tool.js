@@ -173,7 +173,7 @@ export default class ComponentTool extends Tool {
       //console.warn( `Component Tool Type ${componentType} Selected`, selected )
       if ( cursorSystem.entityCoolDown > 5 )
         return false // stop spamming lol.. // console.log("too many components; waiting for entity cooldown; aborting")
-      if (  pointingAtTerrain || (( !!!selected || cursorState.distance > 100 || ( cursorState.distance < 100 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
+      if (  /*pointingAtTerrain ||*/ (( !!!selected || cursorState.distance > 100 || ( cursorState.distance < 100 && tooManyComponents ))) )  { // switch back to entity tool, if the user is clicking into empty space //  console.log("switching to entity tool for whatever reason...")
         console.warn(" Problem ")
         user.toolbox.useTool( 0, telemetry.hand )
         user.hud.componentsByAttr.toolUI[ 0 ].state.toolUI.show()
@@ -241,6 +241,7 @@ export default class ComponentTool extends Tool {
     }
 
     configure ( config ) {
+      console.log("configure component tool", config)
       this.options.componentType = config.preset
     }
 
