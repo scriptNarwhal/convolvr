@@ -30,7 +30,7 @@ export default class UserUpdateHandler {
                 mesh = null,
                 hands = [];
 
-            if (!!data.entity && (world.terrain as any).loaded) {
+            if (!!data.entity && (world.space as any).loaded) {
         
                 update = data.entity
                 if (!world.user || !world.user.id) {
@@ -94,7 +94,7 @@ export default class UserUpdateHandler {
 
         if (userVoxel == null) {
             console.warn("[Remote] Voxel not loaded", coords)
-            world.systems.terrain.loadVoxel(coords, (loadedVoxel: Voxel) => { this.initPlayerAvatar(avatar, user, data) })
+            world.systems.space.loadVoxel(coords, (loadedVoxel: Voxel) => { this.initPlayerAvatar(avatar, user, data) })
         } else if (userVoxel.loaded == false && userVoxel.fetching == false) {
             console.info("[Remote] Voxel being loaded...", coords)
             userVoxel.fetchData((loadedVoxel: Voxel) => { this.initPlayerAvatar(avatar, user, data) })

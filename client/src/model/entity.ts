@@ -68,9 +68,9 @@ export default class Entity {
         world && world.systems.assets.autoEntityID()
       }
       this.id = id
-      this.components = components || []
-      this.position = position ? position : false
-      this.quaternion = quaternion ? quaternion : false
+      this.components = components ? components : [];
+      this.position = position ? position : false;
+      this.quaternion = quaternion ? quaternion : false;
       this.mesh = null
       this.boundingRadius = 0.5 // set in init()
       this.componentsByAttr = {} // arrays are defined here with key of attr
@@ -113,7 +113,7 @@ export default class Entity {
     componentPath?: number[] | false | null, 
     config = {}
   ) {
-    let entityConfig = Object.assign({} as any, config, { updateWorkers: true } ) as any;
+    let entityConfig = Object.assign({} as any, { updateWorkers: true },  config) as any;
 
     if (componentPath && componentPath.length > 0) {
       this.updateComponentAtPath( component, componentPath)
@@ -122,24 +122,33 @@ export default class Entity {
     if (components && components.length > 0) {
       this.components = components
       this.init(this.mount, entityConfig)
-    }
+    } 
     if (position) {
-      if (position) {
-        this.position = position
-        this.mesh.position.fromArray( position )
+      this.position = position;
+      this.mesh.position.fromArray( position );
+      if (this.voxel[1] != 1) {
+        const newCoords = this.getVoxelCoords(position);
+        if (newCoords[0] != this.voxel[0] || newCoords[2] != this.voxel[2] || newCoords[1] != this.voxel[1] ) {
+          console.log("newCoords", newCoords, this.oldCoords);
+            this.oldCoords = [ ...this.voxel];
+            this.voxel = [ ...newCoords];
+            console.log("newCoords", newCoords, this.oldCoords);
+        }
       }
+      
       if (quaternion) {
         this.quaternion = quaternion
-        this.mesh.quaternion.fromArray( quaternion )
+        this.mesh.quaternion.fromArray( quaternion );
       }
       if ((config as any).updateWorkers !== false) {
+        console.log("update workers")
         this.updateWorkers(
           WorkerUpdateMode.TELEMETRY,
           (window as any).three.world.systems,
           { oldCoords: this.oldCoords }
-        )
+        );
       } 
-      this.updateOldCoords()
+      //this.updateOldCoords()
     }
 
     this.mesh.updateMatrix()
@@ -195,18 +204,16 @@ export default class Entity {
         nonMerged = [],
         dimensions = [0, 0, 0],
         compMesh = null,
-        compGeom = null,
         compRadius = 0.5,
         materials = [],
         addToOctree = true,
         workerUpdate: any = WorkerUpdateMode.NONE,
-        updateVoxel = false,
         comp = null,
         face = 0,
         faces = null,
         toFace = 0,
         c = 0,
-        s = 0
+        s = 0;
 
     this.lastFace = 0
     this.componentsByAttr = {} // reset before (re)registering components
@@ -302,7 +309,7 @@ export default class Entity {
       mesh.receiveShadow = true
     }
 
-    s = 1
+    s = 1;
 
     while ( s < nonMerged.length ) {
         mesh.add( nonMerged[ s ] );
@@ -326,16 +333,16 @@ export default class Entity {
     if ( (!!!config || !!!config.noVoxel) && addToOctree )
       this.addToVoxel( this.voxel, mesh );
 
-    mesh.matrixAutoUpdate = false
-    mesh.updateMatrix()
-    !! callback && callback( this )
-    this.callHandlers("init")
-    return this
+    mesh.matrixAutoUpdate = false;
+    mesh.updateMatrix();
+    !! callback && callback( this );
+    this.callHandlers("init");
+    return this;
   }
 
   public save(oldVoxel: any = false): Promise<any> {
     this.callHandlers("save")
-    if ( oldVoxel !== false ) {
+    if ( !!oldVoxel ) {
       return this.saveUpdatedEntity( oldVoxel )
     } else {
       return this.saveNewEntity()
@@ -350,7 +357,7 @@ export default class Entity {
       `${API_SERVER}/api/import-to-world/${worldName}/${this.voxel.join("x")}`,
        data
     ).then( (response: any) => {
-      console.info("Entity Saved", this)
+      // console.info("Entity Saved", this)
     }).catch( (response: any) => {
       console.error("Entity failed to save", response)
     })
@@ -366,32 +373,39 @@ export default class Entity {
       `${API_SERVER}/api/update-space-entity/${worldName}/${this.voxel.join("x")}/${oldVoxel.join("x")}`,
        data
     ).then( (response: any) => {
-      console.info("Entity Updated", this)
+      // console.info("Entity Updated", this)
     }).catch( (response: any) => {
       console.error("Entity failed to send update", response)
     })
   }
 
   public getVoxel(initial: boolean, check?: boolean) {
-    let position = null,
-        coords = null;
+    const coords = this.getVoxelCoords(
+      this.mesh != null 
+        ? this.mesh.position.toArray() 
+        : this.position, 
+      initial);
         
-    if (this.voxel[1] == GLOBAL_SPACE[1] && this.voxel[0] == GLOBAL_SPACE[0] && this.voxel[2] ==GLOBAL_SPACE[2]) {
-      return GLOBAL_SPACE;
-    } 
-    if (initial) {
-      position = this.mesh != null ? this.mesh.position.toArray() : this.position
-      coords = [Math.floor( position[ 0 ] / GRID_SIZE[ 0 ] ), 0, Math.floor( position[ 2 ] / GRID_SIZE[ 2 ] )]
-    } else {
-      coords = this.voxel
-    }
     if (check) {
-      if (this.voxel[0] != coords[0] || this.voxel[1] != coords[1] || this.voxel[2] != coords[2]) {
+      if (this.voxel[0] != coords[0] || this.voxel[2] != coords[2] || this.voxel[2] != coords[2]) {
         this.onVoxelChanged(coords)
       }
     }
     this.voxel = coords
     return coords
+  }
+
+  private getVoxelCoords(position?: number[], initial = false): number[] {
+      if (this.voxel[1] != GLOBAL_SPACE[1] || this.voxel[0] != GLOBAL_SPACE[0] || this.voxel[2] != GLOBAL_SPACE[2]) {
+        if (initial) {
+          return  [Math.floor( position[ 0 ] / GRID_SIZE[ 0 ] ), 0, Math.floor( position[ 2 ] / GRID_SIZE[ 2 ] )]
+         } else {
+           return this.voxel
+         }
+      }  else {
+        return GLOBAL_SPACE;
+      }
+      
   }
 
   private onVoxelChanged(coords: number[]) {
@@ -412,8 +426,8 @@ export default class Entity {
     this.callHandlers("addToVoxel")
   }
 
-  public removeFromVoxel (coords: number[], mesh?: any) {
-    let removeFrom = this.getVoxelForUpdate( coords ),
+  public removeFromVoxel (coords?: number[], mesh?: any) {
+    let removeFrom = this.getVoxelForUpdate( typeof coords === "object" ? coords : this.voxel),
         ent = this;
 
     mesh = mesh ? mesh : this.mesh;
@@ -426,20 +440,20 @@ export default class Entity {
     let world = (window as any).three.world,
         thisEnt = this,
         systems = world.systems,
-        terrain = systems.terrain,
-        voxel = terrain.voxels[ coords.join(".") ];
+        space = systems.space,
+        voxel = space.voxels[ coords.join(".") ];
 
     if ( !!! voxel) { console.warn("voxel not loaded")
-     voxel = terrain.loadVoxel( coords, callback )
+     voxel = space.loadVoxel( coords, callback )
     } else if (typeof voxel != 'boolean' ) {
       callback && callback( voxel )
     } else {
       setTimeout( ()=> {
-        let voxel = terrain.voxels[ coords.join(".") ]
+        let voxel = space.voxels[ coords.join(".") ]
         if ( typeof voxel === 'object' ) {
           callback( voxel )
         } else {
-          terrain.loadVoxel( coords, callback )
+          space.loadVoxel( coords, callback )
         }
       }, 600)
     }
@@ -522,6 +536,8 @@ export default class Entity {
       newPosition[0] -= this.boundingRadius / 2.0;
       newPosition[1] -= this.boundingRadius / 2.0;
 
+      console.log("coords", this.voxel, "oldCoords", config.oldCoords)
+      console.log("this old coords", this.oldCoords);
       message = JSON.stringify({
         command: "update telemetry",
         data: {
@@ -531,7 +547,7 @@ export default class Entity {
           position: newPosition,
           quaternion: entityData.quaternion
         }
-      })
+      });
     }
     systems.staticCollisions.worker.postMessage( message )
     //systems.oimo.worker.postMessage( message )

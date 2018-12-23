@@ -135,7 +135,7 @@ export default class SkyboxSystem implements System {
     followUser(delta: number, position?: number[] ) {
         let camera = (window as any).three.camera,
             world = this.world,
-            terrainEnt = world.terrain.distantTerrain,
+            terrainEnt = world.space.distantTerrain,
             config = world.config,
             skyLight = world.skyLight,
             sunLight = world.sunLight,

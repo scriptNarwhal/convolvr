@@ -78,7 +78,7 @@ export default class Convolvr {
 	// public octree: 		 any
 	public raycaster: 	 any
 	public systems: 	 Systems
-	public terrain: 	 SpaceSystem
+	public space: 	 SpaceSystem
 	public workers: 	 any
 	public skyBoxMesh:   any
 	public skyLight:     any
@@ -176,7 +176,7 @@ export default class Convolvr {
 		(window as any).three = this.three
 
 		this.systems = new Systems( this )
-		this.terrain = this.systems.terrain
+		this.space = this.systems.space
 		this.skybox = this.systems.skybox
 		this.workers = {
 			staticCollisions: this.systems.staticCollisions.worker,
@@ -323,7 +323,7 @@ export default class Convolvr {
 		this.sunLight.intensity = config.light.intensity 
 
 		this.config = config; console.info("Space config: ", config)
-		this.terrain.initTerrain(config.terrain)
+		this.space.initTerrain(config.terrain)
 		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 0.25)
 		this.ambientLight.color.set( config.light.ambientColor )
 		
@@ -407,7 +407,7 @@ export default class Convolvr {
 	}
 
 	public reload(user: string, name: string, place: string, coords: Array<number>, noRedirect: boolean) {
-		this.terrain.destroy()
+		this.space.destroy()
 		this.workers.staticCollisions.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		this.workers.ecsWorker.postMessage(JSON.stringify( { command: "clear", data: {}} ))
 		//this.workers.oimo.postMessage(JSON.stringify( { command: "clear", data: {}} ))
@@ -424,7 +424,7 @@ export default class Convolvr {
 	}
 
 	generateFullLOD( coords: string) {
-		let voxel = (this.terrain as any).voxels[coords],
+		let voxel = (this.space as any).voxels[coords],
 			scene = this.three.scene
 
 		if ( voxel != null && voxel.cleanUp == false ) {

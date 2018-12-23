@@ -84,7 +84,7 @@ export default class Component {
        * Templated Components
        */
       if (data.class) {
-        data = (systems.assets as AssetSystem).makeComponent(data.class, data); 
+        data = systems.assets.makeComponent(data.class, data); 
       }
 
       data.components =  data.components || []
@@ -153,7 +153,7 @@ export default class Component {
         nonMerged = [],
         compMesh = null,
         materials = [],
-        addToOctree = true,
+        // addToOctree = true,
         toFace = 0,
         faces = null,
         face = 0,
@@ -167,8 +167,8 @@ export default class Component {
     while ( c < ncomps ) {
         comp = new Component( components[ c ], entity, systems, { mobile, path: this.path.concat([c]), index: c }, this ) // use simpler shading for mobile gpus
 
-        if ( comp.attrs.noRaycast === true )
-          addToOctree = false
+        // if ( comp.attrs.noRaycast === true )
+        //   addToOctree = false
       
         compMesh = comp.mesh
 
@@ -180,7 +180,7 @@ export default class Component {
             component: comp,
             from: this.lastFace,
             to: toFace
-          })  
+          });  
           this.lastFace = toFace
         }
 
@@ -213,8 +213,8 @@ export default class Component {
       this.mesh.add( combined )
     } else {
       while ( s < nonMerged.length ) { // these might thow things off /wrt face index / ray casting
-          this.mesh.add( nonMerged[ s ] )
-          s ++
+          this.mesh.add( nonMerged[ s ] );
+          s ++;
       }
     }
     this.mesh.userData.compsByFaceIndex = this.compsByFaceIndex     
@@ -244,7 +244,7 @@ export default class Component {
     return false;
   }
 
-  public getClosestComponent(position: Vector3, recursive = false): Component {
+  public getClosestComponent(position: Vector3, recursive = false): Component  {
     let compPos = this._compPos, 
         entMesh = this.mesh,
         parentMesh = this.parent ? this.parent.mesh : false,
@@ -254,9 +254,10 @@ export default class Component {
         closest: Component | null = null;
 
     parentMesh && parentMesh.updateMatrixWorld()
-    this.allComponents.map( component => {
-
-      if ( !! component.merged ) return false
+   // this.allComponents.map( component => {
+   for (let c = 0, cl = this.allComponents.length; c < cl; c++) {
+     const component = this.allComponents[c];
+      if ( !! component.merged ) return null
 
       compPos.setFromMatrixPosition( component.mesh.matrixSpace ) // get world position
       newDist = compPos.distanceTo( position )
@@ -266,14 +267,16 @@ export default class Component {
         closest = component
       }
 
-    })
+    }
 
     if ( !!!closest ) {
 
       distance = 0.0900
       newDist = 0
-      this.combinedComponents.map(component => {
-        console.log("Finding Combined Component: ")
+
+      for (let c = 0, cl = this.combinedComponents.length; c > cl; c++) {
+        const component = this.combinedComponents[c];
+        console.log("Finding Combined Component: ");
         compPos.fromArray( component.data.position ); console.log("compPos", compPos)
         if ( parentMesh ) {
           worldCompPos = parentMesh.localToWorld( compPos ); console.log("worldCompPos", worldCompPos )
@@ -287,7 +290,7 @@ export default class Component {
           closest = component
         }
 
-      })
+      }
     }
     !!closest && console.log(closest.attrs.geometry.size, closest, closest.entity)
     return closest

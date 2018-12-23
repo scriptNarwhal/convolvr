@@ -33,7 +33,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
       pos:       any      = world.camera.position,
       coords:    number[] = world.getVoxel( pos ),
       voxelKey:  string   = coords.join("."),
-      altitude:  number   = (systems.terrain as any).voxels[ voxelKey ].data.altitude;
+      altitude:  number   = systems.space.voxels[ voxelKey ].data.altitude;
       
   world.onUserLogin = (newUser: any) => {
     let user = world.user;
@@ -48,7 +48,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
     world.initUserAvatar(newUser, (avatar: Entity)=> {
       if (worldDetails[3] && worldDetails[3][1] <= 1) {
         console.warn("respawning camera");
-        pos.y = world.systems.terrain.voxels[coords.join(".")].data.altitude+3;
+        pos.y = world.systems.space.voxels[coords.join(".")].data.altitude+3;
       }
     }); 
   };

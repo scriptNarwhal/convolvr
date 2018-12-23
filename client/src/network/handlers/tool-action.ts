@@ -23,7 +23,7 @@ export default class ToolActionHandler {
                 avatar = null,
                 pos = data.position,
                 coords = data.coords,
-                voxel = (world.terrain as any).voxels[coords[0] + ".0." + coords[2]],
+                voxel = (world.space as any).voxels[coords[0] + ".0." + coords[2]],
                 quat = data.quaternion,
                 remoteUser = {},
                 userHand = {};
@@ -92,7 +92,7 @@ export default class ToolActionHandler {
                             if (voxelEnt.id == data.entityId) {
                                 world.three.scene.remove(voxelEnt.mesh)
                                 (userHand as any).state.hand.grabbedEntity = voxelEnt;
-                                voxelEnt.updateOldCoords();
+                                //voxelEnt.updateOldCoords();
                                 (userHand as any).mesh.add(voxelEnt.mesh)
                                 voxelEnt.mesh.position.fromArray([0, 0, -voxelEnt.boundingRadius])
                                 voxelEnt.mesh.quaternion.fromArray([0, 0, 0, 1])

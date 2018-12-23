@@ -1,6 +1,7 @@
 import Component from '../../model/component'
 import Convolvr from '../../world/world'
-import { Vector3 } from 'three';
+import * as THREE from 'three';
+import Entity from '../../model/entity';
 export default class HandSystem {
 
     world: Convolvr
@@ -36,7 +37,7 @@ export default class HandSystem {
         let avatar = component.entity,
             cursors = !!avatar ? avatar.componentsByAttr.cursor : false,
             cursorMesh = null,
-            entity = null, //hand.children[0].userData.component.attrs.,
+            entity: Entity = null, //hand.children[0].userData.component.attrs.,
             cursor = null,
             state = null,
             handPos = [0, 0, 0],
@@ -91,23 +92,30 @@ export default class HandSystem {
                         entity.removeTag("no-raycast");
                         if (state.hand.trackedHands) {
                             component.mesh.remove(entity.mesh);
-                            handPos = component.mesh.position
-                            entity.update( (handPos as any).toArray(), component.mesh.quaternion.toArray())
+                            handPos = component.mesh.position;
+                            entity.update( (handPos as any).toArray(), component.mesh.quaternion.toArray());
+                            //entity.update(entity.mesh.position.toArray());
+                            this.world.three.scene.add(entity.mesh);
                             // entity.mesh.translateZ(-entity.boundingRadius)
                         } else {
                             cursorMesh.remove(entity.mesh);
                             //  let newEntPos = (avatarPos as any).toArray();
-                            let newEntPos = cursorMesh.getWorldPosition();
+                            const vec3 = new THREE.Vector3();
+                            let newEntPos = cursorMesh.getWorldPosition(vec3);
                             //  newEntPos[2] += cursorMesh.position.z;
+                            console.info("old voxel is: ", oldVoxel)
+                            console.log("before move, voxel is: ", entity.voxel);
+                            console.log("pos before move", entity.position);
                             entity.update(newEntPos.toArray(), avatar.mesh.quaternion.toArray());
+                            console.log("pos after move", entity.position);
+                            console.log("after move, voxel is: ", entity.voxel);
                             entity.mesh.translateZ(-entity.boundingRadius); //+cursorMesh.position.z)
-                            entity.update(entity.mesh.position.toArray());
+                            this.world.three.scene.add(entity.mesh);
                         }
-                        this.world.three.scene.add(entity.mesh);
                         
                         entity.mesh.updateMatrix()
                         entity.position = entity.mesh.position.toArray()
-                        entity.getVoxel( true, true )
+                        //entity.getVoxel( true, true )
                         entity.save( oldVoxel )
                         state.hand = Object.assign({}, state.hand, { grabbedEntity: false })
                         return entity.id;

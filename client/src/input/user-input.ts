@@ -121,7 +121,7 @@ export default class UserInput {
 			return
 
 		let world = this.world,
-			terrain: any = world.terrain,
+			terrain: any = world.space,
 			terrainMesh = terrain.mesh,
 			terrainConfig = terrain.config,
 			terrainMode = '',

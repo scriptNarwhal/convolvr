@@ -268,7 +268,7 @@ scWorker.updateEntity = (message: any, data: any) => {
 		return
 	}
 	if ( !voxels[cell] ) {
-		console.warn("can't update entity with no voxel")
+		console.warn("can't update entity with no voxel");
 		return
 	}
 	let entities = voxels[ cell ].entities
@@ -304,15 +304,14 @@ scWorker.updateTelemetry = (message: any, data: any) => {
 	
 	if (oldCell != cell) {
 		let c = oldEntities.length - 1;
-
+	
 		while (c >= 0) {
 			let movedEnt = oldEntities[c];
-			console.info("checking moved entity", movedEnt);
+
 			if (movedEnt.id == data.entityId) {
-				console.log("found entity to move &&&&&& ", movedEnt);
-				oldEntities.splice(oldEntities.indexOf(movedEnt), 1)
-				entities.push(movedEnt)
-				console.log("physics worker: update telemetry: moved between voxels")
+				oldEntities.splice(oldEntities.indexOf(movedEnt), 1);
+				entities.push(movedEnt);
+				console.log("setting position,", movedEnt.position, data.position);
 				movedEnt.position = data.position
 				if (data.quaternion) {
 					movedEnt.quaternion = data.quaternion;
@@ -322,15 +321,18 @@ scWorker.updateTelemetry = (message: any, data: any) => {
 		}
 
 	} else {
+
 		if (entities != null) {
 			let c = entities.length - 1;
-			console.info("checking not moved very-far entity", entities[c])
 			while (c >= 0) {
-				if (entities[c].id == data.entityId) {
-					console.info("physics worker: update telemetry")
-					entities[c].position = data.position
+				let movedEnt = entities[c]; 
+
+				if (movedEnt.id == data.entityId) {
+
+					console.log("setting position,", movedEnt.position, data.position);
+					movedEnt.position = data.position
 					if (data.quaternion) {
-						entities[c].quaternion = data.quaternion;
+						movedEnt.quaternion = data.quaternion;
 					}
 					c = -1
 				}

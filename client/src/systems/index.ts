@@ -1,5 +1,5 @@
 import AbilitySystem from './game/ability'
-import ActivateSystem from './core/activate'
+import ActivateSystem from './input/activate'
 import AudioSystem from './audio/audio'
 import AssetSystem from './core/assets'
 import BrowserSystem from './ui/browser'
@@ -17,8 +17,8 @@ import FactionSystem from './game/faction'
 import FactorySystem from './core/factory'
 import FloorSystem from './environment/physics/floor'
 import GeometrySystem from './core/geometry'
-import GrabSystem from './core/grab'
-import HoverSystem from './core/hover'
+import GrabSystem from './input/grab'
+import HoverSystem from './input/hover'
 import HandSystem from './core/hand'
 import HeadSystem from './core/head'
 import ImportDataSystem from './importers/data'
@@ -31,13 +31,14 @@ import GraphSystem from './ui/graph'
 import DisplaySystem from './video/display'
 import DrawingSystem from './video/drawing'
 import ControlSystem from './vehicle/control'
+import PipelineSystem from './core/pipeline'
 import PropulsionSystem from './vehicle/propulsion'
 import FactoryProviderSystem from './core/factory/factory-provider'
 import ParticleSystem from './environment/particle'
 import PortalSystem from './environment/portal'
 import ProjectileSystem from './game/projectile'
 import QuestSystem from './game/quest'
-import LookAwaySystem from './core/look-away'
+import LookAwaySystem from './input/look-away'
 import MagicSystem from './game/magic'
 import MaterialSystem from './core/material'
 import MiniatureSystem from './core/miniature'
@@ -52,12 +53,13 @@ import SignalSystem from './logic/signal'
 import SkillSystem from './game/skill'
 import SocialMediaSystem from './chat/social-media'
 import SeatSystem from './vehicle/seat'
-import SpeechSystem from './audio/speech'
+import SpeechSystem from './audio/speech' 
 import StateSystem from './logic/state'
 import StatSystem from './game/stat'
 import StaticCollisions  from './environment/physics/static-collisions'
 import SpaceSystem from './environment/space'
 import TextSystem from './ui/text'
+import TerrainSystem from './environment/terrain'
 import ToolSystem from './tool/tool'
 import TimeSystem from './logic/time'
 import TemplateSystem from './core/factory/template'
@@ -144,6 +146,7 @@ export default class Systems {
 	public oimo: 			 OimoPluginSystem;
 	public objective: 		 ObjectiveSystem;
 	public particles: 		 ParticleSystem;
+	public pipeline:         PipelineSystem;
 	public propulsion: 	  	 PropulsionSystem;
 	public portal: 		  	 PortalSystem;
 	public projectile: 	  	 ProjectileSystem;
@@ -151,6 +154,7 @@ export default class Systems {
 	public rest: 			 RESTSystem;
 	public rpgRace: 		 RPGRaceSystem;
 	public signal: 		  	 SignalSystem;
+	public space:            SpaceSystem
 	public skill: 			 SkillSystem;
 	public skybox: 		  	 SkyboxSystem;
 	public script:           ScriptSystem;
@@ -161,7 +165,7 @@ export default class Systems {
 	public state: 			 StateSystem;
 	public stat: 			 StatSystem;
 	public staticCollisions: StaticCollisions;
-	public terrain: 		 SpaceSystem;
+	public terrain: 		 TerrainSystem;
 	public text: 			 TextSystem;
 	public template: 	     TemplateSystem;
 	public time: 			 TimeSystem;
@@ -226,6 +230,7 @@ export default class Systems {
 			oimo: 		   	   new OimoPluginSystem( world ),// TODO: plan out more
 			objective:         new ObjectiveSystem( world ), // TODO: plan out more
 			particles: 		   new ParticleSystem( world ),
+			pipeline:          new PipelineSystem( world ),
 			propulsion: 	   new PropulsionSystem( world ), // TODO: test
 			portal: 		   new PortalSystem( world ), //TODO: Fix
 			projectile: 	   new ProjectileSystem( world ),
@@ -233,6 +238,7 @@ export default class Systems {
 			rest: 			   new RESTSystem( world ),
 			rpgRace:		   new RPGRaceSystem( world ), // TODO: implement
 			signal: 		   new SignalSystem( world ),
+			space:             new SpaceSystem( world ),
 			skill: 			   new SkillSystem( world ), // TODO: think about this more
 			skybox:            new SkyboxSystem( world ),
 			script:            new ScriptSystem( world, new Worker('/data/js/workers/ecs-bundle.js')),
@@ -243,7 +249,7 @@ export default class Systems {
 			state:             new StateSystem( world ), //TODO: how is this used?
 			stat: 			   new StatSystem( world ), // TODO: think about this more
 			staticCollisions:  new StaticCollisions( world, new Worker('/data/js/workers/static-collisions-bundle.js')),
-			terrain: 		   new SpaceSystem( world ),
+			terrain: 		   new TerrainSystem( world ),
 			text: 			   new TextSystem( world ),
 			template: 		   new TemplateSystem( world ), //TODO: finish
 			time: 			   new TimeSystem( world ),
@@ -296,7 +302,9 @@ export default class Systems {
 		
 		let attr: AttributeName;
 
-        for (attr of attrKeys) {
+        for (let a = attrKeys.length; a >= 0; a--) {
+			const attr = attrKeys[a];
+
             if ((this as any)[ attr ] != null) {
 
 				if ( !!this.deferred[ attr ] ) { /* add other systems here */
@@ -328,7 +336,13 @@ export default class Systems {
         return mesh;
 	}
 
-	// need something here to register a component to one system
+	/**
+	 * resgisters a component only with one additional attribute / system
+	 * 
+	 * @param {Component} component 
+	 * @param {string} system 
+	 * @param {AnyObject} data 
+	 */
 	extendComponent(component: Component, system: AttributeName, data = {}) {
 		component.attrs[system] = data;
 		component.state[system] = ((this as any)[system] as System).init(component);
@@ -345,9 +359,12 @@ export default class Systems {
 			system.postInject && system.postInject.call(system);
 			return;
 		}
+		console.warn("deps", system.dependencies)
 		const deps = system.dependencies as SystemDependency[];
 	
-		for (const dep of deps) {
+		for (let d = deps.length -1; d >= 0; d --) {
+			const dep = deps[d];
+
 			if (dep.length === 1) {
 				(system as any)[dep[0]] = (system.world.systems as any)[dep[0]];
 			} else {

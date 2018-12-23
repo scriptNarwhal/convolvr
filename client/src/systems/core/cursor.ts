@@ -29,7 +29,7 @@ export default class CursorSystem {
     }
 
     rayCast (world: Convolvr, camera: any, cursor: any, hand: number, handMesh: any, callback: Function) { // public method; will use from other systems
-        let voxels = world.systems.terrain.voxels,
+        let voxels = world.systems.space.voxels,
             raycaster = world.raycaster,
             coords = [ 0, 0, 0 ],
             // octreeObjects = [],
@@ -125,8 +125,10 @@ export default class CursorSystem {
             input = world.userInput,
             cursorSystem = world.systems.cursor
 
-        cursors.map((cursor: Component, i: number) => { // animate cursors & raycast scene
-
+        // cursors.map((cursor: Component, i: number) => { // animate cursors & raycast scene
+        for (let i = 0, l = cursors.length; i < l; i ++) {
+            const cursor = cursors[i];
+            
             let state = cursor.state.cursor,
                 cursorMesh = cursor.mesh;
             
@@ -139,7 +141,7 @@ export default class CursorSystem {
             if (i == cursorIndex) // ray cast from one cursor at a time to save CPU
                 cursorSystem.rayCast(world, camera, cursor, i -1, handMesh, cursorSystem.cursorCallback)
 
-        });
+        }
 
         if ( cursorSystem.entityCoolDown  > -3 )
             cursorSystem.entityCoolDown -= 2
