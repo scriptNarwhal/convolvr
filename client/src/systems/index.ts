@@ -61,7 +61,6 @@ import SpaceSystem from './environment/space'
 import TextSystem from './ui/text'
 import TerrainSystem from './environment/terrain'
 import ToolSystem from './tool/tool'
-import TimeSystem from './logic/time'
 import TemplateSystem from './core/factory/template'
 import ToolUISystem from './tool/tool-ui'
 import ToolboxSystem from './tool/toolbox'
@@ -102,6 +101,8 @@ export default class Systems {
 	public liveSystems: Array<any>
 	public systems: any
 	public deferred: any
+
+	public time: 0;
 
 	public ability: 		 AbilitySystem;
 	public activate: 		 ActivateSystem;
@@ -168,7 +169,6 @@ export default class Systems {
 	public terrain: 		 TerrainSystem;
 	public text: 			 TextSystem;
 	public template: 	     TemplateSystem;
-	public time: 			 TimeSystem;
 	public toolUI: 		  	 ToolUISystem;
 	public tool: 			 ToolSystem;
 	public toolbox: 		 ToolboxSystem;
@@ -252,7 +252,6 @@ export default class Systems {
 			terrain: 		   new TerrainSystem( world ),
 			text: 			   new TextSystem( world ),
 			template: 		   new TemplateSystem( world ), //TODO: finish
-			time: 			   new TimeSystem( world ),
 			toolUI: 		   new ToolUISystem( world ),
 			tool: 			   new ToolSystem( world ),
 			toolbox:           new ToolboxSystem( world ),

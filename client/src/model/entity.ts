@@ -19,6 +19,12 @@ export type DBEntity = {
   boundingRadius?: number
 }
 
+export type InitEntityConfig = {
+  ignoreRotation?: boolean
+  updateWorkers?: boolean
+  noVoxel?: boolean
+}
+
 enum WorkerUpdateMode {
   ADD = "add",
   UPDATE = "update",
@@ -28,6 +34,8 @@ enum WorkerUpdateMode {
 
 import * as THREE from 'three';
 import { Vector3 } from 'three';
+import Systems from '../systems';
+import { PipelinedResource, PipelinedResourceType } from '../systems/core/pipeline';
 
 export default class Entity {
 
@@ -193,12 +201,27 @@ export default class Entity {
     this.init( this.mount, { updateWorkers: true } )
   }
 
-  public init( mount: any, config: any = {}, callback?: Function) {
+  public init(mount: THREE.Object3D, config: InitEntityConfig = {}, callback?: Function) {
+    const three = (window as any).three,
+        world = three.world,
+        systems = world.systems;
+
+    if (Date.now() - systems.time < 8) {
+      return this.initEntity(systems, mount, config, callback);
+    } else {
+      return systems.pipeline.enqueue({
+        type: PipelinedResourceType.Entity,
+        entity: this,
+        args: [systems, mount, config, callback]
+      } as PipelinedResource)
+    }
+  }
+
+  public initEntity(systems: Systems, mount: THREE.Object3D, config: InitEntityConfig = {}, callback?: Function) {
     let mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
-        three = (window as any).three,
-        world = three.world,
-        systems = world.systems,
+        world = systems.world,
+        three = world.three,
         mobile = world.mobile,
         ncomps = this.components.length,
         nonMerged = [],
@@ -367,8 +390,8 @@ export default class Entity {
     let data = this.serialize(),
         worldName = (window as any).three.world.name;
 
-    console.info("save", data)
-    console.log("oldVoxel", oldVoxel, "newVoxel", this.voxel)
+    // console.info("save", data)
+    // console.log("oldVoxel", oldVoxel, "newVoxel", this.voxel)
     return axios.put(
       `${API_SERVER}/api/update-space-entity/${worldName}/${this.voxel.join("x")}/${oldVoxel.join("x")}`,
        data

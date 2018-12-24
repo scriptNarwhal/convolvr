@@ -2,16 +2,22 @@ import Systems, { System } from '..';
 import { AnyObject } from '../../util';
 import Convolvr from '../../world/world';
 import Component from '../../model/component';
-import terminal from '../../assets/entities/information/hardware/terminal';
+import Entity from '../../model/entity';
+
+import * as THREE from 'three';
 
 export enum PipelinedResourceType {
     Component = "component",
-    // TODO: sub-component
+    MergedComponents = "merged-components",
     Entity = "entity"
 }
 
 export type PipelinedResource = {
     type: PipelinedResourceType
+    entity?: Entity
+    parentComponent?: Component
+    component?: Component
+    mergedGeometry?: THREE.Geometry
     args: any[]
 }
 
@@ -42,27 +48,27 @@ export default class PipelineSystem implements System {
     };
     
     tick = (delta: number, time: number) => {
-        while (this.queue.length > 0) {
+        const idealTime = time + 8;
 
+        while (this.queue.length > 0  && Date.now() < idealTime) {
+            this.emit(this.queue.shift());
         }
     };
 
     
-    private dispatch(item: PipelinedResource) {
-        switch (item.type) {
-            case PipelinedResourceType.Component:
-            
-            break;
-            // TODO: SubComponent
+    private emit(resource: PipelinedResource) {
+        switch (resource.type) {
             case PipelinedResourceType.Entity:
-            
+                resource.entity.initEntity(resource.args[0], resource.args[1], resource.args[2]);
             break;
+            case PipelinedResourceType.Component:
+
+            break;
+            case PipelinedResourceType.MergedComponents:
+            // TODO: SubComponent
+            break;
+            
         }
     }
-
-
-
- 
-    
 
 }

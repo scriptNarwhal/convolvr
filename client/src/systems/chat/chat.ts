@@ -117,7 +117,7 @@ export default class ChatSystem implements System {
             cPos = this.world.three.camera.position;
 
         chatModal.components[0].attrs.text.lines = ["Welcome"]
-        chatModal.init(this.world.three.scene, false, ()=>{})
+        chatModal.init(this.world.three.scene, null, ()=>{})
         chatModal.update([cPos.x, cPos.y - 1, cPos.z - 1.7]);
         this.chatModal = chatModal;
     }
