@@ -36,6 +36,7 @@ import * as THREE from 'three';
 import { Vector3 } from 'three';
 import Systems from '../systems';
 import { PipelinedResource, PipelinedResourceType } from '../systems/core/pipeline';
+import Convolvr from '../world/world';
 
 export default class Entity {
 
@@ -131,7 +132,7 @@ export default class Entity {
       this.components = components
       this.init(this.mount, entityConfig)
     } 
-    if (position) {
+    if (position && this.mesh) {
       this.position = position;
       this.mesh.position.fromArray( position );
       if (this.voxel[1] != 1) {
@@ -157,9 +158,9 @@ export default class Entity {
         );
       } 
       //this.updateOldCoords()
+      this.mesh.updateMatrix();
     }
 
-    this.mesh.updateMatrix()
     this.callHandlers("update")
   }
 
@@ -206,37 +207,28 @@ export default class Entity {
         world = three.world,
         systems = world.systems;
 
-    if (Date.now() - systems.time < 8) {
-      return this.initEntity(systems, mount, config, callback);
+    if (systems.testPerformance()) {
+      return this.initEntity(world, systems, mount, config, callback);
     } else {
       return systems.pipeline.enqueue({
         type: PipelinedResourceType.Entity,
         entity: this,
-        args: [systems, mount, config, callback]
+        args: [world, systems, mount, config, callback]
       } as PipelinedResource)
     }
   }
 
-  public initEntity(systems: Systems, mount: THREE.Object3D, config: InitEntityConfig = {}, callback?: Function) {
+  public initEntity(world: Convolvr, systems: Systems, mount: THREE.Object3D, config: InitEntityConfig = {}, callback?: Function) {
     let mesh = new THREE.Object3D(),
         base = new THREE.Geometry(),
-        world = systems.world,
         three = world.three,
         mobile = world.mobile,
-        ncomps = this.components.length,
-        nonMerged = [],
-        dimensions = [0, 0, 0],
-        compMesh = null,
+        nonMerged = [] as any[],
         compRadius = 0.5,
-        materials = [],
+        dimensions = [0, 0, 0],
+        materials = [] as any[],
         addToOctree = true,
-        workerUpdate: any = WorkerUpdateMode.NONE,
-        comp = null,
-        face = 0,
-        faces = null,
-        toFace = 0,
-        c = 0,
-        s = 0;
+        workerUpdate: any = WorkerUpdateMode.NONE;
 
     this.lastFace = 0
     this.componentsByAttr = {} // reset before (re)registering components
@@ -262,61 +254,14 @@ export default class Entity {
       return false
     }
     
-    while ( c < ncomps ) {
-        comp = new Component( this.components[ c ], this, systems, { mobile, index: c, path: [ c ] } ) // use simpler shading for mobile gpus
-        compMesh = comp.mesh;
-        if ( !!!compMesh || !!!compMesh.geometry.computeBoundingSphere ) {
-          console.error("no geometry; aborting", c, this)
-          return;
-        }
-
-        compMesh.geometry.computeBoundingSphere() // check bounding radius
-        compRadius = compMesh.geometry.boundingSphere.radius
-        if (c == 0) {
-          const size = comp.attrs.geometry.size || [1,1,1];
-          dimensions = [ Math.max(1, size[0]), Math.max(1, size[1]), Math.max(1, size[2]) ];
-        }
-        dimensions = [
-          Math.max( dimensions[ 0 ], Math.abs( compMesh.position.x ) + compRadius ),
-          Math.max( dimensions[ 1 ], Math.abs( compMesh.position.y ) + compRadius ),
-          Math.max( dimensions[ 2 ], Math.abs( compMesh.position.z ) + compRadius )
-        ]
-
-        if ( comp.attrs.geometry ) {
-          faces = compMesh.geometry.faces;
-          face = faces.length-1;
-          toFace = this.lastFace + face;
-          this.compsByFaceIndex.push({
-            component: comp,
-            from: this.lastFace,
-            to: toFace
-          });
-          this.lastFace = toFace;
-        }
-
-        if ( comp.merged ) {
-          this.combinedComponents.push( comp )
-          materials.push( compMesh.material )
-          compMesh.updateMatrix()
-          while ( face > -1 ) {
-              faces[ face ].materialIndex = s
-              face --
-          }
-          base.merge( compMesh.geometry, compMesh.matrix )
-          s ++
-        } else if ( !comp.detached ) {
-          nonMerged.push( comp.mesh )
-        }
-        this.allComponents.push( comp )
-        c += 1
-    }
+    let merged: number = this.initSubComponents(systems, mobile, compRadius, materials, dimensions, base, nonMerged);
 
     addToOctree = this.componentsByAttr.terrain != true && this.componentsByAttr.noRaycast != true
     this.boundingRadius = Math.max( dimensions[0], dimensions[1], dimensions[2] )
-    this.boundingBox = dimensions
-    !! workerUpdate && this.updateWorkers( workerUpdate, systems )
+    this.boundingBox = dimensions;
+    !! workerUpdate && this.updateWorkers( workerUpdate, systems );
 
-    if ( s > 0 ) {
+    if ( merged > 0 ) {
       mesh = new THREE.Mesh( base, materials )
     } else {
       mesh = nonMerged[ 0 ] // maybe nest inside of Object3D ?
@@ -332,11 +277,11 @@ export default class Entity {
       mesh.receiveShadow = true
     }
 
-    s = 1;
+    merged = 1;
 
-    while ( s < nonMerged.length ) {
-        mesh.add( nonMerged[ s ] );
-        s ++
+    while ( merged < nonMerged.length ) {
+        mesh.add( nonMerged[ merged ] );
+        merged ++
     }
 
     if ( !! this.quaternion && (!config.ignoreRotation || this.components.length == 1) )
@@ -361,6 +306,68 @@ export default class Entity {
     !! callback && callback( this );
     this.callHandlers("init");
     return this;
+  }
+
+  private initSubComponents(systems: Systems, mobile: boolean, compRadius: number, materials: any[], dimensions: number[], base: any, nonMerged: any[]): number {
+    let comp = null,
+        compMesh,
+        ncomps = this.components.length,
+        face = 0,
+        faces = null,
+        toFace = 0,
+        s = 0,
+        c = 0;
+
+    while ( c < ncomps ) {
+      comp = new Component( this.components[ c ], this, systems, { mobile, index: c, path: [ c ] } ) // use simpler shading for mobile gpus
+      compMesh = comp.mesh;
+      if ( !!!compMesh || !!!compMesh.geometry.computeBoundingSphere ) {
+        console.error("no geometry; aborting", c, this)
+        return;
+      }
+
+      compMesh.geometry.computeBoundingSphere() // check bounding radius
+      compRadius = compMesh.geometry.boundingSphere.radius
+      if (c == 0) {
+        const size = comp.attrs.geometry.size || [1,1,1];
+        dimensions = [ Math.max(1, size[0]), Math.max(1, size[1]), Math.max(1, size[2]) ];
+      }
+      dimensions = [
+        Math.max( dimensions[ 0 ], Math.abs( compMesh.position.x ) + compRadius ),
+        Math.max( dimensions[ 1 ], Math.abs( compMesh.position.y ) + compRadius ),
+        Math.max( dimensions[ 2 ], Math.abs( compMesh.position.z ) + compRadius )
+      ]
+
+      if ( comp.attrs.geometry ) {
+        faces = compMesh.geometry.faces;
+        face = faces.length-1;
+        toFace = this.lastFace + face;
+        this.compsByFaceIndex.push({
+          component: comp,
+          from: this.lastFace,
+          to: toFace
+        });
+        this.lastFace = toFace;
+      }
+
+      if ( comp.merged ) {
+        this.combinedComponents.push( comp )
+        materials.push( compMesh.material )
+        compMesh.updateMatrix()
+        while ( face > -1 ) {
+            faces[ face ].materialIndex = s
+            face --
+        }
+        base.merge( compMesh.geometry, compMesh.matrix )
+        s ++
+      } else if ( !comp.detached ) {
+        nonMerged.push( comp.mesh )
+      }
+      this.allComponents.push( comp )
+      c += 1
+    }
+
+    return s;
   }
 
   public save(oldVoxel: any = false): Promise<any> {

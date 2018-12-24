@@ -7,9 +7,11 @@ import Entity from '../../model/entity';
 import * as THREE from 'three';
 
 export enum PipelinedResourceType {
-    Component = "component",
-    MergedComponents = "merged-components",
-    Entity = "entity"
+    Component = 0,
+    SubComponent = 1,
+    MergedComponents = 2,
+    MergedSubComponents = 3,
+    Entity = 4
 }
 
 export type PipelinedResource = {
@@ -48,10 +50,11 @@ export default class PipelineSystem implements System {
     };
     
     tick = (delta: number, time: number) => {
-        const idealTime = time + 8;
+        const idealTime = time + 8,
+            queue = this.queue;
 
-        while (this.queue.length > 0  && Date.now() < idealTime) {
-            this.emit(this.queue.shift());
+        while (queue.length > 0  && Date.now() < idealTime) {
+            this.emit(queue.shift());
         }
     };
 
@@ -64,10 +67,15 @@ export default class PipelineSystem implements System {
             case PipelinedResourceType.Component:
 
             break;
-            case PipelinedResourceType.MergedComponents:
-            // TODO: SubComponent
+            case PipelinedResourceType.SubComponent:
+
             break;
+            case PipelinedResourceType.MergedComponents:
             
+            break;
+            case PipelinedResourceType.MergedSubComponents:
+            
+            break;
         }
     }
 

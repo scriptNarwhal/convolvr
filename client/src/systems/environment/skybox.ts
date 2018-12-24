@@ -135,8 +135,13 @@ export default class SkyboxSystem implements System {
     followUser(delta: number, position?: number[] ) {
         let camera = (window as any).three.camera,
             world = this.world,
-            terrainEnt = world.space.distantTerrain,
-            config = world.config,
+            terrainEnt = world.space.distantTerrain;
+
+        if (!!!terrainEnt) {
+            return;
+        }
+
+        let config = world.config,
             skyLight = world.skyLight,
             sunLight = world.sunLight,
             yaw = config ? config.light.yaw - Math.PI / 2.0 : 0,
@@ -163,8 +168,9 @@ export default class SkyboxSystem implements System {
             }
         }
 
-        if (terrainEnt)
+        if (terrainEnt && terrainEnt.mesh) {
             terrainEnt.update([camera.position.x, terrainEnt.mesh.position.y, camera.position.z], false, false, false, false, { updateWorkers: false })
+        }
 
     }
 }

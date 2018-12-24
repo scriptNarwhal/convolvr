@@ -359,21 +359,22 @@ export default class Systems {
 			return;
 		}
 		console.warn("deps", system.dependencies)
-		const deps = system.dependencies as SystemDependency[];
+		const deps = system.dependencies as SystemDependency[],
+			systems = system.world.systems;
 	
 		for (let d = deps.length -1; d >= 0; d --) {
 			const dep = deps[d];
 
 			if (dep.length === 1) {
-				(system as any)[dep[0]] = (system.world.systems as any)[dep[0]];
+				(system as any)[dep[0]] = (systems as any)[dep[0]];
 			} else {
 				const path = dep[1].split("."),
 					length = path.length;
 
 				if (length == 1) {
-					(system as any)[dep[0]] = (system.world.systems as any)[dep[1]];
+					(system as any)[dep[0]] = (systems as any)[dep[1]];
 				} else {
-					(system as any)[dep[0]] = (system.world.systems as any)[path[0]][path[1]];
+					(system as any)[dep[0]] = (systems as any)[path[0]][path[1]];
 				}
 			}
 		}
@@ -405,6 +406,10 @@ export default class Systems {
 		while ( ln -- ) {
 			systems[ ln ].tick( delta, time );
 		}
+	}
+
+	public testPerformance() {
+		return Date.now() - this.time < 8;
 	}
 }
 
