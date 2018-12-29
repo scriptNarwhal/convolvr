@@ -1,10 +1,10 @@
-import Systems, { System } from '..';
-import { AnyObject } from '../../util';
-import Convolvr from '../../world/world';
-import Component from '../../model/component';
-import Entity from '../../model/entity';
+import Systems, { System } from "..";
+import { AnyObject } from "../../util";
+import Convolvr from "../../world/world";
+import Component from "../../model/component";
+import Entity from "../../model/entity";
 
-import * as THREE from 'three';
+import * as THREE from "three";
 
 export enum PipelinedResourceType {
     Component = 0,
@@ -15,21 +15,20 @@ export enum PipelinedResourceType {
 }
 
 export type PipelinedResource = {
-    type: PipelinedResourceType
-    entity?: Entity
-    parentComponent?: Component
-    component?: Component
-    mergedGeometry?: THREE.Geometry
-    args: any[]
-}
+    type: PipelinedResourceType;
+    entity?: Entity;
+    parentComponent?: Component;
+    component?: Component;
+    mergedGeometry?: THREE.Geometry;
+    args: any[];
+};
 
 /**
- * 
+ *
  */
 export default class PipelineSystem implements System {
-    
     world: Convolvr;
-    systems: Systems
+    systems: Systems;
 
     private queue: PipelinedResource[] = [] as PipelinedResource[];
 
@@ -44,39 +43,34 @@ export default class PipelineSystem implements System {
     postInject?: () => void;
 
     init = (component: Component) => {
-
-
         return { foo: "bar" };
     };
-    
+
     tick = (delta: number, time: number) => {
         const idealTime = time + 8,
             queue = this.queue;
 
-        while (queue.length > 0  && Date.now() < idealTime) {
+        while (queue.length > 0 && Date.now() < idealTime) {
             this.emit(queue.shift());
         }
     };
 
-    
     private emit(resource: PipelinedResource) {
         switch (resource.type) {
             case PipelinedResourceType.Entity:
                 resource.entity.initEntity(resource.args[0], resource.args[1], resource.args[2]);
-            break;
+                break;
             case PipelinedResourceType.Component:
-
-            break;
-            case PipelinedResourceType.SubComponent:
-
-            break;
             case PipelinedResourceType.MergedComponents:
-            
-            break;
+                const args = resource.args;
+                resource.entity.initSubComponent(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+                break;
+            case PipelinedResourceType.SubComponent:
+                console.warn("enqueue merged component");
+                break;
             case PipelinedResourceType.MergedSubComponents:
-            
-            break;
+                console.warn("enqueue merged sub component");
+                break;
         }
     }
-
 }
