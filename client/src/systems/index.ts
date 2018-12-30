@@ -418,6 +418,6 @@ export default class Systems {
     }
 
     public testPerformance() {
-        return Date.now() - this.time < 80;
+        return Date.now() - this.time < 8;
     }
 }

@@ -13,7 +13,6 @@ import {
 import { API_SERVER } from '../../../config'
 
 export function toggleMenu ( force?: boolean ) {
-    console.log("toggle menu ", force)
     let world = (window as any).three.world,
         url = window.location.href,
         mode = world.mode

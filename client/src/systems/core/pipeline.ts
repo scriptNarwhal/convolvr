@@ -10,17 +10,20 @@ export enum PipelinedResourceType {
     Component = 0,
     SubComponent = 1,
     MergedComponents = 2,
-    MergedSubComponents = 3,
-    Entity = 4
+    CreateEntityMesh = 3,
+    MergedSubComponents = 4,
+    FinalMergedSubComponent = 5,
+    Entity = 6
 }
 
 export type PipelinedResource = {
     type: PipelinedResourceType;
     entity?: Entity;
+    callback?: Function;
     parentComponent?: Component;
     component?: Component;
     mergedGeometry?: THREE.Geometry;
-    args: any[];
+    args?: any[];
 };
 
 /**
@@ -56,7 +59,7 @@ export default class PipelineSystem implements System {
     };
 
     private emit(resource: PipelinedResource) {
-        switch (resource.type) {
+       switch (resource.type) {
             case PipelinedResourceType.Entity:
                 resource.entity.initEntity(resource.args[0], resource.args[1], resource.args[2]);
                 break;
@@ -64,6 +67,9 @@ export default class PipelineSystem implements System {
             case PipelinedResourceType.MergedComponents:
                 const args = resource.args;
                 resource.entity.initSubComponent(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+                break;
+            case PipelinedResourceType.CreateEntityMesh:
+                resource.callback();
                 break;
             case PipelinedResourceType.SubComponent:
                 console.warn("enqueue merged component");

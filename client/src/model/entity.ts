@@ -33,6 +33,7 @@ import { Vector3 } from "three";
 import Systems from "../systems";
 import { PipelinedResource, PipelinedResourceType } from "../systems/core/pipeline";
 import Convolvr from "../world/world";
+import { AnyObject } from "../util";
 
 export default class Entity {
     public id: number;
@@ -50,11 +51,11 @@ export default class Entity {
     public oldCoords: number[];
     public boundingRadius = 0.5;
     public boundingBox: number[];
+    public  tags: string[];
 
     private mount: any;
     private lastFace: number;
     private compPos: any;
-    public tags: string[];
     private handlers: any;
 
     public dimensions = [1, 1, 1];
@@ -200,7 +201,7 @@ export default class Entity {
             world = three.world as Convolvr,
             systems = world.systems;
 
-        if (systems.testPerformance()) {
+        if (true || systems.testPerformance()) {
             return this.initEntity(world, systems, mount, config, callback);
         } else {
             return systems.pipeline.enqueue({
@@ -212,14 +213,13 @@ export default class Entity {
     }
 
     public initEntity(world: Convolvr, systems: Systems, mount: THREE.Object3D, config: InitEntityConfig = {}, callback?: Function) {
-        let mesh = new THREE.Object3D(),
-            base = new THREE.Geometry(),
+        let base = new THREE.Geometry(),
             three = world.three,
             mobile = world.mobile,
             nonMerged = [] as any[],
             compRadius = 0.5,
             materials = [] as any[],
-            addToOctree = true,
+            addToVoxel = true,
             workerUpdate: any = WorkerUpdateMode.NONE;
 
         this.lastFace = 0;
@@ -246,56 +246,85 @@ export default class Entity {
             return false;
         }
 
-        let merged: number = this.initSubComponents(systems, mobile, compRadius, materials, base, nonMerged);
+        const results = this.initSubComponents(systems, mobile, compRadius, materials, base, nonMerged),
+          merged = results[0],
+          noTime = results[1];
 
-        addToOctree = this.componentsByAttr.terrain != true && this.componentsByAttr.noRaycast != true;
+        addToVoxel = this.componentsByAttr.terrain != true && this.componentsByAttr.noRaycast != true;
         this.boundingRadius = Math.max(this.dimensions[0], this.dimensions[1], this.dimensions[2]);
         this.boundingBox = this.dimensions;
         !!workerUpdate && this.updateWorkers(workerUpdate, systems);
 
-        if (merged > 0) {
-            mesh = new THREE.Mesh(base, materials);
+        
+        if (noTime) {
+          systems.pipeline.enqueue({
+            type: PipelinedResourceType.CreateEntityMesh,
+            callback: () => {
+              this.initEntityMesh(world, config, merged, addToVoxel, nonMerged, base, materials, mount, callback)
+            }
+          });
         } else {
-            mesh = nonMerged[0]; // maybe nest inside of Object3D ?
+          this.initEntityMesh(world, config, merged, addToVoxel, nonMerged, base, materials, mount, callback)
         }
 
-        if (!mesh) {
-            console.warn("entity mesh failed to generate", this);
-            return;
-        }
-
-        if (world.settings.shadows > 0) {
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-        }
-
-        merged = 1;
-
-        while (merged < nonMerged.length) {
-            mesh.add(nonMerged[merged]);
-            merged++;
-        }
-
-        if (!!this.quaternion && (!config.ignoreRotation || this.components.length == 1)) mesh.quaternion.fromArray(this.quaternion);
-
-        !!this.position && mesh.position.fromArray(this.position);
-
-        mesh.userData = {
-            entity: this,
-            compsByFaceIndex: this.compsByFaceIndex
-        };
-
-        // addToOctree && world.octree.add( mesh )
-        mount.add(mesh);
-        this.mesh = mesh;
-
-        if ((!!!config || !!!config.noVoxel) && addToOctree) this.addToVoxel(this.voxel, mesh);
-
-        mesh.matrixAutoUpdate = false;
-        mesh.updateMatrix();
-        !!callback && callback(this);
-        this.callHandlers("init");
         return this;
+    }
+
+    private initEntityMesh(
+      world: Convolvr, 
+      config: InitEntityConfig,
+      merged: number, 
+      addToVoxel: boolean,
+      nonMerged: THREE.Mesh[],
+      base: THREE.Geometry, 
+      materials: THREE.Material[], 
+      mount: THREE.Object3D,
+      callback: Function,  
+    ) {
+      let mesh: THREE.Mesh;
+      
+      if (merged > 0) {
+        mesh = new THREE.Mesh(base, materials);
+      } else {
+          mesh = nonMerged[0]; // maybe nest inside of Object3D ?
+      }
+
+      if (!mesh) {
+          console.warn("entity mesh failed to generate", this);
+          return;
+      }
+
+      if (world.settings.shadows > 0) {
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+      }
+
+      merged = 1;
+
+      while (merged < nonMerged.length) {
+          mesh.add(nonMerged[merged]);
+          merged++;
+      }
+
+      if (!!this.quaternion && (!config.ignoreRotation || this.components.length == 1)) mesh.quaternion.fromArray(this.quaternion);
+
+      !!this.position && mesh.position.fromArray(this.position);
+
+      mesh.userData = {
+          entity: this,
+          compsByFaceIndex: this.compsByFaceIndex
+      };
+
+      // addToOctree && world.octree.add( mesh )
+      mount.add(mesh);
+      this.mesh = mesh;
+
+      if ((!!!config || !!!config.noVoxel) && addToVoxel) { this.addToVoxel(this.voxel, mesh); }
+
+      mesh.matrixAutoUpdate = false;
+      mesh.updateMatrix();
+      !!callback && callback(this);
+      this.callHandlers("init");
     }
 
     private initSubComponents(
@@ -305,7 +334,7 @@ export default class Entity {
         materials: any[],
         base: any,
         nonMerged: any[]
-    ): number {
+    ): [number, boolean] {
         let ncomps = this.components.length,
             noTime = false,
             s = 0,
@@ -315,8 +344,7 @@ export default class Entity {
             const component = this.components[c],
                 isMerged = component && component.attrs.geometry && component.attrs.geometry.merge;
 
-            if (noTime == false || isMerged) {
-                // remove `isMreged` from above once that's working
+            if (true || noTime == false) {
                 s = this.initSubComponent(c, s, component, systems, mobile, compRadius, materials, base, nonMerged);
             } else {
                 systems.pipeline.enqueue({
@@ -325,15 +353,15 @@ export default class Entity {
                     args: [c, s, component, systems, mobile, compRadius, materials, base, nonMerged]
                 } as PipelinedResource);
             }
-            // disabled until this can be fully
-            // noTime = noTime || systems.testPerformance();
+            
+            noTime = noTime || !systems.testPerformance();
             c += 1;
         }
 
-        return s;
+        return [s, noTime];
     }
 
-    public initSubComponent(
+    public initSubComponent = (
         index: number,
         merged: number,
         component: DBComponent,
@@ -343,7 +371,7 @@ export default class Entity {
         materials: any[],
         base: THREE.Geometry,
         nonMerged: any[]
-    ) {
+    ) => {
         let comp = null,
             compMesh,
             face = 0,
@@ -396,7 +424,7 @@ export default class Entity {
         }
         this.allComponents.push(comp);
         return merged;
-    }
+    };
 
     public save(oldVoxel: any = false): Promise<any> {
         this.callHandlers("save");
@@ -567,27 +595,29 @@ export default class Entity {
                 boundingRadius: this.boundingRadius,
                 boundingBox: this.boundingBox
             },
-            message = "";
+            message: AnyObject = {};
 
-        if (mode == WorkerUpdateMode.ADD) {
-            message = JSON.stringify({
-                command: "add entity",
-                data: {
-                    coords: this.voxel,
-                    entity: entityData
-                }
-            });
-        } else if (mode == WorkerUpdateMode.UPDATE) {
-            message = JSON.stringify({
+        switch(mode) {
+          case WorkerUpdateMode.ADD:
+            message = {
+              command: "add entity",
+              data: {
+                  coords: this.voxel,
+                  entity: entityData
+              }
+            };
+          break;
+          case WorkerUpdateMode.UPDATE:
+            message = {
                 command: "update entity",
                 data: {
                     entityId: this.id,
                     coords: this.voxel,
                     entity: entityData
                 }
-            });
-        } else if (mode == WorkerUpdateMode.TELEMETRY) {
-            // make position not offset and actually lined up attrerly
+            };
+          break;
+          case WorkerUpdateMode.TELEMETRY:
             let newPosition = [...entityData.position];
 
             newPosition[0] -= this.boundingRadius / 2.0;
@@ -595,7 +625,7 @@ export default class Entity {
 
             console.log("coords", this.voxel, "oldCoords", config.oldCoords);
             console.log("this old coords", this.oldCoords);
-            message = JSON.stringify({
+            message = {
                 command: "update telemetry",
                 data: {
                     entityId: this.id,
@@ -604,9 +634,10 @@ export default class Entity {
                     position: newPosition,
                     quaternion: entityData.quaternion
                 }
-            });
+            };
         }
-        systems.staticCollisions.worker.postMessage(message);
+        
+        systems.staticCollisions.worker.postMessage(JSON.stringify(message));
         //systems.oimo.worker.postMessage( message )
     }
 
