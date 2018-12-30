@@ -19,15 +19,15 @@ export default class ToolActionHandler {
                 world = this.world,
                 user = world.user,
                 avatar = null,
-                pos = data.position,
+                // pos = data.position,
                 coords = data.coords,
                 voxel = (world.space as any).voxels[coords[0] + ".0." + coords[2]],
-                quat = data.quaternion,
+                // quat = data.quaternion,
                 remoteUser = {},
                 userHand = {};
 
             if (voxel == null || voxel.loaded == false) {
-                if (voxel) (world.systems.terrain as any).loadVoxel(coords);
+                if (voxel) (world.systems.space as any).loadVoxel(coords);
 
                 console.warn("[Remote] Voxel not loaded", coords);
                 return;
@@ -86,7 +86,10 @@ export default class ToolActionHandler {
                         console.log("Network Grab Entity: actually replacing");
                         remoteUser = (world.users as any)["user" + data.userId];
                         userHand = (remoteUser as any).avatar.componentsByAttr.hand[data.hand];
-                        voxel.entities.map((voxelEnt: Entity) => {
+                        
+                        for (let idx in voxel.entities) {  
+                            const voxelEnt = voxel.entities[idx];
+
                             console.log("checking which entity to grab", voxelEnt.id, data.entityId);
                             if (voxelEnt.id == data.entityId) {
                                 world.three.scene.remove(voxelEnt.mesh)(userHand as any).state.hand.grabbedEntity = voxelEnt;
@@ -97,7 +100,7 @@ export default class ToolActionHandler {
                                 voxelEnt.mesh.updateMatrix();
                                 console.log("grab entity: found entity");
                             }
-                        });
+                        }
                     }
                     break;
                 case "Replace Entity":

@@ -285,6 +285,7 @@ export default class Entity {
       
       if (merged > 0) {
         mesh = new THREE.Mesh(base, materials);
+        mesh.matrixAutoUpdate = false;
       } else {
           mesh = nonMerged[0]; // maybe nest inside of Object3D ?
       }
@@ -315,14 +316,13 @@ export default class Entity {
           compsByFaceIndex: this.compsByFaceIndex
       };
 
-      // addToOctree && world.octree.add( mesh )
       mount.add(mesh);
       this.mesh = mesh;
 
       if ((!!!config || !!!config.noVoxel) && addToVoxel) { this.addToVoxel(this.voxel, mesh); }
 
-      mesh.matrixAutoUpdate = false;
       mesh.updateMatrix();
+      
       !!callback && callback(this);
       this.callHandlers("init");
     }

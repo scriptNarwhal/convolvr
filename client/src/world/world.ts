@@ -397,7 +397,7 @@ export default class Convolvr {
 
 		this.name = name;
 		this.userName = userName;
-		(this.systems.terrain as any).readyCallback = readyCallback
+		this.systems.space.readyCallback = readyCallback;
 
 		axios.get(`${API_SERVER}/api/spaces/name/${name}`).then( (response: any) => { // fix this... needs userName now
 			 this.init(response.data, ()=> { callback && callback(world) } )

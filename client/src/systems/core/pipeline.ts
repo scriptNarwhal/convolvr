@@ -52,10 +52,12 @@ export default class PipelineSystem implements System {
     tick = (delta: number, time: number) => {
         const idealTime = time + 8,
             queue = this.queue;
-
-        while (queue.length > 0 && Date.now() < idealTime) {
-            this.emit(queue.shift());
+        if (queue.length > 0) {
+            console.log(JSON.stringify(queue));
         }
+        do {
+            queue.length > 0 && this.emit(queue.shift());
+        } while (Date.now() < idealTime)
     };
 
     private emit(resource: PipelinedResource) {

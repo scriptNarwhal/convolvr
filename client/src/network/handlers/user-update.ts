@@ -17,17 +17,17 @@ export default class UserUpdateHandler {
         socket.on("update", (packet: any) => {
             let data = JSON.parse(packet.data),
                 world = this.world,
-                voxels = (world.systems.terrain as any).voxels,
+                voxels = (world.systems.space as any).voxels,
                 coords = world.getVoxel(data.position),
                 cameraCoords = world.getVoxel(),
-                closeToCamera = Math.abs(cameraCoords[0] - coords[0]) < 3 && Math.abs(cameraCoords[2] - coords[2]) < 3,
+                // closeToCamera = Math.abs(cameraCoords[0] - coords[0]) < 3 && Math.abs(cameraCoords[2] - coords[2]) < 3,
                 userVoxel = null,
                 update = null,
-                avatar = null,
+                // avatar = null,
                 user = null,
                 pos = null,
                 quat = null,
-                mesh = null,
+                // mesh = null,
                 hands = [];
 
             if (!!data.entity && (world.space as any).loaded) {
