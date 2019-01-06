@@ -51,14 +51,15 @@ export default class SkyboxSystem implements System {
         ));
 
         this.world.sunLight.add(sunMesh);
-        this.world.three.scene.add(skybox)
+        this.world.three.scene.add(skybox);
         return skybox
     }
 
     destroy () {
-        let skyboxMesh = this.world.skyboxMesh
+        let skyboxMesh = this.world.skyboxMesh;
+
         if ( skyboxMesh && skyboxMesh.parent ) {
-		    skyboxMesh.parent.remove( skyboxMesh )
+		    skyboxMesh.parent.remove( skyboxMesh );
 		}
     }
 
@@ -146,10 +147,10 @@ export default class SkyboxSystem implements System {
             sunLight = world.sunLight,
             yaw = config ? config.light.yaw - Math.PI / 2.0 : 0,
             pitch = config ? config.light.pitch : 0,
-            skyMat = null
+            skyMat = null;
 
         if (world.skyboxMesh && world.skyLight) {
-            skyMat = world.skyboxMesh.material
+            skyMat = world.skyboxMesh.material;
 
             if (skyMat) {
                 if ((skyMat as any).uniforms) {
@@ -169,7 +170,7 @@ export default class SkyboxSystem implements System {
         }
 
         if (terrainEnt && terrainEnt.mesh) {
-            terrainEnt.update([camera.position.x, terrainEnt.mesh.position.y, camera.position.z], false, false, false, false, { updateWorkers: false })
+            terrainEnt.update([camera.position.x, terrainEnt.mesh.position.y, camera.position.z], null, null, null, null, { updateWorkers: false })
         }
 
     }

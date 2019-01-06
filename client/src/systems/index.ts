@@ -79,8 +79,9 @@ import Component from "../model/component";
 import Binding from "../model/binding";
 import { AttributeName } from "../model/attribute";
 
-/** System Dependency
- * [injectAsThisDotFoo, systemBar.optionallySubSystemBaz][] **/
+// /** System Dependency
+//  * [injectAsThisDotFoo, systemBar.optionallySubSystemBaz][] 
+//  * **/
 export type SystemDependency = string[];
 
 export interface System {
@@ -178,9 +179,9 @@ export default class Systems {
     public webrtc: WebRTCSystem;
     public weapon: WeaponSystem;
 
-    /**
-     *  Initializes all systems before components can be registered
-     **/
+    // /**
+    //  *  Initializes all systems before components can be registered
+    //  **/
     constructor(world: Convolvr) {
         world.systems = this;
 
@@ -298,9 +299,9 @@ export default class Systems {
         };
     }
 
-    /**
-     *  Reads component attrs, registers with systems and populates state with the resulting data
-     **/
+    // /**
+    //  *  Reads component attrs, registers with systems and populates state with the resulting data
+    //  **/
     registerComponent(component: Component): Mesh {
         let componentsByAttr = component.entity.componentsByAttr,
             attrs = component.attrs,
@@ -401,9 +402,9 @@ export default class Systems {
             component.bindings.push(binding);
         }
     }
-    /**
-     *  Fires once per frame, passing the delta and total time passed
-     **/
+    // /**
+    //  *  Fires once per frame, passing the delta and total time passed
+    //  **/
     public tick(delta: number, time: number): void {
         let systems = this.liveSystems,
             ln = systems.length;

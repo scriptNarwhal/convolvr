@@ -54,12 +54,10 @@ export default class Component {
   }
 
   public reInit(systems: Systems, data: DBComponent = {}, config?: any, parent?: Component | null) {
-    console.log("do reinit")
     if (this.mesh && this.mesh.parent) {
       this.mesh.parent.remove(this.mesh);
     }
     this.init(systems, this.data ? {...this.data, ...data} : data, this.entity, config, this.parent)
-    console.log("reinit", this.mesh)
     this.parent.mesh.add(this.mesh);
   }
 

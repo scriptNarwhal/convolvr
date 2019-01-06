@@ -38,7 +38,7 @@ export default class User {
 
     this.avatar = avatar
     this.mesh = avatar.mesh
-    this.hands = avatar.componentsByAttr.hand
+    this.hands = avatar.componentsByAttr.hand || []
   }
 
 }

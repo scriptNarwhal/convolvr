@@ -8,7 +8,7 @@ import {
   API_SERVER
 } from '../../config'
 import StaticCollisions from './physics/static-collisions';
-import Component from '../../model/component';
+import Component, { DBComponent } from '../../model/component';
 import Convolvr from '../../world/world';
 import { navigateTo } from '../../2d-ui/redux/actions/app-actions';
 import { fetchSpaces } from '../../2d-ui/redux/actions/world-actions';
@@ -22,7 +22,7 @@ export default class SpaceSystem {
 
   public mesh: any
   public phase: number
-  public distantTerrain: any
+  public distantTerrain: Entity
   public StaticCollisions: StaticCollisions
 
   private hasBuffered: boolean;
@@ -120,12 +120,13 @@ export default class SpaceSystem {
                 shading: "physical"
               }
             },
-            components: [],
+            components: [] as DBComponent[],
             position: [0,0,0],
             quaternion: [0,0,0]
-          }], [0, yPosition, 0], [0,0,0,1], world.getVoxel())
+          }] as DBComponent[], [0, yPosition, 0], [0,0,0,1], GLOBAL_SPACE)
 
-        distantTerrain.init( (window as any).three.scene, { noVoxel: true }, (terrainEnt: Entity) => {
+        distantTerrain.init(world.three.scene, { noVoxel: true }, (terrainEnt: Entity) => {
+          console.warn("callback to distantTerrain.init", terrainEnt);
           SpaceSystem.mesh = terrainEnt.mesh
           terrainEnt.mesh.rotation.x = -Math.PI/2
           terrainEnt.mesh.updateMatrix()
@@ -297,7 +298,7 @@ export default class SpaceSystem {
 
         }).catch((response: any) => {
           console.error("Voxel Error", coords, response)
-        })
+        });
 
       }
 
@@ -357,15 +358,11 @@ export default class SpaceSystem {
 
     private initializeEntities(config: any) {
       let initialLoad   = this.world.initialLoad,
-          showVoxels    = true,
-          terrain       = this,
-          loadedVoxels  = this.loadedVoxels,
+         loadedVoxels  = this.loadedVoxels,
           cam           = (window as any).three.camera,
-          cameraKey     = Math.floor(cam.position.x / GRID_SIZE[0]) + ".0." + Math.floor(cam.position.z / GRID_SIZE[2]),
-          c             = 0
+          cameraKey     = Math.floor(cam.position.x / GRID_SIZE[0]) + ".0." + Math.floor(cam.position.z / GRID_SIZE[2]);
 
       if (!!config )
-        showVoxels = config.type == "voxels" || config.type == "both"
         if (loadedVoxels.length > 0 ) {
           let newVoxel = loadedVoxels[ 0 ],
               voxelKey = newVoxel.x + ".0." + newVoxel.z,

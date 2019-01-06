@@ -206,11 +206,11 @@ export default class Convolvr {
 		};
 		window.addEventListener('vrdisplayactivate', function(e) {
 			console.log('Display activated.', e);
-			  (navigator as any).getVRDisplays().then( (displays: any[]) => { console.log("displays", displays)
+			  (navigator as any).getVRDisplays().then( (displays: any[]) => { console.log("displays", displays);
 				if ( displays.length > 0 ) {
-				  console.log("vrdisplayactivate: found display: ", displays[0])
+				  console.log("vrdisplayactivate: found display: ", displays[0]);
 				  //three.vrDisplay = displays[0]
-				  self.initiateVRMode()
+				  self.initiateVRMode();
 				}
 			  });
 			
@@ -218,11 +218,12 @@ export default class Convolvr {
 	  
 		(document.querySelector("#viewport") as any).onclick = (event: any) => {
 			let elem = event.target,
-				uInput = self.userInput
-			event.preventDefault()
+				uInput = self.userInput;
+
+			event.preventDefault();
 			if (!uInput.fullscreen) {
-			  self.mode = "3d"
-			elem.requestPointerLock()
+			  	self.mode = "3d";
+				elem.requestPointerLock();
 				self.clickCanvasCallback();
 			}
 		}
@@ -325,7 +326,7 @@ export default class Convolvr {
 			this.systems.assets.envMaps.default = envURL
 		}
 
-		oldSkyMaterial = this.skyboxMesh.material
+		oldSkyMaterial = this.skyboxMesh ? this.skyboxMesh.material : {}
 		if (this.skyboxMesh && this.skyboxMesh.parent) {
 			three.scene.remove(this.skyboxMesh)
 		}
@@ -416,8 +417,8 @@ export default class Convolvr {
 		if (voxel != null && voxel.cleanUp == false ) {
 			const entities = voxel.entities;
 
-			for (let i = 0, l = entities.length; i < l; i++ ) {
-				i > 2 && entities[i].init(scene);
+			for (let i = 2, l = entities.length; i < l; i++ ) {
+				!!entities[i] && entities[i].init(scene);
 			}
 		}
 	}
