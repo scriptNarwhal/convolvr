@@ -152,8 +152,8 @@ export default class SkyboxSystem implements System {
             skyMat = world.skyboxMesh.material
 
             if (skyMat) {
-                if (skyMat.uniforms) {
-                    skyMat.uniforms.time.value += delta
+                if ((skyMat as any).uniforms) {
+                    (skyMat as any).uniforms.time.value += delta
                 }
                 world.skyboxMesh.position.set(camera.position.x, camera.position.y, camera.position.z)
 

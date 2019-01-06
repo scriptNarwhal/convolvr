@@ -34,9 +34,14 @@ export default class PipelineSystem implements System {
     systems: Systems;
 
     private queue: PipelinedResource[] = [] as PipelinedResource[];
+    private idealTime = 10;
 
     public enqueue(item: PipelinedResource) {
         this.queue.push(item);
+    }
+
+    public setIdealTime(time: number) {
+        this.idealTime = time;
     }
 
     constructor(world: Convolvr) {
@@ -50,11 +55,14 @@ export default class PipelineSystem implements System {
     };
 
     tick = (delta: number, time: number) => {
-        const idealTime = time + 8,
+        const idealTime = time + this.idealTime,
             queue = this.queue;
  
         do {
-            queue.length > 0 && this.emit(queue.shift());
+            if (queue.length == 0) {
+                break;
+            }
+            this.emit(queue.shift());    
         } while (Date.now() < idealTime)
     };
 

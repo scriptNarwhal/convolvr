@@ -64,8 +64,8 @@ export default class Convolvr {
 	public mode: 	     string
 	public users: 		 Array<User>
 	public user:         User     = new User({});
-	public camera: 		 any
-	public skyboxMesh: 	 any
+	public camera: 		 THREE.PerspectiveCamera
+	public skyboxMesh: 	 THREE.Mesh
 	public help:         any
 	public skybox: 		 SkyboxSystem
 	public vrFrame: 	 any
@@ -78,11 +78,11 @@ export default class Convolvr {
 	// public octree: 		 any
 	public raycaster: 	 any
 	public systems: 	 Systems
-	public space: 	 SpaceSystem
+	public space: 	     SpaceSystem
 	public workers: 	 any
-	public skyBoxMesh:   any
-	public skyLight:     any
-	public sunLight:     any
+	public skyBoxMesh:   THREE.Mesh
+	public skyLight:     THREE.HemisphereLight
+	public sunLight:     THREE.DirectionalLight
 	public shadowHelper: any
 
 	public animate: 				Function
@@ -136,9 +136,9 @@ export default class Convolvr {
 		this.name = ""
 		this.userName = "world"
 		this.mode = "3d" // web, stereo ( IOTmode should be set this way )
-		this.users = []
- 		this.camera = camera
-		this.skyboxMesh = false
+		this.users = [];
+ 		this.camera = camera;
+		this.skyboxMesh = null;
 		this.vrFrame = !!(window as any).VRFrameData ? new VRFrameData() : null
 		this.sendUpdatePacket = 0
 		this.capturing = false
@@ -148,16 +148,7 @@ export default class Convolvr {
 		this.screenResX = screenResX
 		this.initRenderer( renderer, "viewport" );
 		this.threeJsPluginLoader = new THREEJSPluginLoader(THREE);
-		// this.octree = new THREE.Octree({
-		// 	undeferred: false,
-		// 	depthMax: Infinity,
-		// 	// max number of objects before nodes split or merge
-		// 	objectsThreshold: 8,
-		// 	// percent between 0 and 1 that nodes will overlap each other
-		// 	// helps insert objects that lie over more than one node
-		// 	overlapPct: 0.15,
-		// 	scene
-		// });
+
 		this.user.id = -Math.floor(Math.random()*1000000);
 		// this.octree.visualMaterial.visible = false
 		this.raycaster = new THREE.Raycaster()
@@ -175,9 +166,9 @@ export default class Convolvr {
 		world = this;
 		(window as any).three = this.three
 
-		this.systems = new Systems( this )
-		this.space = this.systems.space
-		this.skybox = this.systems.skybox
+		this.systems = new Systems( this );
+		this.space = this.systems.space;
+		this.skybox = this.systems.skybox;
 		this.workers = {
 			staticCollisions: this.systems.staticCollisions.worker,
 			ecsWorker: this.systems.script.worker
@@ -185,7 +176,7 @@ export default class Convolvr {
 		}
 		camera.add(this.systems.audio.listener)
 		// ^^^ have to get permission first now with new webaudio api
-
+		// TODO
 		this.socketHandlers = new SocketHandlers( this, socket )
 		window.addEventListener('resize', e => this.onWindowResize(), true)
 		this.onWindowResize();
@@ -244,7 +235,6 @@ export default class Convolvr {
 	public initChatAndLoggedInUser(doLogin = false) {
 		this.initChatCallback();
 		if ( doLogin ) {
-			console.log("do login");
 		  let rememberUser = localStorage.getItem("rememberUser"), // detect user credentials // refactor this...
 		  username = '',
 		  password = '',
@@ -280,6 +270,7 @@ export default class Convolvr {
 			}, 
 			GLOBAL_SPACE 
 		  ) as Entity; // entity id can be passed into config object
+
 	  avatar.init( this.three.scene )
 	  this.user.useAvatar( avatar );
 	  this.initUserInput();
@@ -287,14 +278,12 @@ export default class Convolvr {
       toolMenu = this.systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) as Entity // method for spawning built in entities
       this.user.hud = toolMenu
       toolMenu.init( this.three.scene, {}, (menu: Entity) => { 
-		  console.warn("Tool menu callback", menu)
         menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
       }); 
 	  callback && callback(avatar);
 	}
 
 	public init(config: SpaceConfig, callback: Function ) {
-		console.log("init world")
 		const sky = config.sky,
 			terrainColor = [config.terrain.red, config.terrain.green, config.terrain.blue];
 
@@ -302,13 +291,11 @@ export default class Convolvr {
 			skyLight 	   = this.skyLight 
 				|| new THREE.HemisphereLight( 
 					new THREE.Color().fromArray([sky.red, sky.green, sky.blue]), 
-					new THREE.Color().fromArray(terrainColor), config.light.intensity * 0.6 ) /* new THREE.DirectionalLight( config.light.color, 0.4 )*/, 
+					new THREE.Color().fromArray(terrainColor), config.light.intensity * 0.6 ), 
 			sunLight       = this.sunLight || //this.settings.shadows > 0 
 				 new THREE.DirectionalLight( 0xfffff0, Math.min(1.0, config.light.intensity) ),
-				// : new THREE.PointLight(0xffffff, config.light.intensity, 10000000),
 			three          = this.three,
 			camera 		   = three.camera,
-			rotateSky      = false,
 			envURL 	       = '/data/images/photospheres/sky-reflection.jpg',
 			r 		       = config.sky.red,
 			g 			   = config.sky.green,
@@ -322,7 +309,7 @@ export default class Convolvr {
 		this.skyLight.color.set( config.light.color )
 		this.sunLight.intensity = config.light.intensity 
 
-		this.config = config; console.info("Space config: ", config)
+		this.config = config;
 		this.space.initTerrain(config.terrain)
 		this.ambientLight = this.ambientLight || new THREE.AmbientLight(config.light.ambientColor, 0.25)
 		this.ambientLight.color.set( config.light.ambientColor )
@@ -331,9 +318,8 @@ export default class Convolvr {
 			this.initShadows(sunLight);
 		}
 
-		if ( !!config && !!config.sky.photosphere ) { console.log("init world: photosphere: ", config.sky.photosphere)
+		if ( !!config && !!config.sky.photosphere ) {
 			this.systems.assets.envMaps.default = '/data/user/'+config.sky.photosphere
-			rotateSky = true
 		} else {
 			envURL = this.systems.assets.getEnvMapFromColor( r, g, b )
 			this.systems.assets.envMaps.default = envURL
@@ -343,8 +329,8 @@ export default class Convolvr {
 		if (this.skyboxMesh && this.skyboxMesh.parent) {
 			three.scene.remove(this.skyboxMesh)
 		}
-		console.log("init create skybox")
-		this.skyboxMesh = this.skybox.createSkybox( skySize, oldSkyMaterial )
+		
+		this.skyboxMesh = this.skybox.createSkybox( skySize, oldSkyMaterial );
 		
 		const addLightsCallback = () => {
 			for (const light of [world.ambientLight, world.sunLight, world.skyLight]) {
@@ -402,7 +388,7 @@ export default class Convolvr {
 		axios.get(`${API_SERVER}/api/spaces/name/${name}`).then( (response: any) => { // fix this... needs userName now
 			 this.init(response.data, ()=> { callback && callback(world) } )
 		}).catch((response: any) => {
-			console.log("Space Error", response)
+			console.log("Error loading space", response)
 		})
 	}
 
@@ -424,13 +410,15 @@ export default class Convolvr {
 	}
 
 	generateFullLOD( coords: string) {
-		let voxel = (this.space as any).voxels[coords],
+		const voxel = (this.space as any).voxels[coords],
 			scene = this.three.scene
 
-		if ( voxel != null && voxel.cleanUp == false ) {
-			voxel.entities.map( ( entity: Entity, i: number )=>{
-				i > 2 && entity.init(scene)
-			})
+		if (voxel != null && voxel.cleanUp == false ) {
+			const entities = voxel.entities;
+
+			for (let i = 0, l = entities.length; i < l; i++ ) {
+				i > 2 && entities[i].init(scene);
+			}
 		}
 	}
 
@@ -438,7 +426,6 @@ export default class Convolvr {
 		let camera 	  = this.three.camera,
 			mobile 	  = this.mobile,
 			input 	  = this.userInput,
-			image 	  = "",
 			imageSize = [0, 0],
 			userHands = !!world.user.toolbox ? world.user.toolbox.hands : [],
 			hands: any[] = []
@@ -449,14 +436,14 @@ export default class Convolvr {
 	  	this.sendUpdatePacket += 1
 	  	if ( this.sendUpdatePacket %((2+(2*this.mode.indexOf("stereo") > -1 ? 1 : 0))*(mobile ? 2 : 1)) == 0 ) { // send packets faster / slower for all vr / mobile combinations
 			if ( input.trackedControls || input.leapMotion ) {
-				userHands.forEach( (handComponent: Component) => {
-					let hand = handComponent.mesh
+				for (let h = 0, l = userHands.length; h < l; h++ ) {
+					const hand = userHands[h].mesh;
 
 					hands.push({
 						pos: compressFloatArray(hand.position.toArray(), 4),
 						quat: compressFloatArray(hand.quaternion.toArray(), 8)
 					})
-				})
+				}
 			}
 
 			send( 'update', {

@@ -201,7 +201,7 @@ export default class Entity {
             world = three.world as Convolvr,
             systems = world.systems;
 
-        if (true || systems.testPerformance()) {
+        if (systems.testPerformance()) {
             return this.initEntity(world, systems, mount, config, callback);
         } else {
             return systems.pipeline.enqueue({
@@ -322,7 +322,7 @@ export default class Entity {
       if ((!!!config || !!!config.noVoxel) && addToVoxel) { this.addToVoxel(this.voxel, mesh); }
 
       mesh.updateMatrix();
-      
+
       !!callback && callback(this);
       this.callHandlers("init");
     }
@@ -336,7 +336,7 @@ export default class Entity {
         nonMerged: any[]
     ): [number, boolean] {
         let ncomps = this.components.length,
-            noTime = false,
+            enoughTime = true,
             s = 0,
             c = 0;
 
@@ -344,7 +344,7 @@ export default class Entity {
             const component = this.components[c],
                 isMerged = component && component.attrs.geometry && component.attrs.geometry.merge;
 
-            if (true || noTime == false) {
+            if (enoughTime) {
                 s = this.initSubComponent(c, s, component, systems, mobile, compRadius, materials, base, nonMerged);
             } else {
                 systems.pipeline.enqueue({
@@ -354,11 +354,11 @@ export default class Entity {
                 } as PipelinedResource);
             }
             
-            noTime = noTime || !systems.testPerformance();
+            enoughTime = (!enoughTime) ? false : !systems.testPerformance();
             c += 1;
         }
 
-        return [s, noTime];
+        return [s, !enoughTime];
     }
 
     public initSubComponent = (

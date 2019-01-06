@@ -9,6 +9,7 @@ import {
     APP_SET_WINDOW_FOCUS,
     APP_NAVIGATE_TO
 } from '../constants/action-types';
+import Convolvr from '../../../world/world';
 
 export default function app (state: any = {
     menuOpen: false,
@@ -48,7 +49,11 @@ export default function app (state: any = {
             }
         }
     case APP_TOGGLE_VR:
-        (window as any).three.world.mode = !state.vrMode ? "stereo" : "3d";
+        const world = (window as any).three.world as Convolvr;
+        
+        world.mode = !state.vrMode ? "stereo" : "3d";
+        world.systems.pipeline.setIdealTime(world.mode == "stereo" ? 7 : 10);
+        
         return { ... state,
             vrMode: !state.vrMode
         }
