@@ -1,13 +1,37 @@
 /*  static collision detection worker */
 
-let distance2d = ( a: number[], b: number[] ): number => {
-    return Math.sqrt( Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) )
-  },
-  distance2dCompare = ( a: number[], b: number[], n: number): boolean => { // more efficient version of distance2d()
-	  return Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) < (n*n)
-  },
-  distance3dCompare = ( a: number[], b: number[], n: number): boolean => { // ..faster than using Math.sqrt()
-	  return (Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[1]-b[1]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) ) < (n*n)
+const GRID_SIZE =  [ 42.18181818181818, 42.18181818181818, 36.698181818181816 ];
+
+type PhysicsVoxel = {
+	entities: DBEntity[]
+	position: [number,number,number]
+	cell: [number,number,number]
+	loaded?: boolean
+	altitude?: number
+}
+
+type DBEntity = {
+    id: number;
+    name: string;
+    components: DBComponent[];
+    position: number[];
+    quaternion: number[];
+    voxel?: number[];
+    tags?: string[];
+    boundingRadius?: number;
+};
+
+type DBComponent = {
+	id?:         number
+	name?:       string
+	class?:      string
+	components?: DBComponent[]
+	position?:   number[]
+	quaternion?: number[]
+	attrs?:      { [key: string]: any }
+	props?:      { [key: string]: any }
+	state?:      { [key: string]: any }
+	tags?:       string[]
   }
 
 let observer = {
@@ -17,31 +41,30 @@ let observer = {
 		vrHeight: 1.66
 	},
 	voxelList: any[] = [],
-	voxels: any = []
+	voxels: PhysicsVoxel[] = []
 
 let scWorker = (self as any);
 
+function distance2d( a: number[], b: number[] ): number {
+    return Math.sqrt( Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) )
+}
+
+function distance2dCompare( a: number[], b: number[], n: number): boolean { // more efficient version of distance2d()
+	  return Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) < (n*n)
+}
+
+function distance3dCompare( a: number[], b: number[], n: number): boolean { // ..faster than using Math.sqrt()
+	  return (Math.pow( (a[0]-b[0]), 2 ) + Math.pow( (a[1]-b[1]), 2 ) + Math.pow( (a[2]-b[2]), 2 ) ) < (n*n)
+}
+
 scWorker.update = ( ) => {
 
-	var distance = 0,
-		position: any = observer.position,
-		innerBox 	 = [false, false],
-		velocity 	 = observer.velocity,
-		vrHeight 	 = observer.vrHeight,
-		collision 	 = false,
-		yPos 		 = 0,
-		voxel 		 = null,
-		ent 		 = null,
-		entRadius    = 10,
-		structure 	 = null,
-		bounds 		 = [0, 0],
-		voxel 		 = null,
-		delta 		 = [0, 0],
-		oPos 		 = [],
-		speed 		 = 0,
-		e 			 = 0,
-		i 			 = 0,
-		v 			 = 0
+	var position: any 		= observer.position,
+		vrHeight 	 		= observer.vrHeight,
+		collision 	 		= false,
+		yPos 		 		= 0,
+		voxel: PhysicsVoxel = null,
+		i 			 		= 0;
 
 	for ( i = 0; i < voxelList.length; i ++ ) {
 		voxel = voxelList[ i ]
@@ -58,10 +81,20 @@ scWorker.update = ( ) => {
 
 				yPos = voxel.position[1]
 				if ( distance2dCompare( position, voxel.position, 24.5 ) ) {
-					if ( position[1] > yPos - 22 + vrHeight  && position[1] < 13.25+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
-						collision = true
-						scWorker.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
+					const firstEnt = voxel.entities[0];
+
+					if (firstEnt && firstEnt.components.length > 1) {
+						if ( position[1] > yPos - 22 + vrHeight  && position[1] < 14.65+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
+							collision = true;
+							scWorker.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + (1.4+yPos) + ',' + voxel.position[2] + '] }}');
+						}
+					} else {
+						if ( position[1] > yPos - 22 + vrHeight  && position[1] < 13.25+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
+							collision = true;
+							scWorker.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
+						}
 					}
+					
 				}
 				if ( !!voxel.entities && voxel.entities.length > 0 ) {
 					collision = scWorker.checkStaticCollisions( voxel, position )
@@ -121,7 +154,7 @@ scWorker.checkStaticCollisions = ( voxel: any, position: number[] ) => {
 									position: entComp.position,
 									floorData: entComp.attrs.floor
 								}
-							}))
+							}));
 							collision = true
 						}
 						// }
@@ -237,11 +270,13 @@ scWorker.addEntity = (message: any, data: any) => {
 		return
 	}
 	if (!!! voxels[data.coords.join(".")]) {
-		voxels[data.coords.join(".")] = { entities: [], cell: data.coords }
+		voxels[data.coords.join(".")] = { 
+			entities: [], 
+			cell: data.coords, 
+			position: data.coords.map((c: number,i: number)=> c*GRID_SIZE[i]) 
+		};
 	}
-	let entities = voxels[data.coords.join(".")].entities;
-
-	entities.push( data.entity )
+	voxels[data.coords.join(".")].entities.push( data.entity );
 }
 
 scWorker.removeEntity = ( message: any, data: any ) => {

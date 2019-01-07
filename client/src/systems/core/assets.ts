@@ -254,7 +254,7 @@ export default class AssetSystem {
     public loadInventoryEntity ( username: string, itemId: any): Promise<any> {
         let assets = this
         if (this.loadingItemsById.entities[ itemId ]) { return }
-        console.log("continuing to load")
+        
         this.loadingItemsById.entities[ itemId ] = true
          return axios.get(API_SERVER+"/api/inventory/"+username+"/Entities/"+itemId)
                 .then((response: any) => {

@@ -24,9 +24,7 @@ export default class StaticCollisions {
 				vrHeight:  number        = 0,
 	          	cam:       any  		 = three.camera,
 	          	user:      any       	 = world.user,
-				userPos:   any 			 = three.camera.position,
-	          	position:  Array<number> = [],
-	          	velocity:  Array<number> = []
+				userPos:   any 			 = three.camera.position;
 
 			if (vrFrame != null && vrFrame.pose != null && vrFrame.pose.position != null) {
 				vrHeight = 1 * vrFrame.pose.position[1]
@@ -61,10 +59,10 @@ export default class StaticCollisions {
 			}
 
 		} else if ( message.command == "platform collision" ) { // consider sending "top" or "bottom" collision type
-
+			const camPosition = cam.position;
 	      if ( message.data.type == "top" ) {
 
-				cam.position.set( cam.position.x, 13.25 + message.data.position[1] +(vrHeight != 0 ? vrHeight+0.25 : 0), cam.position.z )	
+				camPosition.set( camPosition.x, 13.25 + message.data.position[1] +(vrHeight != 0 ? vrHeight+0.25 : 0), camPosition.z );	
 
 				// if ( Math.abs( user.velocity.y ) > 150 ) {
 				// 	window.navigator.vibrate && window.navigator.vibrate(50)
@@ -76,9 +74,9 @@ export default class StaticCollisions {
 				// }
 				
 			} else if ( message.data.type == "bottom" ) {
-				cam.position.set( cam.position.x, message.data.position[1]-4 +vrHeight, cam.position.z )
+				camPosition.set( camPosition.x, message.data.position[1]-4 +vrHeight, camPosition.z )
 				user.velocity.y *= -0.45
-			}
+			} 
 
 			user.velocity.x *= 0.98
 			user.velocity.z *= 0.98

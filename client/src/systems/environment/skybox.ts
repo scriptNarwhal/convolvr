@@ -2,10 +2,13 @@ import Convolvr from "../../world/world";
 import Component from "../../model/component";
 
 import * as THREE from 'three';
-import { Mesh, Material, Texture } from "three";
+import { Mesh, Material, Texture, Vector3 } from "three";
 import { SpaceConfig, Sky } from "../../model/space";
 import { System } from "..";
 import AssetSystem from "../core/assets";
+import Entity from "../../model/entity";
+import { GRID_SIZE } from "../../config";
+import avatar from "../../assets/entities/avatars/avatar";
 
 export default class SkyboxSystem implements System {
 
@@ -161,8 +164,17 @@ export default class SkyboxSystem implements System {
                 skyLight.position.set(camera.position.x, 2000 + camera.position.y, camera.position.z)
                 sunLight.position.set(camera.position.x - Math.sin(yaw) * 2001, 2800, camera.position.z - Math.cos(yaw) * 2001) // y  // +camera.position.y+ Math.sin(pitch)*801
                 //console.log(skyLight.position, sunLight.position)
-                //this.skyLight.shadow.camera.lookAt( skyLight )
+               
+                    
                 if (sunLight.castShadow) {
+                    const avatar = this.world.user.avatar as Entity;
+ 
+                    if (avatar && avatar.voxel) {
+                        const voxelCoords = [GRID_SIZE[0] * avatar.voxel[0], 0, GRID_SIZE[2] * avatar.voxel[2]];
+    
+                        sunLight.shadow.camera.lookAt( new Vector3(voxelCoords[0], 0, voxelCoords[2]));
+                        sunLight.shadow.camera.updateMatrix();
+                    }
                    // sunLight.shadow.camera.position.set(sunLight.position.x, 2800, sunLight.position.z)
                     //sunLight.shadow.camera.updateMatrix()
                 }

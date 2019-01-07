@@ -34,10 +34,6 @@ export default class Voxel {
     public fetching: boolean
 
     constructor(data: any, cell: number[], world: Convolvr) {
-        let visible:  boolean     = data.visible,
-            scene:    any = world.three.scene,
-            altitude: number      = 0
-
         this.coords = cell;
         this.voxels = data.voxels || [];
         this.bounds = data.bounds ? data.bounds : null;
@@ -45,8 +41,6 @@ export default class Voxel {
         this.meshes = [];
         this.world = world
         
-        altitude = data.altitude || 0
-
         if ( !! cell ) {
             data.cell = cell
         } else {

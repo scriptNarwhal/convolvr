@@ -168,12 +168,12 @@ export default class EntityTool extends Tool  {
               {}, 
               telemetry.voxel 
             ),
-          tooManyComponents = !!selected && selected.components.length >= 48,
-          pointingAtTerrain = !!selected && selected.componentsByAttr.terrain
+          tooManyComponents = !!selected && selected.components.length >= 48;
+          // pointingAtTerrain = !!selected && selected.componentsByAttr.terrain
   
       console.log( "( Entity Tool )", telemetry, params, entity )
 
-      if ( ! tooManyComponents || pointingAtTerrain ) {
+      if ( ! tooManyComponents ) {
         if ( 
           selected && selected.componentsByAttr &&
           !!!selected.componentsByAttr.miniature && 
