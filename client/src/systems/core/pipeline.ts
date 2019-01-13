@@ -67,13 +67,15 @@ export default class PipelineSystem implements System {
     };
 
     private emit(resource: PipelinedResource) {
+        const args = resource.args;
+        
        switch (resource.type) {
             case PipelinedResourceType.Entity:
-                resource.entity.initEntity(resource.args[0], resource.args[1], resource.args[2]);
+                resource.entity.initEntity(args[0], args[1], args[2], args[3], args[4]);
                 break;
             case PipelinedResourceType.Component:
             case PipelinedResourceType.MergedComponents:
-                const args = resource.args;
+                
                 resource.entity.initSubComponent(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
                 break;
             case PipelinedResourceType.CreateEntityMesh:

@@ -162,7 +162,7 @@ export default class Component {
 
     this.lastFace = 0
         
-    while ( c < ncomps ) {
+    while ( c < ncomps ) { 
         comp = new Component( components[ c ], entity, systems, { mobile, path: this.path.concat([c]), index: c }, this ) // use simpler shading for mobile gpus
 
         // if ( comp.attrs.noRaycast === true )
@@ -170,7 +170,7 @@ export default class Component {
       
         compMesh = comp.mesh
 
-        if ( comp.attrs.geometry ) { // this keeps happening.. arrays are geometrically filling up too quickly
+        if ( comp.attrs.geometry ) { 
           faces = compMesh.geometry.faces
           face = faces.length-1
           toFace = this.lastFace + face

@@ -136,10 +136,8 @@ export default class Entity {
             if (this.voxel[1] != 1) {
                 const newCoords = this.getVoxelCoords(position);
                 if (newCoords[0] != this.voxel[0] || newCoords[2] != this.voxel[2] || newCoords[1] != this.voxel[1]) {
-                    console.log("newCoords", newCoords, this.oldCoords);
                     this.oldCoords = [...this.voxel];
                     this.voxel = [...newCoords];
-                    console.log("newCoords", newCoords, this.oldCoords);
                 }
             }
 
@@ -204,11 +202,12 @@ export default class Entity {
         if (systems.testPerformance()) {
             return this.initEntity(world, systems, mount, config, callback);
         } else {
-            return systems.pipeline.enqueue({
+            systems.pipeline.enqueue({
                 type: PipelinedResourceType.Entity,
                 entity: this,
                 args: [world, systems, mount, config, callback]
             } as PipelinedResource);
+            return this;
         }
     }
 
@@ -345,7 +344,7 @@ export default class Entity {
                 isMerged = component && component.attrs.geometry && component.attrs.geometry.merge;
 
             if (enoughTime) {
-                s = this.initSubComponent(c, s, component, systems, mobile, compRadius, materials, base, nonMerged);
+                s += this.initSubComponent(c, s, component, systems, mobile, compRadius, materials, base, nonMerged);
             } else {
                 systems.pipeline.enqueue({
                     type: isMerged ? PipelinedResourceType.MergedComponents : PipelinedResourceType.Component,

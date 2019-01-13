@@ -84,12 +84,12 @@ scWorker.update = ( ) => {
 					const firstEnt = voxel.entities[0];
 
 					if (firstEnt && firstEnt.components.length > 1) {
-						if ( position[1] > yPos - 22 + vrHeight  && position[1] < 14.65+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
+						if ( position[1] > yPos - 22 + vrHeight && position[1] < 15.65+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
 							collision = true;
-							scWorker.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + (1.4+yPos) + ',' + voxel.position[2] + '] }}');
+							scWorker.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + (2.4+yPos) + ',' + voxel.position[2] + '] }}');
 						}
 					} else {
-						if ( position[1] > yPos - 22 + vrHeight  && position[1] < 13.25+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
+						if ( position[1] > yPos - 22 + vrHeight && position[1] < 13.25+yPos + (vrHeight != 0 ? vrHeight+0.25 : 0) ) {
 							collision = true;
 							scWorker.postMessage('{"command": "platform collision", "data":{"type":"top", "position":[' + voxel.position[0] + ',' + yPos + ',' + voxel.position[2] + '] }}');
 						}
@@ -130,7 +130,9 @@ scWorker.checkStaticCollisions = ( voxel: any, position: number[] ) => {
 			ent.position[2] - entRadius/2.0], (entRadius * 1.6 || 3) + 2.5
 		)) {
 
-			for (const entComp of ent.components) {
+			for (const entCompIndex in ent.components) {
+				const entComp = ent.components[entCompIndex];
+				
 				let boundingRadius = entComp.boundingRadius * 1.2 ||
 					entComp.attrs.geometry && entComp.attrs.geometry.size 
 					? Math.max(entComp.attrs.geometry.size[0], entComp.attrs.geometry.size[2]) * 1.2

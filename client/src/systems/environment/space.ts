@@ -124,13 +124,12 @@ export default class SpaceSystem {
             position: [0,0,0],
             quaternion: [0,0,0]
           }] as DBComponent[], [0, yPosition, 0], [0,0,0,1], GLOBAL_SPACE)
-
+         
         distantTerrain.init(world.three.scene, { noVoxel: true }, (terrainEnt: Entity) => {
-          console.warn("callback to distantTerrain.init", terrainEnt);
           SpaceSystem.mesh = terrainEnt.mesh
           terrainEnt.mesh.rotation.x = -Math.PI/2
           terrainEnt.mesh.updateMatrix()
-        })
+        });
         this.distantTerrain = distantTerrain
       }
   }

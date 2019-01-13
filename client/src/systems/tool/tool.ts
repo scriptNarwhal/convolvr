@@ -33,10 +33,9 @@ export default class ToolSystem {
         }
 
         if ( attr.panels )
-            attr.panels.map( ( newPanel: any, p: number) => { console.info("init multiple panels", newPanel);
+            attr.panels.map( ( newPanel: any, p: number) => {
                 contentProps = newPanel && newPanel.content ? newPanel.content.attrs : {}
-                let panelEnt = toolSystem.initPanelUIEntity( newPanel, contentProps )
-                console.info("panel ent ", panelEnt)
+                let panelEnt = toolSystem.initPanelUIEntity( newPanel, contentProps );
                 panels.push( panelEnt )
                 toolSystem.panels.push( panelEnt )
             })
@@ -150,20 +149,21 @@ export default class ToolSystem {
         let userPosition = [userPos[0], userPos[ 1 ] + 3, userPos[2]],
             mesh = toolPanel.mesh
 
-        toolPanel.update(userPosition)
-        const span = ( index) * (2 /9 * Math.PI);
-        // mesh.rotation.y = this.world.three.camera.rotation.y - span * (index/length)
-        
-        
-        mesh.rotation.y = (this.world.three.camera.rotation.y - Math.PI / 8);
+        if (mesh) {
+            toolPanel.update(userPosition)
+            const span = ( index) * (2 /9 * Math.PI);
+            // mesh.rotation.y = this.world.three.camera.rotation.y - span * (index/length)
+            
+            
+            mesh.rotation.y = (this.world.three.camera.rotation.y - Math.PI / 8);
 
-        mesh.translateZ( -4 )
-        mesh.translateX( 1.25 + index * 3.2 )
-        
-        // mesh.translateZ( -2) //Math.cos(span * (index/length))/5)
-        // mesh.translateX(2+index*3) //Math.sin(span * (index/length))*4.0 )
-        mesh.updateMatrix()
-         
+            mesh.translateZ( -4 )
+            mesh.translateX( 1.25 + index * 3.2 )
+            
+            // mesh.translateZ( -2) //Math.cos(span * (index/length))/5)
+            // mesh.translateX(2+index*3) //Math.sin(span * (index/length))*4.0 )
+            mesh.updateMatrix()
+        }
     }
 
     private equip (component: Component, hand: number ) { // refactor for panels[]

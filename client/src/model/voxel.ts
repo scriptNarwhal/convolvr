@@ -81,7 +81,6 @@ export default class Voxel {
         this.fetching = true
         axios.get(`${API_SERVER}/api/voxels/${worldName}/${coords.join("x")}`)
         .then((response: any) => {
-            let physicsVoxels = []
             typeof response.data.map == 'function' && response.data.map((c: any) => {
                 v.setData(c)
                 v.loadDistantEntities()

@@ -156,8 +156,8 @@ export default class EntityTool extends Tool  {
           systems = this.world.systems,
           cursorSystem = systems.cursor,
           assetSystem = systems.assets,
-          position = telemetry.position,
-          quat = telemetry.quaternion,
+          // position = telemetry.position,
+          // quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
           user = this.world.user,
           entity =  params.entity ? 
