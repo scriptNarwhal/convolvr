@@ -275,7 +275,7 @@ export default class Convolvr {
 	  avatar.init( this.three.scene )
 	  this.user.useAvatar( avatar );
 	  this.initUserInput();
-      this.user.toolbox = world.systems.toolbox
+      this.user.toolbox = world.systems.byName.toolbox
       toolMenu = this.systems.byName.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) as Entity // method for spawning built in entities
       this.user.hud = toolMenu
       toolMenu.init( this.three.scene, {}, (menu: Entity) => { 

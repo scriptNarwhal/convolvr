@@ -4,14 +4,16 @@ import Entity, { DBEntity } from '../../../model/entity'
 import { FactoryType, FactoryAttributeType } from '../../../model/attribute';
 import { AnyObject } from '../../../util';
 import AssetSystem from '../assets';
+import LayoutSystem from '../../ui/layout';
 
 export default class FactoryProviderSystem {
     
     private world: Convolvr
 
-    dependencies = [["assets"]]
+    dependencies = [["assets"], ["layout"]]
     private assets: AssetSystem
-
+    private layout: LayoutSystem
+    
     constructor(world: Convolvr) {
 
         this.world = world
@@ -162,7 +164,6 @@ export default class FactoryProviderSystem {
     private addComponent(component: Component, factoryItem: any, assetType: FactoryType, assetCategory: FactoryAttributeType, preset: any, x: number, y: number, i: number, gridSize: number, vOffset: number ) {
         let addTo:   DBComponent[] = null,
             layout:  any         = {},
-            systems: any         = this.world.systems,
             pos:     Array<number> = [ -gridSize / 6 + gridSize * (x-1), vOffset + gridSize * y, 0.120 ]
         // if (assetType === "file") {
         //     console.warn("its happening");
@@ -171,7 +172,7 @@ export default class FactoryProviderSystem {
         if ( component.attrs.layout ) {
             pos = [ 0, vOffset, 0.1 ]
             layout = component.attrs.layout
-            pos = systems.layout.useLayout( layout.type, component, pos, i, layout.axis, layout.columns || 3, layout.gridSize || gridSize, layout.isometric )
+            pos = this.layout.useLayout( layout.type, component, pos, i, layout.axis, layout.columns || 3, layout.gridSize || gridSize, layout.isometric )
         }
 
         if ( !!component.state.tool ) {

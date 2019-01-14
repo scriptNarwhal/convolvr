@@ -636,8 +636,8 @@ export default class Entity {
             };
         }
         
-        systems.staticCollisions.worker.postMessage(JSON.stringify(message));
-        //systems.oimo.worker.postMessage( message )
+        systems.byName.staticCollisions.worker.postMessage(JSON.stringify(message));
+        //systems.byName.oimo.worker.postMessage( message )
     }
 
     public getClosestComponent(position: Vector3, recursive = true) {

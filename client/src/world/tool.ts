@@ -16,8 +16,8 @@ export default class Tool {
       this.toolbox = toolbox
     }
 
-    initMesh () {
-      this.entity.init((window as any).three.scene)
+    initMesh (callback: Function) {
+      this.entity.init((window as any).three.scene, {}, callback);
       this.mesh = this.entity.mesh
       return this.mesh
     }
@@ -27,14 +27,17 @@ export default class Tool {
           toolMesh = null
 
       if ( this.mesh == null ) {
-        toolMesh = this.initMesh()
+        toolMesh = this.initMesh(()=>{
+          component = this.entity.componentsByAttr.tool[0];
+          component.state.tool.equip( hand );
+        })
       } else {
-        toolMesh = this.mesh
-        toolMesh.visible = true
+        toolMesh = this.mesh;
+        toolMesh.visible = true; 
+        component = this.entity.componentsByAttr.tool[0];
+        component.state.tool.equip( hand );
       }
 
-      component = this.entity.componentsByAttr.tool[0]
-      component.state.tool.equip( hand )
     }
 
     preview( cursor: any ) {

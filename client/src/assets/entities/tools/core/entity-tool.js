@@ -120,7 +120,7 @@ export default class EntityTool extends Tool  {
                         }
                       }
                     }
-                  },
+                  }
                   // {
                   //   title: "My Entities",
                   //   color: 0x07ff00,
@@ -154,8 +154,8 @@ export default class EntityTool extends Tool  {
       let cursor = telemetry.cursor,
           cursorState = cursor.state.cursor || {},
           systems = this.world.systems,
-          cursorSystem = systems.cursor,
-          assetSystem = systems.assets,
+          cursorSystem = systems.byName.cursor,
+          assetSystem = systems.byName.assets,
           // position = telemetry.position,
           // quat = telemetry.quaternion,
           selected = !!cursorState.entity ? cursorState.entity : false,
