@@ -52,7 +52,7 @@ export default function app (state: any = {
         const world = (window as any).three.world as Convolvr;
         
         world.mode = !state.vrMode ? "stereo" : "3d";
-        world.systems.pipeline.setIdealTime(world.mode == "stereo" ? 7 : 10);
+        world.systems.byName.pipeline.setIdealTime(world.mode == "stereo" ? 7 : 10);
         
         return { ... state,
             vrMode: !state.vrMode

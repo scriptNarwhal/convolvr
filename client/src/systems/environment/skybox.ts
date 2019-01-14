@@ -9,14 +9,16 @@ import AssetSystem from "../core/assets";
 import Entity from "../../model/entity";
 import { GRID_SIZE } from "../../config";
 import avatar from "../../assets/entities/avatars/avatar";
+import MaterialSystem from "../core/material";
 
 export default class SkyboxSystem implements System {
 
     public live = true;
     public world: Convolvr
-    public dependencies = [["assets"]]
+    public dependencies = [["assets"], ["material"]]
 
     private assets: AssetSystem
+    private material: MaterialSystem
 
     constructor(world: Convolvr) {
         this.world = world
@@ -97,16 +99,15 @@ export default class SkyboxSystem implements System {
     }
 
     loadShaderSky(config: SpaceConfig, oldConfig: any, mesh: Mesh, callback: Function) {
-        let systems = this.world.systems,
-            starMatProp = systems.assets.getMaterialProp("stars"),
-            starSkyTexture = systems.material.procedural.generateTexture(starMatProp),
+        let starMatProp = this.assets.getMaterialProp("stars"),
+            starSkyTexture = this.material.procedural.generateTexture(starMatProp),
             world = this.world
 
         const shaderURLs = world.config.sky['vertexShader'] 
             ? [world.config.sky.vertexShader, world.config.sky.fragmentShader] 
             : ["/data/shaders/sky-vertex.glsl", "/data/shaders/sky-fragment.glsl"];
 
-        systems.assets.loadShaders(shaderURLs[0], shaderURLs[1], (vert: any, frag: any) => {
+        this.assets.loadShaders(shaderURLs[0], shaderURLs[1], (vert: any, frag: any) => {
             let skyMaterial = new THREE.ShaderMaterial({
                 side: 1,
                 fog: false,

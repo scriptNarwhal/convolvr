@@ -15,7 +15,7 @@ export default class RTCHandler {
         socket.on("rtc", (packet: any) => {
 
             let signal = JSON.parse( packet ),
-                webrtc: WebRTCSystem = this.world.systems.webrtc,
+                webrtc: WebRTCSystem = this.world.systems.byName.webrtc,
 
             peerConn = (webrtc as any).peerConn
         

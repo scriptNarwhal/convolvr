@@ -62,7 +62,7 @@ export function listFiles(username: string, dir: string) {
         return axios
             .get(`${API_SERVER}/api/files/list/${username}${dir != null ? "?dir=" + dir : ""}`)
             .then((response: any) => {
-                (window as any).three.world.systems.assets.setUserFiles(response.data);
+                (window as any).three.world.systems.byName.assets.setUserFiles(response.data);
                 dispatch({
                     type: FILES_LIST_DONE,
                     data: response.data
@@ -87,7 +87,7 @@ export function listDirectories(username: string, dir: string) {
         return axios
             .get(`${API_SERVER}/api/directories/list/${username}${dir != null ? "?dir=" + dir : ""}`)
             .then((response: any) => {
-                (window as any).three.world.systems.assets.setUserDirectories(response.data);
+                (window as any).three.world.systems.byName.assets.setUserDirectories(response.data);
                 dispatch({
                     type: DIRECTORIES_LIST_DONE,
                     data: response.data

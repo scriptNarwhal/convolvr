@@ -1,11 +1,14 @@
 import {send} from '../../network/socket'
 import Convolvr from '../../world/world';
 import Component from '../../model/component';
+import { SystemDependency } from '..';
 //WebRTC boilerplate stuff based off of https://github.com/dimircea/WebRTC
 
 export default class WebRTCSystem {
 
-    private world: Convolvr
+    public world: Convolvr
+
+    dependencies = [] as SystemDependency[]
     private localVideo: any
     private remoteVideo: any
     private peerConn: any;

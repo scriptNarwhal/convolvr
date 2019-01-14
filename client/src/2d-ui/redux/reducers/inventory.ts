@@ -79,7 +79,7 @@ export default function places (state: any = {
     case INVENTORY_FETCH_DONE:
       switch( action.category ) {
           case "Entities":
-            (window as any).three.world.systems.assets.addUserEntities(action.data)
+            (window as any).three.world.systems.byName.assets.addUserEntities(action.data)
             return Object.assign({}, state, {
                 items: {
                     ...state.items,
@@ -88,7 +88,7 @@ export default function places (state: any = {
                 entitiesFetching: false
             })
           case "Components":
-            (window as any).three.world.systems.assets.addUserComponents(action.data)
+            (window as any).three.world.systems.byName.assets.addUserComponents(action.data)
             return Object.assign({}, state, {
                 items: {
                     ...state.items,

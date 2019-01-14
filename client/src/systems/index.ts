@@ -84,100 +84,106 @@ import { AttributeName } from "../model/attribute";
 //  * **/
 export type SystemDependency = string[];
 
-export interface System {
-    init: (component: Component) => AnyObject;
+export interface SystemClient {
+    dependencies: SystemDependency[]; 
     postInject?: () => void;
+} 
+
+export interface System extends SystemClient {
+    init: (component: Component) => AnyObject;
     tick?: (delta: number, time: number) => void;
-    dependencies?: SystemDependency[];
     world: Convolvr;
 }
 
 import * as THREE from "three";
 import { AnyObject } from "../util";
 import { Mesh } from "three";
+
+export interface AllServices { 
+    ability: AbilitySystem;
+    activate: ActivateSystem;
+    audio: AudioSystem;
+    assets: AssetSystem;
+    browser: BrowserSystem;
+    camera: CameraSystem;
+    chat: ChatSystem;
+    control: ControlSystem;
+    conveyor: ConveyorSystem;
+    cursor: CursorSystem;
+    datgui: DatGUIVRPluginSystem;
+    destructable: DestructableSystem;
+    display: DisplaySystem;
+    virtualDevice: VirtualDeviceSystem;
+    door: DoorSystem;
+    drawing: DrawingSystem;
+    emote: EmoteSystem;
+    faction: FactionSystem;
+    factory: FactorySystem;
+    factoryProvider: FactoryProviderSystem;
+    fbx: FBXPluginSystem;
+    file: FileSystem;
+    floor: FloorSystem;
+    geometry: GeometrySystem;
+    grab: GrabSystem;
+    graph: GraphSystem;
+    hand: HandSystem;
+    head: HeadSystem;
+    hover: HoverSystem;
+    importData: ImportDataSystem;
+    input: InputSystem;
+    light: LightSystem;
+    layout: LayoutSystem;
+    lookAway: LookAwaySystem;
+    magic: MagicSystem;
+    material: MaterialSystem;
+    media: MediaSystem;
+    miniature: MiniatureSystem;
+    npc: NPCSystem;
+    obj: ObjPluginSystem;
+    oimo: OimoPluginSystem;
+    objective: ObjectiveSystem;
+    particles: ParticleSystem;
+    pipeline: PipelineSystem;
+    propulsion: PropulsionSystem;
+    portal: PortalSystem;
+    projectile: ProjectileSystem;
+    quest: QuestSystem;
+    rest: RESTSystem;
+    rpgRace: RPGRaceSystem;
+    signal: SignalSystem;
+    space: SpaceSystem;
+    skill: SkillSystem;
+    skybox: SkyboxSystem;
+    script: ScriptSystem;
+    screenshot: ScreenshotSystem;
+    socialMedia: SocialMediaSystem;
+    seat: SeatSystem;
+    speech: SpeechSystem;
+    state: StateSystem;
+    stat: StatSystem;
+    staticCollisions: StaticCollisions;
+    terrain: TerrainSystem;
+    text: TextSystem;
+    template: TemplateSystem;
+    toolUI: ToolUISystem;
+    tool: ToolSystem;
+    toolbox: ToolboxSystem;
+    user: UserSystem;
+    vehicle: VehicleSystem;
+    video: VideoSystem;
+    virtualMachine: VirtualMachineSystem;
+    wall: WallSystem;
+    webrtc: WebRTCSystem;
+    weapon: WeaponSystem;
+}
+
 export default class Systems {
     public world: Convolvr;
     public liveSystems: Array<any>;
-    public systems: any;
+    public byName: AllServices;
     public deferred: any;
 
     public time = 0;
-
-    public ability: AbilitySystem;
-    public activate: ActivateSystem;
-    public audio: AudioSystem;
-    public assets: AssetSystem;
-    public browser: BrowserSystem;
-    public camera: CameraSystem;
-    public chat: ChatSystem;
-    public control: ControlSystem;
-    public conveyor: ConveyorSystem;
-    public cursor: CursorSystem;
-    public datgui: DatGUIVRPluginSystem;
-    public destructable: DestructableSystem;
-    public display: DisplaySystem;
-    public virtualDevice: VirtualDeviceSystem;
-    public door: DoorSystem;
-    public drawing: DrawingSystem;
-    public emote: EmoteSystem;
-    public faction: FactionSystem;
-    public factory: FactorySystem;
-    public factoryProvider: FactoryProviderSystem;
-    public fbx: FBXPluginSystem;
-    public file: FileSystem;
-    public floor: FloorSystem;
-    public geometry: GeometrySystem;
-    public grab: GrabSystem;
-    public graph: GraphSystem;
-    public hand: HandSystem;
-    public head: HeadSystem;
-    public hover: HoverSystem;
-    public importData: ImportDataSystem;
-    public input: InputSystem;
-    public light: LightSystem;
-    public layout: LayoutSystem;
-    public lookAway: LookAwaySystem;
-    public magic: MagicSystem;
-    public material: MaterialSystem;
-    public media: MediaSystem;
-    public miniature: MiniatureSystem;
-    public npc: NPCSystem;
-    public obj: ObjPluginSystem;
-    public oimo: OimoPluginSystem;
-    public objective: ObjectiveSystem;
-    public particles: ParticleSystem;
-    public pipeline: PipelineSystem;
-    public propulsion: PropulsionSystem;
-    public portal: PortalSystem;
-    public projectile: ProjectileSystem;
-    public quest: QuestSystem;
-    public rest: RESTSystem;
-    public rpgRace: RPGRaceSystem;
-    public signal: SignalSystem;
-    public space: SpaceSystem;
-    public skill: SkillSystem;
-    public skybox: SkyboxSystem;
-    public script: ScriptSystem;
-    public screenshot: ScreenshotSystem;
-    public socialMedia: SocialMediaSystem;
-    public seat: SeatSystem;
-    public speech: SpeechSystem;
-    public state: StateSystem;
-    public stat: StatSystem;
-    public staticCollisions: StaticCollisions;
-    public terrain: TerrainSystem;
-    public text: TextSystem;
-    public template: TemplateSystem;
-    public toolUI: ToolUISystem;
-    public tool: ToolSystem;
-    public toolbox: ToolboxSystem;
-    public user: UserSystem;
-    public vehicle: VehicleSystem;
-    public video: VideoSystem;
-    public virtualMachine: VirtualMachineSystem;
-    public wall: WallSystem;
-    public webrtc: WebRTCSystem;
-    public weapon: WeaponSystem;
 
     // /**
     //  *  Initializes all systems before components can be registered
@@ -185,7 +191,7 @@ export default class Systems {
     constructor(world: Convolvr) {
         world.systems = this;
 
-        let systems = {
+        let systems: AllServices = {
             ability: new AbilitySystem(world), // TODO: plan out more
             activate: new ActivateSystem(world),
             audio: new AudioSystem(world),
@@ -262,21 +268,21 @@ export default class Systems {
             webrtc: new WebRTCSystem(world), //TODO: test
             weapon: new WeaponSystem(world) //TODO: finish
         };
-        this.systems = systems;
+        this.byName = systems;
         this.liveSystems = [];
-        let systemIndex = this as any;
+        let systemIndex = this.byName;
         const systemNames = Object.keys(systems);
 
         for (let s = 0; s < 2; s++) {
             for (const system of systemNames) {
                 if (s == 0) {
                     // first pass
-                    systemIndex[system] = (systems as any)[system];
-                    if (typeof systemIndex[system].tick == "function") {
-                        systemIndex.liveSystems.push(systemIndex[system]);
+                    // systemIndex[system] = (systems as any)[system];
+                    if (typeof ((systemIndex as any)[system] as System).tick == "function") {
+                        this.liveSystems.push((this.byName as any)[system]);
                     }
                 } else {
-                    this.injectDependencies(systemIndex[system]);
+                    this.injectDependencies((systemIndex as any)[system]);
                 }
             }
         }
@@ -299,28 +305,29 @@ export default class Systems {
         };
     }
 
-    // /**
-    //  *  Reads component attrs, registers with systems and populates state with the resulting data
-    //  **/
-    registerComponent(component: Component): Mesh {
+    /**
+     *  Reads component attrs, registers with systems and populates state with the resulting data
+     **/
+    registerComponent = (component: Component): Mesh  => {
         let componentsByAttr = component.entity.componentsByAttr,
             attrs = component.attrs,
             attrKeys = Object.keys(attrs) as AttributeName[],
             state = component.state,
             deferredSystems: any[] = [],
-            mesh = null;
+            mesh = null,
+            byName = this.byName;
 
         let attr: AttributeName;
 
         for (let a = attrKeys.length; a >= 0; a--) {
             const attr = attrKeys[a];
 
-            if ((this as any)[attr] != null) {
+            if ((byName as any)[attr] != null) {
                 if (!!this.deferred[attr]) {
                     /* add other systems here */
                     deferredSystems.push(attr);
                 } else {
-                    state[attr] = (this[attr] as System).init(component);
+                    state[attr] = (byName[attr] as System).init(component);
                 }
 
                 if (!!!componentsByAttr[attr]) {
@@ -340,7 +347,7 @@ export default class Systems {
         component.mesh = mesh;
 
         for (const attr of deferredSystems) {
-            state[attr] = ((this as any)[attr] as any).init(component);
+            state[attr] = ((byName as any)[attr] as any).init(component);
         }
 
         return mesh;
@@ -354,8 +361,8 @@ export default class Systems {
      * @param {AnyObject} data
      */
     extendComponent(component: Component, system: AttributeName, data = {}) {
-        component.attrs[system] = data;
-        component.state[system] = ((this as any)[system] as System).init(component);
+        (component.attrs as any)[system ] = data;
+        component.state[system] = ((this.byName as any)[system] as System).init(component);
     }
 
     injectSubSystemDependencies(subSystems: { [key: string]: System }): void {
@@ -364,14 +371,17 @@ export default class Systems {
         }
     }
 
-    private injectDependencies(system: System) {
+    /**
+     * 
+     */
+    public injectDependencies = (system: SystemClient) => {
         if (!system.dependencies) {
             system.postInject && system.postInject.call(system);
             return;
         }
 
         const deps = system.dependencies as SystemDependency[],
-            systems = system.world.systems;
+            systems = this.byName;
 
         for (let d = deps.length - 1; d >= 0; d--) {
             const dep = deps[d];
@@ -402,9 +412,10 @@ export default class Systems {
             component.bindings.push(binding);
         }
     }
-    // /**
-    //  *  Fires once per frame, passing the delta and total time passed
-    //  **/
+
+    /**
+     *  Fires once per frame, passing the delta and total time passed
+    **/
     public tick(delta: number, time: number): void {
         let systems = this.liveSystems,
             ln = systems.length;
@@ -421,4 +432,9 @@ export default class Systems {
     public testPerformance() {
         return Date.now() - this.time < 8;
     }
+
+    // public setIdealTime(time: number) {
+    //     this.idealTime = time;
+    //     this.pipeline.setIdealTime(time);
+    // }
 }

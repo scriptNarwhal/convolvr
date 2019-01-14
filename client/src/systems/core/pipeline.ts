@@ -1,4 +1,4 @@
-import Systems, { System } from "..";
+import Systems, { System, SystemDependency } from "..";
 import { AnyObject } from "../../util";
 import Convolvr from "../../world/world";
 import Component from "../../model/component";
@@ -32,6 +32,7 @@ export type PipelinedResource = {
 export default class PipelineSystem implements System {
     world: Convolvr;
     systems: Systems;
+    dependencies = [] as SystemDependency[]
 
     private queue: PipelinedResource[] = [] as PipelinedResource[];
     private idealTime = 10;

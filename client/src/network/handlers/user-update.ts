@@ -5,19 +5,27 @@ import Avatar from '../../assets/entities/avatars/avatar'
 import Entity from '../../model/entity';
 import Voxel from '../../model/voxel';
 import Convolvr from '../../world/world';
+import { SystemDependency, SystemClient } from '../../systems';
+import AssetSystem from '../../systems/core/assets';
+import SpaceSystem from '../../systems/environment/space';
 
-export default class UserUpdateHandler {
-
+export default class UserUpdateHandler implements SystemClient {
     world: Convolvr
     handlers: any
 
+    dependencies = [["space"], ["assets"]] as SystemDependency[]
+    private assets: AssetSystem
+    private space: SpaceSystem
+
     constructor( handlers: any, world: Convolvr, socket: any ) {
         this.world = world
+        this.world.systems.injectDependencies(this);
         this.handlers = handlers;
+
         socket.on("update", (packet: any) => {
             let data = JSON.parse(packet.data),
                 world = this.world,
-                voxels = (world.systems.space as any).voxels,
+                voxels = (world.systems.byName.space as any).voxels,
                 coords = world.getVoxel(data.position),
                 cameraCoords = world.getVoxel(),
                 // closeToCamera = Math.abs(cameraCoords[0] - coords[0]) < 3 && Math.abs(cameraCoords[2] - coords[2]) < 3,
@@ -71,30 +79,30 @@ export default class UserUpdateHandler {
             this.addAvatarToVoxel(userFrame, userVoxel, coords, data )
         } else {
             console.log("entity is not loaded")
-            if ( !!!this.world.systems.assets.loadingItemsById.entities[ userFrame.avatar ] ) {
-                this.world.systems.assets.loadInventoryEntity(userFrame.username, userFrame.avatar).then(()=>{
+            if ( !!!this.assets.loadingItemsById.entities[ userFrame.avatar ] ) {
+                this.assets.loadInventoryEntity(userFrame.username, userFrame.avatar).then(()=>{
                     console.info("loadPlayerAvatar loadInventory callback")
-                   // this.world.systems.assets.userEntities
+                   // this.world.systems.byName.assets.userEntities
                     this.addAvatarToVoxel(userFrame, userVoxel, coords, data )
-                })
+                });
             }
         }
     }
 
     addAvatarToVoxel(userFrame: any, userVoxel: Voxel, coords: number[], data: any ) {
-        let world = this.world,
-            avatar = world.systems.assets.makeEntity(userFrame.avatar, true, 
+        let avatar = this.assets.makeEntity(userFrame.avatar, true, 
                 { wholeBody: true, userName: userFrame.username, id: userFrame.id }, 
             coords) as Entity,
-            user = (world.users as any)["user" + userFrame.id] = {
+            user = (this.world.users as any)["user" + userFrame.id] = {
                 id: userFrame.id,
+                name: userFrame.username,
                 avatar,
                 mesh: null as any
             }
 
         if (userVoxel == null) {
             console.warn("[Remote] Voxel not loaded", coords)
-            world.systems.space.loadVoxel(coords, (loadedVoxel: Voxel) => { this.initPlayerAvatar(avatar, user, data) })
+            this.space.loadVoxel(coords, (loadedVoxel: Voxel) => { this.initPlayerAvatar(avatar, user, data) })
         } else if (userVoxel.loaded == false && userVoxel.fetching == false) {
             console.info("[Remote] Voxel being loaded...", coords)
             userVoxel.fetchData((loadedVoxel: Voxel) => { this.initPlayerAvatar(avatar, user, data) })
@@ -119,8 +127,6 @@ export default class UserUpdateHandler {
     }
 
     isEntityLoaded(entityName: string) {
-        let assets = this.world.systems.assets
-        
-        return assets.isEntityLoaded( entityName )   
+        return this.assets.isEntityLoaded( entityName )   
     }
 }

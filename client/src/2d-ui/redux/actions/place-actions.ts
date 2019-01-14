@@ -31,7 +31,7 @@ export function fetchPlaces () {
      })
      return axios.get(API_SERVER+"/api/places")
         .then((res: any) => {
-            (window as any).three.world.systems.assets.setPlaces( res.data )
+            (window as any).three.world.systems.byName.assets.setPlaces( res.data )
             dispatch({
                 type: PLACES_FETCH_DONE,
                 places: res.data

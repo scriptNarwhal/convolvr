@@ -2,10 +2,13 @@
 import Convolvr from '../../world/world'
 import Component from '../../model/component'
 import { AttributeName } from '../../model/attribute';
+import { SystemDependency } from '..';
 
 export default class EmoteSystem {
 
     world: Convolvr
+
+    dependencies = [] as SystemDependency[]
 
     constructor ( world: Convolvr ) {
         this.world = world
@@ -102,7 +105,7 @@ export default class EmoteSystem {
         terrain: "",
         text: "🅰️",
         template: "",
-        time: "⏳",
+        pipeline: "⏳",
         toolUI: "🛠",
         tool: "🔨",
         toolbox: "🚥",

@@ -2,10 +2,11 @@ import axios from 'axios'
 import Component from '../../model/component.js';
 import Convolvr from '../../world/world'
 import { rest } from '../../model/attribute.js';
-import { System } from '../index.js';
+import { System, SystemDependency } from '../index.js';
 
 export default class RESTSystem implements System {
     world: Convolvr
+    dependencies = [] as SystemDependency[]
 
     constructor ( world: Convolvr ) {
         this.world = world

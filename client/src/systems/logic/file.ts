@@ -2,11 +2,13 @@ import axios from 'axios'
 import { API_SERVER } from '../../config'
 import Component from '../../model/component.js';
 import Convolvr from '../../world/world'
-import Systems from '..';
+import Systems, { SystemDependency } from '..';
 
 export default class FileSystem {
 
-    world: Convolvr
+    public world: Convolvr
+
+    dependencies = [] as SystemDependency[]
     systems: Systems
 
     constructor ( world: Convolvr ) {

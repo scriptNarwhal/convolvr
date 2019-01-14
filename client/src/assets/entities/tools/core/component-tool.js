@@ -8,7 +8,7 @@ export default class ComponentTool extends Tool {
 
     super( data, world, toolbox )
 
-      let assets = world.systems.assets,
+      let assets = world.systems.byName.assets,
           components = assets.componentsByName,
           allOptions = [],
           cameraPos = world.three.camera.position,
@@ -45,7 +45,7 @@ export default class ComponentTool extends Tool {
                       attrs: {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "component", // component, entity, attr
-                          dataSource: this.world.systems.assets.componentsByName,
+                          dataSource: this.world.systems.byName.assets.componentsByName,
                           filter: { 
                             tags: []
                           }
@@ -64,7 +64,7 @@ export default class ComponentTool extends Tool {
                       attrs: {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "component", // component, entity, attr
-                          dataSource: this.world.systems.assets.componentsByName,
+                          dataSource: this.world.systems.byName.assets.componentsByName,
                           filter: {
                             tags: ["ecs-literal"]
                           }
@@ -83,7 +83,7 @@ export default class ComponentTool extends Tool {
                       attrs: {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "component", // component, entity, attr
-                          dataSource: this.world.systems.assets.componentsByName,
+                          dataSource: this.world.systems.byName.assets.componentsByName,
                           filter: {
                             tags: ["ecs-object"]
                           }
@@ -102,7 +102,7 @@ export default class ComponentTool extends Tool {
                       attrs: {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "component", // component, entity, attr
-                          dataSource: this.world.systems.assets.componentsByName,
+                          dataSource: this.world.systems.byName.assets.componentsByName,
                           filter: {
                             tags: ["information-hardware"]
                           }
@@ -122,7 +122,7 @@ export default class ComponentTool extends Tool {
                   //     attrs: {
                   //       factoryProvider: { // generates factory for each item in dataSource
                   //         type: "component", // component, entity, attr
-                  //         dataSource: this.world.systems.assets.userComponents
+                  //         dataSource: this.world.systems.byName.assets.userComponents
                   //       },
                   //       layout: {
                   //         type: "grid",

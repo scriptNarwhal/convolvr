@@ -1,12 +1,15 @@
 import Convolvr from "../../world/world";
 import Component from "../../model/component";
 import * as THREE from 'three';
-import { System } from '../index'
+import { System, SystemDependency } from '../index'
 export default class ObjPluginSystem implements System { // allows use of imported .obj meshes
 
     public world: Convolvr
     public loader: any
 
+    dependencies = [] as SystemDependency[]
+
+    
     constructor ( world: Convolvr ) {
         this.world = world
         this.loader = null

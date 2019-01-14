@@ -13,12 +13,17 @@ import Convolvr from '../../world/world';
 import { navigateTo } from '../../2d-ui/redux/actions/app-actions';
 import { fetchSpaces } from '../../2d-ui/redux/actions/world-actions';
 import { SpaceConfig } from '../../model/space';
+import { SystemDependency } from '..';
+import AssetSystem from '../core/assets';
 
 export default class SpaceSystem {
 
   private world: Convolvr
   config: any
   live: boolean
+  dependencies = [["assets"], ["staticCollisions"]]
+  private assets: AssetSystem
+  private staticCollisions: StaticCollisions
 
   public mesh: any
   public phase: number
@@ -39,6 +44,7 @@ export default class SpaceSystem {
   public voxelList: any[]
   public voxels: { [coords: string]: Voxel }
   public dispatchAction: Function
+
 
     constructor (world: Convolvr) {
       this.world            = world
@@ -70,8 +76,8 @@ export default class SpaceSystem {
       this.voxels[ GLOBAL_SPACE.join(".") ] = globalVoxel
       this.dispatchAction = this.world.store ? this.world.store.dispatch : () => {};
       this.dispatchAction(fetchSpaces((spaces: SpaceConfig[])=>{
-        console.log("fetch spaces ", spaces)
-        this.world.systems.assets.setSpaces(spaces);
+        console.log("fetch spaces ", spaces);
+        (this.assets || this.world.systems.byName.assets).setSpaces(spaces);
       }));
     }
 
@@ -88,9 +94,9 @@ export default class SpaceSystem {
     public initTerrain(config: any) {
       let world = this.world,
           SpaceSystem = this,
-          materials = world.systems.material
+          materials = world.systems.byName.material
 
-      this.StaticCollisions = world.systems.staticCollisions
+      this.StaticCollisions = world.systems.byName.staticCollisions
       this.config = config
 
       let type           = this.config.type,
@@ -116,7 +122,7 @@ export default class SpaceSystem {
               },
               material: {
                 color: config.color,
-                envMap: world.systems.assets.envMaps.default,
+                envMap: (this.assets || world.systems.byName.assets).envMaps.default,
                 shading: "physical"
               }
             },
@@ -313,7 +319,7 @@ export default class SpaceSystem {
 
       if (this.physicsVoxels.length > 0) { //console.log("physics voxels", physicsVoxels)
       
-        systems.staticCollisions.worker.postMessage(JSON.stringify({
+        this.staticCollisions.worker.postMessage(JSON.stringify({
               command: "add voxels",
               data: this.physicsVoxels
         }))

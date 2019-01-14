@@ -1,10 +1,12 @@
 import Convolvr from "../../world/world";
 import Component from "../../model/component";
-import { System } from "..";
+import { System, SystemDependency } from "..";
 
 export default class GrabSystem implements System { // respond to grab / drag events / register callbacks
     world: Convolvr
 
+    dependencies = [] as SystemDependency[]
+    
     constructor (world: Convolvr) {
         this.world = world
 

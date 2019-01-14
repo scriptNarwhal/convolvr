@@ -6,7 +6,8 @@ import {
     sendMessage
   } from '../../2d-ui/redux/actions/message-actions'
 import Component from '../../model/component';
-import { System } from '..';
+import { System, SystemDependency } from '..';
+import AssetSystem from '../core/assets';
 
 export default class ChatSystem implements System {
 
@@ -15,6 +16,9 @@ export default class ChatSystem implements System {
     componentsByUserName: any
     lastSender: string
     chatModal: Entity
+
+    dependencies = [["assets"]];
+    private assets: AssetSystem
 
     constructor (world: Convolvr) {
         this.world = world;
@@ -113,7 +117,7 @@ export default class ChatSystem implements System {
     }
 
     initChatModal() {
-        const chatModal = this.world.systems.assets.makeEntity("help-screen", true, {}, [0,1,0]) as Entity,
+        const chatModal = this.assets.makeEntity("help-screen", true, {}, [0,1,0]) as Entity,
             cPos = this.world.three.camera.position;
 
         chatModal.components[0].attrs.text.lines = ["Welcome"]

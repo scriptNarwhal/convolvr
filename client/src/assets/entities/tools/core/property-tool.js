@@ -36,7 +36,7 @@ export default class PropertyTool extends Tool {
                       // factoryProvider: { // generates factory for each item in dataSource
                       //   type: "attr", // entity, attr
                       //   attrName: "assets",
-                      //   dataSource: this.world.systems.assets.attrs.assets
+                      //   dataSource: this.world.systems.byName.assets.attrs.assets
                       // },
                       // layout: {
                       //   type: "grid",

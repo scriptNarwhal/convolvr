@@ -41,7 +41,7 @@ export default class AttributeTool extends Tool {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "attr", // entity, component, attr
                           attrName: "structures",
-                          dataSource: this.world.systems.assets.attrs.systems
+                          dataSource: this.world.systems.byName.assets.attrs.systems
                         },
                         layout: {
                           type: "grid",
@@ -59,7 +59,7 @@ export default class AttributeTool extends Tool {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "attr", // entity, component, attr
                           attrName: "vehicles",
-                          dataSource: this.world.systems.assets.attrs.systems
+                          dataSource: this.world.systems.byName.assets.attrs.systems
                         },
                         layout: {
                           type: "grid",
@@ -77,7 +77,7 @@ export default class AttributeTool extends Tool {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "attr", // entity, component, attr
                           attrName: "media",
-                          dataSource: this.world.systems.assets.attrs.systems
+                          dataSource: this.world.systems.byName.assets.attrs.systems
                         },
                         layout: {
                           type: "grid",
@@ -95,7 +95,7 @@ export default class AttributeTool extends Tool {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "attr", // entity, component, attr
                           attrName: "interactivity",
-                          dataSource: this.world.systems.assets.attrs.systems
+                          dataSource: this.world.systems.byName.assets.attrs.systems
                         },
                         layout: {
                           type: "grid",

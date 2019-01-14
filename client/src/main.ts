@@ -33,9 +33,9 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
       pos:       any      = world.camera.position,
       coords:    number[] = world.getVoxel( pos ),
       voxelKey:  string   = coords.join("."),
-      altitude:  number   = systems.space.voxels[ voxelKey ].data.altitude;
+      altitude:  number   = systems.byName.space.voxels[ voxelKey ].data.altitude;
       
-  world.onUserLogin = (newUser: any) => {
+  world.onUserLogin = (newUser: User) => {
     let user = world.user;
     let worldDetails = detectSpaceDetailsFromURL();
     
@@ -43,12 +43,12 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
       ...user.data,
       ...newUser
     };
-    user.name = newUser.userName;
+    user.name = newUser.name;
     user.id = newUser.id;
     world.initUserAvatar(newUser, (avatar: Entity)=> {
       if (worldDetails[3] && worldDetails[3][1] <= 1) {
         console.warn("respawning camera");
-        pos.y = world.systems.space.voxels[coords.join(".")].data.altitude+3;
+        pos.y = world.systems.byName.space.voxels[coords.join(".")].data.altitude+3;
       }
     }); 
   };
@@ -60,7 +60,7 @@ loadingSpace = new Convolvr(socket, store, (world: Convolvr) => {
     world.initChatAndLoggedInUser( localStorage.getItem("username") != null );
   }, 400);
 
-  const dummy = world.systems.assets.makeEntity("tool-menu", true, {}, [0,1,1]) as Entity;
+  const dummy = world.systems.byName.assets.makeEntity("tool-menu", true, {}, [0,1,1]) as Entity;
 
   dummy.init(world.three.scene);
   dummy.update([0,40,0]);

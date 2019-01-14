@@ -5,6 +5,7 @@ import { dat } from 'datguivr'
 
 export default class DatGUIVRPluginSystem {
 
+    dependencies = []
 
     constructor ( world ) {
         this.world = world

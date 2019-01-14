@@ -23,7 +23,7 @@ export let animate = (world: Convolvr, last: number, cursorIndex: number) => {
 
         if (user && user.avatar && cursors) {
             user.avatar.update(cPos.toArray(), camera.quaternion.toArray(), false, false, false, { updateWorkers: false });
-            cursorIndex = world.systems.cursor.handleCursors(cursors, cursorIndex, hands, camera, world);
+            cursorIndex = world.systems.byName.cursor.handleCursors(cursors, cursorIndex, hands, camera, world);
         }
 
         world.sendUserData();
@@ -90,7 +90,7 @@ export let vrAnimate = (world: Convolvr, display: VRDisplay, time: number, oldPo
     user.mesh.updateMatrix();
     camera.position.set(cPos.x + vrSpacePos[0], cPos.y + vrSpacePos[1], cPos.z + vrSpacePos[2]);
 
-    cursorIndex = world.systems.cursor.handleCursors(cursors, cursorIndex, hands, camera, world);
+    cursorIndex = world.systems.byName.cursor.handleCursors(cursors, cursorIndex, hands, camera, world);
     world.sendUserData();
     world.systems.tick(delta, time);
     camera.updateMatrix();

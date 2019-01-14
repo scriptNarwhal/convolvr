@@ -27,7 +27,7 @@ export default class ToolActionHandler {
                 userHand = {};
 
             if (voxel == null || voxel.loaded == false) {
-                if (voxel) (world.systems.space as any).loadVoxel(coords);
+                if (voxel) (world.systems.byName.space as any).loadVoxel(coords);
 
                 console.warn("[Remote] Voxel not loaded", coords);
                 return;

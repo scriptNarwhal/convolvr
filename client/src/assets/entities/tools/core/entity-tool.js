@@ -6,7 +6,7 @@ export default class EntityTool extends Tool  {
 
   constructor ( data, world, toolbox ) {
     super(data, world, toolbox)
-    let assets = world.systems.assets,
+    let assets = world.systems.byName.assets,
         allEntities = assets.entitiesByName,
         allOptions = [],
         cameraPos = world.three.camera.position,
@@ -48,7 +48,7 @@ export default class EntityTool extends Tool  {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "entity", // component, attr
                           // attrName: "userEntities", // toggle to user's entities
-                          dataSource: this.world.systems.assets.entities,
+                          dataSource: this.world.systems.byName.assets.entities,
                           filter: {
                             tags: []
                           }
@@ -68,7 +68,7 @@ export default class EntityTool extends Tool  {
                       attrs: {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "entity", 
-                          dataSource: this.world.systems.assets.entities,
+                          dataSource: this.world.systems.byName.assets.entities,
                           filter: {
                             tags: ["ecs-expression"]
                           }
@@ -88,7 +88,7 @@ export default class EntityTool extends Tool  {
                       attrs: {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "entity", 
-                          dataSource: this.world.systems.assets.entities,
+                          dataSource: this.world.systems.byName.assets.entities,
                           filter: {
                             tags: ["ecs-statement"]
                           }
@@ -108,7 +108,7 @@ export default class EntityTool extends Tool  {
                       attrs: {
                         factoryProvider: { // generates factory for each item in dataSource
                           type: "entity", 
-                          dataSource: this.world.systems.assets.entities,
+                          dataSource: this.world.systems.byName.assets.entities,
                           filter: {
                             tags: ["information-hardware"]
                           }
@@ -129,7 +129,7 @@ export default class EntityTool extends Tool  {
                   //       factoryProvider: { // generates factory for each item in dataSource
                   //         type: "entity", // component, attr
                   //         // attrName: "userEntities", // toggle to user's entities
-                  //         dataSource: this.world.systems.assets.userEntities
+                  //         dataSource: this.world.systems.byName.assets.userEntities
                   //       },
                   //       layout: {
                   //         type: "grid",

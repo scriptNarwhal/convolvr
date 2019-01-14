@@ -70,11 +70,11 @@ export default class Binding  {
     private resolveSource(source: SourceData, type: PropType): Promise<any> {
         switch (type) {
             case PropType.IMAGE:
-                return this.systems.assets.loadImage(source, {});
+                return this.systems.byName.assets.loadImage(source, {});
             case PropType.AUDIO:
-                return this.systems.assets.loadSound(source);
+                return this.systems.byName.assets.loadSound(source);
             case PropType.VIDEO:
-                return this.systems.assets.loadVideo(source);
+                return this.systems.byName.assets.loadVideo(source);
         }
     }
 
@@ -230,7 +230,7 @@ export default class Binding  {
     private dataToJSONMaterial(value: any, sourceType: PropType): any {
         let name =  "generated_"+value.toString()+sourceType,
             textLines = JSON.stringify(value).match(/.{1,42}/g),
-            text = this.systems.text,
+            text = this.systems.byName.text,
             canvasSize = [1024, 1024],
             color = "#ffffff",
             background = "#000000",

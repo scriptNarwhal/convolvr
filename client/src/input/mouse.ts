@@ -54,7 +54,7 @@ export default class Mouse {
             })
 
             document.addEventListener("mouseup", (e) => {
-                let toolbox: ToolboxSystem = this.world.systems.toolbox,
+                let toolbox: ToolboxSystem = this.world.systems.byName.toolbox,
                     target = (e.target as any);
 
                 if ( world.mode != "web" && this.input.focus && target && target.tagName.toLowerCase() == "canvas" ) {

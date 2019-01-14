@@ -56,18 +56,25 @@ export default class ToolboxSystem {
 
         this.user = world.user
         setTimeout( ()=>{
-          if (user.avatar && user.avatar.addHandler) {
-            user.avatar.addHandler("init", () => {
-               user.avatar.componentsByAttr.hand.map((m: Component, i: number) => {
-                 if (i < 3)
-                   toolbox.hands.push(m)
-               })
-             })
-          } else {
-            // console.error("user.avatar hasn't loaded yet: User:", user)
+          if (user.avatar) {
+            console.warn("user avatar mesh", user.avatar.mesh)
+            if (user.avatar.mesh) {
+              user.avatar.componentsByAttr.hand.map((m: Component, i: number) => {
+                if (i < 3)
+                  toolbox.hands.push(m)
+              })
+            } else if (user.avatar.addHandler) {
+              user.avatar.addHandler("init", () => {
+                user.avatar.componentsByAttr.hand.map((m: Component, i: number) => {
+                  if (i < 3)
+                    toolbox.hands.push(m)
+                })
+              })
+            } else {
+              // console.error("user.avatar hasn't loaded yet: User:", user)
+            }
           }
-
-        }, 5000)
+        }, 3000)
 
         console.info("user hands ", this.hands)
         this.tools = [
@@ -107,14 +114,16 @@ export default class ToolboxSystem {
       }
   
       useTool(index: number, hand: number, noHUDUpdate: boolean ) {
-        this.tools[ this.currentTools[ hand ] ].unequip()
-        this.currentTools[ hand ] = index
-        this.tools[ index ].equip( hand )
-        console.info("show menu!!!")
-        this.showMenu();
-        if ( !!!noHUDUpdate ) {
-          console.log("move tool ui", this.user.hud);
-          this.user.hud.componentsByAttr.toolUI[ 0 ].state.toolUI.switchTool( index, hand );
+        if (index < this.tools.length) {
+          this.tools[ this.currentTools[ hand ] ].unequip()
+          this.currentTools[ hand ] = index
+          this.tools[ index ].equip( hand )
+          console.info("show menu!!!")
+          this.showMenu();
+          if ( !!!noHUDUpdate ) {
+            console.log("move tool ui", this.user.hud);
+            this.user.hud.componentsByAttr.toolUI[ 0 ].state.toolUI.switchTool( index, hand );
+          }
         }
       }
   

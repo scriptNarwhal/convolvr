@@ -39,7 +39,7 @@ export default class MaterialTool extends Tool {
                       factoryProvider: { // generates factory for each item in dataSource
                         type: "attr", // entity, attr
                         attrName: "material",
-                        dataSource: this.world.systems.assets.attrs.material.color
+                        dataSource: this.world.systems.byName.assets.attrs.material.color
                       },
                       layout: {
                         type: "grid",
@@ -57,7 +57,7 @@ export default class MaterialTool extends Tool {
                       factoryProvider: { // generates factory for each item in dataSource
                         type: "attr", // entity, attr
                         attrName: "material",
-                        dataSource: this.world.systems.assets.attrs.material.material.filter((v, i, a) => { return v.name != "stars" })
+                        dataSource: this.world.systems.byName.assets.attrs.material.material.filter((v, i, a) => { return v.name != "stars" })
                       },
                       layout: {
                         type: "grid",
@@ -76,7 +76,7 @@ export default class MaterialTool extends Tool {
                       factoryProvider: { // generates factory for each item in dataSource
                         type: "attr", // entity, attr
                         attrName: "assets",
-                        dataSource: this.world.systems.assets.attrs.assets.slice(0, 6)
+                        dataSource: this.world.systems.byName.assets.attrs.assets.slice(0, 6)
                       },
                       layout: {
                         type: "grid",

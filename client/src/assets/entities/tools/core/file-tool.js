@@ -43,7 +43,7 @@ export default class FileTool extends Tool {
                         // factoryProvider: { // generates factory for each item in dataSource
                         //   type: "file", // entity, attr, place, world, user, file, directory
                         //   //attrName: "geometry",
-                        //   dataSource: this.world.systems.assets.files
+                        //   dataSource: this.world.systems.byName.assets.files
                         // }
                       }
                     }
@@ -62,7 +62,7 @@ export default class FileTool extends Tool {
                         // factoryProvider: { // generates factory for each item in dataSource
                         //   type: "directory", // entity, attr, place, world, user, file, directory
                         //   //attrName: "geometry",
-                        //   dataSource: this.world.systems.assets.directories
+                        //   dataSource: this.world.systems.byName.assets.directories
                         // }
                       }
                     }

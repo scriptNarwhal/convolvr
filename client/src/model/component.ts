@@ -82,7 +82,7 @@ export default class Component {
        * Templated Components
        */
       if (data.class) {
-        data = systems.assets.makeComponent(data.class, data); 
+        data = systems.byName.assets.makeComponent(data.class, data); 
       }
 
       data.components =  data.components || []

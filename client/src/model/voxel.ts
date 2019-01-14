@@ -64,8 +64,8 @@ export default class Voxel {
         let v = this,
             coords = this.coords,
             system = this.world.systems,
-            collisions: StaticCollisions = system.staticCollisions,
-            oimo = system.oimo ? system.oimo : {},
+            collisions: StaticCollisions = system.byName.staticCollisions,
+            oimo = system.byName.oimo ? system.byName.oimo : {},
             worldName  = this.world.name != "" ? this.world.name : "Overworld";
 
         if (!collisions) {

@@ -6,10 +6,14 @@ import {
 } from '../../config'
 import Convolvr from '../../world/world'
 import { AnyObject } from '../../util';
+import { SystemDependency } from '..';
 
 export default class ToolSystem {
 
-    world: Convolvr
+    public world: Convolvr
+
+    dependencies = [] as SystemDependency[]
+
     panels: Entity[]
 
     constructor ( world: Convolvr ) {
@@ -123,7 +127,7 @@ export default class ToolSystem {
 
     private showPreview(component: Component, cursor: Component) {
         let previewBox = component.state.tool.preview ? component.state.tool.preview.box : null,
-            assets = this.world.systems.assets,
+            assets = this.world.systems.byName.assets,
             preview = null
 
         if (previewBox == null && cursor) {

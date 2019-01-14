@@ -72,7 +72,7 @@ export default class Entity {
         let world = (window as any).three.world;
 
         if (id == -1) {
-            world && world.systems.assets.autoEntityID();
+            world && world.systems.byName.assets.autoEntityID();
         }
         this.id = id;
         this.components = components ? components : [];
@@ -202,7 +202,7 @@ export default class Entity {
         if (systems.testPerformance()) {
             return this.initEntity(world, systems, mount, config, callback);
         } else {
-            systems.pipeline.enqueue({
+            systems.byName.pipeline.enqueue({
                 type: PipelinedResourceType.Entity,
                 entity: this,
                 args: [world, systems, mount, config, callback]
@@ -256,7 +256,7 @@ export default class Entity {
 
         
         if (noTime) {
-          systems.pipeline.enqueue({
+          systems.byName.pipeline.enqueue({
             type: PipelinedResourceType.CreateEntityMesh,
             callback: () => {
               this.initEntityMesh(world, config, merged, addToVoxel, nonMerged, base, materials, mount, callback)
@@ -346,7 +346,7 @@ export default class Entity {
             if (enoughTime) {
                 s += this.initSubComponent(c, s, component, systems, mobile, compRadius, materials, base, nonMerged);
             } else {
-                systems.pipeline.enqueue({
+                systems.byName.pipeline.enqueue({
                     type: isMerged ? PipelinedResourceType.MergedComponents : PipelinedResourceType.Component,
                     entity: this,
                     args: [c, s, component, systems, mobile, compRadius, materials, base, nonMerged]
@@ -518,7 +518,7 @@ export default class Entity {
         let world = (window as any).three.world,
             thisEnt = this,
             systems = world.systems,
-            space = systems.space,
+            space = systems.byName.space,
             voxel = space.voxels[coords.join(".")];
 
         if (!!!voxel) {

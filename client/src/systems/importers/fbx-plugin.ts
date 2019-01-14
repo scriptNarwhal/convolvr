@@ -2,7 +2,7 @@
 import Convolvr from '../../world/world'
 import Component from '../../model/component'
 import * as THREE from 'three';
-import { System } from '..';
+import { System, SystemDependency } from '..';
 
 type FBXState = {
     url: string
@@ -15,6 +15,9 @@ export default class FBXPluginSystem implements System { // allows use of import
     public manager: any
     public mixers: Array<any>
     public live: boolean
+
+    
+    dependencies = [] as SystemDependency[]
 
     constructor ( world: Convolvr ) {
         this.world = world

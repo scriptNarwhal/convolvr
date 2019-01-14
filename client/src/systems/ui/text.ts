@@ -3,7 +3,7 @@ import Component from '../../model/component'
 import { Material, Mesh, Texture } from 'three';
 import * as THREE from 'three'
 import { text } from '../../model/attribute';
-import { System } from '..';
+import { System, SystemDependency } from '..';
 
 export interface TextState  {
     textMaterial?: Material,
@@ -22,6 +22,7 @@ export default class TextSystem implements System {
     mappedColors: string[]
     world: Convolvr
     systems: any
+    dependencies = [] as SystemDependency[]
 
     constructor ( world: Convolvr ) {
         this.world = world;

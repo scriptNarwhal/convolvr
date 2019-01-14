@@ -24,7 +24,7 @@ loadingSpace = new world_1.default(socket, store, (world) => {
         let user = world.user;
         let worldDetails = config_1.detectSpaceDetailsFromURL();
         user.data = Object.assign({}, user.data, newUser);
-        user.name = newUser.userName;
+        user.name = newUser.name;
         user.id = newUser.id;
         world.initUserAvatar(newUser, (avatar) => {
             if (worldDetails[3] && worldDetails[3][1] <= 1) {

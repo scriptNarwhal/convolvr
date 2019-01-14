@@ -18,7 +18,7 @@ export default class SpaceTool extends Tool {
       }
 
       console.info("space tool init")
-      console.log(this.world.systems.assets.spaces)
+      console.log(this.world.systems.byName.assets.spaces)
 
       this.entity = new Entity(-1, [
           {
@@ -39,7 +39,7 @@ export default class SpaceTool extends Tool {
                       factoryProvider: { // generates factory for each item in dataSource
                         type: "world", // entity, attr, place, world, user, file, directory
                         //attrName: "geometry",
-                        dataSource: "this.world.systems.assets.spaces"
+                        dataSource: "this.world.systems.byName.assets.spaces"
                       }
                     }
                   }

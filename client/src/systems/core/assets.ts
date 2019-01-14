@@ -52,10 +52,13 @@ import { Flags, AnyObject } from '../../util';
 import ObjPluginSystem from '../importers/obj-plugin';
 import FBXPluginSystem from '../importers/fbx-plugin';
 import { material, Attributes } from '../../model/attribute';
+import { SystemDependency } from '..';
 
 export default class AssetSystem {
 
-    private world: Convolvr
+    public world: Convolvr
+
+    dependencies = [] as SystemDependency[]
     public geometries: any
     public materials: any
     public textures: any
@@ -180,8 +183,8 @@ export default class AssetSystem {
 
     public loadModel(asset: string) { // use obj and fbx systems
         let systems = this.world.systems,
-            obj: ObjPluginSystem = systems.obj,
-            fbx: FBXPluginSystem = systems.fbx
+            obj: ObjPluginSystem = systems.byName.obj,
+            fbx: FBXPluginSystem = systems.byName.fbx
 
         // implement
         // check format from file extension

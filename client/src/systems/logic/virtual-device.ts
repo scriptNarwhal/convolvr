@@ -7,9 +7,9 @@ import StorageDevice from './virtual-devices/storage'
 import PointingDevice from './virtual-devices/pointing-device'
 import DisplaySystem from '../video/display';
 import { AnyObject } from '../../util';
-import { System } from '..';
+import { System, SystemDependency, SystemClient } from '..';
 import Convolvr from '../../world/world';
-export interface VirtualDevice {
+export interface VirtualDevice extends SystemClient {
     world: Convolvr
     init: (data: AnyObject) => AnyObject
 }
@@ -18,6 +18,7 @@ export default class VirtualDeviceSystem implements System {
     
     world: Convolvr
     devices: {[deviceName: string]: VirtualDevice }
+    dependencies = [] as SystemDependency[]
 
     constructor ( world: Convolvr ) {
         this.world = world

@@ -6,14 +6,14 @@ export default function initDemos(world: Convolvr, coords: number[], pos: any, a
         systems = world.systems;
 
     function _initVideoChat ( world: Convolvr, helpScreen: Entity, voxel: number[] ) {
-        let videoChat = world.systems.assets.makeEntity( "video-chat", true, {}, voxel )as Entity // simple example of displaying GET response from server
+        let videoChat = world.systems.byName.assets.makeEntity( "video-chat", true, {}, voxel )as Entity // simple example of displaying GET response from server
         // videoChat.components[0].attrs.particles = {}
         videoChat.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
         videoChat.update( [ -8, 0, 0 ] )
     }
   
     function _initHTTPClientTest ( world: Convolvr, helpScreen: Entity, voxel: number[] ) {
-        let httpClient = world.systems.assets.makeEntity( "help-screen", true, {}, voxel ) as Entity, // simple example of displaying GET response from server
+        let httpClient = world.systems.byName.assets.makeEntity( "help-screen", true, {}, voxel ) as Entity, // simple example of displaying GET response from server
             attributes = httpClient.components[0].attrs
     
         attributes.rest = {
@@ -28,17 +28,17 @@ export default function initDemos(world: Convolvr, coords: number[], pos: any, a
     }
   
     function _initFileSystemTest ( world: Convolvr, helpScreen: Entity, voxel: number[] ) {
-        let fileBrowser = world.systems.assets.makeEntity( "file-browser", true, {}, voxel ) as Entity // show public files in 3d
+        let fileBrowser = world.systems.byName.assets.makeEntity( "file-browser", true, {}, voxel ) as Entity // show public files in 3d
     
         fileBrowser.init( helpScreen.mesh ) // anchor to other entity (instead of scene) upon init
         fileBrowser.update( [ -16, 0, 0 ] )
     }
 
-    let chatScreen = systems.assets.makeEntity( "chat-screen", true, {}, coords ) as Entity; //; chatScreen.components[0].attrs.speech = {}
+    let chatScreen = systems.byName.assets.makeEntity( "chat-screen", true, {}, coords ) as Entity; //; chatScreen.components[0].attrs.speech = {}
     chatScreen.init( scene );
     chatScreen.update( [ pos.x, altitude + 21, pos.z+10] );  
     (world as any).chat = chatScreen
-    let helpScreen = systems.assets.makeEntity( "help-screen", true, {}, coords ) as Entity;
+    let helpScreen = systems.byName.assets.makeEntity( "help-screen", true, {}, coords ) as Entity;
   
     helpScreen.init(scene, {}, (help: Entity) => { 
       _initHTTPClientTest( world, help, coords ); 

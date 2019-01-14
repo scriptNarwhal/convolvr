@@ -35,7 +35,7 @@ export default class GeometryTool extends Tool {
                       factoryProvider: { // generates factory for each item in dataSource
                         type: "attr", // entity, attr
                         attrName: "geometry",
-                        dataSource: this.world.systems.assets.attrs.geometry
+                        dataSource: this.world.systems.byName.assets.attrs.geometry
                       },
                       layout: {
                         type: "grid",

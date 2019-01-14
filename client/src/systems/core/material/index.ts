@@ -39,7 +39,7 @@ export default class MaterialSystem implements System {
             attrs = component.attrs,
             attr: material = attrs.material,
             mat: any = { color: attr.color || 0xffffff },
-            assets = this.assets || this.world.systems.assets,
+            assets = this.assets || this.world.systems.byName.assets,
             renderer = (window as any).three.renderer,
             anisotropy = renderer.capabilities.getMaxAnisotropy() / ( mobile ? 2 : 1 ),
             path = '/data',
@@ -58,7 +58,7 @@ export default class MaterialSystem implements System {
                                       : ""}:${attr.name}:${attr.color}:${attr.map}:${attr.specular}:${reflection}:`+
                                            `${attr.alpha}:${attr.bump}:${attr.roughnessMap}:${attr.metalnessMap}:${pattern}`;
 
-      let onMapsLoaded = (loadedMat: any) => {
+      let onMapsLoaded = (loadedMat: THREE.MeshBasicMaterial) => {
         if (attr.procedural) {
           loadedMat.map = this.procedural.generateTexture(attr.procedural)
         }
@@ -79,7 +79,7 @@ export default class MaterialSystem implements System {
 
           let allMaps = assets.loadImage(envMapUrl, textureConfig);
 
-          allMaps = allMaps.then((envMap: any) => {
+          allMaps = allMaps.then((envMap: THREE.Texture) => {
             envMap.mapping = THREE.EquirectangularReflectionMapping;
             mat.envMap = envMap;
           }); 
@@ -87,13 +87,13 @@ export default class MaterialSystem implements System {
           if (attr.map) {
             allMaps.then(() => {
               assets.loadImage(attr.map, textureConfig)
-                .then((diffuse) => {
+                .then((diffuse: THREE.Texture) => {
                   this.mapCallback(diffuse, "map", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
 
                   if (attr.roughnessMap) {
                     allMaps = allMaps.then(() => {
                       assets.loadImage(attr.roughnessMap, textureConfig)
-                        .then((map) => {
+                        .then((map: THREE.Texture) => {
                           this.mapCallback(map, "roughnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
                           material = this._initMaterial(attr, mat, shading, basic, mobile);
                         });
@@ -102,7 +102,7 @@ export default class MaterialSystem implements System {
                   if (attr.metalnessMap) {
                     allMaps = allMaps.then(() => {
                       assets.loadImage(attr.metalnessMap, textureConfig)
-                        .then((map) => {
+                        .then((map: THREE.Texture) => {
                           this.mapCallback(map, "metalnessMap", mat, attr, shading, basic, mobile, anisotropy, simpleShading, material, materialSystem)
                           material = this._initMaterial(attr, mat, shading, basic, mobile);
                         });

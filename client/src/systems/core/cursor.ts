@@ -3,14 +3,18 @@ import Convolvr from '../../world/world';
 import Component from '../../model/component';
 import Entity from '../../model/entity';
 import * as THREE from 'three';
+import SpaceSystem from '../environment/space';
 
 let handDirection = new THREE.Vector3(0, 0, 0),
     cameraPos = new THREE.Vector3(0, 0, 0),
     tmpVector2 = new THREE.Vector2(0, 0)
 
 export default class CursorSystem {
+    public world: Convolvr;
 
-    private world: Convolvr;
+    dependencies = [["space"]]
+    private space: SpaceSystem
+
     private entityCoolDown: number;
     private resetEntityTimeout: number;
     private selectAnimTimeout: number;
@@ -29,7 +33,7 @@ export default class CursorSystem {
     }
 
     rayCast (world: Convolvr, camera: any, cursor: any, hand: number, handMesh: any, callback: Function) { // public method; will use from other systems
-        let voxels = world.systems.space.voxels,
+        let voxels = this.space ? this.space.voxels : world.systems.byName.space.voxels,
             raycaster = world.raycaster,
             coords = [ 0, 0, 0 ],
             // octreeObjects = [],
@@ -123,7 +127,7 @@ export default class CursorSystem {
     handleCursors(cursors: any[], cursorIndex: number, hands: any[], camera: any, world: Convolvr) {
         let handMesh: any = null,
             input = world.userInput,
-            cursorSystem = world.systems.cursor
+            cursorSystem = world.systems.byName.cursor
 
         // cursors.map((cursor: Component, i: number) => { // animate cursors & raycast scene
         for (let i = 0, l = cursors.length; i < l; i ++) {

@@ -3,10 +3,15 @@ import Component from '../../model/component'
 // import { THREE } from 'three'
 import * as THREE from 'three';
 import { audio } from '../../model/attribute';
-export default class AudioSystem {
+import AssetSystem from '../core/assets';
+import { System } from '..';
+export default class AudioSystem implements System {
 
     world: Convolvr
     listener: any //THREE.AudioListener
+    dependencies: [["assets"]]
+
+    assets: AssetSystem
 
     constructor ( world: Convolvr ) {
         this.world = world
@@ -15,16 +20,15 @@ export default class AudioSystem {
 
     init ( component: Component ) { 
         let attr: audio = component.attrs.audio,
-            assets = this.world.systems.assets,
             sound: any = null,
             element: any = null
         // find out what kind of node...
 
         if ( attr.type == 'stereo') {
-            element = assets.makeAudioElement(attr);
+            element = this.assets.makeAudioElement(attr);
         } else { // if (attr.type == 'positional')
             sound = new THREE.PositionalAudio( this.listener ); //Create the PositionalAudio object (passing in the listener)
-            assets.loadSound(attr.asset, sound).then((sound: any) => {
+            this.assets.loadSound(attr.asset, sound).then((sound: any) => {
                 if ( sound != null ) {
                     component.mesh.add(sound)
                     sound.setRefDistance( 500 )

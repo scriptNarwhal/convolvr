@@ -1,8 +1,11 @@
 import Component from "../../model/component";
 import Convolvr from "../../world/world";
+import { SystemDependency } from "..";
 
 export default class ConveyorSystem {
-    private world: Convolvr
+    public world: Convolvr
+
+    dependencies = [] as SystemDependency[]
     constructor (world: Convolvr) {
         this.world = world
     }

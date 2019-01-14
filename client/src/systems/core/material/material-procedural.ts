@@ -18,7 +18,7 @@ export default class ProceduralMaterials {
   }
 
   generateTexture( params: any ) { // would be useful for tiling / random patterns
-    let assets:      AssetSystem = this.world.systems.assets,
+    let assets:      AssetSystem = this.world.systems.byName.assets,
         textureCode: string = params.name,
         texture:     any = {} 
 

@@ -35,7 +35,7 @@ export function fetchSpaces (callback?: Function) {
      })
      return axios.get(API_SERVER+"/api/spaces")
         .then(res => {
-            (window as any).three.world.systems.assets.setSpaces( res.data )
+            (window as any).three.world.systems.byName.assets.setSpaces( res.data )
             dispatch({
                 type: SPACES_FETCH_DONE,
                 spaces: res.data

@@ -3,10 +3,14 @@ import Component, { DBComponent } from '../../../model/component'
 import Entity, { DBEntity } from '../../../model/entity'
 import { FactoryType, FactoryAttributeType } from '../../../model/attribute';
 import { AnyObject } from '../../../util';
+import AssetSystem from '../assets';
 
 export default class FactoryProviderSystem {
     
     private world: Convolvr
+
+    dependencies = [["assets"]]
+    private assets: AssetSystem
 
     constructor(world: Convolvr) {
 
@@ -52,7 +56,7 @@ export default class FactoryProviderSystem {
         }
 
         if (assetType == "world") {
-            source = this.world.systems.assets.spaces;
+            source = (this.assets || this.world.systems.byName.assets).spaces;
         }     
 
         if (source && typeof source.map == 'function') { // array of geometries / materials, components, entities, spaces, places, files, (directories could use source[category])

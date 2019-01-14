@@ -53,7 +53,7 @@ export default class TrackedController {
         btnState: any[] = [],
         useTracking = input.trackedControls,
         rotation    = input.rotationVector,
-        tools       = world.systems.toolbox
+        tools       = world.systems.byName.toolbox
 
     if ( useTracking && (gamepad as any).pose )
       tools.setHandOrientation( (gamepad as any).hand == 'left' ? 1 : 0, (gamepad as any).pose.position, (gamepad as any).pose.orientation )
@@ -129,7 +129,7 @@ export default class TrackedController {
             btnState: any[] = [],
             useTracking = input.trackedControls,
             rotation    = input.rotationVector,
-            tools       = world.systems.toolbox
+            tools       = world.systems.byName.toolbox
 
         if (useTracking && (gamepad as any).pose)
           tools.setHandOrientation( (gamepad as any).hand == 'left' ? 1 : 0, (gamepad as any).pose.position, (gamepad as any).pose.orientation )

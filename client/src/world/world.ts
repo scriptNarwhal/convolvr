@@ -167,14 +167,14 @@ export default class Convolvr {
 		(window as any).three = this.three
 
 		this.systems = new Systems( this );
-		this.space = this.systems.space;
-		this.skybox = this.systems.skybox;
+		this.space = this.systems.byName.space;
+		this.skybox = this.systems.byName.skybox;
 		this.workers = {
-			staticCollisions: this.systems.staticCollisions.worker,
-			ecsWorker: this.systems.script.worker
+			staticCollisions: this.systems.byName.staticCollisions.worker,
+			ecsWorker: this.systems.byName.script.worker
 			// oimo: this.systems.oimo.worker
 		}
-		camera.add(this.systems.audio.listener)
+		camera.add(this.systems.byName.audio.listener)
 		// ^^^ have to get permission first now with new webaudio api
 		// TODO
 		this.socketHandlers = new SocketHandlers( this, socket )
@@ -261,7 +261,7 @@ export default class Convolvr {
 
 	public initUserAvatar(newUser: any, callback: Function, overrideAvatar?: string) {
 		let toolMenu:     Entity   = null,
-			avatar = this.systems.assets.makeEntity(  
+			avatar = this.systems.byName.assets.makeEntity(  
 			overrideAvatar || newUser.data.avatar || "default-avatar", 
 			true, 
 			{ 
@@ -276,7 +276,7 @@ export default class Convolvr {
 	  this.user.useAvatar( avatar );
 	  this.initUserInput();
       this.user.toolbox = world.systems.toolbox
-      toolMenu = this.systems.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) as Entity // method for spawning built in entities
+      toolMenu = this.systems.byName.assets.makeEntity("tool-menu", true, {}, GLOBAL_SPACE) as Entity // method for spawning built in entities
       this.user.hud = toolMenu
       toolMenu.init( this.three.scene, {}, (menu: Entity) => { 
         menu.componentsByAttr.toolUI[0].state.toolUI.updatePosition()
@@ -320,10 +320,10 @@ export default class Convolvr {
 		}
 
 		if ( !!config && !!config.sky.photosphere ) {
-			this.systems.assets.envMaps.default = '/data/user/'+config.sky.photosphere
+			this.systems.byName.assets.envMaps.default = '/data/user/'+config.sky.photosphere
 		} else {
-			envURL = this.systems.assets.getEnvMapFromColor( r, g, b )
-			this.systems.assets.envMaps.default = envURL
+			envURL = this.systems.byName.assets.getEnvMapFromColor( r, g, b )
+			this.systems.byName.assets.envMaps.default = envURL
 		}
 
 		oldSkyMaterial = this.skyboxMesh ? this.skyboxMesh.material : {}
@@ -384,7 +384,7 @@ export default class Convolvr {
 
 		this.name = name;
 		this.userName = userName;
-		this.systems.space.readyCallback = readyCallback;
+		this.systems.byName.space.readyCallback = readyCallback;
 
 		axios.get(`${API_SERVER}/api/spaces/name/${name}`).then( (response: any) => { // fix this... needs userName now
 			 this.init(response.data, ()=> { callback && callback(world) } )

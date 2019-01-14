@@ -1,10 +1,11 @@
 import Component from "../../model/component";
 import Convolvr from "../../world/world";
 import { layout, LayoutAxis, LayoutOrientation, LayoutPlane } from "../../model/attribute";
-import { System } from "..";
+import { System, SystemDependency } from "..";
 
 export default class LayoutSystem implements System {
     world: Convolvr
+    dependencies = [] as SystemDependency[]
 
     private readonly angleToXY = [
         [ 1,  0],
@@ -84,9 +85,14 @@ export default class LayoutSystem implements System {
     }
 
     private radialLayout(component: Component, position: number[], index: number, axis: LayoutPlane = "xy", columns: number, gridSize: number, isometric: boolean ): number[] {
-
+        const columnWidth = 2*Math.PI / columns,
+            x = index % columns;
         //TODO: Implement P2
-        let pos = [ 0, index * gridSize, 0 ]
+        let pos = [
+            Math.sin(x * columnWidth) * gridSize,
+            0,  
+            Math.cos(x * columnWidth) * gridSize 
+        ];
         
         return pos
     }

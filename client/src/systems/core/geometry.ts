@@ -2,13 +2,17 @@ import Convolvr from '../../world/world'
 import Component from '../../model/component'
 import * as THREE from 'three';
 import { System } from '..';
-import { geometry } from '../../model/attribute';
+import { geometry, assets } from '../../model/attribute';
+import AssetSystem from './assets';
 
 export default class GeometrySystem implements System {
 
   world: Convolvr
   nodeGeom: any //THREE.PlaneGeometry
   detail: number
+
+  dependencies = [["assets"]]
+  private assets: AssetSystem
 
   constructor ( world: Convolvr ) {
     this.world = world
@@ -21,7 +25,7 @@ export default class GeometrySystem implements System {
         let attr:         geometry        = component.attrs.geometry,
             geometry:     any        = {},
             size:         Array<number> = attr.size,
-            assets:       any        = this.world.systems.assets,
+            assets:       any        = this.assets || this.world.systems.byName.assets,
             detail:       Array<number> = attr.detail || [this.detail, this.detail, this.detail],
             geometryCode: string        = `${attr.shape}:${size.join(':')}:${detail.join(':')}`,
             faceNormals:  boolean       = false

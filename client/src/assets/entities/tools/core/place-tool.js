@@ -36,7 +36,7 @@ export default class PlaceTool extends Tool {
                       factoryProvider: { // generates factory for each item in dataSource
                         type: "place", // entity, attr, place, world, user, file, directory
                         //attrName: "geometry",
-                        dataSource: this.world.systems.assets.places
+                        dataSource: this.world.systems.byName.assets.places
                       },
                       layout: {
                         type: "grid",

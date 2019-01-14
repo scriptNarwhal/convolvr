@@ -17,12 +17,12 @@ export default class User {
   public avatar: any
 
   constructor ( data: any ) {
-    this.id = data ? data.id : -Math.floor(Math.random()*99999999)
+    this.id = data && data.id ? data.id : -Math.floor(Math.random()*99999999)
     this.hands = []
     this.data = data ? data.data : {}
     this.hud = null
     this.cursor = null
-    this.name = data ? data.name : "Human_"+this.id
+    this.name = data && data.name ? data.name : "Human_"+this.id
     this.toolbox = null
     this.mesh = new THREE.Object3D()
     this.velocity = new THREE.Vector3(0, -0.0001, 0)
