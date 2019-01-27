@@ -9,7 +9,7 @@ export default class AudioSystem implements System {
 
     world: Convolvr
     listener: any //THREE.AudioListener
-    dependencies: [["assets"]]
+    public dependencies = [["assets"]]
 
     assets: AssetSystem
 
@@ -18,7 +18,7 @@ export default class AudioSystem implements System {
         this.listener = new THREE.AudioListener()
     }
 
-    init ( component: Component ) { 
+    init = ( component: Component ) => { 
         let attr: audio = component.attrs.audio,
             sound: any = null,
             element: any = null

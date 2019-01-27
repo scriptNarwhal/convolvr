@@ -279,7 +279,7 @@ export default class Systems {
                     // first pass
                     // systemIndex[system] = (systems as any)[system];
                     if (typeof ((systemIndex as any)[system] as System).tick == "function") {
-                        this.liveSystems.push((this.byName as any)[system]);
+                        this.liveSystems.push((systemIndex as any)[system]);
                     }
                 } else {
                     this.injectDependencies((systemIndex as any)[system]);
@@ -379,7 +379,7 @@ export default class Systems {
             system.postInject && system.postInject.call(system);
             return;
         }
-
+        console.warn("inject ", system)
         const deps = system.dependencies as SystemDependency[],
             systems = this.byName;
 

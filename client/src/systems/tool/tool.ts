@@ -203,7 +203,7 @@ export default class ToolSystem {
             })
         }
 
-        if ( toolPanel ) {
+        if ( toolPanel && toolPanel.mesh ) {
             this.panels.map( (panel: Entity, i: number) => { 
                 if (panel && panel.mesh) {
                     let mesh: THREE.Mesh = panel.mesh;
@@ -215,6 +215,8 @@ export default class ToolSystem {
                     }
                 }
             })
+        } else {
+            console.log("%c toolPanel.mesh not initialized", "color: red; background: black;")
         }
     }
 
