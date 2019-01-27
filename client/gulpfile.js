@@ -10,12 +10,8 @@ var tsify = require('tsify');
 var ts = require("gulp-typescript")
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
-const merge = require('merge2');
-var es = require('event-stream'),
-    rename = require('gulp-rename'),
-    paths = {
-        pages: ['src/*.html']
-    };
+const merge = require('merge2'),
+    rename = require('gulp-rename');
 
 let insertGlobalVars = {
     THREE: function(file, dir) {
@@ -71,7 +67,7 @@ function build (all = false) {
         .pipe(gulp.dest(i == 0 && all ? 'web/js' : 'web/js/workers'));
     });
 
-    return es.merge.apply(null, tasks);
+    return merge(tasks);
 }
 
 gulp.task('node-build', function() {
