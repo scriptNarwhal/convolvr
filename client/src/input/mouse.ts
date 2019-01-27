@@ -3,6 +3,8 @@ import Convolvr from '../world/world';
 import UserInput from './user-input';
 import ToolboxSystem from '../systems/tool/toolbox';
 
+declare let document: any;
+
 export default class Mouse {
     
     private input: UserInput
@@ -18,7 +20,7 @@ export default class Mouse {
     }
 
     init () {
-        let viewport = document.querySelector("#viewport"),
+        let viewport = document.querySelector("#viewport") as any,
             mouse = this,
             uInput: any = this.input,
             world: Convolvr = this.world
@@ -37,7 +39,7 @@ export default class Mouse {
         setTimeout(() => {
             let user = uInput.user
 
-            document.addEventListener("mousedown", e => {
+            document.addEventListener("mousedown", (e: MouseEvent) => {
                 if ( world.mode != "web" ) {
                     switch ( e.which ) {
                         case 1: // left mouse
@@ -53,7 +55,7 @@ export default class Mouse {
                 }
             })
 
-            document.addEventListener("mouseup", (e) => {
+            document.addEventListener("mouseup", (e: MouseEvent) => {
                 let toolbox: ToolboxSystem = this.world.systems.byName.toolbox,
                     target = (e.target as any);
 
@@ -73,12 +75,12 @@ export default class Mouse {
             }, false)
         }, 250)
 
-        document.addEventListener("mousemove", (e: any) => {
+        document.addEventListener("mousemove", (e: MouseEvent) => {
             if ( uInput.focus ) {
                 let movement = [0,0];
                 movement = mouse.windows10Fix([
-                    (e.movementX || e.mozMovementX || e.webkitMovementX || 0),
-                    (e.movementY || e.mozMovementY || e.webkitMovementY || 0)
+                    (e.movementX),
+                    (e.movementY)
                 ])
                     
                 uInput.rotationVector.y -= movement[0] / 600
@@ -97,7 +99,7 @@ export default class Mouse {
         }
     }
 
-    lockChangeAlert(canvas: any) {
+    lockChangeAlert(canvas: HTMLCanvasElement) {
         var world = this.world,
             doc = (document as any),
             a = 0

@@ -9,6 +9,7 @@ import { isVRMode } from '../config'
 import GamePadHandler from './gamepad';
 
 import * as THREE from 'three';
+declare let document: any;
 
 export default class UserInput {
 

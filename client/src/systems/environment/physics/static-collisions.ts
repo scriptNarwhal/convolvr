@@ -61,17 +61,21 @@ export default class StaticCollisions {
 		} else if ( message.command == "platform collision" ) { // consider sending "top" or "bottom" collision type
 			const camPosition = cam.position;
 	      if ( message.data.type == "top" ) {
+				const oldY = camPosition.y,
+					newY = 13.25 + message.data.position[1] +(vrHeight != 0 ? vrHeight+0.25 : 0),
+					jump = camPosition.y - oldY;
 
-				camPosition.set( camPosition.x, 13.25 + message.data.position[1] +(vrHeight != 0 ? vrHeight+0.25 : 0), camPosition.z );	
-
-				// if ( Math.abs( user.velocity.y ) > 150 ) {
-				// 	window.navigator.vibrate && window.navigator.vibrate(50)
-				// 	user.velocity.y *= -0.8
-				// 	user.falling = true
-				// } else {
-					user.falling = false
-					user.velocity.y = 0
-				// }
+				if (jump < 4 || jump > 16) {
+					camPosition.set( camPosition.x, newY, camPosition.z );	
+					user.falling = false;
+					if (Math.abs(user.velocity.y) > 2) {
+						user.velocity.y *= -0.64;
+					}
+				
+				} else {
+					user.velocity.x *= -0.98
+					user.velocity.z *= -0.98
+				}
 				
 			} else if ( message.data.type == "bottom" ) {
 				camPosition.set( camPosition.x, message.data.position[1]-4 +vrHeight, camPosition.z )

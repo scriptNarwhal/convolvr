@@ -323,6 +323,7 @@ scWorker.updateEntity = (message: any, data: any) => {
 	}
 }
 
+// problematic
 scWorker.updateTelemetry = (message: any, data: any) => {
 	if (!data || !data.coords) {
 		console.warn("no data to update entity")

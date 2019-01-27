@@ -58,17 +58,18 @@ export default class ToolboxSystem {
         setTimeout( ()=>{
           if (user.avatar) {
             console.warn("user avatar mesh", user.avatar.mesh)
+            // this seems kind of problematic
             if (user.avatar.mesh) {
               user.avatar.componentsByAttr.hand.map((m: Component, i: number) => {
                 if (i < 3)
-                  toolbox.hands.push(m)
-              })
+                  toolbox.hands.push(m);
+              });
             } else if (user.avatar.addHandler) {
               user.avatar.addHandler("init", () => {
                 user.avatar.componentsByAttr.hand.map((m: Component, i: number) => {
                   if (i < 3)
-                    toolbox.hands.push(m)
-                })
+                    toolbox.hands.push(m);
+                });
               })
             } else {
               // console.error("user.avatar hasn't loaded yet: User:", user)
