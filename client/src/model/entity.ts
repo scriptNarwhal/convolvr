@@ -146,7 +146,6 @@ export default class Entity {
                 this.mesh.quaternion.fromArray(quaternion);
             }
             if ((config as any).updateWorkers !== false) {
-                console.log("update workers");
                 this.updateWorkers(WorkerUpdateMode.TELEMETRY, (window as any).three.world.systems, { oldCoords: this.oldCoords });
             }
             //this.updateOldCoords()

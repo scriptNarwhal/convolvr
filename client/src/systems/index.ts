@@ -379,7 +379,7 @@ export default class Systems {
             system.postInject && system.postInject.call(system);
             return;
         }
-        console.warn("inject ", system)
+        
         const deps = system.dependencies as SystemDependency[],
             systems = this.byName;
 

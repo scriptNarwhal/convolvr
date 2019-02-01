@@ -169,7 +169,6 @@ export default class FactorySystem implements System {
     private generateAttrEntity(type: FactoryAttributeType, menuItem: boolean, data: any, voxel: number[], entityPos: number[], quat: number[], preset: string) {
         switch (type) {
             case "geometry":
-            console.log("generate geometry", data)
                 return this.generateGeometry( menuItem, data, voxel, entityPos, quat, preset)
             case "material":
                 return this.generateMaterial( menuItem, data, voxel, entityPos, quat, preset)

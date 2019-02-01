@@ -136,8 +136,8 @@ export default class FactoryProviderSystem {
             case "media": sourceCategory = source.media; break;
             case "interactivity": sourceCategory = source.interactivity; break;
         }
-        console.info("sourceCategory: ", sourceCategory)
-        return sourceCategory
+
+        return sourceCategory;
     }
 
     private getPreset( assetType: string, item: any, i: number, presets: Array<any> ) {
