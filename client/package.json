@@ -1,6 +1,6 @@
 {
   "name": "convolvr",
-  "version": "0.6.8",
+  "version": "0.6.9",
   "scripts": {
     "start": "gulp",
     "build": "gulp node-build",
