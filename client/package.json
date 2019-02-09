@@ -1,6 +1,6 @@
 {
   "name": "convolvr",
-  "version": "0.6.10",
+  "version": "0.6.11",
   "scripts": {
     "start": "gulp",
     "build": "gulp node-build",
@@ -9,7 +9,7 @@
     "testWithCoverage": "jest --coverage",
     "prepublishOnly": "gulp node-build"
   },
-  "main": "dist/bundle.js",
+  "main": "lib/index.js",
   "description": "Modular webvr game engine, authoring tool and server.",
   "repository": {
     "type": "git",
