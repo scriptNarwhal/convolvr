@@ -8,11 +8,10 @@
       "declaration": true, // generate TypeScript definitions
       "rootDir": ".",
       "jsx": "react", // maybe won't need this in the future
-      "outDir": "dist", // transpile JS in this directory
+      "outDir": "lib", // transpile JS in this directory
       "types" : ["node"] // only use needed types
     },
     "include": [
       "src/main.ts",
-      "lib/**/*",
     ]
   }

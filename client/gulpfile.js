@@ -142,14 +142,14 @@ gulp.task('browser-sync-reload', ['build'], function (done) {
 });
 
 gulp.task('move-bundle', function() {
-    gulp.src(["web/js/bundle.js"])
-    .pipe(gulp.dest('dist'));
-    gulp.src(["web/js/workers/geometry-bundle.js"])
-    .pipe(gulp.dest('dist'));
-    gulp.src(["web/js/workers/oimo-bundle.js"])
-    .pipe(gulp.dest('dist'));
-    gulp.src(["web/js/workers/static-collisions-bundle.js"])
-    .pipe(gulp.dest('dist'));
-    gulp.src(["web/js/workers/systems-bundle.js"])
-    .pipe(gulp.dest('dist'));
+    // gulp.src(["web/js/bundle.js"])
+    // .pipe(gulp.dest('lib'));
+    // gulp.src(["web/js/workers/geometry-bundle.js"])
+    // .pipe(gulp.dest('lib'));
+    // gulp.src(["web/js/workers/oimo-bundle.js"])
+    // .pipe(gulp.dest('lib'));
+    // gulp.src(["web/js/workers/static-collisions-bundle.js"])
+    // .pipe(gulp.dest('lib'));
+    // gulp.src(["web/js/workers/systems-bundle.js"])
+    // .pipe(gulp.dest('lib'));
 });
